@@ -5,14 +5,6 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsClassConstraintsSymDictPatchV2 >> addToNewClassesByName: aDictionary [
-
-	"noop"
-
-	
-]
-
-{ #category : 'actions' }
 RwGsClassConstraintsSymDictPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
 	"noop"
 ]

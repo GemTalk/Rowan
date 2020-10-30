@@ -61435,14 +61435,6 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	self
-		subclassResponsibility:
-			#'addSimpleComponentNamed:condition:groupName:comment:'
-%
-
-category: 'accessing'
-method: RwAbstractResolvedObjectV2
 comment
 	^ self subclassResponsibility: #'comment'
 %
@@ -65670,17 +65662,6 @@ method: RwPrjBrowserToolV2
 addPackageNamed: packageName toProjectNamed: projectName
 
 	^ self addPackageNamed: packageName toComponentNamed: 'Core' andProjectNamed: projectName
-%
-
-category: 'package browsing'
-method: RwPrjBrowserToolV2
-addPackagesNamed: packageNames toProjectNamed: projectName
-
-	| projectDefinition |
-	projectDefinition := self _projectNamed: projectName.
-	packageNames
-		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
-	Rowan projectTools load loadProjectDefinition: projectDefinition
 %
 
 category: 'project browsing'
@@ -70336,15 +70317,6 @@ _classNameForCompare: aDefinition
 ! Class implementation for 'RwAbstractProjectDefinitionV2'
 
 !		Instance methods for 'RwAbstractProjectDefinitionV2'
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-addOrUpdatePackage: aPackageDefinition
-
-	| key |
-	key := aPackageDefinition key.
-	packages at: key put: aPackageDefinition
-%
 
 category: 'properties'
 method: RwAbstractProjectDefinitionV2
@@ -76147,20 +76119,6 @@ for: aClassDefinition inPackage: aPackageDefinition
 
 category: 'actions'
 method: RwGsClassPatchV2
-addToNewClassesByName: aDictionary
-
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := classDefinition key.
-	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
-%
-
-category: 'actions'
-method: RwGsClassPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
@@ -76542,15 +76500,6 @@ oldClassVersion: object
 
 category: 'actions'
 method: RwGsClassConstraintsSymDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
-
-category: 'actions'
-method: RwGsClassConstraintsSymDictPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"noop"
 %
@@ -76711,15 +76660,6 @@ for: aClassDefinition
 
 category: 'actions'
 method: RwGsClassDeletionSymbolDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
-
-category: 'actions'
-method: RwGsClassDeletionSymbolDictPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"noop"
 %
@@ -76812,15 +76752,6 @@ installClassExtensionInSystem: aSymbolList
 ! Class implementation for 'RwGsClassPropertiesSymDictPatchV2'
 
 !		Instance methods for 'RwGsClassPropertiesSymDictPatchV2'
-
-category: 'actions'
-method: RwGsClassPropertiesSymDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
 
 category: 'actions'
 method: RwGsClassPropertiesSymDictPatchV2
@@ -79188,15 +79119,6 @@ addRecompiledMethod: newCompiledMethod implementationClass: implementationClass
 
 category: 'private'
 method: RwGsSymbolDictionaryRegistryV2
-addRecompiledSessionMethodMethod: newCompiledMethod
-
-	"add a recompiled session method compiled method to behavior and update the loaded things"
-
-	^ self class registry_ImplementationClass addRecompiledSessionMethodMethod: newCompiledMethod instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
 addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
@@ -79882,26 +79804,6 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	| methodDictionary selector |
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := compiledMethod selector.
-	methodDictionary 
-		at: selector 
-		ifAbsent: [  
-			registryInstance
-				error:
-					'Internal error -- attempt to move a method that does not exist'  ].
-	self _addMovedDeletedMethod: compiledMethod instance: registryInstance.
-	^ self moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 addNewClassVersionToAssociation: newClass oldClassVersion: oldClass instance: registryInstance
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
@@ -80509,45 +80411,6 @@ updateClassProperties: class instance: registryInstance
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, update the loaded thing"
 			loadedClass updatePropertiesFromClassFor: registryInstance ].
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_addMovedDeletedMethod: newCompiledMethod  instance: registryInstance
-
-	"add a recompiled compiled method that was previously removed from loaded things
-		to behavior and update the loaded things appropriately"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [].
-	loadedMethod ifNotNil: [  
-			registryInstance
-				error:
-					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
-
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
-
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
 %
 
@@ -93861,24 +93724,6 @@ performOnServer: commandLine status: statusBlock
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
-applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
-	(self _shouldCloneRowanLoader: aProjectSetModification)
-		ifTrue: [ 
-			self
-				applyModification_V2: aProjectSetModification
-				visitorClass:
-					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2 name)
-				instanceMigrator: instanceMigrator ]
-		ifFalse: [ 
-			self
-				applyModification_V2: aProjectSetModification
-				visitorClass: RwGsImagePatchVisitor_V2
-				instanceMigrator: instanceMigrator ]
-%
-
-category: '*rowan-gemstone-loader-extensions-onlyv2'
-classmethod: RwGsImage
 applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator symbolList: symbolList
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
@@ -93926,7 +93771,7 @@ applyModification_V2: aProjectSetModification visitorClass: visitorClass instanc
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet symbolList: symbolList.
+	patchSet loadSymbolList: symbolList.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -94118,13 +93963,19 @@ _cloneRowanLoaderSymbolDictionary
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 _shouldCloneRowanLoader: aProjectSetModification
-
 	"When modifications are made to the Rowan-GemStone-Loader package in the Rowan project, we need to clone the RowanLoader symbol dictionary"
 
-	| projectModification packageModification |
-	projectModification := aProjectSetModification elementsModified at: 'Rowan' ifAbsent: [ ^ false ].
-	packageModification := projectModification packagesModification elementsModified at: 'Rowan-GemStone-Loader' ifAbsent: [ ^ false ].
-	^ packageModification isEmpty not
+	| projectModification |
+	projectModification := aProjectSetModification elementsModified
+		at: 'Rowan'
+		ifAbsent: [ ^ false ].
+	#('Rowan-GemStone-LoaderV2')
+		do: [ :loaderPackageName | 
+			(projectModification packagesModification elementsModified
+				at: loaderPackageName
+				ifAbsent: [  ])
+				ifNotNil: [ :packageModification | ^ packageModification isEmpty not ] ].
+	^ false
 %
 
 ! Class extensions for 'RwGsLoadedSymbolDictClass'

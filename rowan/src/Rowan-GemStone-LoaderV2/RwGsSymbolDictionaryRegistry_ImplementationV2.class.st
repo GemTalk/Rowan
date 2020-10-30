@@ -36,44 +36,6 @@ Class {
 }
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _addMovedDeletedMethod: newCompiledMethod  instance: registryInstance [
-
-	"add a recompiled compiled method that was previously removed from loaded things
-		to behavior and update the loaded things appropriately"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [].
-	loadedMethod ifNotNil: [  
-			registryInstance
-				error:
-					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
-
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
-
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	^ registryInstance
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _clearLookupCachesFor: aBehavior env: envId [
 
 "Invalidates method lookup caches for all classes.
@@ -474,26 +436,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
 	^ compiledMethod
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	| methodDictionary selector |
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := compiledMethod selector.
-	methodDictionary 
-		at: selector 
-		ifAbsent: [  
-			registryInstance
-				error:
-					'Internal error -- attempt to move a method that does not exist'  ].
-	self _addMovedDeletedMethod: compiledMethod instance: registryInstance.
-	^ self moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance
 
 ]
 

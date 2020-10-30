@@ -252,15 +252,6 @@ RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod impleme
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledMethod [
-
-	"add a recompiled session method compiled method to behavior and update the loaded things"
-
-	^ self class registry_ImplementationClass addRecompiledSessionMethodMethod: newCompiledMethod instance: self
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass [
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"

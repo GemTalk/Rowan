@@ -59,19 +59,6 @@ RwGsClassPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> addToNewClassesByName: aDictionary [
-
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := classDefinition key.
-	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
-]
-
-{ #category : 'actions' }
 RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 

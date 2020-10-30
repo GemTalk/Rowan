@@ -101,13 +101,6 @@ RwAbstractResolvedObjectV2 >> addSimpleComponentNamed: aComponentName condition:
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	self
-		subclassResponsibility:
-			#'addSimpleComponentNamed:condition:groupName:comment:'
-]
-
-{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> comment [
 	^ self subclassResponsibility: #'comment'
 ]
