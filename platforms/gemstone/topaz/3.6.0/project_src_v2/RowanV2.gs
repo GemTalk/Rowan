@@ -6747,24 +6747,6 @@ removeallclassmethods RwPrjBrowserToolV2
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjCheckoutTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjCheckoutTool
-removeallclassmethods RwPrjCheckoutTool
-
-doit
-(RwProjectTool
 	subclass: 'RwPrjCloneTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -30283,17 +30265,6 @@ method: GsTonelOrderedDictionary
 addAll: aDictionary
 	aDictionary keysAndValuesDo: [ :key :value | self at: key put: value ].
 	^ aDictionary
-%
-
-category: 'accessing'
-method: GsTonelOrderedDictionary
-associations
-	"Answer a Collection containing the receiver's associations."
-
-	| result |
-	result := WriteStream on: (Array new: self size).
-	self associationsDo: [ :assoc | result nextPut: assoc ].
-	^ result contents
 %
 
 category: 'enumerating'
@@ -64930,13 +64901,6 @@ audit
 
 category: 'commands'
 classmethod: RwProjectTool
-checkout
-
-	^RwPrjCheckoutTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 clone
 
 	^RwPrjCloneTool new
@@ -66854,60 +66818,6 @@ _rowanSymbolDictionaryNames
 	^ #( #RowanKernel #RowanLoader #RowanTools )
 %
 
-! Class implementation for 'RwPrjCheckoutTool'
-
-!		Instance methods for 'RwPrjCheckoutTool'
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutProjectReference: aRwGitProjectReference
-
-	| checkout |
-	checkout := aRwGitProjectReference  committish.
-	checkout
-		ifNil: [ 
-			| msg |
-			msg := 'No committish defined for the project reference '
-				, aRwGitProjectReference projectAlias printString.
-			self inform: msg.
-			^ msg ]
-		ifNotNil: [ 
-			| gitTool gitRepoPath |
-			gitTool := Rowan gitTools.
-			gitRepoPath := aRwGitProjectReference repositoryRoot.
-			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
-	^ aRwGitProjectReference
-%
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutSpecification: aRwSpecification
-
-	| checkout |
-	self specification: aRwSpecification.
-	checkout := specification repoSpec committish.
-	checkout
-		ifNil: [ 
-			| msg |
-			msg := 'No committish defined for the spec '
-				, specification specName printString.
-			self inform: msg.
-			^ msg ]
-		ifNotNil: [ 
-			| gitTool gitRepoPath |
-			gitTool := Rowan gitTools.
-			gitRepoPath := specification repoSpec repositoryRootPath asFileReference.
-			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
-	^ specification
-%
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutSpecUrl: aString 
-
-	^self checkoutSpecification: (RwSpecification fromUrl: aString) 
-%
-
 ! Class implementation for 'RwPrjCloneTool'
 
 !		Instance methods for 'RwPrjCloneTool'
@@ -66915,9 +66825,7 @@ checkoutSpecUrl: aString
 category: 'smalltalk api'
 method: RwPrjCloneTool
 cloneRepository: aRwGitRepositoryDefinition
-
 	| gitTool response remoteUrl cloneOption checkout |
-
 	self
 		_validateForGitRepository: aRwGitRepositoryDefinition
 		ifDone: [ :msg | 
@@ -66929,9 +66837,16 @@ cloneRepository: aRwGitRepositoryDefinition
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , remoteUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
+	response := gitTool
+		gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString
+		with:
+			cloneOption , remoteUrl , aRwGitRepositoryDefinition repositoryRoot pathString.
 	checkout
-		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
+		ifNotNil: [ 
+			gitTool := Rowan gitTools.
+			gitTool
+				gitcheckoutIn: aRwGitRepositoryDefinition repositoryRoot
+				with: checkout ]
 %
 
 category: 'private'
@@ -74224,41 +74139,6 @@ migrateInstancesOf: aClassArray
 
 category: 'private - method initialization order'
 classmethod: RwGsPatchSet_V2
-classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList
-	"Returns acollection of the specified classPatches ordered in reverse superclass order"
-
-	| order toBeOrdered processed aClass patchMap |
-	patchMap := IdentityKeyValueDictionary new.
-	classPatches
-		do: [ :classPatch | 
-			| class |
-			class := (self
-				lookupSymbolDictName: classPatch symbolDictionaryName
-				in: tempSymbolList)
-				at: classPatch className asSymbol
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: classPatch className asSymbol)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update constraints for.' ]
-						ifNotNil: [ :assoc | assoc value ] ].
-			patchMap at: class put: classPatch ].
-	toBeOrdered := patchMap keys asIdentitySet.
-	order := OrderedCollection new.
-	processed := IdentitySet new.
-	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
-		whileFalse: [ 
-			self
-				_orderBySuperclass: aClass
-				from: toBeOrdered
-				into: order
-				ignoring: processed ].
-	^ ((order collect: [ :orderedClass | patchMap at: orderedClass ifAbsent: [  ] ])
-		select: [ :patch | patch notNil ]) reverse
-%
-
-category: 'private - method initialization order'
-classmethod: RwGsPatchSet_V2
 classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols
 
 	"Returns acollection of the specified classPatches ordered in reverse superclass order"
@@ -77961,32 +77841,6 @@ compiledMethod
 
 category: 'compiling'
 method: RwGsMethodPatchV2
-compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [
-	  | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		  intoCategories: nil
-		  environmentId: self methodEnvironmentId
-  ] on: (CompileError, CompileWarning) do:[:ex |
-    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-    ex pass 
-  ]
-%
-
-category: 'compiling'
-method: RwGsMethodPatchV2
 compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
 	self
 		primeBehaviorNewClasses: createdClasses
@@ -78558,34 +78412,6 @@ installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
 ! Class implementation for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
-
-category: 'compiling'
-method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
-compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [ | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-%
 
 category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
@@ -81804,13 +81630,6 @@ method: RwLoadedMethod
 classIsMeta
 
 	^classIsMeta
-%
-
-category: 'accessing'
-method: RwLoadedMethod
-classIsMeta: aBoolean
-
-	classIsMeta := aBoolean
 %
 
 category: 'queries'
@@ -85237,13 +85056,6 @@ _supportedPlatformNames
 %
 
 !		Instance methods for 'RwSpecification'
-
-category: 'conversion'
-method: RwSpecification
-asSpecification
-
-	^ self
-%
 
 category: 'private'
 method: RwSpecification
@@ -94443,12 +94255,6 @@ audit
   ^ RwPkgAuditToolV2 new
 %
 
-category: '*rowan-tools-corev2'
-classmethod: RwPackageTool
-auditV2
-  ^ RwPkgAuditToolV2 new
-%
-
 ! Class extensions for 'RwPlatform'
 
 !		Class methods for 'RwPlatform'
@@ -95253,12 +95059,6 @@ classmethod: RwProjectTool
 browser
 
 	^RwPrjBrowserToolV2 new
-%
-
-category: '*rowan-tools-corev2'
-classmethod: RwProjectTool
-browserV2
-	^ RwPrjBrowserToolV2 new
 %
 
 category: '*rowan-tools-corev2'

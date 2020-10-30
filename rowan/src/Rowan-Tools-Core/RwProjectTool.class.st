@@ -18,12 +18,6 @@ RwProjectTool class >> audit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> checkout [
-
-	^RwPrjCheckoutTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> clone [
 
 	^RwPrjCloneTool new

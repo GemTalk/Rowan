@@ -70,40 +70,6 @@ RwGsPatchSet_V2 class >> _orderBySuperclass: aClass from: toBeOrdered into: orde
 ]
 
 { #category : 'private - method initialization order' }
-RwGsPatchSet_V2 class >> classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList [
-	"Returns acollection of the specified classPatches ordered in reverse superclass order"
-
-	| order toBeOrdered processed aClass patchMap |
-	patchMap := IdentityKeyValueDictionary new.
-	classPatches
-		do: [ :classPatch | 
-			| class |
-			class := (self
-				lookupSymbolDictName: classPatch symbolDictionaryName
-				in: tempSymbolList)
-				at: classPatch className asSymbol
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: classPatch className asSymbol)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update constraints for.' ]
-						ifNotNil: [ :assoc | assoc value ] ].
-			patchMap at: class put: classPatch ].
-	toBeOrdered := patchMap keys asIdentitySet.
-	order := OrderedCollection new.
-	processed := IdentitySet new.
-	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
-		whileFalse: [ 
-			self
-				_orderBySuperclass: aClass
-				from: toBeOrdered
-				into: order
-				ignoring: processed ].
-	^ ((order collect: [ :orderedClass | patchMap at: orderedClass ifAbsent: [  ] ])
-		select: [ :patch | patch notNil ]) reverse
-]
-
-{ #category : 'private - method initialization order' }
 RwGsPatchSet_V2 class >> classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols [
 
 	"Returns acollection of the specified classPatches ordered in reverse superclass order"
