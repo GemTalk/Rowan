@@ -579,17 +579,6 @@ RwGsPatchSet_V2 >> addClassMove: aRwClassMove [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2 >> addCreatedClassesAndVersionsTo: newClassesByName [
-
-	addedClasses do: [ :patch | patch addToNewClassesByName: newClassesByName ].
-	classesWithClassVariableChanges
-		do: [ :each | each addToNewClassesByName: newClassesByName ].
-	classesWithNewVersions
-		do: [ :each | each addToNewClassesByName: newClassesByName ]
-
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet_V2 >> addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList [
 	addedClasses
 		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].

@@ -170,15 +170,6 @@ RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName [
-
-	"expecting only a single method to be in methDict/catDict"
-
-	^ self class registry_ImplementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass [
 
 	"expecting only a single method to be in methDict/catDict"
@@ -186,28 +177,6 @@ RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	^ self class registry_ImplementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistryV2 >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 

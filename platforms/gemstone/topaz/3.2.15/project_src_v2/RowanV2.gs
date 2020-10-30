@@ -68008,19 +68008,6 @@ addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjec
 	^ projectDefinition
 %
 
-category: 'class extension editting'
-method: RwPrjEditTool
-addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjectNamed: projectName
-
-	"Add the given class extension definition to the named package in the named project. 
-		Return a projectDefinition for the named project"
-
-	^ self
-		addClassExtension: classExtensionDefinition
-		inPackageNamed: packageName
-		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
-%
-
 category: 'class editing'
 method: RwPrjEditTool
 removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition
@@ -74594,67 +74581,6 @@ addAddedProject: aProjectDefinition
 
 category: 'private'
 method: RwGsImagePatchVisitor_V2
-addClasses: classDefinitions
-	classDefinitions
-		do: [ :classDefinition | 
-			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
-				in a project that is not included in this load"
-			(Rowan globalNamed: classDefinition name)
-				ifNotNil: [ :global | 
-					(RwExistingVisitorAddingExistingClassNotification new
-						class: global;
-						classDefinition: classDefinition;
-						yourself) signal ] ].
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addAddedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addAddedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addAddedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-%
-
-category: 'private'
-method: RwGsImagePatchVisitor_V2
-addClassExtensions: classExtensions
-
-	classExtensions
-		do: [ :classDefinition | 
-			patchSet
-				addExtendedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addExtendedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addExtendedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-%
-
-category: 'private'
-method: RwGsImagePatchVisitor_V2
 addDeletedPackage: aPackageDefinition
 
 	currentPackage := aPackageDefinition.
@@ -75427,17 +75353,6 @@ method: RwGsPatchSet_V2
 addClassMove: aRwClassMove
 
 	movedClasses add: aRwClassMove
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2
-addCreatedClassesAndVersionsTo: newClassesByName
-
-	addedClasses do: [ :patch | patch addToNewClassesByName: newClassesByName ].
-	classesWithClassVariableChanges
-		do: [ :each | each addToNewClassesByName: newClassesByName ].
-	classesWithNewVersions
-		do: [ :each | each addToNewClassesByName: newClassesByName ]
 %
 
 category: 'private - applying'
@@ -79919,15 +79834,6 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 
 category: 'private'
 method: RwGsSymbolDictionaryRegistryV2
-addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName
-
-	"expecting only a single method to be in methDict/catDict"
-
-	^ self class registry_ImplementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
 addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass
 
 	"expecting only a single method to be in methDict/catDict"
@@ -79935,28 +79841,6 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	^ self class registry_ImplementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 %
 
 category: 'private'
