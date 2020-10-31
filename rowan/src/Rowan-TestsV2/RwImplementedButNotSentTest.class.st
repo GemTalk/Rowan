@@ -100,7 +100,8 @@ RwImplementedButNotSentTest >> _expectedUnsentMessages [
 
 { #category : 'special cases' }
 RwImplementedButNotSentTest >> singleSenderSelectorsJadeite [
-	"These are selectors where the only sender is image is the method itself ... these methods are sent by the Jadeite client"
+	"These are selectors where there is a single sender in the image and the sending method is the same selector (apparent self sender).
+		These are cases where there is more than one implementor .. we should be able to exclude these cases, but haven't done so yet ..."
 
 	^ #(#'projectServiceClass' #'methodServiceClass' #'browserServiceClass' #'answeringServiceClass')
 ]
