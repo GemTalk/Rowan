@@ -146,11 +146,6 @@ RwAbstractResolvedObjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
 { #category : 'project specification' }
-RwAbstractResolvedObjectV2 >> groupNames [
-	^ self _loadSpecification groupNames
-]
-
-{ #category : 'project specification' }
 RwAbstractResolvedObjectV2 >> groupNames: anArray [
 	self _loadSpecification groupNames: anArray
 ]

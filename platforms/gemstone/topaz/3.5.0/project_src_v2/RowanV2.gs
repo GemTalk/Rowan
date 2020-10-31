@@ -50747,14 +50747,6 @@ projectUrl
 	^ self _loadedProject projectUrl
 %
 
-category: 'project creation'
-method: RwProject
-register
-	"Create a loaded project based on the receiver's properties in the image."
-
-	self _specification register
-%
-
 category: 'properties'
 method: RwProject
 remote
@@ -50774,6 +50766,47 @@ method: RwProject
 repositoryRootPath
 
 	^ self repositoryRoot pathString
+%
+
+category: 'actions'
+method: RwProject
+revert
+	"
+		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly revert the receiver AND required projects, <TBD>.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+%
+
+category: 'actions'
+method: RwProject
+revert: platformConditionalAttributes
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+%
+
+category: 'actions'
+method: RwProject
+revert: platformConditionalAttributes  instanceMigrator: instanceMigrator
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+			receiver are only loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
 %
 
 category: 'actions'
@@ -61999,12 +62032,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 
 category: 'project specification'
 method: RwAbstractResolvedObjectV2
-groupNames
-	^ self _loadSpecification groupNames
-%
-
-category: 'project specification'
-method: RwAbstractResolvedObjectV2
 groupNames: anArray
 	self _loadSpecification groupNames: anArray
 %
@@ -62875,16 +62902,6 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName
 		condition: conditionArray
-		comment: commentString
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionArray
 		comment: commentString
 %
 
@@ -75517,21 +75534,6 @@ compileMethods
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
-createClassesFromWorklist: workList andClassesByName: newClassesByName
-	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| className |
-	className := self anyElementOfCollection: workList.
-	className ifNil: [self error: 'Empty WorkList.'].
-	self
-		createClassNamed: className
-		fromWorkList: workList
-		andClassesByName: newClassesByName
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2
 createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
@@ -75547,25 +75549,6 @@ createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClas
 		fromWorkSymbolList: workSymbolList
 		symDictName: symDictName
 		andClassesByNameSymbolList: newClassesByNameSymbolList
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2
-createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName
-	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| patch superclassName |
-	workList remove: className.
-	patch := newClassesByName at: className.
-	superclassName := patch superclassName.
-	(workList includes: superclassName)
-		ifTrue: 
-			[self
-				createClassNamed: superclassName
-				fromWorkList: workList
-				andClassesByName: newClassesByName].
-	patch createClassFor: self
 %
 
 category: 'private - applying'
@@ -97787,23 +97770,9 @@ componentNames
 
 category: '*rowan-gemstone-core'
 method: RwProject
-defaultSymbolDictName
-
-	^ self _gemstonePlatformSpec defaultSymbolDictName
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
 defaultSymbolDictName: aString
 
 	^ self _loadedProject defaultSymbolDictName: aString
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
-defaultUseSessionMethodsForExtensions
-
-	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
 %
 
 category: '*rowan-corev2'

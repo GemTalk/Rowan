@@ -5,28 +5,6 @@ Class {
 }
 
 { #category : 'private' }
-RwImplementedButNotSentTest >> _analyzeSent: sent andImplemented: implemented forClassDefinition: classDef [
-	| beh |
-	beh := System myUserProfile objectNamed: classDef name.
-	{(classDef instanceMethodDefinitions keys).
-	(classDef classMethodDefinitions keys)}
-		do: [ :selectors | 
-			selectors
-				do: [ :selector | 
-					| sel |
-					sel := selector asSymbol.
-sel == #'
-asOop' ifTrue: [ self halt ].
-					implemented ifNotNil: [ implemented add: sel ].
-					sent
-						ifNotNil: [ 
-							| meth |
-							meth := beh compiledMethodAt: sel.
-							sent addAll: meth _selectorPool ] ].
-			beh := beh class ]
-]
-
-{ #category : 'private' }
 RwImplementedButNotSentTest >> _analyzeSent: sent andImplemented: implemented forClasses: classes [
 	| env |
 	env := 0.
@@ -46,7 +24,27 @@ RwImplementedButNotSentTest >> _analyzeSent: sent andImplemented: implemented fo
 ]
 
 { #category : 'private' }
-RwImplementedButNotSentTest >> _analyzeSent: sent andImplemented: implemented forProjectNamed: projectName [
+RwImplementedButNotSentTest >> _analyzeSent: sent selfSenders: selfSenders andImplemented: implemented forClassDefinition: classDef [
+	| beh |
+	beh := System myUserProfile objectNamed: classDef name.
+	{(classDef instanceMethodDefinitions keys).
+	(classDef classMethodDefinitions keys)}
+		do: [ :selectors | 
+			selectors
+				do: [ :selector | 
+					| sel meth selectorPool |
+					sel := selector asSymbol.
+					implemented ifNotNil: [ implemented add: sel ].
+					meth := beh compiledMethodAt: sel.
+					selectorPool := meth _selectorPool.
+					(selectorPool includes: sel)
+						ifTrue: [ selfSenders add: sel ].
+					sent ifNotNil: [ sent addAll: selectorPool ] ].
+			beh := beh class ]
+]
+
+{ #category : 'private' }
+RwImplementedButNotSentTest >> _analyzeSent: sent selfSenders: selfSenders andImplemented: implemented forProjectNamed: projectName [
 	| project |
 	project := Rowan projectNamed: projectName.
 	project packages
@@ -63,9 +61,30 @@ RwImplementedButNotSentTest >> _analyzeSent: sent andImplemented: implemented fo
 												or: [ package name includesString: '-Cypress-' ] ] ] ] ])
 				ifFalse: [ 
 					package _loadedPackage classDefinitions
-						do: [ :def | self _analyzeSent: sent andImplemented: implemented forClassDefinition: def ].
+						do: [ :def | 
+							self
+								_analyzeSent: sent
+								selfSenders: selfSenders
+								andImplemented: implemented
+								forClassDefinition: def ].
 					package _loadedPackage classExtensionDefinitions
-						do: [ :def | self _analyzeSent: sent andImplemented: implemented forClassDefinition: def ] ] ]
+						do: [ :def | 
+							self
+								_analyzeSent: sent
+								selfSenders: selfSenders
+								andImplemented: implemented
+								forClassDefinition: def ] ] ]
+]
+
+{ #category : 'private' }
+RwImplementedButNotSentTest >> _expectedSingleSenderMessages [
+	"those messages that are expected to be implmented but not sent"
+
+	| singleSenders |
+	singleSenders := IdentitySet new.
+	(self class allSelectors select: [ :ea | ea beginsWith: 'singleSenderSelectors' ])
+		do: [ :selector | singleSenders addAll: (self perform: selector) ].
+	^ singleSenders
 ]
 
 { #category : 'private' }
@@ -79,19 +98,46 @@ RwImplementedButNotSentTest >> _expectedUnsentMessages [
 	^ unSent
 ]
 
+{ #category : 'special cases' }
+RwImplementedButNotSentTest >> singleSenderSelectorsJadeite [
+	"These are selectors where the only sender is image is the method itself ... these methods are sent by the Jadeite client"
+
+	^ #(#'projectServiceClass' #'methodServiceClass' #'browserServiceClass' #'answeringServiceClass')
+]
+
 { #category : 'tests' }
 RwImplementedButNotSentTest >> testImplementedButNotSent [
 	"find messages within the Rowan code base that are implemented but not sent"
 
-	| sent implemented implementedNotSent |
-	sent := IdentitySet new.
-	implemented := IdentitySet new.
-	self _analyzeSent: nil andImplemented: implemented forProjectNamed: 'Rowan'.
+	| sent implemented implementedNotSent singleSenders selfSenders singleImplementors sentBySelfOnly |
+	sent := IdentityBag new.
+	selfSenders := IdentitySet new.
+	implemented := IdentityBag new.
+
+	self
+		_analyzeSent: nil
+		selfSenders: selfSenders
+		andImplemented: implemented
+		forProjectNamed: 'Rowan'.
 	self
 		_analyzeSent: sent
 		andImplemented: nil
 		forClasses: ClassOrganizer new classes.
-	implementedNotSent := implemented - sent - self _expectedUnsentMessages.
+
+	singleImplementors := implemented
+		select: [ :each | (implemented occurrencesOf: each) = 1 ].
+	singleSenders := IdentitySet new.
+	sent
+		do: [ :each | 
+			"if there is only one sender and one implementor of the same selector, make sure that it is not a self send"
+			((sent occurrencesOf: each) = 1
+				and: [ (singleImplementors includes: each) and: [ selfSenders includes: each ] ])
+				ifTrue: [ singleSenders add: each ] ].
+	sentBySelfOnly := singleSenders - self _expectedSingleSenderMessages.
+	implementedNotSent := implemented asIdentitySet - sent asIdentitySet
+		- self _expectedUnsentMessages.
+
+	self assert: sentBySelfOnly isEmpty.
 	self assert: implementedNotSent isEmpty
 ]
 
@@ -112,7 +158,7 @@ RwImplementedButNotSentTest >> unsentSelectorsThatShouldBeRemoved [
 
 	"using this list to manage the list of methods that I think should be removed ... empty this list when done (rerun tests, because the removed methods might be hiding additional orphan messages"
 
-	^ #( #'createClassesFromWorklist:andClassesByName:' #'createLoadedPackageFromDefinition:' #'createLoadedPackageNamed:inProjectNamed:' #'createLoadedPackageNamed:properties:' #'createLoadedPackageNamed:properties:implementationClass:' #'deleteClasses:' #'deleteClassFromPackage:implementationClass:' #'deleteClassNamedFromPackage:' #'deleteCompiledMethod:from:implementationClass:' #'deleteMethodNewClasses:andExistingClasses:' #'deleteMethodNewClasses:andExistingClassSymbolList:' #'deleteMethod:for:' #'deleteMovedLoadedMethod:for:implementationClass:' #'deleteMovedMethod:for:implementationClass:' #'deleteNewVersionMethodNewClasses:andExistingClasses:' #'deleteNewVersionMethodNewClasses:andExistingClassSymbolList:' #'dir' #'dirPath' #'doGitCommit:' #'doGitCommitLog:' #'existingOrNewLoadedPackageNamed:' #'existingSymbolDictionaryNamed:' #'export:' #'loadedClassOrExtensionForMethod' #'loadedConfigurationNames:' #'loadedHybridPackageNamed:ifAbsent:implementationClass:' #'loadedPackageNamed:ifAbsent:implementationClass:' #'modificationForcingNewVersion' #'newLoadedPackageNamed:implementationClass:' #'newUpdateForClassMoves' #'newUpdateForMethodMoves' #'specUrl:')
+	^ #( #'createLoadedPackageFromDefinition:' #'createLoadedPackageNamed:inProjectNamed:' #'createLoadedPackageNamed:properties:' #'createLoadedPackageNamed:properties:implementationClass:' #'deleteClasses:' #'deleteClassFromPackage:implementationClass:' #'deleteClassNamedFromPackage:' #'deleteCompiledMethod:from:implementationClass:' #'deleteMethodNewClasses:andExistingClasses:' #'deleteMethodNewClasses:andExistingClassSymbolList:' #'deleteMethod:for:' #'deleteMovedLoadedMethod:for:implementationClass:' #'deleteMovedMethod:for:implementationClass:' #'deleteNewVersionMethodNewClasses:andExistingClasses:' #'deleteNewVersionMethodNewClasses:andExistingClassSymbolList:' #'dir' #'dirPath' #'doGitCommit:' #'doGitCommitLog:' #'existingOrNewLoadedPackageNamed:' #'existingSymbolDictionaryNamed:' #'export:' #'loadedClassOrExtensionForMethod' #'loadedConfigurationNames:' #'loadedHybridPackageNamed:ifAbsent:implementationClass:' #'loadedPackageNamed:ifAbsent:implementationClass:' #'modificationForcingNewVersion' #'newLoadedPackageNamed:implementationClass:' #'newUpdateForClassMoves' #'newUpdateForMethodMoves' #'specUrl:')
 ]
 
 { #category : 'special cases' }
@@ -130,5 +176,5 @@ RwImplementedButNotSentTest >> unsentSelectorsThatWillBeSent [
 
 	"Use this list for selectors that we intend to keep"
 
-	^ #(#'mercurialUrl:' #'methodEnv' #'svnUrl:')
+	^ #(#'mercurialUrl:' #'methodEnv' #'svnUrl:' #'revert' #'revert:' #'revert:instanceMigrator:')
 ]

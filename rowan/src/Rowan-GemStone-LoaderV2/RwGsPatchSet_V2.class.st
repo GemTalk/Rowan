@@ -1044,20 +1044,6 @@ RwGsPatchSet_V2 >> compileMethods [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2 >> createClassesFromWorklist: workList andClassesByName: newClassesByName [
-	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| className |
-	className := self anyElementOfCollection: workList.
-	className ifNil: [self error: 'Empty WorkList.'].
-	self
-		createClassNamed: className
-		fromWorkList: workList
-		andClassesByName: newClassesByName
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet_V2 >> createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
@@ -1073,24 +1059,6 @@ RwGsPatchSet_V2 >> createClassesFromWorkSymbolList: workSymbolList symDictName: 
 		fromWorkSymbolList: workSymbolList
 		symDictName: symDictName
 		andClassesByNameSymbolList: newClassesByNameSymbolList
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_V2 >> createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName [
-	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| patch superclassName |
-	workList remove: className.
-	patch := newClassesByName at: className.
-	superclassName := patch superclassName.
-	(workList includes: superclassName)
-		ifTrue: 
-			[self
-				createClassNamed: superclassName
-				fromWorkList: workList
-				andClassesByName: newClassesByName].
-	patch createClassFor: self
 ]
 
 { #category : 'private - applying' }
