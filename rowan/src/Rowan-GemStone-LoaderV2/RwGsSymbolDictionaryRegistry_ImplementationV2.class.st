@@ -683,39 +683,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMethod: selector fo
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance [
-
-	"delete a compiled method from behavior - moved method already removed from the loaded things"
-
-	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedLoadedMethod: selector for: behavior instance: registryInstance [
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedMethod: selector for: behavior instance: registryInstance [
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deletePackage: packageName instance: registryInstance [
 
 	| loadedPackage |

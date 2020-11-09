@@ -311,34 +311,11 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 ]
 
 { #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition [
-
-	^ self class registry_ImplementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
-
-]
-
-{ #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
-
-]
-
-{ #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageNamed: packageName properties: properties [
-
-	^ self class registry_ImplementationClass createLoadedPackageNamed: packageName properties: properties instance: self
-
-]
-
-{ #category : 'package - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createLoadedPackageNamed: packageName properties: properties instance: self
 
 ]
 
@@ -348,26 +325,6 @@ RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class [
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
 	^ self class registry_ImplementationClass deleteClassFromPackage: class instance: self
-
-]
-
-{ #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class implementationClass: implementationClass [
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteClassFromPackage: class instance: self
-
-]
-
-{ #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteClassNamedFromPackage: className [
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	^ self class registry_ImplementationClass deleteClassNamedFromPackage: className instance: self
 
 ]
 
@@ -392,47 +349,11 @@ RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: beh
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass [
-
-	"delete a compiled method from behavior and remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteCompiledMethod: compiledMethod from: behavior instance: self
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior [
-
-	^ self class registry_ImplementationClass deleteMethod: selector for: behavior instance: self
-
-]
-
-{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass deleteMethod: selector for: behavior instance: self
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistryV2 >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedMethod: selector for: behavior instance: self
 
 ]
 
@@ -610,13 +531,6 @@ RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryN
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
 		instance: self
-]
-
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistryV2 >> newLoadedPackageNamed: packageName [
-
-	^ self class registry_ImplementationClass newLoadedPackageNamed: packageName instance: self
-
 ]
 
 { #category : 'package - creation api' }
