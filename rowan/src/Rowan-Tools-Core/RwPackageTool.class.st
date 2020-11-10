@@ -15,11 +15,6 @@ RwPackageTool class >> create [
 ]
 
 { #category : 'commands' }
-RwPackageTool class >> diff [
-  ^ RwPkgDiffTool new
-]
-
-{ #category : 'commands' }
 RwPackageTool class >> disown [
   ^ RwPkgDisownTool new
 

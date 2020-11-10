@@ -6511,7 +6511,7 @@ removeallclassmethods RwResolvedRepositoryV2
 doit
 (Object
 	subclass: 'RwAbstractTool'
-	instVarNames: #( specification )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6685,24 +6685,6 @@ true.
 
 removeallmethods RwPkgCreateTool
 removeallclassmethods RwPkgCreateTool
-
-doit
-(RwPackageTool
-	subclass: 'RwPkgDiffTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPkgDiffTool
-removeallclassmethods RwPkgDiffTool
 
 doit
 (RwPackageTool
@@ -6991,42 +6973,6 @@ true.
 
 removeallmethods RwPrjLoadToolV2
 removeallclassmethods RwPrjLoadToolV2
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjPullTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjPullTool
-removeallclassmethods RwPrjPullTool
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjPushTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjPushTool
-removeallclassmethods RwPrjPushTool
 
 doit
 (RwProjectTool
@@ -33600,20 +33546,7 @@ method: JadeServer
 sbChangesInPackage: anOrderedCollection
 	"where anOrderedCollection is {packageName, projectName}"
 
-	| patch string packageName url |
-	packageName := anOrderedCollection removeFirst.
-	url := anOrderedCollection removeFirst.
-	patch := Rowan packageTools diff patchForPackageName: packageName.
-	string := self
-				_mcDescriptionOfPatch: patch
-				baseName: 'closest ancestor'
-				alternateName: nil.
-	writeStream
-		nextPutAll: 'changesInPackage';
-		lf;
-		nextPutAll: string;
-		yourself
-
+	self error: 'this message is no longer supported'
 %
 
 category: 'category'
@@ -55869,7 +55802,7 @@ method: RowanPackageService
 changes
    "diffForPackageName: not implemented yet"
  
-   ^ (Rowan packageTools diff diffForPackageName: name) asString
+ self error: 'this message is no longer supported'
 %
 
 category: 'other'
@@ -64005,12 +63938,6 @@ definitionsForMethod: selector inClassNamed: className isMeta: isMeta ifFound: f
 		ifAbsent: absentBlock
 %
 
-category: 'smalltalk api'
-method: RwAbstractTool
-specification: aRwSpecification
-  ^ specification := aRwSpecification
-%
-
 ! Class implementation for 'RwClassTool'
 
 !		Class methods for 'RwClassTool'
@@ -64795,12 +64722,6 @@ create
 
 category: 'commands'
 classmethod: RwPackageTool
-diff
-  ^ RwPkgDiffTool new
-%
-
-category: 'commands'
-classmethod: RwPackageTool
 disown
   ^ RwPkgDisownTool new
 %
@@ -65115,27 +65036,6 @@ adoptSymbolList: symbolList excludingSymbolDictsNamed: excludedSymbolDictionaryN
 			ifFalse: [ self adoptSymbolDictionary: symbolDict intoPackageNamed: (packageNameMap at: symDictName) ] ]
 %
 
-! Class implementation for 'RwPkgDiffTool'
-
-!		Instance methods for 'RwPkgDiffTool'
-
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchForPackageName: packageName
-
-	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
-self deprecated: 'patchForPackageName: deprecated in favor or RwPrjDiffTool>>patchesForProjectNamed:'.
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	loadedProject := loadedPackage loadedProject.
-	super specification: loadedProject specification.
-	repo := specification repositoryUrl asRwRepository.
-	diskSnapshot := (repo readPackageStructureForPackageNamed: packageName)
-		snapshot.
-	imageSnapshot := (RwCypressPackageStructure
-		fromPackage: loadedPackage asDefinition) snapshot.
-	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-%
-
 ! Class implementation for 'RwPkgDisownTool'
 
 !		Instance methods for 'RwPkgDisownTool'
@@ -65439,20 +65339,6 @@ classmethod: RwProjectTool
 edit
 
 	^ RwPrjEditTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-pull
-
-	^RwPrjPullTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-push
-
-	^RwPrjPushTool new
 %
 
 category: 'commands'
@@ -68008,110 +67894,6 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 					theLoadedProject loadedPackages
 						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
-%
-
-! Class implementation for 'RwPrjPullTool'
-
-!		Instance methods for 'RwPrjPullTool'
-
-category: 'git'
-method: RwPrjPullTool
-doGitPull: remote
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ remote isEmpty
-		ifTrue: [ gitTool gitpullIn: gitRootPath with: '' ]
-		ifFalse: [ 
-			| currentBranchName |
-			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
-			gitTool gitpullIn: gitRootPath with: remote , ' ' , currentBranchName ]
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecification: aRwSpecification
-  ^ self pullSpecification: aRwSpecification remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecification: aRwSpecification remote: remoteOrNil
-  | remote |
-  self specification: aRwSpecification.
-  remoteOrNil
-    ifNil: [ remote := specification repoSpec remote ]
-    ifNotNil: [ remote := remoteOrNil ].
-  ^ specification pullForTool: self remote: remote
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecUrl: aSpecUrlString
-  ^ self
-    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecUrl: aSpecUrlString remote: remote
-  ^ self
-    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: remote
-%
-
-! Class implementation for 'RwPrjPushTool'
-
-!		Instance methods for 'RwPrjPushTool'
-
-category: 'git'
-method: RwPrjPushTool
-doGitPush: remote
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ remote isEmpty
-		ifTrue: [ gitTool gitpushIn: gitRootPath with: '' ]
-		ifFalse: [ 
-			| currentBranchName |
-			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
-			gitTool gitpushIn: gitRootPath with: remote , ' ' , currentBranchName ]
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecification: aRwSpecification
-  ^ self pushSpecification: aRwSpecification remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecification: aRwSpecification remote: remoteOrNil
-  | remote |
-  self specification: aRwSpecification.
-  remoteOrNil
-    ifNil: [ remote := specification repoSpec remote ]
-    ifNotNil: [ remote := remoteOrNil ].
-  ^ specification pushForTool: self remote: remote
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecUrl: aSpecUrlString
-  ^ self
-    pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecUrl: aSpecUrlString remote: remote
-  ^ self
-    pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: remote
 %
 
 ! Class implementation for 'RwPrjQueryTool'

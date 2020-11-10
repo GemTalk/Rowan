@@ -56,18 +56,6 @@ RwProjectTool class >> edit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> pull [
-
-	^RwPrjPullTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> push [
-
-	^RwPrjPushTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> query [
 
 	^ RwPrjQueryTool new

@@ -18,9 +18,6 @@ Fundamental concepts:
 Class {
 	#name : 'RwAbstractTool',
 	#superclass : 'Object',
-	#instVars : [
-		'specification'
-	],
 	#category : 'Rowan-Tools-Core'
 }
 
@@ -90,9 +87,4 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 				value: projectDef.
 			^ self ]
 		ifAbsent: absentBlock
-]
-
-{ #category : 'smalltalk api' }
-RwAbstractTool >> specification: aRwSpecification [
-  ^ specification := aRwSpecification
 ]
