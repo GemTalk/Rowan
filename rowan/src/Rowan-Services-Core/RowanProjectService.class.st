@@ -23,7 +23,8 @@ Class {
 		'rowanProjectsHome',
 		'isDiskDirty',
 		'projectOop',
-		'specService'
+		'specService',
+		'componentServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -112,6 +113,7 @@ RowanProjectService >> basicRefresh [
 	projectUrl := self rowanProjectUrl.
 	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
 	isDiskDirty := self isGitDirty.
+	componentServices := self componentServices.
 	RowanCommandResult addResult: self
 ]
 
@@ -172,6 +174,18 @@ RowanProjectService >> commitWithMessage: message [
 	Rowan projectTools commit
 		commitProjectNamed: name
 		message: message.
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> componentServices [
+	| components |
+	components := Dictionary new.
+	components
+		at: #'nil'
+		put:
+			(self rwProject componentNames
+				collect: [ :componentName | RowanComponentService forComponentNamed: componentName ]).
+	^components
 ]
 
 { #category : 'examples' }
@@ -500,15 +514,14 @@ RowanProjectService >> rowanProjectName [
 { #category : 'rowan' }
 RowanProjectService >> rowanProjectUrl [
 
-	^(RwProject newNamed: name) projectUrl
+	^self rwProject projectUrl
 ]
 
 { #category : 'rowan' }
 RowanProjectService >> rowanSha [
 
 	name isNil ifTrue:[^0].
-	^(RwProject newNamed: name) loadedCommitId
-
+	^self rwProject loadedCommitId
 ]
 
 { #category : 'rowan' }
@@ -540,7 +553,7 @@ RowanProjectService >> setExistsOnDisk [
 	"might be a better test than #repositorySha for
 	determining if a project exists on disk." 
 
-	existsOnDisk := (RwProject newNamed: name) existsOnDisk.
+	existsOnDisk := self rwProject existsOnDisk.
 ]
 
 { #category : 'accessing' }
