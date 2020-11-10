@@ -6973,24 +6973,6 @@ removeallclassmethods RwPrjLoadToolV2
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjLogTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjLogTool
-removeallclassmethods RwPrjLogTool
-
-doit
-(RwProjectTool
 	subclass: 'RwPrjPullTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -50291,6 +50273,13 @@ commitId
 
 category: 'querying'
 method: RwProject
+commitLog: logLimit
+
+	^ self _loadedProject commitLog: logLimit
+%
+
+category: 'querying'
+method: RwProject
 componentForPackageNamed: packageName
 	"Answer nil if no component found"
 
@@ -56377,9 +56366,7 @@ category: 'rowan'
 method: RowanProjectService
 log
 
-	^Rowan projectTools log
-		commitLogProjectNamed: name
-		limit: 25
+	^self rwProject commitLog: 25
 %
 
 category: 'accessing'
@@ -56922,10 +56909,7 @@ category: 'queries'
 method: RowanQueryService
 projectLog: projectName
 
-	queryResults := 
-		(Rowan projectTools log
-		commitLogProjectNamed: projectName
-		limit: self defaultProjectLogSize).
+	queryResults := (Rowan projectNamed: projectName) commitLog: self defaultProjectLogSize.
 	RowanCommandResult addResult: self.
 %
 
@@ -62923,15 +62907,7 @@ export
 category: 'exporting'
 method: RwResolvedProjectV2
 exportComponents
-	self components
-		do: [ :component | 
-			component
-				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				yourself ].
-	self components isEmpty
-		ifTrue: [ 
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+	self components export: self componentsRoot
 %
 
 category: 'exporting'
@@ -63837,35 +63813,10 @@ definitionsForMethod: selector inClassNamed: className isMeta: isMeta ifFound: f
 		ifAbsent: absentBlock
 %
 
-category: 'git'
-method: RwAbstractTool
-doGitCommit: messageString
-
-	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	commitMessageFileName := gitTool createTmpFileWith: messageString.
-	gitTool gitaddIn: gitRootPath with: '-A .'.
-	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
-	status := gitTool gitlogIn: gitRootPath with: '-1'.
-	Transcript
-		cr;
-		show: '==============';
-		cr;
-		show: status.
-	^ status
-%
-
 category: 'smalltalk api'
 method: RwAbstractTool
 specification: aRwSpecification
   ^ specification := aRwSpecification
-%
-
-category: 'smalltalk api'
-method: RwAbstractTool
-specUrl: aString
-  ^ self specification: (RwSpecification fromUrl: aString)
 %
 
 ! Class implementation for 'RwClassTool'
@@ -65296,13 +65247,6 @@ classmethod: RwProjectTool
 edit
 
 	^ RwPrjEditTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-log
-
-	^RwPrjLogTool new
 %
 
 category: 'commands'
@@ -67872,27 +67816,6 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 					theLoadedProject loadedPackages
 						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
-%
-
-! Class implementation for 'RwPrjLogTool'
-
-!		Instance methods for 'RwPrjLogTool'
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogProjectNamed: projectName limit: logLimit
-
-	^ (Rowan image loadedProjectNamed: projectName) commitLog: logLimit
-%
-
-category: 'git'
-method: RwPrjLogTool
-doGitCommitLog: logLimit
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ gitTool gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: gitRootPath
 %
 
 ! Class implementation for 'RwPrjPullTool'
@@ -73202,72 +73125,6 @@ isEmpty
 	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
 %
 
-category: 'moves'
-method: RwProjectSetModification
-newUpdateForClassMoves
-	elementsModified
-		do: [ :projectModification | 
-			| packagesModification |
-			packagesModification := projectModification packagesModification.
-			packagesModification elementsModified
-				do: [ :packageModification | 
-					| classesModification |
-					classesModification := packageModification classesModification.
-					classesModification elementsModified
-						do: [ :classModification | 
-							| addedClass removedClass |
-							classModification before isEmpty
-								ifTrue: [ 
-									| newClass |
-									newClass := classModification after.
-									addedClass := RwClassAdditionOrRemoval
-										projectDefinition: projectModification after
-										packageDefinition: packageModification after
-										classKey: newClass key
-										classesModification: classesModification ].
-							classModification after isEmpty
-								ifTrue: [ 
-									| oldClass |
-									oldClass := classModification before.
-									removedClass := RwClassAdditionOrRemoval
-										projectDefinition: projectModification before
-										packageDefinition: packageModification before
-										classKey: oldClass key
-										classesModification: classesModification ].
-							self updateForClassMoveFrom: removedClass to: addedClass ] ] ]
-%
-
-category: 'moves'
-method: RwProjectSetModification
-newUpdateForMethodMoves
-	"Methods that have been moved between packages will initially show up as a remove and an add rather than a move.
-	Find moved methods and correct the structure."
-
-	elementsModified
-		do: [ :projectModification | 
-			| packagesModification |
-			packagesModification := projectModification packagesModification.
-			packagesModification elementsModified
-				do: [ :packageModification | 
-					| addedMethods removedMethods |
-					removedMethods := Dictionary new.
-					addedMethods := Dictionary new.
-					self
-						addMethodsAddedByPackageModification: packageModification
-						inProject: projectModification
-						toDictionary: addedMethods.
-					self
-						addMethodsRemovedByPackageModification: packageModification
-						inProject: projectModification
-						toDictionary: removedMethods.
-					addedMethods
-						keysAndValuesDo: [ :key :addition | 
-							| removal |
-							removal := removedMethods at: key ifAbsent: [ nil ].
-							removal
-								ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ] ] ]
-%
-
 category: 'private - moves'
 method: RwProjectSetModification
 updateForClassMoveFrom: removal to: addition
@@ -73646,19 +73503,6 @@ ensureSessionMethodsEnabled
 
 	GsPackagePolicy current enabled
 		ifFalse: [ GsPackagePolicy current enable ].
-%
-
-category: 'querying'
-classmethod: RwGsImage
-existingSymbolDictionaryNamed: dictName
-
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName |
-	symbolName := dictName asSymbol.
-	^ self symbolList
-		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
-		ifNone: [ nil ]
 %
 
 category: 'querying'
@@ -78195,27 +78039,6 @@ isMeta: newValue
 	isMeta := newValue
 %
 
-category: 'private'
-method: RwGsMethodPatchV2
-loadedClassOrExtensionForMethod
-
-	"The loaded class or extension should already exist."
-
-	| loadedPackage className |
-	loadedPackage := Rowan image
-		loadedPackageNamed: self packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
-	className := classDefinition key.
-	^ loadedPackage
-		classOrExtensionForClassNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
-%
-
 category: 'accessing'
 method: RwGsMethodPatchV2
 methodDefinition
@@ -79278,20 +79101,6 @@ existingForClass: aClass ifAbsent: absentBlock
 	^ self loadedClassForClass: aClass ifAbsent: absentBlock
 %
 
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-existingOrNewLoadedPackageNamed: packageName
-
-	^ self class registry_ImplementationClass existingOrNewLoadedPackageNamed: packageName instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass
-
-	^ implementationClass existingOrNewLoadedPackageNamed: packageName instance: self
-%
-
 category: 'session methods'
 method: RwGsSymbolDictionaryRegistryV2
 homeSessionMethods
@@ -79348,27 +79157,9 @@ loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock
 
 category: 'loaded queries'
 method: RwGsSymbolDictionaryRegistryV2
-loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
-%
-
-category: 'loaded queries'
-method: RwGsSymbolDictionaryRegistryV2
 loadedPackageNamed: packageName ifAbsent: absentBlock
 
 	^ self class registry_ImplementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
-%
-
-category: 'loaded queries'
-method: RwGsSymbolDictionaryRegistryV2
-loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
 %
 
 category: 'accessing'
@@ -79406,13 +79197,6 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
 		instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-newLoadedPackageNamed: packageName implementationClass: implementationClass
-
-	^ implementationClass newLoadedPackageNamed: packageName instance: self
 %
 
 category: 'accessing'
@@ -80230,15 +80014,6 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
-%
-
-category: 'package - creation api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-newLoadedPackageNamed: packageName instance: registryInstance
-
-	(registryInstance packageRegistry includesKey: packageName)
-		ifTrue: [ registryInstance error: 'The package ', packageName printString, ' already exists' ].
-	^ registryInstance existingOrNewLoadedPackageNamed: packageName implementationClass: self
 %
 
 category: 'class - registration'
@@ -82644,21 +82419,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedConfigurationNames
 
 	^ self resolvedProject loadedConfigurationNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedConfigurationNames: configNames
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
 category: 'accessing'
@@ -95477,13 +95237,6 @@ addPackageNamed: packageName toComponentNamed: componentName
 ! Class extensions for 'RwAbstractClassDefinition'
 
 !		Instance methods for 'RwAbstractClassDefinition'
-
-category: '*rowan-gemstone-definitions'
-method: RwAbstractClassDefinition
-modificationForcingNewVersion
-
-	^ self _modificationForcingNewClassVersion before: self after: self
-%
 
 category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition

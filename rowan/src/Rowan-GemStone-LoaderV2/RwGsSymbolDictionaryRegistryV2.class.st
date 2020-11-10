@@ -409,20 +409,6 @@ RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass ifAbsent: absentBlock
 	^ self loadedClassForClass: aClass ifAbsent: absentBlock
 ]
 
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistryV2 >> existingOrNewLoadedPackageNamed: packageName [
-
-	^ self class registry_ImplementationClass existingOrNewLoadedPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistryV2 >> existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass [
-
-	^ implementationClass existingOrNewLoadedPackageNamed: packageName instance: self
-
-]
-
 { #category : 'session methods' }
 RwGsSymbolDictionaryRegistryV2 >> homeSessionMethods [
 
@@ -473,27 +459,9 @@ RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName if
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
-
-]
-
-{ #category : 'loaded queries' }
 RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ self class registry_ImplementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
-
-]
-
-{ #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
 
 ]
 
@@ -531,13 +499,6 @@ RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryN
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
 		instance: self
-]
-
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistryV2 >> newLoadedPackageNamed: packageName implementationClass: implementationClass [
-
-	^ implementationClass newLoadedPackageNamed: packageName instance: self
-
 ]
 
 { #category : 'accessing' }

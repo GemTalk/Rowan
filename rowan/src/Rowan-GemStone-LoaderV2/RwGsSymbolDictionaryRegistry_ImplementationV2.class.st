@@ -942,15 +942,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName 
 	^ fromRegistryInstance
 ]
 
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> newLoadedPackageNamed: packageName instance: registryInstance [
-
-	(registryInstance packageRegistry includesKey: packageName)
-		ifTrue: [ registryInstance error: 'The package ', packageName printString, ' already exists' ].
-	^ registryInstance existingOrNewLoadedPackageNamed: packageName implementationClass: self
-
-]
-
 { #category : 'class - registration' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClass: loadedClass forClass: aClass [
 	aClass theNonMetaClass _extraDictAt: self _loadedClassKey put: loadedClass

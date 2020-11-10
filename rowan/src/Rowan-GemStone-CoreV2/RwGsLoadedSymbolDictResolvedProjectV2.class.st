@@ -134,20 +134,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames: configNames [
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-]
-
-{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames [
 
 	^ self resolvedProject loadedGroupNames

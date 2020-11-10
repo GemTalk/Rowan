@@ -116,27 +116,6 @@ RwGsMethodPatchV2 >> isMeta: newValue [
 
 ]
 
-{ #category : 'private' }
-RwGsMethodPatchV2 >> loadedClassOrExtensionForMethod [
-
-	"The loaded class or extension should already exist."
-
-	| loadedPackage className |
-	loadedPackage := Rowan image
-		loadedPackageNamed: self packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
-	className := classDefinition key.
-	^ loadedPackage
-		classOrExtensionForClassNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
-
-]
-
 { #category : 'accessing' }
 RwGsMethodPatchV2 >> methodDefinition [
 	^methodDefinition

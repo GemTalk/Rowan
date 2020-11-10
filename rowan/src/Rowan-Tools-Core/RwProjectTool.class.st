@@ -56,12 +56,6 @@ RwProjectTool class >> edit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> log [
-
-	^RwPrjLogTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> pull [
 
 	^RwPrjPullTool new

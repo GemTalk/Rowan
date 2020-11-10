@@ -101,18 +101,6 @@ RwGsImage class >> ensureSessionMethodsEnabled [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> existingSymbolDictionaryNamed: dictName [
-
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName |
-	symbolName := dictName asSymbol.
-	^ self symbolList
-		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
-		ifNone: [ nil ]
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedClassExtension instances of the given name"

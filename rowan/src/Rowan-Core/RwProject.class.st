@@ -67,6 +67,12 @@ RwProject >> commitId [
 ]
 
 { #category : 'querying' }
+RwProject >> commitLog: logLimit [
+
+	^ self _loadedProject commitLog: logLimit
+]
+
+{ #category : 'querying' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
 

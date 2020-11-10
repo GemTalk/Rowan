@@ -375,15 +375,7 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components
-		do: [ :component | 
-			component
-				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				yourself ].
-	self components isEmpty
-		ifTrue: [ 
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+	self components export: self componentsRoot
 ]
 
 { #category : 'exporting' }
