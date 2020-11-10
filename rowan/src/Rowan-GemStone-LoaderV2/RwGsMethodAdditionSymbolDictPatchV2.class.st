@@ -26,8 +26,9 @@ RwGsMethodAdditionSymbolDictPatchV2 >> installMovedMethod: aClassMove newClassVe
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
 	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
+	theRegistry := (self
+		symbolDictionaryFor: aClassMove packageAfter name
+		projectDefinition: aClassMove projectAfter) rowanSymbolDictionaryRegistry.
 
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
@@ -37,16 +38,17 @@ RwGsMethodAdditionSymbolDictPatchV2 >> installMovedMethod: aClassMove newClassVe
 				ifTrue: [ oldClassVersion class ]
 				ifFalse: [ oldClassVersion ].
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-				ifNotNil: [ :oldCompiledMethod |
+				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					(theRegistry methodRegistry
-						at: oldCompiledMethod
-						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
-							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
+					oldCompiledMethod _rowanPackageInfo
+						ifNotNil: [ :ignoredLoadedMethod | oldCompiledMethod _rowanPackageInfo: nil ]
+						ifNil: [ 
+							(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
+								ifNil: [ 
+									theRegistry
+										error:
+											'Internal error -- no existing LoadedMethod found for deleted method.' ]
+								ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ] ].
 
 	theRegistry
 		addNewCompiledMethod: compiledMethod

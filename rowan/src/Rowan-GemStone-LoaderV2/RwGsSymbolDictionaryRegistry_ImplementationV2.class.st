@@ -85,18 +85,21 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: 
 
 { #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance [
-
 	"remove a compiled method from loaded things"
 
 	| loadedMethod loadedPackage loadedClassOrExtension |
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
-
-	registryInstance methodRegistry removeKey: compiledMethod.
+	compiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | 
+			compiledMethod _rowanPackageInfo: nil.
+			loadedMethod := aLoadedMethod ]
+		ifNil: [ 
+			loadedMethod := registryInstance methodRegistry
+				at: compiledMethod
+				ifAbsent: [ 
+					registryInstance
+						error:
+							'Internal error -- no existing LoadedMethod found for deleted method.' ].
+			registryInstance methodRegistry removeKey: compiledMethod ].
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
@@ -108,16 +111,15 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod.
 	loadedClassOrExtension isLoadedClassExtension
-		ifTrue: [
+		ifTrue: [ 
 			loadedClassOrExtension isEmpty
 				ifTrue: [ 
-					self 
-						unregisterLoadedClassExtension: loadedClassOrExtension 
+					self
+						unregisterLoadedClassExtension: loadedClassOrExtension
 						forClass: loadedClassOrExtension handle.
 					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 	^ registryInstance
-
 ]
 
 { #category : 'class - registration' }
@@ -334,8 +336,10 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			compiledMethod == oldCompiledMethod
-				ifFalse: [ | src oldSrc "temps for ease of debugging" |
-					(src := compiledMethod sourceString trimWhiteSpace) = (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
+				ifFalse: [ 
+					| src oldSrc "temps for ease of debugging" |
+					(src := compiledMethod sourceString trimWhiteSpace)
+						= (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
 						ifFalse: [ 
 							"only a problem, if the new and old compiled method are not identical"
 							self
@@ -354,9 +358,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ nil ].
+	existing := compiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
+		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -388,12 +392,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: registryInstance [
-
-
 	"expecting only a single method to be in methDict/catDict"
 
 	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
+	dictsArray := registryInstance homeSessionMethods
+		methodAndCategoryDictionaryFor: behavior.
 	mDict := dictsArray at: 1.
 	cDict := dictsArray at: 2.
 	catDict
@@ -409,7 +412,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
 			compiledMethod := meth ].
 
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing := compiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
+		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -419,7 +424,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+	loadedPackage := self
+		existingOrNewLoadedPackageNamed: packageName
+		instance: registryInstance.
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -429,14 +436,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			self
-				registerLoadedClassExtension: ext
-				forClass: class.
+			self registerLoadedClassExtension: ext forClass: class.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
 	^ compiledMethod
-
 ]
 
 { #category : 'private' }
@@ -471,7 +475,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewClassVersionToAssoc
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
@@ -479,8 +482,10 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 		ifNotNil: [ :oldCompiledMethod | 
 			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
 			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self 
-				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
+			^ self
+				moveCompiledMethod: compiledMethod
+				toProtocol: protocolString
+				instance: registryInstance ].
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
@@ -489,9 +494,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing := compiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
+		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
 	existing
-		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+		ifNotNil: [ 
+			registryInstance
+				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
@@ -556,13 +565,20 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	oldCompiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | 
+			loadedMethod := aLoadedMethod.
+			oldCompiledMethod _rowanPackageInfo: nil ]
+		ifNil: [ 
+			loadedMethod := registryInstance methodRegistry
+				at: oldCompiledMethod
+				ifAbsent: [  ].
+			loadedMethod
+				ifNil: [ 
+					registryInstance
+						error:
+							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
@@ -571,13 +587,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance [
-
 	"add a recompiled session method compiled method to behavior and update the loaded things"
 
 	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
+	dictsArray := registryInstance homeSessionMethods
+		methodAndCategoryDictionaryFor: behavior.
 	mDict := dictsArray at: 1.
 	cDict := dictsArray at: 2.
 	oldCompiledMethod := mDict
@@ -596,16 +612,20 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 		updateMethodLookupCacheFor: newCompiledMethod
 		in: behavior.
 
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	oldCompiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | 
+			loadedMethod := aLoadedMethod.
+			oldCompiledMethod _rowanPackageInfo: nil ]
+		ifNil: [ 
+			loadedMethod := registryInstance methodRegistry
+				at: oldCompiledMethod
+				ifAbsent: [ 
+					registryInstance
+						error:
+							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-
 ]
 
 { #category : 'package - patch api' }
@@ -828,42 +848,58 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveClassFor: classMove [
 	"extension methods will be dealt with later"
 
 	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
-
 	before := classMove classBefore.
-	originalSymbolDictionary := Rowan image symbolDictNamed: before gs_symbolDictionary.
+	originalSymbolDictionary := Rowan image
+		symbolDictNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	theClass := assoc value.
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan image symbolDictNamed: (classMove classAfter gs_symbolDictionary) .
+	newSymbolDictionary := Rowan image
+		symbolDictNamed: classMove classAfter gs_symbolDictionary.
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := self loadedClassForClass: theClass.
 	originalSymbolDictionary removeKey: assoc key.
 
-	self 
-		_symbolDictionary: newSymbolDictionary 
-		at: assoc key 
-		ifPresent: [:class |
+	self
+		_symbolDictionary: newSymbolDictionary
+		at: assoc key
+		ifPresent: [ :class | 
 			theClass ~~ class
-				ifTrue: [ self error: ' internal error - found an existing association in the ',  
-								newSymbolDictionary name asString printString, 
-								' symbol dictionary with a duplicate key ',
-								assoc key printString, 
-								' while attempting to move class ', assoc key asString printString ] ]
+				ifTrue: [ 
+					self
+						error:
+							' internal error - found an existing association in the '
+								, newSymbolDictionary name asString printString
+								, ' symbol dictionary with a duplicate key ' , assoc key printString
+								, ' while attempting to move class ' , assoc key asString printString ] ]
 		ifAbsent: [ newSymbolDictionary add: assoc ].
 
-	loadedClass loadedInstanceMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-	loadedClass loadedClassMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+	loadedClass loadedInstanceMethods values
+		do: [ :loadedMethod | 
+			| compiledMethod |
+			compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
+			compiledMethod _rowanPackageInfo
+				ifNotNil: [ 
+					"this operation can probably be skipped, since the loaded method itself is not changing"
+					compiledMethod _rowanPackageInfo: loadedMethod ]
+				ifNil: [ 
+					oldRegistry methodRegistry removeKey: compiledMethod.
+					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ].
+	loadedClass loadedClassMethods values
+		do: [ :loadedMethod | 
+			| compiledMethod |
+			compiledMethod := theBehavior
+				compiledMethodAt: loadedMethod selector asSymbol.
+			compiledMethod _rowanPackageInfo
+				ifNotNil: [ 
+					"this operation can probably be skipped, since the loaded method itself is not changing"
+					compiledMethod _rowanPackageInfo: loadedMethod ]
+				ifNil: [ 
+					oldRegistry methodRegistry removeKey: compiledMethod.
+					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ]
 ]
 
 { #category : 'method - patch api' }
@@ -899,9 +935,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 
 	behavior moveMethod: selector toCategory: newProtocol.
 
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
+	loadedMethod := compiledMethod _rowanPackageInfo
+		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
+		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [  ] ].
+	loadedMethod
+		ifNil: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
