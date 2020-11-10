@@ -158,6 +158,13 @@ RwImplementedButNotSentTest >> testVerifySpecialCasesStillRelevant [
 ]
 
 { #category : 'special cases' }
+RwImplementedButNotSentTest >> unsentSelectorsForIssue_652 [
+	"see https://github.com/GemTalk/Rowan/issues/652"
+
+	^ #( #'readClassFile:' #'readClassFile:projectName:packageName:' )
+]
+
+{ #category : 'special cases' }
 RwImplementedButNotSentTest >> unsentSelectorsThatNeedMoreSrutiny [
 	"These are selectors that should have test coverage at a minimum OR removed"
 
@@ -165,7 +172,7 @@ RwImplementedButNotSentTest >> unsentSelectorsThatNeedMoreSrutiny [
 
 	"a number of these are clumped together in a particular tool and I need to look at the viability of the tool (other messages sent) and consider removing the whole enchilada"
 
-	^ #( #'pathFor:' #'deleteClasses:' #'installClassExtensionInSystem' #'installPropertiesPatchFor:' #'installPropertiesPatchFor:classMove:' #'installPropertiesPatchNewClasses:andExistingClassSymbolList:' #'loadedClassesDo:loadedClassExtensionsDo:loadedInstanceMethodsDo:loadedClassMethodsDo:' #'readClassDirectory:' #'readClassDirectory:projectName:packageName:' #'readClassFile:' #'readClassFile:projectName:packageName:' #'readProjectForResolvedProject:withComponentNames:' #'readProjectSetForResolvedProject:withComponentNames:' #'removeClass:fromPackageNamed:inProjectNamed:' #'removeClassNamed:fromPackageNamed:inProjectNamed:' #'revert' #'setProtocolTo:' #'symbolDictionaryRegistryFor:' #'updateGsPlatformLoadedComponentInfoFor:from:' #'updateOrAddClass:inPackageNamed:inProjectNamed:' #'updatePropertiesFromClass:' #'visitNested:' #'_removeSubclassesDisallowed')
+	^ #( #'pathFor:' #'deleteClasses:' #'installClassExtensionInSystem' #'installPropertiesPatchFor:' #'installPropertiesPatchFor:classMove:' #'installPropertiesPatchNewClasses:andExistingClassSymbolList:' #'loadedClassesDo:loadedClassExtensionsDo:loadedInstanceMethodsDo:loadedClassMethodsDo:' #'readClassDirectory:' #'readClassDirectory:projectName:packageName:' #'readProjectForResolvedProject:withComponentNames:' #'readProjectSetForResolvedProject:withComponentNames:' #'removeClass:fromPackageNamed:inProjectNamed:' #'removeClassNamed:fromPackageNamed:inProjectNamed:' #'revert' #'setProtocolTo:' #'symbolDictionaryRegistryFor:' #'updateGsPlatformLoadedComponentInfoFor:from:' #'updateOrAddClass:inPackageNamed:inProjectNamed:' #'updatePropertiesFromClass:' #'visitNested:' #'_removeSubclassesDisallowed')
 ]
 
 { #category : 'special cases' }
