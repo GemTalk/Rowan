@@ -142,6 +142,21 @@ RwImplementedButNotSentTest >> testImplementedButNotSent [
 	self assert: implementedNotSent isEmpty
 ]
 
+{ #category : 'tests' }
+RwImplementedButNotSentTest >> testVerifySpecialCasesStillRelevant [
+	"identify that the special cases selectors represented implemented methods --- just to keep things tidy"
+
+	| implemented expectedUnsentMessages unimplemented |
+	implemented := IdentitySet new.
+	self
+		_analyzeSent: nil
+		andImplemented: implemented
+		forClasses: ClassOrganizer new classes.
+	expectedUnsentMessages := self _expectedUnsentMessages asIdentitySet.
+	unimplemented := expectedUnsentMessages - implemented.
+	self assert: unimplemented isEmpty
+]
+
 { #category : 'special cases' }
 RwImplementedButNotSentTest >> unsentSelectorsThatNeedMoreSrutiny [
 	"These are selectors that should have test coverage at a minimum OR removed"
@@ -150,7 +165,7 @@ RwImplementedButNotSentTest >> unsentSelectorsThatNeedMoreSrutiny [
 
 	"a number of these are clumped together in a particular tool and I need to look at the viability of the tool (other messages sent) and consider removing the whole enchilada"
 
-	^ #( #'pathFor:' #'deleteClasses:' #'installClassExtensionInSystem' #'installPropertiesPatchFor:' #'installPropertiesPatchFor:classMove:' #'installPropertiesPatchNewClasses:andExistingClassSymbolList:' #'loadedClassesDo:loadedClassExtensionsDo:loadedInstanceMethodsDo:loadedClassMethodsDo:' #'pull' #'pullSpecification:' #'pullSpecUrl:' #'pullSpecUrl:remote:' #'push' #'pushSpecification:' #'pushSpecUrl:' #'pushSpecUrl:remote:' #'readClassDirectory:' #'readClassDirectory:projectName:packageName:' #'readClassFile:' #'readClassFile:projectName:packageName:' #'readProjectForResolvedProject:withComponentNames:' #'readProjectSetForResolvedProject:withComponentNames:' #'removeClass:fromPackageNamed:inProjectNamed:' #'removeClassNamed:fromPackageNamed:inProjectNamed:' #'revert' #'setProtocolTo:' #'symbolDictionaryRegistryFor:' #'updateGsPlatformLoadedComponentInfoFor:from:' #'updateOrAddClass:inPackageNamed:inProjectNamed:' #'updatePropertiesFromClass:' #'visitNested:' #'_removeSubclassesDisallowed')
+	^ #( #'pathFor:' #'deleteClasses:' #'installClassExtensionInSystem' #'installPropertiesPatchFor:' #'installPropertiesPatchFor:classMove:' #'installPropertiesPatchNewClasses:andExistingClassSymbolList:' #'loadedClassesDo:loadedClassExtensionsDo:loadedInstanceMethodsDo:loadedClassMethodsDo:' #'readClassDirectory:' #'readClassDirectory:projectName:packageName:' #'readClassFile:' #'readClassFile:projectName:packageName:' #'readProjectForResolvedProject:withComponentNames:' #'readProjectSetForResolvedProject:withComponentNames:' #'removeClass:fromPackageNamed:inProjectNamed:' #'removeClassNamed:fromPackageNamed:inProjectNamed:' #'revert' #'setProtocolTo:' #'symbolDictionaryRegistryFor:' #'updateGsPlatformLoadedComponentInfoFor:from:' #'updateOrAddClass:inPackageNamed:inProjectNamed:' #'updatePropertiesFromClass:' #'visitNested:' #'_removeSubclassesDisallowed')
 ]
 
 { #category : 'special cases' }
@@ -159,7 +174,7 @@ RwImplementedButNotSentTest >> unsentSelectorsThatShouldBeSent [
 
 	"using this list while wading through the current set of implemented but not sent methods ... this should be empty when all test cases are covered"
 
-	^ #(#'addClass:inPackageNamed:inProjectNamed:' #'addClassNamed:super:instvars:classinstvars:classvars:category:comment:pools:' #'addClassNamed:super:instvars:classinstvars:classvars:category:comment:pools:type:' #'addRowanSymbolDictionariesToPersistentSymbolList' #'addRowanSymbolDictionariesToTransientSymbolList' #'adoptProjectFromUrl:projectsHome:' #'adoptProjectFromUrl:readonlyDiskUrl:projectsHome:' #'aliases:' #'asDefinitionSet' #'auditAll' #'auditForPackageNamed:' #'auditForProjectsNamed:' #'auditProjectsNamed:' #'clas' #'classCreationTemplateForClass:' #'classesModificationAndPackageModificationDo:' #'conservativeMigration' #'currentPackage' #'currentProject' #'decrementMajorVersion' #'decrementMinorVersion' #'decrementMinorVersionNumber' #'decrementPatchVersion' #'defaultAutomaticClassInitializationBlackList' #'definitionsForMethod:inClassNamed:isMeta:ifFound:ifAbsent:' #'deletededClass:' #'deletededClassExtension:' #'deletededPackage:' #'doGitPull:' #'doGitPush:' #'doitDict:' #'exportTopazFormatTo:' #'exposeRowanToolsSymbolDictionary' #'gitlogFull:limit:gitRepoDirectory:' #'gitpullIn:' #'incrementMajorVersion' #'incrementMinorVersion' #'incrementMinorVersionNumber' #'incrementPatchVersion' #'instanceMigrator:' #'loadedPackages:' #'loadSymbolList:' #'newForClassNamed:super:instvars:category:' #'parseString:forReader:' #'pathParts:isAbsolute:' #'remote:' #'removeClassNamed:ifAbsent:' #'requiredProjectNames' #'rwByteSubclass:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:constraints:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:constraints:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'testSuiteForProjectsNamed:' #'topazFileFooter:' #'validateVersionNumber:against:' #'_alternateImageClass' #'loadProjectDefinition:platformConfigurationAttributes:' #'loadProjectNamed:customConditionalAttributes:')
+	^ #(#'addClass:inPackageNamed:inProjectNamed:' #'addClassNamed:super:instvars:classinstvars:classvars:category:comment:pools:' #'addClassNamed:super:instvars:classinstvars:classvars:category:comment:pools:type:' #'addRowanSymbolDictionariesToPersistentSymbolList' #'addRowanSymbolDictionariesToTransientSymbolList' #'adoptProjectFromUrl:projectsHome:' #'adoptProjectFromUrl:readonlyDiskUrl:projectsHome:' #'aliases:' #'asDefinitionSet' #'auditAll' #'auditForPackageNamed:' #'auditForProjectsNamed:' #'auditProjectsNamed:' #'clas' #'classCreationTemplateForClass:' #'classesModificationAndPackageModificationDo:' #'conservativeMigration' #'currentPackage' #'currentProject' #'decrementMajorVersion' #'decrementMinorVersion' #'decrementMinorVersionNumber' #'decrementPatchVersion' #'defaultAutomaticClassInitializationBlackList' #'definitionsForMethod:inClassNamed:isMeta:ifFound:ifAbsent:' #'deletededClass:' #'deletededClassExtension:' #'deletededPackage:' #'doitDict:' #'exportTopazFormatTo:' #'exposeRowanToolsSymbolDictionary' #'gitlogFull:limit:gitRepoDirectory:' #'gitpullIn:' #'incrementMajorVersion' #'incrementMinorVersion' #'incrementMinorVersionNumber' #'incrementPatchVersion' #'instanceMigrator:' #'loadedPackages:' #'loadSymbolList:' #'newForClassNamed:super:instvars:category:' #'parseString:forReader:' #'pathParts:isAbsolute:' #'remote:' #'removeClassNamed:ifAbsent:' #'requiredProjectNames' #'rwByteSubclass:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:constraints:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:constraints:options:' #'rwIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:packageName:options:' #'testSuiteForProjectsNamed:' #'topazFileFooter:' #'validateVersionNumber:against:' #'_alternateImageClass' #'loadProjectDefinition:platformConfigurationAttributes:' #'loadProjectNamed:customConditionalAttributes:')
 ]
 
 { #category : 'special cases' }
