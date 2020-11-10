@@ -159,7 +159,7 @@ RwImplementedButNotSentTest >> unsentSelectorsThatShouldBeRemoved [
 
 	"using this list to manage the list of methods that I think should be removed ... empty this list when done (rerun tests, because the removed methods might be hiding additional orphan messages"
 
-	^ #( #'dir' #'dirPath' #'doGitCommit:' #'doGitCommitLog:' #'existingOrNewLoadedPackageNamed:' #'existingSymbolDictionaryNamed:' #'export:' #'loadedClassOrExtensionForMethod' #'loadedConfigurationNames:' #'loadedHybridPackageNamed:ifAbsent:implementationClass:' #'loadedPackageNamed:ifAbsent:implementationClass:' #'modificationForcingNewVersion' #'newLoadedPackageNamed:implementationClass:' #'newUpdateForClassMoves' #'newUpdateForMethodMoves' #'specUrl:')
+	^ #( #'doGitCommit:' #'doGitCommitLog:' #'existingOrNewLoadedPackageNamed:' #'existingSymbolDictionaryNamed:' #'export:' #'loadedClassOrExtensionForMethod' #'loadedConfigurationNames:' #'loadedHybridPackageNamed:ifAbsent:implementationClass:' #'loadedPackageNamed:ifAbsent:implementationClass:' #'modificationForcingNewVersion' #'newLoadedPackageNamed:implementationClass:' #'newUpdateForClassMoves' #'newUpdateForMethodMoves' #'specUrl:')
 ]
 
 { #category : 'special cases' }
