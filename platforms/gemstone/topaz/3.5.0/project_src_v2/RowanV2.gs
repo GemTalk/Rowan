@@ -9554,114 +9554,6 @@ removeallmethods RwFileUrl
 removeallclassmethods RwFileUrl
 
 doit
-(RwFileUrl
-	subclass: 'RwCypressUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the cypress: scheme:
-
- cypress:/opt/git/shared/repos/rowan/sample/repository/
-
-The cypress: url specifies the file system path to the directory where a disk-based Smalltalk package repository resides. The name comes from the original name used to specifay a cross-platform package disk layout[1].
-
-This url does not encode the specific disk format used by the repository (like the filetree: and tonel: schemes). The disk format is specified in a .cypress file in the directory using STON ike the following:
-
-  { #format : ''filetree'' }
-  { #format : ''tonel'' }
-  { #format : ''cypress'' }
-
-When the cypress: url is resolved, the appropriate platform-specific repository reader will be used to read the packages from disk.
-
-[1] https://raw.githubusercontent.com/CampSmalltalk/Cypress/master/img/CypressStructure-STIC2012.png';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwCypressUrl
-removeallclassmethods RwCypressUrl
-
-doit
-(RwCypressUrl
-	subclass: 'RwTonelUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the tonel: scheme:
-
-  tonel:/opt/git/shared/repos/rowan/sample/repository
-
-The scheme is supported for backward compatibility with the tonel disk format[1]. Not sure whether it''s use has made it into the wild, but it _is_ currently being used in the Rowan implementation.
-
-[1] https://github.com/pharo-vcs/tonel';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwTonelUrl
-removeallclassmethods RwTonelUrl
-
-doit
-(RwFileUrl
-	subclass: 'RwFiletreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the filetree: scheme[1]:
-
- filetree:///opt/git/shared/repos/rowan/sample/repository
-
-This scheme is supported for backward compatibility. Moving forward the cypress: scheme should be used (see RwCypressUrl).
-
-[1] https://github.com/Metacello/metacello/blob/master/docs/MetacelloScriptingAPI.md#filetree';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwFiletreeUrl
-removeallclassmethods RwFiletreeUrl
-
-doit
-(RwFileUrl
-	subclass: 'RwGithubUrl'
-	instVarNames: #( project committish dir )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the github: scheme[1]:
-
-  github://GsDevKit/GsDevKit:master/repository
-
-This scheme is supported for backward compatibility. Moving forward the metacello: scheme should be used (see RwMetacelloRepositoryUrl).
-
-[1] https://github.com/Metacello/metacello/blob/master/docs/MetacelloScriptingAPI.md#github';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGithubUrl
-removeallclassmethods RwGithubUrl
-
-doit
 (RwUrl
 	subclass: 'RwGenericUrl'
 	instVarNames: #( schemeName locator )
@@ -9734,78 +9626,6 @@ true.
 
 removeallmethods RwHttpsUrl
 removeallclassmethods RwHttpsUrl
-
-doit
-(RwHierarchicalUrl
-	subclass: 'RwSmalltalkRepositoryUrl'
-	instVarNames: #( project committish dir )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the smalltalk: scheme:
-
- smalltalk://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
- smalltalk://git@git.gemtalksystems.com/btree340:dev/repository
- smalltalk://git@github.com/GsDevKit/GsDevKit:350/repository
- smalltalk://github.com/GsDevKit/GsDevKit:350/repository
-
-The smalltalk: scheme is based on Thierry Goubier''s gitfiletree url[1]:
-
-  smalltalk:// <[user[:password]@]host[:port]> / user/ projectName [ : versionIdentifier ] [ / repositoryPath ]
-
-[1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwSmalltalkRepositoryUrl
-removeallclassmethods RwSmalltalkRepositoryUrl
-
-doit
-(RwSmalltalkRepositoryUrl
-	subclass: 'RwGitFileTreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the gitfiletree: scheme:
-
- gitfiletree://gitlab.com/GsDevKit/GsDevKit:master/repository
-
-The gitfiletree scheme [1] encodes the following information:
-
-  gitfiletree:// [ user [ : password ] @ ] host [ : port ] / user / project [ : branch ] [ / repositoryPath ]
-
-From the method comment[1]:
-
-  Parameters are:
-		dir : the directory inside the repository where the target MC packages are.
-		branch : the git branch to fetch.
-		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
-		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
-	Alternative url syntax:
-		gitfiletree://github.com/dalehenrich/filetree:pharo5.0_dev/repository
-	with:
-		host : github.com
-		project : dalehenrich/filetree
-		branch : pharo5.0_dev
-		dir : repository
-
-[1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGitFileTreeUrl
-removeallclassmethods RwGitFileTreeUrl
 
 doit
 (Object
@@ -65152,25 +64972,6 @@ adoptSymbolList: symbolList excludingSymbolDictsNamed: excludedSymbolDictionaryN
 			ifFalse: [ self adoptSymbolDictionary: symbolDict intoPackageNamed: (packageNameMap at: symDictName) ] ]
 %
 
-! Class implementation for 'RwPkgCreateTool'
-
-!		Instance methods for 'RwPkgCreateTool'
-
-category: 'smalltalk api'
-method: RwPkgCreateTool
-createLoadedPackageNamed: packageName inProjectNamed: projectName
-
-	"create a loaded package named <packageName> in the loaded project named <projectName>"
-
-	| registry theSymbolDictionary packageSymDictName loadedPackage loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
-	theSymbolDictionary := Rowan image newOrExistingSymbolDictionaryNamed: packageSymDictName.
-	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
-	loadedPackage := registry newLoadedPackageNamed: packageName.
-	loadedProject addLoadedPackage: loadedPackage.
-%
-
 ! Class implementation for 'RwPkgDiffTool'
 
 !		Instance methods for 'RwPkgDiffTool'
@@ -78627,39 +78428,6 @@ installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch
 
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
 deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses
@@ -78671,31 +78439,6 @@ deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	"remove the method from deleted things"
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	"remove the method from deleted things"
-
-	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
@@ -79436,34 +79179,11 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 
 category: 'package - patch api'
 method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageFromDefinition: packageDefinition
-
-	^ self class registry_ImplementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
-%
-
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
 createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
-%
-
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageNamed: packageName properties: properties
-
-	^ self class registry_ImplementationClass createLoadedPackageNamed: packageName properties: properties instance: self
-%
-
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createLoadedPackageNamed: packageName properties: properties instance: self
 %
 
 category: 'class - patch api'
@@ -79473,26 +79193,6 @@ deleteClassFromPackage: class
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
 	^ self class registry_ImplementationClass deleteClassFromPackage: class instance: self
-%
-
-category: 'class - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteClassFromPackage: class implementationClass: implementationClass
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteClassFromPackage: class instance: self
-%
-
-category: 'class - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteClassNamedFromPackage: className
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	^ self class registry_ImplementationClass deleteClassNamedFromPackage: className instance: self
 %
 
 category: 'class - patch api'
@@ -79517,47 +79217,11 @@ deleteCompiledMethod: compiledMethod from: behavior
 
 category: 'method - patch api'
 method: RwGsSymbolDictionaryRegistryV2
-deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass
-
-	"delete a compiled method from behavior and remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteCompiledMethod: compiledMethod from: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMethod: selector for: behavior
-
-	^ self class registry_ImplementationClass deleteMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
 deleteMethod: selector for: behavior implementationClass: implementationClass
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass deleteMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMovedMethod: selector for: behavior implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedMethod: selector for: behavior instance: self
 %
 
 category: 'method - patch api'
@@ -79742,13 +79406,6 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
 		instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-newLoadedPackageNamed: packageName
-
-	^ self class registry_ImplementationClass newLoadedPackageNamed: packageName instance: self
 %
 
 category: 'package - creation api'
@@ -80304,39 +79961,6 @@ deleteMethod: selector for: behavior instance: registryInstance
 
 	compiledMethod := behavior compiledMethodAt: selector.
 	self deleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance
-
-	"delete a compiled method from behavior - moved method already removed from the loaded things"
-
-	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedLoadedMethod: selector for: behavior instance: registryInstance
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedMethod: selector for: behavior instance: registryInstance
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
 	^ registryInstance
 %
 
@@ -87248,14 +86872,7 @@ urlClassForScheme: scheme
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
 	^ {RwFileUrl.
-	RwCypressUrl.
-	RwTonelUrl.
-	RwFiletreeUrl.
-	RwGithubUrl.
-	RwGenericUrl.
 	RwHierarchicalUrl.
-	RwSmalltalkRepositoryUrl.
-	RwGitFileTreeUrl.
 	RwHttpUrl.
 	RwHttpsUrl}
 		detect: [ :urlClass | urlClass schemeName = scheme ]
@@ -87653,160 +87270,6 @@ segments
 	^ path
 %
 
-! Class implementation for 'RwCypressUrl'
-
-!		Class methods for 'RwCypressUrl'
-
-category: 'constants'
-classmethod: RwCypressUrl
-schemeName
-  ^ 'cypress'
-%
-
-! Class implementation for 'RwTonelUrl'
-
-!		Class methods for 'RwTonelUrl'
-
-category: 'constants'
-classmethod: RwTonelUrl
-schemeName
-	^'tonel'
-%
-
-!		Instance methods for 'RwTonelUrl'
-
-category: 'converting'
-method: RwTonelUrl
-asRwRepository
-  "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
-
-  ^ self createRwTonelRepositoryForPath: self pathForDirectory
-%
-
-! Class implementation for 'RwFiletreeUrl'
-
-!		Class methods for 'RwFiletreeUrl'
-
-category: 'constants'
-classmethod: RwFiletreeUrl
-schemeName
-	^'filetree'
-%
-
-!		Instance methods for 'RwFiletreeUrl'
-
-category: 'converting'
-method: RwFiletreeUrl
-asRwRepository
-  "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
-
-  ^ self createRwFiletreeRepositoryForPath: self pathForDirectory
-%
-
-category: 'printing'
-method: RwFiletreeUrl
-printOn: aStream
-  aStream
-    nextPutAll: self schemeName;
-    nextPut: $:.
-  aStream nextPutAll: '//'.
-  aStream nextPutAll: self pathString
-%
-
-category: 'private-initialization'
-method: RwFiletreeUrl
-privateInitializeFromText: aString
-  "Calculate host and path from a file URL in String format.
-	Some malformed formats are allowed and interpreted by guessing."
-
-  | schemeName pathString bare |
-  host := ''.
-  bare := aString trimSeparators.
-  schemeName := RwUrl schemeNameForString: bare.
-  (schemeName == nil or: [ schemeName ~= self schemeName ])
-    ifTrue: [ pathString := bare ]
-    ifFalse: [ 
-      "First remove schemeName and colon"
-      bare := bare copyFrom: schemeName size + 2 to: bare size.
-      (bare beginsWith: '//')
-        ifTrue: [ pathString := bare copyFrom: 3 to: bare size ]
-        ifFalse: [ pathString := bare ] ].
-  self initializeFromPathString: pathString
-%
-
-! Class implementation for 'RwGithubUrl'
-
-!		Class methods for 'RwGithubUrl'
-
-category: 'constants'
-classmethod: RwGithubUrl
-schemeName
-  ^ 'github'
-%
-
-!		Instance methods for 'RwGithubUrl'
-
-category: 'converting'
-method: RwGithubUrl
-asRwRepository
-  "return a platform appropriate repository for the repository identified in the receiver"
-
-  ^ self halt: 'not yet implemented'
-%
-
-category: 'accessing'
-method: RwGithubUrl
-dirPath
-  ^ self pathFor: dir
-%
-
-category: 'accessing'
-method: RwGithubUrl
-isAbsolute
-	"Should the path be considered absolute to
-	the filesystem instead of relative to the default directory?"
- 
-	^false
-%
-
-category: 'printing'
-method: RwGithubUrl
-printOn: aStream
-  aStream
-    nextPutAll: self schemeName;
-    nextPut: $:.
-  aStream nextPutAll: '//'.
-  aStream nextPutAll: self pathString
-%
-
-category: 'private-initialization'
-method: RwGithubUrl
-privateInitializeFromText: aString
-  | parsedPath |
-  super privateInitializeFromText: aString.
-  parsedPath := {host} , path.
-  (parsedPath
-    detect: [ :e | e includes: $: ]
-    ifNone: [ 
-      project := parsedPath copyFrom: 1 to: parsedPath size - 1.
-      dir := parsedPath copyFrom: 2 to: parsedPath size ])
-    ifNotNil: [ :pivot | 
-      project := parsedPath copyFrom: 1 to: (parsedPath indexOf: pivot) - 1.
-      project addLast: (pivot copyUpTo: $:).
-      committish := pivot copyFrom: (pivot indexOf: $:) + 1 to: pivot size.
-      dir := parsedPath
-        copyFrom: (parsedPath indexOf: pivot) + 1
-        to: parsedPath size ].
-  path := parsedPath.
-  host := ''
-%
-
-category: 'accessing'
-method: RwGithubUrl
-projectPath
-  ^ self pathFor: project
-%
-
 ! Class implementation for 'RwGenericUrl'
 
 !		Class methods for 'RwGenericUrl'
@@ -88158,89 +87621,6 @@ category: 'constants'
 classmethod: RwHttpsUrl
 schemeName
 	^'https'
-%
-
-! Class implementation for 'RwSmalltalkRepositoryUrl'
-
-!		Class methods for 'RwSmalltalkRepositoryUrl'
-
-category: 'constants'
-classmethod: RwSmalltalkRepositoryUrl
-schemeName
-  ^ 'smalltalk'
-%
-
-!		Instance methods for 'RwSmalltalkRepositoryUrl'
-
-category: 'converting'
-method: RwSmalltalkRepositoryUrl
-asRwRepository
-  "return a platform appropriate repository for the repository identified in the receiver"
-
-  ^ self halt: 'not yet implemented'
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-committish
-
-   ^committish
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-dir
-
-   ^dir
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-dirPath
-  ^ self pathFor: dir
-%
-
-category: 'parsing'
-method: RwSmalltalkRepositoryUrl
-privateParsePath: remainder relativeTo: basePath
-  | parsedPath |
-  parsedPath := super privateParsePath: remainder relativeTo: basePath.
-  (parsedPath
-    detect: [ :e | e includes: $: ]
-    ifNone: [ 
-      project := parsedPath copyFrom: 1 to: parsedPath size - 1.
-      dir := parsedPath copyFrom: 2 to: parsedPath size ])
-    ifNotNil: [ :pivot | 
-      project := parsedPath copyFrom: 1 to: (parsedPath indexOf: pivot) - 1.
-      project addLast: (pivot copyUpTo: $:).
-      committish := pivot copyFrom: (pivot indexOf: $:) + 1 to: pivot size.
-      dir := parsedPath
-        copyFrom: (parsedPath indexOf: pivot) + 1
-        to: parsedPath size ].
-  ^ parsedPath
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-project
-
-   ^project
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-projectPath
-  ^ self pathFor: project
-%
-
-! Class implementation for 'RwGitFileTreeUrl'
-
-!		Class methods for 'RwGitFileTreeUrl'
-
-category: 'constants'
-classmethod: RwGitFileTreeUrl
-schemeName
-  ^ 'gitfiletree'
 %
 
 ! Class implementation for 'STON'
