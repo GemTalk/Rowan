@@ -47,17 +47,3 @@ RwProjectDefinitionV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forU
 		forUser: userId
 		ifAbsent: absentBlock
 ]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwProjectDefinitionV2 >> updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo [
-
-	|  thePackageMapSpecs |
-	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
-	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-		ifNotNil: [:name | aLoadedProject defaultSymbolDictName: name ].
-	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-		ifNotNil: [:boolean | 
-			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
-	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
-]

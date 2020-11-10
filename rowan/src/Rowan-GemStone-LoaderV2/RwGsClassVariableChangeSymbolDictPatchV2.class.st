@@ -23,29 +23,6 @@ RwGsClassVariableChangeSymbolDictPatchV2 >> createClassFor: aPatchSet [
 ]
 
 { #category : 'installing' }
-RwGsClassVariableChangeSymbolDictPatchV2 >> installPropertiesPatchFor: aPatchSet [
-
-	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
-
-]
-
-{ #category : 'installing' }
-RwGsClassVariableChangeSymbolDictPatchV2 >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
-
-	" update class and update loadedClass with new properties"
-
-	| className existingClass |
-	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
-		at: className
-		ifAbsent: [ 
-			aPatchSet tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass  implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'installing' }
 RwGsClassVariableChangeSymbolDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
 
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry

@@ -180,15 +180,6 @@ RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	^ createdClass
 ]
 
-{ #category : 'patching moved classes' }
-RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
-]
-
 { #category : 'installing' }
 RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
 

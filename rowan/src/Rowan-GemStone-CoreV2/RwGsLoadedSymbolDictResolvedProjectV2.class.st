@@ -81,12 +81,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> defaultSymbolDictName: symDictName [
 	self resolvedProject defaultSymbolDictName: symDictName
 ]
 
-{ #category : 'properties' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: aBool [
-
-	self resolvedProject defaultUseSessionMethodsForExtensions: aBool
-]
-
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
 	self initializeForName: aResolvedProject projectName.
@@ -195,12 +189,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
 
 	^ self resolvedProject packageConvention
-]
-
-{ #category : 'properties' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDictionary [
-
-	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
 ]
 
 { #category : 'accessing' }

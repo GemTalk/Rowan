@@ -62,12 +62,6 @@ RwProjectTool class >> query [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> revert [
-
-	^RwPrjRevertTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> test [
 
 	^RwPrjTestTool new

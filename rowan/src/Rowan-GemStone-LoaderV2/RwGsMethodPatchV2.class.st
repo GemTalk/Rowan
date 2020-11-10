@@ -159,33 +159,6 @@ RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClasses andExistingClasses:
 ]
 
 { #category : 'private' }
-RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: tempSymbolList [
-	| className class symDictName |
-	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're done"
-			^ self ].
-	className := classDefinition key asSymbol.
-	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2
-		lookupSymbolDictName: symDictName
-		in: createdClassesSymbolList)
-		at: className
-		ifAbsent: [ 
-			(RwGsPatchSet_V2 lookupSymbolDictName: symDictName in: tempSymbolList)
-				at: className
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							^ self ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ]
-]
-
-{ #category : 'private' }
 RwGsMethodPatchV2 >> primeBehaviorNewClassesSymbolList: createdClassesSymbolList andExistingClasses: tempSymbols [
 	| className class symDictName |
 	classDefinition key
@@ -243,14 +216,4 @@ RwGsMethodPatchV2 >> runInitializer [
 RwGsMethodPatchV2 >> selector [
 
 	^ selector
-]
-
-{ #category : 'private-installing' }
-RwGsMethodPatchV2 >> setProtocolTo: protocolString [
-
-	| protocolSymbol |
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [behavior addCategory: protocolSymbol].
-	behavior moveMethod: selector toCategory: protocolSymbol
 ]

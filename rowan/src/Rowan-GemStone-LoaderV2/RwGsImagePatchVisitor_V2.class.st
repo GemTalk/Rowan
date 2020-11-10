@@ -49,31 +49,6 @@ RwGsImagePatchVisitor_V2 >> addDeletedProject: aProjecteDefinition [
 	self error: 'not yet implemented'
 ]
 
-{ #category : 'private' }
-RwGsImagePatchVisitor_V2 >> deleteClasses: classDefinitions [
-
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addDeletedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addDeletedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addDeletedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-]
-
 { #category : 'initialization' }
 RwGsImagePatchVisitor_V2 >> initialize [
 

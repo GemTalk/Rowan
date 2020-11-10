@@ -91,10 +91,3 @@ RwGsPatchV2 >> symbolDictionaryRegistry [
 	^ self symbolDictionary rowanSymbolDictionaryRegistry
 
 ]
-
-{ #category : 'accessing' }
-RwGsPatchV2 >> symbolDictionaryRegistryFor: aPackageName [
-
-	^ (self symbolDictionaryFor: aPackageName) rowanSymbolDictionaryRegistry
-
-]

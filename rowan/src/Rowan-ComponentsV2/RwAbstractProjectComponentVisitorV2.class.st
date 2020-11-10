@@ -144,12 +144,6 @@ RwAbstractProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecificatio
 ]
 
 { #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectLoadComponent [
-
-	^aProjectLoadComponent acceptNestedVisitor: self
-]
-
-{ #category : 'visiting' }
 RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent [
 	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
 		ifTrue: [ ^ self ].
