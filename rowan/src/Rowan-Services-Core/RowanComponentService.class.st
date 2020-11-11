@@ -22,7 +22,8 @@ RowanComponentService class >> forComponentNamed: componentName [
 { #category : 'initialization' }
 RowanComponentService >> initialize [
 	" to do "
-	super initialize
+	super initialize.
+	componentServices := Array new.
 ]
 
 { #category : 'accessing' }
