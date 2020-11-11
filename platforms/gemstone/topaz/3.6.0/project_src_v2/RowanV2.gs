@@ -49662,6 +49662,12 @@ componentForPackageNamed: packageName
 	^ self _loadedProject componentForPackageNamed: packageName
 %
 
+category: 'components'
+method: RwProject
+componentNamed: componentName
+	^ self loadedComponents componentNamed: componentName
+%
+
 category: 'accessing'
 method: RwProject
 currentBranchName
@@ -49852,6 +49858,15 @@ loadedGroupNames
 	^ self _loadedProject loadedGroupNames
 %
 
+category: 'components'
+method: RwProject
+loadedTopLevelComponents
+	| lc |
+	lc := self loadedComponents.
+	^ self componentNames
+		collect: [ :componentName | lc componentNamed: componentName ]
+%
+
 category: 'actions'
 method: RwProject
 loadProjectSet
@@ -49953,6 +49968,15 @@ repositoryRootPath
 	^ self repositoryRoot pathString
 %
 
+category: 'components'
+method: RwProject
+subcomponentsOf: componentName
+	| lc |
+	lc := self loadedComponents.
+	^ (lc componentNamed: componentName) componentNames
+		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
+%
+
 category: 'actions'
 method: RwProject
 revert
@@ -49998,6 +50022,13 @@ category: 'actions'
 method: RwProject
 testSuite
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
+%
+
+category: 'components'
+method: RwProject
+topLevelComponents
+	^ self loadedComponents components values
+		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
 %
 
 category: 'actions'

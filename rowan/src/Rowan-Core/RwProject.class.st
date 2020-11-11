@@ -79,6 +79,11 @@ RwProject >> componentForPackageNamed: packageName [
 	^ self _loadedProject componentForPackageNamed: packageName
 ]
 
+{ #category : 'components' }
+RwProject >> componentNamed: componentName [
+	^ self loadedComponents componentNamed: componentName
+]
+
 { #category : 'accessing' }
 RwProject >> currentBranchName [
 
@@ -248,6 +253,14 @@ RwProject >> loadedGroupNames [
 	^ self _loadedProject loadedGroupNames
 ]
 
+{ #category : 'components' }
+RwProject >> loadedTopLevelComponents [
+	| lc |
+	lc := self loadedComponents.
+	^ self componentNames
+		collect: [ :componentName | lc componentNamed: componentName ]
+]
+
 { #category : 'actions' }
 RwProject >> loadProjectSet [
 	"
@@ -339,6 +352,14 @@ RwProject >> repositoryRootPath [
 	^ self repositoryRoot pathString
 ]
 
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName [
+	| lc |
+	lc := self loadedComponents.
+	^ (lc componentNamed: componentName) componentNames
+		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
+]
+
 { #category : 'actions' }
 RwProject >> revert [
 	"
@@ -381,6 +402,13 @@ RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMi
 RwProject >> testSuite [
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
 ]
+
+{ #category : 'components' }
+RwProject >> topLevelComponents [
+	^ self loadedComponents components values
+		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
+]
+
 
 { #category : 'actions' }
 RwProject >> unload [
