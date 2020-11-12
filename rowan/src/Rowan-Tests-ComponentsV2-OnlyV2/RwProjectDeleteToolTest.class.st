@@ -109,7 +109,9 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "delete project"
 	Rowan projectTools delete deleteProjectNamed: projectName1.
@@ -126,7 +128,9 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 
 	self assert: (audit := project2 audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : 'tests' }
@@ -206,7 +210,9 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "delete project"
 	Rowan projectTools delete deleteProjectNamed: projectName1.
@@ -220,7 +226,9 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 
 	self deny: project isLoaded.
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : 'tests' }
@@ -283,7 +291,9 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "delete project"
 	Rowan projectTools delete deleteProjectNamed: projectName.
@@ -296,8 +306,9 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : 'tests' }
@@ -404,7 +415,9 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "delete project"
 	Rowan projectTools delete forceDeleteProjectNamed: projectName1.
@@ -421,7 +434,9 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 
 	self assert: (audit := project2 audit) isEmpty.
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : 'tests' }
@@ -484,7 +499,9 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "delete project"
 	Rowan projectTools delete forceDeleteProjectNamed: projectName.
@@ -497,6 +514,7 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]

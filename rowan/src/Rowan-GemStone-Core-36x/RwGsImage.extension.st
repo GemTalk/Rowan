@@ -15,7 +15,9 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ loadedMethod ]
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod ifNil: [ ^ absentBlock value ].
+			^ loadedMethod ]
 		ifNil: [ 
 			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
 			self symbolList
@@ -32,7 +34,9 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
 	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ loadedMethod ]
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod ifNil: [ ^ absentBlock value ].
+			^ loadedMethod ]
 		ifNil: [ 
 			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
 			self symbolList

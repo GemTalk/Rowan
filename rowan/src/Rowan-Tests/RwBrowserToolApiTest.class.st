@@ -796,7 +796,9 @@ RwBrowserToolApiTest >> testMoveMethod [
 	self assert: (audit := project1 audit) isEmpty.
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry methodRegistry size = 5.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 5].
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
@@ -811,7 +813,9 @@ RwBrowserToolApiTest >> testMoveMethod [
 	self assert: (audit := project1 audit) isEmpty.
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry methodRegistry size = 6.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 6].
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -839,7 +843,9 @@ RwBrowserToolApiTest >> testMoveMethod [
 	self assert: (audit := project1 audit) isEmpty.
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry methodRegistry size = 6.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 6].
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bif'''
@@ -854,7 +860,9 @@ RwBrowserToolApiTest >> testMoveMethod [
 	self assert: (audit := project1 audit) isEmpty.
 	registry := testSymDict rowanSymbolDictionaryRegistry.
 	self assert: registry packageRegistry size = 3.
-	self assert: registry methodRegistry size = 6.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 6].
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 

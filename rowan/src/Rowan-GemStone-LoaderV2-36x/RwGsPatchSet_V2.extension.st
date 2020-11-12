@@ -90,5 +90,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			registry methodRegistry at: compiledMethod put: loadedMethod ]
+			(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+				ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+				ifFalse: [ registry methodRegistry at: compiledMethod put: loadedMethod ] ]
 ]

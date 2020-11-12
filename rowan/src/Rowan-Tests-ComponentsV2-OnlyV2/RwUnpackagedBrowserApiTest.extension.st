@@ -113,7 +113,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 
 	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "move"
 	testClass addCategory: '*' , packageName2 asLowercase.
@@ -128,7 +130,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 
 	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -145,7 +149,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -208,7 +214,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "move"
 	testClass addCategory: 'accessing'.
@@ -223,7 +231,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -242,7 +252,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -298,7 +310,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 
 	self assert: (audit := project audit) isEmpty.
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "move"
 	testClass addCategory: 'accessing'.
@@ -316,7 +330,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -333,7 +349,6 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 
 "audit"
 	self assert: (audit := project audit) isEmpty.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -391,7 +406,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 "move"
 	testClass addCategory: '*' , packageName1 asLowercase.
@@ -407,7 +424,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -423,7 +442,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -478,7 +499,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 "move"
 	testClass addCategory: 'other accessing'.
@@ -493,7 +516,9 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -514,5 +539,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]

@@ -3267,13 +3267,17 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

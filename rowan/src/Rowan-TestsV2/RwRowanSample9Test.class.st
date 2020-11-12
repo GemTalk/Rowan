@@ -2927,7 +2927,9 @@ RwRowanSample9Test >> testIssue345 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 3.
-	self assert: registry methodRegistry size = 6.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 6].
 
 "unload (delete) project"
 	(Rowan projectNamed: projectName) unload.
@@ -2939,7 +2941,9 @@ RwRowanSample9Test >> testIssue345 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : 'tests' }
@@ -3743,13 +3747,17 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 2.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 2].
 ]
 
 { #category : 'issue 586' }
@@ -3795,7 +3803,9 @@ UserGlobals at: #ConditionalHalt put: false.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 2.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 2].
 
 "load project using symbol dict  _sampleSymbolDictionaryName2"
 	resolvedProject := project asDefinition.
@@ -3819,13 +3829,17 @@ UserGlobals at: #ConditionalHalt put: false.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 2.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 2].
 ]
 
 { #category : 'issue 586' }
@@ -3886,13 +3900,17 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName2.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 ]
 
 { #category : 'issue 493' }

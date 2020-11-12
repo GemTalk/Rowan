@@ -82,7 +82,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -134,7 +136,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := self
 		existingOrNewLoadedPackageNamed: packageName
@@ -185,7 +189,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -242,7 +248,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 
 	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ].
 	^ registryInstance
 ]
 
@@ -286,7 +294,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
 			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ]
 ]
 
 { #category : '*rowan-gemstone-loaderv2-36x' }

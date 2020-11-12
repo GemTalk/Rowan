@@ -91414,7 +91414,9 @@ loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBloc
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ loadedMethod ]
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod ifNil: [ ^ absentBlock value ].
+			^ loadedMethod ]
 		ifNil: [ 
 			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
 			self symbolList
@@ -91432,7 +91434,9 @@ loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
 	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ loadedMethod ]
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod ifNil: [ ^ absentBlock value ].
+			^ loadedMethod ]
 		ifNil: [ 
 			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
 			self symbolList
@@ -91761,7 +91765,9 @@ doMoveMethodsBetweenPackages
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			registry methodRegistry at: compiledMethod put: loadedMethod ]
+			(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+				ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+				ifFalse: [ registry methodRegistry at: compiledMethod put: loadedMethod ] ]
 %
 
 ! Class extensions for 'RwGsPlatform'
@@ -91958,7 +91964,9 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -92011,7 +92019,9 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := self
 		existingOrNewLoadedPackageNamed: packageName
@@ -92063,7 +92073,9 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -92121,7 +92133,9 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 
 	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ].
 	^ registryInstance
 %
 
@@ -92166,7 +92180,9 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
 			registryInstance methodRegistry removeKey: oldCompiledMethod ].
 	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
+	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
+		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ]
 %
 
 category: '*rowan-gemstone-loaderv2-36x'

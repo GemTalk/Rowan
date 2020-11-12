@@ -168,13 +168,17 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	self assert: (audit := project2 audit) isEmpty.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 1.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 1].
 
 	browserTool removeClassNamed: className1.	"remove class className1"
 
@@ -196,7 +200,9 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -205,7 +211,9 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 	self assert: (audit := project2 audit) isEmpty.
 
 	self assert: registry packageRegistry size = 2.
-	self assert: registry methodRegistry size = 0.
+(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifFalse: [ 
+	self assert: registry methodRegistry size = 0].
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -1924,7 +1932,9 @@ true ifTrue: [ ^self ].	"early exit for now"
   symDict := Rowan globalNamed: self _symbolDictionaryName1.
   self assert: (symDict at: className4 asSymbol) == class2.
   registry := symDict at: #RwSymbolDictionaryRegistry.
-  methodRegistry := registry methodRegistry.
+ (UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
+ifTrue: [ ^self].
+ methodRegistry := registry methodRegistry.
   seenMethodsMap := Dictionary new.
   methodRegistry keysAndValuesDo: [:method :loadedMethod |
     ((seenMethodsMap at: method inClass name ifAbsentPut: [ Dictionary new])
