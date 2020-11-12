@@ -11,12 +11,39 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanComponentService class >> forComponentNamed: componentName [
-
+RowanComponentService class >> forComponentNamed: componentName project: rwProject [
 	| inst |
 	inst := self new name: componentName.
-	inst initialize. 
-	^inst
+	inst computeSubComponentsUsing: rwProject.
+	^ inst
+]
+
+{ #category : 'operations' }
+RowanComponentService >> addFlattenedHierarchyTo: dictionary [
+	dictionary
+		at: name
+		put: (componentServices collect: [ :service | service name ]).
+	componentServices
+		do: [ :componentService | componentService addFlattenedHierarchyTo: dictionary ]
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> componentServices [
+	^componentServices
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> componentServices: anArray [
+
+	componentServices := anArray
+]
+
+{ #category : 'operations' }
+RowanComponentService >> computeSubComponentsUsing: rwProject [
+	componentServices := ([ rwProject subcomponentsOf: name ]
+		on: Error
+		do: [ :ex | Array new	"until ifNone: block is written" ])
+		collect: [ :subcomponent | RowanComponentService forComponentNamed: subcomponent name project: rwProject ]
 ]
 
 { #category : 'initialization' }
@@ -34,4 +61,12 @@ RowanComponentService >> name [
 { #category : 'accessing' }
 RowanComponentService >> name: object [
 	name := object
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> subcomponents [
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> subcomponentsOf: rwProject [
 ]

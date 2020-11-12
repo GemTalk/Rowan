@@ -178,14 +178,21 @@ RowanProjectService >> commitWithMessage: message [
 
 { #category : 'accessing' }
 RowanProjectService >> componentServices [
-	| components |
-	components := Dictionary new.
-	components
+	| componentDictionary |
+	componentDictionary := Dictionary new.
+	componentDictionary
 		at: #'nil'
 		put:
 			(self rwProject componentNames
-				collect: [ :componentName | RowanComponentService forComponentNamed: componentName ]).
-	^components
+				collect: [ :componentName | 
+					| componentService |
+					componentService := RowanComponentService
+						forComponentNamed: componentName
+						project: self rwProject.
+					componentService addFlattenedHierarchyTo: componentDictionary. 
+					componentService name ]).
+
+	^ componentDictionary
 ]
 
 { #category : 'examples' }
