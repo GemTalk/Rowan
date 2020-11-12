@@ -306,6 +306,11 @@ RwBasicProjectLoadComponentV2 >> addProjectNamed: aProjectName [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> basename [
+	^ (self name subStrings: $/) last
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> comment [
 
    ^comment

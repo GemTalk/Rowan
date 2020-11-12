@@ -69406,6 +69406,12 @@ addProjectNamed: aProjectName
 
 category: 'accessing'
 method: RwBasicProjectLoadComponentV2
+basename
+	^ (self name subStrings: $/) last
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
 comment
 
    ^comment
