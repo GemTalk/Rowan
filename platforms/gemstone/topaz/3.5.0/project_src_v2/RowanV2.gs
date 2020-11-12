@@ -50925,9 +50925,16 @@ repositoryRootPath
 category: 'components'
 method: RwProject
 subcomponentsOf: componentName
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+%
+
+category: 'components'
+method: RwProject
+subcomponentsOf: componentName ifNone: noneBlock
 	| lc |
 	lc := self loadedComponents.
-	^ (lc componentNamed: componentName) componentNames
+	^ (lc componentNamed: componentName ifAbsent: [ ^ noneBlock value ])
+		componentNames
 		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
 %
 
