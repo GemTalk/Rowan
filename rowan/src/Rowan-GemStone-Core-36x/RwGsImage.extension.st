@@ -28,23 +28,6 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : '*rowan-gemstone-core-36x' }
-RwGsImage class >> loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock [
-	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ presentBlock value: nil value: loadedMethod ]
-		ifNil: [ 
-			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
-			self symbolList
-				do: [ :symbolDict | 
-					symbolDict rowanSymbolDictionaryRegistry
-						ifNotNil: [ :registry | 
-							(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-								ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
-			^ absentBlock value ]
-]
-
-{ #category : '*rowan-gemstone-core-36x' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 

@@ -76972,17 +76972,6 @@ runInitializer
 	"noop"
 %
 
-category: 'accessing'
-method: RwGsMethodDeletionSymbolDictPatchV2
-symbolDictionary
-	"For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
-
-	^ Rowan image 
-			loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
-			ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
-			ifAbsent: [ ^ super symbolDictionary ]
-%
-
 ! Class implementation for 'RwGsMethodDeletionExtensionSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodDeletionExtensionSymbolDictPatchV2'
@@ -91434,24 +91423,6 @@ loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBloc
 						ifNotNil: [ :registry | 
 							(registry methodRegistry at: compiledMethod ifAbsent: [  ])
 								ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
-			^ absentBlock value ]
-%
-
-category: '*rowan-gemstone-core-36x'
-classmethod: RwGsImage
-loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock
-	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | ^ presentBlock value: nil value: loadedMethod ]
-		ifNil: [ 
-			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
-			self symbolList
-				do: [ :symbolDict | 
-					symbolDict rowanSymbolDictionaryRegistry
-						ifNotNil: [ :registry | 
-							(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-								ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
 			^ absentBlock value ]
 %
 

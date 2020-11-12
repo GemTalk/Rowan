@@ -45,14 +45,3 @@ RwGsMethodDeletionSymbolDictPatchV2 >> isAnInitializer [
 RwGsMethodDeletionSymbolDictPatchV2 >> runInitializer [
 	"noop"
 ]
-
-{ #category : 'accessing' }
-RwGsMethodDeletionSymbolDictPatchV2 >> symbolDictionary [
-	"For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
-
-	^ Rowan image 
-			loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
-			ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
-			ifAbsent: [ ^ super symbolDictionary ]
-
-]
