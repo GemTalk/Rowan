@@ -354,9 +354,15 @@ RwProject >> repositoryRootPath [
 
 { #category : 'components' }
 RwProject >> subcomponentsOf: componentName [
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
 	| lc |
 	lc := self loadedComponents.
-	^ (lc componentNamed: componentName) componentNames
+	^ (lc componentNamed: componentName ifAbsent: [ ^ noneBlock value ])
+		componentNames
 		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
 ]
 
@@ -408,7 +414,6 @@ RwProject >> topLevelComponents [
 	^ self loadedComponents components values
 		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
 ]
-
 
 { #category : 'actions' }
 RwProject >> unload [
