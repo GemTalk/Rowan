@@ -50507,15 +50507,6 @@ repositoryRootPath
 	^ self repositoryRoot pathString
 %
 
-category: 'components'
-method: RwProject
-subcomponentsOf: componentName
-	| lc |
-	lc := self loadedComponents.
-	^ (lc componentNamed: componentName) componentNames
-		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
-%
-
 category: 'actions'
 method: RwProject
 revert
@@ -50555,6 +50546,15 @@ revert: platformConditionalAttributes  instanceMigrator: instanceMigrator
 	"should replace places where a projectSet was created for the receiver"
 
 	^ self error: 'Not yet implmented'
+%
+
+category: 'components'
+method: RwProject
+subcomponentsOf: componentName
+	| lc |
+	lc := self loadedComponents.
+	^ (lc componentNamed: componentName) componentNames
+		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
 %
 
 category: 'actions'
