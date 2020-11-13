@@ -10,13 +10,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 			compiledMethod _rowanPackageInfo: nil.
 			loadedMethod := aLoadedMethod ]
 		ifNil: [ 
-			loadedMethod := registryInstance methodRegistry
-				at: compiledMethod
-				ifAbsent: [ 
-					registryInstance
-						error:
-							'Internal error -- no existing LoadedMethod found for deleted method.' ].
-			registryInstance methodRegistry removeKey: compiledMethod ].
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for deleted method.' ].
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
@@ -313,26 +309,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveClassFor: classMove [
 	loadedClass loadedInstanceMethods values
 		do: [ :loadedMethod | 
 			| compiledMethod |
+			"this operation can probably be skipped, since the loaded method itself is not changing"
 			compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ 
-					"this operation can probably be skipped, since the loaded method itself is not changing"
-					compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifNil: [ 
-					oldRegistry methodRegistry removeKey: compiledMethod.
-					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ].
+			compiledMethod _rowanPackageInfo: loadedMethod ].
 	loadedClass loadedClassMethods values
 		do: [ :loadedMethod | 
 			| compiledMethod |
+			"this operation can probably be skipped, since the loaded method itself is not changing"
 			compiledMethod := theBehavior
 				compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ 
-					"this operation can probably be skipped, since the loaded method itself is not changing"
-					compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifNil: [ 
-					oldRegistry methodRegistry removeKey: compiledMethod.
-					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ]
+			compiledMethod _rowanPackageInfo: loadedMethod ]
 ]
 
 { #category : '*rowan-gemstone-loaderv2-36x' }
@@ -368,9 +354,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 
 	behavior moveMethod: selector toCategory: newProtocol.
 
-	loadedMethod := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [  ] ].
+	loadedMethod := compiledMethod _rowanPackageInfo.
 	loadedMethod
 		ifNil: [ 
 			registryInstance

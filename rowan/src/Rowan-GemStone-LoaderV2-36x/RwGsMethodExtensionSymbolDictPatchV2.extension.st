@@ -23,15 +23,7 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMovedMethod: aMethodMove newClass
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
 				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					oldCompiledMethod _rowanPackageInfo
-						ifNotNil: [ :ignoredLoadedMethod | oldCompiledMethod _rowanPackageInfo: nil ]
-						ifNil: [ 
-							(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
-								ifNil: [ 
-									theRegistry
-										error:
-											'Internal error -- no existing LoadedMethod found for deleted method.' ]
-								ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ] ].
+					oldCompiledMethod _rowanPackageInfo: nil ] ].
 
 	newBehavior := behavior isMeta
 		ifTrue: [ newClassVersionPatch newClassVersion class ]

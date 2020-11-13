@@ -91365,19 +91365,9 @@ loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBloc
 		environmentId: 0
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
-	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | 
-			loadedMethod ifNil: [ ^ absentBlock value ].
-			^ loadedMethod ]
-		ifNil: [ 
-			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
-			self symbolList
-				do: [ :symbolDict | 
-					symbolDict rowanSymbolDictionaryRegistry
-						ifNotNil: [ :registry | 
-							(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-								ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
-			^ absentBlock value ]
+	^ compiledMethod _rowanPackageInfo
+		ifNotNil: [ :loadedMethod | loadedMethod ]
+		ifNil: [ absentBlock value ]
 %
 
 category: '*rowan-gemstone-core-36x'
@@ -91385,19 +91375,9 @@ classmethod: RwGsImage
 loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
-	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | 
-			loadedMethod ifNil: [ ^ absentBlock value ].
-			^ loadedMethod ]
-		ifNil: [ 
-			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
-			self symbolList
-				do: [ :symbolDict | 
-					symbolDict rowanSymbolDictionaryRegistry
-						ifNotNil: [ :registry | 
-							(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-								ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
-			^ absentBlock value ]
+	^ compiledMethod _rowanPackageInfo
+		ifNotNil: [ :loadedMethod | loadedMethod ]
+		ifNil: [ absentBlock value ]
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
@@ -91421,14 +91401,7 @@ removeLoadedMethodForCompileMethod: compiledMethod
 	"The given compiled method is being removed from the system, remove the loadedMethod associated 
 		with the compiled method."
 
-	compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | compiledMethod _rowanPackageInfo: nil ]
-		ifNil: [ 
-			"old-fashioned lookup needed until all uses of methodRegistry replaced by  _rowanPackageInfo lookup"
-			self symbolList
-				do: [ :symbolDict | 
-					symbolDict rowanSymbolDictionaryRegistry
-						ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ] ]
+	compiledMethod _rowanPackageInfo: nil
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
@@ -91485,17 +91458,11 @@ disownFromLoaded: aPackageSymbolDictionary
 		valuesDo: [ :loadedInstanceMethod | 
 			self removeLoadedInstanceMethod: loadedInstanceMethod.
 			compiledMethod := loadedInstanceMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :ignoredLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ aPackageSymbolDictionary methodRegistry removeKey: compiledMethod ] ].
+			compiledMethod _rowanPackageInfo: nil ].
 	loadedClassMethods
 		valuesDo: [ :loadedClassMethod | 
 			compiledMethod := loadedClassMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :ignoredLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ 
-					self removeLoadedClassMethod: loadedClassMethod.
-					aPackageSymbolDictionary methodRegistry removeKey: compiledMethod ] ]
+			compiledMethod _rowanPackageInfo: nil ]
 %
 
 ! Class extensions for 'RwGsLoadedSymbolDictClassExtension'
@@ -91510,16 +91477,12 @@ disownFromLoaded: registry
 		valuesDo: [ :loadedInstanceMethod | 
 			self removeLoadedInstanceMethod: loadedInstanceMethod.
 			compiledMethod := loadedInstanceMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :ignoredLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ registry methodRegistry removeKey: compiledMethod ] ].
+			compiledMethod _rowanPackageInfo: nil ].
 	loadedClassMethods
 		valuesDo: [ :loadedClassMethod | 
 			self removeLoadedClassMethod: loadedClassMethod.
 			compiledMethod := loadedClassMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :ignoredLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ registry methodRegistry removeKey: compiledMethod ] ].
+			compiledMethod _rowanPackageInfo: nil ].
 
 	registry unregisterLoadedClassExtension: self forClass: handle
 %
@@ -91553,15 +91516,7 @@ installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
 				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					oldCompiledMethod _rowanPackageInfo
-						ifNotNil: [ :ignoredLoadedMethod | oldCompiledMethod _rowanPackageInfo: nil ]
-						ifNil: [ 
-							(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
-								ifNil: [ 
-									theRegistry
-										error:
-											'Internal error -- no existing LoadedMethod found for deleted method.' ]
-								ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ] ].
+					oldCompiledMethod _rowanPackageInfo: nil ] ].
 
 	theRegistry
 		addNewCompiledMethod: compiledMethod
@@ -91600,15 +91555,7 @@ installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
 				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					oldCompiledMethod _rowanPackageInfo
-						ifNotNil: [ :ignoredLoadedMethod | oldCompiledMethod _rowanPackageInfo: nil ]
-						ifNil: [ 
-							(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
-								ifNil: [ 
-									theRegistry
-										error:
-											'Internal error -- no existing LoadedMethod found for deleted method.' ]
-								ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ] ].
+					oldCompiledMethod _rowanPackageInfo: nil ] ].
 
 	newBehavior := behavior isMeta
 		ifTrue: [ newClassVersionPatch newClassVersion class ]
@@ -92206,26 +92153,16 @@ moveClassFor: classMove
 	loadedClass loadedInstanceMethods values
 		do: [ :loadedMethod | 
 			| compiledMethod |
+			"this operation can probably be skipped, since the loaded method itself is not changing"
 			compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ 
-					"this operation can probably be skipped, since the loaded method itself is not changing"
-					compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifNil: [ 
-					oldRegistry methodRegistry removeKey: compiledMethod.
-					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ].
+			compiledMethod _rowanPackageInfo: loadedMethod ].
 	loadedClass loadedClassMethods values
 		do: [ :loadedMethod | 
 			| compiledMethod |
+			"this operation can probably be skipped, since the loaded method itself is not changing"
 			compiledMethod := theBehavior
 				compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ 
-					"this operation can probably be skipped, since the loaded method itself is not changing"
-					compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifNil: [ 
-					oldRegistry methodRegistry removeKey: compiledMethod.
-					newRegistry methodRegistry at: compiledMethod put: loadedMethod ] ]
+			compiledMethod _rowanPackageInfo: loadedMethod ]
 %
 
 category: '*rowan-gemstone-loaderv2-36x'
@@ -92262,9 +92199,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 
 	behavior moveMethod: selector toCategory: newProtocol.
 
-	loadedMethod := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [  ] ].
+	loadedMethod := compiledMethod _rowanPackageInfo.
 	loadedMethod
 		ifNil: [ 
 			registryInstance
@@ -92286,13 +92221,9 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 			compiledMethod _rowanPackageInfo: nil.
 			loadedMethod := aLoadedMethod ]
 		ifNil: [ 
-			loadedMethod := registryInstance methodRegistry
-				at: compiledMethod
-				ifAbsent: [ 
-					registryInstance
-						error:
-							'Internal error -- no existing LoadedMethod found for deleted method.' ].
-			registryInstance methodRegistry removeKey: compiledMethod ].
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for deleted method.' ].
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
