@@ -91672,9 +91672,7 @@ doMoveMethodsBetweenPackages
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 			compiledMethod := loadedMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :aLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ].
+			compiledMethod _rowanPackageInfo: nil.
 
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
@@ -91717,9 +91715,7 @@ doMoveMethodsBetweenPackages
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-				ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifFalse: [ registry methodRegistry at: compiledMethod put: loadedMethod ] ]
+			compiledMethod _rowanPackageInfo: loadedMethod ]
 %
 
 ! Class extensions for 'RwGsPlatform'
@@ -91903,18 +91899,13 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ self methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
+	existing := compiledMethod _rowanPackageInfo.
 	existing
 		ifNotNil: [ 
 			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
 			^ self ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	(UserGlobals at: #'EnableRowanPackageInfo' ifAbsent: [ false ])
-		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ self methodRegistry at: compiledMethod put: loadedMethod ].
+	compiledMethod _rowanPackageInfo: loadedMethod.
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -91967,9 +91958,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
+	existing := compiledMethod _rowanPackageInfo.
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -91979,9 +91968,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
+	compiledMethod _rowanPackageInfo: loadedMethod.
 
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -92024,9 +92011,7 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
 			compiledMethod := meth ].
 
-	existing := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
+	existing := compiledMethod _rowanPackageInfo.
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -92034,9 +92019,7 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
+	compiledMethod _rowanPackageInfo: loadedMethod.
 
 	loadedPackage := self
 		existingOrNewLoadedPackageNamed: packageName
@@ -92079,18 +92062,14 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
+	existing := compiledMethod _rowanPackageInfo.
 	existing
 		ifNotNil: [ 
 			registryInstance
 				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ registryInstance methodRegistry at: compiledMethod put: loadedMethod ].
+	compiledMethod _rowanPackageInfo: loadedMethod.
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -92132,25 +92111,16 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
-	oldCompiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | 
-			loadedMethod := aLoadedMethod.
-			oldCompiledMethod _rowanPackageInfo: nil ]
+	loadedMethod := oldCompiledMethod _rowanPackageInfo.
+	loadedMethod
 		ifNil: [ 
-			loadedMethod := registryInstance methodRegistry
-				at: oldCompiledMethod
-				ifAbsent: [  ].
-			loadedMethod
-				ifNil: [ 
-					registryInstance
-						error:
-							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-			registryInstance methodRegistry removeKey: oldCompiledMethod ].
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	oldCompiledMethod _rowanPackageInfo: nil.
 
 	loadedMethod handle: newCompiledMethod.
-	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ].
+	newCompiledMethod _rowanPackageInfo: loadedMethod.
 	^ registryInstance
 %
 
@@ -92182,22 +92152,16 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 		updateMethodLookupCacheFor: newCompiledMethod
 		in: behavior.
 
-	oldCompiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | 
-			loadedMethod := aLoadedMethod.
-			oldCompiledMethod _rowanPackageInfo: nil ]
+	loadedMethod := oldCompiledMethod _rowanPackageInfo.
+	loadedMethod
 		ifNil: [ 
-			loadedMethod := registryInstance methodRegistry
-				at: oldCompiledMethod
-				ifAbsent: [ 
-					registryInstance
-						error:
-							'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-			registryInstance methodRegistry removeKey: oldCompiledMethod ].
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	oldCompiledMethod _rowanPackageInfo: nil.
+
 	loadedMethod handle: newCompiledMethod.
-	(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-		ifTrue: [ newCompiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ registryInstance methodRegistry at: newCompiledMethod put: loadedMethod ]
+	newCompiledMethod _rowanPackageInfo: loadedMethod
 %
 
 category: '*rowan-gemstone-loaderv2-36x'

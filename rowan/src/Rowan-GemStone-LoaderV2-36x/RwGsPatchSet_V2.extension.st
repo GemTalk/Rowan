@@ -45,9 +45,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 			compiledMethod := loadedMethod handle.
-			compiledMethod _rowanPackageInfo
-				ifNotNil: [ :aLoadedMethod | compiledMethod _rowanPackageInfo: nil ]
-				ifNil: [ registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ].
+			compiledMethod _rowanPackageInfo: nil.
 
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
@@ -90,7 +88,5 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			(UserGlobals at: #EnableRowanPackageInfo ifAbsent: [false])
-				ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-				ifFalse: [ registry methodRegistry at: compiledMethod put: loadedMethod ] ]
+			compiledMethod _rowanPackageInfo: loadedMethod ]
 ]

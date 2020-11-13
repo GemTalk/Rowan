@@ -30,18 +30,13 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo
-		ifNotNil: [ :aLoadedMethod | aLoadedMethod ]
-		ifNil: [ self methodRegistry at: compiledMethod ifAbsent: [ nil ] ].
+	existing := compiledMethod _rowanPackageInfo.
 	existing
 		ifNotNil: [ 
 			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
 			^ self ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	(UserGlobals at: #'EnableRowanPackageInfo' ifAbsent: [ false ])
-		ifTrue: [ compiledMethod _rowanPackageInfo: loadedMethod ]
-		ifFalse: [ self methodRegistry at: compiledMethod put: loadedMethod ].
+	compiledMethod _rowanPackageInfo: loadedMethod.
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
