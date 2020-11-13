@@ -5,15 +5,19 @@ Class {
 		'name',
 		'componentServices',
 		'packageServices',
-		'projectService'
+		'projectService',
+		'basename'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }
 RowanComponentService class >> forComponentNamed: componentName project: rwProject [
-	| inst |
-	inst := self new name: componentName.
+	| inst component |
+	component := rwProject componentNamed: componentName.
+	inst := self new
+		name: componentName;
+		basename: component basename.
 	inst computeSubComponentsUsing: rwProject.
 	^ inst
 ]
@@ -21,10 +25,20 @@ RowanComponentService class >> forComponentNamed: componentName project: rwProje
 { #category : 'operations' }
 RowanComponentService >> addFlattenedHierarchyTo: dictionary [
 	dictionary
-		at: name
-		put: (componentServices collect: [ :service | service name ]).
+		at: self
+		put: (componentServices collect: [ :service | service ]).
 	componentServices
 		do: [ :componentService | componentService addFlattenedHierarchyTo: dictionary ]
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> basename [
+	^basename
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> basename: object [
+	basename := object
 ]
 
 { #category : 'accessing' }
@@ -61,10 +75,6 @@ RowanComponentService >> name [
 { #category : 'accessing' }
 RowanComponentService >> name: object [
 	name := object
-]
-
-{ #category : 'accessing' }
-RowanComponentService >> subcomponents [
 ]
 
 { #category : 'accessing' }

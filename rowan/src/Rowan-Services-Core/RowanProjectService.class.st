@@ -190,7 +190,7 @@ RowanProjectService >> componentServices [
 						forComponentNamed: componentName
 						project: self rwProject.
 					componentService addFlattenedHierarchyTo: componentDictionary. 
-					componentService name ]).
+					componentService ]).
 
 	^ componentDictionary
 ]

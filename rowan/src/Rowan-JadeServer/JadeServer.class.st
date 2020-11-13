@@ -4855,31 +4855,32 @@ JadeServer >> terminate: aGsProcess [
 
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
-  | services organizer resultString |
-  [ 
-  Rowan commandResultClass initializeResults.
-  services := STON fromString: stonString.
-  organizer := ClassOrganizer new.
-  [ 
-  services
-    do: [ :service | 
-      service organizer: organizer.
-      service updateType: nil.	"Update type is only for returned commands"
-      service command ifNil: [ service command: #'update' ].
-      service servicePerform: service command withArguments: service commandArgs ] ]
-    on: GsInteractionRequest
-    do: [ :ex | 
-      ex
-        response:
-          (ex interaction interactWith: self gsInteractionInformFailureHandler) ].
-  self autoCommitIfRequired.
-  Rowan loggingServiceClass current logSentServices.
-  resultString := STON toString: Rowan commandResultClass results.
-  ^ resultString ]
-    on: Error
-    do: [ :ex | 
-      RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
-      ex pass ]
+	| services organizer resultString |
+	[ 
+	Rowan commandResultClass initializeResults.
+	services := ((STON reader allowComplexMapKeys: true) on: stonString readStream)
+		next.
+	organizer := ClassOrganizer new.
+	[ 
+	services
+		do: [ :service | 
+			service organizer: organizer.
+			service updateType: nil.	"Update type is only for returned commands"
+			service command ifNil: [ service command: #'update' ].
+			service servicePerform: service command withArguments: service commandArgs ] ]
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex
+				response:
+					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].
+	self autoCommitIfRequired.
+	Rowan loggingServiceClass current logSentServices.
+	resultString := STON toString: Rowan commandResultClass results.
+	^ resultString ]
+		on: Error
+		do: [ :ex | 
+			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
+			ex pass ]
 ]
 
 { #category : 'category' }
