@@ -51203,9 +51203,16 @@ repositoryRootPath
 category: 'components'
 method: RwProject
 subcomponentsOf: componentName
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+%
+
+category: 'components'
+method: RwProject
+subcomponentsOf: componentName ifNone: noneBlock
 	| lc |
 	lc := self loadedComponents.
-	^ (lc componentNamed: componentName) componentNames
+	^ (lc componentNamed: componentName ifAbsent: [ ^ noneBlock value ])
+		componentNames
 		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
 %
 
@@ -69829,6 +69836,12 @@ category: 'accessing'
 method: RwBasicProjectLoadComponentV2
 addProjectNamed: aProjectName
 	self subclassResponsibility: #'addProjectNamed:'
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
+basename
+	^ (self name subStrings: $/) last
 %
 
 category: 'accessing'
