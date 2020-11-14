@@ -273,6 +273,27 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 	^ handle
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	| subcomponents |
+	subcomponents := self components
+		subcomponentsOf: componentName
+		resolvedProject: self
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+]
+
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: noneBlock [
+	^ self
+		subcomponentsOf: componentName
+		attributes: self platformConditionalAttributes
+		ifNone: noneBlock
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> symbolDictNameForPackageNamed: packageName [
 

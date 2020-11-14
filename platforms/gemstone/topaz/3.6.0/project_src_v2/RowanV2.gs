@@ -50017,12 +50017,17 @@ subcomponentsOf: componentName
 
 category: 'components'
 method: RwProject
+subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+%
+
+category: 'components'
+method: RwProject
 subcomponentsOf: componentName ifNone: noneBlock
-	| lc |
-	lc := self loadedComponents.
-	^ (lc componentNamed: componentName ifAbsent: [ ^ noneBlock value ])
-		componentNames
-		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
+	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 %
 
 category: 'actions'
@@ -68290,6 +68295,13 @@ initialize
 	packageNames := {}
 %
 
+category: 'matching'
+method: RwAbstractSimpleProjectLoadComponentV2
+matchesAttributes: attributes
+	self conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | ^ self _platformAttributeMatchIn: platformMatchers for: attributes ]
+%
+
 category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 packageNames
@@ -68320,6 +68332,18 @@ category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 removeProjectNamed: aProjectName
 	self subclassResponsibility: #'removeProjectNamed:'
+%
+
+category: 'matching'
+method: RwAbstractSimpleProjectLoadComponentV2
+_platformAttributeMatchIn: platformMatchersList for: attributes
+	platformMatchersList
+		do: [ :platformPatternMatcher | 
+			attributes
+				do: [ :anObject | 
+					(platformPatternMatcher match: anObject)
+						ifTrue: [ ^ true ] ] ].
+	^ false
 %
 
 ! Class implementation for 'RwAbstractRowanProjectLoadComponentV2'
@@ -80740,6 +80764,29 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 	^ handle
 %
 
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
+	| subcomponents |
+	subcomponents := self components
+		subcomponentsOf: componentName
+		resolvedProject: self
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+%
+
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+subcomponentsOf: componentName ifNone: noneBlock
+	^ self
+		subcomponentsOf: componentName
+		attributes: self platformConditionalAttributes
+		ifNone: noneBlock
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 symbolDictNameForPackageNamed: packageName
@@ -82867,6 +82914,33 @@ renameComponentNamed: aComponentPath to: aComponentName
 						addComponentNamed: componentPath ] ].
 	self components at: componentPath put: component.
 	^ componentPath
+%
+
+category: 'querying'
+method: RwResolvedLoadComponentsV2
+subcomponentsOf: componentName resolvedProject: resolvedProject matchBlock: matchBlock ifNone: noneBlock
+	| aComponent subcomponents |
+	subcomponents := {}.
+	aComponent := self
+		componentNamed: componentName
+		ifAbsent: [ 
+			"read from disk if not present?"
+			^ noneBlock value ].
+	(matchBlock value: aComponent)
+		ifFalse: [ 
+			"The component is not loadable, so ignore it's subcomponents"
+			^ subcomponents ].
+	aComponent componentNames
+		do: [ :subcomponentName | 
+			| subcomponent |
+			subcomponent := self
+				componentNamed: subcomponentName
+				ifAbsent: [ 
+					"read from disk if not present?"
+					^ noneBlock value ].
+			(matchBlock value: subcomponent)
+				ifTrue: [ subcomponents add: subcomponent ] ].
+	^ subcomponents
 %
 
 category: 'accessing'

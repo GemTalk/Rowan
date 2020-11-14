@@ -8,6 +8,17 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
+{ #category : 'matching' }
+RwAbstractSimpleProjectLoadComponentV2 >> _platformAttributeMatchIn: platformMatchersList for: attributes [
+	platformMatchersList
+		do: [ :platformPatternMatcher | 
+			attributes
+				do: [ :anObject | 
+					(platformPatternMatcher match: anObject)
+						ifTrue: [ ^ true ] ] ].
+	^ false
+]
+
 { #category : 'comparing' }
 RwAbstractSimpleProjectLoadComponentV2 >> = aRwAbstractSimpleProjectLoadComponentV2 [
 	(aRwAbstractSimpleProjectLoadComponentV2 isKindOf: self class)
@@ -58,6 +69,12 @@ RwAbstractSimpleProjectLoadComponentV2 >> initialize [
 	super initialize.
 	condition := 'common'.
 	packageNames := {}
+]
+
+{ #category : 'matching' }
+RwAbstractSimpleProjectLoadComponentV2 >> matchesAttributes: attributes [
+	self conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | ^ self _platformAttributeMatchIn: platformMatchers for: attributes ]
 ]
 
 { #category : 'accessing' }

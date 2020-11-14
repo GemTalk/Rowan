@@ -358,12 +358,16 @@ RwProject >> subcomponentsOf: componentName [
 ]
 
 { #category : 'components' }
+RwProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+]
+
+{ #category : 'components' }
 RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
-	| lc |
-	lc := self loadedComponents.
-	^ (lc componentNamed: componentName ifAbsent: [ ^ noneBlock value ])
-		componentNames
-		collect: [ :subcomponentName | lc componentNamed: subcomponentName ]
+	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 ]
 
 { #category : 'actions' }
