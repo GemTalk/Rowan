@@ -69325,7 +69325,7 @@ condition
 category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 condition: aString
-	false
+	true
 		ifTrue: [ 
 			aString isString
 				ifFalse: [ self error: 'The condition is constrained to be a string' ] ].
@@ -71057,7 +71057,7 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 	condition _isArray
 		ifTrue: [ 
 			self components
-				addSimpleNestedComponentNamed: theComponentName
+				addPlatformNestedComponentNamed: theComponentName
 				condition: condition
 				comment: aString ]
 		ifFalse: [ 

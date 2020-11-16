@@ -104,7 +104,7 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 	condition _isArray
 		ifTrue: [ 
 			self components
-				addSimpleNestedComponentNamed: theComponentName
+				addPlatformNestedComponentNamed: theComponentName
 				condition: condition
 				comment: aString ]
 		ifFalse: [ 

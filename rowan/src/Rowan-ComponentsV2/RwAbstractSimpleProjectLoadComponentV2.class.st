@@ -47,7 +47,7 @@ RwAbstractSimpleProjectLoadComponentV2 >> condition [
 
 { #category : 'accessing' }
 RwAbstractSimpleProjectLoadComponentV2 >> condition: aString [
-	false
+	true
 		ifTrue: [ 
 			aString isString
 				ifFalse: [ self error: 'The condition is constrained to be a string' ] ].
