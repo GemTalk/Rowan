@@ -28,9 +28,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0001: commitComment;
 		genSpec_0002: commitComment;
 		genSpec_0003: commitComment;
-"
-		genSpec_0004: commitComment;
-"
+"		genSpec_0004: commitComment;"
 		genSpec_0005: commitComment;
 		genSpec_0006: commitComment;
 		genSpec_0007: commitComment;
@@ -83,5 +81,8 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0054: commitComment;
 		genSpec_0055: commitComment;
 		genSpec_0056: commitComment;
+		genSpec_0057: commitComment;
+		genSpec_0058: commitComment;
+		genSpec_0059: commitComment;
 		yourself
 ]

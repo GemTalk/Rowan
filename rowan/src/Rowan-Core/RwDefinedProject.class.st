@@ -80,6 +80,44 @@ RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toCompone
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self
+		addComponentStructureFor: componentBasename
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _resolvedProject
+		addComponentStructureFor: componentBasename
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
+	^ self
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _resolvedProject
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> addNewComponentNamed: componentName [
 	^ self _resolvedProject addNewComponentNamed: componentName
 ]

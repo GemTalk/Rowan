@@ -6104,6 +6104,37 @@ RwRowanSample9Test >> testSpec_0058 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0059 [
+	"spec_0059 should load cleanly for all 4 combos std, alt1, alt2, alt3"
+
+	"https://github.com/GemTalk/Rowan/issues/169"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0059'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"load project using each of the alt conditions"
+	{
+		#('common' 'tests').
+		#('common' 'tests' 'alt1').
+		#('common' 'tests' 'alt2').
+		#('common' 'tests' 'alt3').
+	} do: [:conditionalAttributes |
+		resolvedProject := loadSpec resolve: conditionalAttributes.
+		loadedProjects := resolvedProject load.
+		self
+			_standard_validate: resolvedProject
+			loadedProjects: loadedProjects
+			expectedProjectNames: projectNames ].
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

@@ -102,6 +102,25 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _projectDefinition
+		addComponentStructureFor: componentBasename
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _projectDefinition
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 	^ self _projectDefinition addNewComponentNamed: componentName
 ]
