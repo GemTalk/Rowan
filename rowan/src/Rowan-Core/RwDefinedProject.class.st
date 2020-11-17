@@ -79,7 +79,7 @@ RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toCompone
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addComponentStructureFor: componentBasename
@@ -88,7 +88,7 @@ RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: p
 		comment: ''
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _resolvedProject
 		addComponentStructureFor: componentBasename
@@ -97,7 +97,7 @@ RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: p
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addComponentStructureFor: componentBasename
@@ -107,7 +107,7 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		comment: ''
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _resolvedProject
 		addComponentStructureFor: componentBasename

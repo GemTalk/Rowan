@@ -49730,7 +49730,7 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 		toComponentNamed: toComponentName
 %
 
-category: 'accessing'
+category: 'components'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self
@@ -49740,7 +49740,7 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 		comment: ''
 %
 
-category: 'accessing'
+category: 'components'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _resolvedProject
@@ -49750,7 +49750,7 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self
@@ -49761,7 +49761,7 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: ''
 %
 
-category: 'accessing'
+category: 'components'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _resolvedProject
@@ -69190,6 +69190,7 @@ fromComponentsDirectory: componentsDirectory named: componentName
 	url := 'file:' , (componentsDirectory / componentName , 'ston') pathString.
 	component := self fromUrl: url.
 	component _readDoitsFrom: componentsDirectory.
+	component _validateDoits.
 	^ component
 %
 
@@ -69480,10 +69481,7 @@ initializeForExport
 							platformMap := conditionalPackageMapSpecs at: platformName.
 							orderedPlatformMap := platformName = 'gemstone'
 								ifTrue: [ self _canonicalizeGemStonePackageMapSpecs: platformMap ]
-								ifFalse: [ 
-									platformName = 'vast'
-										ifTrue: [ self _canonicalizeVastPackageMapSpecs: platformMap ]
-										ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+								ifFalse: [ self error: 'Unknown platform name ' , platformName printString ].
 							orderedPlatformMap isEmpty
 								ifFalse: [ orderedConditionalPackageMapSpecs at: platformName put: orderedPlatformMap ] ].
 					conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ] ]
@@ -69608,7 +69606,6 @@ validate
 
 	| allDefinedPackageNames |
 	self name ifNil: [ self error: 'name is nil' ].
-	self _validateDoits.
 	allDefinedPackageNames := self _validatedPackageNames.
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformName :platformPropertiesMap | 
@@ -69647,19 +69644,6 @@ _canonicalizeGemStonePackageMapSpecs: userMap
 			orderedAttributeMap isEmpty
 				ifFalse: [ orderedUserMap at: userName put: orderedAttributeMap ] ].
 	^ orderedUserMap
-%
-
-category: 'private'
-method: RwBasicProjectLoadComponentV2
-_canonicalizeVastPackageMapSpecs: propertiesMap
-	| orderedPropertyMap |
-	orderedPropertyMap := self class orderedDictionaryClass new.
-	(propertiesMap keys asSortedCollection: [ :a :b | a <= b ])
-		do: [ :vaPropertyName | 
-			propertiesMap at: vaPropertyName.
-			propertiesMap isEmpty
-				ifFalse: [ orderedPropertyMap at: vaPropertyName put: (propertiesMap at: vaPropertyName) ] ].
-	^ orderedPropertyMap
 %
 
 category: 'private'
@@ -69762,7 +69746,6 @@ _readDoitsFrom: componentsRoot
 category: 'validation'
 method: RwBasicProjectLoadComponentV2
 _validateDoits
-true ifTrue: [ "short term hack" ^self].
 	self preloadDoitName
 		ifNotNil: [ 
 			((self doitDict
