@@ -27,10 +27,8 @@ RwPlatformNestedProjectLoadComponentV2 >> componentNames [
 
 { #category : 'accessing' }
 RwPlatformNestedProjectLoadComponentV2 >> condition: anArray [
-	true
-		ifTrue: [ 
-			anArray _isArray
-				ifFalse: [ self error: 'The condition is constrained to be an array' ] ].
+	anArray _isArray
+		ifFalse: [ self error: 'The condition is constrained to be an array' ].
 	condition := anArray
 ]
 
