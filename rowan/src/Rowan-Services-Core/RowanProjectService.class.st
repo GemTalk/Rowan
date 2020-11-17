@@ -188,7 +188,7 @@ RowanProjectService >> componentServices [
 					| componentService |
 					componentService := RowanComponentService
 						forComponentNamed: componentName
-						project: self rwProject.
+						projectService: self.
 					componentService addFlattenedHierarchyTo: componentDictionary. 
 					componentService ]).
 

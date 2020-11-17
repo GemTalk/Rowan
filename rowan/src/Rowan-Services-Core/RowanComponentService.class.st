@@ -12,13 +12,14 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanComponentService class >> forComponentNamed: componentName project: rwProject [
+RowanComponentService class >> forComponentNamed: componentName projectService: theProjectService [
 	| inst component |
-	component := rwProject componentNamed: componentName.
+	component := theProjectService rwProject componentNamed: componentName.
 	inst := self new
 		name: componentName;
 		basename: component basename.
-	inst computeSubComponentsUsing: rwProject.
+	inst computeSubComponentsUsingProjectService: theProjectService.
+	inst projectService: theProjectService. 
 	^ inst
 ]
 
@@ -58,11 +59,14 @@ RowanComponentService >> componentServices: anArray [
 ]
 
 { #category : 'operations' }
-RowanComponentService >> computeSubComponentsUsing: rwProject [
-	componentServices := ([ rwProject subcomponentsOf: name ]
-		on: Error
-		do: [ :ex | Array new	"until ifNone: block is written" ])
-		collect: [ :subcomponent | RowanComponentService forComponentNamed: subcomponent name project: rwProject ]
+RowanComponentService >> computeSubComponentsUsingProjectService: theProjectService [
+	componentServices := (theProjectService rwProject
+		subcomponentsOf: name
+		ifNone: [ Array new ])
+		collect: [ :subcomponent | 
+			RowanComponentService
+				forComponentNamed: subcomponent name
+				projectService: theProjectService ]
 ]
 
 { #category : 'initialization' }
@@ -83,7 +87,28 @@ RowanComponentService >> name: object [
 ]
 
 { #category : 'accessing' }
+RowanComponentService >> projectService [
+	^projectService
+]
+
+{ #category : 'accessing' }
+RowanComponentService >> projectService: theProjectService [
+	projectService := theProjectService
+]
+
+{ #category : 'perform' }
+RowanComponentService >> servicePerform: symbol withArguments: collection [
+	super servicePerform: symbol withArguments: collection.
+	self update
+]
+
+{ #category : 'accessing' }
 RowanComponentService >> subcomponentsOf: rwProject [
+]
+
+{ #category : 'updating' }
+RowanComponentService >> update [
+	self updatePackageServices.
 ]
 
 { #category : 'clientCommands' }
