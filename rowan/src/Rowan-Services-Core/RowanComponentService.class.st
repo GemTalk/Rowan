@@ -42,6 +42,11 @@ RowanComponentService >> basename: object [
 ]
 
 { #category : 'accessing' }
+RowanComponentService >> component [
+	^ projectService rwProject componentNamed: name
+]
+
+{ #category : 'accessing' }
 RowanComponentService >> componentServices [
 	^componentServices
 ]
@@ -79,4 +84,11 @@ RowanComponentService >> name: object [
 
 { #category : 'accessing' }
 RowanComponentService >> subcomponentsOf: rwProject [
+]
+
+{ #category : 'clientCommands' }
+RowanComponentService >> updatePackageServices [
+	packageServices := self component packageNames
+		collect: [ :packageName | RowanPackageService forPackageNamed: packageName ].
+	RowanCommandResult addResult: self
 ]
