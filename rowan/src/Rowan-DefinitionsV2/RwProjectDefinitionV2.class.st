@@ -63,6 +63,60 @@ RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toCo
 ]
 
 { #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	"assume that componentBasename is a top-level component"
+
+	^ self
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: componentBasename
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	"return the path name of the new component"
+
+	| theComponentName toComponent path compositePath condition |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / componentBasename) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self components
+					addSimpleNestedComponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: ''.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
+	theComponentName := (path / componentBasename) pathString.
+	condition _isArray
+		ifTrue: [ 
+			self components
+				addPlatformNestedComponentNamed: theComponentName
+				condition: condition
+				comment: aString ]
+		ifFalse: [ 
+			self components
+				addSimpleNestedComponentNamed: theComponentName
+				condition: condition
+				comment: aString ].
+	toComponent addComponentNamed: theComponentName.
+	^ theComponentName
+]
+
+{ #category : 'accessing' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
 	^ self addNewComponentNamed: aComponentName condition: 'common' comment: ''
 ]

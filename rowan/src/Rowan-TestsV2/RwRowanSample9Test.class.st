@@ -6104,6 +6104,78 @@ RwRowanSample9Test >> testSpec_0058 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0059_1 [
+	"spec_0059 should load cleanly for all 4 attributes combos common, alt1, alt2, alt3"
+
+	"https://github.com/GemTalk/Rowan/issues/660"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0059'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"load project using each of the alt conditions"
+	{
+		#('common' 'tests').
+		#('common' 'tests' 'alt1').
+		#('common' 'tests' 'alt2').
+		#('common' 'tests' 'alt3').
+	} do: [:conditionalAttributes |
+		resolvedProject := loadSpec resolve: conditionalAttributes.
+		loadedProjects := resolvedProject load.
+		self
+			_standard_validate: resolvedProject
+			loadedProjects: loadedProjects
+			expectedProjectNames: projectNames.
+		conditionalAttributes size > 2 
+			ifTrue: [
+				"sanity check in case of massive load failure"
+				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 3) asSymbol) ] ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0059_2 [
+	"spec_0059 should load cleanly for all 3 platform combos (platformA, platformB, platformC) and attributes combos common, alt1"
+
+	"https://github.com/GemTalk/Rowan/issues/660"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0059'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"load project using each of the alt conditions"
+	{
+		#('common' 'tests' 'alt1' 'platformA').
+		#('common' 'tests' 'alt1' 'platformB').
+		#('common' 'tests' 'alt1' 'platformC').
+	} do: [:conditionalAttributes |
+		resolvedProject := loadSpec resolve: conditionalAttributes.
+		loadedProjects := resolvedProject load.
+		self
+			_standard_validate: resolvedProject
+			loadedProjects: loadedProjects
+			expectedProjectNames: projectNames.
+		(conditionalAttributes at: 4) = 'platformC'
+			ifTrue: [
+				"sanity check in case of massive load failure"
+				self assert: ((Rowan globalNamed: 'RowanSample9TestCase') selectors includes: #testPlatformC) ]
+			ifFalse: [
+				"sanity check in case of massive load failure"
+				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 4) asSymbol) ]].
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

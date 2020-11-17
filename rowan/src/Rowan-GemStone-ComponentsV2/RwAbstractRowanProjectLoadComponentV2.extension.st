@@ -1,7 +1,7 @@
-Extension { #name : 'RwBasicProjectLoadComponentV2' }
+Extension { #name : 'RwAbstractRowanProjectLoadComponentV2' }
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwBasicProjectLoadComponentV2 class >> fromFile: filePath [
+RwAbstractRowanProjectLoadComponentV2 class >> fromFile: filePath [
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
 			| stream |
@@ -11,13 +11,13 @@ RwBasicProjectLoadComponentV2 class >> fromFile: filePath [
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwBasicProjectLoadComponentV2 class >> orderedDictionaryClass [
+RwAbstractRowanProjectLoadComponentV2 class >> orderedDictionaryClass [
 
 	^ Rowan platform orderedDictionaryClass
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwBasicProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
+RwAbstractRowanProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 	| url |
 	url := directoryUrl asRwUrl.
 	url schemeName = 'file'

@@ -228,7 +228,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 
 	resolvedProject exportComponents.
 
-	component := RwBasicProjectLoadComponentV2
+	component := RwAbstractRowanProjectLoadComponentV2
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName1) name , 'ston'.
@@ -239,7 +239,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 				includes: packageName).	"validate move on disk"
 
 
-	component := RwBasicProjectLoadComponentV2
+	component := RwAbstractRowanProjectLoadComponentV2
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName2) name , 'ston'.

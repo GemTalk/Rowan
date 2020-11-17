@@ -3047,6 +3047,184 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0058: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
+	"Component api revamp. Start with spec_0001; add 3 conditions: alt1, alt2, alt3; one extension method and test case per condition (see https://github.com/GemTalk/Rowan/issues/653 and https://github.com/GemTalk/Rowan/issues/660)"
+
+	| packageName1 packageName2 className1 className2 componentName1 componentName2 componentName3 componentName4 componentName5 componentName6 componentName7 componentName8 componentName9 componentName10 componentName11 componentName12 componentName13 componentName14 componentName15 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 packageName9 packageName10 packageName11 packageName12 packageName13 packageName14 |
+	componentName1 := 'Core'.
+	componentName2 := 'tests/Tests'.
+	componentName3 := 'conditions/Core'.
+	componentName4 := 'conditions/alt1/Core'.
+	componentName5 := 'conditions/alt2/Core'.
+	componentName6 := 'conditions/alt3/Core'.
+	componentName7 := 'tests/alt1/Tests'.
+	componentName8 := 'tests/alt2/Tests'.
+	componentName9 := 'tests/alt3/Tests'.
+	componentName10 := 'conditions/alt1/platform/platformA/Core'.
+	componentName11 := 'conditions/alt1/platform/platformB/Core'.
+	componentName12 := 'conditions/alt1/platform/platformAorB/Core'.
+	componentName13 := 'tests/alt1/platform/platformA/Tests'.
+	componentName14 := 'tests/alt1/platform/platformB/Tests'.
+	componentName15 := 'tests/alt1/platform/platformAorB/Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Tests'.
+	packageName3 := projectName , '-Core-Alt1'.
+	packageName4 := projectName , '-Core-Alt2'.
+	packageName5 := projectName , '-Core-Alt3'.
+	packageName6 := projectName , '-Tests-Alt1'.
+	packageName7 := projectName , '-Tests-Alt2'.
+	packageName8 := projectName , '-Tests-Alt3'.
+	packageName9 := projectName , '-Core-Alt1-PlatformA'.
+	packageName10 := projectName , '-Core-Alt1-PlatformB'.
+	packageName11 := projectName , '-Core-Alt1-PlatformAorB'.
+	packageName12 := projectName , '-Tests-Alt1-PlatformA'.
+	packageName13 := projectName , '-Tests-Alt1-PlatformB'.
+	packageName14 := projectName , '-Tests-Alt1-PlatformAorB'.
+
+	resolvedProject
+		packageConvention: 'Rowan';
+		yourself.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		category: componentName1.
+	((resolvedProject packageNamed: packageName2) classDefinitionNamed: className2)
+		category: componentName2.
+
+	{'alt1'.
+	'alt2'.
+	'alt3'}
+		do: [ :condition | 
+			| componentName pkgSuffix package |
+			pkgSuffix := condition copy.
+			pkgSuffix at: 1 put: (condition at: 1) asUppercase.
+			componentName := resolvedProject
+				addComponentStructureFor: componentName1
+				pathNameArray:
+					{'conditions'.
+					condition}
+				conditionPathArray:
+					{'common'.
+					condition}.
+			package := resolvedProject
+				addPackageNamed: projectName , '-Core-' , pkgSuffix
+				toComponentNamed: componentName.
+			(package addClassExtensionNamed: className1)
+				addInstanceMethod: condition , ' ^ ' , condition printString
+				protocol: 'alternates'.
+
+
+			componentName := resolvedProject
+				addComponentStructureFor: 'Tests'
+				startingAtComponentNamed: componentName2
+				pathNameArray:
+					{'tests'.
+					condition}
+				conditionPathArray:
+					{'tests'.
+					condition}.
+			package := resolvedProject
+				addPackageNamed: projectName , '-Tests-' , pkgSuffix
+				toComponentNamed: componentName.
+			(package addClassExtensionNamed: className2)
+				addInstanceMethod:
+					'test' , pkgSuffix , ' self assert: ' , className1 , ' new ' , condition , ' = '
+						, condition printString
+				protocol: 'tests' ].
+
+	{{'platformA'.
+	#('platformA')}.
+	{'platformB'.
+	#('platformB')}.
+	{'platformAorB'.
+	#('platformA' 'platformB')}.
+	{'platformC'.
+	#('platformC')}}
+		do: [ :conditionArray | 
+			| componentName pkgSuffix package |
+			pkgSuffix := (conditionArray at: 1) copy.
+			pkgSuffix at: 1 put: ((conditionArray at: 1) at: 1) asUppercase.
+			(conditionArray at: 1) ~= 'platformC'
+				ifTrue: [ 
+					"platformA and platformB follow the standard pattern of extension methods and tests that the 
+						extension methods were loaded"
+					componentName := resolvedProject
+						addComponentStructureFor: componentName1
+						pathNameArray:
+							{'conditions'.
+							'alt1'.
+							'platform'.
+							(conditionArray at: 1)}
+						conditionPathArray:
+							{'common'.
+							'alt1'.
+							'common'.
+							(conditionArray at: 2)}.
+					package := resolvedProject
+						addPackageNamed: projectName , '-Core-' , pkgSuffix
+						toComponentNamed: componentName.
+					(package addClassExtensionNamed: className1)
+						addInstanceMethod:
+							(conditionArray at: 1) , ' ^ ' , (conditionArray at: 1) printString
+						protocol: 'platforms'.
+
+
+					componentName := resolvedProject
+						addComponentStructureFor: 'Tests'
+						startingAtComponentNamed: componentName2
+						pathNameArray:
+							{'tests'.
+							'alt1'.
+							'platform'.
+							(conditionArray at: 1)}
+						conditionPathArray:
+							{'tests'.
+							'alt1'.
+							'common'.
+							(conditionArray at: 2)}.
+					package := resolvedProject
+						addPackageNamed: projectName , '-Tests-' , pkgSuffix
+						toComponentNamed: componentName.
+					(package addClassExtensionNamed: className2)
+						addInstanceMethod:
+							'test' , pkgSuffix , ' self assert: ' , className1 , ' new '
+								, (conditionArray at: 1) , ' = ' , (conditionArray at: 1) printString
+						protocol: 'tests' ]
+				ifFalse: [ 
+					"platformC will not load any extension packages for the core, but will load test extensions to confirm that 
+						none of the platformA and platformB methods were loaded"
+					componentName := resolvedProject
+						addComponentStructureFor: 'Tests'
+						startingAtComponentNamed: componentName2
+						pathNameArray:
+							{'tests'.
+							'alt1'.
+							'platform'.
+							(conditionArray at: 1)}
+						conditionPathArray:
+							{'tests'.
+							'alt1'.
+							'common'.
+							(conditionArray at: 2)}.
+					package := resolvedProject
+						addPackageNamed: projectName , '-Tests-' , pkgSuffix
+						toComponentNamed: componentName.
+					(package addClassExtensionNamed: className2)
+						addInstanceMethod:
+							'test' , pkgSuffix
+								,
+									' | selectors |
+	selectors := ' , className1
+								,
+									' selectors.
+	#(platformA platformB platformAorB) do: [:sel | self deny: (selectors includes: sel) ]'
+						protocol: 'tests' ] ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -6454,6 +6632,48 @@ RwTestProjectLibraryGenerator >> genSpec_0058: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0058: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0059: commitMessage [
+	"Component api revamp. Start with spec_0001; add 3 conditions: alt1, alt2, alt3; one extension method and test case per condition (see https://github.com/GemTalk/Rowan/issues/653 and https://github.com/GemTalk/Rowan/issues/660)"
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0059'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Component api revamp. Start with spec_0001; add 3 conditions: alt1, alt2, alt3; one extension method and test case per condition (see https://github.com/GemTalk/Rowan/issues/653 and https://github.com/GemTalk/Rowan/issues/660)'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 3
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #( 653 660 );
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0059: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

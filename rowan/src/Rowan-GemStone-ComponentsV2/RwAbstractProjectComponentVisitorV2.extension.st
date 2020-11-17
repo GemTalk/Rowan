@@ -12,7 +12,7 @@ RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 			self readComponents
 				at: componentName
 				ifAbsentPut: [ 
- 					(RwBasicProjectLoadComponentV2
+ 					(RwAbstractRowanProjectLoadComponentV2
 						fromComponentsDirectory: componentDirectory
 						named: componentName)
 						projectName: aProjectName;
