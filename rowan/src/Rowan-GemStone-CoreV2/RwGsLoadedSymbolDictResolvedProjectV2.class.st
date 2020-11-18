@@ -12,6 +12,26 @@ RwGsLoadedSymbolDictResolvedProjectV2 class >> newForResolvedProject: aResolvedP
 		yourself
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> allPackgeNamesIn: componentNameOrArrayOfNames [
+	| packageNames visited theBlock attributes componentNames |
+	visited := IdentitySet new.
+	packageNames := Set new.
+	attributes := self platformConditionalAttributes.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			packageNames addAll: component packageNames.
+			visited add: component.
+			self subcomponentsOf: component name attributes: attributes do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	componentNames
+		do: [ :componentName | self subcomponentsOf: componentName attributes: attributes do: theBlock ].
+	^ packageNames asArray sort
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
@@ -300,6 +320,17 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 ]
 
 { #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes do: aBlock [
+	| subcomponents |
+	subcomponents := self components
+		subcomponentsOf: componentName
+		resolvedProject: self
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [ ^ self ].
+	^ subcomponents do: aBlock
+]
+
+{ #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
 	| subcomponents |
 	subcomponents := self components
@@ -310,6 +341,14 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attribut
 	subcomponents isEmpty
 		ifTrue: [ ^ noneBlock value ].
 	^ subcomponents
+]
+
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName do: aBlock [
+	^ self
+		subcomponentsOf: componentName
+		attributes: self platformConditionalAttributes
+		do: aBlock
 ]
 
 { #category : 'querying' }
