@@ -52,6 +52,6 @@ A **leafComponent** is a special case of **subcomponent**, where the *condition*
 
 [TO BE CONTINUED]
 
-###Component directory structure
+### Component directory structure
 As mentioned earlier, it is expected that **components** be located in the *components directory*. It then follows that **subcomponents** should be located in subdirectories, to segregate the **subcomponents** and **components**.
 Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*

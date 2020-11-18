@@ -30,6 +30,29 @@ RwProject >> _specification [
 	^ self _loadedProject specification
 ]
 
+{ #category : 'components to be cleaned up' }
+RwProject >> addTopLevelComponentNamed: componentName [
+	^ self addTopLevelComponentNamed: componentName condition: 'common'
+]
+
+{ #category : 'components to be cleaned up' }
+RwProject >> addTopLevelComponentNamed: componentName condition: condition [
+	"since we are working with a loaded project here, adding a new top level component 
+		with a condition, implies that the condition should be applied to the load specification, 
+		thus causing the new component to be loaded"
+
+	| projectDefinition component conditionals |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addTopLevelComponentNamed: componentName
+		condition: condition.
+	conditionals := projectDefinition customConditionalAttributes copy.
+	conditionals add: condition.
+	projectDefinition customConditionalAttributes: conditionals asSet asArray.
+	projectDefinition load.
+	^ component
+]
+
 { #category : 'actions' }
 RwProject >> asDefinition [
 
@@ -247,7 +270,7 @@ RwProject >> loadedGroupNames [
 	^ self _loadedProject loadedGroupNames
 ]
 
-{ #category : 'components' }
+{ #category : 'components to be cleaned up' }
 RwProject >> loadedTopLevelComponents [
 	| lc |
 	lc := self loadedComponents.
@@ -377,7 +400,7 @@ RwProject >> testSuite [
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
 ]
 
-{ #category : 'components' }
+{ #category : 'components to be cleaned up' }
 RwProject >> topLevelComponents [
 	^ self loadedComponents components values
 		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]

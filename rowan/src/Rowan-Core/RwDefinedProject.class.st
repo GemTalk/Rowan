@@ -72,7 +72,7 @@ RwDefinedProject >> _validate: platformConfigurationAttributes [
 	^ self _resolvedProject _validate: platformConfigurationAttributes
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	^ self _resolvedProject
 		addComponentNamed: componentName
@@ -117,24 +117,24 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: componentName [
 	^ self _resolvedProject addNewComponentNamed: componentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName comment: aString [
 	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
 		condition: condition
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -142,7 +142,7 @@ RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition co
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -150,7 +150,7 @@ RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toCom
 		condition: conditionPathArray
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -159,7 +159,7 @@ RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toCom
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewNestedComponentNamed: aComponentName comment: aString [
 	^ self _resolvedProject
 		addNewNestedComponentNamed: aComponentName
@@ -195,7 +195,7 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 		toComponentNamed: componentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self _resolvedProject
 		addPlatformComponentNamed: aComponentName
@@ -204,7 +204,7 @@ RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: 
 		conditionPathArray: conditionPathArray
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _resolvedProject
 		addPlatformComponentNamed: aComponentName
@@ -242,7 +242,7 @@ RwDefinedProject >> addRawPackageNamed: packageName [
 	^ self _resolvedProject addRawPackageNamed: packageName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self _resolvedProject
 		addSimpleNestedComponentNamed: aComponentName
@@ -250,12 +250,12 @@ RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: con
 		comment: commentString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addTopLevelComponentNamed: componentName [
 	^ self _resolvedProject addTopLevelComponentNamed: componentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addTopLevelComponentNamed: componentName  condition: condition [
 	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
 ]

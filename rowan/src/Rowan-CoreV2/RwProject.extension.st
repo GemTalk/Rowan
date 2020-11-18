@@ -60,29 +60,6 @@ RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> addTopLevelComponentNamed: componentName [
-	^ self addTopLevelComponentNamed: componentName condition: 'common'
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> addTopLevelComponentNamed: componentName condition: condition [
-	"since we are working with a loaded project here, adding a new top level component 
-		with a condition, implies that the condition should be applied to the load specification, 
-		thus causing the new component to be loaded"
-
-	| projectDefinition component conditionals |
-	projectDefinition := self defined.
-	component := projectDefinition
-		addTopLevelComponentNamed: componentName
-		condition: condition.
-	conditionals := projectDefinition customConditionalAttributes copy.
-	conditionals add: condition.
-	projectDefinition customConditionalAttributes: conditionals asSet asArray.
-	projectDefinition load.
-	^ component
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> componentNames [
 	^ self _loadedProject componentNames
 ]

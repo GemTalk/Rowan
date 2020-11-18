@@ -49722,7 +49722,7 @@ newNamed: aName
 
 !		Instance methods for 'RwDefinedProject'
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addComponentNamed: componentName toComponentNamed: toComponentName
 	^ self _resolvedProject
@@ -49772,19 +49772,19 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: componentName
 	^ self _resolvedProject addNewComponentNamed: componentName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName comment: aString
 	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName condition: condition
 	^ self _resolvedProject
@@ -49792,7 +49792,7 @@ addNewComponentNamed: aComponentName condition: condition
 		condition: condition
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self _resolvedProject
@@ -49801,7 +49801,7 @@ addNewComponentNamed: aComponentName condition: condition comment: aString
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
 	^ self _resolvedProject
@@ -49810,7 +49810,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 		condition: conditionPathArray
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
 	^ self _resolvedProject
@@ -49820,7 +49820,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewNestedComponentNamed: aComponentName comment: aString
 	^ self _resolvedProject
@@ -49861,7 +49861,7 @@ addPackagesNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self _resolvedProject
@@ -49871,7 +49871,7 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName path
 		conditionPathArray: conditionPathArray
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _resolvedProject
@@ -49914,7 +49914,7 @@ addRawPackageNamed: packageName
 	^ self _resolvedProject addRawPackageNamed: packageName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
 	^ self _resolvedProject
@@ -49923,13 +49923,13 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 		comment: commentString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addTopLevelComponentNamed: componentName
 	^ self _resolvedProject addTopLevelComponentNamed: componentName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwDefinedProject
 addTopLevelComponentNamed: componentName  condition: condition
 	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
@@ -50600,6 +50600,31 @@ write
 
 !		Instance methods for 'RwProject'
 
+category: 'components to be cleaned up'
+method: RwProject
+addTopLevelComponentNamed: componentName
+	^ self addTopLevelComponentNamed: componentName condition: 'common'
+%
+
+category: 'components to be cleaned up'
+method: RwProject
+addTopLevelComponentNamed: componentName condition: condition
+	"since we are working with a loaded project here, adding a new top level component 
+		with a condition, implies that the condition should be applied to the load specification, 
+		thus causing the new component to be loaded"
+
+	| projectDefinition component conditionals |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addTopLevelComponentNamed: componentName
+		condition: condition.
+	conditionals := projectDefinition customConditionalAttributes copy.
+	conditionals add: condition.
+	projectDefinition customConditionalAttributes: conditionals asSet asArray.
+	projectDefinition load.
+	^ component
+%
+
 category: 'actions'
 method: RwProject
 asDefinition
@@ -50846,7 +50871,7 @@ loadedGroupNames
 	^ self _loadedProject loadedGroupNames
 %
 
-category: 'components'
+category: 'components to be cleaned up'
 method: RwProject
 loadedTopLevelComponents
 	| lc |
@@ -50991,7 +51016,7 @@ testSuite
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
 %
 
-category: 'components'
+category: 'components to be cleaned up'
 method: RwProject
 topLevelComponents
 	^ self loadedComponents components values
@@ -99738,31 +99763,6 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 		addNewPackageNamed: packageName
 		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
 		toComponentNamed: componentName
-%
-
-category: '*rowan-corev2'
-method: RwProject
-addTopLevelComponentNamed: componentName
-	^ self addTopLevelComponentNamed: componentName condition: 'common'
-%
-
-category: '*rowan-corev2'
-method: RwProject
-addTopLevelComponentNamed: componentName condition: condition
-	"since we are working with a loaded project here, adding a new top level component 
-		with a condition, implies that the condition should be applied to the load specification, 
-		thus causing the new component to be loaded"
-
-	| projectDefinition component conditionals |
-	projectDefinition := self defined.
-	component := projectDefinition
-		addTopLevelComponentNamed: componentName
-		condition: condition.
-	conditionals := projectDefinition customConditionalAttributes copy.
-	conditionals add: condition.
-	projectDefinition customConditionalAttributes: conditionals asSet asArray.
-	projectDefinition load.
-	^ component
 %
 
 category: '*rowan-corev2'
