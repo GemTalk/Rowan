@@ -291,7 +291,6 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
     ifTrue: [ ^ self handleDeletedService ].
   wasClean := self arePackageAndProjectClean.
   super servicePerform: symbol withArguments: collection.
-  self update.
   wasClean
     ifTrue: [ self updateProject ]
 ]

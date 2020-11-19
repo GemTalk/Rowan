@@ -89,11 +89,6 @@ RowanProcessService >> oop: object [
 	oop := object
 ]
 
-{ #category : 'perform' }
-RowanProcessService >> servicePerform: symbol withArguments: collection [
-	^self perform: symbol withArguments: collection.
-]
-
 { #category : 'accessing' }
 RowanProcessService >> status [
 	^status

@@ -96,12 +96,6 @@ RowanComponentService >> projectService: theProjectService [
 	projectService := theProjectService
 ]
 
-{ #category : 'perform' }
-RowanComponentService >> servicePerform: symbol withArguments: collection [
-	super servicePerform: symbol withArguments: collection.
-	self update
-]
-
 { #category : 'accessing' }
 RowanComponentService >> subcomponentsOf: rwProject [
 ]

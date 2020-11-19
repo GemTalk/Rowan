@@ -364,19 +364,9 @@ RowanBrowserService >> selectedClass: object [
 	selectedClass := object
 ]
 
-{ #category : 'perform' }
-RowanBrowserService >> servicePerform: symbol withArguments: collection [
-	super perform: symbol withArguments: collection.
-]
-
 { #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: projectNames [
 	projectNames do: [ :projectName | (Rowan projectNamed: projectName) unload ].
-	self updateProjects
-]
-
-{ #category : 'update' }
-RowanBrowserService >> update [
 	self updateProjects
 ]
 

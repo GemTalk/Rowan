@@ -552,7 +552,6 @@ RowanProjectService >> servicePerform: symbol withArguments: collection [
   self isUpdatingButFoundToBeDeleted
     ifTrue: [ ^ self handleDeletedService ].
   super servicePerform: symbol withArguments: collection.
-  self update
 ]
 
 { #category : 'rowan' }

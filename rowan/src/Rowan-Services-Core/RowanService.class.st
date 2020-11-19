@@ -500,19 +500,26 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-  "each service updates itself after performing a command.
+	"subclasses may not want to update after performing the command"
+
+	self servicePerform: symbol withArguments: collection shouldUpdate: true
+]
+
+{ #category : 'perform' }
+RowanService >> servicePerform: symbol withArguments: collection shouldUpdate: shouldUpdate [
+	"each service updates itself after performing a command.
 	Therefore, if the command is #update, don't run it here"
 
-  SessionTemps current
-    at: #'versionsVerified'
-    ifAbsent: [ 
-      SessionTemps current at: #'versionsVerified' put: false.
-      self
-        inform:
-          'Version mismatch failure. Client version is older than server version.' ].
-  symbol == #'update'
-    ifTrue: [ ^ self ].
-  ^ super perform: symbol withArguments: collection
+	SessionTemps current
+		at: #'versionsVerified'
+		ifAbsent: [ 
+			SessionTemps current at: #'versionsVerified' put: false.
+			self
+				inform:
+					'Version mismatch failure. Client version is older than server version.' ].
+	super perform: symbol withArguments: collection.
+	shouldUpdate
+		ifTrue: [ self update ]
 ]
 
 { #category : 'commands support' }

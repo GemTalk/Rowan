@@ -683,13 +683,14 @@ RowanMethodService >> selector: aSymbol [
 
 { #category : 'perform' }
 RowanMethodService >> servicePerform: symbol withArguments: collection [
-  | theCommand |
-  self isUpdatingButFoundToBeDeleted
-    ifTrue: [ ^ self handleDeletedService ].
-  theCommand := command.
-  super servicePerform: symbol withArguments: collection.
-  theCommand = #'reformatSource'
-    ifFalse: [ self update ]
+	| theCommand |
+	self isUpdatingButFoundToBeDeleted
+		ifTrue: [ ^ self handleDeletedService ].
+	theCommand := command.
+	super
+		servicePerform: symbol
+		withArguments: collection
+		shouldUpdate: (theCommand == #'reformatSource') not
 ]
 
 { #category : 'client commands' }

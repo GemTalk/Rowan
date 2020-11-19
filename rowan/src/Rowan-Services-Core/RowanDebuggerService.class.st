@@ -70,11 +70,6 @@ RowanDebuggerService >> saveProcessOop: processOop [
           jadeiteProcesses add: process ] ]
 ]
 
-{ #category : 'perform' }
-RowanDebuggerService >> servicePerform: symbol withArguments: collection [
-	^self perform: symbol withArguments: collection.
-]
-
 { #category : 'clientCommands' }
 RowanDebuggerService >> terminateProcess: processOop [
   | process |
@@ -87,7 +82,7 @@ RowanDebuggerService >> terminateProcess: processOop [
 ]
 
 { #category : 'updating' }
-RowanDebuggerService >> update [
+RowanDebuggerService >> updateProcesses [
   processes := OrderedCollection
     with:
       (RowanProcessService onActiveProcess: (Object _objectForOop: initialProcessOop)).

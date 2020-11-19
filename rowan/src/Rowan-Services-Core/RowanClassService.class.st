@@ -474,6 +474,7 @@ RowanClassService >> initialize [
 	methods := Array new.
 	isInSymbolList := true.
 	categories := Array new.
+	updateAfterCommand := true.
 ]
 
 { #category : 'initialization' }
@@ -1081,15 +1082,13 @@ RowanClassService >> selectors [
 
 { #category : 'perform' }
 RowanClassService >> servicePerform: symbol withArguments: collection [
-  | wasClean |
-  self isUpdatingButFoundToBeDeleted
-    ifTrue: [ ^ self handleDeletedService ].
-  wasClean := self isPackageClean.
-  super servicePerform: symbol withArguments: collection.
-  updateAfterCommand == false
-    ifFalse: [ self update ]. 
-  wasClean
-    ifTrue: [ self updatePackageProject ]
+	| wasClean |
+	self isUpdatingButFoundToBeDeleted
+		ifTrue: [ ^ self handleDeletedService ].
+	wasClean := self isPackageClean.
+	super servicePerform: symbol withArguments: collection shouldUpdate: updateAfterCommand.
+	wasClean
+		ifTrue: [ self updatePackageProject ]
 ]
 
 { #category : 'Accessing' }

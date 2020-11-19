@@ -63,11 +63,6 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
   vars := self varsFor: frameData
 ]
 
-{ #category : 'perform' }
-RowanFrameService >> servicePerform: symbol withArguments: collection [
-	^self perform: symbol withArguments: collection.
-]
-
 { #category : 'other' }
 RowanFrameService >> varsFor: anArray [
 	| keys list receiver values |
