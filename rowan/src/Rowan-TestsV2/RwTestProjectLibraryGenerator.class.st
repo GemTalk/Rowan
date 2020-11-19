@@ -189,7 +189,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: resolvedProject [
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
 	resolvedProject
-		addNewComponentNamed: 'Core3'
+		addComponentNamed: 'Core3'
 		comment:
 			'contains ' , projectName
 				,
@@ -207,13 +207,13 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 	| className packageName userId |
 	userId := resolvedProject _gemstoneAllUsersName.
 	resolvedProject
-		addNewComponentNamed: 'Core1'
+		addLoadSpecComponentNamed: 'Core1'
 			comment:  'contains ' , projectName , '-Core1 package';
-		addNewComponentNamed: 'Tests'
-			toComponentNamed: 'Core1'
-			condition: {'tests'}
+		addComponentStructureFor: 'Tests'
+			startingAtComponentNamed: 'Core1'
+			conditionPathArray: {'tests'}
 			comment: 'contains ' , projectName , '-Tests package';
-		addNewComponentNamed: 'Core2'
+		addComponentNamed: 'Core2'
 			comment: 'contains ' , projectName , '-Core2 package';
 		yourself.
 	(resolvedProject componentNamed: 'Core1')
@@ -769,11 +769,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 	resolvedProject
 		comment:
 				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
-		addNewComponentNamed: 'Core'
+		addComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
-		addNewComponentNamed: componentName
-			toComponentNamed: componentName
-			condition: {'vast'}
+		addComponentStructureFor: componentName
+			startingAtComponentNamed: componentName
+			conditionPathArray: {'vast'}
 			comment: 'manage vast packages';
 		addPackageNamed: packageName1 toComponentNamed: 'vast/' , componentName;
 		addPackageNamed: packageName2 toComponentNamed: componentName;
@@ -3964,7 +3964,6 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		specComponentNames: {'Core1'};
 		customConditionalAttributes: {'tests' };
 		specComment: title;
 		yourself.

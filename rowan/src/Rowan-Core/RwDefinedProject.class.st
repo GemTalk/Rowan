@@ -110,6 +110,16 @@ RwDefinedProject >> addComponentStructureFor: componentBasename pathNameArray: p
 ]
 
 { #category : 'components' }
+RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString [
+	^ self _resolvedProject
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'components' }
 RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addComponentStructureFor: componentBasename
@@ -144,18 +154,6 @@ RwDefinedProject >> addNewComponentNamed: componentName [
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
 	^ self _resolvedProject addComponentNamed: componentName
-]
-
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewComponentNamed: aComponentName comment: aString [
-	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition [
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		condition: condition
 ]
 
 { #category : 'components to be cleaned up' }

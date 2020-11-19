@@ -49958,6 +49958,17 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 
 category: 'components'
 method: RwDefinedProject
+addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
+	^ self _resolvedProject
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+%
+
+category: 'components'
+method: RwDefinedProject
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self
 		addComponentStructureFor: componentBasename
@@ -49996,20 +50007,6 @@ addNewComponentNamed: componentName
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
 	^ self _resolvedProject addComponentNamed: componentName
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addNewComponentNamed: aComponentName comment: aString
-	^ self _resolvedProject addNewComponentNamed: aComponentName comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addNewComponentNamed: aComponentName condition: condition
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		condition: condition
 %
 
 category: 'components to be cleaned up'
@@ -62111,7 +62108,7 @@ readClassDirectories: directoryArray projectName: projectName packageName: packa
 		yourself.
 
 	resolvedProject
-		addNewComponentNamed: 'Core'
+		addComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 
 	1 to: directoryArray size do: [ :index | 
@@ -62325,7 +62322,7 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
 		yourself.
 	resolvedProject
-		addNewComponentNamed: 'Core'
+		addComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 	1 to: fileArray size do: [ :index | 
 		| file |
@@ -63407,6 +63404,17 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 
 category: 'components'
 method: RwResolvedProjectV2
+addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
+	^ self 
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+%
+
+category: 'components'
+method: RwResolvedProjectV2
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
@@ -63427,18 +63435,6 @@ method: RwResolvedProjectV2
 addLoadSpecComponentNamed: componentName comment: aString
 	self _loadSpecification addComponentNamed: componentName.
 	^ self _projectDefinition addComponentNamed: componentName comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addNewComponentNamed: aComponentName comment: aString
-	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addNewComponentNamed: aComponentName condition: condition
-	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
 %
 
 category: 'components to be cleaned up'
@@ -71905,20 +71901,6 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName comment: aString
-	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName condition: condition
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
 %
 
 category: 'components to be cleaned up'

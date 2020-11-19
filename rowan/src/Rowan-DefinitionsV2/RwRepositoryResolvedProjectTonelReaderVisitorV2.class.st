@@ -58,7 +58,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArr
 		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
 		yourself.
 	resolvedProject
-		addNewComponentNamed: 'Core'
+		addComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 	1 to: fileArray size do: [ :index | 
 		| file |

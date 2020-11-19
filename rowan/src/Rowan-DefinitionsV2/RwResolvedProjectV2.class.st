@@ -123,6 +123,16 @@ RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray
 ]
 
 { #category : 'components' }
+RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString [
+	^ self 
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
@@ -141,16 +151,6 @@ RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName [
 RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName comment: aString [
 	self _loadSpecification addComponentNamed: componentName.
 	^ self _projectDefinition addComponentNamed: componentName comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
-	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition [
-	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
 ]
 
 { #category : 'components to be cleaned up' }

@@ -134,18 +134,6 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 ]
 
 { #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
-	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition [
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-]
-
-{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
