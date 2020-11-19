@@ -78,8 +78,8 @@ RwProject >> addTopLevelComponentNamed: componentName condition: condition [
 ]
 
 { #category : 'components' }
-RwProject >> allPackgeNamesIn: componentNameOrArrayOfNames [
-	^ self _loadedProject allPackgeNamesIn: componentNameOrArrayOfNames
+RwProject >> allPackageNamesIn: componentNameOrArrayOfNames [
+	^ self _loadedProject allPackageNamesIn: componentNameOrArrayOfNames
 ]
 
 { #category : 'actions' }

@@ -96,7 +96,8 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 
 { #category : 'components' }
 RwResolvedProjectV2 >> addComponentNamed: componentName [
-	self _loadSpecification addComponentNamed: componentName.
+	(self _loadSpecification componentNames includes: componentName)
+		ifFalse: [ self _loadSpecification addComponentNamed: componentName ].
 	^ self _projectDefinition addComponentNamed: componentName
 ]
 
