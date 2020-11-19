@@ -107,6 +107,21 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 ]
 
 { #category : 'components' }
+RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName comment: aString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwComponent newNamed: aComponentName ].
+	component comment: aString.
+	^ component
+]
+
+{ #category : 'components' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	"add existing component named componentName to component named toComponentName"
 
@@ -166,17 +181,8 @@ RwResolvedLoadComponentsV2 >> addPlatformNestedComponentNamed: aComponentName co
 	^ component
 ]
 
-{ #category : 'accessing' }
-RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component addProjectNamed: projectName
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition [
+{ #category : 'components' }
+RwResolvedLoadComponentsV2 >> addPlatformSubcomponentNamed: aComponentName condition: aConditionArray comment: aString [
 	| component |
 	self components
 		at: aComponentName
@@ -185,11 +191,21 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components
 		at: aComponentName
-		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+		ifAbsentPut: [ RwPlatformSubcomponent newNamed: aComponentName ].
 	component
-		condition: condition;
+		comment: aString;
+		condition: aConditionArray;
 		yourself.
 	^ component
+]
+
+{ #category : 'accessing' }
+RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addProjectNamed: projectName
 ]
 
 { #category : 'components to be cleaned up' }
@@ -224,6 +240,24 @@ RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName cond
 	component
 		condition: condition;
 		comment: commentString;
+		yourself.
+	^ component
+]
+
+{ #category : 'components' }
+RwResolvedLoadComponentsV2 >> addSubcomponentNamed: aComponentName condition: aCondition comment: aString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSubcomponent newNamed: aComponentName ].
+	component
+		comment: aString;
+		condition: aCondition;
 		yourself.
 	^ component
 ]

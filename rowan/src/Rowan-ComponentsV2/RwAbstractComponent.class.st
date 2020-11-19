@@ -118,6 +118,33 @@ RwAbstractComponent >> _canonicalizeGemStonePackageMapSpecs: userMap [
 	^ orderedUserMap
 ]
 
+{ #category : 'exporting' }
+RwAbstractComponent >> _exportToUrl: directoryUrl [
+	| url |
+	url := directoryUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			| fileRef |
+			fileRef := url pathForDirectory asFileReference / self name , 'ston'.
+			fileRef parent ensureCreateDirectory.
+			fileRef
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	url schemeName = 'memory'
+		ifTrue: [ 
+			FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory
+				/ self name , 'ston'
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	^ nil	"otherwise a noop"
+]
+
 { #category : 'matching' }
 RwAbstractComponent >> _platformAttributeMatchIn: platformMatchersList for: attributes [
 	platformMatchersList
@@ -416,11 +443,7 @@ RwAbstractComponent >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPac
 
 { #category : 'private' }
 RwAbstractComponent >> conditionalPropertyMatchers [
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {};
-		yourself.
-	^ conditionalPropertyMatchers
+	self subclassResponsibility: #'conditionalPropertyMatchers'
 ]
 
 { #category : 'accessing' }

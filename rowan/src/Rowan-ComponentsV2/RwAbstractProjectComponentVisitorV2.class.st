@@ -146,6 +146,30 @@ RwAbstractProjectComponentVisitorV2 >> visit: aProjectLoadComponent [
 	^aProjectLoadComponent acceptVisitor: self
 ]
 
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitComponent: aComponent [
+	(visitedComponentNames includes: aComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponent.
+
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					self _addPackageNames: aComponent packageNames for: aComponent.
+					self componentNames addAll: aComponent componentNames.
+					self projectNames addAll: aComponent projectNames ] ].
+
+	(self _components: self componentsPath forProject: aComponent projectName)
+		do: [ :component | 
+			(visitedComponentNames includes: component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
+
+	(self _projects: self projectsPath forProject: aComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+]
+
 { #category : 'accessing' }
 RwAbstractProjectComponentVisitorV2 >> visitedComponents [
 

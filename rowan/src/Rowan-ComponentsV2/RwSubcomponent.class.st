@@ -1,13 +1,15 @@
 Class {
 	#name : 'RwSubcomponent',
 	#superclass : 'RwComponent',
-	#instVars : [ 'condition' ],
+	#instVars : [
+		'condition'
+	],
 	#category : 'Rowan-ComponentsV2'
 }
 
 { #category : 'visiting' }
 RwSubcomponent >> acceptNestedVisitor: aVisitor [
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 ]
 
 { #category : 'visiting' }
@@ -18,19 +20,26 @@ RwSubcomponent >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwAbstractComponent >> condition [
+RwSubcomponent >> condition [
 	^condition
 ]
 
 { #category : 'accessing' }
-RwAbstractComponent >> condition: aString [
+RwSubcomponent >> condition: aString [
 	aString isString
 		ifFalse: [ self error: 'The condition is constrained to be a string' ].
 	condition := aString
 ]
 
+{ #category : 'accessing' }
+RwSubcomponent >> conditionalPropertyMatchers [
+	^ Dictionary new
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
+		yourself
+]
+
 { #category : 'initialization' }
-RwAbstractComponent >> initialize [
+RwSubcomponent >> initialize [
 	super initialize.
 	condition := 'common'.
 ]

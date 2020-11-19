@@ -64,10 +64,13 @@ RwProjectDefinitionV2 >> addComponentNamed: aComponentName [
 RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: aString [
 	"eventually no condition for `top level` component"
 
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: aString
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ ^ self components addComponentNamed: aComponentName comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleComponentNamed: aComponentName
+				condition: 'common'
+				comment: aString ]
 ]
 
 { #category : 'components' }
@@ -111,22 +114,22 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 			componentNamed: intermediateComponentName
 			ifAbsent: [ 
 				| newComponent |
-				newComponent := self components
-					addSimpleNestedComponentNamed: intermediateComponentName
+				newComponent := self
+					addSubcomponentNamed: intermediateComponentName
 					condition: (conditionPathArray at: pathIndex)
-					comment: ''.
+					comment: aString.
 				toComponent addComponentNamed: intermediateComponentName.
 				newComponent ] ].
 	theComponentName := (path / componentBasename) pathString.
 	condition _isArray
 		ifTrue: [ 
-			self components
-				addPlatformNestedComponentNamed: theComponentName
+			self
+				addPlatformSubcomponentNamed: theComponentName
 				condition: condition
 				comment: aString ]
 		ifFalse: [ 
-			self components
-				addSimpleNestedComponentNamed: theComponentName
+			self
+				addSubcomponentNamed: theComponentName
 				condition: condition
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
@@ -349,6 +352,21 @@ RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName conditi
 ]
 
 { #category : 'components' }
+RwProjectDefinitionV2 >> addPlatformSubcomponentNamed: aComponentName condition: condition comment: aString [
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			^ self components
+				addPlatformSubcomponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addPlatformNestedComponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+]
+
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
 	^ self components
 		addProjectNamed: projectName
@@ -382,10 +400,17 @@ RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition
 
 { #category : 'components' }
 RwProjectDefinitionV2 >> addSubcomponentNamed: aComponentName condition: condition comment: aString [
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: aString
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			^ self components
+				addSubcomponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleNestedComponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
 ]
 
 { #category : 'querying' }

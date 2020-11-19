@@ -6193,6 +6193,24 @@ removeallmethods RwStringConfigurationPlatformAttributeMatcher
 removeallclassmethods RwStringConfigurationPlatformAttributeMatcher
 
 doit
+(RwAbstractConfigurationPlatformAttributeMatcher
+	subclass: 'RwUnconditionalPlatformAttributeMatcher'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Core-Conditional-Support';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwUnconditionalPlatformAttributeMatcher
+removeallclassmethods RwUnconditionalPlatformAttributeMatcher
+
+doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
 	instVarNames: #( projectLoadSpecs readComponents readProjects visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
@@ -58006,11 +58024,7 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName s
 category: 'private'
 method: RwAbstractComponent
 conditionalPropertyMatchers
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {};
-		yourself.
-	^ conditionalPropertyMatchers
+	self subclassResponsibility: #'conditionalPropertyMatchers'
 %
 
 category: 'accessing'
@@ -58345,6 +58359,34 @@ _canonicalizeGemStonePackageMapSpecs: userMap
 	^ orderedUserMap
 %
 
+category: 'exporting'
+method: RwAbstractComponent
+_exportToUrl: directoryUrl
+	| url |
+	url := directoryUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			| fileRef |
+			fileRef := url pathForDirectory asFileReference / self name , 'ston'.
+			fileRef parent ensureCreateDirectory.
+			fileRef
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	url schemeName = 'memory'
+		ifTrue: [ 
+			FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory
+				/ self name , 'ston'
+				writeStreamDo: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	^ nil	"otherwise a noop"
+%
+
 category: 'matching'
 method: RwAbstractComponent
 _platformAttributeMatchIn: platformMatchersList for: attributes
@@ -58543,7 +58585,7 @@ acceptNestedVisitor: aVisitor
 category: 'visiting'
 method: RwComponent
 acceptVisitor: aVisitor
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 %
 
 category: 'accessing'
@@ -58556,11 +58598,9 @@ addProjectNamed: aProjectName
 category: 'accessing'
 method: RwComponent
 conditionalPropertyMatchers
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {};
-		yourself.
-	^ conditionalPropertyMatchers
+	^ Dictionary new
+		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
+		yourself
 %
 
 category: 'comparing'
@@ -58609,7 +58649,7 @@ _validatedPackageNames
 category: 'visiting'
 method: RwSubcomponent
 acceptNestedVisitor: aVisitor
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 %
 
 category: 'visiting'
@@ -58634,6 +58674,14 @@ condition: aString
 	condition := aString
 %
 
+category: 'accessing'
+method: RwSubcomponent
+conditionalPropertyMatchers
+	^ Dictionary new
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
+		yourself
+%
+
 category: 'initialization'
 method: RwSubcomponent
 initialize
@@ -58647,30 +58695,6 @@ initialize
 
 category: 'accessing'
 method: RwPlatformSubcomponent
-addComponentNamed: aComponentName
-	self
-		error:
-			'a platform nested component may only reference package names'
-%
-
-category: 'accessing'
-method: RwPlatformSubcomponent
-addProjectNamed: aProjectName
-	self
-		error:
-			'a platform nested component may only reference package names'
-%
-
-category: 'accessing'
-method: RwPlatformSubcomponent
-componentNames
-	"a platform nested component may only reference package names --- OR conditionals may only be used by a leaf node"
-
-	^ #()
-%
-
-category: 'accessing'
-method: RwPlatformSubcomponent
 condition: anArray
 	anArray _isArray
 		ifFalse: [ self error: 'The condition is constrained to be an array' ].
@@ -58680,41 +58704,12 @@ condition: anArray
 category: 'accessing'
 method: RwPlatformSubcomponent
 conditionalPropertyMatchers
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
+	^ Dictionary new
 		at:
 				(self condition
 						collect: [ :aCondition | self _platformPatternMatcherFor: aCondition ])
 			put: {};
-		yourself.
-	^ conditionalPropertyMatchers
-%
-
-category: 'initialization'
-method: RwPlatformSubcomponent
-initialize
-	super initialize.
-	componentNames := projectNames := nil
-%
-
-category: 'initialization'
-method: RwPlatformSubcomponent
-initializeForExport
-	"if spec is to be exported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
-
-	super initializeForExport.
-	projectNames := componentNames := nil
-%
-
-category: 'accessing'
-method: RwPlatformSubcomponent
-projectNames
-	"a platform nested component may only reference package names --- OR conditionals may only be used by a leaf node"
-
-	^ #()
+		yourself
 %
 
 ! Class implementation for 'RwAbstractConfigurationPlatformAttributeMatcher'
@@ -58821,6 +58816,16 @@ matchVersion: aGemStoneVersion
 	^ false
 %
 
+! Class implementation for 'RwUnconditionalPlatformAttributeMatcher'
+
+!		Instance methods for 'RwUnconditionalPlatformAttributeMatcher'
+
+category: 'matching'
+method: RwUnconditionalPlatformAttributeMatcher
+match: anObject
+	^ true
+%
+
 ! Class implementation for 'RwAbstractProjectComponentVisitorV2'
 
 !		Class methods for 'RwAbstractProjectComponentVisitorV2'
@@ -58920,6 +58925,31 @@ method: RwAbstractProjectComponentVisitorV2
 visit: aProjectLoadComponent
 
 	^aProjectLoadComponent acceptVisitor: self
+%
+
+category: 'visiting'
+method: RwAbstractProjectComponentVisitorV2
+visitComponent: aComponent
+	(visitedComponentNames includes: aComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponent.
+
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					self _addPackageNames: aComponent packageNames for: aComponent.
+					self componentNames addAll: aComponent componentNames.
+					self projectNames addAll: aComponent projectNames ] ].
+
+	(self _components: self componentsPath forProject: aComponent projectName)
+		do: [ :component | 
+			(visitedComponentNames includes: component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
+
+	(self _projects: self projectsPath forProject: aComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'accessing'
@@ -72841,10 +72871,13 @@ method: RwProjectDefinitionV2
 addComponentNamed: aComponentName comment: aString
 	"eventually no condition for `top level` component"
 
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: aString
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ ^ self components addComponentNamed: aComponentName comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleComponentNamed: aComponentName
+				condition: 'common'
+				comment: aString ]
 %
 
 category: 'components'
@@ -72891,22 +72924,22 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 			componentNamed: intermediateComponentName
 			ifAbsent: [ 
 				| newComponent |
-				newComponent := self components
-					addSimpleNestedComponentNamed: intermediateComponentName
+				newComponent := self
+					addSubcomponentNamed: intermediateComponentName
 					condition: (conditionPathArray at: pathIndex)
-					comment: ''.
+					comment: aString.
 				toComponent addComponentNamed: intermediateComponentName.
 				newComponent ] ].
 	theComponentName := (path / componentBasename) pathString.
 	condition _isArray
 		ifTrue: [ 
-			self components
-				addPlatformNestedComponentNamed: theComponentName
+			self
+				addPlatformSubcomponentNamed: theComponentName
 				condition: condition
 				comment: aString ]
 		ifFalse: [ 
-			self components
-				addSimpleNestedComponentNamed: theComponentName
+			self
+				addSubcomponentNamed: theComponentName
 				condition: condition
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
@@ -73144,6 +73177,22 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 
 category: 'components'
 method: RwProjectDefinitionV2
+addPlatformSubcomponentNamed: aComponentName condition: condition comment: aString
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			^ self components
+				addPlatformSubcomponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addPlatformNestedComponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+%
+
+category: 'components'
+method: RwProjectDefinitionV2
 addProjectNamed: projectName toComponentNamed: toComponentName
 	^ self components
 		addProjectNamed: projectName
@@ -73181,10 +73230,17 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 category: 'components'
 method: RwProjectDefinitionV2
 addSubcomponentNamed: aComponentName condition: condition comment: aString
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: aString
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			^ self components
+				addSubcomponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleNestedComponentNamed: aComponentName
+				condition: condition
+				comment: aString ]
 %
 
 category: 'querying'
@@ -88322,6 +88378,22 @@ new
 
 category: 'components'
 method: RwResolvedLoadComponentsV2
+addComponentNamed: aComponentName comment: aString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwComponent newNamed: aComponentName ].
+	component comment: aString.
+	^ component
+%
+
+category: 'components'
+method: RwResolvedLoadComponentsV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
@@ -88385,19 +88457,9 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 	^ component
 %
 
-category: 'accessing'
+category: 'components'
 method: RwResolvedLoadComponentsV2
-addProjectNamed: projectName toComponentNamed: toComponentName
-	| component |
-	component := self
-		componentNamed: toComponentName
-		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
-	component addProjectNamed: projectName
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedLoadComponentsV2
-addSimpleComponentNamed: aComponentName condition: condition
+addPlatformSubcomponentNamed: aComponentName condition: aConditionArray comment: aString
 	| component |
 	self components
 		at: aComponentName
@@ -88406,11 +88468,22 @@ addSimpleComponentNamed: aComponentName condition: condition
 				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components
 		at: aComponentName
-		ifAbsentPut: [ RwSimpleProjectLoadComponentV2 newNamed: aComponentName ].
+		ifAbsentPut: [ RwPlatformSubcomponent newNamed: aComponentName ].
 	component
-		condition: condition;
+		comment: aString;
+		condition: aConditionArray;
 		yourself.
 	^ component
+%
+
+category: 'accessing'
+method: RwResolvedLoadComponentsV2
+addProjectNamed: projectName toComponentNamed: toComponentName
+	| component |
+	component := self
+		componentNamed: toComponentName
+		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
+	component addProjectNamed: projectName
 %
 
 category: 'components to be cleaned up'
@@ -88447,6 +88520,25 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 	component
 		condition: condition;
 		comment: commentString;
+		yourself.
+	^ component
+%
+
+category: 'components'
+method: RwResolvedLoadComponentsV2
+addSubcomponentNamed: aComponentName condition: aCondition comment: aString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwSubcomponent newNamed: aComponentName ].
+	component
+		comment: aString;
+		condition: aCondition;
 		yourself.
 	^ component
 %

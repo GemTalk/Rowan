@@ -25,7 +25,7 @@ RwComponent >> acceptNestedVisitor: aVisitor [
 
 { #category : 'visiting' }
 RwComponent >> acceptVisitor: aVisitor [
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 ]
 
 { #category : 'accessing' }
@@ -36,11 +36,9 @@ RwComponent >> addProjectNamed: aProjectName [
 
 { #category : 'accessing' }
 RwComponent >> conditionalPropertyMatchers [
-	| conditionalPropertyMatchers |
-	conditionalPropertyMatchers := Dictionary new
-		at: {(self _platformPatternMatcherFor: self condition)} put: {};
-		yourself.
-	^ conditionalPropertyMatchers
+	^ Dictionary new
+		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
+		yourself
 ]
 
 { #category : 'comparing' }
