@@ -44,13 +44,14 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 	projectName := resolvedProject projectName.
 	(resolvedProject
 		comment: 'Project created using the V2 project creation api ';
-		addNewComponentNamed: 'Core'
+		addComponentNamed: 'Core'
 			comment: 'Primary component used for loading the system.')
 			addComponentNames: {'subs/Nested'};
 		yourself.
 
 	resolvedProject
-		addNewNestedComponentNamed: 'subs/Nested'
+		addSubcomponentNamed: 'subs/Nested'
+		condition: 'common'
 		comment: 'Nested component defines a shared subsystem of the primary project.'.
 
 	resolvedProject

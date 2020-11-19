@@ -43,7 +43,7 @@ RwUnmanagedClassesV2Test >> _createProject: projectName packageNames: packageNam
 
 	project := Rowan newProjectNamed: projectName.
 	project
-		addNewComponentNamed: 'Core';
+		addComponentNamed: 'Core';
 		packageConvention: 'Rowan';
 		yourself.
 

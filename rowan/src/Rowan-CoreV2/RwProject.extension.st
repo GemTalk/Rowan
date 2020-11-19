@@ -60,11 +60,6 @@ RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> componentNames [
-	^ self _loadedProject componentNames
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> diskRepositoryRoot: repositoryRootPathString [
 	| originalRepositoryRoot |
 	repositoryRootPathString isString
@@ -97,11 +92,6 @@ RwProject >> gitRepositoryRoot: repositoryRootPathString [
 					"only embedded required projects should have their repository root swapped out"
 					project _gitRepositoryRoot: repositoryRootPathString ] ].
 	self _gitRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> loadedComponents [
-	^ self _loadedProject loadedComponentDefinitions
 ]
 
 { #category : '*rowan-corev2' }
@@ -220,9 +210,4 @@ RwProject >> requiredProjects [
 		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
 	^ requiredProjectNames asArray
 		collect: [ :projectName | Rowan projectNamed: projectName ]
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> topLevelComponentNames [
-	^ self _loadedProject resolvedProject _loadSpecification componentNames
 ]

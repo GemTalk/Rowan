@@ -87,16 +87,18 @@ Class {
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
-	resolvedProject
-		comment: 'spec_0000 definitions';
-		addNewComponentNamed: 'Core'
-			comment: 'Primary component used for loading the core classes.';
-		addNewComponentNamed: 'Tests'
-			toComponentNamed: 'Core'
-			condition: {'tests'}
-			comment: 'Primary component used for loading the test classes.';
-		yourself.
+	| componentName1 componentName2 |
+	componentName1 := 'Core'.
+	componentName2 := 'tests/Tests'.
 	^ resolvedProject
+		comment: 'spec_0000 definitions';
+		addComponentNamed: componentName1
+			comment: 'Primary component used for loading the core classes.';
+		addSubcomponentNamed: componentName2
+			condition: 'tests'
+			comment: 'Primary component used for loading the test classes.';
+		addComponentNamed: componentName2 toComponentNamed: componentName1;
+		yourself
 ]
 
 { #category : 'private' }
@@ -1587,11 +1589,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
 	className1 := projectName , 'Class1'.
 	testClassName1 := projectName , 'TestCase1'.
 
-	resolvedProject 
-		specComponentNames: {componentName1};
+	resolvedProject
+		specComponentNames: {};
 		yourself.
 
-	resolvedProject addNewComponentNamed: componentName1.
+	resolvedProject addComponentNamed: componentName1.
 
 	resolvedProject
 		addPackageNamed: packageName1 toComponentNamed: componentName1;
@@ -2083,7 +2085,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
 	resolvedProject customConditionalAttributes: #('tests' 'v1' 'v2').
 
 	resolvedProject
-		addNewNestedComponentNamed: componentName7
+		addSubcomponentNamed: componentName7
+		condition: 'common'
 		comment:
 			'This component is intended for sharing common code and should not be loaded independently'.
 	resolvedProject
@@ -2821,7 +2824,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
 	packageName5 := projectName , '-' , 'Tests'.
 
 	component1 := resolvedProject componentNamed: componentName1.
-	component2 := resolvedProject addNewComponentNamed: componentName2.
+	component2 := resolvedProject addComponentNamed: componentName2.
 	testComponent := resolvedProject componentNamed: testComponentName.
 
 	component2
@@ -2869,7 +2872,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 		yourself.
 	requiredProject
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addNewComponentNamed: 'Tests'
 			toComponentNamed: componentName
 			condition: {'tests'};
@@ -3713,7 +3716,6 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		specComment: title;
 		yourself.

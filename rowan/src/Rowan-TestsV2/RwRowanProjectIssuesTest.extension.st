@@ -25,7 +25,7 @@ RwRowanProjectIssuesTest >> testIssue495_move_class_and_extension_method_to_new_
 
 	project1 := RwResolvedProjectV2 new
 		projectName: projectName;
-		addNewComponentNamed: 'Core';
+		addComponentNamed: 'Core';
 		addPackageNamed: packageName1 
 			toComponentNamed: 'Core';
 		addPackageNamed: packageName2 
@@ -169,7 +169,7 @@ RwRowanProjectIssuesTest >> testIssue582 [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		resolve;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -178,7 +178,7 @@ RwRowanProjectIssuesTest >> testIssue582 [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		resolve;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.

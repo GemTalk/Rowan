@@ -47,11 +47,29 @@ A **subcomponent** that references another **subcomponent** via its list of *com
 A **subcomponent** may only be loaded via a direct or indirect reference from a **component**.
 There is no implied API for a **subcomponent**, so no associated *test* are expected.
 
-### LeafComponents
-A **leafComponent** is a special case of **subcomponent**, where the *condition* is a collection of *conditional attributes* and/or *platform version patterns*.
+### PlatformComponents
+A **platformComponent** is a special case of **subcomponent**, where the *condition* is a collection of *conditional attributes* and/or *platform version patterns*.
+Each of the items in the list are effectively ORed together.
+The use case for ORing is when you have a set of packages that are conditional on a set of platforms. For example here are several **platformComponent** *conditions*:
+1. `#( 'gemstone' 'pharo' )`
+2. `#( 'gs3.2.1.x' 'pharo7.x' )`
+3. `#( 'gs3.[1-]' 'pharo7.[1-5]' )`
 
-[TO BE CONTINUED]
+If you are familiar with [Metacello][1], the the *conditions* in items 1 and 2 should be familiar to you.
+
+The `#( 'gemstone' 'pharo' )` *condition* in item 1 is a case where no pattern matching is needed, if the *platform conditional attributes list* contains wither 'gemstone' or 'pharo' the *condition* is matched and the **subcomponent** is active. 
+For these *exact match* cases, it isn't necessary that the attributes in the pattern list be the name of a platform.
+However, items 2 and 3, involves matching platform specific version strings.
+
+The `#( 'gs3.2.1.x' 'pharo7.x' )` *condition* where the `x` in each pattern may be replaced with a continuation of the version string.
+The pattern  'gs3.2.1.x' will match all of the following gemstone version strings: '3.2.1.0', '3.2.1.2', '3.2.1.2.5', '3.2.1.10' and not match the following gemstone version strings: '3.2.1', '3.2.2'.
+
+From experience with Metacello, t is clear that a pattern is also needed that allows for matching version ranges and the example in item 3 illustrates the version range pattern.
+The pattern 'gs3.[1-]' will do an open ended match ot gemstone version strings from '3.1.0' up to, but not including version '4.0'.
+The pattern 'pharo7.[1-5]' will match pharo version strings in a closed range from '7.1' through '7.5'.
 
 ### Component directory structure
 As mentioned earlier, it is expected that **components** be located in the *components directory*. It then follows that **subcomponents** should be located in subdirectories, to segregate the **subcomponents** and **components**.
 Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*
+
+[1]: https://github.com/dalehenrich/metacello-work

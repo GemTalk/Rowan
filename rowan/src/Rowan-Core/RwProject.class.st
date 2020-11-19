@@ -30,22 +30,39 @@ RwProject >> _specification [
 	^ self _loadedProject specification
 ]
 
-{ #category : 'components to be cleaned up' }
-RwProject >> addTopLevelComponentNamed: componentName [
-	^ self addTopLevelComponentNamed: componentName condition: 'common'
+{ #category : 'components' }
+RwProject >> addComponentNamed: componentName [
+	^ self addComponentNamed: componentName comment: ''
 ]
 
-{ #category : 'components to be cleaned up' }
-RwProject >> addTopLevelComponentNamed: componentName condition: condition [
-	"since we are working with a loaded project here, adding a new top level component 
+{ #category : 'components' }
+RwProject >> addComponentNamed: componentName comment: aString [
+	| projectDefinition component |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addComponentNamed: componentName
+		comment: aString.
+	projectDefinition load.
+	^ component
+]
+
+{ #category : 'components' }
+RwProject >> addSubcomponentNamed: componentName condition: condition [
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
+]
+
+{ #category : 'components' }
+RwProject >> addSubcomponentNamed: componentName condition: condition comment: aString [
+	"since we are working with a loaded project here, adding a component 
 		with a condition, implies that the condition should be applied to the load specification, 
 		thus causing the new component to be loaded"
 
 	| projectDefinition component conditionals |
 	projectDefinition := self defined.
 	component := projectDefinition
-		addTopLevelComponentNamed: componentName
-		condition: condition.
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString.
 	conditionals := projectDefinition customConditionalAttributes copy.
 	conditionals add: condition.
 	projectDefinition customConditionalAttributes: conditionals asSet asArray.
@@ -53,9 +70,16 @@ RwProject >> addTopLevelComponentNamed: componentName condition: condition [
 	^ component
 ]
 
+{ #category : 'components v2.0' }
+RwProject >> addTopLevelComponentNamed: componentName condition: condition [
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self addComponentNamed: componentName
+]
+
 { #category : 'components' }
-RwProject >> allPackgeNamesIn: componentNameOrArrayOfNames [
-	^ self _loadedProject allPackgeNamesIn: componentNameOrArrayOfNames
+RwProject >> allPackageNamesIn: componentNameOrArrayOfNames [
+	^ self _loadedProject allPackageNamesIn: componentNameOrArrayOfNames
 ]
 
 { #category : 'actions' }
@@ -94,7 +118,7 @@ RwProject >> commitId [
 	^ self _loadedProject commitId
 ]
 
-{ #category : 'querying' }
+{ #category : 'components' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
 
@@ -104,6 +128,11 @@ RwProject >> componentForPackageNamed: packageName [
 { #category : 'components' }
 RwProject >> componentNamed: componentName [
 	^ self loadedComponents componentNamed: componentName
+]
+
+{ #category : 'components' }
+RwProject >> componentNames [
+	^ self _loadedProject componentNames
 ]
 
 { #category : 'accessing' }
@@ -261,18 +290,9 @@ RwProject >> loadedCommitId [
 	^ self _loadedProject loadedCommitId
 ]
 
-{ #category : 'properties' }
-RwProject >> loadedConfigurationNames [
-	"Answer the list of configuration names that were explicitly specified when the project was loaded"
-
-	^ self _loadedProject loadedConfigurationNames
-]
-
-{ #category : 'properties' }
-RwProject >> loadedGroupNames [
-	"Answer the list of group names that were explicitly specified when the project was loaded"
-
-	^ self _loadedProject loadedGroupNames
+{ #category : 'components to be cleaned up' }
+RwProject >> loadedComponents [
+	^ self _loadedProject loadedComponentDefinitions
 ]
 
 { #category : 'components to be cleaned up' }
@@ -403,6 +423,11 @@ RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
 { #category : 'actions' }
 RwProject >> testSuite [
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
+]
+
+{ #category : 'components to be cleaned up' }
+RwProject >> topLevelComponentNames [
+	^ self _loadedProject resolvedProject _loadSpecification componentNames
 ]
 
 { #category : 'components to be cleaned up' }
