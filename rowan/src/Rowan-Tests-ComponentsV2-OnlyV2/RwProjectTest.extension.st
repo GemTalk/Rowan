@@ -20,7 +20,7 @@ RwProjectTest >> _simpleCreateDefinedProjectForRepoType: repoType [
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		repoType: repoType;
-		addComponentNamed: componentName1;
+		addLoadSpecComponentNamed: componentName1;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
 		addSubcomponentNamed: componentName2 condition: 'tests' comment: 'tests';
 		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
@@ -191,8 +191,7 @@ RwProjectTest >> testResolvedProjectAPI [
 "tests attribute not specified, so packageName2 is NOT read from disk"
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
-		projectsHome: resolvedProject1 projectsHome
-		componentNames: #('Core').
+		projectsHome: resolvedProject1 projectsHome.
 
 	self assert: resolvedProject2 class == RwResolvedProject.
 	self assert: (x := resolvedProject2 repositoryRoot) exists.
@@ -205,7 +204,6 @@ RwProjectTest >> testResolvedProjectAPI [
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		componentNames: #('Core')
 		customConditionalAttributes: #('tests').
 
 	self assert: resolvedProject2 class == RwResolvedProject.
@@ -219,7 +217,6 @@ RwProjectTest >> testResolvedProjectAPI [
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		componentNames: #('Core')
 		platformConditionalAttributes: #('common' 'tests').
 
 	self assert: resolvedProject2 class == RwResolvedProject.
@@ -234,7 +231,6 @@ RwProjectTest >> testResolvedProjectAPI [
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		componentNames: #('Core')
 		platformConditionalAttributes: #('tests').
 
 	self assert: resolvedProject2 class == RwResolvedProject.

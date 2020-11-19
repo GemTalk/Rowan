@@ -129,6 +129,16 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		comment: aString
 ]
 
+{ #category : 'components' }
+RwDefinedProject >> addLoadSpecComponentNamed: componentName [
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addLoadSpecComponentNamed: componentName comment: aString [
+	^ self _resolvedProject addLoadSpecComponentNamed: componentName comment: aString
+]
+
 { #category : 'components v2.0' }
 RwDefinedProject >> addNewComponentNamed: componentName [
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
@@ -274,7 +284,7 @@ RwDefinedProject >> addSubcomponentNamed: componentName condition: condition com
 RwDefinedProject >> addTopLevelComponentNamed: componentName [
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
-	^ self addComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName
 ]
 
 { #category : 'accessing' }

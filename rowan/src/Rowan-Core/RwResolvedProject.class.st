@@ -129,6 +129,18 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 ]
 
 { #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes [
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve: platformConditionalAttributes.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+]
+
+{ #category : 'instance creation' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)

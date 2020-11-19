@@ -189,11 +189,6 @@ RwLoadSpecificationV2 >> addComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecificationV2 >> addTopLevelComponentNamed: componentName [
-	componentNames add: componentName
-]
-
-{ #category : 'accessing' }
 RwLoadSpecificationV2 >> comment [
 	^ comment ifNil: [ ^ '' ]
 ]

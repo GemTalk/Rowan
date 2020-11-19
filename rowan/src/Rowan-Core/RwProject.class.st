@@ -47,6 +47,22 @@ RwProject >> addComponentNamed: componentName comment: aString [
 ]
 
 { #category : 'components' }
+RwProject >> addLoadSpecComponentNamed: componentName [
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwProject >> addLoadSpecComponentNamed: componentName comment: aString [
+	| projectDefinition component |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addLoadSpecComponentNamed: componentName
+		comment: aString.
+	projectDefinition load.
+	^ component
+]
+
+{ #category : 'components' }
 RwProject >> addSubcomponentNamed: componentName condition: condition [
 	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 ]
@@ -74,7 +90,7 @@ RwProject >> addSubcomponentNamed: componentName condition: condition comment: a
 RwProject >> addTopLevelComponentNamed: componentName condition: condition [
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
-	^ self addComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName
 ]
 
 { #category : 'components' }

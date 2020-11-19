@@ -96,14 +96,11 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 
 { #category : 'components' }
 RwResolvedProjectV2 >> addComponentNamed: componentName [
-	(self _loadSpecification componentNames includes: componentName)
-		ifFalse: [ self _loadSpecification addComponentNamed: componentName ].
 	^ self _projectDefinition addComponentNamed: componentName
 ]
 
 { #category : 'components' }
 RwResolvedProjectV2 >> addComponentNamed: componentName comment: aString [
-	self _loadSpecification addComponentNamed: componentName.
 	^ self _projectDefinition addComponentNamed: componentName comment: aString
 ]
 
@@ -133,6 +130,17 @@ RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtCom
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
 		comment: aString
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName [
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName comment: aString [
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addComponentNamed: componentName comment: aString
 ]
 
 { #category : 'components to be cleaned up' }

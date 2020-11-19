@@ -49978,6 +49978,18 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: aString
 %
 
+category: 'components'
+method: RwDefinedProject
+addLoadSpecComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+%
+
+category: 'components'
+method: RwDefinedProject
+addLoadSpecComponentNamed: componentName comment: aString
+	^ self _resolvedProject addLoadSpecComponentNamed: componentName comment: aString
+%
+
 category: 'components v2.0'
 method: RwDefinedProject
 addNewComponentNamed: componentName
@@ -50143,7 +50155,7 @@ method: RwDefinedProject
 addTopLevelComponentNamed: componentName
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
-	^ self addComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName
 %
 
 category: 'accessing'
@@ -50640,6 +50652,19 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: 'instance creation'
 classmethod: RwResolvedProject
+projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+	| loadSpec resolvedProject |
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve: platformConditionalAttributes.
+	^ (self newNamed: resolvedProject name)
+		_resolvedProject: resolvedProject resolve;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProject
 projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
@@ -50831,6 +50856,24 @@ addComponentNamed: componentName comment: aString
 
 category: 'components'
 method: RwProject
+addLoadSpecComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+%
+
+category: 'components'
+method: RwProject
+addLoadSpecComponentNamed: componentName comment: aString
+	| projectDefinition component |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addLoadSpecComponentNamed: componentName
+		comment: aString.
+	projectDefinition load.
+	^ component
+%
+
+category: 'components'
+method: RwProject
 addSubcomponentNamed: componentName condition: condition
 	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 %
@@ -50860,7 +50903,7 @@ method: RwProject
 addTopLevelComponentNamed: componentName condition: condition
 	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
 
-	^ self addComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName
 %
 
 category: 'components'
@@ -63333,15 +63376,12 @@ acceptVisitor: aVisitor
 category: 'components'
 method: RwResolvedProjectV2
 addComponentNamed: componentName
-	(self _loadSpecification componentNames includes: componentName)
-		ifFalse: [ self _loadSpecification addComponentNamed: componentName ].
 	^ self _projectDefinition addComponentNamed: componentName
 %
 
 category: 'components'
 method: RwResolvedProjectV2
 addComponentNamed: componentName comment: aString
-	self _loadSpecification addComponentNamed: componentName.
 	^ self _projectDefinition addComponentNamed: componentName comment: aString
 %
 
@@ -63374,6 +63414,19 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
 		comment: aString
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addLoadSpecComponentNamed: componentName
+	^ self addLoadSpecComponentNamed: componentName comment: ''
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addLoadSpecComponentNamed: componentName comment: aString
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addComponentNamed: componentName comment: aString
 %
 
 category: 'components to be cleaned up'
@@ -87963,12 +88016,6 @@ addComponentNamed: componentName
 
 category: 'accessing'
 method: RwLoadSpecificationV2
-addTopLevelComponentNamed: componentName
-	componentNames add: componentName
-%
-
-category: 'accessing'
-method: RwLoadSpecificationV2
 comment
 	^ comment ifNil: [ ^ '' ]
 %
@@ -98550,6 +98597,15 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: '*rowan-coreV2'
 classmethod: Rowan
+projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+	^ self platform
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
 projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 	^ self platform projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 %
@@ -99983,6 +100039,15 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
 		customConditionalAttributes: customConditionalAttributes
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+	^ RwResolvedProject
+		projectFromUrl: loadSpecUrl
+		projectsHome: projectsHome
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: '*rowan-corev2'

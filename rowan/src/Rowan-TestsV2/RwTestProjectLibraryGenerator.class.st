@@ -92,7 +92,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	componentName2 := 'tests/Tests'.
 	^ resolvedProject
 		comment: 'spec_0000 definitions';
-		addComponentNamed: componentName1
+		addLoadSpecComponentNamed: componentName1
 			comment: 'Primary component used for loading the core classes.';
 		addSubcomponentNamed: componentName2
 			condition: 'tests'
@@ -1593,7 +1593,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
 		specComponentNames: {};
 		yourself.
 
-	resolvedProject addComponentNamed: componentName1.
+	resolvedProject addLoadSpecComponentNamed: componentName1.
 
 	resolvedProject
 		addPackageNamed: packageName1 toComponentNamed: componentName1;
