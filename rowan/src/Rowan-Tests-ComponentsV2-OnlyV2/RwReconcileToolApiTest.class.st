@@ -31,7 +31,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
 		resolve;
@@ -165,7 +165,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
 		resolve;
@@ -310,7 +310,7 @@ RwReconcileToolApiTest >> testReconcileProjectSetMethods [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
 		resolve;

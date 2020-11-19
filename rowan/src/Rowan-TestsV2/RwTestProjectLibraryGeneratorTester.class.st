@@ -9,6 +9,9 @@ Class {
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorTester >> _doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchName: branchName [
+	Transcript
+		cr;
+		show: '-- ' , branchName.
 	self testCase
 		deny:
 			(super

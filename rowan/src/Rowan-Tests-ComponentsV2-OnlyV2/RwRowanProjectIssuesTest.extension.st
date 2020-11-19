@@ -1398,7 +1398,7 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -2176,7 +2176,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_class_to_package [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -2241,7 +2241,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		resolve;
@@ -2310,7 +2310,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		resolve;
@@ -2397,7 +2397,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
@@ -2485,7 +2485,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
@@ -2572,7 +2572,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
@@ -2698,7 +2698,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
@@ -3071,7 +3071,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		resolve;
@@ -3174,7 +3174,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		resolve;
@@ -3221,7 +3221,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		resolve;
@@ -3662,7 +3662,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -3762,7 +3762,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -3857,7 +3857,7 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -3917,7 +3917,7 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4005,7 +4005,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4079,7 +4079,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4166,7 +4166,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_3 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4251,7 +4251,7 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4315,7 +4315,7 @@ RwRowanProjectIssuesTest >> testIssue263 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4371,7 +4371,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_keep_in_system [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4445,7 +4445,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4522,7 +4522,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_remove_from_system [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4592,7 +4592,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4697,7 +4697,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4824,7 +4824,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -4959,7 +4959,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5094,7 +5094,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5226,7 +5226,7 @@ RwRowanProjectIssuesTest >> testIssue293_constraint_ordering [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5314,7 +5314,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -5376,7 +5376,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -5467,7 +5467,7 @@ RwRowanProjectIssuesTest >> testIssue310 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5581,7 +5581,7 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5694,7 +5694,7 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5805,7 +5805,7 @@ RwRowanProjectIssuesTest >> testIssue313_3 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -5915,7 +5915,7 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -6030,7 +6030,7 @@ RwRowanProjectIssuesTest >> testIssue313_5 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6151,7 +6151,7 @@ RwRowanProjectIssuesTest >> testIssue313_6 [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		resolve;
@@ -6160,7 +6160,7 @@ RwRowanProjectIssuesTest >> testIssue313_6 [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName2}
 			toComponentNamed: componentName;
 		resolve;
@@ -6286,7 +6286,7 @@ RwRowanProjectIssuesTest >> testIssue325 [
 	projectDefinition1 := RwResolvedProjectV2 new
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		resolve;
@@ -6393,7 +6393,7 @@ RwRowanProjectIssuesTest >> testIssue326_class_modification_remove_constraint [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6473,7 +6473,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6604,7 +6604,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6733,7 +6733,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6836,7 +6836,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -6937,7 +6937,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -7072,7 +7072,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -7208,7 +7208,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -7315,7 +7315,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -7453,7 +7453,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -7587,7 +7587,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;
@@ -8352,7 +8352,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_1 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		resolve;
@@ -8482,7 +8482,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -8614,7 +8614,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_3 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -8772,7 +8772,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_4 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -8979,7 +8979,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_5 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -9191,7 +9191,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -9394,7 +9394,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		resolve;

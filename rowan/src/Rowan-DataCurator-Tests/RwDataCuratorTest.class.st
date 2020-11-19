@@ -20,7 +20,7 @@ RwDataCuratorTest >> testCreateProjects [
 
 	projectDef := RwResolvedProjectV2 new
 		projectName: projectName;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		yourself.
 	projectDef resolve.
 

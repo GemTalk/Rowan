@@ -49914,9 +49914,23 @@ newNamed: aName
 
 !		Instance methods for 'RwDefinedProject'
 
-category: 'components to be cleaned up'
+category: 'components'
+method: RwDefinedProject
+addComponentNamed: componentName
+	^ self addComponentNamed: componentName comment: ''
+%
+
+category: 'components'
+method: RwDefinedProject
+addComponentNamed: componentName comment: aString
+	^ self _resolvedProject addComponentNamed: componentName comment: aString
+%
+
+category: 'components'
 method: RwDefinedProject
 addComponentNamed: componentName toComponentNamed: toComponentName
+	"add existing component named componentName to component named toComponentName"
+
 	^ self _resolvedProject
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
@@ -49964,10 +49978,12 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'components v2.0'
 method: RwDefinedProject
 addNewComponentNamed: componentName
-	^ self _resolvedProject addNewComponentNamed: componentName
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self _resolvedProject addComponentNamed: componentName
 %
 
 category: 'components to be cleaned up'
@@ -50009,14 +50025,6 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 		addNewComponentNamed: aComponentName
 		toComponentNamed: toComponentName
 		condition: conditionPathArray
-		comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addNewNestedComponentNamed: aComponentName comment: aString
-	^ self _resolvedProject
-		addNewNestedComponentNamed: aComponentName
 		comment: aString
 %
 
@@ -50115,16 +50123,27 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 		comment: commentString
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwDefinedProject
-addTopLevelComponentNamed: componentName
-	^ self _resolvedProject addTopLevelComponentNamed: componentName
+addSubcomponentNamed: componentName condition: condition
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwDefinedProject
-addTopLevelComponentNamed: componentName  condition: condition
-	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
+addSubcomponentNamed: componentName condition: condition comment: aString
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+%
+
+category: 'components v2.0'
+method: RwDefinedProject
+addTopLevelComponentNamed: componentName
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self addComponentNamed: componentName
 %
 
 category: 'accessing'
@@ -50792,29 +50811,62 @@ write
 
 !		Instance methods for 'RwProject'
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwProject
-addTopLevelComponentNamed: componentName
-	^ self addTopLevelComponentNamed: componentName condition: 'common'
+addComponentNamed: componentName
+	^ self addComponentNamed: componentName comment: ''
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwProject
-addTopLevelComponentNamed: componentName condition: condition
-	"since we are working with a loaded project here, adding a new top level component 
+addComponentNamed: componentName comment: aString
+	| projectDefinition component |
+	projectDefinition := self defined.
+	component := projectDefinition
+		addComponentNamed: componentName
+		comment: aString.
+	projectDefinition load.
+	^ component
+%
+
+category: 'components'
+method: RwProject
+addSubcomponentNamed: componentName condition: condition
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
+%
+
+category: 'components'
+method: RwProject
+addSubcomponentNamed: componentName condition: condition comment: aString
+	"since we are working with a loaded project here, adding a component 
 		with a condition, implies that the condition should be applied to the load specification, 
 		thus causing the new component to be loaded"
 
 	| projectDefinition component conditionals |
 	projectDefinition := self defined.
 	component := projectDefinition
-		addTopLevelComponentNamed: componentName
-		condition: condition.
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString.
 	conditionals := projectDefinition customConditionalAttributes copy.
 	conditionals add: condition.
 	projectDefinition customConditionalAttributes: conditionals asSet asArray.
 	projectDefinition load.
 	^ component
+%
+
+category: 'components v2.0'
+method: RwProject
+addTopLevelComponentNamed: componentName condition: condition
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self addComponentNamed: componentName
+%
+
+category: 'components'
+method: RwProject
+allPackageNamesIn: componentNameOrArrayOfNames
+	^ self _loadedProject allPackageNamesIn: componentNameOrArrayOfNames
 %
 
 category: 'actions'
@@ -50859,7 +50911,7 @@ commitId
 	^ self _loadedProject commitId
 %
 
-category: 'querying'
+category: 'components'
 method: RwProject
 componentForPackageNamed: packageName
 	"Answer nil if no component found"
@@ -50871,6 +50923,12 @@ category: 'components'
 method: RwProject
 componentNamed: componentName
 	^ self loadedComponents componentNamed: componentName
+%
+
+category: 'components'
+method: RwProject
+componentNames
+	^ self _loadedProject componentNames
 %
 
 category: 'accessing'
@@ -51047,20 +51105,10 @@ loadedCommitId
 	^ self _loadedProject loadedCommitId
 %
 
-category: 'properties'
+category: 'components to be cleaned up'
 method: RwProject
-loadedConfigurationNames
-	"Answer the list of configuration names that were explicitly specified when the project was loaded"
-
-	^ self _loadedProject loadedConfigurationNames
-%
-
-category: 'properties'
-method: RwProject
-loadedGroupNames
-	"Answer the list of group names that were explicitly specified when the project was loaded"
-
-	^ self _loadedProject loadedGroupNames
+loadedComponents
+	^ self _loadedProject loadedComponentDefinitions
 %
 
 category: 'components to be cleaned up'
@@ -51206,6 +51254,12 @@ category: 'actions'
 method: RwProject
 testSuite
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
+%
+
+category: 'components to be cleaned up'
+method: RwProject
+topLevelComponentNames
+	^ self _loadedProject resolvedProject _loadSpecification componentNames
 %
 
 category: 'components to be cleaned up'
@@ -63276,15 +63330,32 @@ acceptVisitor: aVisitor
 	^ aVisitor visitResolvedProjectV2: self
 %
 
-category: 'project definition'
+category: 'components'
+method: RwResolvedProjectV2
+addComponentNamed: componentName
+	(self _loadSpecification componentNames includes: componentName)
+		ifFalse: [ self _loadSpecification addComponentNamed: componentName ].
+	^ self _projectDefinition addComponentNamed: componentName
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addComponentNamed: componentName comment: aString
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addComponentNamed: componentName comment: aString
+%
+
+category: 'components'
 method: RwResolvedProjectV2
 addComponentNamed: componentName toComponentNamed: toComponentName
+	"add existing component named componentName to component named toComponentName"
+
 	^ self _projectDefinition
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _projectDefinition
@@ -63294,7 +63365,7 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 		comment: aString
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _projectDefinition
@@ -63305,31 +63376,25 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: aString
 %
 
-category: 'project definition'
-method: RwResolvedProjectV2
-addNewComponentNamed: componentName
-	^ self _projectDefinition addNewComponentNamed: componentName
-%
-
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: aComponentName comment: aString
 	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: aComponentName condition: condition
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
 	^ self
@@ -63339,7 +63404,7 @@ addNewComponentNamed: componentName toComponentNamed: toComponentName condition:
 		comment: ''
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
 	^ self _projectDefinition
@@ -63351,21 +63416,13 @@ addNewComponentNamed: componentName toComponentNamed: toComponentName condition:
 
 category: 'project definition'
 method: RwResolvedProjectV2
-addNewNestedComponentNamed: aComponentName comment: aString
-	^ self _projectDefinition
-		addNewNestedComponentNamed: aComponentName
-		comment: aString
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 addPackageNamed: packageName
 	"the package is expected to already be present in a component - used when reading packages from disk"
 
 	^ self _projectDefinition addPackageNamed: packageName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addPackageNamed: packageName toComponentNamed: componentName
 	^ self _projectDefinition
@@ -63373,7 +63430,7 @@ addPackageNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 	^ self _projectDefinition
@@ -63382,7 +63439,7 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addPackagesNamed: packageNames toComponentNamed: componentName 
 	^ self _projectDefinition
@@ -63390,7 +63447,7 @@ addPackagesNamed: packageNames toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	^ self
@@ -63401,7 +63458,7 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName path
 		comment: ''
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	^ self _projectDefinition
@@ -63412,7 +63469,7 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName path
 		comment: aString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString
 	^ self _projectDefinition
@@ -63421,7 +63478,7 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 		comment: commentString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString
 	^ self _projectDefinition
@@ -63449,7 +63506,7 @@ addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponent
 	component doitDict at: doitName put: doitSource
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 addProjectNamed:projectName toComponentNamed: componentName 
 	^ self _projectDefinition
@@ -63467,7 +63524,7 @@ addRawPackageNamed: packageName
 	^ self _projectDefinition addRawPackageNamed: packageName
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addSimpleComponentNamed: aComponentName comment: commentString
 	^ self _projectDefinition
@@ -63476,7 +63533,7 @@ addSimpleComponentNamed: aComponentName comment: commentString
 		comment: commentString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addSimpleComponentNamed: aComponentName condition: condition comment: commentString
 	^ self _projectDefinition
@@ -63485,7 +63542,7 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 		comment: commentString
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString
 	^ self _projectDefinition
@@ -63494,20 +63551,19 @@ addSimpleNestedComponentNamed: aComponentName condition: condition  comment: com
 		comment: commentString
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
-addTopLevelComponentNamed: componentName
-	self _loadSpecification addTopLevelComponentNamed: componentName.
-	^ self _projectDefinition addNewComponentNamed: componentName
+addSubcomponentNamed: componentName condition: condition
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
-addTopLevelComponentNamed: componentName condition: condition
-	self _loadSpecification addTopLevelComponentNamed: componentName.
+addSubcomponentNamed: componentName condition: condition comment: aString
 	^ self _projectDefinition
-		addNewComponentNamed: componentName
+		addSubcomponentNamed: componentName
 		condition: condition
+		comment: aString
 %
 
 category: 'actions'
@@ -63574,21 +63630,23 @@ componentForPackageNamed: packageName
 	^ self _projectDefinition componentForPackageNamed: packageName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 componentNamed: aComponentName
 	^ self _projectDefinition componentNamed: aComponentName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 componentNamed: aComponentName ifAbsent: absentBlock
 	^ self _projectDefinition componentNamed: aComponentName ifAbsent: absentBlock
 %
 
-category: 'project definition'
+category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 components
+	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
+
 	^ self _projectDefinition components
 %
 
@@ -63896,7 +63954,7 @@ moveClassNamed: aClassName toPackageNamed: aPackageName
 			thePackage addClassDefinition: classDef ]
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 movePackageNamed: aPackageName toComponentNamed: aComponentName
 	^ self _projectDefinition
@@ -63904,7 +63962,7 @@ movePackageNamed: aPackageName toComponentNamed: aComponentName
 		toComponentNamed: aComponentName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName
 	^ self _projectDefinition
@@ -64206,7 +64264,7 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
 	^ self _projectDefinition removeComponentNamed: aComponentName
@@ -64219,7 +64277,7 @@ removePackageNamed: packageName
 	^ self _projectDefinition removePackageNamed: packageName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 removePackageNamed: packageName fromComponentNamed: componentName
 	^ self _projectDefinition
@@ -64227,13 +64285,13 @@ removePackageNamed: packageName fromComponentNamed: componentName
 		fromComponentNamed: componentName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 removeProjectNamed: aProjectName
 	^ self _projectDefinition removeProjectNamed: aProjectName
 %
 
-category: 'project definition'
+category: 'components'
 method: RwResolvedProjectV2
 renameComponentNamed: aComponentPath to: aComponentName
 	^ self _projectDefinition
@@ -71713,15 +71771,34 @@ acceptVisitor: aVisitor
 	^ aVisitor visitComponentProjectDefinition: self
 %
 
-category: 'accessing'
+category: 'components'
+method: RwProjectDefinitionV2
+addComponentNamed: aComponentName
+	^ self addComponentNamed: aComponentName comment: ''
+%
+
+category: 'components'
+method: RwProjectDefinitionV2
+addComponentNamed: aComponentName comment: aString
+	"eventually no condition for `top level` component"
+
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+%
+
+category: 'components'
 method: RwProjectDefinitionV2
 addComponentNamed: componentName toComponentNamed: toComponentName
+	"add existing component named componentName to component named toComponentName"
+
 	^ self components
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"assume that componentBasename is a top-level component"
@@ -71734,7 +71811,7 @@ addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditi
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"return the path name of the new component"
@@ -71777,19 +71854,13 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 	^ theComponentName
 %
 
-category: 'accessing'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName
-	^ self addNewComponentNamed: aComponentName condition: 'common' comment: ''
-%
-
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName comment: aString
 	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName condition: condition
 	^ self components
@@ -71797,7 +71868,7 @@ addNewComponentNamed: aComponentName condition: condition
 		condition: condition
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName condition: condition comment: aString
 	^ self components
@@ -71806,7 +71877,7 @@ addNewComponentNamed: aComponentName condition: condition comment: aString
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
 	"return the path name of the new component"
@@ -71818,7 +71889,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 		conditionPathArray: conditionPathArray
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
 	"return the path name of the new component"
@@ -71831,7 +71902,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition
 		comment: aString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	"return the path name of the new component"
@@ -71844,7 +71915,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameA
 		comment: ''
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"return the path name of the new component"
@@ -71879,7 +71950,7 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameA
 	^ theComponentName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addNewNestedComponentNamed: aComponentName comment: aString
 	^ self components
@@ -71909,7 +71980,7 @@ addPackageNamed: packageName
 	^ package
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addPackageNamed: packageName toComponentNamed: componentName
 	| package |
@@ -71926,7 +71997,7 @@ addPackageNamed: packageName toComponentNamed: componentName
 	^ package
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 	| package |
@@ -71946,7 +72017,7 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 	^ package
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addPackages: somePackageNames forComponent: aComponent
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
@@ -71961,14 +72032,14 @@ addPackages: somePackageNames forComponent: aComponent
 		do: [ :packageName | self _addPackage: (RwPackageDefinition newNamed: packageName) ]
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addPackagesNamed: packageNames toComponentNamed: componentName
 	^ packageNames
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
 	"return the path name of the new component"
@@ -71981,7 +72052,7 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName path
 		comment: ''
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
 	"return the path name of the new component"
@@ -72017,7 +72088,7 @@ addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName path
 	^ theComponentName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString
 	^ self components
@@ -72026,7 +72097,7 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 		comment: commentString
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 addProjectNamed: projectName toComponentNamed: toComponentName
 	^ self components
@@ -72044,7 +72115,7 @@ addRawPackageNamed: packageName
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addSimpleComponentNamed: aComponentName condition: condition comment: commentString
 	^ self components
@@ -72053,13 +72124,22 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 		comment: commentString
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwProjectDefinitionV2
 addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
 	^ self components
 		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
 		comment: commentString
+%
+
+category: 'components'
+method: RwProjectDefinitionV2
+addSubcomponentNamed: aComponentName condition: condition comment: aString
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: aString
 %
 
 category: 'querying'
@@ -72103,7 +72183,7 @@ load: instanceMigrator
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 movePackageNamed: aPackageName toComponentNamed: aComponentName
 	self
@@ -72112,7 +72192,7 @@ movePackageNamed: aPackageName toComponentNamed: aComponentName
 		asPackageName: aPackageName
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName
 	self components removePackageNamed: aPackageName.
@@ -72152,7 +72232,7 @@ removePackage: aPackageDefinition
 	^ super removePackage: aPackageDefinition
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 removePackageNamed: packageName fromComponentNamed: componentName
 	"do not remove package from defintion, remove it from the named component only. 
@@ -72164,7 +72244,7 @@ removePackageNamed: packageName fromComponentNamed: componentName
 	^ component
 %
 
-category: 'accessing'
+category: 'components'
 method: RwProjectDefinitionV2
 renameComponentNamed: aComponentPath to: aComponentName
 	^ self components renameComponentNamed: aComponentPath to: aComponentName
@@ -85052,6 +85132,27 @@ newForResolvedProject: aResolvedProject
 
 !		Instance methods for 'RwGsLoadedSymbolDictResolvedProjectV2'
 
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+allPackageNamesIn: componentNameOrArrayOfNames
+	| packageNames visited theBlock attributes componentNames |
+	visited := IdentitySet new.
+	packageNames := Set new.
+	attributes := self platformConditionalAttributes.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			packageNames addAll: component packageNames.
+			visited add: component.
+			self subcomponentsOf: component name attributes: attributes do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	componentNames
+		do: [ :componentName | self subcomponentsOf: componentName attributes: attributes do: theBlock ].
+	^ packageNames asArray sort
+%
+
 category: 'definitions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 asDefinition
@@ -85180,35 +85281,6 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedComponentDefinitions
 	^ self resolvedProject _projectStructure copy
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedConfigurationNames
-
-	^ self resolvedProject loadedConfigurationNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedConfigurationNames: configNames
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-loadedGroupNames
-
-	^ self resolvedProject loadedGroupNames
 %
 
 category: 'actions'
@@ -85378,6 +85450,18 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 
 category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
+subcomponentsOf: componentName attributes: attributes do: aBlock
+	| subcomponents |
+	subcomponents := self components
+		subcomponentsOf: componentName
+		resolvedProject: self
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [ ^ self ].
+	^ subcomponents do: aBlock
+%
+
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
 subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
 	| subcomponents |
 	subcomponents := self components
@@ -85388,6 +85472,15 @@ subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
 	subcomponents isEmpty
 		ifTrue: [ ^ noneBlock value ].
 	^ subcomponents
+%
+
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+subcomponentsOf: componentName do: aBlock
+	^ self
+		subcomponentsOf: componentName
+		attributes: self platformConditionalAttributes
+		do: aBlock
 %
 
 category: 'querying'
@@ -87182,9 +87275,11 @@ new
 
 !		Instance methods for 'RwResolvedLoadComponentsV2'
 
-category: 'accessing'
+category: 'components'
 method: RwResolvedLoadComponentsV2
 addComponentNamed: componentName toComponentNamed: toComponentName
+	"add existing component named componentName to component named toComponentName"
+
 	| component |
 	component := self
 		componentNamed: toComponentName
@@ -87226,7 +87321,7 @@ addPackagesNamed: packageNames toComponentNamed: aComponentName
 		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwResolvedLoadComponentsV2
 addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString
 	| component |
@@ -87255,7 +87350,7 @@ addProjectNamed: projectName toComponentNamed: toComponentName
 	component addProjectNamed: projectName
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwResolvedLoadComponentsV2
 addSimpleComponentNamed: aComponentName condition: condition
 	| component |
@@ -87273,7 +87368,7 @@ addSimpleComponentNamed: aComponentName condition: condition
 	^ component
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwResolvedLoadComponentsV2
 addSimpleComponentNamed: aComponentName condition: condition comment: commentString
 	| component |
@@ -87292,7 +87387,7 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 	^ component
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwResolvedLoadComponentsV2
 addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
 	| component |
@@ -87311,7 +87406,7 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 	^ component
 %
 
-category: 'accessing'
+category: 'components to be cleaned up'
 method: RwResolvedLoadComponentsV2
 categoryComponentsFor: componentNameList
 	"category components are the components listed in the top-level loaded components"
@@ -87858,6 +87953,12 @@ method: RwLoadSpecificationV2
 acceptVisitor: aVisitor
 
 	^ aVisitor visitLoadSpecification: self
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+addComponentNamed: componentName
+	componentNames add: componentName
 %
 
 category: 'accessing'
@@ -100112,12 +100213,6 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: '*rowan-corev2'
-method: RwProject
-componentNames
-	^ self _loadedProject componentNames
-%
-
 category: '*rowan-gemstone-core'
 method: RwProject
 defaultSymbolDictName
@@ -100205,12 +100300,6 @@ gitRepositoryRoot: repositoryRootPathString
 					"only embedded required projects should have their repository root swapped out"
 					project _gitRepositoryRoot: repositoryRootPathString ] ].
 	self _gitRepositoryRoot: repositoryRootPathString
-%
-
-category: '*rowan-corev2'
-method: RwProject
-loadedComponents
-	^ self _loadedProject loadedComponentDefinitions
 %
 
 category: '*rowan-gemstone-core'
@@ -100353,12 +100442,6 @@ method: RwProject
 symbolDictNameForPackageNamed: packageName
 
 	^ self _loadedProject symbolDictNameForPackageNamed: packageName
-%
-
-category: '*rowan-corev2'
-method: RwProject
-topLevelComponentNames
-	^ self _loadedProject resolvedProject _loadSpecification componentNames
 %
 
 category: '*rowan-gemstone-core'

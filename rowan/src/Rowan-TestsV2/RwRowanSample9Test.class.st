@@ -654,7 +654,7 @@ RwRowanSample9Test >> testCategoryComponents [
 
 "using the category components, calculate the list of package names and class names in each component"
 	components := project loadedComponents.
-	categoryComponents := components categoryComponentsFor: project topLevelComponentNames.
+	categoryComponents := components categoryComponentsFor: project componentNames.
 "I think I want a component visitor to extract the list of packages from the loaded components"
 	false ifTrue: [ self halt]
 ]
@@ -792,13 +792,13 @@ RwRowanSample9Test >> testIssue_446 [
 	resolvedProject := project1 resolve.
 
 	(resolvedProject
-		addNewComponentNamed: 'Core1'
+		addSubcomponentNamed: 'Core1'
 		condition: 'common'
 		comment: 'contains ' , projectName , '-Core1 package and Core2 component')
 			addComponentNames: #('Core2');
 			yourself.
 	resolvedProject
-		addNewComponentNamed: 'Core2'
+		addSubcomponentNamed: 'Core2'
 		condition: 'common'
 		comment: 'contains ' , projectName , '-Core2 package'.
 
@@ -2309,7 +2309,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 		yourself.
 
 	primerResolvedProject
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackageNamed: primerPackageName1 toComponentNamed: componentName;
 		addPackageNamed: primerPackageName2  toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: symDictName1 forPackageNamed: primerPackageName1;
@@ -2421,7 +2421,7 @@ RwRowanSample9Test >> testIssue230 [
 		yourself.
 
 	primerResolvedProject
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackageNamed: primerPackageName1 toComponentNamed: componentName;
 		addPackageNamed: primerPackageName2  toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: symDictName1 forPackageNamed: primerPackageName1;

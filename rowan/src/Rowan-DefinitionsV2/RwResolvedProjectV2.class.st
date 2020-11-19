@@ -94,14 +94,28 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
+RwResolvedProjectV2 >> addComponentNamed: componentName [
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addComponentNamed: componentName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addComponentNamed: componentName comment: aString [
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addComponentNamed: componentName comment: aString
+]
+
+{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	"add existing component named componentName to component named toComponentName"
+
 	^ self _projectDefinition
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
@@ -110,7 +124,7 @@ RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray
 		comment: aString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
@@ -120,27 +134,22 @@ RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtCom
 		comment: aString
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addNewComponentNamed: componentName [
-	^ self _projectDefinition addNewComponentNamed: componentName
-]
-
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition [
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self
 		addNewComponentNamed: componentName
@@ -149,19 +158,12 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toC
 		comment: ''
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addNewComponentNamed: componentName
 		toComponentNamed: toComponentName
 		condition: conditionPathArray
-		comment: aString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
-	^ self _projectDefinition
-		addNewNestedComponentNamed: aComponentName
 		comment: aString
 ]
 
@@ -172,14 +174,14 @@ RwResolvedProjectV2 >> addPackageNamed: packageName [
 	^ self _projectDefinition addPackageNamed: packageName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	^ self _projectDefinition
 		addPackageNamed: packageName
 		toComponentNamed: componentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
 	^ self _projectDefinition
 		addPackageNamed: packageName
@@ -187,14 +189,14 @@ RwResolvedProjectV2 >> addPackageNamed: packageName toComponentNamed: componentN
 		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [ 
 	^ self _projectDefinition
 		addPackagesNamed: packageNames
 		toComponentNamed: componentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addPlatformComponentNamed: aComponentName
@@ -204,7 +206,7 @@ RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentName
 		comment: ''
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	^ self _projectDefinition
 		addPlatformComponentNamed: aComponentName
@@ -214,7 +216,7 @@ RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentName
 		comment: aString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName
@@ -222,7 +224,7 @@ RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition
 		comment: commentString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString [
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName
@@ -247,7 +249,7 @@ RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toCom
 	component doitDict at: doitName put: doitSource
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName [ 
 	^ self _projectDefinition
 		addProjectNamed:projectName
@@ -263,7 +265,7 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 	^ self _projectDefinition addRawPackageNamed: packageName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName
@@ -271,7 +273,7 @@ RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentS
 		comment: commentString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self _projectDefinition
 		addSimpleComponentNamed: aComponentName
@@ -279,7 +281,7 @@ RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condit
 		comment: commentString
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString [
 	^ self _projectDefinition
 		addSimpleNestedComponentNamed: aComponentName
@@ -287,18 +289,17 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		comment: commentString
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
-	self _loadSpecification addTopLevelComponentNamed: componentName.
-	^ self _projectDefinition addNewComponentNamed: componentName
+{ #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition [
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName condition: condition [
-	self _loadSpecification addTopLevelComponentNamed: componentName.
+{ #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition comment: aString [
 	^ self _projectDefinition
-		addNewComponentNamed: componentName
+		addSubcomponentNamed: componentName
 		condition: condition
+		comment: aString
 ]
 
 { #category : 'actions' }
@@ -356,18 +357,20 @@ RwResolvedProjectV2 >> componentForPackageNamed: packageName [
 	^ self _projectDefinition componentForPackageNamed: packageName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> componentNamed: aComponentName [
 	^ self _projectDefinition componentNamed: aComponentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _projectDefinition componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> components [
+	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
+
 	^ self _projectDefinition components
 ]
 
@@ -650,14 +653,14 @@ RwResolvedProjectV2 >> moveClassNamed: aClassName toPackageNamed: aPackageName [
 			thePackage addClassDefinition: classDef ]
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
 	^ self _projectDefinition
 		movePackageNamed: aPackageName
 		toComponentNamed: aComponentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName [
 	^ self _projectDefinition
 		movePackageNamed: aPackageName
@@ -928,7 +931,7 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectDefinition removeComponentNamed: aComponentName
 ]
@@ -939,19 +942,19 @@ RwResolvedProjectV2 >> removePackageNamed: packageName [
 	^ self _projectDefinition removePackageNamed: packageName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> removePackageNamed: packageName fromComponentNamed: componentName [
 	^ self _projectDefinition
 		removePackageNamed: packageName
 		fromComponentNamed: componentName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
 	^ self _projectDefinition removeProjectNamed: aProjectName
 ]
 
-{ #category : 'project definition' }
+{ #category : 'components' }
 RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
 	^ self _projectDefinition
 		renameComponentNamed: aComponentPath

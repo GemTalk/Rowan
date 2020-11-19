@@ -539,7 +539,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -664,7 +664,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -785,7 +785,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -924,7 +924,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -1069,7 +1069,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -1213,7 +1213,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -1371,7 +1371,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
@@ -1516,7 +1516,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 			projectName: projectName, projectExt;
 			projectsHome: projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-			addNewComponentNamed: componentName;
+			addComponentNamed: componentName;
 			addPackagesNamed: { 
 				packageName1, projectExt . 
 				packageName2, projectExt . 
@@ -1679,7 +1679,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 			projectName: projectName, projectExt;
 			projectsHome: projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-			addNewComponentNamed: componentName;
+			addComponentNamed: componentName;
 			addPackagesNamed: { 
 				packageName1, projectExt . 
 				packageName2, projectExt . 

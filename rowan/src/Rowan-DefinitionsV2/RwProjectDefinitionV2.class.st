@@ -55,14 +55,31 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitComponentProjectDefinition: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addComponentNamed: aComponentName [
+	^ self addComponentNamed: aComponentName comment: ''
+]
+
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: aString [
+	"eventually no condition for `top level` component"
+
+	^ self components
+		addSimpleComponentNamed: aComponentName
+		condition: 'common'
+		comment: aString
+]
+
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	"add existing component named componentName to component named toComponentName"
+
 	^ self components
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"assume that componentBasename is a top-level component"
 
@@ -74,7 +91,7 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename pathNameArr
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
@@ -116,24 +133,19 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 	^ theComponentName
 ]
 
-{ #category : 'accessing' }
-RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName [
-	^ self addNewComponentNamed: aComponentName condition: 'common' comment: ''
-]
-
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName comment: aString [
 	^ self addNewComponentNamed: aComponentName condition: 'common' comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition [
 	^ self components
 		addSimpleComponentNamed: aComponentName
 		condition: condition
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
@@ -141,7 +153,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: conditi
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	"return the path name of the new component"
 
@@ -152,7 +164,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 		conditionPathArray: conditionPathArray
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
@@ -164,7 +176,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 		comment: aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	"return the path name of the new component"
 
@@ -176,7 +188,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 		comment: ''
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
@@ -210,7 +222,7 @@ RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: 
 	^ theComponentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
 	^ self components
 		addSimpleNestedComponentNamed: aComponentName
@@ -238,7 +250,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName [
 	^ package
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName [
 	| package |
 	self components
@@ -254,7 +266,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 	^ package
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
 	| package |
 	self components
@@ -273,7 +285,7 @@ RwProjectDefinitionV2 >> addPackageNamed: packageName toComponentNamed: componen
 	^ package
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
@@ -287,13 +299,13 @@ RwProjectDefinitionV2 >> addPackages: somePackageNames forComponent: aComponent 
 		do: [ :packageName | self _addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: componentName [
 	^ packageNames
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	"return the path name of the new component"
 
@@ -305,7 +317,7 @@ RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNa
 		comment: ''
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"return the path name of the new component"
 
@@ -340,7 +352,7 @@ RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNa
 	^ theComponentName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self components
 		addPlatformNestedComponentNamed: aComponentName
@@ -348,7 +360,7 @@ RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName conditi
 		comment: commentString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> addProjectNamed: projectName toComponentNamed: toComponentName [
 	^ self components
 		addProjectNamed: projectName
@@ -364,7 +376,7 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self components
 		addSimpleComponentNamed: aComponentName
@@ -372,12 +384,20 @@ RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: cond
 		comment: commentString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
 	^ self components
 		addSimpleNestedComponentNamed: aComponentName
 		condition: condition
 		comment: commentString
+]
+
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addSubcomponentNamed: aComponentName condition: condition comment: aString [
+	^ self components
+		addSimpleNestedComponentNamed: aComponentName
+		condition: condition
+		comment: aString
 ]
 
 { #category : 'querying' }
@@ -416,7 +436,7 @@ RwProjectDefinitionV2 >> load: instanceMigrator [
 	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName [
 	self
 		movePackageNamed: aPackageName
@@ -424,7 +444,7 @@ RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aCompo
 		asPackageName: aPackageName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> movePackageNamed: aPackageName toComponentNamed: aComponentName asPackageName: newPackageName [
 	self components removePackageNamed: aPackageName.
 	self components
@@ -459,7 +479,7 @@ RwProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	^ super removePackage: aPackageDefinition
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: componentName [
 	"do not remove package from defintion, remove it from the named component only. 
 		Use removePackage:, if you want the package completely removed from definition"
@@ -470,7 +490,7 @@ RwProjectDefinitionV2 >> removePackageNamed: packageName fromComponentNamed: com
 	^ component
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwProjectDefinitionV2 >> renameComponentNamed: aComponentPath to: aComponentName [
 	^ self components renameComponentNamed: aComponentPath to: aComponentName
 ]

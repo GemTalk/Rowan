@@ -106,8 +106,10 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 	^ componentPackageNames
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	"add existing component named componentName to component named toComponentName"
+
 	| component |
 	component := self
 		componentNamed: toComponentName
@@ -146,7 +148,7 @@ RwResolvedLoadComponentsV2 >> addPackagesNamed: packageNames toComponentNamed: a
 		do: [ :packageName | self addPackageNamed: packageName toComponentNamed: aComponentName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwResolvedLoadComponentsV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	| component |
 	self components
@@ -173,7 +175,7 @@ RwResolvedLoadComponentsV2 >> addProjectNamed: projectName toComponentNamed: toC
 	component addProjectNamed: projectName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition [
 	| component |
 	self components
@@ -190,7 +192,7 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 	^ component
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
 	| component |
 	self components
@@ -208,7 +210,7 @@ RwResolvedLoadComponentsV2 >> addSimpleComponentNamed: aComponentName condition:
 	^ component
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
 	| component |
 	self components
@@ -226,7 +228,7 @@ RwResolvedLoadComponentsV2 >> addSimpleNestedComponentNamed: aComponentName cond
 	^ component
 ]
 
-{ #category : 'accessing' }
+{ #category : 'components to be cleaned up' }
 RwResolvedLoadComponentsV2 >> categoryComponentsFor: componentNameList [
 	"category components are the components listed in the top-level loaded components"
 

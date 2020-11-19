@@ -72,8 +72,20 @@ RwDefinedProject >> _validate: platformConfigurationAttributes [
 	^ self _resolvedProject _validate: platformConfigurationAttributes
 ]
 
-{ #category : 'components to be cleaned up' }
+{ #category : 'components' }
+RwDefinedProject >> addComponentNamed: componentName [
+	^ self addComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addComponentNamed: componentName comment: aString [
+	^ self _resolvedProject addComponentNamed: componentName comment: aString
+]
+
+{ #category : 'components' }
 RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toComponentName [
+	"add existing component named componentName to component named toComponentName"
+
 	^ self _resolvedProject
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
@@ -117,9 +129,11 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		comment: aString
 ]
 
-{ #category : 'components to be cleaned up' }
+{ #category : 'components v2.0' }
 RwDefinedProject >> addNewComponentNamed: componentName [
-	^ self _resolvedProject addNewComponentNamed: componentName
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self _resolvedProject addComponentNamed: componentName
 ]
 
 { #category : 'components to be cleaned up' }
@@ -156,13 +170,6 @@ RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toCom
 		addNewComponentNamed: aComponentName
 		toComponentNamed: toComponentName
 		condition: conditionPathArray
-		comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewNestedComponentNamed: aComponentName comment: aString [
-	^ self _resolvedProject
-		addNewNestedComponentNamed: aComponentName
 		comment: aString
 ]
 
@@ -250,14 +257,24 @@ RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: con
 		comment: commentString
 ]
 
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addTopLevelComponentNamed: componentName [
-	^ self _resolvedProject addTopLevelComponentNamed: componentName
+{ #category : 'components' }
+RwDefinedProject >> addSubcomponentNamed: componentName condition: condition [
+	^ self addSubcomponentNamed: componentName condition: condition comment: ''
 ]
 
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addTopLevelComponentNamed: componentName  condition: condition [
-	^ self _resolvedProject addTopLevelComponentNamed: componentName  condition: condition
+{ #category : 'components' }
+RwDefinedProject >> addSubcomponentNamed: componentName condition: condition comment: aString [
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+]
+
+{ #category : 'components v2.0' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName [
+	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+
+	^ self addComponentNamed: componentName
 ]
 
 { #category : 'accessing' }

@@ -13,7 +13,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 class >> newForResolvedProject: aResolvedP
 ]
 
 { #category : 'querying' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> allPackgeNamesIn: componentNameOrArrayOfNames [
+RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames [
 	| packageNames visited theBlock attributes componentNames |
 	visited := IdentitySet new.
 	packageNames := Set new.
@@ -145,32 +145,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedComponentDefinitions [
 	^ self resolvedProject _projectStructure copy
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames [
-
-	^ self resolvedProject loadedConfigurationNames
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames: configNames [
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames [
-
-	^ self resolvedProject loadedGroupNames
 ]
 
 { #category : 'actions' }
