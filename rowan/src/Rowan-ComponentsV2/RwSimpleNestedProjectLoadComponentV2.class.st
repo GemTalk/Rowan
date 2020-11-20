@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
+{ #category : 'ston' }
+RwSimpleNestedProjectLoadComponentV2 >> _stonReplacementClass [
+	^ RwSubcomponent
+]
+
 { #category : 'visiting' }
 RwSimpleNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 	^ aVisitor visitSimpleProjectLoadComponent: self

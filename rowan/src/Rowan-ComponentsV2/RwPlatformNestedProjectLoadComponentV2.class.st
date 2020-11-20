@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
+{ #category : 'ston' }
+RwPlatformNestedProjectLoadComponentV2 >> _stonReplacementClass [
+	^ RwPlatformSubcomponent
+]
+
 { #category : 'accessing' }
 RwPlatformNestedProjectLoadComponentV2 >> addComponentNamed: aComponentName [
 	self

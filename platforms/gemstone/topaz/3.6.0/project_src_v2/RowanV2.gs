@@ -57872,6 +57872,35 @@ conditionalPropertyMatchers
 		yourself
 %
 
+category: 'ston'
+method: RwComponent
+fromSton: stonReader
+	"Decode non-variable classes from a map of their instance variables and values.
+	Override to customize and add a matching #toSton: (see implementors)."
+
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			self class isVariable
+				ifTrue: [ self subclassResponsibility ]
+				ifFalse: [ 
+					| instanceVariableNames |
+					instanceVariableNames := self class allInstVarNames.
+					stonReader
+						parseMapDo: [ :instVarName :value | 
+							(self class == RwComponent and: [ instVarName = #'condition' ])
+								ifTrue: [
+									"we're skipping the condition instvar, assuming that #fromSton: has been forwarded from RwSimpleProjectLoadComponent 
+										and condition instance var isn't supported in RwComponent"
+									value ~= 'common'
+										ifTrue: [ 
+											"if the value is not common, then we'll throw an error, since we should not have top level components with conditions"
+											self
+												error:
+													'condition instance variable is ignored for RwComponent instances is convert component to a subcomponent' ] ]
+								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ]
+		ifFalse: [ super fromSton: stonReader ]
+%
+
 category: 'comparing'
 method: RwComponent
 hash
@@ -69868,6 +69897,15 @@ fromComponentsDirectory: componentsDirectory named: componentName
 	^ component
 %
 
+category: 'ston'
+classmethod: RwAbstractRowanProjectLoadComponentV2
+fromSton: stonReader
+	"Create a new instance and delegate decoding to instance side.
+	Override only when new instance should be created directly (see implementors). "
+	
+	^ self new fromSton: stonReader "since fromSton: could be forwarded to another instance, we need to return the result of #fromSton:"
+%
+
 category: 'instance creation'
 classmethod: RwAbstractRowanProjectLoadComponentV2
 fromUrl: specNameOrUrl
@@ -70164,6 +70202,16 @@ exportToUrl: directoryUrl
 	^ self copy initializeForExport
 		_exportToUrl: directoryUrl;
 		yourself
+%
+
+category: 'ston'
+method: RwAbstractRowanProjectLoadComponentV2
+fromSton: stonReader
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			self _stonReplacementClass
+				ifNotNil: [ :replacementClass | ^ replacementClass new fromSton: stonReader ] ].
+	^ super fromSton: stonReader
 %
 
 category: 'testing'
@@ -70543,6 +70591,12 @@ _readDoitsFrom: componentsRoot
 				ifFalse: [ self error: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
 %
 
+category: 'ston'
+method: RwAbstractRowanProjectLoadComponentV2
+_stonReplacementClass
+	^ nil
+%
+
 category: 'validation'
 method: RwAbstractRowanProjectLoadComponentV2
 _validateDoits
@@ -70683,6 +70737,12 @@ removeProjectNamed: aProjectName
 	self projectNames remove: aProjectName ifAbsent: [  ]
 %
 
+category: 'ston'
+method: RwSimpleProjectLoadComponentV2
+_stonReplacementClass
+	^ RwComponent
+%
+
 category: 'validation'
 method: RwSimpleProjectLoadComponentV2
 _validatedPackageNames
@@ -70707,6 +70767,12 @@ acceptVisitor: aVisitor
 	^ self
 		error:
 			'nested component cannot be used as a top-level configuration. The receiver is nested inside of top-level components'
+%
+
+category: 'ston'
+method: RwSimpleNestedProjectLoadComponentV2
+_stonReplacementClass
+	^ RwSubcomponent
 %
 
 ! Class implementation for 'RwPlatformNestedProjectLoadComponentV2'
@@ -70783,6 +70849,12 @@ projectNames
 	"a platform nested component may only reference package names --- OR conditionals may only be used by a leaf node"
 
 	^ #()
+%
+
+category: 'ston'
+method: RwPlatformNestedProjectLoadComponentV2
+_stonReplacementClass
+	^ RwPlatformSubcomponent
 %
 
 ! Class implementation for 'RwClassAdditionOrRemoval'

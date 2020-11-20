@@ -4837,6 +4837,9 @@ RwRowanSample9Test >> testSpec_0029 [
 	"https://github.com/dalehenrich/Rowan/issues/573"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
+[ 
+UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
+
 	loadSpec := self _loadSpecNamed: 'spec_0029'.
 
 	projectName := loadSpec projectName.
@@ -4875,6 +4878,7 @@ RwRowanSample9Test >> testSpec_0029 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+] ensure: [UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: []]
 ]
 
 { #category : 'tests' }

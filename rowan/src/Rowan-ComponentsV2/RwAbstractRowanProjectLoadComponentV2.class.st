@@ -33,6 +33,14 @@ RwAbstractRowanProjectLoadComponentV2 class >> fromComponentsDirectory: componen
 	^ component
 ]
 
+{ #category : 'ston' }
+RwAbstractRowanProjectLoadComponentV2 class >> fromSton: stonReader [
+	"Create a new instance and delegate decoding to instance side.
+	Override only when new instance should be created directly (see implementors). "
+	
+	^ self new fromSton: stonReader "since fromSton: could be forwarded to another instance, we need to return the result of #fromSton:"
+]
+
 { #category : 'instance creation' }
 RwAbstractRowanProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
 
@@ -214,6 +222,11 @@ RwAbstractRowanProjectLoadComponentV2 >> _readDoitsFrom: componentsRoot [
 					fileRef
 						readStreamDo: [ :fileStream | self doitDict at: postloadDoitName put: fileStream contents ] ]
 				ifFalse: [ self error: '"no doit file ' , postloadDoitName printString , ' found"' ] ]
+]
+
+{ #category : 'ston' }
+RwAbstractRowanProjectLoadComponentV2 >> _stonReplacementClass [
+	^ nil
 ]
 
 { #category : 'validation' }
@@ -482,6 +495,15 @@ RwAbstractRowanProjectLoadComponentV2 >> exportToUrl: directoryUrl [
 	^ self copy initializeForExport
 		_exportToUrl: directoryUrl;
 		yourself
+]
+
+{ #category : 'ston' }
+RwAbstractRowanProjectLoadComponentV2 >> fromSton: stonReader [
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ 
+			self _stonReplacementClass
+				ifNotNil: [ :replacementClass | ^ replacementClass new fromSton: stonReader ] ].
+	^ super fromSton: stonReader
 ]
 
 { #category : 'testing' }
