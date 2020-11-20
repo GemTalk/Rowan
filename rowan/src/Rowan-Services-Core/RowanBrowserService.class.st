@@ -213,39 +213,37 @@ RowanBrowserService >> openWindows [
 
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
-  organizer := ClassOrganizer new.	"when we call this method, our world has changed from a reload, etc."
-  testPackages := Set new.
-  testCount := 0.
-  testPackages := Set new.
-  testCount := 0.
-  (organizer allSubclassesOf: TestCase)
-    do: [ :sub | 
-      | packageName testMethodCount |
-      testMethodCount := (sub sunitSelectors
-        select: [ :each | each beginsWith: 'test' ]) size.	"sending #testSelectors was slower"
-      testCount := testCount + testMethodCount.
-      testMethodCount > 0
-        ifTrue: [ 
-          packageName := sub rowanPackageName.
-          packageName = Rowan unpackagedName
-            ifFalse: [ 
-              testPackages
-                add:
-                  (RowanPackageService new
-                    name: packageName;
-                    updateProjectName;
-                    yourself) ].
-          (Rowan image loadedClassExtensionsForClass: sub)
-            do: [ :loadedThing | 
-              testPackages
-                add:
-                  (RowanPackageService new
-                    name: loadedThing loadedPackage name;
-                    updateProjectName;
-                    yourself)	"don't update the entire package for performance improvement" ] ] ].
-  updateType := #'testPackages:'.
-  testPackages := testPackages asArray.
-  RowanCommandResult addResult: self
+	organizer := ClassOrganizer new.	"when we call this method, our world has changed from a reload, etc."
+	testPackages := Set new.
+	testCount := 0.
+	testPackages := Set new.
+	testCount := 0.
+	(organizer allSubclassesOf: TestCase)
+		do: [ :sub | 
+			| packageName testMethodCount |
+			testMethodCount := (sub sunitSelectors
+				select: [ :each | each beginsWith: 'test' ]) size.	"sending #testSelectors was slower"
+			testCount := testCount + testMethodCount.
+			testMethodCount > 0
+				ifTrue: [ 
+					packageName := sub rowanPackageName.
+					packageName = Rowan unpackagedName
+						ifFalse: [ 
+							testPackages
+								add:
+									((RowanPackageService forPackageNamed: packageName)
+										updateProjectName;
+										yourself) ].
+					(Rowan image loadedClassExtensionsForClass: sub)
+						do: [ :loadedThing | 
+							testPackages
+								add:
+									((RowanPackageService forPackageNamed: loadedThing loadedPackage name)
+										updateProjectName;
+										yourself)	"don't update the entire package for performance improvement" ] ] ].
+	updateType := #'testPackages:'.
+	testPackages := testPackages asArray.
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -367,11 +365,6 @@ RowanBrowserService >> selectedClass: object [
 { #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: projectNames [
 	projectNames do: [ :projectName | (Rowan projectNamed: projectName) unload ].
-	self updateProjects
-]
-
-{ #category : 'update' }
-RowanBrowserService >> update [
 	self updateProjects
 ]
 

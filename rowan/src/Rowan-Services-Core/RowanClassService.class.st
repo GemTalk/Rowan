@@ -319,34 +319,33 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 
 { #category : 'client commands' }
 RowanClassService >> copyClassTo: newClassName [
-  | newTemplate newClass newClassService index |
-  (Rowan image symbolList resolveSymbol: newClassName)
-    ifNotNil: [ ^ self inform: newClassName , ' already exists' ].
-  index := template findPattern: (Array with: name) startingAt: 1.
-  newTemplate := template copy.
-  newTemplate removeFrom: index to: index + name size - 1.
-  newTemplate insertAll: newClassName at: index.
-  newClass := GsCurrentSession currentSession execute: newTemplate.
-  newClassService := RowanClassService new name: newClassName.
-  self theClass thisClass
-    methodsDo: [ :selector :gsMethod | 
-      newClassService
-        compileMethod: gsMethod sourceString
-        behavior: newClass
-        symbolList: Rowan image symbolList
-        inCategory:
-          (self theClass thisClass categoryOfSelector: selector) asSymbol ].
-  self theClass thisClass class
-    methodsDo: [ :selector :gsMethod | 
-      newClassService
-        compileMethod: gsMethod sourceString
-        behavior: newClass class
-        symbolList: Rowan image symbolList
-        inCategory:
-          (self theClass thisClass class categoryOfSelector: selector) asSymbol ].
-  newClassService update.
-  (RowanPackageService new name: newClassService packageName) update.
-  (RowanDictionaryService new name: dictionaryName) update
+	| newTemplate newClass newClassService index |
+	(Rowan image symbolList resolveSymbol: newClassName)
+		ifNotNil: [ ^ self inform: newClassName , ' already exists' ].
+	index := template findPattern: (Array with: name) startingAt: 1.
+	newTemplate := template copy.
+	newTemplate removeFrom: index to: index + name size - 1.
+	newTemplate insertAll: newClassName at: index.
+	newClass := GsCurrentSession currentSession execute: newTemplate.
+	newClassService := RowanClassService new name: newClassName.
+	self theClass thisClass
+		methodsDo: [ :selector :gsMethod | 
+			newClassService
+				compileMethod: gsMethod sourceString
+				behavior: newClass
+				symbolList: Rowan image symbolList
+				inCategory: (self theClass thisClass categoryOfSelector: selector) asSymbol ].
+	self theClass thisClass class
+		methodsDo: [ :selector :gsMethod | 
+			newClassService
+				compileMethod: gsMethod sourceString
+				behavior: newClass class
+				symbolList: Rowan image symbolList
+				inCategory:
+					(self theClass thisClass class categoryOfSelector: selector) asSymbol ].
+	newClassService update.
+	(RowanPackageService forPackageNamed: newClassService packageName) update.
+	(RowanDictionaryService new name: dictionaryName) update
 ]
 
 { #category : 'Updating' }
@@ -700,7 +699,8 @@ RowanClassService >> moveMethods: methodServices to: category [
 	category first = $*
 		ifTrue: [ 
 			| packageService projectService |
-			packageService := RowanPackageService new name: (category copyWithout: $*).
+			packageService := RowanPackageService
+				forPackageNamed: (category copyWithout: $*).
 			packageService update.
 
 			projectService := RowanProjectService new name: packageService projectName.
@@ -756,11 +756,11 @@ RowanClassService >> oop: newValue [
 
 { #category : 'testing' }
 RowanClassService >> packageIsDirty [
-
 	| behavior |
 	behavior := self theClass.
-	behavior rowanPackageName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
-	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
+	behavior rowanPackageName = Rowan unpackagedName
+		ifTrue: [ ^ true ].	"avoid a refresh by assuming it's dirty"
+	^ (RowanPackageService forPackageNamed: behavior rowanPackageName) rowanDirty
 ]
 
 { #category : 'Accessing' }
@@ -1264,11 +1264,10 @@ RowanClassService >> updateMethodsAfterRenameFrom: oldClassName to: newClassName
 { #category : 'updates' }
 RowanClassService >> updatePackageProject [
 	| packageService projectService |
-
-	packageService := RowanPackageService new name: packageName. 
-	packageService update. 
-	projectService := RowanProjectService new name: projectName. 
-	projectService update.
+	packageService := RowanPackageService forPackageNamed: packageName.
+	packageService updateIsDirty.
+	projectService := RowanProjectService new name: projectName.
+	projectService updateIsDirty
 ]
 
 { #category : 'private' }
@@ -1292,13 +1291,11 @@ RowanClassService >> updateSymbols: newSymbols [
 
 { #category : 'updates' }
 RowanClassService >> updateTests [
-  "update the test browsers on certain operations"
+	"update the test browsers on certain operations"
 
-  RowanBrowserService new packagesWithTests.
-  (RowanPackageService new
-    name: packageName;
-    yourself) testClasses.
-  RowanCommandResult addResult: self update
+	RowanBrowserService new packagesWithTests.
+	(RowanPackageService forPackageNamed: packageName) testClasses.
+	RowanCommandResult addResult: self update
 ]
 
 { #category : 'Accessing' }

@@ -376,6 +376,12 @@ RowanPackageService >> updateInternalService: updatedService [
 		]].
 ]
 
+{ #category : 'rowan' }
+RowanPackageService >> updateIsDirty [
+
+	isDirty := self isDirty.
+]
+
 { #category : 'updates' }
 RowanPackageService >> updateProject [
 	| projectService |

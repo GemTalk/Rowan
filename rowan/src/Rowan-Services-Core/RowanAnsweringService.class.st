@@ -476,11 +476,11 @@ RowanAnsweringService >> needsCommit [
 
 { #category : 'client commands' }
 RowanAnsweringService >> newPackageNamed: packageName [
-  | packageService |
-  packageService := RowanPackageService new name: packageName.
-  packageService update.
-  answer := packageService.
-  RowanCommandResult addResult: self
+	| packageService |
+	packageService := RowanPackageService forPackageNamed: packageName.
+	packageService update.
+	answer := packageService.
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
@@ -531,29 +531,29 @@ RowanAnsweringService >> removeMethodHistoryFor: methodService [
 
 { #category : 'client commands' }
 RowanAnsweringService >> resolveAsService: name [
-  | projectService packageService classService dictionaryService |
-  projectService := RowanProjectService new name: name.
-  projectService update projectIsLoaded
-    ifTrue: [ 
-      answer := projectService.
-      ^ RowanCommandResult addResult: self ].
-  packageService := RowanPackageService new name: name.
-  packageService update projectName
-    ifNotNil: [ 
-      answer := packageService.
-      ^ RowanCommandResult addResult: self ].
-  dictionaryService := RowanDictionaryService new name: name.
-  dictionaryService update classes notEmpty
-    ifTrue: [ 
-      answer := dictionaryService.
-      ^ RowanCommandResult addResult: self ].
-  classService := RowanClassService new name: name.
-  classService update projectName
-    ifNotNil: [ 
-      answer := classService.
-      ^ RowanCommandResult addResult: self ].
-  answer := nil.
-  RowanCommandResult addResult: self
+	| projectService packageService classService dictionaryService |
+	projectService := RowanProjectService new name: name.
+	projectService update projectIsLoaded
+		ifTrue: [ 
+			answer := projectService.
+			^ RowanCommandResult addResult: self ].
+	packageService := RowanPackageService forPackageNamed: name.
+	packageService update projectName
+		ifNotNil: [ 
+			answer := packageService.
+			^ RowanCommandResult addResult: self ].
+	dictionaryService := RowanDictionaryService new name: name.
+	dictionaryService update classes notEmpty
+		ifTrue: [ 
+			answer := dictionaryService.
+			^ RowanCommandResult addResult: self ].
+	classService := RowanClassService new name: name.
+	classService update projectName
+		ifNotNil: [ 
+			answer := classService.
+			^ RowanCommandResult addResult: self ].
+	answer := nil.
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }

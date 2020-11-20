@@ -619,6 +619,12 @@ RowanProjectService >> updateInternalService: updatedService [
 		]].
 ]
 
+{ #category : 'other' }
+RowanProjectService >> updateIsDirty [
+
+	isDirty := self isDirty
+]
+
 { #category : 'testing' }
 RowanProjectService >> wasDeleted [
   ^ self projectIsLoaded not
