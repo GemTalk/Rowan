@@ -370,6 +370,11 @@ RowanBrowserService >> unloadProjectsNamed: projectNames [
 	self updateProjects
 ]
 
+{ #category : 'update' }
+RowanBrowserService >> update [
+	self updateProjects
+]
+
 { #category : 'client commands' }
 RowanBrowserService >> updateDictionaries [
 

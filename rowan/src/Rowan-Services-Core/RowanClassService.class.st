@@ -1205,7 +1205,7 @@ RowanClassService >> theClass [
 
 { #category : 'updates' }
 RowanClassService >> update [
-
+	super update.
 	self updateClass.
 ]
 

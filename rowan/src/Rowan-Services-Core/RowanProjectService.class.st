@@ -599,6 +599,7 @@ RowanProjectService >> unload [
 
 { #category : 'update' }
 RowanProjectService >> update [
+	super update.
 	self refresh.
 ]
 

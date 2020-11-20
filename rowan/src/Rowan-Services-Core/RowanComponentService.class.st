@@ -102,7 +102,8 @@ RowanComponentService >> subcomponentsOf: rwProject [
 
 { #category : 'updating' }
 RowanComponentService >> update [
-	self updatePackageServices.
+	super update.
+	self updatePackageServices
 ]
 
 { #category : 'clientCommands' }

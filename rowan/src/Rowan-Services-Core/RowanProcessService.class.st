@@ -101,7 +101,7 @@ RowanProcessService >> status: object [
 
 { #category : 'updating' }
 RowanProcessService >> update [
-
+	super update. 
 	self initialize: (Object _objectForOop: oop) status: 'suspended'.
 	RowanCommandResult addResult: self.
 ]

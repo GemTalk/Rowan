@@ -795,6 +795,7 @@ RowanMethodService >> testResult [
 
 { #category : 'updates' }
 RowanMethodService >> update [
+	super update.
 	self isUnboundMethod ifFalse:[
 		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
 		self wasDeleted ifTrue:[

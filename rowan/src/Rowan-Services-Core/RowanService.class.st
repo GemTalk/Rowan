@@ -21,7 +21,8 @@ Class {
 		'commandArgs',
 		'updateType',
 		'organizer',
-		'updates'
+		'updates',
+		'wasUpdated'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -346,8 +347,8 @@ RowanService >> hierarchiesByLevel: hierarchies [
 
 { #category : 'initialization' }
 RowanService >> initialize [
-
-	updates := Array new
+	updates := Array new.
+	wasUpdated := false
 ]
 
 { #category : 'testing' }
@@ -618,8 +619,9 @@ RowanService >> symbolDictionaryNamed: aName [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'update' }
 RowanService >> update [
+	wasUpdated := true
 ]
 
 { #category : 'update' }
