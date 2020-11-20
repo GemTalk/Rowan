@@ -71,7 +71,25 @@ Since **subcomponents** have a *condition* it makes sense to organize **subcompo
 
 ### CategoryComponent and CategorySubcomponent
 The **categoryComponent** and **categorySubcomponent** are used to provide code organization within a package/class browser.
+The current Jadeite Project browser
+displays the list of projects, then list of packages in selected project, then list of classes in selected package, etc: 
+<img src="https://github.com/GemTalk/Rowan/blob/issue_660/docs/Jadeite_project_browser.png" alt="Jadite Project Browser" width="1000px" >
+When category components are specified in a project, the packages pane is replaced by a hierarchical category component view composed of the list of the names of the **categoryComponents** directly referenced from the loaded **components**.
+The package pane has a *package* tab and a *category* tab. 
+When the *package* tab is selected, the list of packages in the project will be displayed.
+When the *category* tab is selected, the list of **categoryComponents** referenced by the loaded **components** will be displayed.
 
-<img src="https://github.com/GemTalk/Rowan/blob/issue_660/docs/Jadeite_project_browser.png" alt="Jadite Project Browser" width="500px" >
+Selecting a **categoryComponent** or **categorySubcomponent** will cause list of classes referenced by the component to be displayed in the classes pane.
+Expanding the selected component will display the list of **categorySubcomponents** in the selected component and so on. 
+
+A **categoryComponents** can only be referenced by **components**.
+A **categoryComponents** can reference only **categorySubcomponents**.
+
+A **categorySubcomponents** can only be referenced by **categoryComponents** or **categorySubcomponents**.
+A **categorySubcomponents** may reference  **categorySubcomponents**, **components**, and **subcomponents**.
+
+**categoryComponent** and **categorySubcomponent** are not conditional and do not participate in loading decisions.
+If a component referenced by a **categoryComponent** or **categorySubcomponent** is not loaded, then the component is ignored for display purposes.
+ 
 
 [1]: https://github.com/dalehenrich/metacello-work
