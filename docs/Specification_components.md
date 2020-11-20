@@ -72,6 +72,6 @@ Since **subcomponents** have a *condition* it makes sense to organize **subcompo
 ### CategoryComponent and CategorySubcomponent
 The **categoryComponent** and **categorySubcomponent** are used to provide code organization within a package/class browser.
 
-![Jadeite Project Browser](,/Jadeite_project_browser.png?raw=true "Jadeite Project Browser")
+![Jadeite Project Browser](./Jadeite_project_browser.png?raw=true "Jadeite Project Browser")
 
 [1]: https://github.com/dalehenrich/metacello-work
