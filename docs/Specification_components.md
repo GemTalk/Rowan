@@ -17,7 +17,6 @@ When a **component** is loaded, the listed packages are loaded.
 When a **component** is loaded, the packages listed by the referenced components are loaded.
 The list may reference **components** or **subcomponents** by name and recursive references (direct or indirect) are allowed.
 
-An active **component** is visible in a code browser and as such provides organization for classes within the browser.
 #### Components and Tests
 A **component** should have an associated set of *tests* that validates the public API for the component.
 As a loadable unit there is an implied contract between the developers and users of the component that the public API implemented by the classes and methods loaded by the component and the test* are expected to validate that contract.
@@ -32,8 +31,6 @@ Similar to the **component**, a **subcomponent** is composed of:
 - A *postload doit name*. 
 - A list of *package names*. 
 - A list of *component names*.
-
-An `active` **subcomponent** may be visible in a code browser and as such can be used to provide finer grained organization for classes within the browser, than that provided by the **components**.
 
 #### Conditional Subcomponents
 A **subcomponent** has a *condition* associated with it. 
@@ -71,5 +68,10 @@ The pattern 'pharo7.[1-5]' will match pharo version strings in a closed range fr
 ### Component directory structure
 As mentioned earlier, it is expected that **components** be located in the *components directory*. It then follows that **subcomponents** should be located in subdirectories, to segregate the **subcomponents** and **components**.
 Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*
+
+### CategoryComponent and CategorySubcomponent
+The **categoryComponent** and **categorySubcomponent** are used to provide code organization within a package/class browser.
+
+![Jadeite Project Browser](,/Jadeite_project_browser.png?raw=true "Jadeite Project Browser")
 
 [1]: https://github.com/dalehenrich/metacello-work
