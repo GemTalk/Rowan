@@ -311,6 +311,32 @@ RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition 
 		comment: aString
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
+	| visited theBlock componentNames subs |
+	visited := IdentitySet new.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			aBlock value: component.
+			visited add: component.
+			subs := self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	^ componentNames
+		do: [ :componentName | 
+			subs := self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ]
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
@@ -1088,6 +1114,32 @@ RwResolvedProjectV2 >> revision [
 { #category : 'load specification' }
 RwResolvedProjectV2 >> revision: aRevisionString [
 	^ self _loadSpecification revision: aRevisionString
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock [
+	| aComponent subcomponents |
+	subcomponents := {}.
+	aComponent := self
+		componentNamed: componentName
+		ifAbsent: [ 
+			"noneBlock, if it returns, should answer a component"
+			noneBlock cull: componentName ].
+	(matchBlock value: aComponent)
+		ifFalse: [ 
+			"The component is not loadable, so ignore it's subcomponents"
+			^ subcomponents ].
+	aComponent componentNames
+		do: [ :subcomponentName | 
+			| subcomponent |
+			subcomponent := self
+				componentNamed: subcomponentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: subcomponentName ].
+			(matchBlock value: subcomponent)
+				ifTrue: [ subcomponents add: subcomponent ] ].
+	^ subcomponents
 ]
 
 { #category : '-- loader compat --' }

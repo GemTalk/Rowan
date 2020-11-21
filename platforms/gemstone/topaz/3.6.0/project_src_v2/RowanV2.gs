@@ -50332,6 +50332,12 @@ componentNames
 
 category: 'accessing'
 method: RwProject
+componentsRoot
+	^ self _loadedProject componentsRoot
+%
+
+category: 'accessing'
+method: RwProject
 currentBranchName
 
 	| rootPath |
@@ -63953,6 +63959,33 @@ addSubcomponentNamed: componentName condition: condition comment: aString
 		comment: aString
 %
 
+category: 'components'
+method: RwResolvedProjectV2
+allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock
+	| visited theBlock componentNames subs |
+	visited := IdentitySet new.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			aBlock value: component.
+			visited add: component.
+			subs := self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	^ componentNames
+		do: [ :componentName | 
+			subs := self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ]
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 checkout: aCommittish
@@ -64814,6 +64847,33 @@ category: 'load specification'
 method: RwResolvedProjectV2
 revision: aRevisionString
 	^ self _loadSpecification revision: aRevisionString
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
+	| aComponent subcomponents |
+	subcomponents := {}.
+	aComponent := self
+		componentNamed: componentName
+		ifAbsent: [ 
+			"noneBlock, if it returns, should answer a component"
+			noneBlock cull: componentName ].
+	(matchBlock value: aComponent)
+		ifFalse: [ 
+			"The component is not loadable, so ignore it's subcomponents"
+			^ subcomponents ].
+	aComponent componentNames
+		do: [ :subcomponentName | 
+			| subcomponent |
+			subcomponent := self
+				componentNamed: subcomponentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: subcomponentName ].
+			(matchBlock value: subcomponent)
+				ifTrue: [ subcomponents add: subcomponent ] ].
+	^ subcomponents
 %
 
 category: '-- loader compat --'
@@ -85576,6 +85636,33 @@ newForResolvedProject: aResolvedProject
 
 category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
+allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock
+	| visited theBlock componentNames subs |
+	visited := IdentitySet new.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			aBlock value: component.
+			visited add: component.
+			subs := self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	^ componentNames
+		do: [ :componentName | 
+			subs := self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ]
+%
+
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
 allPackageNamesIn: componentNameOrArrayOfNames
 	| packageNames visited theBlock attributes componentNames |
 	visited := IdentitySet new.
@@ -85652,6 +85739,12 @@ componentForPackageNamed: packageName
 	^ self components componentForPackageNamed: packageName
 %
 
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+componentNamed: aComponentName ifAbsent: absentBlock
+	^ self components componentNamed: aComponentName ifAbsent: absentBlock
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 componentNames
@@ -85664,6 +85757,12 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 components
 
 	^ handle _projectStructure
+%
+
+category: 'properties'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+componentsRoot
+	^ self resolvedProject componentsRoot
 %
 
 category: 'properties'
@@ -85896,7 +85995,6 @@ subcomponentsOf: componentName attributes: attributes do: aBlock
 	| subcomponents |
 	subcomponents := self components
 		subcomponentsOf: componentName
-		resolvedProject: self
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [ ^ self ].
 	^ subcomponents do: aBlock
@@ -85908,7 +86006,6 @@ subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
 	| subcomponents |
 	subcomponents := self components
 		subcomponentsOf: componentName
-		resolvedProject: self
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [^ noneBlock value ].
 	subcomponents isEmpty
@@ -85932,6 +86029,33 @@ subcomponentsOf: componentName ifNone: noneBlock
 		subcomponentsOf: componentName
 		attributes: self platformConditionalAttributes
 		ifNone: noneBlock
+%
+
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
+	| aComponent subcomponents |
+	subcomponents := {}.
+	aComponent := self
+		componentNamed: componentName
+		ifAbsent: [ 
+			"noneBlock, if it returns, should answer a component"
+			noneBlock  cull: componentName ].
+	(matchBlock value: aComponent)
+		ifFalse: [ 
+			"The component is not loadable, so ignore it's subcomponents"
+			^ subcomponents ].
+	aComponent componentNames
+		do: [ :subcomponentName | 
+			| subcomponent |
+			subcomponent := self
+				componentNamed: subcomponentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock  cull: subcomponentName ].
+			(matchBlock value: subcomponent)
+				ifTrue: [ subcomponents add: subcomponent ] ].
+	^ subcomponents
 %
 
 category: 'accessing'
@@ -88135,14 +88259,14 @@ renameComponentNamed: aComponentPath to: aComponentName
 
 category: 'querying'
 method: RwResolvedLoadComponentsV2
-subcomponentsOf: componentName resolvedProject: resolvedProject matchBlock: matchBlock ifNone: noneBlock
+subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
 		componentNamed: componentName
 		ifAbsent: [ 
-			"read from disk if not present?"
-			^ noneBlock value ].
+			"noneBlock, if it returns, should answer a component"
+			noneBlock  cull: componentName ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -88153,8 +88277,8 @@ subcomponentsOf: componentName resolvedProject: resolvedProject matchBlock: matc
 			subcomponent := self
 				componentNamed: subcomponentName
 				ifAbsent: [ 
-					"read from disk if not present?"
-					^ noneBlock value ].
+					"noneBlock, if it returns, should answer a component"
+					noneBlock  cull: subcomponentName ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents
@@ -96228,6 +96352,21 @@ category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition
 name
   ^ self key
+%
+
+! Class extensions for 'RwAbstractComponent'
+
+!		Class methods for 'RwAbstractComponent'
+
+category: '*rowan-gemstone-componentsv2'
+classmethod: RwAbstractComponent
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ self _readStonFrom: stream ]
 %
 
 ! Class extensions for 'RwAbstractProjectComponentVisitorV2'

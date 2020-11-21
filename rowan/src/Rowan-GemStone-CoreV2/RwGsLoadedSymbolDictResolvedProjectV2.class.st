@@ -13,6 +13,32 @@ RwGsLoadedSymbolDictResolvedProjectV2 class >> newForResolvedProject: aResolvedP
 ]
 
 { #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
+	| visited theBlock componentNames subs |
+	visited := IdentitySet new.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			aBlock value: component.
+			visited add: component.
+			subs := self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	^ componentNames
+		do: [ :componentName | 
+			subs := self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock.
+			subs do: theBlock ]
+]
+
+{ #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames [
 	| packageNames visited theBlock attributes componentNames |
 	visited := IdentitySet new.
@@ -83,6 +109,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
 	^ self components componentForPackageNamed: packageName
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
+	^ self components componentNamed: aComponentName ifAbsent: absentBlock
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
 
@@ -93,6 +124,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
 RwGsLoadedSymbolDictResolvedProjectV2 >> components [
 
 	^ handle _projectStructure
+]
+
+{ #category : 'properties' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
+	^ self resolvedProject componentsRoot
 ]
 
 { #category : 'properties' }
@@ -298,7 +334,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attribut
 	| subcomponents |
 	subcomponents := self components
 		subcomponentsOf: componentName
-		resolvedProject: self
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [ ^ self ].
 	^ subcomponents do: aBlock
@@ -309,7 +344,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attribut
 	| subcomponents |
 	subcomponents := self components
 		subcomponentsOf: componentName
-		resolvedProject: self
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [^ noneBlock value ].
 	subcomponents isEmpty
@@ -331,6 +365,32 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: 
 		subcomponentsOf: componentName
 		attributes: self platformConditionalAttributes
 		ifNone: noneBlock
+]
+
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock [
+	| aComponent subcomponents |
+	subcomponents := {}.
+	aComponent := self
+		componentNamed: componentName
+		ifAbsent: [ 
+			"noneBlock, if it returns, should answer a component"
+			noneBlock  cull: componentName ].
+	(matchBlock value: aComponent)
+		ifFalse: [ 
+			"The component is not loadable, so ignore it's subcomponents"
+			^ subcomponents ].
+	aComponent componentNames
+		do: [ :subcomponentName | 
+			| subcomponent |
+			subcomponent := self
+				componentNamed: subcomponentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock  cull: subcomponentName ].
+			(matchBlock value: subcomponent)
+				ifTrue: [ subcomponents add: subcomponent ] ].
+	^ subcomponents
 ]
 
 { #category : 'accessing' }

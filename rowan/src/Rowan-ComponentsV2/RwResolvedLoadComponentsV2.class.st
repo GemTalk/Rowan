@@ -490,14 +490,14 @@ RwResolvedLoadComponentsV2 >> renameComponentNamed: aComponentPath to: aComponen
 ]
 
 { #category : 'querying' }
-RwResolvedLoadComponentsV2 >> subcomponentsOf: componentName resolvedProject: resolvedProject matchBlock: matchBlock ifNone: noneBlock [
+RwResolvedLoadComponentsV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock [
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
 		componentNamed: componentName
 		ifAbsent: [ 
-			"read from disk if not present?"
-			^ noneBlock value ].
+			"noneBlock, if it returns, should answer a component"
+			noneBlock  cull: componentName ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -508,8 +508,8 @@ RwResolvedLoadComponentsV2 >> subcomponentsOf: componentName resolvedProject: re
 			subcomponent := self
 				componentNamed: subcomponentName
 				ifAbsent: [ 
-					"read from disk if not present?"
-					^ noneBlock value ].
+					"noneBlock, if it returns, should answer a component"
+					noneBlock  cull: subcomponentName ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

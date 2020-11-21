@@ -152,6 +152,11 @@ RwProject >> componentNames [
 ]
 
 { #category : 'accessing' }
+RwProject >> componentsRoot [
+	^ self _loadedProject componentsRoot
+]
+
+{ #category : 'accessing' }
 RwProject >> currentBranchName [
 
 	| rootPath |
