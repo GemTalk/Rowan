@@ -286,13 +286,16 @@ RowanPackageService >> selectedClass: classService [
 
 { #category : 'perform' }
 RowanPackageService >> servicePerform: symbol withArguments: collection [
-  | wasClean |
-  self isUpdatingButFoundToBeDeleted
-    ifTrue: [ ^ self handleDeletedService ].
-  wasClean := self arePackageAndProjectClean.
-  super servicePerform: symbol withArguments: collection.
-  wasClean
-    ifTrue: [ self updateProject ]
+	| wasClean projectService |
+	self isUpdatingButFoundToBeDeleted
+		ifTrue: [ ^ self handleDeletedService ].
+	wasClean := self arePackageAndProjectClean.
+	super servicePerform: symbol withArguments: collection.
+	wasClean
+		ifTrue: [ 
+			projectService := RowanProjectService new name: projectName.
+			projectService updateIsDirty.
+			RowanCommandResult addResult: projectService ]
 ]
 
 { #category : 'commands support' }
