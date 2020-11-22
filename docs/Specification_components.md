@@ -91,5 +91,59 @@ A **categorySubcomponents** may reference  **categorySubcomponents**, **componen
 **categoryComponent** and **categorySubcomponent** are not conditional and do not participate in loading decisions.
 If a component referenced by a **categoryComponent** or **categorySubcomponent** is not loaded, then the component is ignored for display purposes.
  
-
+### Examples
+#### Query for list of ALL components, packages and conditions
+Returns an array of 4 dictionaries:
+1. **components** is a map of all components on disk indexed by component name.
+2. **packages** is a map all components on disk indexed by package name.
+3. **conditions** is a map of all components and packages on disk indexed by condition.
+4. **platformConditions** is a map all components and packages on disk indexed by platform condition array.
+```smalltalk
+|  project components packages conditions platformConditions notFoundBlock |
+project := Rowan projectNamed: 'Rowan'.
+components := Dictionary new.
+packages := Dictionary new.
+conditions := Dictionary new.
+platformConditions := Dictionary new.
+notFoundBlock := [:missingComponentName |
+		| missingComponent |
+		missingComponent := RwAbstractComponent 
+			fromComponentsDirectory: project componentsRoot
+			named: missingComponentName.
+		components at: missingComponentName put: missingComponent packageNames.
+		missingComponent ].
+project _loadedProject 
+	allComponentsIn: 'Rowan' 
+	matchBlock: [:ignored | true ] 
+	notFound: notFoundBlock
+	do: [:component | 
+		| condition |
+		condition := component condition.
+		condition _isArray
+			ifTrue: [ 
+				| dict |
+				dict := platformConditions at: condition ifAbsentPut:  [ Dictionary new ].
+				(dict at: 'packages' ifAbsentPut: [ Set new])
+					addAll: component packageNames.
+				(dict at: 'components' ifAbsentPut: [ IdentitySet new])
+					add: component ]
+			ifFalse: [ 
+				| dict |
+				dict := conditions at: condition ifAbsentPut:  [ Dictionary new ].
+				(dict at: 'packages' ifAbsentPut: [ Set new])
+					addAll: component packageNames.
+				(dict at: 'components' ifAbsentPut: [ IdentitySet new])
+					add: component.
+ 				(dict at: 'allPackageNames' ifAbsentPut: [ Set new])
+					addAll: 
+						(project _loadedProject
+							allPackageNamesIn: component name 
+							matchBlock: [:ignored | true ] 
+							notFound: notFoundBlock) ].
+		components at: component name put: component.
+		component packageNames do: [:packageName |
+			packages at: packageName ifPresent: [ self halt: 'package duplication'].
+			packages at: packageName put: component ] ].
+{ components . packages . conditions . platformConditions }
+```
 [1]: https://github.com/dalehenrich/metacello-work

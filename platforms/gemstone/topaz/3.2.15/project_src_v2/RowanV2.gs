@@ -86413,6 +86413,40 @@ allPackageNamesIn: componentNameOrArrayOfNames
 	^ packageNames asArray sort
 %
 
+category: 'querying'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+allPackageNamesIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock
+	| packageNames visited theBlock attributes componentNames |
+	visited := IdentitySet new.
+	packageNames := Set new.
+	attributes := self platformConditionalAttributes.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			packageNames addAll: component packageNames.
+			visited add: component.
+			(self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock) do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	componentNames
+		do: [ :componentName | 
+			| aComponent |
+			aComponent := self components
+				componentNamed: componentName
+				ifAbsent: [ notFoundBlock cull: componentName ].
+			packageNames addAll: aComponent packageNames.
+			visited add: aComponent.
+			(self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock) do: theBlock ].
+	^ packageNames asArray sort
+%
+
 category: 'definitions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 asDefinition
