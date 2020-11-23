@@ -3,7 +3,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'v1',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/v1/deprecated/Definitions',
 		'common/v1/platforms/Definitions'
 	],
 	#packageNames : [

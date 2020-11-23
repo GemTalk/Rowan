@@ -3,7 +3,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'v1',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/tests/v1/deprecated/Tests'
 	],
 	#packageNames : [
 		'Rowan-TestsV1'
