@@ -58654,7 +58654,7 @@ initialize
 category: 'ston'
 method: RwComponent
 instVarNamesInOrderForSton
-	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
 category: 'accessing'
