@@ -5,7 +5,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/platforms/Specifications',
 		'common/tests/Specifications',
-		'common/v1/Specifications',
 		'common/v2/Specifications'
 	],
 	#packageNames : [

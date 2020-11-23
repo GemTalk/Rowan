@@ -7,7 +7,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/stubs/Core',
 		'common/tests/Core',
 		'common/tonel/Core',
-		'common/v1/Core',
 		'common/v2/Core'
 	],
 	#packageNames : [

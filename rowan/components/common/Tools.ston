@@ -4,7 +4,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/platforms/Tools',
-		'common/v1/Tools',
 		'common/v2/Tools'
 	],
 	#packageNames : [
