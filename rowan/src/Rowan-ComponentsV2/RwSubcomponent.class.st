@@ -38,6 +38,13 @@ RwSubcomponent >> conditionalPropertyMatchers [
 		yourself
 ]
 
+{ #category : 'ston' }
+RwSubcomponent >> excludedInstVars [
+	"restore full #instVarNamesInOrderForSton - no exclusions (see super implementation)"
+
+	^ #()
+]
+
 { #category : 'initialization' }
 RwSubcomponent >> initialize [
 	super initialize.

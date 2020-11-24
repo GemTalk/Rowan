@@ -58611,6 +58611,14 @@ conditionalPropertyMatchers
 
 category: 'ston'
 method: RwComponent
+excludedInstVars
+	"it's in #instVarNamesInOrderForSton, but not defined in this class"
+
+	^ #(#'condition')
+%
+
+category: 'ston'
+method: RwComponent
 fromSton: stonReader
 	"Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
@@ -58654,7 +58662,7 @@ initialize
 category: 'ston'
 method: RwComponent
 instVarNamesInOrderForSton
-	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
 category: 'accessing'
@@ -58715,6 +58723,14 @@ conditionalPropertyMatchers
 	^ Dictionary new
 		at: {(self _platformPatternMatcherFor: self condition)} put: {};
 		yourself
+%
+
+category: 'ston'
+method: RwSubcomponent
+excludedInstVars
+	"restore full #instVarNamesInOrderForSton - no exclusions (see super implementation)"
+
+	^ #()
 %
 
 category: 'initialization'

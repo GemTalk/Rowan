@@ -42,6 +42,13 @@ RwComponent >> conditionalPropertyMatchers [
 ]
 
 { #category : 'ston' }
+RwComponent >> excludedInstVars [
+	"it's in #instVarNamesInOrderForSton, but not defined in this class"
+
+	^ #(#'condition')
+]
+
+{ #category : 'ston' }
 RwComponent >> fromSton: stonReader [
 	"Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
@@ -82,7 +89,7 @@ RwComponent >> initialize [
 
 { #category : 'ston' }
 RwComponent >> instVarNamesInOrderForSton [
-	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
 
 { #category : 'accessing' }
