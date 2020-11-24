@@ -5955,7 +5955,7 @@ doit
 	inDictionary: RowanTools
 	options: #( #logCreation )
 )
-		category: 'Rowan-ComponentsV2';
+		category: 'Rowan-Components';
 		immediateInvariant.
 true.
 %
@@ -5973,7 +5973,7 @@ doit
 	inDictionary: RowanTools
 	options: #( #logCreation )
 )
-		category: 'Rowan-ComponentsV2';
+		category: 'Rowan-Components';
 		immediateInvariant.
 true.
 %
@@ -5991,7 +5991,7 @@ doit
 	inDictionary: RowanTools
 	options: #( #logCreation )
 )
-		category: 'Rowan-ComponentsV2';
+		category: 'Rowan-Components';
 		immediateInvariant.
 true.
 %
@@ -6009,7 +6009,7 @@ doit
 	inDictionary: RowanTools
 	options: #( #logCreation )
 )
-		category: 'Rowan-ComponentsV2';
+		category: 'Rowan-Components';
 		immediateInvariant.
 true.
 %
@@ -9365,7 +9365,7 @@ doit
 	inDictionary: RowanTools
 	options: #( #logCreation )
 )
-		category: 'Rowan-ComponentsV2';
+		category: 'Rowan-Components';
 		immediateInvariant.
 true.
 %
@@ -57089,6 +57089,17 @@ fromComponentsDirectory: componentsDirectory named: componentName
 
 category: 'instance creation'
 classmethod: RwAbstractComponent
+fromFile: filePath
+	filePath asFileReference
+		readStreamDo: [ :fileStream | 
+			| stream |
+			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
+			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+			^ self _readStonFrom: stream ]
+%
+
+category: 'instance creation'
+classmethod: RwAbstractComponent
 fromUrl: specNameOrUrl
 
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
@@ -96402,21 +96413,6 @@ category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition
 name
   ^ self key
-%
-
-! Class extensions for 'RwAbstractComponent'
-
-!		Class methods for 'RwAbstractComponent'
-
-category: '*rowan-gemstone-componentsv2'
-classmethod: RwAbstractComponent
-fromFile: filePath
-	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ self _readStonFrom: stream ]
 %
 
 ! Class extensions for 'RwAbstractProjectComponentVisitorV2'

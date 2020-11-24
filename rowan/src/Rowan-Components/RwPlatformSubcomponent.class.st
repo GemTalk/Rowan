@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPlatformSubcomponent',
 	#superclass : 'RwSubcomponent',
-	#category : 'Rowan-ComponentsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'accessing' }

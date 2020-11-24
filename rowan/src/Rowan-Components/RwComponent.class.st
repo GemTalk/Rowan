@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwComponent',
 	#superclass : 'RwAbstractComponent',
-	#category : 'Rowan-ComponentsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'validation' }
