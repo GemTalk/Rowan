@@ -97,7 +97,7 @@ From experience with Metacello, t is clear that a pattern is also needed that al
 The pattern 'gs3.[1-]' will do an open ended match ot gemstone version strings from '3.1.0' up to, but not including version '4.0'.
 The pattern 'pharo7.[1-5]' will match pharo version strings in a closed range from '7.1' through '7.5'.
 
-Here's an example of a **RwPlatformSubcomponent** with a *package* and a *condition* of 'platformA':
+Here's a sample of a **RwPlatformSubcomponent** with a *package* and a *condition* of 'platformA':
 ```ston
 RwPlatformSubcomponent {
 	#name : 'tests/alt1/platform/platformA/Tests',
@@ -115,7 +115,8 @@ RwPlatformSubcomponent {
 
 ### Component directory structure
 As mentioned earlier, it is expected that **components** be located in the *components directory*. It then follows that **subcomponents** should be located in subdirectories, to segregate the **subcomponents** and **components**.
-Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*
+Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*.
+
 Here's a picture of an example component directory structure:
 <img src="https://github.com/GemTalk/Rowan/blob/issue_660/docs/component_directory_structure.png" alt="component directory structure" width="250px" >
 ### CategoryComponent and CategorySubcomponent
