@@ -17,7 +17,7 @@ When a **component** is loaded, the listed packages are loaded.
 When a **component** is loaded, the packages listed by the referenced components are loaded.
 The list may reference **components** or **subcomponents** by name and recursive references (direct or indirect) are allowed.
 
-Here's a sample **RwComponent** ston file with two **subcomponents**:
+Here's a sample **component** ston file with two **subcomponents**:
 ```ston
 RwComponent {
 	#name : 'Core',
@@ -57,7 +57,7 @@ If a **subcomponent** is referenced either directly or indirectly from a **compo
 
 A **subcomponent** that references another **subcomponent** via its list of *component names* is an effective `AND` of the two *conditions* for the **referenced subcomponent**
 
-Here's a sample of a **RwSubcomponent** ston file with a **subcomponens**, a *package*, and a *condition* of 'alt1':
+Here's a sample of a **subcomponent** ston file with a **subcomponents**, a *package*, and a *condition* of 'alt1':
 ```ston
 RwSubcomponent {
 	#name : 'tests/alt1/Tests',
@@ -97,7 +97,7 @@ From experience with Metacello, t is clear that a pattern is also needed that al
 The pattern 'gs3.[1-]' will do an open ended match ot gemstone version strings from '3.1.0' up to, but not including version '4.0'.
 The pattern 'pharo7.[1-5]' will match pharo version strings in a closed range from '7.1' through '7.5'.
 
-Here's a sample of a **RwPlatformSubcomponent** with a *package* and a *condition* of 'platformA':
+Here's a sample of a **platformComponent** with a *package* and a *condition* of 'platformA':
 ```ston
 RwPlatformSubcomponent {
 	#name : 'tests/alt1/platform/platformA/Tests',
