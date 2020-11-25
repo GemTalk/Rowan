@@ -37,7 +37,7 @@ Class {
 	#name : 'RwExampleComponentRefactoringTool',
 	#superclass : 'RwExamplesTool',
 	#instVars : [
-		'project',
+		'definedProject',
 		'components',
 		'packages',
 		'conditions',
@@ -66,10 +66,15 @@ RwExampleComponentRefactoringTool >> conditions [
 	^ conditions
 ]
 
+{ #category : 'accessing' }
+RwExampleComponentRefactoringTool >> definedProject [
+	^ definedProject ifNil: [ definedProject := self project defined ]
+]
+
 { #category : 'initialization' }
 RwExampleComponentRefactoringTool >> forProjectNamed: projectName componentNamed: componentName [
 	| notFoundBlock |
-	project := Rowan projectNamed: projectName.
+	definedProject := (Rowan projectNamed: projectName) defined.
 	components := Dictionary new.
 	packages := Dictionary new.
 	conditions := Dictionary new.
@@ -77,11 +82,11 @@ RwExampleComponentRefactoringTool >> forProjectNamed: projectName componentNamed
 	notFoundBlock := [ :missingComponentName | 
 	| missingComponent |
 	missingComponent := RwAbstractComponent
-		fromComponentsDirectory: project componentsRoot
+		fromComponentsDirectory: definedProject componentsRoot
 		named: missingComponentName.
 	components at: missingComponentName put: missingComponent packageNames.
 	missingComponent ].
-	project _loadedProject
+	definedProject _resolvedProject
 		allComponentsIn: componentName
 		matchBlock: [ :ignored | true ]
 		notFound: notFoundBlock
@@ -103,7 +108,7 @@ RwExampleComponentRefactoringTool >> forProjectNamed: projectName componentNamed
 					(dict at: 'components' ifAbsentPut: [ IdentitySet new ]) add: component.
 					(dict at: 'allPackageNames' ifAbsentPut: [ Set new ])
 						addAll:
-							(project _loadedProject
+							(definedProject _resolvedProject
 								allPackageNamesIn: component name
 								matchBlock: [ :ignored | true ]
 								notFound: notFoundBlock) ].
@@ -134,6 +139,25 @@ RwExampleComponentRefactoringTool >> platformConditions [
 
 { #category : 'refactoring' }
 RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCondition [
+	"This refactoring code is based on the assumption that the component structure was 
+		created using the addComponentStructureFor:... family of methods or were 
+		created following the addComponentStructureFor:... algorithm manually"
+
+	^ self
+		refactorComponentsWithCondition: targetCondition
+		packageMap: Dictionary new
+		ifAbsent: [ :packageName | 
+			self
+				error:
+					'No package name for ' , packageName printString , ' found in package map' ]
+]
+
+{ #category : 'refactoring' }
+RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCondition packageMap: packageMap ifAbsent: absentBlock [
+	"This refactoring code is based on the assumption that the component structure was 
+		created using the addComponentStructureFor:... family of methods or were 
+		created following the addComponentStructureFor:... algorithm manually"
+
 	^ ((conditions at: targetCondition) at: 'components')
 		collect: [ :component | 
 			| componentName path basename destinationComponentName x |
@@ -142,13 +166,31 @@ RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCond
 			basename := path basename.
 			path parent basename = targetCondition
 				ifTrue: [ 
-					destinationComponentName := path parent parent ]
+					destinationComponentName := path parent parent.
+					component packageNames
+						do: [ :packageName | 
+							| destinationPackage destinationPackageName package |
+							destinationPackageName := packageMap
+								at: packageName
+								ifAbsent: [ absentBlock cull: packageName ].
+							package := self definedProject
+								packageNamed: packageName
+								ifAbsent: [ 
+									self
+										error:
+											'Cannot find package named ' , packageName printString , ' in defined project.' ].
+							destinationPackage := self definedProject
+								packageNamed: destinationPackageName
+								ifAbsent: [ 
+									self
+										error:
+											'Cannot find destination package named ' , destinationPackageName printString
+												, ' in defined project.' ] ] ]
 				ifFalse: [ 
 					(x := path parent basename) = 'platforms'
 						ifFalse: [ self error: 'expected platforms' ].
 					(x := path parent parent basename) = targetCondition
 						ifTrue: [ destinationComponentName := path parent parent parent ]
 						ifFalse: [ self error: 'expected ' , targetCondition ] ].
-			{destinationComponentName.
-			component} ]
+			self halt ]
 ]
