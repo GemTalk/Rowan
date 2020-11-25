@@ -17,6 +17,22 @@ When a **component** is loaded, the listed packages are loaded.
 When a **component** is loaded, the packages listed by the referenced components are loaded.
 The list may reference **components** or **subcomponents** by name and recursive references (direct or indirect) are allowed.
 
+Here's a sample **RwComponent** ston file with two **subcomponents**:
+```ston
+RwComponent {
+	#name : 'Core',
+	#projectNames : [ ],
+	#componentNames : [
+		'conditions/Core',
+		'tests/Tests'
+	],
+	#packageNames : [
+		'RowanSample9-Core'
+	],
+	#comment : 'Primary component used for loading the core classes.'
+}
+```
+
 #### Components and Tests
 A **component** should have an associated set of *tests* that validates the public API for the component.
 As a loadable unit there is an implied contract between the developers and users of the component that the public API implemented by the classes and methods loaded by the component and the test* are expected to validate that contract.
@@ -27,6 +43,7 @@ A **subcomponent** has a name and is located on disk in the *components director
 
 Similar to the **component**, a **subcomponent** is composed of:
 - A list of *dependent project names*.
+- A *condition*.
 - A *preload doit name*. 
 - A *postload doit name*. 
 - A list of *package names*. 
@@ -40,6 +57,21 @@ If a **subcomponent** is referenced either directly or indirectly from a **compo
 
 A **subcomponent** that references another **subcomponent** via its list of *component names* is an effective `AND` of the two *conditions* for the **referenced subcomponent**
 
+Here's a sample of a **RwSubcomponent** ston file with a **subcomponens**, a *package*, and a *condition* of 'alt1':
+```ston
+RwSubcomponent {
+	#name : 'tests/alt1/Tests',
+	#condition : 'alt1',
+	#projectNames : [ ],
+	#componentNames : [
+		'tests/alt1/platform/Tests'
+	],
+	#packageNames : [
+		'RowanSample9-Tests-Alt1'
+	],
+	#comment : ''
+}
+```
 #### Subcomponents and Tests
 A **subcomponent** may only be loaded via a direct or indirect reference from a **component**.
 There is no implied API for a **subcomponent**, so no associated *test* are expected.
@@ -65,10 +97,27 @@ From experience with Metacello, t is clear that a pattern is also needed that al
 The pattern 'gs3.[1-]' will do an open ended match ot gemstone version strings from '3.1.0' up to, but not including version '4.0'.
 The pattern 'pharo7.[1-5]' will match pharo version strings in a closed range from '7.1' through '7.5'.
 
+Here's an example of a **RwPlatformSubcomponent** with a *package* and a *condition* of 'platformA':
+```ston
+RwPlatformSubcomponent {
+	#name : 'tests/alt1/platform/platformA/Tests',
+	#condition : [
+		'platformA'
+	],
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'RowanSample9-Tests-PlatformA'
+	],
+	#comment : ''
+}
+```
+
 ### Component directory structure
 As mentioned earlier, it is expected that **components** be located in the *components directory*. It then follows that **subcomponents** should be located in subdirectories, to segregate the **subcomponents** and **components**.
 Since **subcomponents** have a *condition* it makes sense to organize **subcomponents** by the value of their *conditions*
-
+Here's a picture of an example component directory structure:
+<img src="https://github.com/GemTalk/Rowan/blob/issue_660/docs/component_directory_structure.png" alt="component directory structure" width="250px" >
 ### CategoryComponent and CategorySubcomponent
 The **categoryComponent** and **categorySubcomponent** are used to provide code organization within a package/class browser.
 The current Jadeite Project browser
