@@ -459,6 +459,12 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> create [
+	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
+	self resolve; export
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 	projectRepository := self _projectRepository

@@ -6,18 +6,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/v2/v2Only/platforms/Definitions'
 	],
 	#packageNames : [
-		'Rowan-Tests-DefinitionsV2-Extensions-OnlyV2'
 	],
-	#conditionalPackageMapSpecs : {
-		'gemstone' : {
-			'allusers' : {
-				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Tests-DefinitionsV2-Extensions-OnlyV2' : {
-						'symbolDictName' : 'RowanTools'
-					}
-				}
-			}
-		}
-	},
 	#comment : 'Organize all v2 definitions classes under one component'
 }

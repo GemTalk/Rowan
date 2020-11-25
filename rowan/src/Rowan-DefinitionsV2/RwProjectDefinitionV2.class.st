@@ -420,14 +420,6 @@ RwProjectDefinitionV2 >> componentForPackageNamed: packageName [
 	^ self components componentForPackageNamed: packageName
 ]
 
-{ #category : 'actions' }
-RwProjectDefinitionV2 >> create [
-	"write the project structure to disk, if it doesn't already exist"
-
-	Rowan projectTools create
-		createComponentProject: self.
-]
-
 { #category : 'properties' }
 RwProjectDefinitionV2 >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
