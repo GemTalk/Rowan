@@ -12,7 +12,8 @@ RwLoadSpecificationV2 {
 		'stubs',
 		'tonel',
 		'v2',
-		'v2Only'
+		'v2Only',
+		'examples'
 	],
 	#platformProperties : {
 		'gemstone' : {

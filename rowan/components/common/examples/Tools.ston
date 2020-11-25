@@ -1,21 +1,16 @@
 RwSimpleNestedProjectLoadComponentV2 {
-	#name : 'common/Tools',
-	#condition : 'common',
+	#name : 'common/examples/Tools',
+	#condition : 'examples',
 	#projectNames : [ ],
-	#componentNames : [
-		'common/examples/Tools',
-		'common/platforms/Tools',
-		'common/v2/Tools'
-	],
+	#componentNames : [ ],
 	#packageNames : [
-		'Rowan-Cypress-Core',
-		'Rowan-Tools-Core'
+		'Rowan-Tools-Examples'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Tools-Core' : {
+					'Rowan-Tools-Examples' : {
 						'symbolDictName' : 'RowanTools'
 					}
 				}

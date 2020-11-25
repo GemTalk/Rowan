@@ -196,4 +196,10 @@ project _loadedProject
 			packages at: packageName put: component ] ].
 { components . packages . conditions . platformConditions }
 ```
+#### Move packages in components with v2Only condition into parent component
+```smalltalk
+| components . packages . conditions . platformConditions |
+"start with array produced by https://github.com/GemTalk/Rowan/blob/issue_660/docs/Specification_components.md#query-for-list-of-all-components-packages-and-conditions"
+{ components . packages . conditions . platformConditions }
+```
 [1]: https://github.com/dalehenrich/metacello-work
