@@ -707,6 +707,15 @@ RowanClassService >> moveMethods: methodServices to: category [
 			projectService update ]
 ]
 
+{ #category : 'client commands' }
+RowanClassService >> moveToPackageNamed: thePackageName [
+	| packageService |
+	self classOrMeta rwMoveClassToPackage: thePackageName.
+	self update.
+	(packageService := RowanPackageService forPackageNamed: thePackageName) update.
+	(RowanProjectService new name: packageService projectName) update
+]
+
 { #category : 'Accessing' }
 RowanClassService >> name [
 	^name
