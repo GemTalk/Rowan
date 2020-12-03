@@ -708,9 +708,20 @@ RowanClassService >> moveMethods: methodServices to: category [
 ]
 
 { #category : 'client commands' }
+RowanClassService >> moveMethodSelectors: methodSelectors toPackageNamed: thePackageName [
+	| targetPackageService |
+	methodSelectors
+		do: [ :selector | self theClass rwMoveMethod: selector toPackage: thePackageName ].
+	self update.
+	targetPackageService := (RowanPackageService forPackageNamed: thePackageName)
+		update.
+	(RowanProjectService new name: targetPackageService projectName) update
+]
+
+{ #category : 'client commands' }
 RowanClassService >> moveToPackageNamed: thePackageName [
 	| packageService |
-	self classOrMeta rwMoveClassToPackage: thePackageName.
+	self theClass rwMoveClassToPackage: thePackageName.
 	self update.
 	(packageService := RowanPackageService forPackageNamed: thePackageName) update.
 	(RowanProjectService new name: packageService projectName) update
