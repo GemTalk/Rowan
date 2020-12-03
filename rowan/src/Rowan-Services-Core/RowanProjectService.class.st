@@ -370,6 +370,16 @@ RowanProjectService >> packageNameString [
 ]
 
 { #category : 'accessing' }
+RowanProjectService >> packages [
+	^packages
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> packages: object [
+	packages := object
+]
+
+{ #category : 'accessing' }
 RowanProjectService >> packageServices [
 
 	^self packageNames collect:[:packageName | RowanPackageService forPackageNamed: packageName]

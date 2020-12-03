@@ -51,7 +51,23 @@ RowanBrowserService >> abortTransactionAndUpdateServices: services [
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
 	allClasses := self basicAllClasses.
-	updateType := #classes. "#classes not used at the moment so no updates will be done"
+	updateType := #dontUpdate. 
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> allPackages [
+	| theProjects |
+	theProjects := Rowan image loadedProjects asArray.
+	projects := theProjects
+		collect: [ :project | 
+			| projectService |
+			projectService := RowanProjectService newNamed: project name.
+			projectService packages: projectService packageServices.
+			projectService packages
+				do: [ :packageService | packageService projectName: project name ].
+			projectService ].
+	updateType := #'dontUpdate'.
 	RowanCommandResult addResult: self
 ]
 

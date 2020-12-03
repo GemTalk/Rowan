@@ -301,26 +301,6 @@ RowanService >> executeCommand [
 ]
 
 { #category : 'commands support' }
-RowanService >> extendHierarchies: hierarchies [
-	
-	"extend the hierarchies by one level
-	of subclasses"
-
-	| extendedHierarchies |
-	extendedHierarchies := Array new. 
-	hierarchies do:[:hierarchy |
-		| theClass subclasses |
-		theClass := hierarchy last. 
-		(subclasses := organizer subclassesOf: theClass) isEmpty 
-			ifTrue:[extendedHierarchies add: hierarchy]
-			ifFalse:[
-				subclasses do:[:sub |
-					extendedHierarchies add: (hierarchy copy add: sub; yourself)
-				]]].
-	^extendedHierarchies
-]
-
-{ #category : 'commands support' }
 RowanService >> extendHierarchies: hierarchies forClasses: theClasses [
 	"extend the hierarchies by one level
 	of subclasses if it is a selected class"
@@ -436,8 +416,7 @@ RowanService >> organizer: anOrganizer [
 { #category : 'commands support' }
 RowanService >> peerHierarchies: theClasses [
 	" create hierarchies for each peer of the 
-	classes of interest. Those classes are the last
-	element of superclassHierarchies"
+	classes of interest."
 
 	| peerHierarchies |
 	peerHierarchies := Array new.
