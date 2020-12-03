@@ -116,6 +116,16 @@ RowanService class >> version [
   ^ 3200
 ]
 
+{ #category : 'commands support' }
+RowanService >> addAllSubclassHierarchiesOf: theClass to: hierarchies [
+	(organizer subclassesOf: theClass)
+		do: [ :subclass | 
+			hierarchies
+				add:
+					(organizer allSuperclassesOf: theClass) , (Array with: theClass with: subclass).
+			self addAllSubclassHierarchiesOf: subclass to: hierarchies ]
+]
+
 { #category : 'other' }
 RowanService >> answer: anObject [
 
@@ -145,25 +155,24 @@ RowanService >> browserTool [
 
 { #category : 'commands support' }
 RowanService >> classHierarchy: theClasses [
-  | superclassChains levels services hierarchies toExpand hierarchyServices |
-  superclassChains := self superclassChainsFor: theClasses.
-  hierarchies := self extendHierarchies: superclassChains.
-  levels := self hierarchiesByLevel: hierarchies.
-  services := Dictionary new.
-  toExpand := Set new.
-  self
-    services: services
-    from: levels
-    expand: toExpand
-    classes: theClasses.
-  hierarchyServices := services reject: [ :array | array isEmpty ].
-  hierarchyServices copy
-    keysAndValuesDo: [ :key :value | 
-      hierarchyServices
-        at: key
-        put:
-          (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
-  ^ hierarchyServices
+	| superclassChains levels services hierarchies toExpand hierarchyServices |
+	superclassChains := self peerHierarchies: theClasses.
+	hierarchies := self extendHierarchies: superclassChains forClasses: theClasses.
+	levels := self hierarchiesByLevel: hierarchies.
+	services := Dictionary new.
+	toExpand := Set new.
+	self
+		services: services
+		from: levels
+		expand: toExpand
+		classes: theClasses.
+	hierarchyServices := services reject: [ :array | array isEmpty ].
+	hierarchyServices copy
+		keysAndValuesDo: [ :key :value | 
+			hierarchyServices
+				at: key
+				put: (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
+	^ hierarchyServices
 ]
 
 { #category : 'rsr' }
@@ -311,6 +320,20 @@ RowanService >> extendHierarchies: hierarchies [
 	^extendedHierarchies
 ]
 
+{ #category : 'commands support' }
+RowanService >> extendHierarchies: hierarchies forClasses: theClasses [
+	"extend the hierarchies by one level
+	of subclasses if it is a selected class"
+
+	hierarchies
+		do: [ :hierarchy | 
+			| theClass |
+			theClass := hierarchy last.
+			(theClasses includes: theClass)
+				ifTrue: [ self addAllSubclassHierarchiesOf: theClass to: hierarchies ] ].
+	^ hierarchies
+]
+
 { #category : 'perform' }
 RowanService >> handleDeletedService [
   self updateType: #'removed:'.
@@ -408,6 +431,28 @@ RowanService >> jadeiteServer [
 RowanService >> organizer: anOrganizer [
 
 	organizer := anOrganizer.
+]
+
+{ #category : 'commands support' }
+RowanService >> peerHierarchies: theClasses [
+	" create hierarchies for each peer of the 
+	classes of interest. Those classes are the last
+	element of superclassHierarchies"
+
+	| peerHierarchies |
+	peerHierarchies := Array new.
+	theClasses
+		do: [ :theClass | 
+			| superclass |
+			superclass := theClass superclass.
+			superclass subclasses
+				do: [ :subclass | 
+					peerHierarchies
+						add:
+							((organizer allSuperclassesOf: subclass)
+								add: subclass;
+								yourself) ] ].
+	^ peerHierarchies
 ]
 
 { #category : 'rsr' }

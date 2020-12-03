@@ -439,7 +439,7 @@ RowanClassService >> fullHierarchy [
   | behavior sortedSubclasses |
   behavior := self theClass.
   hierarchyServices := Dictionary new.
-  hierarchyServices at: #'expand' put: Array new.
+  hierarchyServices at: #'expand' put: (Array with: self).
   sortedSubclasses := behavior subclasses
     asSortedCollection: [ :x :y | x name < y name ].
   RowanCommandResult addResult: self.
@@ -448,7 +448,7 @@ RowanClassService >> fullHierarchy [
       | classService |
       classService := (self classServiceFromOop: subclass asOop) meta: meta.
       (hierarchyServices at: #'expand') add: classService.
-      classService allSubclassServices ]
+      classService allSubclassServices ].
 ]
 
 { #category : 'comparing' }
