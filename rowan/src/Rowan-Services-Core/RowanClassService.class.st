@@ -1108,7 +1108,7 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 	wasClean := self isPackageClean.
 	super servicePerform: symbol withArguments: collection shouldUpdate: updateAfterCommand.
 	wasClean
-		ifTrue: [ self updatePackageProject ]
+		ifTrue: [ self updatePackageAndProject ]
 ]
 
 { #category : 'Accessing' }
@@ -1282,12 +1282,12 @@ RowanClassService >> updateMethodsAfterRenameFrom: oldClassName to: newClassName
 ]
 
 { #category : 'updates' }
-RowanClassService >> updatePackageProject [
+RowanClassService >> updatePackageAndProject [
 	| packageService projectService |
 	packageService := RowanPackageService forPackageNamed: packageName.
-	packageService updateIsDirty.
+	packageService update.
 	projectService := RowanProjectService new name: projectName.
-	projectService updateIsDirty
+	projectService update
 ]
 
 { #category : 'private' }

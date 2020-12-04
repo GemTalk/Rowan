@@ -105,7 +105,7 @@ RowanProjectService >> basicRefresh [
 				ifFalse: [ 
 					updateType := #'removedProject:'.
 					^ RowanCommandResult addResult: self ] ].
-	isDirty := self isDirty.
+	self updateIsDirty. 
 	self setExistsOnDisk.
 	isSkew := self isSkew.
 	sha := self rowanSha.
@@ -242,7 +242,7 @@ RowanProjectService >> initialize [
 RowanProjectService >> isDirty [
 	name isNil
 		ifTrue: [ ^ false ].
-	^ self rwProject isDirty
+	^ self isDirty
 ]
 
 { #category : 'accessing' }
@@ -632,7 +632,7 @@ RowanProjectService >> updateInternalService: updatedService [
 { #category : 'other' }
 RowanProjectService >> updateIsDirty [
 
-	isDirty := self isDirty
+	isDirty := self rowanDirty
 ]
 
 { #category : 'testing' }

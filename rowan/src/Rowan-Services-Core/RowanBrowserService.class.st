@@ -341,7 +341,7 @@ RowanBrowserService >> removeMethods: methodServices [
 		classService := RowanClassService forClassNamed: methodService className. 
 		classService meta: methodService meta. 
 		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
-		classService updatePackageProject.
+		classService updatePackageAndProject.
 		(notRemoved includes: methodService) ifFalse:[
 			methodService updateType: #removed:.
 			RowanCommandResult addResult: methodService]. 

@@ -25,16 +25,14 @@ Class {
 
 { #category : 'instance creation' }
 RowanPackageService class >> forPackageNamed: aName [
-
 	| inst |
-	inst := self new.  
+	inst := self new.
 	inst name: aName.
-	aName isNil ifFalse:[
-		inst isDirty. "lazy initialize"].
-	inst setDefaultTemplate. 
+	aName isNil
+		ifFalse: [ inst updateIsDirty ].
+	inst setDefaultTemplate.
 	inst updateProjectName.
-	^inst
-
+	^ inst
 ]
 
 { #category : 'comparing' }
@@ -124,11 +122,9 @@ RowanPackageService >> hierarchyServices [
 	^hierarchyServices
 ]
 
-{ #category : 'rowan' }
+{ #category : 'Accessing' }
 RowanPackageService >> isDirty [
-
-	^isDirty := self rowanDirty
-
+	^isDirty
 ]
 
 { #category : 'Updating' }
@@ -358,7 +354,7 @@ RowanPackageService >> update [
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
 		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 
-	self isDirty. 
+	self updateIsDirty. 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
 	RowanCommandResult addResult: self
 ]
@@ -382,7 +378,7 @@ RowanPackageService >> updateInternalService: updatedService [
 { #category : 'rowan' }
 RowanPackageService >> updateIsDirty [
 
-	isDirty := self isDirty.
+	isDirty := self rowanDirty.
 ]
 
 { #category : 'updates' }

@@ -487,26 +487,6 @@ RowanService >> rowanFixMe [
 
 ]
 
-{ #category : 'rowan' }
-RowanService >> rowanLoadedPackageNames [
-
-	| stream packages |
-	self rowanFixMe.	"handle modified package display"
-	stream := WriteStream on: String new.
-	packages := Rowan packageNames.
-	packages do: 
-					[:package |
-					stream
-						nextPutAll: package;
-						tab;
-						nextPut: ((RwPackage newNamed: package) isDirty ifTrue:[$Y] ifFalse:[$N]);
-						tab;
-						nextPutAll: package;
-						lf].
-	^stream contents
-
-]
-
 { #category : 'accessing' }
 RowanService >> rowanProjectName [
 
