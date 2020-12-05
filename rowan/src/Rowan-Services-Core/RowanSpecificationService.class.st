@@ -6,18 +6,26 @@ Class {
 
 { #category : 'command support' }
 RowanSpecificationService >> addInstVars: anObject [
-	| namedSize |
-	instVarNames := anObject class allInstVarNames.
-	namedSize := instVarNames size.
-	1 to: namedSize do: [ :i | 
+	"coerce the oops into strings for display in the browsers"
+
+	super addInstVars: anObject.
+	1 to: objects size do: [ :index | 
 		objects
-			add:
-				(self stripOutUnicode: (instVarNames at: i) asString) -> (anObject instVarAt: i) ]
+			at: index
+			put:
+				(objects at: index) key
+					-> (Object _objectForOop: (objects at: index) value) printString ]
 ]
 
 { #category : 'initialization' }
 RowanSpecificationService >> initialize: anOop [
-	"intention revealing"
+	"intention revealing - not really an inspect"
 	isOop := true. 
+	maxIndexedVars := 0. 
 	super inspect: anOop
+]
+
+{ #category : 'constants' }
+RowanSpecificationService >> instVarPrefix [
+	^ String new
 ]

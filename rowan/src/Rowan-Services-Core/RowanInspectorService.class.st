@@ -53,14 +53,14 @@ RowanInspectorService >> addFirstIndexedVars: anObject [
 
 { #category : 'command support' }
 RowanInspectorService >> addInstVars: anObject [
-  | namedSize |
-  instVarNames := anObject class allInstVarNames.
-  namedSize := instVarNames size.
-  1 to: namedSize do: [ :i | 
-    objects
-      add:
-        ('-' , (self stripOutUnicode: (instVarNames at: i) asString))
-          -> (Reflection oopOf: (anObject instVarAt: i)) ]
+	| namedSize |
+	instVarNames := anObject class allInstVarNames.
+	namedSize := instVarNames size.
+	1 to: namedSize do: [ :i | 
+		objects
+			add:
+				(self instVarPrefix , (self stripOutUnicode: (instVarNames at: i) asString))
+					-> (Reflection oopOf: (anObject instVarAt: i)) ]
 ]
 
 { #category : 'client commands' }
@@ -203,6 +203,11 @@ RowanInspectorService >> inspectDictionary: aDictionary from: start to: stop [
   indexedSize := aDictionary size.
   RowanCommandResult addResult: self.
   ^ nextIndices
+]
+
+{ #category : 'constants' }
+RowanInspectorService >> instVarPrefix [
+	^ '-'
 ]
 
 { #category : 'testing' }
