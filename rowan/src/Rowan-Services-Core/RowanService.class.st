@@ -424,13 +424,16 @@ RowanService >> peerHierarchies: theClasses [
 		do: [ :theClass | 
 			| superclass |
 			superclass := theClass superclass.
-			superclass subclasses
-				do: [ :subclass | 
-					peerHierarchies
-						add:
-							((organizer allSuperclassesOf: subclass)
-								add: subclass;
-								yourself) ] ].
+			superclass
+				ifNil: [ peerHierarchies add: (Array with: theClass) ]
+				ifNotNil: [ 
+					superclass subclasses
+						do: [ :subclass | 
+							peerHierarchies
+								add:
+									((organizer allSuperclassesOf: subclass)
+										add: subclass;
+										yourself) ] ] ].
 	^ peerHierarchies
 ]
 
