@@ -1,0 +1,38 @@
+The hierarchy of classes that includes components, are unified by having file-based on-disk specifications, 
+within the directory that (by convention) is named components.  This hierarchy of classes includes both 
+   - classes of objects that provide instructions on loading code into an image (true components) 
+   - a class of objects that provide a level of code organization that is visible after load but does not control loading (groups).
+
+Within this hierarchy of classes, there are:
+   LoadComponent  (previously Component)  
+         	A LoadComponent is independently loadable, and the load operation results in a complete unit of functionality being loaded. 
+		This may include both code that is directly contained in the component and code that is loaded by dependent 
+		components and by other projects, so it is recursively complete. 
+         	A repository can have multiple top-level components, that are independently loadable, 
+                 e.g. a production version of an application, and a development version that includes tests. 
+
+   SubComponent 
+	   	A SubComponent always has a single condition.  If this condition is met when defined within a LoadComponent, this SubComponent is loaded. 
+			For example, you may wish separate code to be loaded for conditions 'production' and 'development'. 
+      		A SubComponent may have the condition 'common', which means it is not conditional (always loaded).
+	   	SubComponents cannot be loaded independently, but control loading when referenced by a LoadComponent. 
+		After loading, these have no effect and are not visible when browsing code in the image.
+
+   PlatformSubComponent (previously PlatformComponent)  
+         	A PlatformSubComponent is similar to a SubComponent, but is specialized for Platforms conditions including Smalltalk dialect and version numbers; 
+			and has an array of pattern matching conditions rather than one condition.
+		If all of these conditions are met (conditions tests are "and"), when defined within a LoadComponent, this PlatformSubComponent is loaded. 
+ 		An example array of conditions would be #( 'gs3.[1-]' 'pharo7.x' ).
+	   	PlatformSubComponents cannot be loaded independently, but control loading when referenced by a LoadComponent. 
+		After loading, these have no effect and are not visible when browsing code in the image.
+         
+   ClassGroup (previously CategoryComponent)  
+         A ClassGroup has no impact on load operations, but are used for code organization within the browser after the code has been loaded.
+		(The pane in the code browser will be named Group for simplicity - this document may use either term)
+     	ClassGroups can be nested to allow sub-ClassGroups for code organization.
+ 
+		The way a ClassGroup connects to the class that are associated with them is by the package. 
+		All classes in a given package will be the same ClassGroup, or all classes will have no ClassGroup specified. 
+  		A ClassGroup may end up containing classes from multiple packages. 
+		Packages/classes that do not have a ClassGroup associated with them will be displayed in the code browser 
+			with <ungrouped> (or something equivalent) in the Group pane, to avoid ambiguity. 
