@@ -351,6 +351,14 @@ RwDefinedProject >> loadSpecification [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageNamed: toPackageName [
+	^ self _resolvedProject
+		moveClassExtensionNamed: aClassName
+		fromPackageNamed: fromPackageName
+		toPackageNamed: toPackageName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> moveClassNamed: aClassName toPackageNamed: aPackageName [
 	^ self _resolvedProject moveClassNamed: aClassName toPackageNamed: aPackageName
 ]

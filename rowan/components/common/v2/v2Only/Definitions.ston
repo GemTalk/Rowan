@@ -5,7 +5,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/v2/v2Only/platforms/Definitions'
 	],
-	#packageNames : [
-	],
+	#packageNames : [ ],
 	#comment : 'Organize all v2 definitions classes under one component'
 }

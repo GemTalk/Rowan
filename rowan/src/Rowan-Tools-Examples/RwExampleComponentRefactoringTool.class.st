@@ -158,9 +158,9 @@ RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCond
 		created using the addComponentStructureFor:... family of methods or were 
 		created following the addComponentStructureFor:... algorithm manually"
 
-	^ ((conditions at: targetCondition) at: 'components')
-		collect: [ :component | 
-			| componentName path basename destinationComponentName x |
+	((conditions at: targetCondition) at: 'components')
+		do: [ :component | 
+			| componentName path basename destinationComponentName x y |
 			componentName := component name.
 			path := FileSystem * componentName.
 			basename := path basename.
@@ -169,7 +169,7 @@ RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCond
 					destinationComponentName := path parent parent.
 					component packageNames
 						do: [ :packageName | 
-							| destinationPackage destinationPackageName package |
+							| destinationPackageName package |
 							destinationPackageName := packageMap
 								at: packageName
 								ifAbsent: [ absentBlock cull: packageName ].
@@ -179,18 +179,21 @@ RwExampleComponentRefactoringTool >> refactorComponentsWithCondition: targetCond
 									self
 										error:
 											'Cannot find package named ' , packageName printString , ' in defined project.' ].
-							destinationPackage := self definedProject
-								packageNamed: destinationPackageName
-								ifAbsent: [ 
-									self
-										error:
-											'Cannot find destination package named ' , destinationPackageName printString
-												, ' in defined project.' ] ] ]
+							(x := package classDefinitions keys copy)
+								do: [ :className | definedProject moveClassNamed: className toPackageNamed: destinationPackageName ].
+							(y := package classExtensions keys copy)
+								do: [ :className | 
+									definedProject
+										moveClassExtensionNamed: className
+										fromPackageNamed: packageName
+										toPackageNamed: destinationPackageName ].
+							self halt: 'remove the package' ] ]
 				ifFalse: [ 
 					(x := path parent basename) = 'platforms'
 						ifFalse: [ self error: 'expected platforms' ].
 					(x := path parent parent basename) = targetCondition
 						ifTrue: [ destinationComponentName := path parent parent parent ]
-						ifFalse: [ self error: 'expected ' , targetCondition ] ].
+						ifFalse: [ self error: 'expected ' , targetCondition ].
+					self halt ].
 			self halt ]
 ]

@@ -711,6 +711,22 @@ RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMig
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageNamed: toPackageName [
+	| toPackage fromPackage classDef |
+	toPackage := self
+		packageNamed: toPackageName
+		ifAbsent: [ self error: 'No package found name ' , toPackageName printString ].
+	fromPackage := self
+		packageNamed: fromPackageName
+		ifAbsent: [ self error: 'No package found name ' , fromPackageName printString ].
+	classDef := fromPackage removeClassExtensionNamed: aClassName.
+	classDef
+		moveToPackageNamed: toPackageName
+		packageConvention: self packageConvention.
+	toPackage addClassExtensionDefinition: classDef
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> moveClassNamed: aClassName toPackageNamed: aPackageName [
 	| thePackage |
 	thePackage := self

@@ -255,6 +255,16 @@ RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> removeClassExtensionNamed: className [
+	^ self removeKey: className from: classExtensions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassExtensionNamed: className ifAbsent: absentBlock [
+	^ self removeKey: className from: classExtensions ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> removeClassNamed: className [
 	^ self removeKey: className from: classDefinitions
 ]
