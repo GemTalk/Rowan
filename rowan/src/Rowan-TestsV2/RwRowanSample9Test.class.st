@@ -5740,6 +5740,81 @@ RwRowanSample9Test >> testSpec_0059_2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0060_1 [
+	"spec_0060 should load cleanly, including RowanSample10"
+
+	"https://github.com/GemTalk/Rowan/issues/668"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0060_2 [
+	"load spec_0001 then load (reload) spec_0060, RowanProject10 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/668"
+
+	| loadSpec projectName projectNames_1 projectNames_2 resolvedProject 
+		loadedProjects project requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames_1 := {projectName }.
+	requiredProjectName := 'RowanSample10'.
+	projectNames_2 := {projectName . requiredProjectName}.
+
+	projectNames_2 do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames_1.
+
+"checkout spec_0060 and reload"
+	project checkout: 'spec_0060'.
+
+"reload project"
+	loadedProjects := project reload. "can afford to take required projects into account"
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames_2.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

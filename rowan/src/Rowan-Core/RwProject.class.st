@@ -333,6 +333,15 @@ RwProject >> projectUrl [
 	^ self _loadedProject projectUrl
 ]
 
+{ #category : 'actions' }
+RwProject >> reload [
+	"
+		load the receiver AND required projects.
+	"
+
+	^ Rowan projectTools load loadProjectNamed: self name
+]
+
 { #category : 'properties' }
 RwProject >> remote [
 
@@ -350,24 +359,6 @@ RwProject >> repositoryCommitId [
 RwProject >> repositoryRootPath [
 
 	^ self repositoryRoot pathString
-]
-
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName [
-	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
-]
-
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
-	^ self _loadedProject
-		subcomponentsOf: componentName
-		attributes: attributes
-		ifNone: noneBlock
-]
-
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
-	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 ]
 
 { #category : 'actions' }
@@ -406,6 +397,24 @@ RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMi
 	"should replace places where a projectSet was created for the receiver"
 
 	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName [
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
+	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 ]
 
 { #category : 'actions' }
