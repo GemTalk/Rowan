@@ -3439,7 +3439,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			resolvedRepository repositoryRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
-						nextPutAll: '# RowanSample9 - ' , specName;
+						nextPutAll: '# ', projectName, ' - ' , specName;
 						lf;
 						nextPutAll: indexCard title;
 						lf;
@@ -3483,10 +3483,9 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
-				nextPutAll: '# RowanSample9';
+				nextPutAll: '# ', projectName;
 				lf;
-				nextPutAll:
-						'Sample project that is being used to develop the **final** version of the V2.0 project handling API.';
+				nextPutAll: self projectReadmeIntro;
 				lf;
 				nextPutAll: '## Summary of Load Specs';
 				lf;
@@ -6719,9 +6718,9 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 		ifFalse: [ ^ self ].
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/RowanSample9.git'.
+		with: 'git@github.com:dalehenrich/', projectName, '.git'.
 	indexCardMap := Dictionary new.
-	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9' / 'indexCards')
+	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards')
 		files
 		do: [ :file | 
 			| indexCard |
@@ -6741,6 +6740,13 @@ RwTestProjectLibraryGenerator >> projectName [
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> projectName: object [
 	projectName := object
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> projectReadmeIntro [
+	"Intro in README"
+
+	^ 'Sample project that is being used to develop the **final** version of the V2.0 project handling API.'
 ]
 
 { #category : 'accessing' }
