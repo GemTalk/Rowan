@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwAbstractRowanSampleTest',
-	#superclass : 'RwAbstractTest',
+	#superclass : 'RwAbstractV2Test',
 	#category : 'Rowan-TestsV2'
 }
 
