@@ -50720,6 +50720,16 @@ projectUrl
 	^ self _loadedProject projectUrl
 %
 
+category: 'actions'
+method: RwProject
+reload
+	"
+		load the receiver AND required projects.
+	"
+
+	^ Rowan projectTools load loadProjectNamed: self name
+%
+
 category: 'properties'
 method: RwProject
 remote
@@ -67725,12 +67735,8 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
 			absentProjectNames isEmpty
 				ifFalse: [ 
-					self
-						error:
-							'Missing required projects for the project '
-								, projectDefinition name printString
-								,
-									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
+					projectSetDefinition := projectDefinition
+						readProjectSet: platformConfigurationAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -84472,7 +84478,7 @@ resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	self _projectRepository resolve
+	^self  resolve
 %
 
 category: 'accessing'
