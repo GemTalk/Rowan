@@ -5151,11 +5151,11 @@ RwRowanSample9Test >> testSpec_0051 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0052_1 [
-	"spec_0052 should load cleanly ... both projects"
+	"spec_0052 should load cleanly ... both projects as of https://github.com/GemTalk/Rowan/issues/668"
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName errorHit |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0052'.
 
 	projectName := loadSpec projectName.
@@ -5169,16 +5169,8 @@ RwRowanSample9Test >> testSpec_0052_1 [
 "resolve project"
 	resolvedProject := loadSpec resolveStrict.
 
-"expect an error for #load"
-	errorHit := false.
-	[ resolvedProject load ] 
-		on: Error do: [:ex | 
-			ex description ='UserDefinedError: Missing required projects for the project ''RowanSample9''. Use loadProjectSet to ensure that all required projects are installed.'
-				ifTrue: [ errorHit := true ] ].
-	self assert: errorHit description: 'Expected an error on #load'.
-
 "load project"
-	loadedProjects := resolvedProject loadProjectSet.
+	loadedProjects := resolvedProject load.
 
 "validate"
 	self
@@ -5756,6 +5748,8 @@ RwRowanSample9Test >> testSpec_0060_1 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
@@ -5787,6 +5781,8 @@ RwRowanSample9Test >> testSpec_0060_2 [
 	projectNames_2 do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
