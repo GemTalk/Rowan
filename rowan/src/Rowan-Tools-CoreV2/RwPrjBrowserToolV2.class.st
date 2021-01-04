@@ -372,8 +372,10 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource inProtocol: hybridPackageN
 				ifAbsent: [  ].
 			hybridLoadedPackage
 				ifNotNil: [ 
+					| pkgConvention |
 					hybridLoadedProject := hybridLoadedPackage loadedProject.
-					hybridLoadedProject packageConvention = 'RowanHybrid'
+					pkgConvention := hybridLoadedProject packageConvention.
+					(pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
 						ifTrue: [ 
 							"everything is cool - the project associated with hybridPackageName _is_ using the `RowanHybrid` package convention"
 							 ]
