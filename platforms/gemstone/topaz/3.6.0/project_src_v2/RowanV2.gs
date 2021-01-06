@@ -54390,22 +54390,14 @@ method: RowanMethodService
 breakPointsFor: aGsNMethod
   "Answers an Array stepPoints"
 
-  | list theMethod |
-  list := OrderedCollection new.
+  | theMethod |
   theMethod := aGsNMethod isMethodForBlock
     ifTrue: [ 
       isMethodForBlock := true.
       aGsNMethod homeMethod ]
     ifFalse: [ aGsNMethod ].
   homeMethodOop := theMethod asOop.
-  theMethod _allBreakpoints
-    ifNil: [ ^ OrderedCollection new ]
-    ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
-        list
-          add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
-  ^ list asOrderedCollection
+	^ self _initializeBreakPointsFor: theMethod
 %
 
 category: 'Accessing'
@@ -90787,6 +90779,26 @@ method: RowanInterface
 _gemstonePlatformSpec
 
 	^ self _specification platformSpec at: 'gemstone'
+%
+
+! Class extensions for 'RowanMethodService'
+
+!		Instance methods for 'RowanMethodService'
+
+category: '*rowan-services-core-32x'
+method: RowanMethodService
+_initializeBreakPointsFor: theMethod
+  "Answers an Array stepPoints"
+  | list |
+  list := OrderedCollection new.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+  ^ list asOrderedCollection
 %
 
 ! Class extensions for 'RowanProjectService'
