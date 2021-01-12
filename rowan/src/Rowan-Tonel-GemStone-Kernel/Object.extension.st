@@ -17,6 +17,14 @@ Object >> isCollection [
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
+Object >> makeSparkle [
+	(self isSpecial or:[self class = String])
+		ifTrue: [ ^ self ].
+	self class = Array ifTrue:[^self copy collect:[:element | element makeSparkle]].
+	^ self printString
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
 Object >> putOn: aStream [
 
 	^ aStream nextPut: self

@@ -29,6 +29,14 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'sparkle' }
+RowanProjectService class >> instantiateFrom: sparkleService [
+	| service |
+	service := self new. 
+	service name: (sparkleService blobPropertyNamed: #'name').
+	^ service
+]
+
 { #category : 'instance creation' }
 RowanProjectService class >> newNamed: aString [
 
