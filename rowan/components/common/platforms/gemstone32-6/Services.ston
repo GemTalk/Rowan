@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone32-6/Services',
+	#condition : [
+		'gs3.[2-6]'
+	],
+	#packageNames : [
+		'Rowan-Services-Core-32x'
+	],
+	#comment : 'Services gemstone packages - 3.2.x thru 3.6.x'
+}
