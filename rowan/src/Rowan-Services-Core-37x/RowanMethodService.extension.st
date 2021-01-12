@@ -1,8 +1,8 @@
 Extension { #name : 'RowanMethodService' }
 
-{ #category : '*rowan-services-core-361x' }
+{ #category : '*rowan-services-core-37x' }
 RowanMethodService >> _initializeBreakPointsFor: theMethod [
-  "Answers an Array stepPoints - _allBreakpoints array size changed in 3.6.1"
+  "Answers an Array stepPoints - _allBreakpoints array size changed in 3.7.0"
   | list |
   list := OrderedCollection new.
   theMethod _allBreakpoints

@@ -5,7 +5,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [
 		'common/platforms/gemstone/Services',
 		'common/platforms/gemstone32-5/Services',
-		'common/platforms/gemstone36-/Services'
+		'common/platforms/gemstone37-/Services'
 	],
 	#packageNames : [ ],
 	#comment : ''
