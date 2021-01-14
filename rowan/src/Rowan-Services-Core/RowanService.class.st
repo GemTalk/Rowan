@@ -57,7 +57,7 @@ RowanService class >> instantiateFrom: sparkleService [
 	| rowanServiceClass |
 	rowanServiceClass := (GsSession currentSession
 		resolveSymbol: sparkleService rowanServiceClassName) value.
-	^ rowanServiceClass instantiateFrom: sparkleService
+	^ rowanServiceClass instantiateFromSparkle: sparkleService
 ]
 
 { #category : 'sparkle' }
@@ -69,6 +69,15 @@ RowanService class >> instantiateFromClassName: classString meta: meta [
 	meta
 		ifTrue: [ theClass := theClass class ].
 	^theClass new
+]
+
+{ #category : 'sparkle' }
+RowanService class >> instantiateFromSparkle: sparkleService [
+	"very simple instantiation from a sparkle blob" 
+	| service |
+	service := self new. 
+	service name: (sparkleService blobPropertyNamed: #'name').
+	^ service
 ]
 
 { #category : 'rsr' }
