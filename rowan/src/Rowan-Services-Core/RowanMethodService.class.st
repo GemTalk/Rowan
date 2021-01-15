@@ -64,6 +64,19 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 	^service
 ]
 
+{ #category : 'sparkle' }
+RowanMethodService class >> instantiateFromSparkle: sparkleService [
+	"very simple instantiation from a sparkle blob"
+
+	| service |
+	service := super instantiateFromSparkle: sparkleService.
+	service className: (sparkleService blobPropertyNamed: #'className').
+	service selector: (sparkleService blobPropertyNamed: #'selector').
+	service meta: (sparkleService blobPropertyNamed: #'meta').
+	service oop: (sparkleService blobPropertyNamed: #'oop').
+	^ service
+]
+
 { #category : 'utility' }
 RowanMethodService class >> put: string onStreamWithoutUnicode: stream [
 

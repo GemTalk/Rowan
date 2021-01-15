@@ -73,10 +73,12 @@ RowanService class >> instantiateFromClassName: classString meta: meta [
 
 { #category : 'sparkle' }
 RowanService class >> instantiateFromSparkle: sparkleService [
-	"very simple instantiation from a sparkle blob" 
+	"very simple instantiation from a sparkle blob"
+
 	| service |
-	service := self new. 
-	service name: (sparkleService blobPropertyNamed: #'name').
+	service := self new.
+	service organizer: ClassOrganizer new.
+	service name: (sparkleService blobPropertyNamed: #'name' ifAbsent: [  ]).
 	^ service
 ]
 
@@ -453,6 +455,11 @@ RowanService >> makeSparkle [
 		instVarValue := self instVarAt: index.
 		sparkleService blob at: instVarName put: instVarValue makeSparkle ].
 	^ sparkleService
+]
+
+{ #category : 'sparkle' }
+RowanService >> name: dontCare [
+	"for rowan services which don't have a name -  ignore"
 ]
 
 { #category : 'accessing' }
