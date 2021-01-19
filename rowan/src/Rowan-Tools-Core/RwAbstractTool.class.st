@@ -18,9 +18,6 @@ Fundamental concepts:
 Class {
 	#name : 'RwAbstractTool',
 	#superclass : 'Object',
-	#instVars : [
-		'specification'
-	],
 	#category : 'Rowan-Tools-Core'
 }
 
@@ -90,38 +87,4 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 				value: projectDef.
 			^ self ]
 		ifAbsent: absentBlock
-]
-
-{ #category : 'git' }
-RwAbstractTool >> doGitCommit: messageString [
-
-	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	commitMessageFileName := gitTool createTmpFileWith: messageString.
-	gitTool gitaddIn: gitRootPath with: '-A .'.
-	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
-	status := gitTool gitlogIn: gitRootPath with: '-1'.
-	Transcript
-		cr;
-		show: '==============';
-		cr;
-		show: status.
-	^ status
-
-]
-
-{ #category : 'private' }
-RwAbstractTool >> fileUtilities [
-  ^ Rowan fileUtilities
-]
-
-{ #category : 'smalltalk api' }
-RwAbstractTool >> specification: aRwSpecification [
-  ^ specification := aRwSpecification
-]
-
-{ #category : 'smalltalk api' }
-RwAbstractTool >> specUrl: aString [
-  ^ self specification: (RwSpecification fromUrl: aString)
 ]

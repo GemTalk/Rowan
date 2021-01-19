@@ -25,14 +25,6 @@ Class {
 	#category : 'Rowan-Core'
 }
 
-{ #category : 'testing' }
-RwConfiguration >> needsPackageProtocolNames [
-
-	"Answer true if image protocol names need to be *<packageName>*"
-
-	^ packageInfoSource == #'Category'
-]
-
 { #category : 'accessing' }
 RwConfiguration >> packageInfoSource [
 	^packageInfoSource

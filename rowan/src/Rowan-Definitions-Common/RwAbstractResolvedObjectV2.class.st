@@ -101,13 +101,6 @@ RwAbstractResolvedObjectV2 >> addSimpleComponentNamed: aComponentName condition:
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString [
-	self
-		subclassResponsibility:
-			#'addSimpleComponentNamed:condition:groupName:comment:'
-]
-
-{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> comment [
 	^ self subclassResponsibility: #'comment'
 ]
@@ -150,11 +143,6 @@ RwAbstractResolvedObjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPacka
 { #category : 'package properties' }
 RwAbstractResolvedObjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
-]
-
-{ #category : 'project specification' }
-RwAbstractResolvedObjectV2 >> groupNames [
-	^ self _loadSpecification groupNames
 ]
 
 { #category : 'project specification' }

@@ -63,15 +63,6 @@ RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	^ 'unknown'
 ]
 
-{ #category : 'instance creation' }
-RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
-
-	^ self new
-		initialize;
-		initializeForLoadSpecification: aLoadSpecification;
-		yourself
-]
-
 { #category : 'accessing' }
 RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 
@@ -100,13 +91,6 @@ RwLoadedProject >> initialize [
 	loadedPackages := KeyValueDictionary new.
 	isDirty := true. "a project is dirty if it has changes that are not written to disk"
 
-]
-
-{ #category : 'initialization' }
-RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
-
-	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification
 ]
 
 { #category : 'testing' }
@@ -228,12 +212,6 @@ RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
-]
-
-{ #category : 'private' }
-RwLoadedProject >> markProjectDirty [
-
-	self markDirty
 ]
 
 { #category : 'accessing' }

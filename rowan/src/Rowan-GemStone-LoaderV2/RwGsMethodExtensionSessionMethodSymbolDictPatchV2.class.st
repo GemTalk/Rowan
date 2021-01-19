@@ -11,64 +11,6 @@ Class {
 }
 
 { #category : 'compiling' }
-RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [ | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-]
-
-{ #category : 'compiling' }
-RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-  [ | sourceString protocol |
-	  sourceString := methodDefinition source.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: tempSymbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-]
-
-{ #category : 'compiling' }
 RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses

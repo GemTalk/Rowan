@@ -42,15 +42,6 @@ RwModificationTonelWriterVisitorV2 >> _commentOf: aClassDefinition [
 ]
 
 { #category : 'class writing' }
-RwModificationTonelWriterVisitorV2 >> _fileNameFor: aClassDefinition [
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
-]
-
-{ #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _hasCommentOf: aClassDefinition [ 
 
 	| comment |

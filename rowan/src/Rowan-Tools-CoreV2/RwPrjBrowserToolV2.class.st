@@ -45,31 +45,12 @@ RwPrjBrowserToolV2 >> _copyClassDefinitionNamed: className to: newName [
 ]
 
 { #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedClassExtensionsNamed: className [
-
-	^ self
-		_loadedClassExtensionsNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'No extensions for the class ' , className printString , ' were found' ]
-]
-
-{ #category : 'private' }
 RwPrjBrowserToolV2 >> _loadedClassExtensionsNamed: className ifAbsent: absentBlock [
 
 	^ Rowan image
 		loadedClassExtensionsNamed: className
 		ifFound: [ :loadedClassExtensionSet | ^ loadedClassExtensionSet ]
 		ifAbsent: absentBlock
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedClassNamed: className [
-
-	^ self
-		_loadedClassNamed: className
-		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
 ]
 
 { #category : 'private' }
@@ -118,51 +99,11 @@ RwPrjBrowserToolV2 >> _loadedPackageNamed: packageName ifAbsent: absentBlock [
 ]
 
 { #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForClassNamed: className [
-
-	^ (self _loadedClassNamed: className) loadedProject
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
-
-	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
-		loadedProject
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _loadedProjectForPackageNamed: packageName [
-
-	^ (self _loadedPackageNamed: packageName) loadedProject
-]
-
-{ #category : 'private' }
 RwPrjBrowserToolV2 >> _loadedProjectNamed: projectName [
 
 	^ Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForClassNamed: className [
-
-	^ (self _loadedProjectForClassNamed: className) asDefinition
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
-
-	^ (self
-		_loadedProjectForMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta) asDefinition
-]
-
-{ #category : 'private' }
-RwPrjBrowserToolV2 >> _projectForPackageNamed: packageName [
-
-	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
 ]
 
 { #category : 'private' }
@@ -431,8 +372,10 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource inProtocol: hybridPackageN
 				ifAbsent: [  ].
 			hybridLoadedPackage
 				ifNotNil: [ 
+					| pkgConvention |
 					hybridLoadedProject := hybridLoadedPackage loadedProject.
-					hybridLoadedProject packageConvention = 'RowanHybrid'
+					pkgConvention := hybridLoadedProject packageConvention.
+					(pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
 						ifTrue: [ 
 							"everything is cool - the project associated with hybridPackageName _is_ using the `RowanHybrid` package convention"
 							 ]
@@ -697,16 +640,6 @@ RwPrjBrowserToolV2 >> addPackageNamed: packageName toComponentNamed: componentNa
 RwPrjBrowserToolV2 >> addPackageNamed: packageName toProjectNamed: projectName [
 
 	^ self addPackageNamed: packageName toComponentNamed: 'Core' andProjectNamed: projectName
-]
-
-{ #category : 'package browsing' }
-RwPrjBrowserToolV2 >> addPackagesNamed: packageNames toProjectNamed: projectName [
-
-	| projectDefinition |
-	projectDefinition := self _projectNamed: projectName.
-	packageNames
-		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
-	Rowan projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'project browsing' }

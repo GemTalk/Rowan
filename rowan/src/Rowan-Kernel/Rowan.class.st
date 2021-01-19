@@ -84,13 +84,6 @@ Rowan class >> defaultAutomaticClassInitializationBlackList [
 	^ self platform automaticClassInitializationBlackList_default
 ]
 
-{ #category : 'private' }
-Rowan class >> fileUtilities [
-	"Private to the Cypress system."
-
-	^self platform fileUtilities
-]
-
 { #category : 'public tools' }
 Rowan class >> gitTools [
 

@@ -29,12 +29,6 @@ RwLoadedMethod >> classIsMeta [
 	^classIsMeta
 ]
 
-{ #category : 'accessing' }
-RwLoadedMethod >> classIsMeta: aBoolean [
-
-	classIsMeta := aBoolean
-]
-
 { #category : 'queries' }
 RwLoadedMethod >> loadedClass [
 

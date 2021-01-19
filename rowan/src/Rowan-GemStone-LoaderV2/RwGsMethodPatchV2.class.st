@@ -62,64 +62,6 @@ RwGsMethodPatchV2 >> compiledMethod [
 ]
 
 { #category : 'compiling' }
-RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [
-	  | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		  intoCategories: nil
-		  environmentId: self methodEnvironmentId
-  ] on: (CompileError, CompileWarning) do:[:ex |
-    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-    ex pass 
-  ]
-]
-
-{ #category : 'compiling' }
-RwGsMethodPatchV2 >> compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-	[ 
-	| sourceString protocol |
-	sourceString := methodDefinition source.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: tempSymbolList
-		category: protocol
-		intoMethodDict: false
-		intoCategories: nil
-		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
-		on: CompileError , CompileWarning
-		do: [ :ex | 
-			ex
-				addText:
-					(RwRepositoryResolvedProjectTonelReaderVisitorV2
-						lineNumberStringForMethod: methodDefinition).
-			ex pass ]
-]
-
-{ #category : 'compiling' }
 RwGsMethodPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses
@@ -174,27 +116,6 @@ RwGsMethodPatchV2 >> isMeta: newValue [
 
 ]
 
-{ #category : 'private' }
-RwGsMethodPatchV2 >> loadedClassOrExtensionForMethod [
-
-	"The loaded class or extension should already exist."
-
-	| loadedPackage className |
-	loadedPackage := Rowan image
-		loadedPackageNamed: self packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
-	className := classDefinition key.
-	^ loadedPackage
-		classOrExtensionForClassNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
-
-]
-
 { #category : 'accessing' }
 RwGsMethodPatchV2 >> methodDefinition [
 	^methodDefinition
@@ -213,14 +134,6 @@ RwGsMethodPatchV2 >> methodEnvironmentId [
 	"use the project load spec package properties"
 
 	^ self projectDefinition methodEnvForPackageNamed: self packageName
-]
-
-{ #category : 'private-installing' }
-RwGsMethodPatchV2 >> packageProtocolName [
-
-	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
-
-	^ '*' , self packageName
 ]
 
 { #category : 'private' }
@@ -246,33 +159,6 @@ RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClasses andExistingClasses:
 ]
 
 { #category : 'private' }
-RwGsMethodPatchV2 >> primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: tempSymbolList [
-	| className class symDictName |
-	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're done"
-			^ self ].
-	className := classDefinition key asSymbol.
-	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
-		lookupSymbolDictName: symDictName
-		in: createdClassesSymbolList)
-		at: className
-		ifAbsent: [ 
-			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
-				at: className
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							^ self ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ]
-]
-
-{ #category : 'private' }
 RwGsMethodPatchV2 >> primeBehaviorNewClassesSymbolList: createdClassesSymbolList andExistingClasses: tempSymbols [
 	| className class symDictName |
 	classDefinition key
@@ -281,7 +167,7 @@ RwGsMethodPatchV2 >> primeBehaviorNewClassesSymbolList: createdClassesSymbolList
 			^ self ].
 	className := classDefinition key asSymbol.
 	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
+	class := (RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: createdClassesSymbolList)
 		at: className
@@ -330,14 +216,4 @@ RwGsMethodPatchV2 >> runInitializer [
 RwGsMethodPatchV2 >> selector [
 
 	^ selector
-]
-
-{ #category : 'private-installing' }
-RwGsMethodPatchV2 >> setProtocolTo: protocolString [
-
-	| protocolSymbol |
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [behavior addCategory: protocolSymbol].
-	behavior moveMethod: selector toCategory: protocolSymbol
 ]

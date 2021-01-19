@@ -477,15 +477,6 @@ RwTonelParser >> try: aBlock [
 ]
 
 { #category : 'private parsing' }
-RwTonelParser >> try: aBlock onFailure: failureBlock [
-	^ self 
-		try: aBlock 
-		onSuccess: [ :parsedValue |  parsedValue ] 
-		onFailure: failureBlock
-
-]
-
-{ #category : 'private parsing' }
 RwTonelParser >> try: aBlock onSuccess: successBlock [
 	^ self 
 		try: aBlock 

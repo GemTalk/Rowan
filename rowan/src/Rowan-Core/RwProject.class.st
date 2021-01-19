@@ -134,7 +134,13 @@ RwProject >> commitId [
 	^ self _loadedProject commitId
 ]
 
-{ #category : 'components' }
+{ #category : 'querying' }
+RwProject >> commitLog: logLimit [
+
+	^ self _loadedProject commitLog: logLimit
+]
+
+{ #category : 'querying' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
 
@@ -396,12 +402,13 @@ RwProject >> projectUrl [
 	^ self _loadedProject projectUrl
 ]
 
-{ #category : 'project creation' }
-RwProject >> register [
-	"Create a loaded project based on the receiver's properties in the image."
+{ #category : 'actions' }
+RwProject >> reload [
+	"
+		load the receiver AND required projects.
+	"
 
-	self _specification register
-
+	^ Rowan projectTools load loadProjectNamed: self name
 ]
 
 { #category : 'properties' }
@@ -421,6 +428,44 @@ RwProject >> repositoryCommitId [
 RwProject >> repositoryRootPath [
 
 	^ self repositoryRoot pathString
+]
+
+{ #category : 'actions' }
+RwProject >> revert [
+	"
+		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly revert the receiver AND required projects, <TBD>.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'actions' }
+RwProject >> revert: platformConditionalAttributes [
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'actions' }
+RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMigrator [
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+			receiver are only loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
 ]
 
 { #category : 'components' }

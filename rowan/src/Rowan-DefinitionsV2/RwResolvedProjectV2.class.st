@@ -233,15 +233,6 @@ RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition
 		comment: commentString
 ]
 
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString [
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionArray
-		comment: commentString
-]
-
 { #category : 'accessing' }
 RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
 	| component |
@@ -376,15 +367,6 @@ RwResolvedProjectV2 >> checkout: aCommittish [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> classNamed: aString ifAbsent: absentBlock [
-	self packages
-		do: [ :packageDef | 
-			(packageDef classDefinitionNamed: aString ifAbsent: [  ])
-				ifNotNil: [ :classDef | ^ classDef ] ].
-	^ absentBlock value
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
 	^ self _projectDefinition comment
 ]
@@ -489,15 +471,7 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components
-		do: [ :component | 
-			component
-				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				yourself ].
-	self components isEmpty
-		ifTrue: [ 
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+	self components export: self componentsRoot
 ]
 
 { #category : 'exporting' }

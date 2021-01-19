@@ -229,13 +229,6 @@ RwGsPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> fileUtilities [
-  "Answer the platform-specific object for accessing files and directories"
-
-  ^ RwGsFileUtilities
-]
-
-{ #category : 'queries' }
 RwGsPlatform >> globalNamed: aString [
 
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."

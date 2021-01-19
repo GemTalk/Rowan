@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : 'other' }
-RwPkgAuditToolV2 >> _addAll: aColl to: aDict for: aName [
-
-	aDict at: aName ifAbsentPut: [aColl].
-
-]
-
-{ #category : 'other' }
 RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 	"audit dirty packages"
 

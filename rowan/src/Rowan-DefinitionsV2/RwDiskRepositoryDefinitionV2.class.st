@@ -13,11 +13,6 @@ RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFi
 		yourself
 ]
 
-{ #category : 'private' }
-RwDiskRepositoryDefinitionV2 >> _fileSystem [
-	^ FileSystem disk
-]
-
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> canCommit [
 

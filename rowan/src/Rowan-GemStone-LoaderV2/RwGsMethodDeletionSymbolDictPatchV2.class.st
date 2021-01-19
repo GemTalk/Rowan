@@ -5,37 +5,6 @@ Class {
 }
 
 { #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses
@@ -47,29 +16,6 @@ RwGsMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClassesSymbolList: created
 
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	"remove the method from deleted things"
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList [
-	"remove the method from deleted things"
-
-	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
@@ -98,15 +44,4 @@ RwGsMethodDeletionSymbolDictPatchV2 >> isAnInitializer [
 { #category : 'initializers' }
 RwGsMethodDeletionSymbolDictPatchV2 >> runInitializer [
 	"noop"
-]
-
-{ #category : 'accessing' }
-RwGsMethodDeletionSymbolDictPatchV2 >> symbolDictionary [
-	"For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
-
-	^ Rowan image 
-			loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
-			ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
-			ifAbsent: [ ^ super symbolDictionary ]
-
 ]

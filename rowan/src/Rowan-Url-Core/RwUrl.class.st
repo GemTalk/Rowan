@@ -112,14 +112,7 @@ RwUrl class >> urlClassForScheme: scheme [
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
 	^ {RwFileUrl.
-	RwCypressUrl.
-	RwTonelUrl.
-	RwFiletreeUrl.
-	RwGithubUrl.
-	RwGenericUrl.
 	RwHierarchicalUrl.
-	RwSmalltalkRepositoryUrl.
-	RwGitFileTreeUrl.
 	RwHttpUrl.
 	RwHttpsUrl}
 		detect: [ :urlClass | urlClass schemeName = scheme ]
@@ -161,20 +154,6 @@ RwUrl >> authority [
 RwUrl >> fragment [
 	^fragment
 
-]
-
-{ #category : 'accessing' }
-RwUrl >> pathFor: coll [
-  | ans sz |
-  ans := WriteStreamPortable on: String new.
-  sz := coll size.
-  1 to: sz do: [ :index | 
-    | pathElem |
-    pathElem := coll at: index.
-    ans nextPutAll: pathElem.
-    index < sz
-      ifTrue: [ ans nextPut: $/ ] ].
-  ^ ans contents
 ]
 
 { #category : 'printing' }

@@ -30,14 +30,6 @@ RwAbstractProjectDefinitionV2 >> _projectDefinition [
 	^ self
 ]
 
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> addOrUpdatePackage: aPackageDefinition [
-
-	| key |
-	key := aPackageDefinition key.
-	packages at: key put: aPackageDefinition
-]
-
 { #category : 'properties' }
 RwAbstractProjectDefinitionV2 >> comment [
 

@@ -412,11 +412,6 @@ RwDefinedProject >> projectSpecFile: relativePathString [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> projectSpecName: aString [
-	self _projectSpecification specName: aString
-]
-
-{ #category : 'accessing' }
 RwDefinedProject >> projectSpecPath: aString [
 	self _projectSpecification projectSpecPath: aString
 ]

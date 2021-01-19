@@ -361,18 +361,3 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 								loadedClass: loadedClass) ] ].
 	^ res
 ]
-
-{ #category : 'audit' }
-RwClsAuditTool >> errorLog: aResult add: aMessage [
-	"add error to results. print to file"
-
-	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
-]
-
-{ #category : 'audit' }
-RwClsAuditTool >> errorLog: aResult addAll: aCol [
-	"add all messages to result"
-
-	aCol do: [ :e | self errorLog: aResult add: e ]
-]

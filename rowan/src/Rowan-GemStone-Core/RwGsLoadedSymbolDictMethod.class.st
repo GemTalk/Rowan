@@ -18,12 +18,6 @@ RwGsLoadedSymbolDictMethod class >> forMethod: aGsNMethod [
 	^ instance
 ]
 
-{ #category : 'private' }
-RwGsLoadedSymbolDictMethod >> definingPackageOfClass [
-
-	^loadedClass loadedPackage
-]
-
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictMethod >> handleClassDeletion [
 

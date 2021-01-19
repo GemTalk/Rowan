@@ -69,6 +69,8 @@ RwTestProjectLibraryGenerator new
 	genSpec_0056: commitComment;
 	genSpec_0057: commitComment;
 	genSpec_0058: commitComment;
+	genSpec_0059: commitComment;
+	genSpec_0060: commitComment;
 	yourself
 "
 Class {
@@ -3228,6 +3230,43 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
+	"Start with spec_0001; add RowanSample10 as an external project ... based on genSpec_0052"
+
+	| requiredProjectName requiredLoadSpec componentName requiredClassName1 className1 packageName1 |
+	requiredProjectName := 'RowanSample10'.
+	componentName := 'Core'.
+	requiredClassName1 :=  requiredProjectName , 'Class1'.
+	className1 :=  projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		revision: 'spec_0001';
+		gitUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		componentNames: {componentName};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: { 'tests' }
+		yourself.
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+
+	(resolvedProject componentNamed: componentName)
+		addProjectNamed: requiredProjectName;
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed: className1)
+			superclassName: requiredClassName1;
+			instVarNames: #();
+			yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -3442,7 +3481,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			resolvedRepository repositoryRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
-						nextPutAll: '# RowanSample9 - ' , specName;
+						nextPutAll: '# ', projectName, ' - ' , specName;
 						lf;
 						nextPutAll: indexCard title;
 						lf;
@@ -3486,10 +3525,9 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
-				nextPutAll: '# RowanSample9';
+				nextPutAll: '# ', projectName;
 				lf;
-				nextPutAll:
-						'Sample project that is being used to develop the **final** version of the V2.0 project handling API.';
+				nextPutAll: self projectReadmeIntro;
 				lf;
 				nextPutAll: '## Summary of Load Specs';
 				lf;
@@ -6688,6 +6726,51 @@ RwTestProjectLibraryGenerator >> genSpec_0059: commitMessage [
 		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
 ]
 
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
+	"Start with spec_0001; add RowanSample10 as an external project ... based on genSpec_0052"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0060'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001; add RowanSample10 as an external project ... based on genSpec_0052'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 60
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(668);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0060: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> indexCardMap [
 	^ indexCardMap
@@ -6723,9 +6806,9 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 		ifFalse: [ ^ self ].
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/RowanSample9.git'.
+		with: 'git@github.com:dalehenrich/', projectName, '.git'.
 	indexCardMap := Dictionary new.
-	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9' / 'indexCards')
+	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards')
 		files
 		do: [ :file | 
 			| indexCard |
@@ -6745,6 +6828,13 @@ RwTestProjectLibraryGenerator >> projectName [
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> projectName: object [
 	projectName := object
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGenerator >> projectReadmeIntro [
+	"Intro in README"
+
+	^ 'Sample project that is being used to develop the **final** version of the V2.0 project handling API.'
 ]
 
 { #category : 'accessing' }

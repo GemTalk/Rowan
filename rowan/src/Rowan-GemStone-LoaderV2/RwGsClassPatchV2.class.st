@@ -59,19 +59,6 @@ RwGsClassPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> addToNewClassesByName: aDictionary [
-
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := classDefinition key.
-	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
-]
-
-{ #category : 'actions' }
 RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
@@ -79,7 +66,7 @@ RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList 
 	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
 	symDictName := self symbolDictionaryName.
-	symDict := RwGsPatchSet_V2_symbolList
+	symDict := RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: newClassesByNameSymbolList
 		ifAbsent: [ 
@@ -191,15 +178,6 @@ RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
 	aPatchSet createdClass: createdClass inSymDict: symDictName.
 	^ createdClass
-]
-
-{ #category : 'patching moved classes' }
-RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
 ]
 
 { #category : 'installing' }

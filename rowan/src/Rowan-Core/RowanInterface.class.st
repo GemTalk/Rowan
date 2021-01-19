@@ -22,12 +22,6 @@ RowanInterface >> _loadedProject [
 ]
 
 { #category : 'private' }
-RowanInterface >> _packageTools [
-
-	^ Rowan packageTools
-]
-
-{ #category : 'private' }
 RowanInterface >> _projectTools [
 
 	^ Rowan projectTools

@@ -32,7 +32,7 @@ RwGsClassAdditionSymbolDictPatchV2 >> installClassInSystem [
 	| loadedClass |
 	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
-		forClass: newClass
+		forClass: self newClass
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition

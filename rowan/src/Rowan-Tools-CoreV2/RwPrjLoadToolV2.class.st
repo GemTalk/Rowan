@@ -156,12 +156,8 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
 			absentProjectNames isEmpty
 				ifFalse: [ 
-					self
-						error:
-							'Missing required projects for the project '
-								, projectDefinition name printString
-								,
-									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
+					projectSetDefinition := projectDefinition
+						readProjectSet: platformConfigurationAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -241,18 +237,6 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad symbolLi
 		loadProjectSetDefinition: projectSetDefinitionToLoad
 		instanceMigrator: Rowan platform instanceMigrator
 		symbolList: symbolList
-]
-
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromFile: aFilePathOrReference [
-
-	^ RwSpecification fromFile: aFilePathOrReference
-]
-
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromUrl: specUrl [
-
-	^ RwSpecification fromUrl: specUrl
 ]
 
 { #category : 'utilities' }

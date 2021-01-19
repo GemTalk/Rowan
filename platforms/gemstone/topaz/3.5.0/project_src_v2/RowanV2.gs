@@ -6418,7 +6418,7 @@ removeallclassmethods RwModificationTonelWriterVisitorV2
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
-	instVarNames: #( packageNames packageNamesBlock currentDirectory currentProjectReferenceDefinition )
+	instVarNames: #( packageNames packageNamesBlock currentProjectReferenceDefinition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6580,7 +6580,7 @@ removeallclassmethods RwResolvedRepositoryV2
 doit
 (Object
 	subclass: 'RwAbstractTool'
-	instVarNames: #( specification )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6685,6 +6685,75 @@ removeallclassmethods RwClsDiffTool
 
 doit
 (RwAbstractTool
+	subclass: 'RwExamplesTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-Examples';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwExamplesTool
+removeallclassmethods RwExamplesTool
+
+doit
+(RwExamplesTool
+	subclass: 'RwExampleComponentRefactoringTool'
+	instVarNames: #( definedProject components packages conditions platformConditions )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-Examples';
+		comment: 'This is an example tool that was used to refactor the Rowan component structure that was present 
+in commit ebdabb9d9 of the Rowan project. See https://github.com/GemTalk/Rowan/issues/617 for
+additional information.
+
+The goal of the restructuring was to move the tests, classes and methods that were managed by 
+conditional components with the condition v2Only and v2 into packages where possible and new
+component structure otherwise. The process involved basically folding the v2 and v2Only 
+components into the existing common component structure.
+
+If you inspect the result of the following expression:
+
+	Rowan projectTools examples componentRefactoring forProjectNamed: ''Rowan'' componentNamed: ''Rowan''
+
+you see that there are 6 instance variables:
+	project					- the loaded project for Rowan (instance of RwProject)
+	components			- a dictionary of the components on disk for the current Rowan project
+	packages				- a dictionary that maps the packageNames to the component that manages
+									the package
+	conditions				- a dictionary that maps the subcomponent conditions to a list of the
+									subcomponents that specify that condition
+	platformConditions	- a dictionary that maps the platformComponent condition arrays to a list of
+									the plaformComponents that specifies that condition array
+
+Inspecting these fields can give you an overview of the composition of the given project and load spec.
+
+The method #refactorComponentsWithCondition: does folds the classes and methods into existing 
+packages or creates new components to manage the existing packages when an appropriate existing
+package cannot be found.
+
+	Rowan projectTools examples componentRefactoring componentRefactoring forProjectNamed: ''Rowan'' componentNamed: ''Rowan''
+		refactorComponentsWithCondition: ''v2Only'';
+		refactorComponentsWithCondition: ''v2'';
+		export';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwExampleComponentRefactoringTool
+removeallclassmethods RwExampleComponentRefactoringTool
+
+doit
+(RwAbstractTool
 	subclass: 'RwGitTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -6754,24 +6823,6 @@ true.
 
 removeallmethods RwPkgCreateTool
 removeallclassmethods RwPkgCreateTool
-
-doit
-(RwPackageTool
-	subclass: 'RwPkgDiffTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPkgDiffTool
-removeallclassmethods RwPkgDiffTool
 
 doit
 (RwPackageTool
@@ -6919,24 +6970,6 @@ removeallclassmethods RwPrjBrowserToolV2
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjCheckoutTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjCheckoutTool
-removeallclassmethods RwPrjCheckoutTool
-
-doit
-(RwProjectTool
 	subclass: 'RwPrjCloneTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -7081,60 +7114,6 @@ removeallclassmethods RwPrjLoadToolV2
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjLogTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjLogTool
-removeallclassmethods RwPrjLogTool
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjPullTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjPullTool
-removeallclassmethods RwPrjPullTool
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjPushTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjPushTool
-removeallclassmethods RwPrjPushTool
-
-doit
-(RwProjectTool
 	subclass: 'RwPrjQueryTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -7186,24 +7165,6 @@ true.
 
 removeallmethods RwPrjReconcileToolV2
 removeallclassmethods RwPrjReconcileToolV2
-
-doit
-(RwProjectTool
-	subclass: 'RwPrjRevertTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwPrjRevertTool
-removeallclassmethods RwPrjRevertTool
 
 doit
 (RwProjectTool
@@ -8008,51 +7969,6 @@ removeallclassmethods RwEntitySet
 
 doit
 (Object
-	subclass: 'RwFileUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Core';
-		comment: 'No class-specific documentation for CypFileUtilities, hierarchy is: 
-Object
-  CypFileUtilities
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwFileUtilities
-removeallclassmethods RwFileUtilities
-
-doit
-(RwFileUtilities
-	subclass: 'RwGsFileUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-GemStone-Core';
-		comment: 'No class-specific documentation for CypGemStoneFileUtilities, hierarchy is: 
-Object
-  CypFileUtilities
-    CypGemStoneFileUtilities
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGsFileUtilities
-removeallclassmethods RwGsFileUtilities
-
-doit
-(Object
 	subclass: 'RwGsImage'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -8088,24 +8004,6 @@ true.
 
 removeallmethods RwGsImagePatchVisitor_V2
 removeallclassmethods RwGsImagePatchVisitor_V2
-
-doit
-(RwGsImagePatchVisitor_V2
-	subclass: 'RwGsImagePatchVisitor_V2_symbolList'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanLoader
-	options: #()
-)
-		category: 'Rowan-GemStone-LoaderV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGsImagePatchVisitor_V2_symbolList
-removeallclassmethods RwGsImagePatchVisitor_V2_symbolList
 
 doit
 (Object
@@ -8146,7 +8044,7 @@ removeallclassmethods RwGsDeferredInstanceMigrator
 doit
 (Object
 	subclass: 'RwGsPatchSet_V2'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition )
+	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition movedClassesSymbolList addedUnmanagedClasses loadSymbolList )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -8161,24 +8059,6 @@ true.
 
 removeallmethods RwGsPatchSet_V2
 removeallclassmethods RwGsPatchSet_V2
-
-doit
-(RwGsPatchSet_V2
-	subclass: 'RwGsPatchSet_V2_symbolList'
-	instVarNames: #( tempSymbolList movedClassesSymbolList addedUnmanagedClasses loadSymbolList )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanLoader
-	options: #()
-)
-		category: 'Rowan-GemStone-LoaderV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGsPatchSet_V2_symbolList
-removeallclassmethods RwGsPatchSet_V2_symbolList
 
 doit
 (Object
@@ -9743,114 +9623,6 @@ removeallmethods RwFileUrl
 removeallclassmethods RwFileUrl
 
 doit
-(RwFileUrl
-	subclass: 'RwCypressUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the cypress: scheme:
-
- cypress:/opt/git/shared/repos/rowan/sample/repository/
-
-The cypress: url specifies the file system path to the directory where a disk-based Smalltalk package repository resides. The name comes from the original name used to specifay a cross-platform package disk layout[1].
-
-This url does not encode the specific disk format used by the repository (like the filetree: and tonel: schemes). The disk format is specified in a .cypress file in the directory using STON ike the following:
-
-  { #format : ''filetree'' }
-  { #format : ''tonel'' }
-  { #format : ''cypress'' }
-
-When the cypress: url is resolved, the appropriate platform-specific repository reader will be used to read the packages from disk.
-
-[1] https://raw.githubusercontent.com/CampSmalltalk/Cypress/master/img/CypressStructure-STIC2012.png';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwCypressUrl
-removeallclassmethods RwCypressUrl
-
-doit
-(RwCypressUrl
-	subclass: 'RwTonelUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the tonel: scheme:
-
-  tonel:/opt/git/shared/repos/rowan/sample/repository
-
-The scheme is supported for backward compatibility with the tonel disk format[1]. Not sure whether it''s use has made it into the wild, but it _is_ currently being used in the Rowan implementation.
-
-[1] https://github.com/pharo-vcs/tonel';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwTonelUrl
-removeallclassmethods RwTonelUrl
-
-doit
-(RwFileUrl
-	subclass: 'RwFiletreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the filetree: scheme[1]:
-
- filetree:///opt/git/shared/repos/rowan/sample/repository
-
-This scheme is supported for backward compatibility. Moving forward the cypress: scheme should be used (see RwCypressUrl).
-
-[1] https://github.com/Metacello/metacello/blob/master/docs/MetacelloScriptingAPI.md#filetree';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwFiletreeUrl
-removeallclassmethods RwFiletreeUrl
-
-doit
-(RwFileUrl
-	subclass: 'RwGithubUrl'
-	instVarNames: #( project committish dir )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the github: scheme[1]:
-
-  github://GsDevKit/GsDevKit:master/repository
-
-This scheme is supported for backward compatibility. Moving forward the metacello: scheme should be used (see RwMetacelloRepositoryUrl).
-
-[1] https://github.com/Metacello/metacello/blob/master/docs/MetacelloScriptingAPI.md#github';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGithubUrl
-removeallclassmethods RwGithubUrl
-
-doit
 (RwUrl
 	subclass: 'RwGenericUrl'
 	instVarNames: #( schemeName locator )
@@ -9923,78 +9695,6 @@ true.
 
 removeallmethods RwHttpsUrl
 removeallclassmethods RwHttpsUrl
-
-doit
-(RwHierarchicalUrl
-	subclass: 'RwSmalltalkRepositoryUrl'
-	instVarNames: #( project committish dir )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the smalltalk: scheme:
-
- smalltalk://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
- smalltalk://git@git.gemtalksystems.com/btree340:dev/repository
- smalltalk://git@github.com/GsDevKit/GsDevKit:350/repository
- smalltalk://github.com/GsDevKit/GsDevKit:350/repository
-
-The smalltalk: scheme is based on Thierry Goubier''s gitfiletree url[1]:
-
-  smalltalk:// <[user[:password]@]host[:port]> / user/ projectName [ : versionIdentifier ] [ / repositoryPath ]
-
-[1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwSmalltalkRepositoryUrl
-removeallclassmethods RwSmalltalkRepositoryUrl
-
-doit
-(RwSmalltalkRepositoryUrl
-	subclass: 'RwGitFileTreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #()
-)
-		category: 'Rowan-Url-Core';
-		comment: 'This class implements the gitfiletree: scheme:
-
- gitfiletree://gitlab.com/GsDevKit/GsDevKit:master/repository
-
-The gitfiletree scheme [1] encodes the following information:
-
-  gitfiletree:// [ user [ : password ] @ ] host [ : port ] / user / project [ : branch ] [ / repositoryPath ]
-
-From the method comment[1]:
-
-  Parameters are:
-		dir : the directory inside the repository where the target MC packages are.
-		branch : the git branch to fetch.
-		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
-		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
-	Alternative url syntax:
-		gitfiletree://github.com/dalehenrich/filetree:pharo5.0_dev/repository
-	with:
-		host : github.com
-		project : dalehenrich/filetree
-		branch : pharo5.0_dev
-		dir : repository
-
-[1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwGitFileTreeUrl
-removeallclassmethods RwGitFileTreeUrl
 
 doit
 (Object
@@ -30995,17 +30695,6 @@ addAll: aDictionary
 	^ aDictionary
 %
 
-category: 'accessing'
-method: GsTonelOrderedDictionary
-associations
-	"Answer a Collection containing the receiver's associations."
-
-	| result |
-	result := WriteStream on: (Array new: self size).
-	self associationsDo: [ :assoc | result nextPut: assoc ].
-	^ result contents
-%
-
 category: 'enumerating'
 method: GsTonelOrderedDictionary
 associationsDo: aBlock
@@ -33977,20 +33666,7 @@ method: JadeServer
 sbChangesInPackage: anOrderedCollection
 	"where anOrderedCollection is {packageName, projectName}"
 
-	| patch string packageName url |
-	packageName := anOrderedCollection removeFirst.
-	url := anOrderedCollection removeFirst.
-	patch := Rowan packageTools diff patchForPackageName: packageName.
-	string := self
-				_mcDescriptionOfPatch: patch
-				baseName: 'closest ancestor'
-				alternateName: nil.
-	writeStream
-		nextPutAll: 'changesInPackage';
-		lf;
-		nextPutAll: string;
-		yourself
-
+	self error: 'this message is no longer supported'
 %
 
 category: 'category'
@@ -49131,14 +48807,6 @@ defaultAutomaticClassInitializationBlackList
 	^ self platform automaticClassInitializationBlackList_default
 %
 
-category: 'private'
-classmethod: Rowan
-fileUtilities
-	"Private to the Cypress system."
-
-	^self platform fileUtilities
-%
-
 category: 'public tools'
 classmethod: Rowan
 gitTools
@@ -49596,13 +49264,6 @@ method: RowanInterface
 _loadedProject
 
 	^ self subclassResponsibility: #'_loadedProject'
-%
-
-category: 'private'
-method: RowanInterface
-_packageTools
-
-	^ Rowan packageTools
 %
 
 category: 'private'
@@ -50131,6 +49792,15 @@ loadSpecification
 
 category: 'accessing'
 method: RwDefinedProject
+moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageNamed: toPackageName
+	^ self _resolvedProject
+		moveClassExtensionNamed: aClassName
+		fromPackageNamed: fromPackageName
+		toPackageNamed: toPackageName
+%
+
+category: 'accessing'
+method: RwDefinedProject
 moveClassNamed: aClassName toPackageNamed: aPackageName
 	^ self _resolvedProject moveClassNamed: aClassName toPackageNamed: aPackageName
 %
@@ -50189,12 +49859,6 @@ category: 'accessing'
 method: RwDefinedProject
 projectSpecFile: relativePathString
 	^ self _resolvedProject projectSpecFile: relativePathString
-%
-
-category: 'accessing'
-method: RwDefinedProject
-projectSpecName: aString
-	self _projectSpecification specName: aString
 %
 
 category: 'accessing'
@@ -50849,7 +50513,14 @@ commitId
 	^ self _loadedProject commitId
 %
 
-category: 'components'
+category: 'querying'
+method: RwProject
+commitLog: logLimit
+
+	^ self _loadedProject commitLog: logLimit
+%
+
+category: 'querying'
 method: RwProject
 componentForPackageNamed: packageName
 	"Answer nil if no component found"
@@ -51144,12 +50815,14 @@ projectUrl
 	^ self _loadedProject projectUrl
 %
 
-category: 'project creation'
+category: 'actions'
 method: RwProject
-register
-	"Create a loaded project based on the receiver's properties in the image."
+reload
+	"
+		load the receiver AND required projects.
+	"
 
-	self _specification register
+	^ Rowan projectTools load loadProjectNamed: self name
 %
 
 category: 'properties'
@@ -51171,6 +50844,47 @@ method: RwProject
 repositoryRootPath
 
 	^ self repositoryRoot pathString
+%
+
+category: 'actions'
+method: RwProject
+revert
+	"
+		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly revert the receiver AND required projects, <TBD>.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+%
+
+category: 'actions'
+method: RwProject
+revert: platformConditionalAttributes
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+%
+
+category: 'actions'
+method: RwProject
+revert: platformConditionalAttributes  instanceMigrator: instanceMigrator
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+			receiver are only loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
 %
 
 category: 'components'
@@ -55508,22 +55222,14 @@ method: RowanMethodService
 breakPointsFor: aGsNMethod
   "Answers an Array stepPoints"
 
-  | list theMethod |
-  list := OrderedCollection new.
+  | theMethod |
   theMethod := aGsNMethod isMethodForBlock
     ifTrue: [ 
       isMethodForBlock := true.
       aGsNMethod homeMethod ]
     ifFalse: [ aGsNMethod ].
   homeMethodOop := theMethod asOop.
-  theMethod _allBreakpoints
-    ifNil: [ ^ OrderedCollection new ]
-    ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
-        list
-          add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
-  ^ list asOrderedCollection
+	^ self _initializeBreakPointsFor: theMethod
 %
 
 category: 'Accessing'
@@ -56266,7 +55972,7 @@ method: RowanPackageService
 changes
    "diffForPackageName: not implemented yet"
  
-   ^ (Rowan packageTools diff diffForPackageName: name) asString
+ self error: 'this message is no longer supported'
 %
 
 category: 'other'
@@ -56955,9 +56661,7 @@ category: 'rowan'
 method: RowanProjectService
 log
 
-	^Rowan projectTools log
-		commitLogProjectNamed: name
-		limit: 25
+	^self rwProject commitLog: 25
 %
 
 category: 'accessing'
@@ -57500,10 +57204,7 @@ category: 'queries'
 method: RowanQueryService
 projectLog: projectName
 
-	queryResults := 
-		(Rowan projectTools log
-		commitLogProjectNamed: projectName
-		limit: self defaultProjectLogSize).
+	queryResults := (Rowan projectNamed: projectName) commitLog: self defaultProjectLogSize.
 	RowanCommandResult addResult: self.
 %
 
@@ -58838,13 +58539,6 @@ visitLoadSpecification: aLoadSpecification
 
 category: 'visiting'
 method: RwAbstractProjectComponentVisitorV2
-visitNested: aProjectLoadComponent
-
-	^aProjectLoadComponent acceptNestedVisitor: self
-%
-
-category: 'visiting'
-method: RwAbstractProjectComponentVisitorV2
 visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
 	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
 		ifTrue: [ ^ self ].
@@ -58898,22 +58592,6 @@ _platformAttributeMatchIn: platformMatchersList
 		(self _matchPlatformAttributes: platformPatternMatcher) 
 			ifTrue: [ ^true ] ].
 	^false
-%
-
-category: 'private'
-method: RwAbstractProjectComponentVisitorV2
-_processConditionalProperties: aProjectLoadConfiguration
-	aProjectLoadConfiguration conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :groupMap | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					groupMap
-						keysAndValuesDo: [ :group :map | 
-							self
-								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-								for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
 %
 
 category: 'private'
@@ -60411,14 +60089,6 @@ topazFilename: aString
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
-topazFilename: aNameString filenameExtension: anExtensionString
-
-	topazFilename := aNameString.
-	filenameExtension := anExtensionString
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
 topazFilenameComponentMap
 
 	^ topazFilenameComponentMap
@@ -61524,16 +61194,6 @@ _classSourceFile
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
-_fileNameFor: aClassDefinition
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
-%
-
-category: 'class writing'
-method: RwModificationTonelWriterVisitor
 _hasCommentOf: aClassDefinition 
 
 	| comment |
@@ -62611,16 +62271,6 @@ _commentOf: aClassDefinition
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitorV2
-_fileNameFor: aClassDefinition
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
-%
-
-category: 'class writing'
-method: RwModificationTonelWriterVisitorV2
 _hasCommentOf: aClassDefinition 
 
 	| comment |
@@ -62824,34 +62474,6 @@ compileWhileReading: aBoolean
   self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 %
 
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentDirectory
-
-	^ currentDirectory
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentDirectory: aFileReference
-
-	currentDirectory := aFileReference
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentProjectReferenceDefinition
-
-	^ currentProjectReferenceDefinition
-%
-
-category: 'accessing'
-method: RwRepositoryComponentProjectReaderVisitor
-currentProjectReferenceDefinition: aRwProjectReferenceDefinition
-
-	currentProjectReferenceDefinition := aRwProjectReferenceDefinition
-%
-
 category: 'tonel parser'
 method: RwRepositoryComponentProjectReaderVisitor
 newClassDefinitionFrom: anArray
@@ -62967,15 +62589,6 @@ visitComponentProjectDefinition: aRwComponentProjectDefinition
 	self currentProjectDefinition: aRwComponentProjectDefinition.
 	aRwComponentProjectDefinition packages: Dictionary new.
 	self visit: aRwComponentProjectDefinition projectRef
-%
-
-category: 'visiting'
-method: RwRepositoryComponentProjectReaderVisitor
-visitProjectReferenceDefinition: aRwProjectReferenceDefinition
-	"read the packageNames from the repository"
-
-	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
-	self readPackages: aRwProjectReferenceDefinition packagesRoot
 %
 
 category: 'visiting'
@@ -63463,14 +63076,6 @@ addSimpleComponentNamed: aComponentName condition: condition comment: commentStr
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-addSimpleComponentNamed: aComponentName condition: condition groupName: groupName comment: commentString
-	self
-		subclassResponsibility:
-			#'addSimpleComponentNamed:condition:groupName:comment:'
-%
-
-category: 'accessing'
-method: RwAbstractResolvedObjectV2
 comment
 	^ self subclassResponsibility: #'comment'
 %
@@ -63521,12 +63126,6 @@ category: 'package properties'
 method: RwAbstractResolvedObjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName
 	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
-%
-
-category: 'project specification'
-method: RwAbstractResolvedObjectV2
-groupNames
-	^ self _loadSpecification groupNames
 %
 
 category: 'project specification'
@@ -64437,16 +64036,6 @@ addPlatformNestedComponentNamed: aComponentName condition: conditionArray commen
 		comment: commentString
 %
 
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionArray
-		comment: commentString
-%
-
 category: 'accessing'
 method: RwResolvedProjectV2
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
@@ -64552,20 +64141,44 @@ allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: no
 			subs do: theBlock ]
 %
 
+category: 'components'
+method: RwResolvedProjectV2
+allPackageNamesIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock
+	| packageNames visited theBlock attributes componentNames |
+	visited := IdentitySet new.
+	packageNames := Set new.
+	attributes := self platformConditionalAttributes.
+	theBlock := [ :component | 
+	(visited includes: component)
+		ifFalse: [ 
+			packageNames addAll: component packageNames.
+			visited add: component.
+			(self
+				subcomponentsOf: component name
+				matchBlock: matchBlock
+				ifNone: notFoundBlock) do: theBlock ] ].
+	componentNames := componentNameOrArrayOfNames _isArray
+		ifTrue: [ componentNameOrArrayOfNames ]
+		ifFalse: [ {componentNameOrArrayOfNames} ].
+	componentNames
+		do: [ :componentName | 
+			| aComponent |
+			aComponent := self components
+				componentNamed: componentName
+				ifAbsent: [ notFoundBlock cull: componentName ].
+			packageNames addAll: aComponent packageNames.
+			visited add: aComponent.
+			(self
+				subcomponentsOf: componentName
+				matchBlock: matchBlock
+				ifNone: notFoundBlock) do: theBlock ].
+	^ packageNames asArray sort
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 checkout: aCommittish
 	^ self _projectRepository checkout: aCommittish
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-classNamed: aString ifAbsent: absentBlock
-	self packages
-		do: [ :packageDef | 
-			(packageDef classDefinitionNamed: aString ifAbsent: [  ])
-				ifNotNil: [ :classDef | ^ classDef ] ].
-	^ absentBlock value
 %
 
 category: 'project definition'
@@ -64655,6 +64268,13 @@ copyForLoadedProject
 		yourself
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+create
+	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
+	self resolve; export
+%
+
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 diskRepositoryRoot: repositoryRootPathString
@@ -64683,15 +64303,7 @@ export
 category: 'exporting'
 method: RwResolvedProjectV2
 exportComponents
-	self components
-		do: [ :component | 
-			component
-				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				yourself ].
-	self components isEmpty
-		ifTrue: [ 
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+	self components export: self componentsRoot
 %
 
 category: 'exporting'
@@ -64920,6 +64532,23 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
 		instanceMigrator: instanceMigrator
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageNamed: toPackageName
+	| toPackage fromPackage classDef |
+	toPackage := self
+		packageNamed: toPackageName
+		ifAbsent: [ self error: 'No package found name ' , toPackageName printString ].
+	fromPackage := self
+		packageNamed: fromPackageName
+		ifAbsent: [ self error: 'No package found name ' , fromPackageName printString ].
+	classDef := fromPackage removeClassExtensionNamed: aClassName.
+	classDef
+		moveToPackageNamed: toPackageName
+		packageConvention: self packageConvention.
+	toPackage addClassExtensionDefinition: classDef
 %
 
 category: 'project definition'
@@ -65624,43 +65253,6 @@ definitionsForMethod: selector inClassNamed: className isMeta: isMeta ifFound: f
 		ifAbsent: absentBlock
 %
 
-category: 'git'
-method: RwAbstractTool
-doGitCommit: messageString
-
-	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	commitMessageFileName := gitTool createTmpFileWith: messageString.
-	gitTool gitaddIn: gitRootPath with: '-A .'.
-	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
-	status := gitTool gitlogIn: gitRootPath with: '-1'.
-	Transcript
-		cr;
-		show: '==============';
-		cr;
-		show: status.
-	^ status
-%
-
-category: 'private'
-method: RwAbstractTool
-fileUtilities
-  ^ Rowan fileUtilities
-%
-
-category: 'smalltalk api'
-method: RwAbstractTool
-specification: aRwSpecification
-  ^ specification := aRwSpecification
-%
-
-category: 'smalltalk api'
-method: RwAbstractTool
-specUrl: aString
-  ^ self specification: (RwSpecification fromUrl: aString)
-%
-
 ! Class implementation for 'RwClassTool'
 
 !		Class methods for 'RwClassTool'
@@ -65727,23 +65319,6 @@ auditLoadedClass: aLoadedClass
 								forBehavior: aBehavior class
 								loadedClass: loadedClass) ] ].
 	^ res
-%
-
-category: 'audit'
-method: RwClsAuditTool
-errorLog: aResult add: aMessage
-	"add error to results. print to file"
-
-	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
-%
-
-category: 'audit'
-method: RwClsAuditTool
-errorLog: aResult addAll: aCol
-	"add all messages to result"
-
-	aCol do: [ :e | self errorLog: aResult add: e ]
 %
 
 category: 'audit'
@@ -66180,6 +65755,185 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 	^res
 %
 
+! Class implementation for 'RwExamplesTool'
+
+!		Class methods for 'RwExamplesTool'
+
+category: 'commands'
+classmethod: RwExamplesTool
+componentRefactoring
+	^ RwExampleComponentRefactoringTool
+%
+
+! Class implementation for 'RwExampleComponentRefactoringTool'
+
+!		Class methods for 'RwExampleComponentRefactoringTool'
+
+category: 'instance creation'
+classmethod: RwExampleComponentRefactoringTool
+forProjectNamed: projectName componentNamed: componentName
+	^ self new forProjectNamed: projectName componentNamed: componentName
+%
+
+category: 'instance creation'
+classmethod: RwExampleComponentRefactoringTool
+new
+	^ self basicNew initialize
+%
+
+!		Instance methods for 'RwExampleComponentRefactoringTool'
+
+category: 'accessing'
+method: RwExampleComponentRefactoringTool
+components
+	^ components
+%
+
+category: 'accessing'
+method: RwExampleComponentRefactoringTool
+conditions
+	^ conditions
+%
+
+category: 'accessing'
+method: RwExampleComponentRefactoringTool
+definedProject
+	^ definedProject ifNil: [ definedProject := self project defined ]
+%
+
+category: 'initialization'
+method: RwExampleComponentRefactoringTool
+forProjectNamed: projectName componentNamed: componentName
+	| notFoundBlock |
+	definedProject := (Rowan projectNamed: projectName) defined.
+	components := Dictionary new.
+	packages := Dictionary new.
+	conditions := Dictionary new.
+	platformConditions := Dictionary new.
+	notFoundBlock := [ :missingComponentName | 
+	| missingComponent |
+	missingComponent := RwAbstractComponent
+		fromComponentsDirectory: definedProject componentsRoot
+		named: missingComponentName.
+	components at: missingComponentName put: missingComponent packageNames.
+	missingComponent ].
+	definedProject _resolvedProject
+		allComponentsIn: componentName
+		matchBlock: [ :ignored | true ]
+		notFound: notFoundBlock
+		do: [ :component | 
+			| condition |
+			condition := component condition.
+			condition _isArray
+				ifTrue: [ 
+					| dict |
+					dict := platformConditions at: condition ifAbsentPut: [ Dictionary new ].
+					(dict at: 'packages' ifAbsentPut: [ Set new ])
+						addAll: component packageNames.
+					(dict at: 'components' ifAbsentPut: [ IdentitySet new ]) add: component ]
+				ifFalse: [ 
+					| dict |
+					dict := conditions at: condition ifAbsentPut: [ Dictionary new ].
+					(dict at: 'packages' ifAbsentPut: [ Set new ])
+						addAll: component packageNames.
+					(dict at: 'components' ifAbsentPut: [ IdentitySet new ]) add: component.
+					(dict at: 'allPackageNames' ifAbsentPut: [ Set new ])
+						addAll:
+							(definedProject _resolvedProject
+								allPackageNamesIn: component name
+								matchBlock: [ :ignored | true ]
+								notFound: notFoundBlock) ].
+			components at: component name put: component.
+			component packageNames
+				do: [ :packageName | 
+					packages at: packageName ifPresent: [ self halt: 'package duplication' ].
+					packages at: packageName put: component ] ]
+%
+
+category: 'initialization'
+method: RwExampleComponentRefactoringTool
+initialize
+	components := Dictionary new.
+	packages := Dictionary new.
+	conditions := Dictionary new.
+	platformConditions := Dictionary new
+%
+
+category: 'accessing'
+method: RwExampleComponentRefactoringTool
+packages
+	^ packages
+%
+
+category: 'accessing'
+method: RwExampleComponentRefactoringTool
+platformConditions
+	^ platformConditions
+%
+
+category: 'refactoring'
+method: RwExampleComponentRefactoringTool
+refactorComponentsWithCondition: targetCondition
+	"This refactoring code is based on the assumption that the component structure was 
+		created using the addComponentStructureFor:... family of methods or were 
+		created following the addComponentStructureFor:... algorithm manually"
+
+	^ self
+		refactorComponentsWithCondition: targetCondition
+		packageMap: Dictionary new
+		ifAbsent: [ :packageName | 
+			self
+				error:
+					'No package name for ' , packageName printString , ' found in package map' ]
+%
+
+category: 'refactoring'
+method: RwExampleComponentRefactoringTool
+refactorComponentsWithCondition: targetCondition packageMap: packageMap ifAbsent: absentBlock
+	"This refactoring code is based on the assumption that the component structure was 
+		created using the addComponentStructureFor:... family of methods or were 
+		created following the addComponentStructureFor:... algorithm manually"
+
+	((conditions at: targetCondition) at: 'components')
+		do: [ :component | 
+			| componentName path basename destinationComponentName x y |
+			componentName := component name.
+			path := FileSystem * componentName.
+			basename := path basename.
+			path parent basename = targetCondition
+				ifTrue: [ 
+					destinationComponentName := path parent parent.
+					component packageNames
+						do: [ :packageName | 
+							| destinationPackageName package |
+							destinationPackageName := packageMap
+								at: packageName
+								ifAbsent: [ absentBlock cull: packageName ].
+							package := self definedProject
+								packageNamed: packageName
+								ifAbsent: [ 
+									self
+										error:
+											'Cannot find package named ' , packageName printString , ' in defined project.' ].
+							(x := package classDefinitions keys copy)
+								do: [ :className | definedProject moveClassNamed: className toPackageNamed: destinationPackageName ].
+							(y := package classExtensions keys copy)
+								do: [ :className | 
+									definedProject
+										moveClassExtensionNamed: className
+										fromPackageNamed: packageName
+										toPackageNamed: destinationPackageName ].
+							self halt: 'remove the package' ] ]
+				ifFalse: [ 
+					(x := path parent basename) = 'platforms'
+						ifFalse: [ self error: 'expected platforms' ].
+					(x := path parent parent basename) = targetCondition
+						ifTrue: [ destinationComponentName := path parent parent parent ]
+						ifFalse: [ self error: 'expected ' , targetCondition ].
+					self halt ].
+			self halt ]
+%
+
 ! Class implementation for 'RwGitTool'
 
 !		Instance methods for 'RwGitTool'
@@ -66458,12 +66212,6 @@ category: 'commands'
 classmethod: RwPackageTool
 create
   ^ RwPkgCreateTool new
-%
-
-category: 'commands'
-classmethod: RwPackageTool
-diff
-  ^ RwPkgDiffTool new
 %
 
 category: 'commands'
@@ -66782,46 +66530,6 @@ adoptSymbolList: symbolList excludingSymbolDictsNamed: excludedSymbolDictionaryN
 			ifFalse: [ self adoptSymbolDictionary: symbolDict intoPackageNamed: (packageNameMap at: symDictName) ] ]
 %
 
-! Class implementation for 'RwPkgCreateTool'
-
-!		Instance methods for 'RwPkgCreateTool'
-
-category: 'smalltalk api'
-method: RwPkgCreateTool
-createLoadedPackageNamed: packageName inProjectNamed: projectName
-
-	"create a loaded package named <packageName> in the loaded project named <projectName>"
-
-	| registry theSymbolDictionary packageSymDictName loadedPackage loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
-	theSymbolDictionary := Rowan image newOrExistingSymbolDictionaryNamed: packageSymDictName.
-	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
-	loadedPackage := registry newLoadedPackageNamed: packageName.
-	loadedProject addLoadedPackage: loadedPackage.
-%
-
-! Class implementation for 'RwPkgDiffTool'
-
-!		Instance methods for 'RwPkgDiffTool'
-
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchForPackageName: packageName
-
-	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
-self deprecated: 'patchForPackageName: deprecated in favor or RwPrjDiffTool>>patchesForProjectNamed:'.
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	loadedProject := loadedPackage loadedProject.
-	super specification: loadedProject specification.
-	repo := specification repositoryUrl asRwRepository.
-	diskSnapshot := (repo readPackageStructureForPackageNamed: packageName)
-		snapshot.
-	imageSnapshot := (RwCypressPackageStructure
-		fromPackage: loadedPackage asDefinition) snapshot.
-	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-%
-
 ! Class implementation for 'RwPkgDisownTool'
 
 !		Instance methods for 'RwPkgDisownTool'
@@ -67067,13 +66775,6 @@ auditLoadedClassExtension: aLoadedClass
 	^RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass
 %
 
-category: 'other'
-method: RwPkgAuditToolV2
-_addAll: aColl to: aDict for: aName
-
-	aDict at: aName ifAbsentPut: [aColl].
-%
-
 ! Class implementation for 'RwProjectTool'
 
 !		Class methods for 'RwProjectTool'
@@ -67090,13 +66791,6 @@ classmethod: RwProjectTool
 audit
 
 	^RwPrjAuditTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-checkout
-
-	^RwPrjCheckoutTool new
 %
 
 category: 'commands'
@@ -67143,37 +66837,9 @@ edit
 
 category: 'commands'
 classmethod: RwProjectTool
-log
-
-	^RwPrjLogTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-pull
-
-	^RwPrjPullTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-push
-
-	^RwPrjPushTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 query
 
 	^ RwPrjQueryTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
-revert
-
-	^RwPrjRevertTool new
 %
 
 category: 'commands'
@@ -67556,8 +67222,10 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 				ifAbsent: [  ].
 			hybridLoadedPackage
 				ifNotNil: [ 
+					| pkgConvention |
 					hybridLoadedProject := hybridLoadedPackage loadedProject.
-					hybridLoadedProject packageConvention = 'RowanHybrid'
+					pkgConvention := hybridLoadedProject packageConvention.
+					(pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
 						ifTrue: [ 
 							"everything is cool - the project associated with hybridPackageName _is_ using the `RowanHybrid` package convention"
 							 ]
@@ -67826,17 +67494,6 @@ method: RwPrjBrowserToolV2
 addPackageNamed: packageName toProjectNamed: projectName
 
 	^ self addPackageNamed: packageName toComponentNamed: 'Core' andProjectNamed: projectName
-%
-
-category: 'package browsing'
-method: RwPrjBrowserToolV2
-addPackagesNamed: packageNames toProjectNamed: projectName
-
-	| projectDefinition |
-	projectDefinition := self _projectNamed: projectName.
-	packageNames
-		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
-	Rowan projectTools load loadProjectDefinition: projectDefinition
 %
 
 category: 'project browsing'
@@ -68948,33 +68605,12 @@ _copyClassDefinitionNamed: className to: newName
 
 category: 'private'
 method: RwPrjBrowserToolV2
-_loadedClassExtensionsNamed: className
-
-	^ self
-		_loadedClassExtensionsNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'No extensions for the class ' , className printString , ' were found' ]
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
 _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 
 	^ Rowan image
 		loadedClassExtensionsNamed: className
 		ifFound: [ :loadedClassExtensionSet | ^ loadedClassExtensionSet ]
 		ifAbsent: absentBlock
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedClassNamed: className
-
-	^ self
-		_loadedClassNamed: className
-		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
 %
 
 category: 'private'
@@ -69029,57 +68665,11 @@ _loadedPackageNamed: packageName ifAbsent: absentBlock
 
 category: 'private'
 method: RwPrjBrowserToolV2
-_loadedProjectForClassNamed: className
-
-	^ (self _loadedClassNamed: className) loadedProject
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta
-
-	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
-		loadedProject
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_loadedProjectForPackageNamed: packageName
-
-	^ (self _loadedPackageNamed: packageName) loadedProject
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
 _loadedProjectNamed: projectName
 
 	^ Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForClassNamed: className
-
-	^ (self _loadedProjectForClassNamed: className) asDefinition
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForMethod: methodSelector inClassNamed: className isMeta: isMeta
-
-	^ (self
-		_loadedProjectForMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta) asDefinition
-%
-
-category: 'private'
-method: RwPrjBrowserToolV2
-_projectForPackageNamed: packageName
-
-	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
 %
 
 category: 'private'
@@ -69096,60 +68686,6 @@ _rowanSymbolDictionaryNames
 	^ #( #RowanKernel #RowanLoader #RowanTools )
 %
 
-! Class implementation for 'RwPrjCheckoutTool'
-
-!		Instance methods for 'RwPrjCheckoutTool'
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutProjectReference: aRwGitProjectReference
-
-	| checkout |
-	checkout := aRwGitProjectReference  committish.
-	checkout
-		ifNil: [ 
-			| msg |
-			msg := 'No committish defined for the project reference '
-				, aRwGitProjectReference projectAlias printString.
-			self inform: msg.
-			^ msg ]
-		ifNotNil: [ 
-			| gitTool gitRepoPath |
-			gitTool := Rowan gitTools.
-			gitRepoPath := aRwGitProjectReference repositoryRoot.
-			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
-	^ aRwGitProjectReference
-%
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutSpecification: aRwSpecification
-
-	| checkout |
-	self specification: aRwSpecification.
-	checkout := specification repoSpec committish.
-	checkout
-		ifNil: [ 
-			| msg |
-			msg := 'No committish defined for the spec '
-				, specification specName printString.
-			self inform: msg.
-			^ msg ]
-		ifNotNil: [ 
-			| gitTool gitRepoPath |
-			gitTool := Rowan gitTools.
-			gitRepoPath := specification repoSpec repositoryRootPath asFileReference.
-			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
-	^ specification
-%
-
-category: 'smalltalk api'
-method: RwPrjCheckoutTool
-checkoutSpecUrl: aString 
-
-	^self checkoutSpecification: (RwSpecification fromUrl: aString) 
-%
-
 ! Class implementation for 'RwPrjCloneTool'
 
 !		Instance methods for 'RwPrjCloneTool'
@@ -69157,9 +68693,7 @@ checkoutSpecUrl: aString
 category: 'smalltalk api'
 method: RwPrjCloneTool
 cloneRepository: aRwGitRepositoryDefinition
-
 	| gitTool response remoteUrl cloneOption checkout |
-
 	self
 		_validateForGitRepository: aRwGitRepositoryDefinition
 		ifDone: [ :msg | 
@@ -69171,9 +68705,16 @@ cloneRepository: aRwGitRepositoryDefinition
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , remoteUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
+	response := gitTool
+		gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString
+		with:
+			cloneOption , remoteUrl , aRwGitRepositoryDefinition repositoryRoot pathString.
 	checkout
-		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
+		ifNotNil: [ 
+			gitTool := Rowan gitTools.
+			gitTool
+				gitcheckoutIn: aRwGitRepositoryDefinition repositoryRoot
+				with: checkout ]
 %
 
 category: 'private'
@@ -69500,19 +69041,6 @@ addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjec
 	^ projectDefinition
 %
 
-category: 'class extension editting'
-method: RwPrjEditTool
-addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjectNamed: projectName
-
-	"Add the given class extension definition to the named package in the named project. 
-		Return a projectDefinition for the named project"
-
-	^ self
-		addClassExtension: classExtensionDefinition
-		inPackageNamed: packageName
-		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
-%
-
 category: 'class editing'
 method: RwPrjEditTool
 removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition
@@ -69523,19 +69051,6 @@ removeClass: classDefinition fromPackageNamed: packageName inProject: projectDef
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition removeClassDefinition: classDefinition.
 	^ projectDefinition
-%
-
-category: 'class editing'
-method: RwPrjEditTool
-removeClass: classDefinition fromPackageNamed: packageName inProjectNamed: projectName
-
-	"Remove the given class definition to the named package in the named project. 
-		Return a projectDefinition for the named project"
-
-	^ self
-		removeClass: classDefinition
-		fromPackageNamed: packageName
-		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
 %
 
 category: 'class editing'
@@ -69552,19 +69067,6 @@ removeClassNamed: className fromPackageNamed: packageName inProject: projectDefi
 
 category: 'class editing'
 method: RwPrjEditTool
-removeClassNamed: className fromPackageNamed: packageName inProjectNamed: projectName
-
-	"Remove the named class definition to the named package in the named project. 
-		Return a projectDefinition for the named project"
-
-	^ self
-		removeClassNamed: className
-		fromPackageNamed: packageName
-		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
-%
-
-category: 'class editing'
-method: RwPrjEditTool
 updateOrAddClass: classDefinition inPackageNamed: packageName inProject: projectDefinition
 	"Update or add the given class definition to the named package in the given project. 
 		Return the projectDefinition"
@@ -69573,19 +69075,6 @@ updateOrAddClass: classDefinition inPackageNamed: packageName inProject: project
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition updateClassDefinition: classDefinition.
 	^ projectDefinition
-%
-
-category: 'class editing'
-method: RwPrjEditTool
-updateOrAddClass: classDefinition inPackageNamed: packageName inProjectNamed: projectName
-
-	"Update or add the given class definition to the named package in the named project. 
-		Return a projectDefinition for the named project"
-
-	^ self
-		updateOrAddClass: classDefinition
-		inPackageNamed: packageName
-		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
 %
 
 ! Class implementation for 'RwPrjLoadToolV2'
@@ -69651,12 +69140,8 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
 			absentProjectNames isEmpty
 				ifFalse: [ 
-					self
-						error:
-							'Missing required projects for the project '
-								, projectDefinition name printString
-								,
-									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
+					projectSetDefinition := projectDefinition
+						readProjectSet: platformConfigurationAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -69743,20 +69228,6 @@ loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList
 		loadProjectSetDefinition: projectSetDefinitionToLoad
 		instanceMigrator: Rowan platform instanceMigrator
 		symbolList: symbolList
-%
-
-category: 'project load specifications'
-method: RwPrjLoadToolV2
-loadProjectSpecFromFile: aFilePathOrReference
-
-	^ RwSpecification fromFile: aFilePathOrReference
-%
-
-category: 'project load specifications'
-method: RwPrjLoadToolV2
-loadProjectSpecFromUrl: specUrl
-
-	^ RwSpecification fromUrl: specUrl
 %
 
 category: 'utilities'
@@ -69869,131 +69340,6 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 					theLoadedProject loadedPackages
 						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
-%
-
-! Class implementation for 'RwPrjLogTool'
-
-!		Instance methods for 'RwPrjLogTool'
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogProjectNamed: projectName limit: logLimit
-
-	^ (Rowan image loadedProjectNamed: projectName) commitLog: logLimit
-%
-
-category: 'git'
-method: RwPrjLogTool
-doGitCommitLog: logLimit
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ gitTool gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: gitRootPath
-%
-
-! Class implementation for 'RwPrjPullTool'
-
-!		Instance methods for 'RwPrjPullTool'
-
-category: 'git'
-method: RwPrjPullTool
-doGitPull: remote
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ remote isEmpty
-		ifTrue: [ gitTool gitpullIn: gitRootPath with: '' ]
-		ifFalse: [ 
-			| currentBranchName |
-			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
-			gitTool gitpullIn: gitRootPath with: remote , ' ' , currentBranchName ]
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecification: aRwSpecification
-  ^ self pullSpecification: aRwSpecification remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecification: aRwSpecification remote: remoteOrNil
-  | remote |
-  self specification: aRwSpecification.
-  remoteOrNil
-    ifNil: [ remote := specification repoSpec remote ]
-    ifNotNil: [ remote := remoteOrNil ].
-  ^ specification pullForTool: self remote: remote
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecUrl: aSpecUrlString
-  ^ self
-    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPullTool
-pullSpecUrl: aSpecUrlString remote: remote
-  ^ self
-    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: remote
-%
-
-! Class implementation for 'RwPrjPushTool'
-
-!		Instance methods for 'RwPrjPushTool'
-
-category: 'git'
-method: RwPrjPushTool
-doGitPush: remote
-
-	| gitTool gitRootPath |
-	gitTool := Rowan gitTools.
-	gitRootPath := specification repoSpec repositoryRootPath.
-	^ remote isEmpty
-		ifTrue: [ gitTool gitpushIn: gitRootPath with: '' ]
-		ifFalse: [ 
-			| currentBranchName |
-			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
-			gitTool gitpushIn: gitRootPath with: remote , ' ' , currentBranchName ]
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecification: aRwSpecification
-  ^ self pushSpecification: aRwSpecification remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecification: aRwSpecification remote: remoteOrNil
-  | remote |
-  self specification: aRwSpecification.
-  remoteOrNil
-    ifNil: [ remote := specification repoSpec remote ]
-    ifNotNil: [ remote := remoteOrNil ].
-  ^ specification pushForTool: self remote: remote
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecUrl: aSpecUrlString
-  ^ self
-    pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: nil
-%
-
-category: 'smalltalk api'
-method: RwPrjPushTool
-pushSpecUrl: aSpecUrlString remote: remote
-  ^ self
-    pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
-    remote: remote
 %
 
 ! Class implementation for 'RwPrjQueryTool'
@@ -70592,6 +69938,94 @@ _gemstoneSupportedPackagePropertyNames
 	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
 %
 
+category: 'pattern matching'
+classmethod: RwAbstractRowanProjectLoadComponentV2
+_platformPatternMatcherFor: pattern
+	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
+		RwStringConfigurationPlatformAttributeMatcher,
+		RwGemStoneVersionConfigurationPlatformAttributeMatcher,
+		or RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
+	"
+
+	| versionPattern gsVersion1 gsVersion2 |
+	(pattern beginsWith: 'gs')
+		ifFalse: [ 
+			"simple equality match"
+			^ RwStringConfigurationPlatformAttributeMatcher new
+				pattern: pattern;
+				patternMatchBlock: [ :a :b | a = b ];
+				yourself ].	"GemStone version pattern"
+	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
+	(versionPattern last beginsWith: '[')
+		ifTrue: [ 
+			| vpSize rangePattern dashIndex |
+			"range pattern"
+			vpSize := versionPattern size.
+			gsVersion1 := RwGemStoneVersionNumber new: vpSize.
+			1 to: vpSize - 1 do: [ :index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
+			gsVersion1 at: vpSize put: 0.
+			rangePattern := (versionPattern at: vpSize) trimBoth.
+			((rangePattern at: 1) = $[ and: [ (rangePattern at: rangePattern size) = $] ])
+				ifFalse: [ 
+					self
+						error:
+							'Poorly formed GemStone version range pattern ' , rangePattern printString
+								, ' in ' , pattern printString ].
+			rangePattern := rangePattern copyFrom: 2 to: rangePattern size - 1.
+			dashIndex := rangePattern indexOf: $-.
+			dashIndex <= 1
+				ifTrue: [ 
+					self
+						error:
+							'Invalid version range pattern missing range begin' , rangePattern printString
+								, ' in ' , pattern printString ].
+			gsVersion1
+				at: vpSize
+				put: (rangePattern copyFrom: 1 to: dashIndex - 1) asInteger.
+			dashIndex = rangePattern size
+				ifTrue: [ 
+					"open range"
+					gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size - 1.
+					gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
+					^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+						pattern: gsVersion1;
+						pattern2: gsVersion2;
+						patternMatchBlock: [ :a :b :c | a <= b & (b < c) ];
+						yourself ]
+				ifFalse: [ 
+					"closed range"
+					gsVersion2 := gsVersion1 copy.
+					gsVersion2
+						at: vpSize
+						put:
+							(rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger + 1.
+					^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+						pattern: gsVersion1;
+						pattern2: gsVersion2;
+						patternMatchBlock: [ :a :b :c | a <= b & (b < c) ];
+						yourself ] ].
+	versionPattern last = 'x'
+		ifTrue: [ 
+			" 'gs', <gemstone-version-number> , '.x'"
+			"match all values in x field"
+			gsVersion1 := ((pattern copyFrom: 3 to: pattern size - 2) , '.0')
+				asRwGemStoneVersionNumber.
+			gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size - 1.
+			gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
+			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+				pattern: gsVersion1;
+				pattern2: gsVersion2;
+				patternMatchBlock: [ :a :b :c | a <= b & (b < c) ];
+				yourself ]
+		ifFalse: [ 
+			"specific version number match, use ="
+			pattern asRwGemStoneVersionNumber.	"sanity check to make sure that the original pattern is a valid version number"
+			^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
+				pattern: (pattern copyFrom: 3 to: pattern size) asRwGemStoneVersionNumber;
+				patternMatchBlock: [ :a :b | a = b ];
+				yourself ]
+%
+
 category: 'private'
 classmethod: RwAbstractRowanProjectLoadComponentV2
 _readStonFrom: stream
@@ -70699,20 +70133,6 @@ method: RwAbstractRowanProjectLoadComponentV2
 conditionalPackageMapSpecs
 
 	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwAbstractRowanProjectLoadComponentV2
-conditionalPackageMapSpecs: aDictionary
-	conditionalPackageMapSpecs := aDictionary
-%
-
-category: 'accessing'
-method: RwAbstractRowanProjectLoadComponentV2
-conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
-	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
-
-	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -71123,75 +70543,7 @@ _platformAttributeMatchIn: platformMatchersList for: attributes
 category: 'private'
 method: RwAbstractRowanProjectLoadComponentV2
 _platformPatternMatcherFor: pattern
-
-	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
-		RwStringConfigurationPlatformAttributeMatcher,
-		RwGemStoneVersionConfigurationPlatformAttributeMatcher,
-		or RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
-	"
-
-	| versionPattern gsVersion1 gsVersion2 |
-	(pattern beginsWith: 'gs')
-		ifFalse: [ 
-			"simple equality match"
-			^ RwStringConfigurationPlatformAttributeMatcher new
-					pattern: pattern;
-					patternMatchBlock: [:a :b | a = b ];
-					yourself ].
-	"GemStone version pattern"
-	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
-	(versionPattern last beginsWith: '[')
-		ifTrue: [ 
-			| vpSize rangePattern dashIndex |
-			"range pattern"
-			vpSize := versionPattern size.
-			gsVersion1 := RwGemStoneVersionNumber new: vpSize .
-			1 to: vpSize - 1
-				do: [:index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
-			gsVersion1 at: vpSize put: 0.
-			rangePattern := (versionPattern at: vpSize) trimBoth.
-			(((rangePattern at: 1) = $[) and: [ (rangePattern at: rangePattern size) = $] ])
-				ifFalse: [ self error: 'Poorly formed GemStone version range pattern ', rangePattern printString, ' in ', pattern printString ].
-			rangePattern := rangePattern copyFrom: 2 to: rangePattern size -1.
-			dashIndex := rangePattern indexOf: $-.
-			dashIndex <= 1
-				ifTrue: [ self error: 'Invalid version range pattern missing range begin' , rangePattern printString, ' in ', pattern printString ].
-			gsVersion1 at: vpSize put: (rangePattern copyFrom: 1 to: dashIndex -1) asInteger.
-			dashIndex = rangePattern size
-				ifTrue: [
-					"open range"
-					gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size -1.
-					gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
-					^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-							pattern: gsVersion1;
-							pattern2: gsVersion2;
-							patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
-							yourself ].
-			"closed range"
-			gsVersion2 := gsVersion1 copy.
-			gsVersion2 at: vpSize put: (rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger.
-			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-					pattern: gsVersion1;
-					pattern2: gsVersion2;
-					patternMatchBlock: [:a :b :c | (a <= b) & (b <= c ) ];
-					yourself ].
-	versionPattern last = 'x' 
-		ifFalse: [
-			"specific version number match, use ="
-			^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-					pattern: (pattern copyFrom: 3 to: pattern size) asRwGemStoneVersionNumber;
-					patternMatchBlock: [:a :b | a = b ];
-					yourself ].
-	" 'gs', <gemstone-version-number> , '.x'"
-	"match all values in x field"
-	gsVersion1 := ((pattern copyFrom: 3 to: pattern size - 2), '.0') asRwGemStoneVersionNumber.
-	gsVersion2 := gsVersion1 copyFrom: 1 to: gsVersion1 size - 1.
-	gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
-	^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-			pattern: gsVersion1;
-			pattern2: gsVersion2;
-			patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
-			yourself
+	^ self class _platformPatternMatcherFor: pattern
 %
 
 category: 'doits'
@@ -71563,15 +70915,6 @@ projectDefinition: newValue
 ! Class implementation for 'RwConfiguration'
 
 !		Instance methods for 'RwConfiguration'
-
-category: 'testing'
-method: RwConfiguration
-needsPackageProtocolNames
-
-	"Answer true if image protocol names need to be *<packageName>*"
-
-	^ packageInfoSource == #'Category'
-%
 
 category: 'accessing'
 method: RwConfiguration
@@ -72121,13 +71464,6 @@ removeInstanceMethod: selector ifAbsent: absentBlock
 
 category: 'accessing'
 method: RwAbstractClassDefinition
-updateClassMethod: methodSource protocol: protocol
-
-	^self updateClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
-%
-
-category: 'accessing'
-method: RwAbstractClassDefinition
 updateClassMethodDefinition: aMethodDefinition
 
 	self updateDefinition: aMethodDefinition in: classMethodDefinitions
@@ -72346,27 +71682,6 @@ superclassName: aString
 
 category: 'utility'
 method: RwClassDefinition
-updatePropertiesFromClass: aClass
-
-	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
-
-	self
-		_updateSymbolDictionaryFromClass: aClass;
-		_updateClassNameFromClass: aClass;
-		_updateSuperclassNameFromClass: aClass;
-		_updateInstvarNamesFromClass: aClass;
-		_updateClassInstvarNamesFromClass: aClass;
-		_updateClassVariableNamesFromClass: aClass;
-		_updatePoolDictionaryNamesFromClass: aClass;
-		_updateClassTypeFromClass: aClass;
-		_updateOptionsFromClass: aClass;
-		_updateConstraintsFromClass: aClass;
-		_updateCommentFromClass: aClass;
-		_updateCategoryFromClass: aClass
-%
-
-category: 'utility'
-method: RwClassDefinition
 _removeSubclassesDisallowed
   "Only for use in building definitions for bootstap of the base image.
    image bootstrap code responsible for setting subclassesDisallowed on
@@ -72378,173 +71693,6 @@ _removeSubclassesDisallowed
      newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
      self propertyAt: propertyName put: newValue
   ]
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateCategoryFromClass: aClass
-
-	| propertyName newValue |
-	propertyName := 'category'.
-	newValue := aClass _classCategory ifNil: [ ^ self removeProperty: propertyName ].
-	newValue isEmpty
-		ifTrue: [ ^ self removeProperty: propertyName ].
-
-	self propertyAt: propertyName put: newValue
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateClassInstvarNamesFromClass: aClass
-
-	self classInstVarNames: (aClass class instVarNames collect: [:each | each asString ])
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateClassNameFromClass: aClass
-
-	self name: aClass name asString
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateClassTypeFromClass: aClass
-
-	"For GemStone, the valid values are:
-	byteSubclass
-	variable
-	normal for non-indexable pointer object"
-
-	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
-
-	| propertyName oldValue newValue |
-	propertyName := 'type'.
-	oldValue := self propertyAt: propertyName.
-	newValue := aClass isBytes
-						ifTrue: [
-							aClass superClass isBytes not
-								ifTrue: [ 'byteSubclass' ]
-								ifFalse: [ 'normal' ]]
-						ifFalse: [ 
-							aClass areInstancesSpecial
-								ifTrue: [ 'immediate' ]
-								ifFalse: 
-									[ aClass isNsc
-										ifTrue: [ 'normal' ]
-										ifFalse:  [
-											(aClass isVariable and: [aClass superClass isVariable not])
-												ifTrue: [ 'variable' ]
-												ifFalse: [ 'normal' ] ] ] ].
-
-	oldValue = newValue
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateClassVariableNamesFromClass: aClass
-
-	self classVarNames: ((aClass classVarNames collect: [:each | each asString]) asSortedCollection asArray)
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateCommentFromClass: aClass
-	| propertyName newValue |
-	propertyName := 'comment'.
-	newValue := (aClass _extraDictAt: #comment) ifNil: [ ^ self removeProperty: propertyName ].
-	newValue isEmpty
-		ifTrue: [ ^ self removeProperty: propertyName ].
-
-	self propertyAt: propertyName put: newValue
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateConstraintsFromClass: aClass
-
-	| propertyName newValue sortedConstraints |
-	propertyName := 'gs_constraints'.
-	sortedConstraints := aClass _rwSortedConstraints.
-	(sortedConstraints isKindOf: Array ) 
-		ifTrue: [
-			newValue := (sortedConstraints collect: [:ar | 
-					(ar isKindOf: Array )
-						ifTrue: [ {(ar at: 1) asString . (ar at: 2) name asString } ]
-						ifFalse: [ 
-							"varyingConstraint"
-							ar name asString ] ]) asArray.
-			newValue isEmpty ifTrue: [ ^ self removeProperty: propertyName ] ]
-		ifFalse: [
-			newValue :=  sortedConstraints 
-				ifNil: [ ^ self removeProperty: propertyName ]
-				ifNotNil: [ sortedConstraints ] ].
-
-	self propertyAt: propertyName put: newValue
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateInstvarNamesFromClass: aClass
-
-	self instVarNames: (aClass instVarNames collect: [:each | each asString ])
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateOptionsFromClass: aClass
-	"Options are GemStone-specific. If the class has no options, the property is absent.
-	Otherwise, the property is a sorted array of strings. The valid values are:
-
-	dbTransient
-	disallowGciStore
-	instancesInvariant
-	instancesNonPersistent
-	modifiable
-	subclassesDisallowed
-	traverseByCallback
-
-	Not all combinations are legal, but we don't have to worry about that here, since we're getting the values
-	from the image, and the image is trusted to only have valid values."
-
-	| propertyName newValue |
-	propertyName := 'gs_options'.
-	newValue := (aClass _rwOptionsArray collect: [:option | option asString])
-				asSortedCollection asArray.
-	newValue isEmpty 
-		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: [ self propertyAt: propertyName put: newValue ].
-  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
-                          ifNil:[ self removeProperty:'gs_reservedoop' ].
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updatePoolDictionaryNamesFromClass: aClass
-
-	"Order of pool dictionaries *does* matter in GemStone, so we keep the names in the order given in the image."
-
-	"self instVarNames: (aClass sharedPools collect: [ :each | each name asString ]) asArray"
-
-	"NOT YET IMPLEMENTED"
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateSuperclassNameFromClass: aClass
-	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
-%
-
-category: 'utility'
-method: RwClassDefinition
-_updateSymbolDictionaryFromClass: aClass
-
-	| ar symbolDictName |
-	ar := System myUserProfile dictionariesAndSymbolsOf: aClass.
-	symbolDictName := ((ar at: 1) at: 1) name.
-	self gs_symbolDictionary: symbolDictName
 %
 
 ! Class implementation for 'RwClassExtensionDefinition'
@@ -72622,15 +71770,6 @@ _classNameForCompare: aDefinition
 ! Class implementation for 'RwAbstractProjectDefinitionV2'
 
 !		Instance methods for 'RwAbstractProjectDefinitionV2'
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-addOrUpdatePackage: aPackageDefinition
-
-	| key |
-	key := aPackageDefinition key.
-	packages at: key put: aPackageDefinition
-%
 
 category: 'properties'
 method: RwAbstractProjectDefinitionV2
@@ -73218,15 +72357,6 @@ componentForPackageNamed: packageName
 	^ self components componentForPackageNamed: packageName
 %
 
-category: 'actions'
-method: RwProjectDefinitionV2
-create
-	"write the project structure to disk, if it doesn't already exist"
-
-	Rowan projectTools create
-		createComponentProject: self.
-%
-
 category: 'properties'
 method: RwProjectDefinitionV2
 key
@@ -73659,12 +72789,6 @@ resolve
 	self repositoryRoot exists
 		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
 	^ true
-%
-
-category: 'private'
-method: RwDiskRepositoryDefinitionV2
-_fileSystem
-	^ FileSystem disk
 %
 
 ! Class implementation for 'RwGitRepositoryDefinitionV2'
@@ -74645,6 +73769,18 @@ removeClassExtensionDefinitionNamed: className
 
 category: 'accessing'
 method: RwPackageDefinition
+removeClassExtensionNamed: className
+	^ self removeKey: className from: classExtensions
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+removeClassExtensionNamed: className ifAbsent: absentBlock
+	^ self removeKey: className from: classExtensions ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwPackageDefinition
 removeClassNamed: className
 	^ self removeKey: className from: classDefinitions
 %
@@ -75364,72 +74500,6 @@ isEmpty
 	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
 %
 
-category: 'moves'
-method: RwProjectSetModification
-newUpdateForClassMoves
-	elementsModified
-		do: [ :projectModification | 
-			| packagesModification |
-			packagesModification := projectModification packagesModification.
-			packagesModification elementsModified
-				do: [ :packageModification | 
-					| classesModification |
-					classesModification := packageModification classesModification.
-					classesModification elementsModified
-						do: [ :classModification | 
-							| addedClass removedClass |
-							classModification before isEmpty
-								ifTrue: [ 
-									| newClass |
-									newClass := classModification after.
-									addedClass := RwClassAdditionOrRemoval
-										projectDefinition: projectModification after
-										packageDefinition: packageModification after
-										classKey: newClass key
-										classesModification: classesModification ].
-							classModification after isEmpty
-								ifTrue: [ 
-									| oldClass |
-									oldClass := classModification before.
-									removedClass := RwClassAdditionOrRemoval
-										projectDefinition: projectModification before
-										packageDefinition: packageModification before
-										classKey: oldClass key
-										classesModification: classesModification ].
-							self updateForClassMoveFrom: removedClass to: addedClass ] ] ]
-%
-
-category: 'moves'
-method: RwProjectSetModification
-newUpdateForMethodMoves
-	"Methods that have been moved between packages will initially show up as a remove and an add rather than a move.
-	Find moved methods and correct the structure."
-
-	elementsModified
-		do: [ :projectModification | 
-			| packagesModification |
-			packagesModification := projectModification packagesModification.
-			packagesModification elementsModified
-				do: [ :packageModification | 
-					| addedMethods removedMethods |
-					removedMethods := Dictionary new.
-					addedMethods := Dictionary new.
-					self
-						addMethodsAddedByPackageModification: packageModification
-						inProject: projectModification
-						toDictionary: addedMethods.
-					self
-						addMethodsRemovedByPackageModification: packageModification
-						inProject: projectModification
-						toDictionary: removedMethods.
-					addedMethods
-						keysAndValuesDo: [ :key :addition | 
-							| removal |
-							removal := removedMethods at: key ifAbsent: [ nil ].
-							removal
-								ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ] ] ]
-%
-
 category: 'private - moves'
 method: RwProjectSetModification
 updateForClassMoveFrom: removal to: addition
@@ -75763,202 +74833,6 @@ size
 	^ entities size
 %
 
-! Class implementation for 'RwGsFileUtilities'
-
-!		Class methods for 'RwGsFileUtilities'
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteAll: aDirectory
-  "Delete all the files and directories under the named directory.
-	 Ensure we don't try to recursively delete . or .."
-
-  self deleteAll: aDirectory rejecting: [ :filename | false ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteAll: aDirectory rejecting: rejectBlock
-  "Delete all the files and directories under the named directory.
-       Reject file and directores in aDirectory that are rejected by rejectBlock.
-       The rejectBlock is not used recursively.
-       Ensure we don't try to recursively delete . or .."
-
-  | filename isFile |
-  (GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
-    doWithIndex: [ :each :index | 
-      index odd
-        ifTrue: [ filename := each ]
-        ifFalse: [ 
-          isFile := each.
-          isFile
-            ifTrue: [ 
-              (rejectBlock value: filename)
-                ifFalse: [ 
-                  (rejectBlock value: filename)
-                    ifFalse: [ GsFile removeServerFile: filename ] ] ]
-            ifFalse: [ 
-              (self _endsWithSpecial: filename)
-                ifFalse: [ 
-                  (rejectBlock value: filename)
-                    ifFalse: [ 
-                      self deleteAll: filename rejecting: rejectBlock.
-                      GsFile removeServerDirectory: filename ] ] ] ] ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-deleteDirectory: aDirectory
-  "Delete the named directory and all of it contents"
-
-	self deleteAll: aDirectory.
-   GsFile removeServerDirectory: aDirectory
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryEntriesFrom: aDirectory
-	"Answer fully qualified paths to the contents of aDirectory."
-
-	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryExists: aDirectory
-
-	"handle the case where GsFile class>>existsOnServer: returns nil"
-	^ (GsFile existsOnServer: aDirectory) == true
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-directoryFromPath: directoryPath relativeTo: aDirectory
-
-	^((aDirectory endsWith: self pathNameDelimiter)
-		or: [directoryPath beginsWith: self pathNameDelimiter])
-			ifTrue: [aDirectory , directoryPath]
-			ifFalse: [aDirectory , self pathNameDelimiter , directoryPath]
-%
-
-category: 'private'
-classmethod: RwGsFileUtilities
-endsWithSpecial: filename
-	"Answer true if the given filename ends with any of the special sequences
-	'/..' '/.' '\..' '\.', false otherwise."
-
-	| filenameSize finalChars |
-	filenameSize := filename size.
-	finalChars := filename copyFrom: filenameSize - 1 to: filenameSize.
-	finalChars = '/.' ifTrue: [^true].
-	finalChars = '\.' ifTrue: [^true].
-	finalChars := filename copyFrom: filenameSize - 2 to: filenameSize.
-	finalChars = '/..' ifTrue: [^true].
-	finalChars = '\..' ifTrue: [^true].
-	^false
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-ensureDirectoryExists: aDirectory
-
-	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) == true ifTrue: [^aDirectory].
-	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
-	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter
-				startingAt: aDirectory size.
-	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
-	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
-	self ensureDirectoryExists: aDirectory
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-entryNamesFrom: aDirectory
-  "Answer just the name of the contents of aDirectory."
-
-  ^ (((self directoryEntriesFrom: aDirectory)
-    collect: [ :each | self localNameFrom: each ])
-    reject: [ :each | each = '.' or: [ each = '..' ] ])
-    sortWithBlock: [ :a :b | a <= b ]
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-localNameFrom: aDirectory
-
-	| endOfPath |
-	endOfPath := aDirectory findLastSubString: self pathNameDelimiter
-				startingAt: aDirectory size.
-	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-pathNameDelimiter
-
-	^'/'
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-readStreamFor: filePath do: aOneArgBlock
-
-	| file stream result |
-	GsFile serverErrorString.
-	file := GsFile openReadOnServer: filePath.
-	GsFile serverErrorString
-		ifNotNil: [:errorMessage | self error: errorMessage].
-	
-	[stream := ReadStreamPortable
-				on: (String withAll: file contents asByteArray decodeFromUTF8).
-	result := aOneArgBlock value: stream]
-			ensure: [file close].
-	^result
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-readStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	self
-		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
-		do: aOneArgBlock
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
-writeStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	| file stream |
-	GsFile serverErrorString.
-	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
-	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	stream := WriteStreamPortable on: String new.
-	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
-%
-
-category: 'private'
-classmethod: RwGsFileUtilities
-_endsWithSpecial: filename
-  "Answer true if the given filename ends with any of the special sequences
-	'/..' '/.' '\..' '\.', false otherwise."
-
-  | filenameSize finalChars |
-  filenameSize := filename size.
-  finalChars := filename copyFrom: filenameSize - 1 to: filenameSize.
-  finalChars = '/.'
-    ifTrue: [ ^ true ].
-  finalChars = '\.'
-    ifTrue: [ ^ true ].
-  finalChars := filename copyFrom: filenameSize - 2 to: filenameSize.
-  finalChars = '/..'
-    ifTrue: [ ^ true ].
-  finalChars = '\..'
-    ifTrue: [ ^ true ].
-  ^ false
-%
-
 ! Class implementation for 'RwGsImage'
 
 !		Class methods for 'RwGsImage'
@@ -76004,19 +74878,6 @@ ensureSessionMethodsEnabled
 
 	GsPackagePolicy current enabled
 		ifFalse: [ GsPackagePolicy current enable ].
-%
-
-category: 'querying'
-classmethod: RwGsImage
-existingSymbolDictionaryNamed: dictName
-
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName |
-	symbolName := dictName asSymbol.
-	^ self symbolList
-		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
-		ifNone: [ nil ]
 %
 
 category: 'querying'
@@ -76074,46 +74935,6 @@ loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock
 
 category: 'querying'
 classmethod: RwGsImage
-loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock
-
-	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
-
-	| behavior compiledMethod |
-	behavior := self objectNamed: className.
-	behavior ifNil: [ ^ absentBlock value ].
-	isMeta
-		ifTrue: [ behavior := behavior class ].
-	compiledMethod := behavior
-		compiledMethodAt: selector asSymbol
-		environmentId: 0
-		otherwise: nil.
-	compiledMethod ifNil: [ ^ absentBlock value ].
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
-	^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
-loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock
-
-        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-        self symbolList
-                do: [ :symbolDict |
-                        symbolDict rowanSymbolDictionaryRegistry
-                                ifNotNil: [ :registry |
-                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
-                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
-        ^ absentBlock value
-%
-
-category: 'querying'
-classmethod: RwGsImage
 loadedMethodForMethod: compiledMethod
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
@@ -76124,21 +74945,6 @@ loadedMethodForMethod: compiledMethod
 			self
 				error:
 					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
-%
-
-category: 'querying'
-classmethod: RwGsImage
-loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
-
-	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
-	^ absentBlock value
 %
 
 category: 'querying'
@@ -76338,19 +75144,6 @@ projectNames
 
 category: 'querying'
 classmethod: RwGsImage
-removeLoadedMethodForCompileMethod: compiledMethod
-
-	"The given compiled method is being removed from the system, remove the loadedMethod associated 
-		with the compiled method."
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
-%
-
-category: 'querying'
-classmethod: RwGsImage
 resolveClassNamed: aName
 
 	"If the given name is bound to a class in the environment of the current session, 
@@ -76496,67 +75289,6 @@ addAddedProject: aProjectDefinition
 
 category: 'private'
 method: RwGsImagePatchVisitor_V2
-addClasses: classDefinitions
-	classDefinitions
-		do: [ :classDefinition | 
-			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
-				in a project that is not included in this load"
-			(Rowan globalNamed: classDefinition name)
-				ifNotNil: [ :global | 
-					(RwExistingVisitorAddingExistingClassNotification new
-						class: global;
-						classDefinition: classDefinition;
-						yourself) signal ] ].
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addAddedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addAddedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addAddedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-%
-
-category: 'private'
-method: RwGsImagePatchVisitor_V2
-addClassExtensions: classExtensions
-
-	classExtensions
-		do: [ :classDefinition | 
-			patchSet
-				addExtendedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addExtendedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addExtendedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-%
-
-category: 'private'
-method: RwGsImagePatchVisitor_V2
 addDeletedPackage: aPackageDefinition
 
 	currentPackage := aPackageDefinition.
@@ -76570,37 +75302,11 @@ addDeletedProject: aProjecteDefinition
 	self error: 'not yet implemented'
 %
 
-category: 'private'
-method: RwGsImagePatchVisitor_V2
-deleteClasses: classDefinitions
-
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addDeletedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addDeletedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addDeletedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-%
-
 category: 'initialization'
 method: RwGsImagePatchVisitor_V2
 initialize
 
-	patchSet := self _patchSetClass new
+	patchSet := RwGsPatchSet_V2 new
 %
 
 category: 'accessing'
@@ -76831,24 +75537,6 @@ visitSourceModification: aSourceModification
 	self error: 'internal error - not yet implemented'
 %
 
-category: 'private'
-method: RwGsImagePatchVisitor_V2
-_patchSetClass
-
-	^ RwGsPatchSet_V2
-%
-
-! Class implementation for 'RwGsImagePatchVisitor_V2_symbolList'
-
-!		Instance methods for 'RwGsImagePatchVisitor_V2_symbolList'
-
-category: 'initialization'
-method: RwGsImagePatchVisitor_V2_symbolList
-initialize
-
-	patchSet := RwGsPatchSet_V2_symbolList new
-%
-
 ! Class implementation for 'RwGsInstanceMigrator'
 
 !		Class methods for 'RwGsInstanceMigrator'
@@ -77002,6 +75690,27 @@ classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols
   ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
 %
 
+category: 'accessing'
+classmethod: RwGsPatchSet_V2
+lookupSymbolDictName: symDictName in: symbolList
+	^ self
+		lookupSymbolDictName: symDictName
+		in: symbolList
+		ifAbsent: [ 
+			self
+				error:
+					'the symbol dictionary named ' , symDictName asString printString
+						, ' was not found in the symbol list' ]
+%
+
+category: 'accessing'
+classmethod: RwGsPatchSet_V2
+lookupSymbolDictName: symDictName in: symbolList ifAbsent: absentBlock
+	^ symbolList
+		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+		ifNone: absentBlock
+%
+
 category: 'private - method initialization order'
 classmethod: RwGsPatchSet_V2
 methodPatchesInInitializationOrder: methodPatches
@@ -77030,6 +75739,21 @@ classmethod: RwGsPatchSet_V2
 new
 
 	^super new initialize
+%
+
+category: 'accessing'
+classmethod: RwGsPatchSet_V2
+resolveSymbolDictWith: assocation in: symbolList
+| res aDict |
+res := { } .
+1 to: symbolList size do:[ :j |
+  (aDict := symbolList at: j) ifNotNil:[
+    aDict associationsDo:[ :assoc |
+      assoc == assocation ifTrue:[ res add: aDict]
+    ].
+  ].
+].
+^ res
 %
 
 category: 'private - method initialization order'
@@ -77144,6 +75868,21 @@ addAddedProject: aProjectDefinition
 		add: (self _projectAdditionPatchClass for: aProjectDefinition) yourself
 %
 
+category: 'building'
+method: RwGsPatchSet_V2
+addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition
+
+	currentProjectDefinition := aProjectDefinition.
+	addedUnmanagedClasses
+		add:
+			((self _classUnmanagedAdditionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				oldClassVersion: aClass
+				yourself)
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2
 addAndUpdateLoadedPackages
@@ -77180,11 +75919,44 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 				symbolDictNameForPackageNamed: aPackage name.
 			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
 			(Rowan globalNamed: aRwClassModification after name)
-				ifNotNil: [ :global | 
-					(RwExistingVisitorAddingExistingClassNotification new
-						class: global;
-						classDefinition: aRwClassModification after;
-						yourself) signal ].
+				ifNotNil: [ :class | 
+					(Rowan image loadedClassForClass: class ifAbsent: [  ])
+						ifNil: [ 
+							| theClassDefinition theClassModification |
+							"no loaded class exists for the class"
+							theClassDefinition := class
+								rwClassDefinitionInSymbolDictionaryNamed: symDictName.
+							theClassModification := aRwClassModification after
+								compareAgainstBase: theClassDefinition.
+							theClassModification isEmpty
+								ifTrue: [ 
+									self
+										addAddedUnmanagedClass: aRwClassModification after
+										oldClassVersion: class
+										inPackage: aPackage
+										inProject: aProjectDefinition ]
+								ifFalse: [ 
+									aRwClassModification before: theClassDefinition.
+									self
+										addPatchedUnmanagedClassNewVersion: aRwClassModification
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							(aRwClassModification propertiesModification elementsModified
+								at: 'gs_constraints'
+								ifAbsent: [  ])
+								ifNotNil: [ :constraints | 
+									"arrange to add constraints to a newly created class - constraints not created during class creation"
+									self
+										addPatchedClassConstraints: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							^ self ]
+						ifNotNil: [ 
+							"if the class is packaged, then it must be in another project, signal notification"
+							(RwExistingVisitorAddingExistingClassNotification new
+								class: class;
+								classDefinition: aRwClassModification after;
+								yourself) signal ] ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
@@ -77197,7 +75969,8 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 					self
 						addPatchedClassConstraints: aRwClassModification after
 						inPackage: aPackage
-						inProject: aProjectDefinition ] ].
+						inProject: aProjectDefinition ].
+			^ self ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
 			self
@@ -77231,13 +76004,15 @@ addClassMove: aRwClassMove
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
-addCreatedClassesAndVersionsTo: newClassesByName
-
-	addedClasses do: [ :patch | patch addToNewClassesByName: newClassesByName ].
+addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList
+	addedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	addedUnmanagedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithClassVariableChanges
-		do: [ :each | each addToNewClassesByName: newClassesByName ].
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithNewVersions
-		do: [ :each | each addToNewClassesByName: newClassesByName ]
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
 %
 
 category: 'building'
@@ -77617,6 +76392,21 @@ addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDef
 				yourself)
 %
 
+category: 'building'
+method: RwGsPatchSet_V2
+addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+%
+
 category: 'private - applying'
 method: RwGsPatchSet_V2
 allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock
@@ -77722,9 +76512,9 @@ commit
 category: 'private - applying'
 method: RwGsPatchSet_V2
 compileMethodPatch: aMethodAdditionPatch
-
-	aMethodAdditionPatch compileUsingNewClasses: createdClasses
-		andExistingClasses: tempSymbols
+	aMethodAdditionPatch
+		compileUsingNewClassesSymbolList: self createdClasses
+		andExistingClasses: self tempSymbols
 %
 
 category: 'private - applying'
@@ -77738,76 +76528,120 @@ compileMethods
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
-createClassesFromWorklist: workList andClassesByName: newClassesByName
+createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
-	| className |
-	className := self anyElementOfCollection: workList.
-	className ifNil: [self error: 'Empty WorkList.'].
+	| classNames className |
+	classNames := (self class lookupSymbolDictName: symDictName in: workSymbolList)
+		keys.
+	classNames remove: symDictName.
+	className := self anyElementOfCollection: classNames.
+	className ifNil: [ self error: 'Empty WorkList.' ].
 	self
 		createClassNamed: className
-		fromWorkList: workList
-		andClassesByName: newClassesByName
+		fromWorkSymbolList: workSymbolList
+		symDictName: symDictName
+		andClassesByNameSymbolList: newClassesByNameSymbolList
 %
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
-createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName
+createClassNamed: className fromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList
 	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
 	| patch superclassName |
-	workList remove: className.
-	patch := newClassesByName at: className.
-	superclassName := patch superclassName.
-	(workList includes: superclassName)
-		ifTrue: 
-			[self
+	(self class lookupSymbolDictName: symDictName in: workSymbolList)
+		removeKey: className asSymbol.
+	patch := (self class
+		lookupSymbolDictName: symDictName
+		in: newClassesByNameSymbolList) at: className asSymbol.
+	superclassName := patch superclassName asSymbol.
+	(workSymbolList resolveSymbol: superclassName)
+		ifNotNil: [ :superclassAssoc | 
+			| ar |
+			ar := self class resolveSymbolDictWith: superclassAssoc in: workSymbolList.
+			ar size ~= 1
+				ifTrue: [ 
+					self
+						error:
+							'Internal error: more than one symbol dictionary with association for class '
+								, superclassName printString ].
+			self
 				createClassNamed: superclassName
-				fromWorkList: workList
-				andClassesByName: newClassesByName].
-	patch createClassFor: self
+				fromWorkSymbolList: workSymbolList
+				symDictName: (ar at: 1) name
+				andClassesByNameSymbolList: newClassesByNameSymbolList ].
+	patch createClassFor: self inSymDict: symDictName
 %
 
 category: 'patch access'
 method: RwGsPatchSet_V2
 createdClass: aClass
-
 	| className |
-	className := aClass name.
-	(createdClasses at: className ifAbsent: [ ])
-		ifNil: [ 
-			createdClasses
-				add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [:cl | 
-			cl == aClass
+	className := aClass name asSymbol.
+	(createdClasses resolveSymbol: className)
+		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :assoc | 
+			assoc value == aClass
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
 					createdClasses at: className put: aClass ] ]
 %
 
+category: 'patch access'
+method: RwGsPatchSet_V2
+createdClass: aClass inSymDict: symDictName
+	| className symDict |
+	className := aClass name.
+	symDict := self class lookupSymbolDictName: symDictName in: self createdClasses.
+	(symDict at: className ifAbsent: [  ])
+		ifNil: [ symDict add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					symDict at: className put: aClass ] ]
+%
+
 category: 'accessing'
 method: RwGsPatchSet_V2
 createdClasses
-	^ createdClasses
+	^ createdClasses ifNil: [ createdClasses :=  self _createNewSymbolList ]
 %
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
 createNewClassesAndClassVersions
-
 	"Who: Added classes and classes with new versions and classes with class variable changes
 	   How: Create the new class or class version. Superclass by identity, not name resolution.
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	| newClassesByName workList |
-	newClassesByName := Dictionary new.
-	self addCreatedClassesAndVersionsTo: newClassesByName.
-	workList := Set withAll: newClassesByName keys.
-	[ workList isEmpty ]
-		whileFalse: [ self createClassesFromWorklist: workList andClassesByName: newClassesByName ]
+	| newClassesByNameSymbolList workSymbolList |
+	newClassesByNameSymbolList := self _createNewSymbolList.
+	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
+	workSymbolList := self _createNewSymbolList.
+	newClassesByNameSymbolList
+		do: [ :symDict | 
+			| workList symDictName |
+			symDictName := symDict name.
+			workList := symDict keys.
+			workList remove: symDictName.
+			workList
+				do: [ :className | 
+					(self class lookupSymbolDictName: symDictName in: workSymbolList)
+						at: className
+						put: nil ] ].
+	workSymbolList
+		do: [ :symDict | 
+			[ symDict keys size <= 1 ]
+				whileFalse: [ 
+					self
+						createClassesFromWorkSymbolList: workSymbolList
+						symDictName: symDict name
+						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
 %
 
 category: 'private - applying'
@@ -77825,94 +76659,9 @@ doMoveClassesBetweenPackages
 				addLoadedClass: loadedClass ]
 %
 
-category: 'private - applying'
-method: RwGsPatchSet_V2
-doMoveMethodsBetweenPackages
-
-	| image |
-	image := Rowan image.
-	movedMethods 
-		do: [:aMethodMove |
-			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
-			packageDef := aMethodMove packageBefore.
-			classOrExtensionDef := aMethodMove classOrExtensionBefore.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					self error: 'internal error - no loaded class or extension found for class ', 
-						classOrExtensionDef name printString, 
-						'  in package ', 
-						packageDef name printString ].
-			loadedMethods := aMethodMove isMeta
-				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
-				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
-			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
-
-			registry := image loadedRegistryForPackageNamed: loadedPackage name.
-
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-			loadedClassOrExtension isLoadedClassExtension
-				ifTrue: [
-					loadedClassOrExtension isEmpty
-						ifTrue: [ 
-							(registry loadedClassExtensionsForClass: loadedClassOrExtension handle ifAbsent: [])
-								ifNotNil: [ :loadedClassExtensions |
-									loadedClassExtensions isEmpty
-										ifFalse: [ 
-											loadedClassExtensions remove: loadedClassOrExtension.
-											loadedClassExtensions isEmpty
-												ifTrue: [ 
-													registry 
-														unregisterLoadedClassExtension: loadedClassOrExtension
-														forClass: loadedClassOrExtension handle ] ] ].
-							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
-
-            compiledMethod := loadedMethod handle.
-			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
-
-			packageDef := aMethodMove packageAfter.
-			classOrExtensionDef := aMethodMove classOrExtensionAfter.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					classOrExtensionDef isClassExtension
-						ifTrue: [ 
-							"add a new class extension on demand"
-							(aMethodMove projectAfter
-								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
-								ifTrue: [ | resolved |
-									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
-										and: [resolved isBehavior and: [ resolved isMeta not ]])
-										ifFalse: [ 
-											self
-												error:
-													'The extension class named ' , self className printString , ' cannot be found.' ].
-"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
-"https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [
-									registry
-										ensureExtensionClassNamed: classOrExtensionDef name
-										existsForPackageNamed: packageDef name
-										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
-							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
-						ifFalse: [ 
-							self error: 'internal error - no loaded class found for class ', 
-								classOrExtensionDef name printString, 
-								'  in package ', 
-								packageDef name printString ] ].
-
-			loadedClassOrExtension addLoadedMethod: loadedMethod.
-
-			registry methodRegistry at: compiledMethod put: loadedMethod ]
-%
-
 category: 'initialization'
 method: RwGsPatchSet_V2
 initialize
-
 	addedPackages := Set new.
 	addedProjects := Set new.
 	deletedPackages := Set new.
@@ -77927,7 +76676,6 @@ initialize
 	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClasses := Set new.
-	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
@@ -77937,7 +76685,9 @@ initialize
 	methodsWithPropertyChanges := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
-	errors := Set new
+	errors := Set new.
+	createdClasses := nil.
+	addedUnmanagedClasses := Set new
 %
 
 category: 'private - applying'
@@ -77947,14 +76697,15 @@ installAddedClasses
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	addedClasses do: [:patch |  patch installClassInSystem ]
+	addedClasses do: [:patch |  patch installClassInSystem ].
+	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
 %
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
 installAddedClassExtensions
 
-	extendedClasses do: [ :each | each installClassExtensionInSystem ]
+	extendedClasses do: [ :each | each installClassExtensionInSystem: self loadSymbolList ]
 %
 
 category: 'accessing'
@@ -77962,6 +76713,18 @@ method: RwGsPatchSet_V2
 instanceMigrator
 
 	^ instanceMigrator
+%
+
+category: 'accessing'
+method: RwGsPatchSet_V2
+loadSymbolList
+	^ loadSymbolList ifNil: [ Rowan image symbolList ]
+%
+
+category: 'accessing'
+method: RwGsPatchSet_V2
+loadSymbolList: aSymbolList
+	loadSymbolList := aSymbolList
 %
 
 category: 'private - applying'
@@ -77984,19 +76747,23 @@ migrateInstances
 category: 'private - applying'
 method: RwGsPatchSet_V2
 moveClassesBetweenSymbolDictionaries
-
-	classesWithSymbolDictionaryChanges do: [:each | 
-		| className |
-		className := each classDefinition name.
-		(movedClassesMap at: className ifAbsent: [])
-				ifNil: [ each installSymbolDictionaryPatchFor: self ]
-				ifNotNil: [:classMove | each installSymbolDictionaryPatchFor: self classMove: classMove ] ].
+	classesWithSymbolDictionaryChanges
+		do: [ :patch | 
+			| className |
+			className := patch classDefinition name asSymbol.
+			(self movedClassesSymbolList resolveSymbol: className)
+				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
 %
 
 category: 'accessing'
 method: RwGsPatchSet_V2
-movedClassesMap
-	^ movedClassesMap
+movedClassesSymbolList
+	^ movedClassesSymbolList
+		ifNil: [ movedClassesSymbolList := self _createNewSymbolList ]
 %
 
 category: 'accessing'
@@ -78014,9 +76781,11 @@ movePackages
 category: 'private - applying'
 method: RwGsPatchSet_V2
 recordCompiledForNewClassVersionDeletions
-
 	deleteNewVersionMethods
-		do: [ :each | each primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		do: [ :each | 
+			each
+				primeBehaviorNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'private - applying'
@@ -78039,17 +76808,18 @@ removeDeletedClassesFromTempSymbols
 category: 'private - applying'
 method: RwGsPatchSet_V2
 removeDeletedMethods
-
 	deletedMethods
 		do: [ :methodDeletionPatch | 
 			| className |
 			className := methodDeletionPatch className.
-			methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+			methodDeletionPatch
+				deleteMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
-				deleteNewVersionMethodNewClasses: createdClasses
-				andExistingClasses: tempSymbols  ]
+				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'private - applying'
@@ -78133,23 +76903,12 @@ setupForNewClassVersionUpdates
 
 category: 'patch access'
 method: RwGsPatchSet_V2
-superclassNamed: aName
-
-	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2
 superclassNamed: aName ifAbsent: absentBlock
-
 	| superclassName |
 	superclassName := aName asSymbol.
-	^ createdClasses
-		at: superclassName
-		ifAbsent: [ 
-			tempSymbols
-				at: superclassName
-				ifAbsent: absentBlock ]
+	^ (self createdClasses resolveSymbol: superclassName)
+		ifNotNil: [ :assoc | assoc value ]
+		ifNil: [ self tempSymbols at: superclassName ifAbsent: absentBlock ]
 %
 
 category: 'accessing'
@@ -78164,7 +76923,7 @@ symbolDictionaryRegistryClass
 category: 'patch access'
 method: RwGsPatchSet_V2
 tempAssociationFor: aName
-	^ tempSymbols associationAt: aName
+	^ self tempSymbols associationAt: aName
 %
 
 category: 'accessing'
@@ -78176,23 +76935,33 @@ tempSymbols
 category: 'private - applying'
 method: RwGsPatchSet_V2
 updateClassProperties
-
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
 	| classPatches ts |
 	ts := self tempSymbols.
 	classPatches := OrderedCollection new.
-	classPatches 
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges tempSymbols: ts);
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithPropertyChanges tempSymbols: ts);
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithConstraintChanges tempSymbols: ts);
+	classPatches
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges
+						tempSymbols: ts);
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithPropertyChanges
+						tempSymbols: ts);
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithConstraintChanges
+						tempSymbols: ts);
 		yourself.
-	classPatches 
-		do: [ :each | 
-			(movedClassesMap at: each className ifAbsent: [])
-				ifNil: [ each installPropertiesPatchFor: self ]
-				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]
+	classPatches
+		do: [ :patch | 
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
+				ifNil: [ patch installPropertiesPatchSymbolListFor: self ]
+				ifNotNil: [ :aClassMove | patch installPropertiesPatchSymbolListFor: self classMove: aClassMove ] ]
 %
 
 category: 'private - applying'
@@ -78204,64 +76973,94 @@ updateMethodDictionaries
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedClassesWithNewVersionMap movedExtensionMethodsMap |
-	movedClassesWithNewVersionMap := Dictionary new.
-	classesWithNewVersions do: [:patch | 
-		(movedClassesMap at: patch className ifAbsent: []) 
-			ifNotNil: [:aClassMove | 
-				movedClassesWithNewVersionMap at: patch className put: {aClassMove . patch} ] ]. 
-	addedMethods do: [:patch |
-		| className |
-		className := patch className.
-		(movedClassesWithNewVersionMap at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
-	movedClassesWithNewVersionMap isEmpty
-		ifFalse: [
+	| movedClassesWithNewVersionMap movedExtensionMethodsMap emptyMap |
+	movedClassesWithNewVersionMap := self _createNewSymbolList.
+	emptyMap := true.
+	classesWithNewVersions
+		do: [ :patch | 
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
+				ifNotNil: [ :aClassMove | 
+					(self class
+						lookupSymbolDictName: aClassMove symbolDictionaryNameAfter asSymbol
+						in: movedClassesWithNewVersionMap)
+						at: patch className asSymbol
+						put:
+							{aClassMove.
+							patch}.
+					emptyMap := false ] ].
+	addedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :ar | 
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+	emptyMap
+		ifFalse: [ 
 			"calculate moved extension methods map only if there are moved new class versions as well"
-			movedExtensionMethodsMap := Dictionary new.
-			movedMethods do: [:aMethodMove |
-				| classExtDict key methodDict  |
-				classExtDict := movedExtensionMethodsMap  at: aMethodMove classOrExtensionAfter name ifAbsentPut: [ Dictionary new].
-				key := aMethodMove isMeta ifTrue: [ 'class' ] ifFalse: [ 'instance'].
-				methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ]. 
-				methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
-	extendedMethods do: [:patch |
-		| className |
-		className := patch className.
-		(movedClassesWithNewVersionMap at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				(movedExtensionMethodsMap at: className ifAbsent: [])
-					ifNil: [ patch installMethod ]
-					ifNotNil: [:classExtDict |
-						| methodDict |
-						methodDict := patch isMeta
-							ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
-							ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
-						(methodDict at: patch methodDefinition selector ifAbsent: [])
-							ifNil: [ patch installMethod ]
-							ifNotNil: [:aMethodMove |
-								patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
-	methodsNeedingRecompile do: [:each | each installSourcePatch ]
+			movedExtensionMethodsMap := self _createNewSymbolList.
+			movedMethods
+				do: [ :aMethodMove | 
+					| classExtDict key methodDict |
+					classExtDict := (self class
+						lookupSymbolDictName: aMethodMove symbolDictionaryNameAfter asSymbol
+						in: movedExtensionMethodsMap)
+						at: aMethodMove classOrExtensionBefore name asSymbol
+						ifAbsentPut: [ Dictionary new ].
+					key := aMethodMove isMeta
+						ifTrue: [ 'class' ]
+						ifFalse: [ 'instance' ].
+					methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ].
+					methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
+	extendedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			(movedClassesWithNewVersionMap resolveSymbol: className)
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :movedAssoc | 
+					| ar classMove |
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					ar := movedAssoc value.
+					classMove := ar at: 1.
+					((self class
+						lookupSymbolDictName: classMove symbolDictionaryNameAfter
+						in: movedExtensionMethodsMap) at: className ifAbsent: [  ])
+						ifNil: [ patch installMethod ]
+						ifNotNil: [ :assoc | 
+							| classExtDict methodDict |
+							classExtDict := assoc value.
+							methodDict := patch isMeta
+								ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
+								ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
+							(methodDict at: patch methodDefinition selector ifAbsent: [  ])
+								ifNil: [ patch installMethod ]
+								ifNotNil: [ :aMethodMove | patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
+	methodsNeedingRecompile do: [ :each | each installSourcePatch ]
 %
 
 category: 'private - applying'
 method: RwGsPatchSet_V2
 updateMethodProperties
-
 	methodsWithPropertyChanges
-		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		do: [ :each | 
+			each
+				installPropertiesPatchNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 %
 
 category: 'dispatching'
 method: RwGsPatchSet_V2
 updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification
 	aClassVersioningPatch
-		updatePatchesForNewClassVersion: aProjectSetModification patchSet: self;
+		updatePatchesForNewClassVersion: aProjectSetModification
+			patchSetSymbolList: self;
 		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
 			patchSet: self;
 		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
@@ -78273,11 +77072,14 @@ method: RwGsPatchSet_V2
 updateSymbolAssociations
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | 
-		(movedClassesMap at: each className ifAbsent: [])
-			ifNil: [ each installNewClassVersionInSystem ]
-			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
-		 ]
+	classesWithNewVersions
+		do: [ :each | 
+			(self movedClassesSymbolList resolveSymbol: each className asSymbol)
+				ifNil: [ each installNewClassVersionInSystem ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					each moveNewClassVersionInSystem: classMove ] ]
 %
 
 category: 'private - patch class accessors'
@@ -78331,6 +77133,13 @@ _classUnmanagedAdditionPatchClass
 
 category: 'private - patch class accessors'
 method: RwGsPatchSet_V2
+_classUnmanagedVersioningPatchClass
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
+%
+
+category: 'private - patch class accessors'
+method: RwGsPatchSet_V2
 _classVariablePatchClass
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -78347,7 +77156,27 @@ category: 'private - applying'
 method: RwGsPatchSet_V2
 _createMovedClasses
 	movedClasses
-		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
+		do: [ :movedClass | 
+			| symDictName |
+			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
+			( self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList)
+				at: movedClass classBefore name asSymbol
+				put: movedClass ]
+%
+
+category: 'private - applying'
+method: RwGsPatchSet_V2
+_createNewSymbolList
+	| new |
+	new := SymbolList new.
+	self loadSymbolList
+		do: [ :symDict | 
+			| newSymDict |
+			newSymDict := SymbolDictionary new
+				name: symDict name;
+				yourself.
+			new addLast: newSymDict ].
+	^ new
 %
 
 category: 'private - applying'
@@ -78458,794 +77287,6 @@ _projectAdditionPatchClass
 	^ RwGsProjectAdditionPatchV2
 %
 
-! Class implementation for 'RwGsPatchSet_V2_symbolList'
-
-!		Class methods for 'RwGsPatchSet_V2_symbolList'
-
-category: 'private - method initialization order'
-classmethod: RwGsPatchSet_V2_symbolList
-classPatchesInReverseHierarchyOrder: classPatches tempSymbolList: tempSymbolList
-	"Returns acollection of the specified classPatches ordered in reverse superclass order"
-
-	| order toBeOrdered processed aClass patchMap |
-	patchMap := IdentityKeyValueDictionary new.
-	classPatches
-		do: [ :classPatch | 
-			| class |
-			class := (self
-				lookupSymbolDictName: classPatch symbolDictionaryName
-				in: tempSymbolList)
-				at: classPatch className asSymbol
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: classPatch className asSymbol)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							self error: 'Cannot find class to update constraints for.' ]
-						ifNotNil: [ :assoc | assoc value ] ].
-			patchMap at: class put: classPatch ].
-	toBeOrdered := patchMap keys asIdentitySet.
-	order := OrderedCollection new.
-	processed := IdentitySet new.
-	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
-		whileFalse: [ 
-			self
-				_orderBySuperclass: aClass
-				from: toBeOrdered
-				into: order
-				ignoring: processed ].
-	^ ((order collect: [ :orderedClass | patchMap at: orderedClass ifAbsent: [  ] ])
-		select: [ :patch | patch notNil ]) reverse
-%
-
-category: 'accessing'
-classmethod: RwGsPatchSet_V2_symbolList
-lookupSymbolDictName: symDictName in: symbolList
-	^ self
-		lookupSymbolDictName: symDictName
-		in: symbolList
-		ifAbsent: [ 
-			self
-				error:
-					'the symbol dictionary named ' , symDictName asString printString
-						, ' was not found in the symbol list' ]
-%
-
-category: 'accessing'
-classmethod: RwGsPatchSet_V2_symbolList
-lookupSymbolDictName: symDictName in: symbolList ifAbsent: absentBlock
-	^ symbolList
-		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
-		ifNone: absentBlock
-%
-
-category: 'accessing'
-classmethod: RwGsPatchSet_V2_symbolList
-resolveSymbolDictWith: assocation in: symbolList
-| res aDict |
-res := { } .
-1 to: symbolList size do:[ :j |
-  (aDict := symbolList at: j) ifNotNil:[
-    aDict associationsDo:[ :assoc |
-      assoc == assocation ifTrue:[ res add: aDict]
-    ].
-  ].
-].
-^ res
-%
-
-!		Instance methods for 'RwGsPatchSet_V2_symbolList'
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-addAddedClassesToTempSymbols
-true ifTrue: [^ super addAddedClassesToTempSymbols ].
-	addedClasses
-		do: [ :patch | 
-			| key symDict symDictName |
-			key := patch className asSymbol.
-			symDictName := patch symbolDictionaryName.
-			symDict := self class
-				lookupSymbolDictName: symDictName
-				in: self tempSymbolList.
-			(symDict includesKey: key)
-				ifTrue: [ 
-					self
-						error:
-							'Encountered an existing association for a new class ' , key asString ].
-			symDict at: key put: nil	"Just need the names for now, they don't need to resolve to anything in particular" ]
-%
-
-category: 'building'
-method: RwGsPatchSet_V2_symbolList
-addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition
-
-	currentProjectDefinition := aProjectDefinition.
-	addedUnmanagedClasses
-		add:
-			((self _classUnmanagedAdditionPatchClass
-				for: aClassDefinition
-				inPackage: aPackageDefinition)
-				projectDefinition: aProjectDefinition;
-				oldClassVersion: aClass
-				yourself)
-%
-
-category: 'modification dispatching'
-method: RwGsPatchSet_V2_symbolList
-addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition
-	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
-		while updating the loader using the loader"
-
-	aRwClassModification isAddition
-		ifTrue: [ 
-			| symDictName className |
-			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
-				in a project that is not included in this load"
-			className := aRwClassModification after name.
-			symDictName := aProjectDefinition
-				symbolDictNameForPackageNamed: aPackage name.
-			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
-			(Rowan globalNamed: aRwClassModification after name)
-				ifNotNil: [ :class | 
-					(Rowan image loadedClassForClass: class ifAbsent: [  ])
-						ifNil: [ 
-							| theClassDefinition theClassModification |
-							"no loaded class exists for the class"
-							theClassDefinition := class
-								rwClassDefinitionInSymbolDictionaryNamed: symDictName.
-							theClassModification := aRwClassModification after
-								compareAgainstBase: theClassDefinition.
-							theClassModification isEmpty
-								ifTrue: [ 
-									self
-										addAddedUnmanagedClass: aRwClassModification after
-										oldClassVersion: class
-										inPackage: aPackage
-										inProject: aProjectDefinition ]
-								ifFalse: [ 
-									aRwClassModification before: theClassDefinition.
-									self
-										addPatchedUnmanagedClassNewVersion: aRwClassModification
-										inPackage: aPackage
-										inProject: aProjectDefinition ].
-							(aRwClassModification propertiesModification elementsModified
-								at: 'gs_constraints'
-								ifAbsent: [  ])
-								ifNotNil: [ :constraints | 
-									"arrange to add constraints to a newly created class - constraints not created during class creation"
-									self
-										addPatchedClassConstraints: aRwClassModification after
-										inPackage: aPackage
-										inProject: aProjectDefinition ].
-							^ self ]
-						ifNotNil: [ 
-							"if the class is packaged, then it must be in another project, signal notification"
-							(RwExistingVisitorAddingExistingClassNotification new
-								class: class;
-								classDefinition: aRwClassModification after;
-								yourself) signal ] ].
-			self
-				addAddedClass: aRwClassModification after
-				inPackage: aPackage
-				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified
-				at: 'gs_constraints'
-				ifAbsent: [  ])
-				ifNotNil: [ :constraints | 
-					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self
-						addPatchedClassConstraints: aRwClassModification after
-						inPackage: aPackage
-						inProject: aProjectDefinition ].
-			^ self ].
-	aRwClassModification isDeletion
-		ifTrue: [ 
-			self
-				addDeletedClass: aRwClassModification before
-				inPackage: aPackage
-				inProject: aProjectDefinition ].
-	aRwClassModification isModification
-		ifTrue: [ 
-			RwGsClassVersioningPatchV2
-				addPatchedClassModification: aRwClassModification
-				inPackage: aPackage
-				inProject: aProjectDefinition
-				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified
-				at: 'gs_constraints'
-				ifAbsent: [  ])
-				ifNotNil: [ :constraints | 
-					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self
-						addPatchedClassConstraints: aRwClassModification after
-						inPackage: aPackage
-						inProject: aProjectDefinition ] ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList
-	addedClasses
-		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
-	addedUnmanagedClasses
-		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
-	classesWithClassVariableChanges
-		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
-	classesWithNewVersions
-		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
-%
-
-category: 'building'
-method: RwGsPatchSet_V2_symbolList
-addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition
-
-	currentProjectDefinition := aProjectDefinition.
-
-	classesWithNewVersions
-		add:
-			((self _classUnmanagedVersioningPatchClass
-				for: aClassModification
-				inPackage: aPackageDefinition)
-				projectDefinition: aProjectDefinition;
-				yourself)
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-compileMethodPatch: aMethodAdditionPatch
-	aMethodAdditionPatch
-		compileUsingNewClassesSymbolList: self createdClasses
-		andExistingClasses: self tempSymbolList
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList
-	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| classNames className |
-	classNames := (self class lookupSymbolDictName: symDictName in: workSymbolList)
-		keys.
-	classNames remove: symDictName.
-	className := self anyElementOfCollection: classNames.
-	className ifNil: [ self error: 'Empty WorkList.' ].
-	self
-		createClassNamed: className
-		fromWorkSymbolList: workSymbolList
-		symDictName: symDictName
-		andClassesByNameSymbolList: newClassesByNameSymbolList
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-createClassNamed: className fromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList
-	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
-	Remove any classes created from the workList."
-
-	| patch superclassName |
-	(self class lookupSymbolDictName: symDictName in: workSymbolList)
-		removeKey: className asSymbol.
-	patch := (self class
-		lookupSymbolDictName: symDictName
-		in: newClassesByNameSymbolList) at: className asSymbol.
-	superclassName := patch superclassName asSymbol.
-	(workSymbolList resolveSymbol: superclassName)
-		ifNotNil: [ :superclassAssoc | 
-			| ar |
-			ar := self class resolveSymbolDictWith: superclassAssoc in: workSymbolList.
-			ar size ~= 1
-				ifTrue: [ 
-					self
-						error:
-							'Internal error: more than one symbol dictionary with association for class '
-								, superclassName printString ].
-			self
-				createClassNamed: superclassName
-				fromWorkSymbolList: workSymbolList
-				symDictName: (ar at: 1) name
-				andClassesByNameSymbolList: newClassesByNameSymbolList ].
-	patch createClassFor: self inSymDict: symDictName
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2_symbolList
-createdClass: aClass
-	| className |
-	className := aClass name asSymbol.
-	(createdClasses resolveSymbol: className)
-		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [ :assoc | 
-			assoc value == aClass
-				ifFalse: [ 
-					"new version created, update entry in createdClasses"
-					createdClasses at: className put: aClass ] ]
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2_symbolList
-createdClass: aClass inSymDict: symDictName
-	| className symDict |
-	className := aClass name.
-	symDict := self class lookupSymbolDictName: symDictName in: self createdClasses.
-	(symDict at: className ifAbsent: [  ])
-		ifNil: [ symDict add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [ :cl | 
-			cl == aClass
-				ifFalse: [ 
-					"new version created, update entry in createdClasses"
-					symDict at: className put: aClass ] ]
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-createdClasses
-	^ createdClasses ifNil: [ createdClasses :=  self _createNewSymbolList ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-createNewClassesAndClassVersions
-	"Who: Added classes and classes with new versions and classes with class variable changes
-	   How: Create the new class or class version. Superclass by identity, not name resolution.
-	   Order: Superclasses first.
-	   Errors: Collect for reporting later"
-
-	| newClassesByNameSymbolList workSymbolList |
-	newClassesByNameSymbolList := self _createNewSymbolList.
-	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
-	workSymbolList := self _createNewSymbolList.
-	newClassesByNameSymbolList
-		do: [ :symDict | 
-			| workList symDictName |
-			symDictName := symDict name.
-			workList := symDict keys.
-			workList remove: symDictName.
-			workList
-				do: [ :className | 
-					(self class lookupSymbolDictName: symDictName in: workSymbolList)
-						at: className
-						put: nil ] ].
-	workSymbolList
-		do: [ :symDict | 
-			[ symDict keys size <= 1 ]
-				whileFalse: [ 
-					self
-						createClassesFromWorkSymbolList: workSymbolList
-						symDictName: symDict name
-						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-doMoveMethodsBetweenPackages
-
-	| image |
-	image := Rowan image.
-	movedMethods 
-		do: [:aMethodMove |
-			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
-			packageDef := aMethodMove packageBefore.
-			classOrExtensionDef := aMethodMove classOrExtensionBefore.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					self error: 'internal error - no loaded class or extension found for class ', 
-						classOrExtensionDef name printString, 
-						'  in package ', 
-						packageDef name printString ].
-			loadedMethods := aMethodMove isMeta
-				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
-				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
-			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
-
-			registry := image loadedRegistryForPackageNamed: loadedPackage name.
-
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-			loadedClassOrExtension isLoadedClassExtension
-				ifTrue: [
-					loadedClassOrExtension isEmpty
-						ifTrue: [ 
-							(registry loadedClassExtensionsForClass: loadedClassOrExtension handle ifAbsent: [])
-								ifNotNil: [ :loadedClassExtensions |
-									loadedClassExtensions isEmpty
-										ifFalse: [ 
-											loadedClassExtensions remove: loadedClassOrExtension.
-											loadedClassExtensions isEmpty
-												ifTrue: [ 
-													registry 
-														unregisterLoadedClassExtension: loadedClassOrExtension
-														forClass: loadedClassOrExtension handle ] ] ].
-							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
-
-            compiledMethod := loadedMethod handle.
-			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
-
-			packageDef := aMethodMove packageAfter.
-			classOrExtensionDef := aMethodMove classOrExtensionAfter.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					classOrExtensionDef isClassExtension
-						ifTrue: [ 
-							"add a new class extension on demand"
-							(aMethodMove projectAfter
-								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
-								ifTrue: [ | resolved |
-									((resolved := self loadSymbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
-										and: [resolved isBehavior and: [ resolved isMeta not ]])
-										ifFalse: [ 
-											self
-												error:
-													'The extension class named ' , self className printString , ' cannot be found.' ].
-"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
-"https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [
-									registry
-										ensureExtensionClassNamed: classOrExtensionDef name
-										existsForPackageNamed: packageDef name
-										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
-							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
-						ifFalse: [ 
-							self error: 'internal error - no loaded class found for class ', 
-								classOrExtensionDef name printString, 
-								'  in package ', 
-								packageDef name printString ] ].
-
-			loadedClassOrExtension addLoadedMethod: loadedMethod.
-
-			registry methodRegistry at: compiledMethod put: loadedMethod ]
-%
-
-category: 'initialization'
-method: RwGsPatchSet_V2_symbolList
-initialize
-	super initialize.
-	createdClasses := nil.
-	addedUnmanagedClasses := Set new
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-installAddedClasses
-	"Copy the name association from TempSymbols to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	super installAddedClasses.
-	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-installAddedClassExtensions
-
-	extendedClasses do: [ :each | each installClassExtensionInSystem: self loadSymbolList ]
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-loadSymbolList
-	^ loadSymbolList ifNil: [ Rowan image symbolList ]
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-loadSymbolList: aSymbolList
-	loadSymbolList := aSymbolList
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-moveClassesBetweenSymbolDictionaries
-	classesWithSymbolDictionaryChanges
-		do: [ :patch | 
-			| className |
-			className := patch classDefinition name asSymbol.
-			(self movedClassesSymbolList resolveSymbol: className)
-				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
-				ifNotNil: [ :assoc | 
-					| classMove |
-					classMove := assoc value.
-					patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-movedClassesMap
-	self error: 'Use movedClassedSymbolList'
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-movedClassesSymbolList
-	^ movedClassesSymbolList
-		ifNil: [ movedClassesSymbolList := self _createNewSymbolList ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-recordCompiledForNewClassVersionDeletions
-	deleteNewVersionMethods
-		do: [ :each | 
-			each
-				primeBehaviorNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbols ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-removeDeletedClassesFromTempSymbols
-	"Deleted class names should not resolve during compilation."
-
-	true
-		ifTrue: [ ^ super removeDeletedClassesFromTempSymbols ].
-	deletedClasses
-		do: [ :patch | 
-			| symDictName symDict |
-			symDictName := patch symbolDictionaryName asSymbol.
-			symDict := self class
-				lookupSymbolDictName: symDictName
-				in: self tempSymbolList.
-			symDict removeKey: patch className asSymbol ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-removeDeletedMethods
-	deletedMethods
-		do: [ :methodDeletionPatch | 
-			| className |
-			className := methodDeletionPatch className.
-			methodDeletionPatch
-				deleteMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ].
-	deleteNewVersionMethods
-		do: [ :methodDeletionPatch | 
-			methodDeletionPatch
-				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbolList ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-setupForApply
-	"Copy the entire namespace from the user's transient SymbolList into a temporary SymbolDictionary in a temporary 
-	SymbolList, the tempSymbols. The tempSymbols, once suitably modified, will be used as the environment in which 
-	to compile methods during this apply operation."
-
-	| symbolList |
-	true
-		ifTrue: [ ^ super setupForApply ].
-
-	symbolList := self loadSymbolList.
-	1 to: symbolList size do: [ :index | 
-		| dict symDictName symDict |
-		"Need to preserve association identity and symbolList structure tempSymbolList is used for compiling methods"
-		dict := symbolList at: index.
-		symDictName := dict name asSymbol.
-		symDict := self class
-			lookupSymbolDictName: symDictName
-			in: self tempSymbolList.
-		dict
-			associationsDo: [ :assoc | 
-				assoc key ~~ symDictName
-					ifTrue: [ 
-						"avoid add association for the SymbolDictionary name"
-						symDict add: assoc ] ] ].
-
-	self setupForMovedClasses
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2_symbolList
-superclassNamed: aName ifAbsent: absentBlock
-	| superclassName |
-	superclassName := aName asSymbol.
-	^ (self createdClasses resolveSymbol: superclassName)
-		ifNotNil: [ :assoc | assoc value ]
-		ifNil: [ self tempSymbolList at: superclassName ifAbsent: absentBlock ]
-%
-
-category: 'patch access'
-method: RwGsPatchSet_V2_symbolList
-tempAssociationFor: aName
-	^ self tempSymbolList associationAt: aName
-%
-
-category: 'accessing'
-method: RwGsPatchSet_V2_symbolList
-tempSymbolList
-	^ tempSymbols
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-updateClassProperties
-	"For classes with changes that don't require versioning, 
-	update the properties in the class and the LoadedClasses as appropriate."
-
-	| classPatches ts |
-	ts := self tempSymbolList.
-	classPatches := OrderedCollection new.
-	classPatches
-		addAll:
-				(self class
-						classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges
-						tempSymbols: ts);
-		addAll:
-				(self class
-						classPatchesInReverseHierarchyOrder: classesWithPropertyChanges
-						tempSymbols: ts);
-		addAll:
-				(self class
-						classPatchesInReverseHierarchyOrder: classesWithConstraintChanges
-						tempSymbols: ts);
-		yourself.
-	classPatches
-		do: [ :patch | 
-			((self class
-				lookupSymbolDictName: patch symbolDictionaryName
-				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
-				ifNil: [ patch installPropertiesPatchSymbolListFor: self ]
-				ifNotNil: [ :aClassMove | patch installPropertiesPatchSymbolListFor: self classMove: aClassMove ] ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-updateMethodDictionaries
-	"For added methods and methods that need recompiling,
-	copy from temporary methodDictionaries to live methodDictionaries
-	For added methods, create LoadedMethods and add to the appropriate LoadedClass
-	or LoadedExtension
-	For methods that need recompiling updated the LoadedMethods registration. "
-
-	| movedClassesWithNewVersionMap movedExtensionMethodsMap emptyMap |
-	movedClassesWithNewVersionMap := self _createNewSymbolList.
-	emptyMap := true.
-	classesWithNewVersions
-		do: [ :patch | 
-			((self class
-				lookupSymbolDictName: patch symbolDictionaryName
-				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
-				ifNotNil: [ :aClassMove | 
-					(self class
-						lookupSymbolDictName: aClassMove symbolDictionaryNameAfter asSymbol
-						in: movedClassesWithNewVersionMap)
-						at: patch className asSymbol
-						put:
-							{aClassMove.
-							patch}.
-					emptyMap := false ] ].
-	addedMethods
-		do: [ :patch | 
-			| className |
-			className := patch className asSymbol.
-			((self class
-				lookupSymbolDictName: patch symbolDictionaryName
-				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
-				ifNil: [ patch installMethod ]
-				ifNotNil: [ :ar | 
-					"https://github.com/dalehenrich/Rowan/issues/316"
-					patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
-	emptyMap
-		ifFalse: [ 
-			"calculate moved extension methods map only if there are moved new class versions as well"
-			movedExtensionMethodsMap := self _createNewSymbolList.
-			movedMethods
-				do: [ :aMethodMove | 
-					| classExtDict key methodDict |
-					classExtDict := (self class
-						lookupSymbolDictName: aMethodMove symbolDictionaryNameAfter asSymbol
-						in: movedExtensionMethodsMap)
-						at: aMethodMove classOrExtensionBefore name asSymbol
-						ifAbsentPut: [ Dictionary new ].
-					key := aMethodMove isMeta
-						ifTrue: [ 'class' ]
-						ifFalse: [ 'instance' ].
-					methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ].
-					methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
-	extendedMethods
-		do: [ :patch | 
-			| className |
-			className := patch className asSymbol.
-			(movedClassesWithNewVersionMap resolveSymbol: className)
-				ifNil: [ patch installMethod ]
-				ifNotNil: [ :movedAssoc | 
-					| ar classMove |
-					"https://github.com/dalehenrich/Rowan/issues/316"
-					ar := movedAssoc value.
-					classMove := ar at: 1.
-					((self class
-						lookupSymbolDictName: classMove symbolDictionaryNameAfter
-						in: movedExtensionMethodsMap) at: className ifAbsent: [  ])
-						ifNil: [ patch installMethod ]
-						ifNotNil: [ :assoc | 
-							| classExtDict methodDict |
-							classExtDict := assoc value.
-							methodDict := patch isMeta
-								ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
-								ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
-							(methodDict at: patch methodDefinition selector ifAbsent: [  ])
-								ifNil: [ patch installMethod ]
-								ifNotNil: [ :aMethodMove | patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
-	methodsNeedingRecompile do: [ :each | each installSourcePatch ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-updateMethodProperties
-	methodsWithPropertyChanges
-		do: [ :each | 
-			each
-				installPropertiesPatchNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbols ]
-%
-
-category: 'dispatching'
-method: RwGsPatchSet_V2_symbolList
-updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification
-	aClassVersioningPatch
-		updatePatchesForNewClassVersion: aProjectSetModification
-			patchSetSymbolList: self;
-		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
-			patchSet: self;
-		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
-			patchSet: self
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-updateSymbolAssociations
-	"Install new class versions."
-
-	classesWithNewVersions
-		do: [ :each | 
-			(self movedClassesSymbolList resolveSymbol: each className asSymbol)
-				ifNil: [ each installNewClassVersionInSystem ]
-				ifNotNil: [ :assoc | 
-					| classMove |
-					classMove := assoc value.
-					each moveNewClassVersionInSystem: classMove ] ]
-%
-
-category: 'private - patch class accessors'
-method: RwGsPatchSet_V2_symbolList
-_classUnmanagedVersioningPatchClass
-
-	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-_createMovedClasses
-	movedClasses
-		do: [ :movedClass | 
-			| symDictName |
-			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
-			( self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList)
-				at: movedClass classBefore name asSymbol
-				put: movedClass ]
-%
-
-category: 'private - applying'
-method: RwGsPatchSet_V2_symbolList
-_createNewSymbolList
-	| new |
-	new := SymbolList new.
-	self loadSymbolList
-		do: [ :symDict | 
-			| newSymDict |
-			newSymDict := SymbolDictionary new
-				name: symDict name;
-				yourself.
-			new addLast: newSymDict ].
-	^ new
-%
-
 ! Class implementation for 'RwGsPatchV2'
 
 !		Instance methods for 'RwGsPatchV2'
@@ -79341,13 +77382,6 @@ symbolDictionaryRegistry
 	^ self symbolDictionary rowanSymbolDictionaryRegistry
 %
 
-category: 'accessing'
-method: RwGsPatchV2
-symbolDictionaryRegistryFor: aPackageName
-
-	^ (self symbolDictionaryFor: aPackageName) rowanSymbolDictionaryRegistry
-%
-
 ! Class implementation for 'RwGsClassPatchV2'
 
 !		Class methods for 'RwGsClassPatchV2'
@@ -79366,20 +77400,6 @@ for: aClassDefinition inPackage: aPackageDefinition
 
 category: 'actions'
 method: RwGsClassPatchV2
-addToNewClassesByName: aDictionary
-
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := classDefinition key.
-	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
-%
-
-category: 'actions'
-method: RwGsClassPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
@@ -79387,7 +77407,7 @@ addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
 	symDictName := self symbolDictionaryName.
-	symDict := RwGsPatchSet_V2_symbolList
+	symDict := RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: newClassesByNameSymbolList
 		ifAbsent: [ 
@@ -79503,16 +77523,6 @@ createClassFor: aPatchSet inSymDict: symDictName
 	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
 	aPatchSet createdClass: createdClass inSymDict: symDictName.
 	^ createdClass
-%
-
-category: 'patching moved classes'
-method: RwGsClassPatchV2
-installPropertiesPatchFor: aPatchSet classMove: aClassMove
-
-	| theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
 %
 
 category: 'installing'
@@ -79691,7 +77701,7 @@ installClassInSystem
 	| loadedClass |
 	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
-		forClass: newClass
+		forClass: self newClass
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition
@@ -79761,81 +77771,8 @@ oldClassVersion: object
 
 category: 'actions'
 method: RwGsClassConstraintsSymDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
-
-category: 'actions'
-method: RwGsClassConstraintsSymDictPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"noop"
-%
-
-category: 'installing'
-method: RwGsClassConstraintsSymDictPatchV2
-installPropertiesPatchFor: aPatchSet
-
-	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
-%
-
-category: 'installing'
-method: RwGsClassConstraintsSymDictPatchV2
-installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
-
-	" update class and update loadedClass with new constraints"
-
-	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
-		existingConstraints instVarNames |
-	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
-		at: className
-		ifAbsent: [ 
-			aPatchSet tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
-	existingConstraintsMap := Dictionary new.
-	existingVaryingConstraint := existingClass _varyingConstraint.
-	instVarNames := existingClass allInstVarNames.
-	existingConstraints := [ existingClass _constraints ] on: Deprecated do: [:ex | ex resume ].
-	1 to: existingConstraints size do: [:index |
-		existingConstraintsMap at: (instVarNames at: index) put: (existingConstraints at: index ) ].
-	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
-	theConstraintsMap := Dictionary new.
-	theVaryingConstraint := Object.
-	theConstraints do: [:arrayOrVaryingConstraintClass |
-		arrayOrVaryingConstraintClass _isArray
-			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
-			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
-	keys := existingConstraintsMap keys copy.
-	keys addAll: theConstraintsMap keys.
-	keys do: [:key | 
-		| existingConstraint theConstraint |
-		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
-		theConstraint := theConstraintsMap at: key ifAbsent: [].
-		existingConstraint == theConstraint
-			ifFalse: [ 
-				| instVarString |
-				instVarString := key asString.
-				existingConstraint == nil
-					ifTrue: [ 
-						"add theConstraint" 
-						existingClass _rwInstVar: instVarString constrainTo: theConstraint ]
-					ifFalse: [ 
-						theConstraint == nil
-							ifTrue: [ 
-								"remove the constraint" 
-								existingClass _rwInstVar: instVarString constrainTo: Object ]
-							ifFalse: [
-								"change the value of the constraint"
-                                existingClass _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
-	existingVaryingConstraint == theVaryingConstraint
-		ifFalse: [
-			"change the varying constraint"
-			[ existingClass _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 %
 
 category: 'installing'
@@ -79930,15 +77867,6 @@ for: aClassDefinition
 
 category: 'actions'
 method: RwGsClassDeletionSymbolDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
-
-category: 'actions'
-method: RwGsClassDeletionSymbolDictPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"noop"
 %
@@ -79982,30 +77910,6 @@ symbolDictionaryName
 
 category: 'actions'
 method: RwGsClassExtensionSymbolDictPatchV2
-installClassExtensionInSystem
-	"The class must already exist.
-        Create or update the LoadedClassExtension for the extended class."
-
-	(self projectDefinition
-		useSessionMethodsForExtensionsForPackageNamed: self packageName)
-		ifTrue: [ 
-			| resolved |
-			Rowan image ensureSessionMethodsEnabled.
-			((resolved := Rowan image symbolList objectNamed: self className asSymbol)
-				notNil and: [ resolved isBehavior and: [ resolved isMeta not ] ])
-				ifFalse: [ 
-					self
-						error:
-							'The extension class named ' , self className printString , ' cannot be found.' ] ]
-		ifFalse: [ 
-			self symbolDictionaryRegistry
-				ensureExtensionClassNamed: self className
-				existsForPackageNamed: self packageName
-				implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ]
-%
-
-category: 'actions'
-method: RwGsClassExtensionSymbolDictPatchV2
 installClassExtensionInSystem: aSymbolList
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
@@ -80034,47 +77938,8 @@ installClassExtensionInSystem: aSymbolList
 
 category: 'actions'
 method: RwGsClassPropertiesSymDictPatchV2
-addToNewClassesByName: aDictionary
-
-	"noop"
-
-	
-%
-
-category: 'actions'
-method: RwGsClassPropertiesSymDictPatchV2
 addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	"noop"
-%
-
-category: 'installing'
-method: RwGsClassPropertiesSymDictPatchV2
-installPropertiesPatchFor: aPatchSet
-
-	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
-%
-
-category: 'installing'
-method: RwGsClassPropertiesSymDictPatchV2
-installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
-
-	" update class and update loadedClass with new properties"
-
-	| className existingClass createdClass |
-	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
-		at: className
-		ifAbsent: [ 
-			aPatchSet tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	createdClass := self createClassFor: aPatchSet.	"use createClassFor:, but not expected to create new class version"
-	createdClass == existingClass
-		ifFalse: [ 
-			self
-				error:
-					'internal error - class changed during class property update ... should have been a class versioning patch' ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
 category: 'installing'
@@ -80152,7 +78017,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 
 	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
-	before := classModification before.
+	before := self classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
@@ -80194,30 +78059,6 @@ createClassFor: aPatchSet
 				error:
 					'internal error - unexpected new class version for class variable modification' ].
 	^ oldClassVersion
-%
-
-category: 'installing'
-method: RwGsClassVariableChangeSymbolDictPatchV2
-installPropertiesPatchFor: aPatchSet
-
-	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
-%
-
-category: 'installing'
-method: RwGsClassVariableChangeSymbolDictPatchV2
-installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
-
-	" update class and update loadedClass with new properties"
-
-	| className existingClass |
-	className := classDefinition key asSymbol.
-	existingClass := aPatchSet createdClasses
-		at: className
-		ifAbsent: [ 
-			aPatchSet tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass  implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
 category: 'installing'
@@ -80420,17 +78261,6 @@ oldClassVersion
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
-%
-
-category: 'actions'
-method: RwGsClassVersioningPatchV2
-updateSymbolAssociation
-
-	oldClassVersion == newClassVersion 
-		ifTrue: [ 
-			"no newClassVersion created when property modifications applied .. not a problem"
-			^self ].
-	symbolAssociation value: newClassVersion
 %
 
 category: 'private'
@@ -80754,45 +78584,6 @@ updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification patchSet: p
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
-%
-
-category: 'new version support'
-method: RwGsClassVersioningSymbolDictPatchV2
-updatePatchesForNewClassVersion: aProjectSetModification patchSet: patchSet
-
-	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
-	movedDeletedMap := Dictionary new.
-	patchSet movedClassesMap keysAndValuesDo: [:className :classMove | movedDeletedMap at: className put: classMove ].
-	existingClass := self oldClassVersion.
-	existingClassName := existingClass name asString.
-
-	loadedClass := self existingSymbolDictionaryRegistry existingForClass: existingClass.
-	loadedClassDefinition := loadedClass asDefinition.
-	loadedPackageName := loadedClass loadedPackage name.
-
-	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	newVersionClassModification isEmpty
-		ifFalse: [ 
-			"only newVersionClassModification with substance need further processing"
-			aProjectSetModification
-				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
-					classesModification isEmpty
-						ifFalse: [ 
-							| classesModified |
-							classesModified := classesModification elementsModified.
-							(classesModified at: existingClassName ifAbsent: [  ])
-								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
-								ifNotNil: [ :existingClassModification | 
-									| deleteClassModification |
-									deleteClassModification := false.
-									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:classMove |
-										deleteClassModification := classMove packageBefore name = packageModification after name ].
-									deleteClassModification
-										ifTrue: [classesModified removeKey: existingClassName]
-										ifFalse: [
-											newVersionClassModification mergeForExistingClassWith: existingClassModification.
-											classesModified at: existingClassName put: newVersionClassModification ] ] ] ] ]
 %
 
 category: 'new version support'
@@ -81299,66 +79090,6 @@ compiledMethod
 
 category: 'compiling'
 method: RwGsMethodPatchV2
-compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [
-	  | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
-		  intoCategories: nil
-		  environmentId: self methodEnvironmentId
-  ] on: (CompileError, CompileWarning) do:[:ex |
-    ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-    ex pass 
-  ]
-%
-
-category: 'compiling'
-method: RwGsMethodPatchV2
-compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-	[ 
-	| sourceString protocol |
-	sourceString := methodDefinition source.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: tempSymbolList
-		category: protocol
-		intoMethodDict: false
-		intoCategories: nil
-		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
-		on: CompileError , CompileWarning
-		do: [ :ex | 
-			ex
-				addText:
-					(RwRepositoryResolvedProjectTonelReaderVisitorV2
-						lineNumberStringForMethod: methodDefinition).
-			ex pass ]
-%
-
-category: 'compiling'
-method: RwGsMethodPatchV2
 compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 	self
 		primeBehaviorNewClassesSymbolList: createdClasses
@@ -81414,27 +79145,6 @@ isMeta: newValue
 	isMeta := newValue
 %
 
-category: 'private'
-method: RwGsMethodPatchV2
-loadedClassOrExtensionForMethod
-
-	"The loaded class or extension should already exist."
-
-	| loadedPackage className |
-	loadedPackage := Rowan image
-		loadedPackageNamed: self packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
-	className := classDefinition key.
-	^ loadedPackage
-		classOrExtensionForClassNamed: className
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
-%
-
 category: 'accessing'
 method: RwGsMethodPatchV2
 methodDefinition
@@ -81454,15 +79164,6 @@ methodEnvironmentId
 	"use the project load spec package properties"
 
 	^ self projectDefinition methodEnvForPackageNamed: self packageName
-%
-
-category: 'private-installing'
-method: RwGsMethodPatchV2
-packageProtocolName
-
-	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
-
-	^ '*' , self packageName
 %
 
 category: 'private'
@@ -81490,34 +79191,6 @@ primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols
 
 category: 'private'
 method: RwGsMethodPatchV2
-primeBehaviorNewClasses: createdClassesSymbolList andExistingClassSymbolList: tempSymbolList
-	| className class symDictName |
-	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're done"
-			^ self ].
-	className := classDefinition key asSymbol.
-	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
-		lookupSymbolDictName: symDictName
-		in: createdClassesSymbolList)
-		at: className
-		ifAbsent: [ 
-			(RwGsPatchSet_V2_symbolList lookupSymbolDictName: symDictName in: tempSymbolList)
-				at: className
-				ifAbsent: [ 
-					(tempSymbolList resolveSymbol: className)
-						ifNil: [ 
-							"cannot find class ... caller can decide whether or not that is a problem"
-							^ self ]
-						ifNotNil: [ :assoc | assoc value ] ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ]
-%
-
-category: 'private'
-method: RwGsMethodPatchV2
 primeBehaviorNewClassesSymbolList: createdClassesSymbolList andExistingClasses: tempSymbols
 	| className class symDictName |
 	classDefinition key
@@ -81526,7 +79199,7 @@ primeBehaviorNewClassesSymbolList: createdClassesSymbolList andExistingClasses: 
 			^ self ].
 	className := classDefinition key asSymbol.
 	symDictName := self symbolDictionaryName.
-	class := (RwGsPatchSet_V2_symbolList
+	class := (RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: createdClassesSymbolList)
 		at: className
@@ -81580,17 +79253,6 @@ selector
 	^ selector
 %
 
-category: 'private-installing'
-method: RwGsMethodPatchV2
-setProtocolTo: protocolString
-
-	| protocolSymbol |
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [behavior addCategory: protocolSymbol].
-	behavior moveMethod: selector toCategory: protocolSymbol
-%
-
 ! Class implementation for 'RwGsMethodAdditionSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodAdditionSymbolDictPatchV2'
@@ -81608,84 +79270,9 @@ installMethod
 	selector := compiledMethod selector
 %
 
-category: 'installing'
-method: RwGsMethodAdditionSymbolDictPatchV2
-installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch
-	"the receiver represents an existing method for a class with a new version that has moved to a new package"
-
-	"the old method in the old class version must be removed from the loaded things in the new registry, since it was moved earlier, 
-		then the regular installMethod should be performed --- new version requires that all methods be compiled"
-
-	"https://github.com/dalehenrich/Rowan/issues/316"
-
-	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry.
-
-	oldClassVersion := newClassVersionPatch oldClassVersion.
-	oldClassVersion ~~ newClassVersionPatch newClassVersion
-		ifTrue: [ 
-			"only do this work if we truly have a new class version"
-			oldBehavior := self isMeta
-				ifTrue: [ oldClassVersion class ]
-				ifFalse: [ oldClassVersion ].
-			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-				ifNotNil: [ :oldCompiledMethod |
-					"new methods will not be in the old method dictionary"
-					(theRegistry methodRegistry
-						at: oldCompiledMethod
-						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
-							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
-
-	theRegistry
-		addNewCompiledMethod: compiledMethod
-		for: behavior
-		protocol: self propertiesProtocolName
-		toPackageNamed: aClassMove packageAfter name
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	selector := compiledMethod selector
-%
-
 ! Class implementation for 'RwGsMethodDeletionSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodDeletionSymbolDictPatchV2'
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	self
-		primeBehaviorNewClasses: createdClasses
-		andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			"class is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
 
 category: 'deleting'
 method: RwGsMethodDeletionSymbolDictPatchV2
@@ -81700,31 +79287,6 @@ deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols
 
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	"remove the method from deleted things"
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'deleting'
-method: RwGsMethodDeletionSymbolDictPatchV2
-deleteNewVersionMethodNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-	"remove the method from deleted things"
-
-	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
@@ -81755,17 +79317,6 @@ category: 'initializers'
 method: RwGsMethodDeletionSymbolDictPatchV2
 runInitializer
 	"noop"
-%
-
-category: 'accessing'
-method: RwGsMethodDeletionSymbolDictPatchV2
-symbolDictionary
-	"For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
-
-	^ Rowan image 
-			loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
-			ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
-			ifAbsent: [ ^ super symbolDictionary ]
 %
 
 ! Class implementation for 'RwGsMethodDeletionExtensionSymbolDictPatchV2'
@@ -81859,112 +79410,9 @@ installMethod
 	selector := compiledMethod selector
 %
 
-category: 'installing'
-method: RwGsMethodExtensionSymbolDictPatchV2
-installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
-	"the receiver represents an existing method for a class with a new version that has moved to a new package"
-
-	"the old method in the old class version must be removed from the loaded things in the new registry, since it was moved earlier, 
-		then the regular installMethod should be performed --- new version requires that all methods be compiled"
-
-	"https://github.com/dalehenrich/Rowan/issues/316"
-
-	| oldClassVersion oldBehavior theRegistry newBehavior |
-	theRegistry := (self
-		symbolDictionaryFor: aMethodMove packageAfter name
-		projectDefinition: aMethodMove projectAfter) rowanSymbolDictionaryRegistry.
-	oldClassVersion := newClassVersionPatch oldClassVersion.
-	oldClassVersion ~~ newClassVersionPatch newClassVersion
-		ifTrue: [ 
-			"only do this work if we truly have a new class version"
-			oldBehavior := self isMeta
-				ifTrue: [ oldClassVersion class ]
-				ifFalse: [ oldClassVersion ].
-			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-				ifNotNil: [ :oldCompiledMethod | 
-					"new methods will not be in the old method dictionary"
-					(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
-						ifNil: [ 
-							theRegistry
-								error:
-									'Internal error -- no existing LoadedMethod found for deleted method.' ]
-						ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
-
-	newBehavior := behavior isMeta
-		ifTrue: [ newClassVersionPatch newClassVersion class ]
-		ifFalse: [ newClassVersionPatch newClassVersion ].
-	theRegistry
-		addExtensionCompiledMethod: compiledMethod
-		for: newBehavior
-		protocol: self propertiesProtocolName
-		toPackageNamed: aMethodMove packageAfter name
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	selector := compiledMethod selector
-%
-
 ! Class implementation for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
 
 !		Instance methods for 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
-
-category: 'compiling'
-method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
-compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-  [ | sourceString symbolList protocol |
-	  sourceString := methodDefinition source.
-	  symbolList := SymbolList with: tempSymbols.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: symbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-%
-
-category: 'compiling'
-method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
-compileUsingNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Class ' , self className printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-  [ | sourceString protocol |
-	  sourceString := methodDefinition source.
-	  protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-
-	  methDict := GsMethodDictionary new.
-	  catDict := GsMethodDictionary new.
-	  compiledMethod := behavior
-		  compileMethod: sourceString
-		  dictionaries: tempSymbolList
-		  category: protocol
-		  intoMethodDict: methDict
-		  intoCategories: catDict
-		  environmentId: self methodEnvironmentId
-   ] on: (CompileError, CompileWarning) do:[:ex |
-     ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methodDefinition).
-     ex pass
-   ]
-%
 
 category: 'compiling'
 method: RwGsMethodExtensionSessionMethodSymbolDictPatchV2
@@ -82032,32 +79480,6 @@ installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols
 
 	| methodDictionary oldCompiledMethod |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
-
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := methodDefinition selector.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
-
-	self symbolDictionaryRegistry
-		moveCompiledMethod: oldCompiledMethod
-		toProtocol: self propertiesProtocolName
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-%
-
-category: 'installing'
-method: RwGsMethodPropertiesSymDictPatchV2
-installPropertiesPatchNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList
-
-	" update method protocol and update loadedMethod with new compiled method"
-
-	| methodDictionary oldCompiledMethod |
-	self primeBehaviorNewClasses: createdClasses andExistingClassSymbolList: tempSymbolList.
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
@@ -82381,15 +79803,6 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 
 category: 'private'
 method: RwGsSymbolDictionaryRegistryV2
-addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName
-
-	"expecting only a single method to be in methDict/catDict"
-
-	^ self class registry_ImplementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
 addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass
 
 	"expecting only a single method to be in methDict/catDict"
@@ -82397,28 +79810,6 @@ addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNam
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	^ self class registry_ImplementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 %
 
 category: 'private'
@@ -82497,15 +79888,6 @@ addRecompiledMethod: newCompiledMethod implementationClass: implementationClass
 
 category: 'private'
 method: RwGsSymbolDictionaryRegistryV2
-addRecompiledSessionMethodMethod: newCompiledMethod
-
-	"add a recompiled session method compiled method to behavior and update the loaded things"
-
-	^ self class registry_ImplementationClass addRecompiledSessionMethodMethod: newCompiledMethod instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
 addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
@@ -82513,61 +79895,6 @@ addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: impleme
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass addRecompiledSessionMethodMethod: newCompiledMethod instance: self
-%
-
-category: 'method - adopt api'
-method: RwGsSymbolDictionaryRegistryV2
-adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName
-
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	classExtension
-		ifTrue: [
-			"to adopt and extension method, it is much less complicated" 
-			^ self 
-				addExtensionCompiledMethod: compiledMethod 
-				for: behavior 
-				protocol: protocolString 
-				toPackageNamed: packageName ].
-
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := compiledMethod selector.
-	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])
-		ifFalse: [ self error: 'The given compiled method does not the existing compiled method in the class.' ].
-
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [
-			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
-			^ self ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self
-		loadedPackageNamed: packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
-
-	loadedClassOrExtension := loadedPackage
-		loadedClassOrClassExtensionForClass: behavior
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod
-%
-
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageFromDefinition: packageDefinition
-
-	^ self class registry_ImplementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
 %
 
 category: 'package - patch api'
@@ -82579,22 +79906,6 @@ createLoadedPackageFromDefinition: packageDefinition implementationClass: implem
 	^ implementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
 %
 
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageNamed: packageName properties: properties
-
-	^ self class registry_ImplementationClass createLoadedPackageNamed: packageName properties: properties instance: self
-%
-
-category: 'package - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createLoadedPackageNamed: packageName properties: properties instance: self
-%
-
 category: 'class - patch api'
 method: RwGsSymbolDictionaryRegistryV2
 deleteClassFromPackage: class
@@ -82602,26 +79913,6 @@ deleteClassFromPackage: class
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
 	^ self class registry_ImplementationClass deleteClassFromPackage: class instance: self
-%
-
-category: 'class - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteClassFromPackage: class implementationClass: implementationClass
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteClassFromPackage: class instance: self
-%
-
-category: 'class - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteClassNamedFromPackage: className
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	^ self class registry_ImplementationClass deleteClassNamedFromPackage: className instance: self
 %
 
 category: 'class - patch api'
@@ -82646,47 +79937,11 @@ deleteCompiledMethod: compiledMethod from: behavior
 
 category: 'method - patch api'
 method: RwGsSymbolDictionaryRegistryV2
-deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass
-
-	"delete a compiled method from behavior and remove it from the loaded things"
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteCompiledMethod: compiledMethod from: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMethod: selector for: behavior
-
-	^ self class registry_ImplementationClass deleteMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
 deleteMethod: selector for: behavior implementationClass: implementationClass
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass deleteMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
-%
-
-category: 'method - patch api'
-method: RwGsSymbolDictionaryRegistryV2
-deleteMovedMethod: selector for: behavior implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass deleteMovedMethod: selector for: behavior instance: self
 %
 
 category: 'method - patch api'
@@ -82741,20 +79996,6 @@ existingForClass: aClass ifAbsent: absentBlock
 	"Answer the registered LoadedClass for the given class."
 
 	^ self loadedClassForClass: aClass ifAbsent: absentBlock
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-existingOrNewLoadedPackageNamed: packageName
-
-	^ self class registry_ImplementationClass existingOrNewLoadedPackageNamed: packageName instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass
-
-	^ implementationClass existingOrNewLoadedPackageNamed: packageName instance: self
 %
 
 category: 'session methods'
@@ -82813,27 +80054,9 @@ loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock
 
 category: 'loaded queries'
 method: RwGsSymbolDictionaryRegistryV2
-loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
-%
-
-category: 'loaded queries'
-method: RwGsSymbolDictionaryRegistryV2
 loadedPackageNamed: packageName ifAbsent: absentBlock
 
 	^ self class registry_ImplementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
-%
-
-category: 'loaded queries'
-method: RwGsSymbolDictionaryRegistryV2
-loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
 %
 
 category: 'accessing'
@@ -82871,20 +80094,6 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 		to: symbolDictionaryName
 		classesWithNewVersions: classesWithNewVersions
 		instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-newLoadedPackageNamed: packageName
-
-	^ self class registry_ImplementationClass newLoadedPackageNamed: packageName instance: self
-%
-
-category: 'package - creation api'
-method: RwGsSymbolDictionaryRegistryV2
-newLoadedPackageNamed: packageName implementationClass: implementationClass
-
-	^ implementationClass newLoadedPackageNamed: packageName instance: self
 %
 
 category: 'accessing'
@@ -83025,40 +80234,6 @@ _symbolDictionaryAssociationAt: aKey ifPresent: oneArgBlock
 	^ nil
 %
 
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAssociationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionaryAssociationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAt: key ifPresent: oneArgBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistryV2
-_symbolDictionaryAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
-
-	| v |
-	v := self _symbolDictionary at: key ifAbsent: [ ^absentBlock value ].
-	^ oneArgBlock cull: v
-%
-
 ! Class implementation for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
 
 !		Class methods for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
@@ -83110,141 +80285,6 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			compiledMethod == oldCompiledMethod
-				ifFalse: [ | src oldSrc "temps for ease of debugging" |
-					(src := compiledMethod sourceString trimWhiteSpace) = (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
-						ifFalse: [ 
-							"only a problem, if the new and old compiled method are not identical"
-							self
-								error:
-									'internal error - Compiled method ' , behavior name asString , '>>'
-										, selector asString
-										,
-											' already exists in method dictionary when new extension method is expected ( package '
-										, packageName , ').' ] ] ].
-
-	methodDictionary at: selector put: compiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			registryInstance
-				error:
-					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
-						, selector asString , ' found for extension compiled method ( package '
-						, packageName , ').' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := Rowan image
-		loadedPackageNamed: packageName
-		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			self registerLoadedClassExtension: ext forClass: class.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod.
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: registryInstance
-
-
-	"expecting only a single method to be in methDict/catDict"
-
-	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	catDict
-		keysAndValuesDo: [ :protocolSymbol :selectors | 
-			| symbolSet |
-			symbolSet := cDict
-				at: protocolSymbol
-				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
-			symbolSet addAll: selectors ].
-	methDict
-		keysAndValuesDo: [ :sel :meth | 
-			mDict at: sel put: meth.
-			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
-			compiledMethod := meth ].
-
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			registryInstance
-				error:
-					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			self
-				registerLoadedClassExtension: ext
-				forClass: class.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod.
-
-	^ compiledMethod
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	| methodDictionary selector |
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := compiledMethod selector.
-	methodDictionary 
-		at: selector 
-		ifAbsent: [  
-			registryInstance
-				error:
-					'Internal error -- attempt to move a method that does not exist'  ].
-	self _addMovedDeletedMethod: compiledMethod instance: registryInstance.
-	^ self moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 addNewClassVersionToAssociation: newClass oldClassVersion: oldClass instance: registryInstance
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
@@ -83276,51 +80316,6 @@ addNewClassVersionToAssociation: newClass oldClassVersion: oldClass instance: re
 
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
-
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self 
-				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
-	methodDictionary at: selector put: compiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self
-		loadedPackageNamed: packageName
-		ifAbsent: [ 
-			registryInstance
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ]
-		instance: registryInstance.
-
-	loadedClassOrExtension := loadedPackage
-		loadedClassOrClassExtensionForClass: behavior
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod.
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName instance: registryInstance
 	"a new class version is being added to the association in the receiver previously occupied by 
 		the original class. No loadedClass or loadedClassExtension is expected for the oldClass"
@@ -83339,81 +80334,6 @@ addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toP
 		_symbolDictionary: registryInstance _symbolDictionary
 		associationAt: newClass name
 		ifPresent: [ :assoc | Rowan packageTools adopt adoptClass: newClass intoPackageNamed: aPackageName ]
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addRecompiledMethod: newCompiledMethod instance: registryInstance
-	"add a recompiled compiled method to behavior and update the loaded things"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-
-	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
-
-	"add a recompiled session method compiled method to behavior and update the loaded things"
-
-	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	oldCompiledMethod := mDict
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	mDict at: selector put: newCompiledMethod.
-	GsPackagePolicy current
-		updateMethodLookupCacheFor: newCompiledMethod
-		in: behavior.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
 %
 
 category: 'package - patch api'
@@ -83487,39 +80407,6 @@ deleteMethod: selector for: behavior instance: registryInstance
 
 	compiledMethod := behavior compiledMethodAt: selector.
 	self deleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance
-
-	"delete a compiled method from behavior - moved method already removed from the loaded things"
-
-	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedLoadedMethod: selector for: behavior instance: registryInstance
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
-	^ registryInstance
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-deleteMovedMethod: selector for: behavior instance: registryInstance
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
 	^ registryInstance
 %
 
@@ -83621,7 +80508,7 @@ loadedClassExtensionsForClass: aClass
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
-	^ (aClass theNonMetaClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
 %
 
 category: 'class - registration'
@@ -83665,99 +80552,6 @@ loadedPackageNamed: packageName ifAbsent: absentBlock instance: registryInstance
 	^ registryInstance packageRegistry at: packageName ifAbsent: absentBlock
 %
 
-category: 'class symbol dict - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-moveClassFor: classMove
-	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
-
-	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
-
-	"extension methods will be dealt with later"
-
-	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
-
-	before := classMove classBefore.
-	originalSymbolDictionary := Rowan image symbolDictNamed: before gs_symbolDictionary.
-	assoc := originalSymbolDictionary associationAt: before key asSymbol.
-	theClass := assoc value.
-	theBehavior := theClass class.
-	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	newSymbolDictionary := Rowan image symbolDictNamed: (classMove classAfter gs_symbolDictionary) .
-	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	loadedClass := self loadedClassForClass: theClass.
-	originalSymbolDictionary removeKey: assoc key.
-
-	self 
-		_symbolDictionary: newSymbolDictionary 
-		at: assoc key 
-		ifPresent: [:class |
-			theClass ~~ class
-				ifTrue: [ self error: ' internal error - found an existing association in the ',  
-								newSymbolDictionary name asString printString, 
-								' symbol dictionary with a duplicate key ',
-								assoc key printString, 
-								' while attempting to move class ', assoc key asString printString ] ]
-		ifAbsent: [ newSymbolDictionary add: assoc ].
-
-	loadedClass loadedInstanceMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-	loadedClass loadedClassMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-%
-
-category: 'method - patch api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance
-	"move a compiled method into a different protocol and update loaded things"
-
-	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
-	selector := compiledMethod selector.
-	behavior := compiledMethod inClass.
-
-	methodDictionary := (behavior persistentMethodDictForEnv: 0)
-		ifNil: [ Dictionary new ].
-	existingCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
-	existingCompiledMethod == compiledMethod
-		ifFalse: [ 
-			registryInstance
-				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
-
-	oldCat := behavior categoryOfSelector: selector environmentId: 0.
-	catSym := newProtocol asSymbol.
-	catDict := behavior _baseCategorysForStore: 0.
-	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
-	catDict
-		at: catSym
-		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
-	(catDict at: catSym) add: selector.
-
-	behavior moveMethod: selector toCategory: newProtocol.
-
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
-
-	loadedMethod updateForProtocolChange.
-	^ registryInstance
-%
-
 category: 'method - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance
@@ -83789,15 +80583,6 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
-%
-
-category: 'package - creation api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-newLoadedPackageNamed: packageName instance: registryInstance
-
-	(registryInstance packageRegistry includesKey: packageName)
-		ifTrue: [ registryInstance error: 'The package ', packageName printString, ' already exists' ].
-	^ registryInstance existingOrNewLoadedPackageNamed: packageName implementationClass: self
 %
 
 category: 'class - registration'
@@ -83857,45 +80642,6 @@ updateClassProperties: class instance: registryInstance
 
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_addMovedDeletedMethod: newCompiledMethod  instance: registryInstance
-
-	"add a recompiled compiled method that was previously removed from loaded things
-		to behavior and update the loaded things appropriately"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [].
-	loadedMethod ifNotNil: [  
-			registryInstance
-				error:
-					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
-
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
-
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 _clearLookupCachesFor: aBehavior env: envId
 
 "Invalidates method lookup caches for all classes.
@@ -83939,43 +80685,6 @@ _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstanc
 	| selector |
 	selector := compiledMethod selector.
 	behavior removeSelector: selector asString environmentId: 0.
-
-	^ registryInstance
-%
-
-category: 'method - private api'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance
-
-	"remove a compiled method from loaded things"
-
-	| loadedMethod loadedPackage loadedClassOrExtension |
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
-
-	registryInstance methodRegistry removeKey: compiledMethod.
-
-	loadedPackage := loadedMethod loadedPackage.
-	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClass: behavior
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
-
-	loadedClassOrExtension removeLoadedMethod: loadedMethod.
-	loadedClassOrExtension isLoadedClassExtension
-		ifTrue: [
-			loadedClassOrExtension isEmpty
-				ifTrue: [ 
-					self 
-						unregisterLoadedClassExtension: loadedClassOrExtension 
-						forClass: loadedClassOrExtension handle.
-					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 	^ registryInstance
 %
@@ -84133,30 +80842,6 @@ _symbolDictionary: symbolDictionary associationAt: aKey ifPresent: oneArgBlock
 	anAssoc := symbolDictionary associationAt: aKey otherwise: nil.
 	anAssoc ifNotNil: [ ^ oneArgBlock cull: anAssoc ].
 	^ nil
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_symbolDictionary: symbolDictionary associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionary: symbolDictionary 
-		associationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
-_symbolDictionary: symbolDictionary at: key ifPresent: oneArgBlock
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
 %
 
 category: 'private'
@@ -84590,21 +81275,6 @@ addLoadedMethod: aLoadedMethod
 	aLoadedMethod classIsMeta
 		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
-%
-
-category: 'removing'
-method: RwGsLoadedSymbolDictClass
-disownFromLoaded: aPackageSymbolDictionary
-
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
 %
 
 category: 'private-updating'
@@ -85169,21 +81839,6 @@ addLoadedMethod: aLoadedMethod
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 %
 
-category: 'removing'
-method: RwGsLoadedSymbolDictClassExtension
-disownFromLoaded: registry
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			registry methodRegistry removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			registry methodRegistry removeKey: loadedClassMethod handle ].
-
-	registry unregisterLoadedClassExtension: self forClass: handle
-%
-
 category: 'private-updating'
 method: RwGsLoadedSymbolDictClassExtension
 handleClassDeletion
@@ -85340,13 +81995,6 @@ classIsMeta
 	^classIsMeta
 %
 
-category: 'accessing'
-method: RwLoadedMethod
-classIsMeta: aBoolean
-
-	classIsMeta := aBoolean
-%
-
 category: 'queries'
 method: RwLoadedMethod
 loadedClass
@@ -85424,13 +82072,6 @@ forMethod: aGsNMethod
 %
 
 !		Instance methods for 'RwGsLoadedSymbolDictMethod'
-
-category: 'private'
-method: RwGsLoadedSymbolDictMethod
-definingPackageOfClass
-
-	^loadedClass loadedPackage
-%
 
 category: 'private-updating'
 method: RwGsLoadedSymbolDictMethod
@@ -85637,30 +82278,6 @@ loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionB
 				cull: self ]
 %
 
-category: 'enumeration'
-method: RwLoadedPackage
-loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock
-
-	loadedClasses
-		valuesDo: [ :loadedClass | 
-			loadedClassBlock 
-				cull: loadedClass
-				cull: self loadedProject 
-				cull: self. 
-			loadedClass
-				loadedInstanceMethodsDo: loadedInstanceMethodBlock
-				loadedClassMethodsDo: loadedClassMethodBlock ].
-	loadedClassExtensions
-		valuesDo: [ :loadedClassExtension | 
-			loadedClassExtensionBlock
-				cull: loadedClassExtension
-				cull: self loadedProject
-				cull: self.
-			loadedClassExtension
-				loadedInstanceMethodsDo: loadedInstanceMethodBlock
-				loadedClassMethodsDo: loadedClassMethodBlock ]
-%
-
 category: 'accessing'
 method: RwLoadedPackage
 loadedClassExtensions
@@ -85847,16 +82464,6 @@ updatePropertiesFromRegistryFor: aSymbolDictionaryRegistry
 
 !		Class methods for 'RwLoadedProject'
 
-category: 'instance creation'
-classmethod: RwLoadedProject
-newForLoadSpecification: aLoadSpecification
-
-	^ self new
-		initialize;
-		initializeForLoadSpecification: aLoadSpecification;
-		yourself
-%
-
 category: 'accessing'
 classmethod: RwLoadedProject
 _projectDefinitionPlatformConditionalAttributesKey
@@ -85952,14 +82559,6 @@ initialize
 	super initialize.
 	loadedPackages := KeyValueDictionary new.
 	isDirty := true. "a project is dirty if it has changes that are not written to disk"
-%
-
-category: 'initialization'
-method: RwLoadedProject
-initializeForLoadSpecification: aLoadSpecification
-
-	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification
 %
 
 category: 'testing'
@@ -86094,13 +82693,6 @@ markNotDirty
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
-%
-
-category: 'private'
-method: RwLoadedProject
-markProjectDirty
-
-	self markDirty
 %
 
 category: 'accessing'
@@ -86372,13 +82964,6 @@ defaultSymbolDictName: symDictName
 	self resolvedProject defaultSymbolDictName: symDictName
 %
 
-category: 'properties'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-defaultUseSessionMethodsForExtensions: aBool
-
-	self resolvedProject defaultUseSessionMethodsForExtensions: aBool
-%
-
 category: 'initialization'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 initializeForResolvedProject: aResolvedProject
@@ -86486,13 +83071,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 packageConvention
 
 	^ self resolvedProject packageConvention
-%
-
-category: 'properties'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-packageNameToPlatformPropertiesMap: aDictionary
-
-	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
 %
 
 category: 'accessing'
@@ -87849,27 +84427,11 @@ defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock
 
 category: 'queries'
 method: RwPlatform
-fileUtilities
-	"Answer the platform-specific object for accessing files and directories"
-
-	self subclassResponsibility: #fileUtilities
-%
-
-category: 'queries'
-method: RwPlatform
 globalNamed: aString
 
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
 
 	self subclassResponsibility: #'globalNamed:'
-%
-
-category: 'queries'
-method: RwPlatform
-loadedPackageClass
-	"Answer the platform-specific class for LoadedPackage"
-
-	self subclassResponsibility: #'loadedPackageClass'
 %
 
 category: 'queries'
@@ -87908,14 +84470,6 @@ method: RwPlatform
 setPreferenceFor: preferenceSymbol to: anObject
 
 	self subclassResponsibility: #setPreferenceFor:to:
-%
-
-category: 'queries'
-method: RwPlatform
-tools
-	"Answer the platform-specific class for tools"
-
-	self subclassResponsibility: #tools
 %
 
 category: 'automatic class initialization'
@@ -88075,14 +84629,6 @@ defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock
 	"global preferences implements default preference"
 
 	^self globalPreferenceFor: preferenceSymbol ifAbsent: aBlock
-%
-
-category: 'queries'
-method: RwGsPlatform
-fileUtilities
-  "Answer the platform-specific object for accessing files and directories"
-
-  ^ RwGsFileUtilities
 %
 
 category: 'queries'
@@ -89035,13 +85581,6 @@ _supportedPlatformNames
 
 !		Instance methods for 'RwSpecification'
 
-category: 'conversion'
-method: RwSpecification
-asSpecification
-
-	^ self
-%
-
 category: 'private'
 method: RwSpecification
 currentVersion
@@ -89608,7 +86147,7 @@ resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	self _projectRepository resolve
+	^self  resolve
 %
 
 category: 'accessing'
@@ -90509,15 +87048,6 @@ try: aBlock
 
 category: 'private parsing'
 method: RwTonelParser
-try: aBlock onFailure: failureBlock
-	^ self 
-		try: aBlock 
-		onSuccess: [ :parsedValue |  parsedValue ] 
-		onFailure: failureBlock
-%
-
-category: 'private parsing'
-method: RwTonelParser
 try: aBlock onSuccess: successBlock
 	^ self 
 		try: aBlock 
@@ -90810,14 +87340,7 @@ urlClassForScheme: scheme
 	"explicitly list the classes to be matched: https://github.com/dalehenrich/Rowan/issues/211"
 
 	^ {RwFileUrl.
-	RwCypressUrl.
-	RwTonelUrl.
-	RwFiletreeUrl.
-	RwGithubUrl.
-	RwGenericUrl.
 	RwHierarchicalUrl.
-	RwSmalltalkRepositoryUrl.
-	RwGitFileTreeUrl.
 	RwHttpUrl.
 	RwHttpsUrl}
 		detect: [ :urlClass | urlClass schemeName = scheme ]
@@ -90863,21 +87386,6 @@ category: 'fragment'
 method: RwUrl
 fragment
 	^fragment
-%
-
-category: 'accessing'
-method: RwUrl
-pathFor: coll
-  | ans sz |
-  ans := WriteStreamPortable on: String new.
-  sz := coll size.
-  1 to: sz do: [ :index | 
-    | pathElem |
-    pathElem := coll at: index.
-    ans nextPutAll: pathElem.
-    index < sz
-      ifTrue: [ ans nextPut: $/ ] ].
-  ^ ans contents
 %
 
 category: 'printing'
@@ -91213,160 +87721,6 @@ method: RwFileUrl
 segments
 
 	^ path
-%
-
-! Class implementation for 'RwCypressUrl'
-
-!		Class methods for 'RwCypressUrl'
-
-category: 'constants'
-classmethod: RwCypressUrl
-schemeName
-  ^ 'cypress'
-%
-
-! Class implementation for 'RwTonelUrl'
-
-!		Class methods for 'RwTonelUrl'
-
-category: 'constants'
-classmethod: RwTonelUrl
-schemeName
-	^'tonel'
-%
-
-!		Instance methods for 'RwTonelUrl'
-
-category: 'converting'
-method: RwTonelUrl
-asRwRepository
-  "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
-
-  ^ self createRwTonelRepositoryForPath: self pathForDirectory
-%
-
-! Class implementation for 'RwFiletreeUrl'
-
-!		Class methods for 'RwFiletreeUrl'
-
-category: 'constants'
-classmethod: RwFiletreeUrl
-schemeName
-	^'filetree'
-%
-
-!		Instance methods for 'RwFiletreeUrl'
-
-category: 'converting'
-method: RwFiletreeUrl
-asRwRepository
-  "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
-
-  ^ self createRwFiletreeRepositoryForPath: self pathForDirectory
-%
-
-category: 'printing'
-method: RwFiletreeUrl
-printOn: aStream
-  aStream
-    nextPutAll: self schemeName;
-    nextPut: $:.
-  aStream nextPutAll: '//'.
-  aStream nextPutAll: self pathString
-%
-
-category: 'private-initialization'
-method: RwFiletreeUrl
-privateInitializeFromText: aString
-  "Calculate host and path from a file URL in String format.
-	Some malformed formats are allowed and interpreted by guessing."
-
-  | schemeName pathString bare |
-  host := ''.
-  bare := aString trimSeparators.
-  schemeName := RwUrl schemeNameForString: bare.
-  (schemeName == nil or: [ schemeName ~= self schemeName ])
-    ifTrue: [ pathString := bare ]
-    ifFalse: [ 
-      "First remove schemeName and colon"
-      bare := bare copyFrom: schemeName size + 2 to: bare size.
-      (bare beginsWith: '//')
-        ifTrue: [ pathString := bare copyFrom: 3 to: bare size ]
-        ifFalse: [ pathString := bare ] ].
-  self initializeFromPathString: pathString
-%
-
-! Class implementation for 'RwGithubUrl'
-
-!		Class methods for 'RwGithubUrl'
-
-category: 'constants'
-classmethod: RwGithubUrl
-schemeName
-  ^ 'github'
-%
-
-!		Instance methods for 'RwGithubUrl'
-
-category: 'converting'
-method: RwGithubUrl
-asRwRepository
-  "return a platform appropriate repository for the repository identified in the receiver"
-
-  ^ self halt: 'not yet implemented'
-%
-
-category: 'accessing'
-method: RwGithubUrl
-dirPath
-  ^ self pathFor: dir
-%
-
-category: 'accessing'
-method: RwGithubUrl
-isAbsolute
-	"Should the path be considered absolute to
-	the filesystem instead of relative to the default directory?"
- 
-	^false
-%
-
-category: 'printing'
-method: RwGithubUrl
-printOn: aStream
-  aStream
-    nextPutAll: self schemeName;
-    nextPut: $:.
-  aStream nextPutAll: '//'.
-  aStream nextPutAll: self pathString
-%
-
-category: 'private-initialization'
-method: RwGithubUrl
-privateInitializeFromText: aString
-  | parsedPath |
-  super privateInitializeFromText: aString.
-  parsedPath := {host} , path.
-  (parsedPath
-    detect: [ :e | e includes: $: ]
-    ifNone: [ 
-      project := parsedPath copyFrom: 1 to: parsedPath size - 1.
-      dir := parsedPath copyFrom: 2 to: parsedPath size ])
-    ifNotNil: [ :pivot | 
-      project := parsedPath copyFrom: 1 to: (parsedPath indexOf: pivot) - 1.
-      project addLast: (pivot copyUpTo: $:).
-      committish := pivot copyFrom: (pivot indexOf: $:) + 1 to: pivot size.
-      dir := parsedPath
-        copyFrom: (parsedPath indexOf: pivot) + 1
-        to: parsedPath size ].
-  path := parsedPath.
-  host := ''
-%
-
-category: 'accessing'
-method: RwGithubUrl
-projectPath
-  ^ self pathFor: project
 %
 
 ! Class implementation for 'RwGenericUrl'
@@ -91720,89 +88074,6 @@ category: 'constants'
 classmethod: RwHttpsUrl
 schemeName
 	^'https'
-%
-
-! Class implementation for 'RwSmalltalkRepositoryUrl'
-
-!		Class methods for 'RwSmalltalkRepositoryUrl'
-
-category: 'constants'
-classmethod: RwSmalltalkRepositoryUrl
-schemeName
-  ^ 'smalltalk'
-%
-
-!		Instance methods for 'RwSmalltalkRepositoryUrl'
-
-category: 'converting'
-method: RwSmalltalkRepositoryUrl
-asRwRepository
-  "return a platform appropriate repository for the repository identified in the receiver"
-
-  ^ self halt: 'not yet implemented'
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-committish
-
-   ^committish
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-dir
-
-   ^dir
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-dirPath
-  ^ self pathFor: dir
-%
-
-category: 'parsing'
-method: RwSmalltalkRepositoryUrl
-privateParsePath: remainder relativeTo: basePath
-  | parsedPath |
-  parsedPath := super privateParsePath: remainder relativeTo: basePath.
-  (parsedPath
-    detect: [ :e | e includes: $: ]
-    ifNone: [ 
-      project := parsedPath copyFrom: 1 to: parsedPath size - 1.
-      dir := parsedPath copyFrom: 2 to: parsedPath size ])
-    ifNotNil: [ :pivot | 
-      project := parsedPath copyFrom: 1 to: (parsedPath indexOf: pivot) - 1.
-      project addLast: (pivot copyUpTo: $:).
-      committish := pivot copyFrom: (pivot indexOf: $:) + 1 to: pivot size.
-      dir := parsedPath
-        copyFrom: (parsedPath indexOf: pivot) + 1
-        to: parsedPath size ].
-  ^ parsedPath
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-project
-
-   ^project
-%
-
-category: 'accessing'
-method: RwSmalltalkRepositoryUrl
-projectPath
-  ^ self pathFor: project
-%
-
-! Class implementation for 'RwGitFileTreeUrl'
-
-!		Class methods for 'RwGitFileTreeUrl'
-
-category: 'constants'
-classmethod: RwGitFileTreeUrl
-schemeName
-  ^ 'gitfiletree'
 %
 
 ! Class implementation for 'STON'
@@ -97602,7 +93873,7 @@ options: optionsArray
 		options: optionsArray
 %
 
-category: '*rowan-gemstone-35x'
+category: '*rowan-gemstone-kernel-35'
 method: Class
 _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
   ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
@@ -99650,6 +95921,26 @@ _gemstonePlatformSpec
 	^ self _specification platformSpec at: 'gemstone'
 %
 
+! Class extensions for 'RowanMethodService'
+
+!		Instance methods for 'RowanMethodService'
+
+category: '*rowan-services-core-32x'
+method: RowanMethodService
+_initializeBreakPointsFor: theMethod
+  "Answers an Array stepPoints"
+  | list |
+  list := OrderedCollection new.
+  theMethod _allBreakpoints
+    ifNil: [ ^ OrderedCollection new ]
+    ifNotNil: [ :anArray | 
+      1 to: anArray size by: 3 do: [ :i | 
+        list
+          add:
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
+  ^ list asOrderedCollection
+%
+
 ! Class extensions for 'RowanProjectService'
 
 !		Instance methods for 'RowanProjectService'
@@ -99668,13 +95959,6 @@ addPackageNamed: packageName toComponentNamed: componentName
 ! Class extensions for 'RwAbstractClassDefinition'
 
 !		Instance methods for 'RwAbstractClassDefinition'
-
-category: '*rowan-gemstone-definitions'
-method: RwAbstractClassDefinition
-modificationForcingNewVersion
-
-	^ self _modificationForcingNewClassVersion before: self after: self
-%
 
 category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition
@@ -99851,18 +96135,6 @@ readlink: filepath
 	"resolve (possible) symbolic links in filepath and return an absolute path"
 
 	^ GsFile _expandFilename: filepath trimSeparators isClient: false
-%
-
-category: '*rowan-tools-gemstone'
-method: RwAbstractTool
-_log: aString
-
-"
-If the client is a topaz process, the default logger writes to the 
- current output file as controlled by topaz OUTPUT PUSH statements, 
- else to stdout.
-"
-	GsFile gciLogClient: aString
 %
 
 ! Class extensions for 'RwClassDefinition'
@@ -100276,54 +96548,20 @@ performOnServer: commandLine status: statusBlock
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
-applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
-	(self _shouldCloneRowanLoader: aProjectSetModification)
-		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
-			self
-				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
-				instanceMigrator: instanceMigrator ]
-		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
-			self
-				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
-				instanceMigrator: instanceMigrator ]
-%
-
-category: '*rowan-gemstone-loader-extensions-onlyv2'
-classmethod: RwGsImage
 applyModification_V2: aProjectSetModification instanceMigrator: instanceMigrator symbolList: symbolList
-	| visitorClassName visitorClass |
-	visitorClassName := 'RwGsImagePatchVisitor_V2_symbolList'.
-	visitorClassName := SessionTemps current
-		at: #'Experimental_RwGsImagePatchVisitor_V2_className'
-		ifAbsent: [ 
-			"#'RwGsImagePatchVisitor_V2'"
-			visitorClassName ].
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass:
+					(self _cloneRowanLoaderSymbolDictionary
+						at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
-			visitorClass := ((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanLoader')
-				at: visitorClassName.
 			self
 				applyModification_V2: aProjectSetModification
-				visitorClass: visitorClass
+				visitorClass: RwGsImagePatchVisitor_V2
 				instanceMigrator: instanceMigrator ]
 %
 
@@ -100357,7 +96595,7 @@ applyModification_V2: aProjectSetModification visitorClass: visitorClass instanc
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet symbolList: symbolList.
+	patchSet loadSymbolList: symbolList.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -100427,6 +96665,61 @@ loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock
 	^ foundBlock value: loadedClass
 %
 
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock
+
+       "scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
+
+       | behavior compiledMethod |
+       behavior := self objectNamed: className.
+       behavior ifNil: [ ^ absentBlock value ].
+       isMeta
+               ifTrue: [ behavior := behavior class ].
+       compiledMethod := behavior
+               compiledMethodAt: selector asSymbol
+               environmentId: 0
+               otherwise: nil.
+       compiledMethod ifNil: [ ^ absentBlock value ].
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | 
+                                       (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                               ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
+       ^ absentBlock value
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock
+
+        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
+        ^ absentBlock value
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+loadedMethodForMethod: compiledMethod ifAbsent: absentBlock
+
+       "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | 
+                                       (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                               ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
+       ^ absentBlock value
+%
+
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 removeLoadedClassExtensionsForClass: class
@@ -100440,6 +96733,19 @@ removeLoadedClassExtensionsForClass: class
 			self symbolDictionaryRegistryClass registry_ImplementationClass
 				unregisterLoadedClassExtension: loadedClassExtension
 				forClass: class ]
+%
+
+category: '*rowan-gemstone-core-32x'
+classmethod: RwGsImage
+removeLoadedMethodForCompileMethod: compiledMethod
+
+       "The given compiled method is being removed from the system, remove the loadedMethod associated 
+               with the compiled method."
+
+       self symbolList
+               do: [ :symbolDict | 
+                       symbolDict rowanSymbolDictionaryRegistry
+                               ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 %
 
 category: '*rowan-gemstone-loader-extensions-onlyv2'
@@ -100469,13 +96775,245 @@ _cloneRowanLoaderSymbolDictionary
 category: '*rowan-gemstone-loader-extensions-onlyv2'
 classmethod: RwGsImage
 _shouldCloneRowanLoader: aProjectSetModification
-
 	"When modifications are made to the Rowan-GemStone-Loader package in the Rowan project, we need to clone the RowanLoader symbol dictionary"
 
-	| projectModification packageModification |
-	projectModification := aProjectSetModification elementsModified at: 'Rowan' ifAbsent: [ ^ false ].
-	packageModification := projectModification packagesModification elementsModified at: 'Rowan-GemStone-Loader' ifAbsent: [ ^ false ].
-	^ packageModification isEmpty not
+	| projectModification |
+	projectModification := aProjectSetModification elementsModified
+		at: 'Rowan'
+		ifAbsent: [ ^ false ].
+	#('Rowan-GemStone-LoaderV2')
+		do: [ :loaderPackageName | 
+			(projectModification packagesModification elementsModified
+				at: loaderPackageName
+				ifAbsent: [  ])
+				ifNotNil: [ :packageModification | ^ packageModification isEmpty not ] ].
+	^ false
+%
+
+! Class extensions for 'RwGsLoadedSymbolDictClass'
+
+!		Instance methods for 'RwGsLoadedSymbolDictClass'
+
+category: '*rowan-gemstone-core-32x'
+method: RwGsLoadedSymbolDictClass
+disownFromLoaded: aPackageSymbolDictionary
+
+       loadedInstanceMethods
+               valuesDo: [ :loadedInstanceMethod | 
+                       self removeLoadedInstanceMethod: loadedInstanceMethod.
+                       aPackageSymbolDictionary methodRegistry
+                               removeKey: loadedInstanceMethod handle ].
+       loadedClassMethods
+               valuesDo: [ :loadedClassMethod | 
+                       self removeLoadedClassMethod: loadedClassMethod.
+                       aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
+%
+
+! Class extensions for 'RwGsLoadedSymbolDictClassExtension'
+
+!		Instance methods for 'RwGsLoadedSymbolDictClassExtension'
+
+category: '*rowan-gemstone-core-32x'
+method: RwGsLoadedSymbolDictClassExtension
+disownFromLoaded: registry
+       loadedInstanceMethods
+               valuesDo: [ :loadedInstanceMethod | 
+                       self removeLoadedInstanceMethod: loadedInstanceMethod.
+                       registry methodRegistry removeKey: loadedInstanceMethod handle ].
+       loadedClassMethods
+               valuesDo: [ :loadedClassMethod | 
+                       self removeLoadedClassMethod: loadedClassMethod.
+                       registry methodRegistry removeKey: loadedClassMethod handle ].
+
+       registry unregisterLoadedClassExtension: self forClass: handle
+%
+
+! Class extensions for 'RwGsMethodAdditionSymbolDictPatchV2'
+
+!		Instance methods for 'RwGsMethodAdditionSymbolDictPatchV2'
+
+category: '*rowan-gemstone-loaderv2-32x'
+method: RwGsMethodAdditionSymbolDictPatchV2
+installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch
+	"the receiver represents an existing method for a class with a new version that has moved to a new package"
+
+	"the old method in the old class version must be removed from the loaded things in the new registry, since it was moved earlier, 
+		then the regular installMethod should be performed --- new version requires that all methods be compiled"
+
+	"https://github.com/dalehenrich/Rowan/issues/316"
+
+	| oldClassVersion oldBehavior theRegistry |
+	theRegistry := (self
+		symbolDictionaryFor: aClassMove packageAfter name
+		projectDefinition: aClassMove projectAfter) rowanSymbolDictionaryRegistry.
+
+	oldClassVersion := newClassVersionPatch oldClassVersion.
+	oldClassVersion ~~ newClassVersionPatch newClassVersion
+		ifTrue: [ 
+			"only do this work if we truly have a new class version"
+			oldBehavior := self isMeta
+				ifTrue: [ oldClassVersion class ]
+				ifFalse: [ oldClassVersion ].
+			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
+				ifNotNil: [ :oldCompiledMethod | 
+					"new methods will not be in the old method dictionary"
+					(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
+						ifNil: [ 
+							theRegistry
+								error:
+									'Internal error -- no existing LoadedMethod found for deleted method.' ]
+						ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
+
+	theRegistry
+		addNewCompiledMethod: compiledMethod
+		for: behavior
+		protocol: self propertiesProtocolName
+		toPackageNamed: aClassMove packageAfter name
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
+	selector := compiledMethod selector
+%
+
+! Class extensions for 'RwGsMethodExtensionSymbolDictPatchV2'
+
+!		Instance methods for 'RwGsMethodExtensionSymbolDictPatchV2'
+
+category: '*rowan-gemstone-loaderv2-32x'
+method: RwGsMethodExtensionSymbolDictPatchV2
+installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch
+	"the receiver represents an existing method for a class with a new version that has moved to a new package"
+
+	"the old method in the old class version must be removed from the loaded things in the new registry, since it was moved earlier, 
+		then the regular installMethod should be performed --- new version requires that all methods be compiled"
+
+	"https://github.com/dalehenrich/Rowan/issues/316"
+
+	| oldClassVersion oldBehavior theRegistry newBehavior |
+	theRegistry := (self
+		symbolDictionaryFor: aMethodMove packageAfter name
+		projectDefinition: aMethodMove projectAfter) rowanSymbolDictionaryRegistry.
+	oldClassVersion := newClassVersionPatch oldClassVersion.
+	oldClassVersion ~~ newClassVersionPatch newClassVersion
+		ifTrue: [ 
+			"only do this work if we truly have a new class version"
+			oldBehavior := self isMeta
+				ifTrue: [ oldClassVersion class ]
+				ifFalse: [ oldClassVersion ].
+			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
+				ifNotNil: [ :oldCompiledMethod | 
+					"new methods will not be in the old method dictionary"
+					(theRegistry methodRegistry at: oldCompiledMethod ifAbsent: [  ])
+						ifNil: [ 
+							theRegistry
+								error:
+									'Internal error -- no existing LoadedMethod found for deleted method.' ]
+						ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
+
+	newBehavior := behavior isMeta
+		ifTrue: [ newClassVersionPatch newClassVersion class ]
+		ifFalse: [ newClassVersionPatch newClassVersion ].
+	theRegistry
+		addExtensionCompiledMethod: compiledMethod
+		for: newBehavior
+		protocol: self propertiesProtocolName
+		toPackageNamed: aMethodMove packageAfter name
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
+	selector := compiledMethod selector
+%
+
+! Class extensions for 'RwGsPatchSet_V2'
+
+!		Instance methods for 'RwGsPatchSet_V2'
+
+category: '*rowan-gemstone-loaderv2-32x'
+method: RwGsPatchSet_V2
+doMoveMethodsBetweenPackages
+	| image |
+	image := Rowan image.
+	movedMethods
+		do: [ :aMethodMove | 
+			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
+			packageDef := aMethodMove packageBefore.
+			classOrExtensionDef := aMethodMove classOrExtensionBefore.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			loadedClassOrExtension := loadedPackage
+				classOrExtensionForClassNamed: classOrExtensionDef name
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class or extension found for class '
+								, classOrExtensionDef name printString , '  in package '
+								, packageDef name printString ].
+			loadedMethods := aMethodMove isMeta
+				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
+				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
+			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
+
+			registry := image loadedRegistryForPackageNamed: loadedPackage name.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+			loadedClassOrExtension isLoadedClassExtension
+				ifTrue: [ 
+					loadedClassOrExtension isEmpty
+						ifTrue: [ 
+							(registry
+								loadedClassExtensionsForClass: loadedClassOrExtension handle
+								ifAbsent: [  ])
+								ifNotNil: [ :loadedClassExtensions | 
+									loadedClassExtensions isEmpty
+										ifFalse: [ 
+											loadedClassExtensions remove: loadedClassOrExtension.
+											loadedClassExtensions isEmpty
+												ifTrue: [ 
+													registry
+														unregisterLoadedClassExtension: loadedClassOrExtension
+														forClass: loadedClassOrExtension handle ] ] ].
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
+			compiledMethod := loadedMethod handle.
+			registry methodRegistry removeKey: compiledMethod ifAbsent: [  ].
+
+			packageDef := aMethodMove packageAfter.
+			classOrExtensionDef := aMethodMove classOrExtensionAfter.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			registry := (Rowan image
+				symbolDictNamed:
+					(aMethodMove projectAfter
+						symbolDictNameForPackageNamed: aMethodMove packageAfter name))
+				rowanSymbolDictionaryRegistry.
+			loadedClassOrExtension := loadedPackage
+				classOrExtensionForClassNamed: classOrExtensionDef name
+				ifAbsent: [ 
+					classOrExtensionDef isClassExtension
+						ifTrue: [ 
+							"add a new class extension on demand"
+							(aMethodMove projectAfter
+								useSessionMethodsForExtensionsForPackageNamed:
+									aMethodMove packageAfter name)
+								ifTrue: [ 
+									| resolved |
+									((resolved := self loadSymbolList
+										objectNamed: classOrExtensionDef name asSymbol) notNil
+										and: [ resolved isBehavior and: [ resolved isMeta not ] ])
+										ifFalse: [ 
+											self
+												error:
+													'The extension class named ' , self className printString , ' cannot be found.' ]	"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"	"https://github.com/dalehenrich/Rowan/issues/254" ]
+								ifFalse: [ 
+									registry
+										ensureExtensionClassNamed: classOrExtensionDef name
+										existsForPackageNamed: packageDef name
+										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
+							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
+						ifFalse: [ 
+							self
+								error:
+									'internal error - no loaded class found for class '
+										, classOrExtensionDef name printString , '  in package '
+										, packageDef name printString ] ].
+
+			loadedClassOrExtension addLoadedMethod: loadedMethod.
+
+			registry methodRegistry at: compiledMethod put: loadedMethod ]
 %
 
 ! Class extensions for 'RwGsPlatform'
@@ -100622,6 +97160,442 @@ method: RwGsPlatform
 serviceClassFor: className
 
 	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
+%
+
+! Class extensions for 'RwGsSymbolDictionaryRegistryV2'
+
+!		Instance methods for 'RwGsSymbolDictionaryRegistryV2'
+
+category: '*rowan-gemstone-loaderv2-32x'
+method: RwGsSymbolDictionaryRegistryV2
+adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	classExtension
+		ifTrue: [ 
+			"to adopt and extension method, it is much less complicated"
+			^ self
+				addExtensionCompiledMethod: compiledMethod
+				for: behavior
+				protocol: protocolString
+				toPackageNamed: packageName ].
+
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
+	selector := compiledMethod selector.
+	compiledMethod
+		==
+			(methodDictionary
+				at: selector
+				ifAbsent: [ self error: 'expected an existing compiled method' ])
+		ifFalse: [ 
+			self
+				error:
+					'The given compiled method does not the existing compiled method in the class.' ].
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := self methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
+			^ self ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	self methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+
+	loadedClassOrExtension := loadedPackage
+		loadedClassOrClassExtensionForClass: behavior
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+	loadedClassOrExtension addLoadedMethod: loadedMethod
+%
+
+! Class extensions for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
+
+!		Class methods for 'RwGsSymbolDictionaryRegistry_ImplementationV2'
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
+			compiledMethod == oldCompiledMethod
+				ifFalse: [ 
+					| src oldSrc "temps for ease of debugging" |
+					(src := compiledMethod sourceString trimWhiteSpace)
+						= (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
+						ifFalse: [ 
+							"only a problem, if the new and old compiled method are not identical"
+							self
+								error:
+									'internal error - Compiled method ' , behavior name asString , '>>'
+										, selector asString
+										,
+											' already exists in method dictionary when new extension method is expected ( package '
+										, packageName , ').' ] ] ].
+
+	methodDictionary at: selector put: compiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			registryInstance
+				error:
+					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
+						, selector asString , ' found for extension compiled method ( package '
+						, packageName , ').' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
+
+	loadedClassExtension := loadedPackage
+		loadedClassExtensionForClass: behavior
+		ifAbsent: [ 
+			| class ext |
+			class := behavior theNonMetaClass.
+			ext := RwGsLoadedSymbolDictClassExtension
+				newForClass: class
+				inPackage: loadedPackage.
+			self registerLoadedClassExtension: ext forClass: class.
+			ext ].
+	loadedClassExtension addLoadedMethod: loadedMethod.
+	^ registryInstance
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: registryInstance
+	"expecting only a single method to be in methDict/catDict"
+
+	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
+	dictsArray := registryInstance homeSessionMethods
+		methodAndCategoryDictionaryFor: behavior.
+	mDict := dictsArray at: 1.
+	cDict := dictsArray at: 2.
+	catDict
+		keysAndValuesDo: [ :protocolSymbol :selectors | 
+			| symbolSet |
+			symbolSet := cDict
+				at: protocolSymbol
+				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
+			symbolSet addAll: selectors ].
+	methDict
+		keysAndValuesDo: [ :sel :meth | 
+			mDict at: sel put: meth.
+			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
+			compiledMethod := meth ].
+
+	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			registryInstance
+				error:
+					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self
+		existingOrNewLoadedPackageNamed: packageName
+		instance: registryInstance.
+
+	loadedClassExtension := loadedPackage
+		loadedClassExtensionForClass: behavior
+		ifAbsent: [ 
+			| class ext |
+			class := behavior theNonMetaClass.
+			ext := RwGsLoadedSymbolDictClassExtension
+				newForClass: class
+				inPackage: loadedPackage.
+			self registerLoadedClassExtension: ext forClass: class.
+			ext ].
+	loadedClassExtension addLoadedMethod: loadedMethod.
+
+	^ compiledMethod
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
+			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
+			self addRecompiledMethod: compiledMethod instance: registryInstance.
+			^ self
+				moveCompiledMethod: compiledMethod
+				toProtocol: protocolString
+				instance: registryInstance ].
+	methodDictionary at: selector put: compiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			registryInstance
+				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			registryInstance
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ]
+		instance: registryInstance.
+
+	loadedClassOrExtension := loadedPackage
+		loadedClassOrClassExtensionForClass: behavior
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+	loadedClassOrExtension addLoadedMethod: loadedMethod.
+	^ registryInstance
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addRecompiledMethod: newCompiledMethod instance: registryInstance
+	"add a recompiled compiled method to behavior and update the loaded things"
+
+	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
+	selector := newCompiledMethod selector.
+	behavior := newCompiledMethod inClass.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- expected an existing compiled method in the method dictionary' ].
+
+	oldCompiledMethod == newCompiledMethod
+		ifTrue: [ 
+			"exit early, no more work to be done"
+			^ registryInstance ].
+	methodDictionary at: selector put: newCompiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
+
+	loadedMethod := registryInstance methodRegistry
+		at: oldCompiledMethod
+		ifAbsent: [  ].
+	loadedMethod
+		ifNil: [ 
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	registryInstance methodRegistry removeKey: oldCompiledMethod.
+
+	loadedMethod handle: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	^ registryInstance
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
+	"add a recompiled session method compiled method to behavior and update the loaded things"
+
+	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
+	selector := newCompiledMethod selector.
+	behavior := newCompiledMethod inClass.
+	dictsArray := registryInstance homeSessionMethods
+		methodAndCategoryDictionaryFor: behavior.
+	mDict := dictsArray at: 1.
+	cDict := dictsArray at: 2.
+	oldCompiledMethod := mDict
+		at: selector
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
+
+	oldCompiledMethod == newCompiledMethod
+		ifTrue: [ 
+			"exit early, no more work to be done"
+			^ registryInstance ].
+	mDict at: selector put: newCompiledMethod.
+	GsPackagePolicy current
+		updateMethodLookupCacheFor: newCompiledMethod
+		in: behavior.
+
+	loadedMethod := registryInstance methodRegistry
+		at: oldCompiledMethod
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+moveClassFor: classMove
+	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
+
+	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
+
+	"extension methods will be dealt with later"
+
+	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
+	before := classMove classBefore.
+	originalSymbolDictionary := Rowan image
+		symbolDictNamed: before gs_symbolDictionary.
+	assoc := originalSymbolDictionary associationAt: before key asSymbol.
+	theClass := assoc value.
+	theBehavior := theClass class.
+	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	newSymbolDictionary := Rowan image
+		symbolDictNamed: classMove classAfter gs_symbolDictionary.
+	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	loadedClass := self loadedClassForClass: theClass.
+	originalSymbolDictionary removeKey: assoc key.
+
+	self
+		_symbolDictionary: newSymbolDictionary
+		at: assoc key
+		ifPresent: [ :class | 
+			theClass ~~ class
+				ifTrue: [ 
+					self
+						error:
+							' internal error - found an existing association in the '
+								, newSymbolDictionary name asString printString
+								, ' symbol dictionary with a duplicate key ' , assoc key printString
+								, ' while attempting to move class ' , assoc key asString printString ] ]
+		ifAbsent: [ newSymbolDictionary add: assoc ].
+
+	loadedClass loadedInstanceMethods values
+		do: [ :loadedMethod | 
+			| compiledMethod |
+			compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
+			oldRegistry methodRegistry removeKey: compiledMethod.
+			newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+	loadedClass loadedClassMethods values
+		do: [ :loadedMethod | 
+			| compiledMethod |
+			compiledMethod := theBehavior
+				compiledMethodAt: loadedMethod selector asSymbol.
+			oldRegistry methodRegistry removeKey: compiledMethod.
+			newRegistry methodRegistry at: compiledMethod put: loadedMethod ]
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance
+	"move a compiled method into a different protocol and update loaded things"
+
+	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
+	selector := compiledMethod selector.
+	behavior := compiledMethod inClass.
+
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
+	existingCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+	existingCompiledMethod == compiledMethod
+		ifFalse: [ 
+			registryInstance
+				error:
+					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+
+	oldCat := behavior categoryOfSelector: selector environmentId: 0.
+	catSym := newProtocol asSymbol.
+	catDict := behavior _baseCategorysForStore: 0.
+	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
+	catDict
+		at: catSym
+		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
+	(catDict at: catSym) add: selector.
+
+	behavior moveMethod: selector toCategory: newProtocol.
+
+	loadedMethod := registryInstance methodRegistry at: compiledMethod ifAbsent: [  ].
+	loadedMethod
+		ifNil: [ 
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+
+	loadedMethod updateForProtocolChange.
+	^ registryInstance
+%
+
+category: '*rowan-gemstone-loaderv2-32x'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+_doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance
+	"remove a compiled method from loaded things"
+
+	| loadedMethod loadedPackage loadedClassOrExtension |
+	loadedMethod := registryInstance methodRegistry
+		at: compiledMethod
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+	registryInstance methodRegistry removeKey: compiledMethod .
+
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClass: behavior
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
+
+	loadedClassOrExtension removeLoadedMethod: loadedMethod.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [ 
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					self
+						unregisterLoadedClassExtension: loadedClassOrExtension
+						forClass: loadedClassOrExtension handle.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
+	^ registryInstance
 %
 
 ! Class extensions for 'RwLoadSpecificationV2'
@@ -100791,21 +97765,6 @@ methodEnv
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: self name
 %
 
-category: '*rowan-gemstone-core'
-method: RwPackage
-symbolDictName
-
-	^ self project symbolDictNameForPackageNamed: self name
-%
-
-category: '*rowan-gemstone-core'
-method: RwPackage
-useSessionMethodsForExtensions
-
-	^ self _gemstonePlatformSpec
-		useSessionMethodsForExtensionsForPackageNamed: self name
-%
-
 ! Class extensions for 'RwPackageDefinition'
 
 !		Instance methods for 'RwPackageDefinition'
@@ -100904,12 +97863,6 @@ compareAgainstBase: aDefinition
 category: '*rowan-tools-onlyv2'
 classmethod: RwPackageTool
 audit
-  ^ RwPkgAuditToolV2 new
-%
-
-category: '*rowan-tools-corev2'
-classmethod: RwPackageTool
-auditV2
   ^ RwPkgAuditToolV2 new
 %
 
@@ -101274,23 +98227,9 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 
 category: '*rowan-gemstone-core'
 method: RwProject
-defaultSymbolDictName
-
-	^ self _gemstonePlatformSpec defaultSymbolDictName
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
 defaultSymbolDictName: aString
 
 	^ self _loadedProject defaultSymbolDictName: aString
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
-defaultUseSessionMethodsForExtensions
-
-	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
 %
 
 category: '*rowan-corev2'
@@ -101592,21 +98531,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwProjectDefinitionV2
-updateGsPlatformLoadedComponentInfoFor: aLoadedProject from: projectInfo
-
-	|  thePackageMapSpecs |
-	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
-	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-		ifNotNil: [:name | aLoadedProject defaultSymbolDictName: name ].
-	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-		ifNotNil: [:boolean | 
-			aLoadedProject defaultUseSessionMethodsForExtensions: boolean  ].
-	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-		ifNotNil: [:map | aLoadedProject packageNameToPlatformPropertiesMap: map]
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwProjectDefinitionV2
 _gemstoneAllUsersName
 	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 %
@@ -101687,14 +98611,14 @@ browser
 
 category: '*rowan-tools-corev2'
 classmethod: RwProjectTool
-browserV2
-	^ RwPrjBrowserToolV2 new
-%
-
-category: '*rowan-tools-corev2'
-classmethod: RwProjectTool
 createV2
 	^ RwPrjCreateToolV2 new
+%
+
+category: '*rowan-tools-examples'
+classmethod: RwProjectTool
+examples
+	^ RwExamplesTool
 %
 
 category: '*rowan-tools-onlyv2'
@@ -101780,13 +98704,6 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
-%
-
-category: '*rowan-tests-definitionsv2-extensions-onlyv2'
-method: RwResolvedProjectV2
-create
-	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
-	self resolve; export
 %
 
 category: '*rowan-gemstone-definitionsv2'

@@ -584,7 +584,7 @@ RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	self _projectRepository resolve
+	^self  resolve
 ]
 
 { #category : 'accessing' }
