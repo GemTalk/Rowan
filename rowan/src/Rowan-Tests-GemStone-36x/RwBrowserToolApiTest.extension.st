@@ -92,7 +92,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		comment: 'another project for testing project browser api';
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: packageNames2 toComponentNamed: componentName;
 		yourself.
 
@@ -339,7 +339,7 @@ RwBrowserToolApiTest >> testRenameClass_Issue_490 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.

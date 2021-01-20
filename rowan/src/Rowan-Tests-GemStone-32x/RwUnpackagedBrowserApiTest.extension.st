@@ -25,7 +25,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
 		yourself.
 
@@ -120,7 +120,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -223,7 +223,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -316,7 +316,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -412,7 +412,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
+		addComponentNamed: componentName;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName;
 		resolve;
 		yourself.
