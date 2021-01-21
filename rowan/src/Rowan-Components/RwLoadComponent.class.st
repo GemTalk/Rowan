@@ -1,55 +1,55 @@
 Class {
-	#name : 'RwComponent',
+	#name : 'RwLoadComponent',
 	#superclass : 'RwAbstractComponent',
 	#category : 'Rowan-Components'
 }
 
 { #category : 'validation' }
-RwComponent >> _validatedPackageNames [
+RwLoadComponent >> _validatedPackageNames [
 	"answer the validated set of package names"
 
 	^ self packageNames asSet
 ]
 
 { #category : 'comparing' }
-RwComponent >> = aRwComponent [
-	^ super = aRwComponent
-		and: [ self projectNames = aRwComponent projectNames ]
+RwLoadComponent >> = aRwLoadComponent [
+	^ super = aRwLoadComponent
+		and: [ self projectNames = aRwLoadComponent projectNames ]
 ]
 
 { #category : 'visiting' }
-RwComponent >> acceptNestedVisitor: aVisitor [
+RwLoadComponent >> acceptNestedVisitor: aVisitor [
 
 	^ self acceptVisitor: aVisitor
 ]
 
 { #category : 'visiting' }
-RwComponent >> acceptVisitor: aVisitor [
+RwLoadComponent >> acceptVisitor: aVisitor [
 	^ aVisitor visitComponent: self
 ]
 
 { #category : 'accessing' }
-RwComponent >> addProjectNamed: aProjectName [
+RwLoadComponent >> addProjectNamed: aProjectName [
 	self projectNames add: aProjectName.
 	projectNames := projectNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
-RwComponent >> conditionalPropertyMatchers [
+RwLoadComponent >> conditionalPropertyMatchers [
 	^ Dictionary new
 		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
 		yourself
 ]
 
 { #category : 'ston' }
-RwComponent >> excludedInstVars [
+RwLoadComponent >> excludedInstVars [
 	"it's in #instVarNamesInOrderForSton, but not defined in this class"
 
 	^ #(#'condition')
 ]
 
 { #category : 'ston' }
-RwComponent >> fromSton: stonReader [
+RwLoadComponent >> fromSton: stonReader [
 	"Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
 
@@ -62,42 +62,42 @@ RwComponent >> fromSton: stonReader [
 					instanceVariableNames := self class allInstVarNames.
 					stonReader
 						parseMapDo: [ :instVarName :value | 
-							(self class == RwComponent and: [ instVarName = #'condition' ])
+							(self class == RwLoadComponent and: [ instVarName = #'condition' ])
 								ifTrue: [
 									"we're skipping the condition instvar, assuming that #fromSton: has been forwarded from RwSimpleProjectLoadComponent 
-										and condition instance var isn't supported in RwComponent"
+										and condition instance var isn't supported in RwLoadComponent"
 									value ~= 'common'
 										ifTrue: [ 
 											"if the value is not common, then we'll throw an error, since we should not have top level components with conditions"
 											self
 												error:
-													'condition instance variable is ignored for RwComponent instances is convert component to a subcomponent' ] ]
+													'condition instance variable is ignored for RwLoadComponent instances is convert component to a subcomponent' ] ]
 								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ]
 		ifFalse: [ super fromSton: stonReader ]
 ]
 
 { #category : 'comparing' }
-RwComponent >> hash [
+RwLoadComponent >> hash [
 	^ super hash bitXor: self projectNames hash
 ]
 
 { #category : 'initialization' }
-RwComponent >> initialize [
+RwLoadComponent >> initialize [
 	super initialize.
 	projectNames := {}
 ]
 
 { #category : 'ston' }
-RwComponent >> instVarNamesInOrderForSton [
+RwLoadComponent >> instVarNamesInOrderForSton [
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
 
 { #category : 'accessing' }
-RwComponent >> projectNames [
+RwLoadComponent >> projectNames [
 	^projectNames
 ]
 
 { #category : 'accessing' }
-RwComponent >> removeProjectNamed: aProjectName [
+RwLoadComponent >> removeProjectNamed: aProjectName [
 	self projectNames remove: aProjectName ifAbsent: [  ]
 ]

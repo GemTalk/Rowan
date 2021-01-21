@@ -9,7 +9,7 @@ Class {
 
 { #category : 'ston' }
 RwSimpleProjectLoadComponentV2 >> _stonReplacementClass [
-	^ RwComponent
+	^ RwLoadComponent
 ]
 
 { #category : 'validation' }

@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwSubcomponent',
-	#superclass : 'RwComponent',
+	#superclass : 'RwLoadComponent',
 	#instVars : [
 		'condition'
 	],

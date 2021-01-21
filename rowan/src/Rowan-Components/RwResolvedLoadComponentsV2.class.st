@@ -116,7 +116,7 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName comment: aString
 				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components
 		at: aComponentName
-		ifAbsentPut: [ RwComponent newNamed: aComponentName ].
+		ifAbsentPut: [ RwLoadComponent newNamed: aComponentName ].
 	component comment: aString.
 	^ component
 ]
