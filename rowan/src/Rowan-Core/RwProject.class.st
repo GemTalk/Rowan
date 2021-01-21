@@ -32,11 +32,17 @@ RwProject >> _specification [
 
 { #category : 'components' }
 RwProject >> addLoadComponentNamed: componentName [
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
 	^ self addLoadComponentNamed: componentName comment: ''
 ]
 
 { #category : 'components' }
 RwProject >> addLoadComponentNamed: componentName comment: aString [
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
 	| projectDefinition component |
 	projectDefinition := self defined.
 	component := projectDefinition

@@ -120,12 +120,14 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 
 { #category : 'components' }
 RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName [
+	"add a new instance of RwLoadComponent to the project components"
+
 	^ self addLoadComponentNamed: aComponentName comment: ''
 ]
 
 { #category : 'components' }
 RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName comment: aString [
-	"eventually no condition for `top level` component"
+	"add a new instance of RwLoadComponent to the project components"
 
 	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
 		ifTrue: [ ^ self components addLoadComponentNamed: aComponentName comment: aString ]

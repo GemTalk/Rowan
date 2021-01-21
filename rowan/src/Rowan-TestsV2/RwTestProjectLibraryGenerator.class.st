@@ -4724,7 +4724,7 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
-		specComponentNames: {'Core'};
+		specComponentNames: {};
 		specComment: indexCard title;
 		yourself.
 

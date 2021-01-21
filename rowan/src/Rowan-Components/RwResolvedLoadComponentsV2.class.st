@@ -107,21 +107,6 @@ RwResolvedLoadComponentsV2 >> _validate: platformConfigurationAttributes [
 ]
 
 { #category : 'components' }
-RwResolvedLoadComponentsV2 >> addComponentNamed: aComponentName comment: aString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwLoadComponent newNamed: aComponentName ].
-	component comment: aString.
-	^ component
-]
-
-{ #category : 'components' }
 RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	"add existing component named componentName to component named toComponentName"
 
@@ -134,6 +119,8 @@ RwResolvedLoadComponentsV2 >> addComponentNamed: componentName toComponentNamed:
 
 { #category : 'components' }
 RwResolvedLoadComponentsV2 >> addLoadComponentNamed: aComponentName comment: aString [
+	"add a new instance of RwLoadComponent to the project components"
+
 	| component |
 	self components
 		at: aComponentName

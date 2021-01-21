@@ -131,11 +131,17 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 
 { #category : 'components' }
 RwDefinedProject >> addLoadComponentNamed: componentName [
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
 	^ self addLoadComponentNamed: componentName comment: ''
 ]
 
 { #category : 'components' }
 RwDefinedProject >> addLoadComponentNamed: componentName comment: aString [
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
 	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 ]
 
@@ -146,7 +152,12 @@ RwDefinedProject >> addLoadSpecComponentNamed: componentName [
 
 { #category : 'components' }
 RwDefinedProject >> addLoadSpecComponentNamed: componentName comment: aString [
-	^ self _resolvedProject addLoadSpecComponentNamed: componentName comment: aString
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	^ self _resolvedProject
+		addLoadSpecComponentNamed: componentName
+		comment: aString
 ]
 
 { #category : 'components v2.0' }
