@@ -9,7 +9,7 @@ RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageN
 		projectsHome: self _testRowanProjectsSandbox;
 		comment: comment;
 		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself
 ]

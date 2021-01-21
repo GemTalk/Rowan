@@ -23,7 +23,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName} toComponentNamed: componentName;
 		yourself.
 

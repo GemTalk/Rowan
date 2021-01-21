@@ -31,16 +31,16 @@ RwProject >> _specification [
 ]
 
 { #category : 'components' }
-RwProject >> addComponentNamed: componentName [
-	^ self addComponentNamed: componentName comment: ''
+RwProject >> addLoadComponentNamed: componentName [
+	^ self addLoadComponentNamed: componentName comment: ''
 ]
 
 { #category : 'components' }
-RwProject >> addComponentNamed: componentName comment: aString [
+RwProject >> addLoadComponentNamed: componentName comment: aString [
 	| projectDefinition component |
 	projectDefinition := self defined.
 	component := projectDefinition
-		addComponentNamed: componentName
+		addLoadComponentNamed: componentName
 		comment: aString.
 	projectDefinition load.
 	^ component

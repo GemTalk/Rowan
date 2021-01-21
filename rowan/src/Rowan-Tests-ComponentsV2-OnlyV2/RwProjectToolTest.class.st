@@ -29,7 +29,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: #('Simple-Core' 'Simple-Tests')
 			toComponentNamed: componentName;
 		resolve;
@@ -58,7 +58,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: #('Simple-Extensions')
 			toComponentNamed: componentName;
 		comment:
@@ -119,7 +119,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 

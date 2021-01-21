@@ -26,7 +26,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -35,7 +35,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -154,7 +154,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -246,7 +246,7 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -333,7 +333,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -341,7 +341,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -454,7 +454,7 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName } toComponentNamed: componentName;
 		resolve;
 		yourself.

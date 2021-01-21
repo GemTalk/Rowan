@@ -31,7 +31,7 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName  }
 			toComponentNamed: componentName;
 		resolve;

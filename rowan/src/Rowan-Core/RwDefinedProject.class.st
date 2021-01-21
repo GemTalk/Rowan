@@ -73,16 +73,6 @@ RwDefinedProject >> _validate: platformConfigurationAttributes [
 ]
 
 { #category : 'components' }
-RwDefinedProject >> addComponentNamed: componentName [
-	^ self addComponentNamed: componentName comment: ''
-]
-
-{ #category : 'components' }
-RwDefinedProject >> addComponentNamed: componentName comment: aString [
-	^ self _resolvedProject addComponentNamed: componentName comment: aString
-]
-
-{ #category : 'components' }
 RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	"add existing component named componentName to component named toComponentName"
 
@@ -137,6 +127,16 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
 		comment: aString
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addLoadComponentNamed: componentName [
+	^ self addLoadComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addLoadComponentNamed: componentName comment: aString [
+	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 ]
 
 { #category : 'components' }

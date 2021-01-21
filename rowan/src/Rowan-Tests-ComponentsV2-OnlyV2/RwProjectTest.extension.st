@@ -114,7 +114,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		repoType: #none;
@@ -149,7 +149,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox  / 'rowanSimpleProject';
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames
 			toComponentNamed: componentName;
 		packageFormat: 'tonel';

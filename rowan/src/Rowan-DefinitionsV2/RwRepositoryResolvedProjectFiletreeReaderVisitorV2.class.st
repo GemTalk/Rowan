@@ -23,7 +23,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 class >> readClassDirectories
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Core'
+		addLoadComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 
 	1 to: directoryArray size do: [ :index | 

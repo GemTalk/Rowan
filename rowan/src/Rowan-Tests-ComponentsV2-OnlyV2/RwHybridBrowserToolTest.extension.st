@@ -8,7 +8,7 @@ RwHybridBrowserToolTest >> _standardProjectDefinition: projectName packageNameMa
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		yourself.
 
 	packageNameMap

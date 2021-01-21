@@ -95,16 +95,6 @@ RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'components' }
-RwResolvedProjectV2 >> addComponentNamed: componentName [
-	^ self _projectDefinition addComponentNamed: componentName
-]
-
-{ #category : 'components' }
-RwResolvedProjectV2 >> addComponentNamed: componentName comment: aString [
-	^ self _projectDefinition addComponentNamed: componentName comment: aString
-]
-
-{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	"add existing component named componentName to component named toComponentName"
 
@@ -143,6 +133,16 @@ RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtCom
 ]
 
 { #category : 'components' }
+RwResolvedProjectV2 >> addLoadComponentNamed: componentName [
+	^ self _projectDefinition addLoadComponentNamed: componentName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addLoadComponentNamed: componentName comment: aString [
+	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
+]
+
+{ #category : 'components' }
 RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName [
 	^ self addLoadSpecComponentNamed: componentName comment: ''
 ]
@@ -150,7 +150,7 @@ RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName [
 { #category : 'components' }
 RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName comment: aString [
 	self _loadSpecification addComponentNamed: componentName.
-	^ self _projectDefinition addComponentNamed: componentName comment: aString
+	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 ]
 
 { #category : 'components to be cleaned up' }

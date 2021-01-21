@@ -9,7 +9,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 		projectsHome: self _testRowanProjectsSandbox;
 		comment: comment;
 		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself.
 
@@ -40,7 +40,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		projectsHome: rootPath;
 		comment: 'another project for testing project browser api';
 		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		repoType: #'git';
 		yourself.
@@ -69,7 +69,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo:
 				defaultUseSessionMethodsForExtensions;
 		comment: comment;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself.
 	resolvedProject loadSpecification componentNames: {componentName}.

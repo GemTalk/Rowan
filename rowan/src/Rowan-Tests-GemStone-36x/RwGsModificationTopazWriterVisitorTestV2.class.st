@@ -402,7 +402,7 @@ RwGsModificationTopazWriterVisitorTestV2 >> _standardProjectSetDefinition: proje
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 

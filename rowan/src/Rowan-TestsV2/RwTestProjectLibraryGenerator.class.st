@@ -191,7 +191,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0003: resolvedProject [
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004_b: resolvedProject [
 	resolvedProject
-		addComponentNamed: 'Core3'
+		addLoadComponentNamed: 'Core3'
 		comment:
 			'contains ' , projectName
 				,
@@ -215,7 +215,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 			startingAtComponentNamed: 'Core1'
 			conditionPathArray: {'tests'}
 			comment: 'contains ' , projectName , '-Tests package';
-		addComponentNamed: 'Core2'
+		addLoadComponentNamed: 'Core2'
 			comment: 'contains ' , projectName , '-Core2 package';
 		yourself.
 	(resolvedProject componentNamed: 'Core1')
@@ -771,7 +771,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 	resolvedProject
 		comment:
 				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
-		addComponentNamed: 'Core'
+		addLoadComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
 		addComponentStructureFor: componentName
 			startingAtComponentNamed: componentName
@@ -2826,7 +2826,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
 	packageName5 := projectName , '-' , 'Tests'.
 
 	component1 := resolvedProject componentNamed: componentName1.
-	component2 := resolvedProject addComponentNamed: componentName2.
+	component2 := resolvedProject addLoadComponentNamed: componentName2.
 	testComponent := resolvedProject componentNamed: testComponentName.
 
 	component2
@@ -2874,7 +2874,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 		yourself.
 	requiredProject
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addNewComponentNamed: 'Tests'
 			toComponentNamed: componentName
 			condition: {'tests'};

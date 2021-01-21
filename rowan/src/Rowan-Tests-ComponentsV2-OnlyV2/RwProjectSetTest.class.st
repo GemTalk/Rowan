@@ -41,7 +41,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames1 
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
@@ -54,7 +54,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames2 
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1 
@@ -275,7 +275,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		resolve;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -284,7 +284,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		resolve;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -496,7 +496,7 @@ RwProjectSetTest >> testProjectSetLoad1 [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: #('Simple1-Core') 
 			toComponentNamed: componentName;
 		resolve;
@@ -507,7 +507,7 @@ RwProjectSetTest >> testProjectSetLoad1 [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: #('Simple2-Core') 
 			toComponentNamed: componentName;
 		resolve;

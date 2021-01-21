@@ -2156,7 +2156,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 		yourself.
 
 	primerResolvedProject
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackageNamed: primerPackageName1 toComponentNamed: componentName;
 		addPackageNamed: primerPackageName2  toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: symDictName1 forPackageNamed: primerPackageName1;
@@ -2268,7 +2268,7 @@ RwRowanSample9Test >> testIssue230 [
 		yourself.
 
 	primerResolvedProject
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackageNamed: primerPackageName1 toComponentNamed: componentName;
 		addPackageNamed: primerPackageName2  toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: symDictName1 forPackageNamed: primerPackageName1;

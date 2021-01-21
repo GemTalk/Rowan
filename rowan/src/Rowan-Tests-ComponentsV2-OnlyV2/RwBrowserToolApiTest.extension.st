@@ -80,7 +80,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		comment: 'another project for testing project browser api';
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames2 toComponentNamed: componentName;
 		yourself.
 
@@ -519,7 +519,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
 		yourself.
 
@@ -654,7 +654,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
 		yourself.
 
@@ -796,7 +796,7 @@ RwBrowserToolApiTest >> testRenameClass_1 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.
@@ -968,7 +968,7 @@ RwBrowserToolApiTest >> testRenameClass_2 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.
@@ -1140,7 +1140,7 @@ RwBrowserToolApiTest >> testRenameClass_3 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.
@@ -1312,7 +1312,7 @@ RwBrowserToolApiTest >> testRenameClass_4 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.
@@ -1464,7 +1464,7 @@ RwBrowserToolApiTest >> testRenameClass_5 [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
 	projectDefinition resolve.

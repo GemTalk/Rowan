@@ -54,7 +54,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		resolve;
 		yourself.
@@ -268,7 +268,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
@@ -487,7 +487,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 		projectName: projectName;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;

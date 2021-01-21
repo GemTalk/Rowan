@@ -33,7 +33,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		projectName: projectName1;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
 		resolve;
@@ -80,7 +80,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
 		resolve;

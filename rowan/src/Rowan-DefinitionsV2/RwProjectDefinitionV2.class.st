@@ -56,24 +56,6 @@ RwProjectDefinitionV2 >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'components' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName [
-	^ self addComponentNamed: aComponentName comment: ''
-]
-
-{ #category : 'components' }
-RwProjectDefinitionV2 >> addComponentNamed: aComponentName comment: aString [
-	"eventually no condition for `top level` component"
-
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
-		ifTrue: [ ^ self components addComponentNamed: aComponentName comment: aString ]
-		ifFalse: [ 
-			^ self components
-				addSimpleComponentNamed: aComponentName
-				condition: 'common'
-				comment: aString ]
-]
-
-{ #category : 'components' }
 RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toComponentName [
 	"add existing component named componentName to component named toComponentName"
 
@@ -134,6 +116,24 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
+]
+
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName [
+	^ self addLoadComponentNamed: aComponentName comment: ''
+]
+
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName comment: aString [
+	"eventually no condition for `top level` component"
+
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ ^ self components addLoadComponentNamed: aComponentName comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleComponentNamed: aComponentName
+				condition: 'common'
+				comment: aString ]
 ]
 
 { #category : 'components to be cleaned up' }
