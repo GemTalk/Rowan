@@ -211,9 +211,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 	resolvedProject
 		addLoadComponentNamed: 'Core1'
 			comment:  'contains ' , projectName , '-Core1 package';
-		addComponentStructureFor: 'Tests'
+		addSubcomponentStructureFor: 'Tests'
 			startingAtComponentNamed: 'Core1'
-			pathNameArray: {'tests'}
 			conditionPathArray: {'tests'}
 			comment: 'contains ' , projectName , '-Tests package';
 		addLoadComponentNamed: 'Core2'
@@ -774,9 +773,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
 		addLoadComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
-		addComponentStructureFor: componentName
+		addSubcomponentStructureFor: componentName
 			startingAtComponentNamed: componentName
-			pathNameArray: {'vast'}
 			conditionPathArray: {'vast'}
 			comment: 'manage vast packages';
 		addPackageNamed: packageName1 toComponentNamed: 'vast/' , componentName;
@@ -3108,11 +3106,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 			pkgSuffix := condition copy.
 			pkgSuffix at: 1 put: (condition at: 1) asUppercase.
 			theComponent := resolvedProject
-				addComponentStructureFor: componentName1
+				addSubcomponentStructureFor: componentName1
 				startingAtComponentNamed: componentName1
-				pathNameArray:
-					{'conditions'.
-					condition}
 				conditionPathArray:
 					{'common'.
 					condition}.
@@ -3125,11 +3120,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 
 
 			theComponent := resolvedProject
-				addComponentStructureFor: 'Tests'
+				addSubcomponentStructureFor: 'Tests'
 				startingAtComponentNamed: componentName2
-				pathNameArray:
-					{'tests'.
-					condition}
 				conditionPathArray:
 					{'tests'.
 					condition}.
@@ -3162,7 +3154,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 						addComponentStructureFor: componentName1
 						startingAtComponentNamed: componentName1
 						pathNameArray:
-							{'conditions'.
+							{'common'.
 							'alt1'.
 							'platform'.
 							(conditionArray at: 1)}

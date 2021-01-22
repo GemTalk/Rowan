@@ -237,9 +237,9 @@ RwResolvedProjectV2 >> addPreloadDoitName: doitName withSource: doitSource toCom
 ]
 
 { #category : 'components' }
-RwResolvedProjectV2 >> addProjectNamed:projectName toComponentNamed: componentName [ 
+RwResolvedProjectV2 >> addProjectNamed: projectName toComponentNamed: componentName [
 	^ self _projectDefinition
-		addProjectNamed:projectName
+		addProjectNamed: projectName
 		toComponentNamed: componentName
 ]
 
