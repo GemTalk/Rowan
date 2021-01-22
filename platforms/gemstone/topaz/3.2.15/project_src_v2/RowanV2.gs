@@ -49746,32 +49746,6 @@ addLoadComponentNamed: componentName comment: aString
 	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 %
 
-category: 'components'
-method: RwDefinedProject
-addLoadSpecComponentNamed: componentName
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-%
-
-category: 'components'
-method: RwDefinedProject
-addLoadSpecComponentNamed: componentName comment: aString
-	"add a new instance of RwLoadComponent to the project components and add the componentName
-		to the load spec (i.e., it will be loaded when the load spec is loaded)"
-
-	^ self _resolvedProject
-		addLoadSpecComponentNamed: componentName
-		comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addNewComponentNamed: aComponentName condition: condition comment: aString
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		condition: condition
-		comment: aString
-%
-
 category: 'components to be cleaned up'
 method: RwDefinedProject
 addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
@@ -49931,6 +49905,18 @@ category: 'accessing'
 method: RwDefinedProject
 componentNamed: aComponentName ifAbsent: absentBlock
 	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwDefinedProject
+componentNames
+	^ self _resolvedProject componentNames
+%
+
+category: 'accessing'
+method: RwDefinedProject
+componentNames: anArray
+	^ self _resolvedProject componentNames: anArray
 %
 
 category: 'accessing'
@@ -50621,24 +50607,6 @@ addLoadComponentNamed: componentName comment: aString
 	projectDefinition := self defined.
 	component := projectDefinition
 		addLoadComponentNamed: componentName
-		comment: aString.
-	projectDefinition load.
-	^ component
-%
-
-category: 'components'
-method: RwProject
-addLoadSpecComponentNamed: componentName
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-%
-
-category: 'components'
-method: RwProject
-addLoadSpecComponentNamed: componentName comment: aString
-	| projectDefinition component |
-	projectDefinition := self defined.
-	component := projectDefinition
-		addLoadSpecComponentNamed: componentName
 		comment: aString.
 	projectDefinition load.
 	^ component
@@ -64154,25 +64122,6 @@ addLoadComponentNamed: componentName comment: aString
 	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 %
 
-category: 'components'
-method: RwResolvedProjectV2
-addLoadSpecComponentNamed: componentName
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-%
-
-category: 'components'
-method: RwResolvedProjectV2
-addLoadSpecComponentNamed: componentName comment: aString
-	self _loadSpecification addComponentNamed: componentName.
-	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addNewComponentNamed: aComponentName condition: condition comment: aString
-	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
-%
-
 category: 'components to be cleaned up'
 method: RwResolvedProjectV2
 addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
@@ -72295,15 +72244,6 @@ addLoadComponentNamed: aComponentName comment: aString
 				addSimpleComponentNamed: aComponentName
 				condition: 'common'
 				comment: aString ]
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName condition: condition comment: aString
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: aString
 %
 
 category: 'components to be cleaned up'
