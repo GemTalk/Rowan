@@ -1657,22 +1657,22 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0028: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/573"
 
-	| componentPath1 componentName2 packageName1 className1 testClassName1 packageName2 componentPath2  |
+	| componentPath1 componentName2 packageName1 className1 testClassName1 packageName2 componentPath2 |
 	componentPath1 := projectName.
-	componentName2 :=  projectName.
+	componentName2 := projectName.
 	packageName1 := projectName , '-Core'.
 	packageName2 := projectName , '-Tests'.
 	className1 := projectName , 'Class1'.
 	testClassName1 := projectName , 'TestCase1'.
 
-	componentPath2 := resolvedProject
-		addNewComponentNamed: componentName2
-			toComponentNamed: componentPath1
-			condition: #('common' 'tests' ).
+	componentPath2 := (resolvedProject
+		addSubcomponentStructureFor: componentName2
+		startingAtComponentNamed: componentPath1
+		conditionPathArray: #('common' 'tests')) name.
 
 	resolvedProject customConditionalAttributes: #('tests').
 
-	resolvedProject 
+	resolvedProject
 		movePackageNamed: packageName2 toComponentNamed: componentPath2;
 		yourself.
 
@@ -1715,18 +1715,18 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 		renameComponentNamed: componentPath2
 		to: componentName2.
 
-	componentPath3 := resolvedProject
-		addNewComponentNamed: componentName3
-		toComponentNamed: componentPath1
-		condition: #('common').
+	componentPath3 := (resolvedProject
+		addSubcomponentStructureFor: componentName3
+		startingAtComponentNamed: componentPath1
+		conditionPathArray: #('common')) name.
 	resolvedProject
 		movePackageNamed: packageName1 toComponentNamed: componentPath3;
 		yourself.
 
-	componentPath3 := resolvedProject
-		addNewComponentNamed: componentName4
-		toComponentNamed: componentPath1
-		condition: #('common').
+	componentPath3 := (resolvedProject
+		addSubcomponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath1
+		conditionPathArray: #('common')) name.
 	resolvedProject
 		addPackageNamed: packageName3 toComponentNamed: componentPath3;
 		yourself.
@@ -1734,10 +1734,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 		addPackageNamed: packageName4 toComponentNamed: componentPath2;
 		yourself.
 
-	componentPath3 := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath1
-		condition: #('common').
+	componentPath3 := (resolvedProject
+		addSubcomponentStructureFor: componentName5
+		startingAtComponentNamed: componentPath1
+		conditionPathArray: #('common')) name.
 	resolvedProject
 		addPackageNamed: packageName5 toComponentNamed: componentPath3;
 		yourself.
@@ -1745,10 +1745,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0029: resolvedProject [
 		addPackageNamed: packageName6 toComponentNamed: componentPath2;
 		yourself.
 
-	componentPath3 := resolvedProject
-		addNewComponentNamed: componentName6
-		toComponentNamed: componentPath1
-		condition: #('common').
+	componentPath3 := (resolvedProject
+		addSubcomponentStructureFor: componentName6
+		startingAtComponentNamed: componentPath1
+		conditionPathArray: #('common')) name.
 	(resolvedProject componentNamed: componentPath1)
 		removeComponentNamed: componentPath2;
 		addComponentNamed: componentPath3;
@@ -1830,18 +1830,18 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 					protocol: 'tests';
 				yourself ].
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName4
-		toComponentNamed: componentPath4
-		condition: #('common' 'gemstone').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
+		conditionPathArray: #('common' 'gemstone')) name.
 	resolvedProject
 		addPackageNamed: packageName7 toComponentNamed: componentPath;
 		yourself.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName4
-		toComponentNamed: componentPath4
-		condition: #('common' 'tests' 'gemstone').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
+		conditionPathArray: #('common' 'tests' 'gemstone')) name.
 	resolvedProject
 		addPackageNamed: packageName8 toComponentNamed: componentPath;
 		yourself.
@@ -1861,18 +1861,18 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0030: resolvedProject [
 					protocol: '*' , (ar at: 3) asLowercase;
 				yourself ].
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName4
-		toComponentNamed: componentPath4
-		condition: #('common' 'pharo').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
+		conditionPathArray: #('common' 'pharo')) name.
 	resolvedProject
 		addPackageNamed: packageName9 toComponentNamed: componentPath;
 		yourself.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName4
-		toComponentNamed: componentPath4
-		condition: #('common' 'tests' 'pharo').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
+		conditionPathArray: #('common' 'tests' 'pharo')) name.
 	resolvedProject
 		addPackageNamed: packageName10 toComponentNamed: componentPath;
 		yourself.
@@ -2096,34 +2096,34 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0032: resolvedProject [
 		addPackageNamed: packageName11 toComponentNamed: componentName7;
 		yourself.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath5
-		condition: #('common' 'v1').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName5
+		startingAtComponentNamed: componentPath5
+		conditionPathArray: #('common' 'v1')) name.
 	resolvedProject
 		addPackageNamed: packageName12 toComponentNamed: componentPath;
 		addComponentNamed: componentName7 toComponentNamed: componentPath;
 		yourself.
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath5
-		condition: #('common' 'v2').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName5
+		startingAtComponentNamed: componentPath5
+		conditionPathArray: #('common' 'v2')) name.
 	resolvedProject
 		addPackageNamed: packageName13 toComponentNamed: componentPath;
 		addComponentNamed: componentName7 toComponentNamed: componentPath;
 		yourself.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath6
-		condition: #('common' 'tests' 'v1').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName5
+		startingAtComponentNamed: componentPath6
+		conditionPathArray: #('common' 'tests' 'v1')) name.
 	resolvedProject
 		addPackageNamed: packageName14 toComponentNamed: componentPath;
 		yourself.
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName5
-		toComponentNamed: componentPath6
-		condition: #('common' 'tests' 'v2').
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName5
+		startingAtComponentNamed: componentPath6
+		conditionPathArray: #('common' 'tests' 'v2')) name.
 	resolvedProject
 		addPackageNamed: packageName15 toComponentNamed: componentPath;
 		yourself.
@@ -2711,17 +2711,17 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0048: resolvedProject [
 		removePackageNamed: packageName7;
 		yourself.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName2 
-			toComponentNamed: componentName1 
-			condition: {'renamed'}.
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName2
+		startingAtComponentNamed: componentName1
+		conditionPathArray: #('renamed')) name.
 	(resolvedProject componentNamed: componentPath)
 		addPackageNames: {packageName7}.
 
-	componentPath := resolvedProject
-		addNewComponentNamed: componentName3 
-			toComponentNamed: componentName1 
-			condition: {'renamed' . 'tests'}.
+	componentPath := (resolvedProject
+		addSubcomponentStructureFor: componentName3
+		startingAtComponentNamed: componentName1
+		conditionPathArray: #('renamed' 'tests')) name.
 	(resolvedProject componentNamed: componentPath)
 		addPackageNames: {packageName8}.
 
@@ -2876,9 +2876,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 	requiredProject
 		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
 		addLoadComponentNamed: componentName;
-		addNewComponentNamed: 'Tests'
-			toComponentNamed: componentName
-			condition: {'tests'};
+		addSubcomponentStructureFor: 'Tests'
+			startingAtComponentNamed: componentName
+			conditionPathArray: #('tests');
 		yourself.
 	self _addDefinitionsFor: requiredProject projectName: requiredProjectName.
 

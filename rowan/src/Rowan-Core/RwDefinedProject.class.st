@@ -147,23 +147,6 @@ RwDefinedProject >> addLoadComponentNamed: componentName comment: aString [
 	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 ]
 
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
-]
-
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
-		comment: aString
-]
-
 { #category : 'accessing' }
 RwDefinedProject >> addPackageNamed: packageName [
 	"the package is expected to already be present in a component - used when reading packages from disk"
@@ -291,10 +274,10 @@ RwDefinedProject >> addSubcomponentStructureFor: componentBasename startingAtCom
 	"
 
 	^ self 
-		addComponentStructureFor: componentBasename
+		addSubcomponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
 		conditionPathArray: conditionPathArray
+		comment: ''
 ]
 
 { #category : 'component structure' }
@@ -308,10 +291,9 @@ RwDefinedProject >> addSubcomponentStructureFor: componentBasename startingAtCom
 	Return the last component created.
 	"
 
-	^ self
-		addComponentStructureFor: componentBasename
+	^ self _resolvedProject
+		addSubcomponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
 		conditionPathArray: conditionPathArray
 		comment: aString
 ]

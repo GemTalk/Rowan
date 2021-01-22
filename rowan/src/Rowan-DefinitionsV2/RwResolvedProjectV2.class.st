@@ -145,24 +145,6 @@ RwResolvedProjectV2 >> addLoadComponentNamed: componentName comment: aString [
 	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 ]
 
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
-	^ self
-		addNewComponentNamed: componentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
-		comment: ''
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString [
-	^ self _projectDefinition
-		addNewComponentNamed: componentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
-		comment: aString
-]
-
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName [
 	"the package is expected to already be present in a component - used when reading packages from disk"
@@ -307,6 +289,43 @@ RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition 
 		condition: condition
 		comment: ''
 		toComponentNamed: toComponentName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray [
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:.
+
+	Return the last component created.
+	"
+
+	^ self 
+		addSubcomponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		conditionPathArray: conditionPathArray
+		comment: ''
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString [
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:.
+
+	Return the last component created.
+	"
+
+	^ self 
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
 ]
 
 { #category : 'components' }
