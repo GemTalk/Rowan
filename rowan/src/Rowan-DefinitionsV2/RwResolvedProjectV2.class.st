@@ -103,7 +103,7 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'components' }
+{ #category : 'component structure' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"
 	<pathNameArray> and <conditionPathArray> should be of equal size. The 
@@ -172,26 +172,6 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 	^ self _projectDefinition
 		addPackagesNamed: packageNames
 		toComponentNamed: componentName
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
-	^ self
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	^ self _projectDefinition
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
 ]
 
 { #category : 'components to be cleaned up' }
@@ -291,7 +271,7 @@ RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition 
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'components' }
+{ #category : 'component structure' }
 RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray [
 	"
 	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
@@ -309,7 +289,7 @@ RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAt
 		comment: ''
 ]
 
-{ #category : 'components' }
+{ #category : 'component structure' }
 RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString [
 	"
 	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.

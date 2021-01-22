@@ -1402,8 +1402,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 		removeComponentNamed: 'tests/Tests';
 		addLoadComponentNamed: 'Core'
 			comment: 'Top-level component for loading the application';
-		addPlatformComponentNamed: 'Core'
-			toComponentNamed: 'Core'
+		addComponentStructureFor: 'Core'
+			startingAtComponentNamed: 'Core'
 			pathNameArray:
 				{'platform'.
 				'gemstone'}
@@ -1411,8 +1411,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 				{'common'.
 				{'gemstone'}}
 			comment: 'Component for loading gemstone-specific packages';
-		addPlatformComponentNamed: 'Core'
-			toComponentNamed: 'Core'
+		addComponentStructureFor: 'Core'
+			startingAtComponentNamed: 'Core'
 			pathNameArray:
 				{'platform'.
 				'pharo'}
@@ -1420,8 +1420,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 				{'common'.
 				{'pharo'}}
 			comment: 'Component for loading pharo-specific packages';
-		addPlatformComponentNamed: 'Core'
-			toComponentNamed: 'Core'
+		addComponentStructureFor: 'Core'
+			startingAtComponentNamed: 'Core'
 			pathNameArray:
 				{'platform'.
 				'vast'}
@@ -1435,8 +1435,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 
 		The package named RowanSample9-VAST-Application, which contains the Envy 
 		Application class is also included in this component.';
-		addPlatformComponentNamed: 'Tests'
-			toComponentNamed: 'Core'
+		addComponentStructureFor: 'Tests'
+			startingAtComponentNamed: 'Core'
 			pathNameArray:
 				{'tests'.
 				'platform'.
@@ -1950,23 +1950,23 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 					protocol: 'tests';
 				yourself ].
 
-	componentPath := resolvedProject
-		addPlatformComponentNamed: componentName4
-		toComponentNamed: componentPath4
+	componentPath := (resolvedProject
+		addComponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
 		pathNameArray:
 			{'common'.
 			'_gemstone_glass'}
 		conditionPathArray:
 			{'common'.
 			{'gemstone'.
-			'glass'}}.
+			'glass'}}) name.
 	resolvedProject
 		addPackageNamed: packageName7 toComponentNamed: componentPath;
 		yourself.
 
-	componentPath := resolvedProject
-		addPlatformComponentNamed: componentName4
-		toComponentNamed: componentPath4
+	componentPath := (resolvedProject
+		addComponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
 		pathNameArray:
 			{'common'.
 			'tests'.
@@ -1975,7 +1975,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 			{'common'.
 			'tests'.
 			{'gemstone'.
-			'glass'}}.
+			'glass'}}) name.
 	resolvedProject
 		addPackageNamed: packageName8 toComponentNamed: componentPath;
 		yourself.
@@ -1995,22 +1995,22 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 					protocol: '*' , (ar at: 3) asLowercase;
 				yourself ].
 
-	componentPath := resolvedProject
-		addPlatformComponentNamed: componentName4
-		toComponentNamed: componentPath4
+	componentPath := (resolvedProject
+		addComponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
 		pathNameArray:
 			{'common'.
 			'_pharo'}
 		conditionPathArray:
 			{'common'.
-			{'pharo'}}.
+			{'pharo'}}) name.
 	resolvedProject
 		addPackageNamed: packageName9 toComponentNamed: componentPath;
 		yourself.
 
-	componentPath := resolvedProject
-		addPlatformComponentNamed: componentName4
-		toComponentNamed: componentPath4
+	componentPath := (resolvedProject
+		addComponentStructureFor: componentName4
+		startingAtComponentNamed: componentPath4
 		pathNameArray:
 			{'common'.
 			'tests'.
@@ -2018,7 +2018,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0031: resolvedProject [
 		conditionPathArray:
 			{'common'.
 			'tests'.
-			{'pharo'}}.
+			{'pharo'}}) name.
 	resolvedProject
 		addPackageNamed: packageName10 toComponentNamed: componentPath;
 		yourself.
@@ -3328,16 +3328,16 @@ RwTestProjectLibraryGenerator >> _addPlatformConditionalDefinitionsFor_0054Proje
 	gnuPackageName1 := theProjectName , '-', packageLabel, '-Core'.
 	gnuPackageName2 := theProjectName , '-', packageLabel, '-Tests'.
 
-	gnuComponentName1 := theProject
-		addPlatformComponentNamed: componentName1
-		toComponentNamed: componentName1
+	gnuComponentName1 := (theProject
+		addComponentStructureFor: componentName1
+		startingAtComponentNamed: componentName1
 		pathNameArray: {packageLabel} 
-		conditionPathArray: { {condition} }.
-	gnuComponentName2 := theProject
-		addPlatformComponentNamed: componentName2
-		toComponentNamed: componentName1
+		conditionPathArray: { {condition} }) name.
+	gnuComponentName2 := (theProject
+		addComponentStructureFor: componentName2
+		startingAtComponentNamed: componentName1
 		pathNameArray: {'tests' . packageLabel} 
-		conditionPathArray: {'tests' . {condition}}.
+		conditionPathArray: {'tests' . {condition}}) name.
 	((theProject
 		addPackageNamed: gnuPackageName1
 		toComponentNamed: gnuComponentName1)

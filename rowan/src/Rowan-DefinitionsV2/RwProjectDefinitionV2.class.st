@@ -223,53 +223,6 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 ]
 
 { #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
-	"return the path name of the new component"
-
-	^ self
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-]
-
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	"return the path name of the new component"
-
-	| theComponentName toComponent path compositePath condition |
-	toComponent := self componentNamed: toComponentName.
-	condition := conditionPathArray last.
-	path := RelativePath withAll: pathNameArray.
-	1 to: pathNameArray size - 1 do: [ :pathIndex | 
-		| segmentName intermediateComponentName |
-		"ensure that we have the appropriate intermediate component structure"
-		segmentName := pathNameArray at: pathIndex.
-		compositePath := compositePath
-			ifNil: [ Path * segmentName ]
-			ifNotNil: [ compositePath / segmentName ].
-		intermediateComponentName := (compositePath / aComponentName) pathString.
-		toComponent := self components
-			componentNamed: intermediateComponentName
-			ifAbsent: [ 
-				| newComponent |
-				newComponent := self components
-					addSimpleNestedComponentNamed: intermediateComponentName
-					condition: (conditionPathArray at: pathIndex)
-					comment: ''.
-				toComponent addComponentNamed: intermediateComponentName.
-				newComponent ] ].
-	theComponentName := (path / aComponentName) pathString.
-	self components
-		addPlatformNestedComponentNamed: theComponentName
-		condition: condition
-		comment: ''.
-	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
-]
-
-{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
 	^ self components
 		addPlatformNestedComponentNamed: aComponentName

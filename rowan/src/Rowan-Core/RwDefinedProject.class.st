@@ -176,25 +176,6 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 		toComponentNamed: componentName
 ]
 
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
-	^ self _resolvedProject
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-]
-
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	^ self _resolvedProject
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-]
-
 { #category : 'accessing' }
 RwDefinedProject >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
 	^ self _resolvedProject
