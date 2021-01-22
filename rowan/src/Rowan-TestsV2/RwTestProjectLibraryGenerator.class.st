@@ -98,8 +98,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 			comment: 'Primary component used for loading the core classes.';
 		addSubcomponentNamed: componentName2
 			condition: 'tests'
-			comment: 'Primary component used for loading the test classes.';
-		addComponentNamed: componentName2 toComponentNamed: componentName1;
+			comment: 'Primary component used for loading the test classes.'
+			toComponentNamed: componentName1;
 		yourself
 ]
 

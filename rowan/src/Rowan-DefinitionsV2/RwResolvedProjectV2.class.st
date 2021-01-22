@@ -310,6 +310,26 @@ RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition 
 ]
 
 { #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	self
+		addSubcomponentNamed: componentName condition: condition comment: aString;
+		addComponentNamed: componentName toComponentNamed: toComponentName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'components' }
 RwResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
 	visited := IdentitySet new.

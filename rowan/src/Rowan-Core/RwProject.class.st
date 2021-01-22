@@ -69,12 +69,9 @@ RwProject >> addLoadSpecComponentNamed: componentName comment: aString [
 ]
 
 { #category : 'components' }
-RwProject >> addSubcomponentNamed: componentName condition: condition [
-	^ self addSubcomponentNamed: componentName condition: condition comment: ''
-]
+RwProject >> addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-{ #category : 'components' }
-RwProject >> addSubcomponentNamed: componentName condition: condition comment: aString [
 	"since we are working with a loaded project here, adding a component 
 		with a condition, implies that the condition should be applied to the load specification, 
 		thus causing the new component to be loaded"
@@ -84,7 +81,8 @@ RwProject >> addSubcomponentNamed: componentName condition: condition comment: a
 	component := projectDefinition
 		addSubcomponentNamed: componentName
 		condition: condition
-		comment: aString.
+		comment: aString
+		toComponentNamed: toComponentName.
 	conditionals := projectDefinition customConditionalAttributes copy.
 	conditionals add: condition.
 	projectDefinition customConditionalAttributes: conditionals asSet asArray.
@@ -92,11 +90,15 @@ RwProject >> addSubcomponentNamed: componentName condition: condition comment: a
 	^ component
 ]
 
-{ #category : 'components v2.0' }
-RwProject >> addTopLevelComponentNamed: componentName condition: condition [
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+{ #category : 'components' }
+RwProject >> addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addLoadSpecComponentNamed: componentName
+	^ self
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'components' }

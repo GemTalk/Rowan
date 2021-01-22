@@ -160,13 +160,6 @@ RwDefinedProject >> addLoadSpecComponentNamed: componentName comment: aString [
 		comment: aString
 ]
 
-{ #category : 'components v2.0' }
-RwDefinedProject >> addNewComponentNamed: componentName [
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
-
-	^ self _resolvedProject addComponentNamed: componentName
-]
-
 { #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _resolvedProject
@@ -289,11 +282,22 @@ RwDefinedProject >> addSubcomponentNamed: componentName condition: condition com
 		comment: aString
 ]
 
-{ #category : 'components v2.0' }
-RwDefinedProject >> addTopLevelComponentNamed: componentName [
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+{ #category : 'components' }
+RwDefinedProject >> addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addLoadSpecComponentNamed: componentName
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self addSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
 ]
 
 { #category : 'accessing' }

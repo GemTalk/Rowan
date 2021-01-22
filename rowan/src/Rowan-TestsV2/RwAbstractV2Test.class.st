@@ -42,17 +42,17 @@ RwAbstractV2Test class >> _symbolDictionaryNames [
 RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject [
 	| projectName packageName className |
 	projectName := resolvedProject projectName.
-	(resolvedProject
+	resolvedProject
 		comment: 'Project created using the V2 project creation api ';
 		addLoadComponentNamed: 'Core'
-			comment: 'Primary component used for loading the system.')
-			addComponentNames: {'subs/Nested'};
+			comment: 'Primary component used for loading the system.';
 		yourself.
 
 	resolvedProject
 		addSubcomponentNamed: 'subs/Nested'
 		condition: 'common'
-		comment: 'Nested component defines a shared subsystem of the primary project.'.
+		comment: 'Nested component defines a shared subsystem of the primary project.'
+		toComponentNamed: 'Core'.
 
 	resolvedProject
 		addPackagesNamed: {(projectName , '-Core')}

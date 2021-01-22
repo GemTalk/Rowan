@@ -118,28 +118,30 @@ RwGsTopazRowanToolTest >> testTopazAddToplevelComponent [
 	"Create a disk-based project using topaz api"
 
 	|  project projectName componentName1 componentName2 packageName1 packageName2
-		x y c |
+		condition |
 	projectName := 'TopazApiProject'.
 	componentName1 := 'Core'.
-	componentName2 := 'Test'.
+	componentName2 := 'tests/Test'.
+	condition := 'tests'.
 	packageName1 := projectName , '-Core'.
 	packageName2 := projectName, '-Tests'.
 
 "Create project and add new component"
 	project := self _createTestProjectNamed: projectName.
-
 	Rowan gemstoneTools topaz
-		addTopLevelComponentNamed: componentName2
-			forProjectNamed: projectName 
-			condition: 'test';
+		addSubcomponentNamed: componentName2
+			condition: condition
+			forProjectNamed: projectName
+			toComponentNamed: componentName1;
 		addNewPackageNamed: packageName2 
 			forProjectNamed: projectName 
 			toComponentNamed: componentName2;
 		yourself.
 
 "Validate"
-c := project customConditionalAttributes.
-	self assert: (x := project componentNames sort)  = (y := {componentName1 . componentName2 } sort).
+	self assert: project customConditionalAttributes equals: {condition}.
+	self assert: project componentNames equals: {componentName1}.
+	self assert: (project componentNamed: componentName1) componentNames equals: {componentName2}.
 	self assert: (project componentForPackageNamed: packageName1) name = componentName1.
 	self assert: (project componentForPackageNamed: packageName2) name = componentName2.
 ]
