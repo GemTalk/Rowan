@@ -146,14 +146,6 @@ RwDefinedProject >> addLoadComponentNamed: componentName comment: aString [
 ]
 
 { #category : 'components to be cleaned up' }
-RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
-	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		condition: condition
-		comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self _resolvedProject
 		addNewComponentNamed: aComponentName
@@ -293,6 +285,16 @@ RwDefinedProject >> componentNamed: componentName [
 { #category : 'accessing' }
 RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> componentNames [
+	^ self _resolvedProject componentNames
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> componentNames: anArray [
+	^ self _resolvedProject componentNames: anArray
 ]
 
 { #category : 'accessing' }

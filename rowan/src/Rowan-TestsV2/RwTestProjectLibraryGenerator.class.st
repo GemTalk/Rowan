@@ -1213,48 +1213,37 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	resolvedProject removeComponentNamed: 'Core'.
 	resolvedProject removeComponentNamed: 'tests/Tests'.
+	resolvedProject  loadSpecification componentNames: {}.
 	resolvedProject
-		addNewComponentNamed: 'Core'
-		condition: 'common'
+		addLoadComponentNamed: 'Core'
 		comment:
 			'master component, that will load 4 simple components in order with each component doing a complete, independent load'.
 
 	resolvedProject
-		addNewComponentNamed: 'Core1'
-			condition: 'common'
+		addLoadComponentNamed: 'Core1'
 			comment: 'First component for loading first package';
 		addPackagesNamed:
 				{packageName1.
 					testPackageName1}
 			toComponentNamed: 'Core1';
-		addNewComponentNamed: 'Core2'
-			condition: 'common'
+		addLoadComponentNamed: 'Core2'
 			comment: 'Second component for loading second package';
 		addPackagesNamed:
 				{packageName2.
 					testPackageName2}
 			toComponentNamed: 'Core2';
-		addNewComponentNamed: 'Core3'
-			condition: 'common'
+		addLoadComponentNamed: 'Core3'
 			comment: 'Third component for loading third package';
 		addPackagesNamed:
 				{packageName3.
 					testPackageName3}
 			toComponentNamed: 'Core3';
-		addNewComponentNamed: 'Core4'
-			condition: 'common'
+		addLoadComponentNamed: 'Core4'
 			comment: 'Fourth component for loading fourth package';
 		addPackagesNamed:
 				{packageName4.
 					testPackageName4}
 			toComponentNamed: 'Core4';
-		yourself.
-
-	(resolvedProject componentNamed: 'Core')
-		addComponentNamed: 'Core1';
-		addComponentNamed: 'Core2';
-		addComponentNamed: 'Core3';
-		addComponentNamed: 'Core4';
 		yourself.
 
 	resolvedProject
@@ -1280,6 +1269,16 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 			withSource: className4 , ' postLoadDoit: 4'
 			toComponentNamed: 'Core4';
 		yourself.
+
+	resolvedProject componentNames: { 'Core' }.
+
+	(resolvedProject componentNamed: 'Core')
+		addComponentNamed: 'Core1';
+		addComponentNamed: 'Core2';
+		addComponentNamed: 'Core3';
+		addComponentNamed: 'Core4';
+		yourself.
+
 	^ resolvedProject
 ]
 
@@ -1397,11 +1396,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 			protocol: 'accessing';
 		yourself.
 
+	resolvedProject loadSpecification componentNames: {}.
 	resolvedProject
 		removeComponentNamed: 'Core';
 		removeComponentNamed: 'tests/Tests';
-		addNewComponentNamed: 'Core'
-			condition: 'common'
+		addLoadComponentNamed: 'Core'
 			comment: 'Top-level component for loading the application';
 		addPlatformComponentNamed: 'Core'
 			toComponentNamed: 'Core'
@@ -1503,7 +1502,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 
 	resolvedProject_0025
 		removeComponentNamed: 'Core';
-		addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
+		componentNames: {};
+		addLoadComponentNamed: 'Core' comment: 'the component';
 		addComponentNamed: 'tests/Tests' toComponentNamed: 'Core';
 		yourself.
 	packageNames
@@ -1529,7 +1529,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 			specName: resolvedProjectName;
 			revision: loadSpecification_0025 revision;
 			gitUrl: self projectUrl;
-			componentNames: {'Core'};
+			componentNames: {};
 			customConditionalAttributes: {'tests'};
 			comment: loadSpecification_0025 comment;
 			yourself.
@@ -1537,10 +1537,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 		resolvedProject := loadSpecification resolve.
 
 		resolvedProject
-			addNewComponentNamed: 'Core' condition: 'common' comment: 'the component';
-			addNewComponentNamed: 'tests/Tests'
+			addLoadComponentNamed: 'Core' comment: 'the component';
+			addSubcomponentNamed: 'tests/Tests'
 				condition: 'tests'
-				comment: 'the test component';
+				comment: 'the test component'
+				toComponentNamed: 'Core';
 			yourself.
 
 		resolvedProject projectSpecification

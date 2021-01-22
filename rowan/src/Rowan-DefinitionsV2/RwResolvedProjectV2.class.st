@@ -150,11 +150,6 @@ RwResolvedProjectV2 >> addLoadComponentNamed: componentName comment: aString [
 ]
 
 { #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
-	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray [
 	^ self
 		addNewComponentNamed: componentName

@@ -139,14 +139,6 @@ RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName comment: aString 
 ]
 
 { #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: aString
-]
-
-{ #category : 'components to be cleaned up' }
 RwProjectDefinitionV2 >> addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray [
 	"return the path name of the new component"
 
