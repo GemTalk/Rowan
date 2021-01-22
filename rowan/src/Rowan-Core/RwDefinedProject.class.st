@@ -145,21 +145,6 @@ RwDefinedProject >> addLoadComponentNamed: componentName comment: aString [
 	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 ]
 
-{ #category : 'components' }
-RwDefinedProject >> addLoadSpecComponentNamed: componentName [
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-]
-
-{ #category : 'components' }
-RwDefinedProject >> addLoadSpecComponentNamed: componentName comment: aString [
-	"add a new instance of RwLoadComponent to the project components and add the componentName
-		to the load spec (i.e., it will be loaded when the load spec is loaded)"
-
-	^ self _resolvedProject
-		addLoadSpecComponentNamed: componentName
-		comment: aString
-]
-
 { #category : 'components to be cleaned up' }
 RwDefinedProject >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _resolvedProject

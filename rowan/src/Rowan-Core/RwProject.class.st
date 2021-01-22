@@ -53,22 +53,6 @@ RwProject >> addLoadComponentNamed: componentName comment: aString [
 ]
 
 { #category : 'components' }
-RwProject >> addLoadSpecComponentNamed: componentName [
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-]
-
-{ #category : 'components' }
-RwProject >> addLoadSpecComponentNamed: componentName comment: aString [
-	| projectDefinition component |
-	projectDefinition := self defined.
-	component := projectDefinition
-		addLoadSpecComponentNamed: componentName
-		comment: aString.
-	projectDefinition load.
-	^ component
-]
-
-{ #category : 'components' }
 RwProject >> addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName [
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 

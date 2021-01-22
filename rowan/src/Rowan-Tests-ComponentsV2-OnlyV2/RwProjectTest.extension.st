@@ -20,7 +20,7 @@ RwProjectTest >> _simpleCreateDefinedProjectForRepoType: repoType [
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		repoType: repoType;
-		addLoadSpecComponentNamed: componentName1;
+		addLoadComponentNamed: componentName1;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
 		addSubcomponentNamed: componentName2 condition: 'tests' comment: 'tests';
 		addPackagesNamed: {packageName2} toComponentNamed: componentName2;

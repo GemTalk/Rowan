@@ -149,17 +149,6 @@ RwResolvedProjectV2 >> addLoadComponentNamed: componentName comment: aString [
 	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 ]
 
-{ #category : 'components' }
-RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName [
-	^ self addLoadSpecComponentNamed: componentName comment: ''
-]
-
-{ #category : 'components' }
-RwResolvedProjectV2 >> addLoadSpecComponentNamed: componentName comment: aString [
-	self _loadSpecification addComponentNamed: componentName.
-	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
-]
-
 { #category : 'components to be cleaned up' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition comment: aString

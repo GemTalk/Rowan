@@ -94,7 +94,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	componentName2 := 'tests/Tests'.
 	^ resolvedProject
 		comment: 'spec_0000 definitions';
-		addLoadSpecComponentNamed: componentName1
+		addLoadComponentNamed: componentName1
 			comment: 'Primary component used for loading the core classes.';
 		addSubcomponentNamed: componentName2
 			condition: 'tests'
@@ -209,7 +209,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 	| className packageName userId |
 	userId := resolvedProject _gemstoneAllUsersName.
 	resolvedProject
-		addLoadSpecComponentNamed: 'Core1'
+		addLoadComponentNamed: 'Core1'
 			comment:  'contains ' , projectName , '-Core1 package';
 		addComponentStructureFor: 'Tests'
 			startingAtComponentNamed: 'Core1'
@@ -1595,7 +1595,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0026: resolvedProject [
 		specComponentNames: {};
 		yourself.
 
-	resolvedProject addLoadSpecComponentNamed: componentName1.
+	resolvedProject addLoadComponentNamed: componentName1.
 
 	resolvedProject
 		addPackageNamed: packageName1 toComponentNamed: componentName1;
