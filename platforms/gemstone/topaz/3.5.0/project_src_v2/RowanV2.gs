@@ -6047,7 +6047,7 @@ removeallclassmethods RwAbstractComponent
 
 doit
 (RwAbstractComponent
-	subclass: 'RwComponent'
+	subclass: 'RwLoadComponent'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -6060,11 +6060,11 @@ doit
 true.
 %
 
-removeallmethods RwComponent
-removeallclassmethods RwComponent
+removeallmethods RwLoadComponent
+removeallclassmethods RwLoadComponent
 
 doit
-(RwComponent
+(RwLoadComponent
 	subclass: 'RwSubcomponent'
 	instVarNames: #( condition )
 	classVars: #(  )
@@ -49475,18 +49475,6 @@ newNamed: aName
 
 category: 'components'
 method: RwDefinedProject
-addComponentNamed: componentName
-	^ self addComponentNamed: componentName comment: ''
-%
-
-category: 'components'
-method: RwDefinedProject
-addComponentNamed: componentName comment: aString
-	^ self _resolvedProject addComponentNamed: componentName comment: aString
-%
-
-category: 'components'
-method: RwDefinedProject
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
@@ -49550,6 +49538,24 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 
 category: 'components'
 method: RwDefinedProject
+addLoadComponentNamed: componentName
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	^ self addLoadComponentNamed: componentName comment: ''
+%
+
+category: 'components'
+method: RwDefinedProject
+addLoadComponentNamed: componentName comment: aString
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
+%
+
+category: 'components'
+method: RwDefinedProject
 addLoadSpecComponentNamed: componentName
 	^ self addLoadSpecComponentNamed: componentName comment: ''
 %
@@ -49557,15 +49563,12 @@ addLoadSpecComponentNamed: componentName
 category: 'components'
 method: RwDefinedProject
 addLoadSpecComponentNamed: componentName comment: aString
-	^ self _resolvedProject addLoadSpecComponentNamed: componentName comment: aString
-%
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
-category: 'components v2.0'
-method: RwDefinedProject
-addNewComponentNamed: componentName
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
-
-	^ self _resolvedProject addComponentNamed: componentName
+	^ self _resolvedProject
+		addLoadSpecComponentNamed: componentName
+		comment: aString
 %
 
 category: 'components to be cleaned up'
@@ -49706,12 +49709,24 @@ addSubcomponentNamed: componentName condition: condition comment: aString
 		comment: aString
 %
 
-category: 'components v2.0'
+category: 'components'
 method: RwDefinedProject
-addTopLevelComponentNamed: componentName
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addLoadSpecComponentNamed: componentName
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+		toComponentNamed: toComponentName
+%
+
+category: 'components'
+method: RwDefinedProject
+addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self addSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
 %
 
 category: 'accessing'
@@ -50397,17 +50412,23 @@ write
 
 category: 'components'
 method: RwProject
-addComponentNamed: componentName
-	^ self addComponentNamed: componentName comment: ''
+addLoadComponentNamed: componentName
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	^ self addLoadComponentNamed: componentName comment: ''
 %
 
 category: 'components'
 method: RwProject
-addComponentNamed: componentName comment: aString
+addLoadComponentNamed: componentName comment: aString
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
 	| projectDefinition component |
 	projectDefinition := self defined.
 	component := projectDefinition
-		addComponentNamed: componentName
+		addLoadComponentNamed: componentName
 		comment: aString.
 	projectDefinition load.
 	^ component
@@ -50433,13 +50454,9 @@ addLoadSpecComponentNamed: componentName comment: aString
 
 category: 'components'
 method: RwProject
-addSubcomponentNamed: componentName condition: condition
-	^ self addSubcomponentNamed: componentName condition: condition comment: ''
-%
+addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-category: 'components'
-method: RwProject
-addSubcomponentNamed: componentName condition: condition comment: aString
 	"since we are working with a loaded project here, adding a component 
 		with a condition, implies that the condition should be applied to the load specification, 
 		thus causing the new component to be loaded"
@@ -50449,7 +50466,8 @@ addSubcomponentNamed: componentName condition: condition comment: aString
 	component := projectDefinition
 		addSubcomponentNamed: componentName
 		condition: condition
-		comment: aString.
+		comment: aString
+		toComponentNamed: toComponentName.
 	conditionals := projectDefinition customConditionalAttributes copy.
 	conditionals add: condition.
 	projectDefinition customConditionalAttributes: conditionals asSet asArray.
@@ -50457,12 +50475,16 @@ addSubcomponentNamed: componentName condition: condition comment: aString
 	^ component
 %
 
-category: 'components v2.0'
+category: 'components'
 method: RwProject
-addTopLevelComponentNamed: componentName condition: condition
-	"sender from 3.6.0 code base, so this method shouldn't be removed until candidateV2.1 and 3.6.1"
+addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addLoadSpecComponentNamed: componentName
+	^ self
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
 %
 
 category: 'components'
@@ -58090,39 +58112,39 @@ _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
 										ifFalse: [ Error signal: 'Unknown package property name ' , packagePropertyName printString ] ] ] ] ]
 %
 
-! Class implementation for 'RwComponent'
+! Class implementation for 'RwLoadComponent'
 
-!		Instance methods for 'RwComponent'
+!		Instance methods for 'RwLoadComponent'
 
 category: 'comparing'
-method: RwComponent
-= aRwComponent
-	^ super = aRwComponent
-		and: [ self projectNames = aRwComponent projectNames ]
+method: RwLoadComponent
+= aRwLoadComponent
+	^ super = aRwLoadComponent
+		and: [ self projectNames = aRwLoadComponent projectNames ]
 %
 
 category: 'visiting'
-method: RwComponent
+method: RwLoadComponent
 acceptNestedVisitor: aVisitor
 
 	^ self acceptVisitor: aVisitor
 %
 
 category: 'visiting'
-method: RwComponent
+method: RwLoadComponent
 acceptVisitor: aVisitor
 	^ aVisitor visitComponent: self
 %
 
 category: 'accessing'
-method: RwComponent
+method: RwLoadComponent
 addProjectNamed: aProjectName
 	self projectNames add: aProjectName.
 	projectNames := projectNames asSet asArray sort
 %
 
 category: 'accessing'
-method: RwComponent
+method: RwLoadComponent
 conditionalPropertyMatchers
 	^ Dictionary new
 		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
@@ -58130,7 +58152,7 @@ conditionalPropertyMatchers
 %
 
 category: 'ston'
-method: RwComponent
+method: RwLoadComponent
 excludedInstVars
 	"it's in #instVarNamesInOrderForSton, but not defined in this class"
 
@@ -58138,7 +58160,7 @@ excludedInstVars
 %
 
 category: 'ston'
-method: RwComponent
+method: RwLoadComponent
 fromSton: stonReader
 	"Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
@@ -58152,53 +58174,53 @@ fromSton: stonReader
 					instanceVariableNames := self class allInstVarNames.
 					stonReader
 						parseMapDo: [ :instVarName :value | 
-							(self class == RwComponent and: [ instVarName = #'condition' ])
+							(self class == RwLoadComponent and: [ instVarName = #'condition' ])
 								ifTrue: [
 									"we're skipping the condition instvar, assuming that #fromSton: has been forwarded from RwSimpleProjectLoadComponent 
-										and condition instance var isn't supported in RwComponent"
+										and condition instance var isn't supported in RwLoadComponent"
 									value ~= 'common'
 										ifTrue: [ 
 											"if the value is not common, then we'll throw an error, since we should not have top level components with conditions"
 											self
 												error:
-													'condition instance variable is ignored for RwComponent instances is convert component to a subcomponent' ] ]
+													'condition instance variable is ignored for RwLoadComponent instances is convert component to a subcomponent' ] ]
 								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ]
 		ifFalse: [ super fromSton: stonReader ]
 %
 
 category: 'comparing'
-method: RwComponent
+method: RwLoadComponent
 hash
 	^ super hash bitXor: self projectNames hash
 %
 
 category: 'initialization'
-method: RwComponent
+method: RwLoadComponent
 initialize
 	super initialize.
 	projectNames := {}
 %
 
 category: 'ston'
-method: RwComponent
+method: RwLoadComponent
 instVarNamesInOrderForSton
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
 category: 'accessing'
-method: RwComponent
+method: RwLoadComponent
 projectNames
 	^projectNames
 %
 
 category: 'accessing'
-method: RwComponent
+method: RwLoadComponent
 removeProjectNamed: aProjectName
 	self projectNames remove: aProjectName ifAbsent: [  ]
 %
 
 category: 'validation'
-method: RwComponent
+method: RwLoadComponent
 _validatedPackageNames
 	"answer the validated set of package names"
 
@@ -62631,7 +62653,7 @@ readClassDirectories: directoryArray projectName: projectName packageName: packa
 		yourself.
 
 	resolvedProject
-		addComponentNamed: 'Core'
+		addLoadComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 
 	1 to: directoryArray size do: [ :index | 
@@ -62845,7 +62867,7 @@ readClassFiles: fileArray projectName: projectName packageName: packageName
 		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
 		yourself.
 	resolvedProject
-		addComponentNamed: 'Core'
+		addLoadComponentNamed: 'Core'
 		comment: 'Temporary project to hold class definitions read from disk'.
 	1 to: fileArray size do: [ :index | 
 		| file |
@@ -63881,18 +63903,6 @@ acceptVisitor: aVisitor
 
 category: 'components'
 method: RwResolvedProjectV2
-addComponentNamed: componentName
-	^ self _projectDefinition addComponentNamed: componentName
-%
-
-category: 'components'
-method: RwResolvedProjectV2
-addComponentNamed: componentName comment: aString
-	^ self _projectDefinition addComponentNamed: componentName comment: aString
-%
-
-category: 'components'
-method: RwResolvedProjectV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
@@ -63935,6 +63945,25 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 
 category: 'components'
 method: RwResolvedProjectV2
+addLoadComponentNamed: componentName
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	^ self _projectDefinition addLoadComponentNamed: componentName
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addLoadComponentNamed: componentName comment: aString
+	"add a new instance of RwLoadComponent to the project components and add the componentName
+		to the load spec (i.e., it will be loaded when the load spec is loaded)"
+
+	self _loadSpecification addComponentNamed: componentName.
+	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
+%
+
+category: 'components'
+method: RwResolvedProjectV2
 addLoadSpecComponentNamed: componentName
 	^ self addLoadSpecComponentNamed: componentName comment: ''
 %
@@ -63943,7 +63972,7 @@ category: 'components'
 method: RwResolvedProjectV2
 addLoadSpecComponentNamed: componentName comment: aString
 	self _loadSpecification addComponentNamed: componentName.
-	^ self _projectDefinition addComponentNamed: componentName comment: aString
+	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 %
 
 category: 'components to be cleaned up'
@@ -64112,6 +64141,28 @@ addSubcomponentNamed: componentName condition: condition comment: aString
 		addSubcomponentNamed: componentName
 		condition: condition
 		comment: aString
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	self
+		addSubcomponentNamed: componentName condition: condition comment: aString;
+		addComponentNamed: componentName toComponentNamed: toComponentName
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
 %
 
 category: 'components'
@@ -70718,7 +70769,7 @@ removeProjectNamed: aProjectName
 category: 'ston'
 method: RwSimpleProjectLoadComponentV2
 _stonReplacementClass
-	^ RwComponent
+	^ RwLoadComponent
 %
 
 category: 'validation'
@@ -71968,26 +72019,6 @@ acceptVisitor: aVisitor
 
 category: 'components'
 method: RwProjectDefinitionV2
-addComponentNamed: aComponentName
-	^ self addComponentNamed: aComponentName comment: ''
-%
-
-category: 'components'
-method: RwProjectDefinitionV2
-addComponentNamed: aComponentName comment: aString
-	"eventually no condition for `top level` component"
-
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
-		ifTrue: [ ^ self components addComponentNamed: aComponentName comment: aString ]
-		ifFalse: [ 
-			^ self components
-				addSimpleComponentNamed: aComponentName
-				condition: 'common'
-				comment: aString ]
-%
-
-category: 'components'
-method: RwProjectDefinitionV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
@@ -72050,6 +72081,28 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
+%
+
+category: 'components'
+method: RwProjectDefinitionV2
+addLoadComponentNamed: aComponentName
+	"add a new instance of RwLoadComponent to the project components"
+
+	^ self addLoadComponentNamed: aComponentName comment: ''
+%
+
+category: 'components'
+method: RwProjectDefinitionV2
+addLoadComponentNamed: aComponentName comment: aString
+	"add a new instance of RwLoadComponent to the project components"
+
+	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+		ifTrue: [ ^ self components addLoadComponentNamed: aComponentName comment: aString ]
+		ifFalse: [ 
+			^ self components
+				addSimpleComponentNamed: aComponentName
+				condition: 'common'
+				comment: aString ]
 %
 
 category: 'components to be cleaned up'
@@ -84989,22 +85042,6 @@ new
 
 category: 'components'
 method: RwResolvedLoadComponentsV2
-addComponentNamed: aComponentName comment: aString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
-			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwComponent newNamed: aComponentName ].
-	component comment: aString.
-	^ component
-%
-
-category: 'components'
-method: RwResolvedLoadComponentsV2
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
@@ -85013,6 +85050,24 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 		componentNamed: toComponentName
 		ifAbsent: [ self error: 'The component ' , toComponentName printString , ' is undefined' ].
 	component addComponentNamed: componentName
+%
+
+category: 'components'
+method: RwResolvedLoadComponentsV2
+addLoadComponentNamed: aComponentName comment: aString
+	"add a new instance of RwLoadComponent to the project components"
+
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwLoadComponent newNamed: aComponentName ].
+	component comment: aString.
+	^ component
 %
 
 category: 'accessing'
