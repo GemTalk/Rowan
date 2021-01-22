@@ -213,6 +213,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0004: resolvedProject [
 			comment:  'contains ' , projectName , '-Core1 package';
 		addComponentStructureFor: 'Tests'
 			startingAtComponentNamed: 'Core1'
+			pathNameArray: {'tests'}
 			conditionPathArray: {'tests'}
 			comment: 'contains ' , projectName , '-Tests package';
 		addLoadComponentNamed: 'Core2'
@@ -775,6 +776,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 			comment: 'Primary component used for loading the core classes.';
 		addComponentStructureFor: componentName
 			startingAtComponentNamed: componentName
+			pathNameArray: {'vast'}
 			conditionPathArray: {'vast'}
 			comment: 'manage vast packages';
 		addPackageNamed: packageName1 toComponentNamed: 'vast/' , componentName;
@@ -3102,11 +3104,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 	'alt2'.
 	'alt3'}
 		do: [ :condition | 
-			| componentName pkgSuffix package |
+			| theComponent pkgSuffix package |
 			pkgSuffix := condition copy.
 			pkgSuffix at: 1 put: (condition at: 1) asUppercase.
-			componentName := resolvedProject
+			theComponent := resolvedProject
 				addComponentStructureFor: componentName1
+				startingAtComponentNamed: componentName1
 				pathNameArray:
 					{'conditions'.
 					condition}
@@ -3115,13 +3118,13 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 					condition}.
 			package := resolvedProject
 				addPackageNamed: projectName , '-Core-' , pkgSuffix
-				toComponentNamed: componentName.
+				toComponentNamed: theComponent name.
 			(package addClassExtensionNamed: className1)
 				addInstanceMethod: condition , ' ^ ' , condition printString
 				protocol: 'alternates'.
 
 
-			componentName := resolvedProject
+			theComponent := resolvedProject
 				addComponentStructureFor: 'Tests'
 				startingAtComponentNamed: componentName2
 				pathNameArray:
@@ -3132,7 +3135,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 					condition}.
 			package := resolvedProject
 				addPackageNamed: projectName , '-Tests-' , pkgSuffix
-				toComponentNamed: componentName.
+				toComponentNamed: theComponent name.
 			(package addClassExtensionNamed: className2)
 				addInstanceMethod:
 					'test' , pkgSuffix , ' self assert: ' , className1 , ' new ' , condition , ' = '
@@ -3148,15 +3151,16 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 	{'platformC'.
 	#('platformC')}}
 		do: [ :conditionArray | 
-			| componentName pkgSuffix package |
+			| theComponent pkgSuffix package |
 			pkgSuffix := (conditionArray at: 1) copy.
 			pkgSuffix at: 1 put: ((conditionArray at: 1) at: 1) asUppercase.
 			(conditionArray at: 1) ~= 'platformC'
 				ifTrue: [ 
 					"platformA and platformB follow the standard pattern of extension methods and tests that the 
 						extension methods were loaded"
-					componentName := resolvedProject
+					theComponent := resolvedProject
 						addComponentStructureFor: componentName1
+						startingAtComponentNamed: componentName1
 						pathNameArray:
 							{'conditions'.
 							'alt1'.
@@ -3169,14 +3173,14 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 							(conditionArray at: 2)}.
 					package := resolvedProject
 						addPackageNamed: projectName , '-Core-' , pkgSuffix
-						toComponentNamed: componentName.
+						toComponentNamed: theComponent name.
 					(package addClassExtensionNamed: className1)
 						addInstanceMethod:
 							(conditionArray at: 1) , ' ^ ' , (conditionArray at: 1) printString
 						protocol: 'platforms'.
 
 
-					componentName := resolvedProject
+					theComponent := resolvedProject
 						addComponentStructureFor: 'Tests'
 						startingAtComponentNamed: componentName2
 						pathNameArray:
@@ -3191,7 +3195,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 							(conditionArray at: 2)}.
 					package := resolvedProject
 						addPackageNamed: projectName , '-Tests-' , pkgSuffix
-						toComponentNamed: componentName.
+						toComponentNamed: theComponent name.
 					(package addClassExtensionNamed: className2)
 						addInstanceMethod:
 							'test' , pkgSuffix , ' self assert: ' , className1 , ' new '
@@ -3200,7 +3204,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 				ifFalse: [ 
 					"platformC will not load any extension packages for the core, but will load test extensions to confirm that 
 						none of the platformA and platformB methods were loaded"
-					componentName := resolvedProject
+					theComponent := resolvedProject
 						addComponentStructureFor: 'Tests'
 						startingAtComponentNamed: componentName2
 						pathNameArray:
@@ -3215,7 +3219,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0059: resolvedProject [
 							(conditionArray at: 2)}.
 					package := resolvedProject
 						addPackageNamed: projectName , '-Tests-' , pkgSuffix
-						toComponentNamed: componentName.
+						toComponentNamed: theComponent name.
 					(package addClassExtensionNamed: className2)
 						addInstanceMethod:
 							'test' , pkgSuffix

@@ -65,22 +65,23 @@ RwProjectDefinitionV2 >> addComponentNamed: componentName toComponentNamed: toCo
 ]
 
 { #category : 'components' }
-RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	"assume that componentBasename is a top-level component"
-
-	^ self
-		addComponentStructureFor: componentBasename
-		startingAtComponentNamed: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-]
-
-{ #category : 'components' }
 RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	"return the path name of the new component"
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
 
-	| theComponentName toComponent path compositePath condition |
+	Return the last component created.
+	"
+
+	| theComponentName toComponent path compositePath condition theLastComponent |
 	toComponent := self componentNamed: toComponentName.
 	condition := conditionPathArray last.
 	path := RelativePath withAll: pathNameArray.
@@ -103,7 +104,7 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 				toComponent addComponentNamed: intermediateComponentName.
 				newComponent ] ].
 	theComponentName := (path / componentBasename) pathString.
-	condition _isArray
+	theLastComponent := condition _isArray
 		ifTrue: [ 
 			self
 				addPlatformSubcomponentNamed: theComponentName
@@ -115,7 +116,7 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 				condition: condition
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
+	^ theLastComponent
 ]
 
 { #category : 'components' }

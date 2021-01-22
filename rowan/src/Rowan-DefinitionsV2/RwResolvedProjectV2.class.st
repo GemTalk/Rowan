@@ -104,26 +104,22 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 ]
 
 { #category : 'components' }
-RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
-	^ self _projectDefinition
-		addComponentStructureFor: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-]
-
-{ #category : 'components' }
-RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString [
-	^ self 
-		addComponentStructureFor: componentBasename
-		startingAtComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-]
-
-{ #category : 'components' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
