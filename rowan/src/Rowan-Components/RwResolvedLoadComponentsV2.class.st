@@ -134,6 +134,24 @@ RwResolvedLoadComponentsV2 >> addLoadComponentNamed: aComponentName comment: aSt
 	^ component
 ]
 
+{ #category : 'components' }
+RwResolvedLoadComponentsV2 >> addPackageGroupNamed: aComponentName condition: aCondition comment: aString [
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwPackageGroup newNamed: aComponentName ].
+	component
+		comment: aString;
+		condition: aCondition;
+		yourself.
+	^ component
+]
+
 { #category : 'accessing' }
 RwResolvedLoadComponentsV2 >> addPackageNamed: packageName toComponentNamed: componentName [ 
 	| component |

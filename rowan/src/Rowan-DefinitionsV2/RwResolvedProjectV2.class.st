@@ -145,6 +145,36 @@ RwResolvedProjectV2 >> addLoadComponentNamed: componentName comment: aString [
 	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> addPackageGroupNamed: aComponentName condition: condition comment: aString [
+	^ self _projectDefinition
+		addPackageGroupNamed: aComponentName condition: condition comment: aString
+]
+
+{ #category : 'component structure' }
+RwResolvedProjectV2 >> addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the package group at each level. The name of each
+		package group is formed using  <componentBasename> and the directory
+		path based on the <pathNameArray>. The name of the first pacakge 
+		group created will be added to the component names of the 
+		<toComponentName> component.
+
+	Return the last component created.
+	"
+
+	^ self _projectDefinition
+		addPackageGroupStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addPackageNamed: packageName [
 	"the package is expected to already be present in a component - used when reading packages from disk"

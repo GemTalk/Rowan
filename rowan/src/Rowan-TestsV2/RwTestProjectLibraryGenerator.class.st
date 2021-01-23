@@ -71,6 +71,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0058: commitComment;
 	genSpec_0059: commitComment;
 	genSpec_0060: commitComment;
+	genSpec_0061: commitComment;
 	yourself
 "
 Class {
@@ -3259,6 +3260,125 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 			superclassName: requiredClassName1;
 			instVarNames: #();
 			yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
+	"Start with master; create a collection of classes and packages to populate the following categoryGroups: Public, Examples, Tests, Packages; where Packages is a synthetic category group"
+
+	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName1d packageGroupName2 packageGroupName3 component2PackageNames component3PackageNames component4PackageNames component1 component2 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroups classMap |
+	componentName1 := 'Core'.
+	packageGroupName1a := 'Projects'.
+	packageGroupName1b := 'Definitions'.
+	packageGroupName1c := 'Tools'.
+	packageGroupName1d := 'Loader'.
+	packageGroupName2 := 'Examples'.
+	packageGroupName3 := 'Tests'.
+
+	component2PackageNames := {(projectName , '-' , componentName1)}.
+
+	packageGroup1 := {packageGroupName1a.
+	packageGroupName1b.
+	packageGroupName1c.
+	packageGroupName1d}.
+
+	packageGroup2 := {packageGroupName2.
+	packageGroupName3}.
+	packageGroups := packageGroup1 , packageGroup2.
+
+	packageGroup1
+		do: [ :groupName | component2PackageNames add: projectName , '-' , componentName1 , '-' , groupName ].
+	component3PackageNames := {(projectName , '-' , packageGroupName2)}.
+	component4PackageNames := {(projectName , '-' , packageGroupName3)}.
+
+	classPrefix := 'Rs9'.
+	classMap := Dictionary new
+		add:
+				'Projects'
+						->
+							{(RwClassDefinition
+								newForClassNamed: classPrefix , 'AbstractProject'
+								super: 'Object'
+								category: 'Projects').
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'RwAbstractUnloadedProject'
+								super: classPrefix , 'AbstractProject'
+								category: 'Projects').
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'ResolvedProject'
+								super: classPrefix , 'RwAbstractUnloadedProject'
+								category: 'Projects').
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'DefinedProjects'
+								super: classPrefix , 'RwAbstractUnloadedProject'
+								category: 'Projects').
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'Project'
+								super: classPrefix , 'AbstractProject'
+								category: 'Projects')};
+		add: 'Definitions' -> {};
+		add: 'Tools' -> {};
+		add: 'Loader' -> {};
+		add: 'Examples' -> {};
+		add: 'Tests' -> {};
+		yourself.
+
+	resolvedProject
+		packageConvention: 'Rowan';
+		comment:
+				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group'.
+	resolvedProject _loadSpecification componentNames: {}.
+
+	component1 := resolvedProject
+		addLoadComponentNamed: componentName1
+		comment: 'Primary component used for loading the project.'.
+
+	component2 := resolvedProject
+		addSubcomponentStructureFor: componentName1
+		startingAtComponentNamed: componentName1
+		conditionPathArray: {'common'}.
+	component3 := resolvedProject
+		addSubcomponentStructureFor: packageGroupName2
+		startingAtComponentNamed: componentName1
+		conditionPathArray:
+			{'common'.
+			'examples'}.
+	component4 := resolvedProject
+		addSubcomponentStructureFor: packageGroupName3
+		startingAtComponentNamed: componentName1
+		conditionPathArray:
+			{'common'.
+			'tests'}.
+
+	resolvedProject
+		addPackagesNamed: component2PackageNames
+		toComponentNamed: component2 name.
+	resolvedProject
+		addPackagesNamed: component3PackageNames
+		toComponentNamed: component3 name.
+	resolvedProject
+		addPackagesNamed: component4PackageNames
+		toComponentNamed: component4 name.
+
+	packageGroups
+		do: [ :packageGroup | 
+			| packageGroupComponent extraName packageName package |
+			packageGroupComponent := resolvedProject
+				addPackageGroupStructureFor: packageGroup
+				startingAtComponentNamed: component1 name
+				pathNameArray: {'groups'}
+				conditionPathArray: {'common'}
+				comment: 'package group for ' , packageGroup.
+			extraName := (packageGroup2 includes: packageGroup)
+				ifTrue: [ '' ]
+				ifFalse: [ '-' , componentName1 ].
+			packageName := projectName , extraName , '-' , packageGroup.
+			packageGroupComponent addPackageNames: {packageName}.
+			package := resolvedProject packageNamed: packageName.
+			(classMap at: packageGroup ifAbsent: [ {} ])
+				do: [ :classDef | package addClassDefinition: classDef ] ].
 
 	^ resolvedProject
 ]
@@ -6766,6 +6886,56 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
+	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	[ 
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
+	postfix := '0061'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 61
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(660);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:
+				{'tests'.
+					'examples'};
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0061: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage ]
+		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
 ]
 
 { #category : 'accessing' }

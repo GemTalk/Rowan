@@ -139,6 +139,61 @@ RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName comment: aString 
 				comment: aString ]
 ]
 
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addPackageGroupNamed: aComponentName condition: condition comment: aString [
+	^ self components
+		addPackageGroupNamed: aComponentName
+		condition: condition
+		comment: aString
+]
+
+{ #category : 'components' }
+RwProjectDefinitionV2 >> addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the package group at each level. The name of each
+		package group is formed using  <componentBasename> and the directory
+		path based on the <pathNameArray>. The name of the first pacakge 
+		group created will be added to the component names of the 
+		<toComponentName> component.
+
+	Return the last component created.
+	"
+
+	| theComponentName toComponent path compositePath condition theLastComponent |
+	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
+	path := RelativePath withAll: pathNameArray.
+	1 to: pathNameArray size - 1 do: [ :pathIndex | 
+		| segmentName intermediateComponentName |
+		"ensure that we have the appropriate intermediate component structure"
+		segmentName := pathNameArray at: pathIndex.
+		compositePath := compositePath
+			ifNil: [ Path * segmentName ]
+			ifNotNil: [ compositePath / segmentName ].
+		intermediateComponentName := (compositePath / componentBasename) pathString.
+		toComponent := self components
+			componentNamed: intermediateComponentName
+			ifAbsent: [ 
+				| newComponent |
+				newComponent := self
+					addSubcomponentNamed: intermediateComponentName
+					condition: (conditionPathArray at: pathIndex)
+					comment: aString.
+				toComponent addComponentNamed: intermediateComponentName.
+				newComponent ] ].
+	theComponentName := (path / componentBasename) pathString.
+	theLastComponent := self
+		addPackageGroupNamed: theComponentName
+		condition: condition
+		comment: aString.
+	toComponent addComponentNamed: theComponentName.
+	^ theLastComponent
+]
+
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 	"the package is expected to already be present in a component - used when reading packages from disk"
