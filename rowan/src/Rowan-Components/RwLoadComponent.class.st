@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwLoadComponent',
-	#superclass : 'RwAbstractComponent',
+	#superclass : 'RwAbstractActiveComponent',
 	#category : 'Rowan-Components'
 }
 

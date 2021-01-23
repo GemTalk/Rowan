@@ -16,7 +16,7 @@ RwSubcomponent >> acceptNestedVisitor: aVisitor [
 RwSubcomponent >> acceptVisitor: aVisitor [
 	^ self
 		error:
-			'nested component cannot be used as a top-level configuration. The receiver is nested inside of top-level components'
+			'Subcomponent cannot be independently loaded. The receiver is nested inside of load components'
 ]
 
 { #category : 'accessing' }
