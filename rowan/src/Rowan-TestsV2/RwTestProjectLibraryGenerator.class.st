@@ -921,10 +921,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 	groupName := 'core'.
 
 	resolvedProject
-		addSimpleNestedComponentNamed: componentName1
+		addSubcomponentNamed: componentName1
 			condition: 'common'
 			comment: '';
-		addSimpleNestedComponentNamed: componentName2
+		addSubcomponentNamed: componentName2
 			condition: 'common'
 			comment: '';
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName1;

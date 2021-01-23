@@ -174,14 +174,6 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 		toComponentNamed: componentName
 ]
 
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		condition: conditionArray
-		comment: commentString
-]
-
 { #category : 'accessing' }
 RwResolvedProjectV2 >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
 	| component |
@@ -212,30 +204,6 @@ RwResolvedProjectV2 >> addRawPackageNamed: packageName [
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _projectDefinition addRawPackageNamed: packageName
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName comment: commentString [
-	^ self _projectDefinition
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: commentString
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
-	^ self _projectDefinition
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
-]
-
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString [
-	^ self _projectDefinition
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
 ]
 
 { #category : 'components' }

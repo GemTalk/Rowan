@@ -204,14 +204,6 @@ RwDefinedProject >> addRawPackageNamed: packageName [
 	^ self _resolvedProject addRawPackageNamed: packageName
 ]
 
-{ #category : 'components to be cleaned up' }
-RwDefinedProject >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
-	^ self _resolvedProject
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
-]
-
 { #category : 'components' }
 RwDefinedProject >> addSubcomponentNamed: componentName condition: condition [
 	^ self addSubcomponentNamed: componentName condition: condition comment: ''

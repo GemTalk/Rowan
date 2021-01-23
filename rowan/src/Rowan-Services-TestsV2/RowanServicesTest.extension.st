@@ -15,7 +15,7 @@ RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: pac
 	project resolve.
 
 	project
-		addSimpleComponentNamed: componentName comment: 'a test component';
+		addLoadComponentNamed: componentName comment: 'a test component';
 		addPackageNamed: packageName toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self defaultSymbolDictionaryName
 			forPackageNamed: packageName;
@@ -38,7 +38,7 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 	project resolve.
 
 	project
-		addSimpleComponentNamed: self servicesTestComponentName
+		addLoadComponentNamed: self servicesTestComponentName
 		comment: 'a test component'.
 
 	project load.

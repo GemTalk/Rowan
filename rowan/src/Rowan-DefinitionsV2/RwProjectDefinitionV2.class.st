@@ -139,14 +139,6 @@ RwProjectDefinitionV2 >> addLoadComponentNamed: aComponentName comment: aString 
 				comment: aString ]
 ]
 
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addNewNestedComponentNamed: aComponentName comment: aString [
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: 'common'
-		comment: aString
-]
-
 { #category : 'accessing' }
 RwProjectDefinitionV2 >> addPackageNamed: packageName [
 	"the package is expected to already be present in a component - used when reading packages from disk"
@@ -222,14 +214,6 @@ RwProjectDefinitionV2 >> addPackagesNamed: packageNames toComponentNamed: compon
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
 ]
 
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString [
-	^ self components
-		addPlatformNestedComponentNamed: aComponentName
-		condition: conditionArray
-		comment: commentString
-]
-
 { #category : 'components' }
 RwProjectDefinitionV2 >> addPlatformSubcomponentNamed: aComponentName condition: condition comment: aString [
 	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
@@ -259,22 +243,6 @@ RwProjectDefinitionV2 >> addRawPackageNamed: packageName [
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
-]
-
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addSimpleComponentNamed: aComponentName condition: condition comment: commentString [
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
-]
-
-{ #category : 'components to be cleaned up' }
-RwProjectDefinitionV2 >> addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString [
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
 ]
 
 { #category : 'components' }

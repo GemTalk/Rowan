@@ -32,7 +32,7 @@ RowanClassServiceTest >> createHierarchyWithNonResolvableClass [
 	projectDefinition resolve.
 
 	projectDefinition 
-		addSimpleComponentNamed: self servicesTestComponentName 
+		addLoadComponentNamed: self servicesTestComponentName 
 			comment: 'a test component';
 		addPackagesNamed: {packageName1. packageName2} toComponentNamed: self servicesTestComponentName;
 		yourself.
