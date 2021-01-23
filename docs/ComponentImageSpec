@@ -21,7 +21,7 @@ Within this hierarchy of classes, there are:
    PlatformSubComponent (previously PlatformComponent)  
          	A PlatformSubComponent is similar to a SubComponent, but is specialized for Platforms conditions including Smalltalk dialect and version numbers; 
 			and has an array of pattern matching conditions rather than one condition.
-		If all of these conditions are met (conditions tests are "and"), when defined within a LoadComponent, this PlatformSubComponent is loaded. 
+		If any one of these conditions are met (conditions tests are "or"), when defined within a LoadComponent, this PlatformSubComponent is loaded. 
  		An example array of conditions would be #( 'gs3.[1-]' 'pharo7.x' ).
 	   	PlatformSubComponents cannot be loaded independently, but control loading when referenced by a LoadComponent. 
 		After loading, these have no effect and are not visible when browsing code in the image.
