@@ -5948,7 +5948,7 @@ removeallclassmethods RowanVariableService
 doit
 (Object
 	subclass: 'RwAbstractComponent'
-	instVarNames: #( name comment projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict componentNames packageNames projectNames )
+	instVarNames: #( name comment componentNames packageNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5965,6 +5965,24 @@ removeallclassmethods RwAbstractComponent
 
 doit
 (RwAbstractComponent
+	subclass: 'RwAbstractActiveComponent'
+	instVarNames: #( projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict projectNames )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Components';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAbstractActiveComponent
+removeallclassmethods RwAbstractActiveComponent
+
+doit
+(RwAbstractActiveComponent
 	subclass: 'RwLoadComponent'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -5998,6 +6016,24 @@ true.
 
 removeallmethods RwSubcomponent
 removeallclassmethods RwSubcomponent
+
+doit
+(RwSubcomponent
+	subclass: 'RwPackageGroup'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Components';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPackageGroup
+removeallclassmethods RwPackageGroup
 
 doit
 (RwSubcomponent
@@ -48944,40 +48980,24 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 		toComponentNamed: toComponentName
 %
 
-category: 'components'
-method: RwDefinedProject
-addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray
-	^ self
-		addComponentStructureFor: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-%
-
-category: 'components'
-method: RwDefinedProject
-addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	^ self _resolvedProject
-		addComponentStructureFor: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components'
-method: RwDefinedProject
-addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
-	^ self _resolvedProject
-		addComponentStructureFor: componentBasename
-		startingAtComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components'
+category: 'component structure'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self
 		addComponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
@@ -48986,9 +49006,24 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		comment: ''
 %
 
-category: 'components'
+category: 'component structure'
 method: RwDefinedProject
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self _resolvedProject
 		addComponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
@@ -49015,22 +49050,37 @@ addLoadComponentNamed: componentName comment: aString
 	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwDefinedProject
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
+addPackageGroupNamed: aComponentName condition: condition comment: aString
 	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
+		addPackageGroupNamed: aComponentName
+		condition: condition
+		comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'component structure'
 method: RwDefinedProject
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
+addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the package group at each level. The name of each
+		package group is formed using  <componentBasename> and the directory
+		path based on the <pathNameArray>. The name of the first pacakge 
+		group created will be added to the component names of the 
+		<toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self _resolvedProject
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
+		addPackageGroupStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
 		comment: aString
 %
 
@@ -49067,27 +49117,6 @@ addPackagesNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
-	^ self _resolvedProject
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	^ self _resolvedProject
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
 category: 'accessing'
 method: RwDefinedProject
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
@@ -49118,15 +49147,6 @@ category: 'accessing'
 method: RwDefinedProject
 addRawPackageNamed: packageName
 	^ self _resolvedProject addRawPackageNamed: packageName
-%
-
-category: 'components to be cleaned up'
-method: RwDefinedProject
-addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
-	^ self _resolvedProject
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
 %
 
 category: 'components'
@@ -49162,6 +49182,44 @@ addSubcomponentNamed: componentName condition: condition toComponentNamed: toCom
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
 	^ self addSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
+%
+
+category: 'component structure'
+method: RwDefinedProject
+addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:.
+
+	Return the last component created.
+	"
+
+	^ self 
+		addSubcomponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		conditionPathArray: conditionPathArray
+		comment: ''
+%
+
+category: 'component structure'
+method: RwDefinedProject
+addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:comment:.
+
+	Return the last component created.
+	"
+
+	^ self _resolvedProject
+		addSubcomponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		conditionPathArray: conditionPathArray
+		comment: aString
 %
 
 category: 'accessing'
@@ -56833,22 +56891,6 @@ newNamed: aName
 		yourself
 %
 
-category: 'instance creation'
-classmethod: RwAbstractComponent
-newNamed: aName for: projectName
-	"this method should not exist"
-
-	^ (self newNamed: aName)
-		projectName: projectName;
-		yourself
-%
-
-category: 'private'
-classmethod: RwAbstractComponent
-_gemstoneSupportedPackagePropertyNames
-	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
-%
-
 category: 'private'
 classmethod: RwAbstractComponent
 _readStonFrom: stream
@@ -56862,21 +56904,6 @@ _readStonFrom: stream
 %
 
 !		Instance methods for 'RwAbstractComponent'
-
-category: 'comparing'
-method: RwAbstractComponent
-= aRwProjectLoadComponentV2
-	(aRwProjectLoadComponentV2 isKindOf: self class)
-		ifFalse: [ ^ false ].
-	^ ((((self name = aRwProjectLoadComponentV2 name
-		and: [ self comment = aRwProjectLoadComponentV2 comment ])
-		and: [ 
-			self conditionalPackageMapSpecs
-				= aRwProjectLoadComponentV2 conditionalPackageMapSpecs ])
-		and: [ self condition = aRwProjectLoadComponentV2 condition ])
-		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
-		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
-%
 
 category: 'accessing'
 method: RwAbstractComponent
@@ -56906,18 +56933,6 @@ addPackageNames: aPackageNames
 
 category: 'accessing'
 method: RwAbstractComponent
-addProjectNamed: aProjectName
-	self subclassResponsibility: #'addProjectNamed:'
-%
-
-category: 'accessing'
-method: RwAbstractComponent
-basename
-	^ (self name subStrings: $/) last
-%
-
-category: 'accessing'
-method: RwAbstractComponent
 comment
 
    ^comment
@@ -56937,21 +56952,98 @@ componentNames
 	^ componentNames
 %
 
+category: 'initialization'
+method: RwAbstractComponent
+initialize
+	comment := ''.
+	packageNames := {}.
+	componentNames := {}
+%
+
 category: 'accessing'
 method: RwAbstractComponent
+name
+
+   ^name
+%
+
+category: 'initialization'
+method: RwAbstractComponent
+name: anObject
+
+   name := anObject
+%
+
+category: 'accessing'
+method: RwAbstractComponent
+packageNames
+
+	^ packageNames
+%
+
+category: 'printing'
+method: RwAbstractComponent
+printOn: aStream
+	super printOn: aStream.
+	aStream
+		space;
+		nextPutAll: name.
+%
+
+! Class implementation for 'RwAbstractActiveComponent'
+
+!		Class methods for 'RwAbstractActiveComponent'
+
+category: 'private'
+classmethod: RwAbstractActiveComponent
+_gemstoneSupportedPackagePropertyNames
+	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+%
+
+!		Instance methods for 'RwAbstractActiveComponent'
+
+category: 'comparing'
+method: RwAbstractActiveComponent
+= aRwProjectLoadComponentV2
+	(aRwProjectLoadComponentV2 isKindOf: self class)
+		ifFalse: [ ^ false ].
+	^ ((((self name = aRwProjectLoadComponentV2 name
+		and: [ self comment = aRwProjectLoadComponentV2 comment ])
+		and: [ 
+			self conditionalPackageMapSpecs
+				= aRwProjectLoadComponentV2 conditionalPackageMapSpecs ])
+		and: [ self condition = aRwProjectLoadComponentV2 condition ])
+		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
+		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
+%
+
+category: 'accessing'
+method: RwAbstractActiveComponent
+addProjectNamed: aProjectName
+	self subclassResponsibility: #'addProjectNamed:'
+%
+
+category: 'accessing'
+method: RwAbstractActiveComponent
+basename
+	^ (self name subStrings: $/) last
+%
+
+category: 'accessing'
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecs
 
 	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecs: aDictionary
 	conditionalPackageMapSpecs := aDictionary
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
 	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
 
@@ -56959,7 +57051,7 @@ conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecsAtGemStoneUserId: userId 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
@@ -56967,7 +57059,7 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setSymbolDictNameTo: symbolDictName
 	| dict |
 	dict := (((self conditionalPackageMapSpecs
@@ -56983,7 +57075,7 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName s
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setUseSessionMethodsForExtensions: aBool
 	| dict |
 	dict := (((self conditionalPackageMapSpecs
@@ -56999,45 +57091,45 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName s
 %
 
 category: 'private'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 conditionalPropertyMatchers
 	self subclassResponsibility: #'conditionalPropertyMatchers'
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 doitDict
 	^doitDict
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 doitDict: object
 	doitDict := object
 %
 
 category: 'ston'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 excludedInstVars
 	^ #()
 %
 
 category: 'doits'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 executePostloadDoit
 	self postloadDoitName
 		ifNotNil: [ (self doitDict at: self postloadDoitName) evaluate ]
 %
 
 category: 'doits'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 executePreloadDoit
 	self preloadDoitName
 		ifNotNil: [ (self doitDict at: self preloadDoitName) evaluate ]
 %
 
 category: 'exporting'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 exportDoitsToUrl: directoryUrl
 	| doitsRoot url |
 	url := directoryUrl asRwUrl.
@@ -57061,7 +57153,7 @@ exportDoitsToUrl: directoryUrl
 %
 
 category: 'exporting'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 exportToUrl: directoryUrl
 	self exportDoitsToUrl: directoryUrl.
 	^ self copy initializeForExport
@@ -57070,13 +57162,13 @@ exportToUrl: directoryUrl
 %
 
 category: 'testing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 hasDoits
 	^ preloadDoitName notNil or: [ postloadDoitName notNil ]
 %
 
 category: 'comparing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 hash
 	| hashValue |
 	hashValue := self name hash.
@@ -57087,16 +57179,14 @@ hash
 %
 
 category: 'initialization'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 initialize
-	comment := ''.
-	doitDict := Dictionary new.
-	packageNames := {}.
-	componentNames := {}
+	super initialize.
+	doitDict := Dictionary new
 %
 
 category: 'initialization'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
@@ -57126,7 +57216,7 @@ initializeForExport
 %
 
 category: 'initialization'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 initializeForImport
 
 	"if spec has been imported, clear out any of the fields that represent state that should 
@@ -57136,42 +57226,21 @@ initializeForImport
 %
 
 category: 'ston'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 instVarNamesInOrderForSton
 
 	^ self class allInstVarNames
 %
 
 category: 'matching'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 matchesAttributes: attributes
 	self conditionalPropertyMatchers
 		keysAndValuesDo: [ :platformMatchers :ignored | ^ self _platformAttributeMatchIn: platformMatchers for: attributes ]
 %
 
 category: 'accessing'
-method: RwAbstractComponent
-name
-
-   ^name
-%
-
-category: 'initialization'
-method: RwAbstractComponent
-name: anObject
-
-   name := anObject
-%
-
-category: 'accessing'
-method: RwAbstractComponent
-packageNames
-
-	^ packageNames
-%
-
-category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
 	"Answer the collection of package names defined in the receiver."
 
@@ -57190,67 +57259,64 @@ packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 postloadDoitName
 	^postloadDoitName
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 postloadDoitName: object
 	postloadDoitName := object
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 preloadDoitName
 	^preloadDoitName
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 preloadDoitName: object
 	preloadDoitName := object
 %
 
 category: 'printing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 printOn: aStream
 	super printOn: aStream.
-	aStream
-		space;
-		nextPutAll: name.
 	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 projectName
 
    ^projectName
 %
 
 category: 'initialization'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 projectName: anObject
 
    projectName := anObject
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 referencePath
 	^ Path from: self name
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 removeComponentNamed: aComponentName
 	self componentNames remove: aComponentName ifAbsent: [  ]
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 removePackageNamed: aPackageName
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
@@ -57263,13 +57329,13 @@ removePackageNamed: aPackageName
 %
 
 category: 'accessing'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 removeProjectNamed: aProjectName
 	self subclassResponsibility: #'removeProjectNamed:'
 %
 
 category: 'ston'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 stonOn: stonWriter
 	| instanceVariableNames allInstanceVariableNames |
 	instanceVariableNames := self instVarNamesInOrderForSton
@@ -57288,7 +57354,7 @@ stonOn: stonWriter
 %
 
 category: 'validation'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 validate
 	"ensure that the data structures within the receiver contain valid information:
 		1. only packages defined in the receiver may be referenced in the reciever
@@ -57311,7 +57377,7 @@ validate
 %
 
 category: 'private'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _canonicalizeGemStonePackageMapSpecs: userMap
 	| orderedUserMap |
 	orderedUserMap := self class orderedDictionaryClass new.
@@ -57337,7 +57403,7 @@ _canonicalizeGemStonePackageMapSpecs: userMap
 %
 
 category: 'exporting'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _exportToUrl: directoryUrl
 	| url |
 	url := directoryUrl asRwUrl.
@@ -57365,7 +57431,7 @@ _exportToUrl: directoryUrl
 %
 
 category: 'matching'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _platformAttributeMatchIn: platformMatchersList for: attributes
 	platformMatchersList
 		do: [ :platformPatternMatcher | 
@@ -57377,7 +57443,7 @@ _platformAttributeMatchIn: platformMatchersList for: attributes
 %
 
 category: 'private'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _platformPatternMatcherFor: pattern
 
 	" Returns an instance of RwAbstractConfigurationPlatformAttributeMatcher:
@@ -57451,7 +57517,7 @@ _platformPatternMatcherFor: pattern
 %
 
 category: 'doits'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _readDoitsFrom: componentsRoot
 	| fileRef |
 	preloadDoitName
@@ -57474,7 +57540,7 @@ _readDoitsFrom: componentsRoot
 %
 
 category: 'validation'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _validateDoits
 	self preloadDoitName
 		ifNotNil: [ 
@@ -57506,7 +57572,7 @@ _validateDoits
 %
 
 category: 'validation'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _validatedPackageNames
 	"answer the validated set of package names"
 
@@ -57514,7 +57580,7 @@ _validatedPackageNames
 %
 
 category: 'validation'
-method: RwAbstractComponent
+method: RwAbstractActiveComponent
 _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
 	"ensure that the data structures within the receiver contain valid information:
 		1. only packages defined in the receiver may be referenced in the reciever
@@ -57671,7 +57737,7 @@ method: RwSubcomponent
 acceptVisitor: aVisitor
 	^ self
 		error:
-			'nested component cannot be used as a top-level configuration. The receiver is nested inside of top-level components'
+			'Subcomponent cannot be independently loaded. The receiver is nested inside of load components'
 %
 
 category: 'accessing'
@@ -57709,6 +57775,16 @@ method: RwSubcomponent
 initialize
 	super initialize.
 	condition := 'common'.
+%
+
+! Class implementation for 'RwPackageGroup'
+
+!		Instance methods for 'RwPackageGroup'
+
+category: 'visiting'
+method: RwPackageGroup
+acceptNestedVisitor: aVisitor
+	^ aVisitor visitPackageGroupComponent: self
 %
 
 ! Class implementation for 'RwPlatformSubcomponent'
@@ -57986,37 +58062,6 @@ method: RwAbstractProjectComponentVisitorV2
 visitLoadSpecification: aLoadSpecification
 
 	self projectLoadSpecs add: aLoadSpecification
-%
-
-category: 'visiting'
-method: RwAbstractProjectComponentVisitorV2
-visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent
-	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aSimpleProjectLoadComponent.
-
-	aSimpleProjectLoadComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					self
-						_addPackageNames: aSimpleProjectLoadComponent packageNames
-						for: aSimpleProjectLoadComponent.
-					self componentNames addAll: aSimpleProjectLoadComponent componentNames.
-					self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ].
-
-	(self
-		_components: self componentsPath
-		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :component | 
-			(visitedComponentNames includes: component name)
-				ifFalse: [ component acceptNestedVisitor: self ] ].
-
-	(self
-		_projects: self projectsPath
-		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 %
 
 category: 'private'
@@ -62521,12 +62566,6 @@ new
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-addSimpleComponentNamed: aComponentName condition: condition comment: commentString
-	self subclassResponsibility: #'addSimpleComponentNamed:condition:comment:'
-%
-
-category: 'accessing'
-method: RwAbstractResolvedObjectV2
 comment
 	^ self subclassResponsibility: #'comment'
 %
@@ -63340,30 +63379,24 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 		toComponentNamed: toComponentName
 %
 
-category: 'components'
-method: RwResolvedProjectV2
-addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	^ self _projectDefinition
-		addComponentStructureFor: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components'
-method: RwResolvedProjectV2
-addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
-	^ self 
-		addComponentStructureFor: componentBasename
-		startingAtComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components'
+category: 'component structure'
 method: RwResolvedProjectV2
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self _projectDefinition
 		addComponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
@@ -63391,23 +63424,35 @@ addLoadComponentNamed: componentName comment: aString
 	^ self _projectDefinition addLoadComponentNamed: componentName comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwResolvedProjectV2
-addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray
-	^ self
-		addNewComponentNamed: componentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
-		comment: ''
+addPackageGroupNamed: aComponentName condition: condition comment: aString
+	^ self _projectDefinition
+		addPackageGroupNamed: aComponentName condition: condition comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'component structure'
 method: RwResolvedProjectV2
-addNewComponentNamed: componentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
+addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the package group at each level. The name of each
+		package group is formed using  <componentBasename> and the directory
+		path based on the <pathNameArray>. The name of the first pacakge 
+		group created will be added to the component names of the 
+		<toComponentName> component.
+
+	Return the last component created.
+	"
+
 	^ self _projectDefinition
-		addNewComponentNamed: componentName
-		toComponentNamed: toComponentName
-		condition: conditionPathArray
+		addPackageGroupStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
 		comment: aString
 %
 
@@ -63444,37 +63489,6 @@ addPackagesNamed: packageNames toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
-	^ self
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	^ self _projectDefinition
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		condition: conditionArray
-		comment: commentString
-%
-
 category: 'accessing'
 method: RwResolvedProjectV2
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
@@ -63495,9 +63509,9 @@ addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponent
 
 category: 'components'
 method: RwResolvedProjectV2
-addProjectNamed:projectName toComponentNamed: componentName 
+addProjectNamed: projectName toComponentNamed: componentName
 	^ self _projectDefinition
-		addProjectNamed:projectName
+		addProjectNamed: projectName
 		toComponentNamed: componentName
 %
 
@@ -63509,33 +63523,6 @@ addRawPackageNamed: packageName
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _projectDefinition addRawPackageNamed: packageName
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addSimpleComponentNamed: aComponentName comment: commentString
-	^ self _projectDefinition
-		addSimpleComponentNamed: aComponentName
-		condition: 'common'
-		comment: commentString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addSimpleComponentNamed: aComponentName condition: condition comment: commentString
-	^ self _projectDefinition
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
-%
-
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-addSimpleNestedComponentNamed: aComponentName condition: condition  comment: commentString
-	^ self _projectDefinition
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
 %
 
 category: 'components'
@@ -63573,6 +63560,45 @@ addSubcomponentNamed: componentName condition: condition toComponentNamed: toCom
 		condition: condition
 		comment: ''
 		toComponentNamed: toComponentName
+%
+
+category: 'component structure'
+method: RwResolvedProjectV2
+addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:.
+
+	Return the last component created.
+	"
+
+	^ self 
+		addSubcomponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		conditionPathArray: conditionPathArray
+		comment: ''
+%
+
+category: 'component structure'
+method: RwResolvedProjectV2
+addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toComponentName conditionPathArray: conditionPathArray comment: aString
+	"
+	PREFERRED method for adding subcomponent structure following the convention that the directory names reflect the condition names.
+
+	When adding platform component structure, where the condition is an Array instead of a String, use 
+		addComponentStructureFor:startingAtComponentNamed:pathNameArray:conditionPathArray:.
+
+	Return the last component created.
+	"
+
+	^ self 
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: conditionPathArray
+		conditionPathArray: conditionPathArray
+		comment: aString
 %
 
 category: 'components'
@@ -70125,7 +70151,7 @@ acceptNestedVisitor: aVisitor
 category: 'visiting'
 method: RwSimpleProjectLoadComponentV2
 acceptVisitor: aVisitor
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 %
 
 category: 'accessing'
@@ -70197,7 +70223,7 @@ _validatedPackageNames
 category: 'visiting'
 method: RwSimpleNestedProjectLoadComponentV2
 acceptNestedVisitor: aVisitor
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 %
 
 category: 'visiting'
@@ -71439,23 +71465,23 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 
 category: 'components'
 method: RwProjectDefinitionV2
-addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	"assume that componentBasename is a top-level component"
-
-	^ self
-		addComponentStructureFor: componentBasename
-		startingAtComponentNamed: componentBasename
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: aString
-%
-
-category: 'components'
-method: RwProjectDefinitionV2
 addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	"return the path name of the new component"
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the subcomponent at each level. If the condition is an Array
+		a platform subcomponent will be created, otherwise a subcomponent
+		will be created. The name of each subcomponent formed using 
+		<componentBasename> and the directory path based on the <pathNameArray>.
+		The name of the first subcomponent created will be added to the component
+		names of the <toComponentName> component.
 
-	| theComponentName toComponent path compositePath condition |
+	Return the last component created.
+	"
+
+	| theComponentName toComponent path compositePath condition theLastComponent |
 	toComponent := self componentNamed: toComponentName.
 	condition := conditionPathArray last.
 	path := RelativePath withAll: pathNameArray.
@@ -71478,7 +71504,7 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 				toComponent addComponentNamed: intermediateComponentName.
 				newComponent ] ].
 	theComponentName := (path / componentBasename) pathString.
-	condition _isArray
+	theLastComponent := condition _isArray
 		ifTrue: [ 
 			self
 				addPlatformSubcomponentNamed: theComponentName
@@ -71490,7 +71516,7 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 				condition: condition
 				comment: aString ].
 	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
+	^ theLastComponent
 %
 
 category: 'components'
@@ -71515,51 +71541,35 @@ addLoadComponentNamed: aComponentName comment: aString
 				comment: aString ]
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray
-	"return the path name of the new component"
-
-	^ self
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionPathArray
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName condition: conditionPathArray comment: aString
-	"return the path name of the new component"
-
-	^ self
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionPathArray
+addPackageGroupNamed: aComponentName condition: condition comment: aString
+	^ self components
+		addPackageGroupNamed: aComponentName
+		condition: condition
 		comment: aString
 %
 
-category: 'components to be cleaned up'
+category: 'components'
 method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
-	"return the path name of the new component"
+addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
+	"
+	<pathNameArray> and <conditionPathArray> should be of equal size. The 
+		<pathNameArray> lists the names of the directories that will be created 
+		on demand starting in the parent directory of the <toComponentName> 
+		component. <conditionPathArray> lists the conditions that will be used 
+		when creating the package group at each level. The name of each
+		package group is formed using  <componentBasename> and the directory
+		path based on the <pathNameArray>. The name of the first pacakge 
+		group created will be added to the component names of the 
+		<toComponentName> component.
 
-	^ self
-		addNewComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-%
+	Return the last component created.
+	"
 
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	"return the path name of the new component"
-
-	| theComponentName toComponent path compositePath |
+	| theComponentName toComponent path compositePath condition theLastComponent |
 	toComponent := self componentNamed: toComponentName.
+	condition := conditionPathArray last.
 	path := RelativePath withAll: pathNameArray.
 	1 to: pathNameArray size - 1 do: [ :pathIndex | 
 		| segmentName intermediateComponentName |
@@ -71568,33 +71578,24 @@ addNewComponentNamed: aComponentName toComponentNamed: toComponentName pathNameA
 		compositePath := compositePath
 			ifNil: [ Path * segmentName ]
 			ifNotNil: [ compositePath / segmentName ].
-		intermediateComponentName := (compositePath / aComponentName) pathString.
+		intermediateComponentName := (compositePath / componentBasename) pathString.
 		toComponent := self components
 			componentNamed: intermediateComponentName
 			ifAbsent: [ 
 				| newComponent |
-				newComponent := self components
-					addSimpleNestedComponentNamed: intermediateComponentName
+				newComponent := self
+					addSubcomponentNamed: intermediateComponentName
 					condition: (conditionPathArray at: pathIndex)
-					comment: ''.
+					comment: aString.
 				toComponent addComponentNamed: intermediateComponentName.
 				newComponent ] ].
-	theComponentName := (path / aComponentName) pathString.
-	self components
-		addSimpleNestedComponentNamed: theComponentName
-		condition: conditionPathArray last
+	theComponentName := (path / componentBasename) pathString.
+	theLastComponent := self
+		addPackageGroupNamed: theComponentName
+		condition: condition
 		comment: aString.
 	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addNewNestedComponentNamed: aComponentName comment: aString
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: 'common'
-		comment: aString
+	^ theLastComponent
 %
 
 category: 'accessing'
@@ -71677,64 +71678,6 @@ addPackagesNamed: packageNames toComponentNamed: componentName
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
 %
 
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray
-	"return the path name of the new component"
-
-	^ self
-		addPlatformComponentNamed: aComponentName
-		toComponentNamed: toComponentName
-		pathNameArray: pathNameArray
-		conditionPathArray: conditionPathArray
-		comment: ''
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString
-	"return the path name of the new component"
-
-	| theComponentName toComponent path compositePath condition |
-	toComponent := self componentNamed: toComponentName.
-	condition := conditionPathArray last.
-	path := RelativePath withAll: pathNameArray.
-	1 to: pathNameArray size - 1 do: [ :pathIndex | 
-		| segmentName intermediateComponentName |
-		"ensure that we have the appropriate intermediate component structure"
-		segmentName := pathNameArray at: pathIndex.
-		compositePath := compositePath
-			ifNil: [ Path * segmentName ]
-			ifNotNil: [ compositePath / segmentName ].
-		intermediateComponentName := (compositePath / aComponentName) pathString.
-		toComponent := self components
-			componentNamed: intermediateComponentName
-			ifAbsent: [ 
-				| newComponent |
-				newComponent := self components
-					addSimpleNestedComponentNamed: intermediateComponentName
-					condition: (conditionPathArray at: pathIndex)
-					comment: ''.
-				toComponent addComponentNamed: intermediateComponentName.
-				newComponent ] ].
-	theComponentName := (path / aComponentName) pathString.
-	self components
-		addPlatformNestedComponentNamed: theComponentName
-		condition: condition
-		comment: ''.
-	toComponent addComponentNamed: theComponentName.
-	^ theComponentName
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addPlatformNestedComponentNamed: aComponentName condition: conditionArray comment: commentString
-	^ self components
-		addPlatformNestedComponentNamed: aComponentName
-		condition: conditionArray
-		comment: commentString
-%
-
 category: 'components'
 method: RwProjectDefinitionV2
 addPlatformSubcomponentNamed: aComponentName condition: condition comment: aString
@@ -71767,24 +71710,6 @@ addRawPackageNamed: packageName
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addSimpleComponentNamed: aComponentName condition: condition comment: commentString
-	^ self components
-		addSimpleComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
-%
-
-category: 'components to be cleaned up'
-method: RwProjectDefinitionV2
-addSimpleNestedComponentNamed: aComponentName condition: condition comment: commentString
-	^ self components
-		addSimpleNestedComponentNamed: aComponentName
-		condition: condition
-		comment: commentString
 %
 
 category: 'components'
@@ -84471,6 +84396,25 @@ addLoadComponentNamed: aComponentName comment: aString
 	^ component
 %
 
+category: 'components'
+method: RwResolvedLoadComponentsV2
+addPackageGroupNamed: aComponentName condition: aCondition comment: aString
+	| component |
+	self components
+		at: aComponentName
+		ifPresent: [ 
+			self
+				error: 'The component ' , aComponentName printString , ' is already present' ].
+	component := self components
+		at: aComponentName
+		ifAbsentPut: [ RwPackageGroup newNamed: aComponentName ].
+	component
+		comment: aString;
+		condition: aCondition;
+		yourself.
+	^ component
+%
+
 category: 'accessing'
 method: RwResolvedLoadComponentsV2
 addPackageNamed: packageName toComponentNamed: componentName 
@@ -84578,7 +84522,7 @@ addSimpleNestedComponentNamed: aComponentName condition: condition comment: comm
 	| component |
 	self components
 		at: aComponentName
-		ifPresent: [:ignored |
+		ifPresent: [ :ignored | 
 			self
 				error: 'The component ' , aComponentName printString , ' is already present' ].
 	component := self components

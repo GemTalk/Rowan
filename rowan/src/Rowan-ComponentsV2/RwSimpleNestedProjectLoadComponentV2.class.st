@@ -11,7 +11,7 @@ RwSimpleNestedProjectLoadComponentV2 >> _stonReplacementClass [
 
 { #category : 'visiting' }
 RwSimpleNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 ]
 
 { #category : 'visiting' }

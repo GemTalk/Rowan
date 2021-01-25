@@ -3266,69 +3266,80 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
-	"Start with master; create a collection of classes and packages to populate the following categoryGroups: Public, Examples, Tests, Packages; where Packages is a synthetic category group"
+	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
-	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName1d packageGroupName2 packageGroupName3 component2PackageNames component3PackageNames component4PackageNames component1 component2 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroups classMap |
+	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName2 packageGroupName3 packageGroupName4 component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component2 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroups classMap |
 	componentName1 := 'Core'.
 	packageGroupName1a := 'Projects'.
 	packageGroupName1b := 'Definitions'.
-	packageGroupName1c := 'Tools'.
-	packageGroupName1d := 'Loader'.
+	packageGroupName1c := 'Rowan'.
 	packageGroupName2 := 'Examples'.
 	packageGroupName3 := 'Tests'.
+	packageGroupName4 := 'WorkGroup_dkh'.
 
 	component2PackageNames := {(projectName , '-' , componentName1)}.
 
 	packageGroup1 := {packageGroupName1a.
 	packageGroupName1b.
-	packageGroupName1c.
-	packageGroupName1d}.
+	packageGroupName1c}.
 
 	packageGroup2 := {packageGroupName2.
 	packageGroupName3}.
-	packageGroups := packageGroup1 , packageGroup2.
+
+	packageGroup3 := {packageGroupName4}.
+
+	packageGroups := packageGroup1 , packageGroup2 , packageGroup3.
 
 	packageGroup1
 		do: [ :groupName | component2PackageNames add: projectName , '-' , componentName1 , '-' , groupName ].
 	component3PackageNames := {(projectName , '-' , packageGroupName2)}.
 	component4PackageNames := {(projectName , '-' , packageGroupName3)}.
+	component5PackageNames := {(projectName , '-' , componentName1).
+	(projectName , '-' , componentName1 , '-' , packageGroupName1a)}.
 
 	classPrefix := 'Rs9'.
 	classMap := Dictionary new
 		add:
-				'Projects'
+				componentName1
+						->
+							{(RwClassDefinition
+								newForClassNamed: classPrefix , 'Interface'
+								super: 'Object'
+								category: componentName1)};
+		add:
+				packageGroupName1a
 						->
 							{(RwClassDefinition
 								newForClassNamed: classPrefix , 'AbstractProject'
-								super: 'Object'
-								category: 'Projects').
+								super: classPrefix , 'Interface'
+								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'RwAbstractUnloadedProject'
 								super: classPrefix , 'AbstractProject'
-								category: 'Projects').
+								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'ResolvedProject'
 								super: classPrefix , 'RwAbstractUnloadedProject'
-								category: 'Projects').
+								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'DefinedProjects'
 								super: classPrefix , 'RwAbstractUnloadedProject'
-								category: 'Projects').
+								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'Project'
 								super: classPrefix , 'AbstractProject'
-								category: 'Projects')};
-		add: 'Definitions' -> {};
-		add: 'Tools' -> {};
-		add: 'Loader' -> {};
-		add: 'Examples' -> {};
-		add: 'Tests' -> {};
+								category: packageGroupName1a)};
+		add: packageGroupName1b -> {};
+		add: packageGroupName1c -> {};
+		add: packageGroupName2 -> {};
+		add: packageGroupName3 -> {};
+		add: packageGroupName4 -> {};
 		yourself.
 
 	resolvedProject
 		packageConvention: 'Rowan';
 		comment:
-				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group'.
+				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 	resolvedProject _loadSpecification componentNames: {}.
 
 	component1 := resolvedProject
@@ -3364,21 +3375,44 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 
 	packageGroups
 		do: [ :packageGroup | 
-			| packageGroupComponent extraName packageName package |
+			| condition packageGroupComponent extraName package |
+			condition := packageGroup = packageGroupName4
+				ifTrue: [ 'dkh' ]
+				ifFalse: [ 'common' ].
 			packageGroupComponent := resolvedProject
 				addPackageGroupStructureFor: packageGroup
 				startingAtComponentNamed: component1 name
 				pathNameArray: {'groups'}
-				conditionPathArray: {'common'}
+				conditionPathArray: {condition}
 				comment: 'package group for ' , packageGroup.
-			extraName := (packageGroup2 includes: packageGroup)
-				ifTrue: [ '' ]
-				ifFalse: [ '-' , componentName1 ].
-			packageName := projectName , extraName , '-' , packageGroup.
-			packageGroupComponent addPackageNames: {packageName}.
-			package := resolvedProject packageNamed: packageName.
-			(classMap at: packageGroup ifAbsent: [ {} ])
-				do: [ :classDef | package addClassDefinition: classDef ] ].
+			extraName := (packageGroup1 includes: packageGroup)
+				ifTrue: [ '-' , componentName1 ]
+				ifFalse: [ '' ].
+			(packageGroup3 includes: packageGroup)
+				ifTrue: [ 
+					packageGroupComponent addPackageNames: component5PackageNames.
+					component5PackageNames
+						do: [ :packageName | 
+							| classMapKey |
+							package := resolvedProject packageNamed: packageName.
+							classMapKey := packageName
+								copyFrom: (projectName , '-') size + 1
+								to: packageName size.
+							(classMapKey beginsWith: componentName1)
+								ifTrue: [ 
+									"populate Core* packages as other packages are already populated"
+									(classMap at: classMapKey ifAbsent: [ {} ])
+										do: [ :classDef | package addClassDefinition: classDef ] ] ] ]
+				ifFalse: [ 
+					| packageName |
+					"packageGroup3 is the WorkGroup component and the packages involved will be handled separately"
+					packageName := projectName , extraName , '-' , packageGroup.
+					packageGroupComponent addPackageNames: {packageName}.
+					package := resolvedProject packageNamed: packageName.
+					(classMap at: packageGroup ifAbsent: [ {} ])
+						do: [ :classDef | package addClassDefinition: classDef ] ] ].
+
+
 
 	^ resolvedProject
 ]
@@ -6890,7 +6924,7 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
-	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group"
+	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -6901,7 +6935,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 	postfix := '0061'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
-	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Tools, Loader, Examples, Tests, Packages; where Packages is a synthetic package group'.
+	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 
 	indexCard := (self
 		_createCard: postfix
@@ -6919,7 +6953,8 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes:
 				{'tests'.
-					'examples'};
+					'examples'.
+					'dkh'};
 		specComment: title;
 		yourself.
 

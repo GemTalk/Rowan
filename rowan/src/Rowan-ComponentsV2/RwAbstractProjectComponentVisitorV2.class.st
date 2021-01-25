@@ -166,34 +166,3 @@ RwAbstractProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecificatio
 
 	self projectLoadSpecs add: aLoadSpecification
 ]
-
-{ #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitSimpleProjectLoadComponent: aSimpleProjectLoadComponent [
-	(visitedComponentNames includes: aSimpleProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aSimpleProjectLoadComponent.
-
-	aSimpleProjectLoadComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					self
-						_addPackageNames: aSimpleProjectLoadComponent packageNames
-						for: aSimpleProjectLoadComponent.
-					self componentNames addAll: aSimpleProjectLoadComponent componentNames.
-					self projectNames addAll: aSimpleProjectLoadComponent projectNames ] ].
-
-	(self
-		_components: self componentsPath
-		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :component | 
-			(visitedComponentNames includes: component name)
-				ifFalse: [ component acceptNestedVisitor: self ] ].
-
-	(self
-		_projects: self projectsPath
-		forProject: aSimpleProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
-
-]

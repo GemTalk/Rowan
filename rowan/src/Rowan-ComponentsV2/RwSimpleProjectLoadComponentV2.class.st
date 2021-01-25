@@ -33,7 +33,7 @@ RwSimpleProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 
 { #category : 'visiting' }
 RwSimpleProjectLoadComponentV2 >> acceptVisitor: aVisitor [
-	^ aVisitor visitSimpleProjectLoadComponent: self
+	^ aVisitor visitComponent: self
 ]
 
 { #category : 'accessing' }
