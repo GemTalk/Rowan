@@ -237,11 +237,6 @@ RwDefinedProject >> addRawPackageNamed: packageName [
 ]
 
 { #category : 'components' }
-RwDefinedProject >> addSubcomponentNamed: componentName condition: condition [
-	^ self addSubcomponentNamed: componentName condition: condition comment: ''
-]
-
-{ #category : 'components' }
 RwDefinedProject >> addSubcomponentNamed: componentName condition: condition comment: aString [
 	^ self _resolvedProject
 		addSubcomponentNamed: componentName

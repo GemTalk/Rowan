@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'resolvedProject'
 	],
-	#category : 'Rowan-ComponentsV2'
+	#category : 'Rowan-Components'
 }
 
 { #category : 'reading' }
@@ -80,7 +80,7 @@ RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject pl
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: aComponent [
 
-	self projectDefinition addPackages: somePackageNames forComponent: aComponent
+	self resolvedProject addPackages: somePackageNames forComponent: aComponent
 ]
 
 { #category : 'private' }
@@ -139,11 +139,6 @@ RwResolvedProjectComponentVisitorV2 >> componentsPath [
 { #category : 'accessing' }
 RwResolvedProjectComponentVisitorV2 >> packageNames [
 	^ self resolvedProject packageNames
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> projectDefinition [
-	^ self resolvedProject _projectDefinition
 ]
 
 { #category : 'accessing' }

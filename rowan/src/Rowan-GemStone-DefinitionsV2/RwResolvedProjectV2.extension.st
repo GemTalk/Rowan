@@ -35,12 +35,12 @@ RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-	self _projectDefinition gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+	self _projectComponents gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName [
-	self _projectDefinition
+	self _projectComponents
 		gemstoneSetSymbolDictNameForUser: userId
 		to: symbolDictName
 		forPackageNamed: packageName
@@ -48,14 +48,14 @@ RwResolvedProjectV2 >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictNa
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
-	self _projectDefinition
+	self _projectComponents
 		gemstoneSetUseSessionMethodsForExtensions: aBool
 		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
-	self _projectDefinition
+	self _projectComponents
 		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
 		to: aBool
 		forPackageNamed: packageName
@@ -72,7 +72,7 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
 	| resolvedLoadComponents |
 	resolvedLoadComponents := self _projectStructure
-		ifNil: [ self _projectDefinition ]
+		ifNil: [ self _projectComponents ]
 		ifNotNil: [ :structure | structure ].
 	^ resolvedLoadComponents
 		gemstoneSymbolDictNameForPackageNamed: packageName
@@ -80,6 +80,14 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUse
 		ifAbsent: [ 
 			"no entry for this package, use the defaultSymbolDictName"
 			^ self gemstoneDefaultSymbolDictNameForUser: userId ]
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
+	^ self _projectComponents
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: absentBlock
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

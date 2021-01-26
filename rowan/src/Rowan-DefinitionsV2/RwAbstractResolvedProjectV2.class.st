@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwAbstractResolvedObjectV2',
 	#instVars : [
 		'projectDefinition',
-		'projectStructure'
+		'projectStructure',
+		'projectComponents'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
@@ -140,7 +141,7 @@ RwAbstractResolvedProjectV2 >> _validate: platformConfigurationAttributes [
 		responsiblity for them to have valid data"
 
 	super _validate: platformConfigurationAttributes.
-	self _projectDefinition _validate: platformConfigurationAttributes.
+	self _projectDefinition _validate: platformConfigurationAttributes componentPackageNames: (self _projectComponents _validate: platformConfigurationAttributes).
 	^ true
 ]
 

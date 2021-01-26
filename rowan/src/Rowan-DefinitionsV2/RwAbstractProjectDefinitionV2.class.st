@@ -43,17 +43,6 @@ RwAbstractProjectDefinitionV2 >> comment: aString [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName [
-
-	^ self componentNamed: aComponentName ifAbsent: [ self error: 'The component named ', aComponentName printString, ' was not found' ]
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
-	^ self components componentNamed: aComponentName ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> components [
 	^ components
 ]
@@ -139,11 +128,6 @@ RwAbstractProjectDefinitionV2 >> projectDefinitionPlatformConditionalAttributes:
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> removeComponentNamed: aComponentName [
-	^ self components removeComponentNamed: aComponentName
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
 	| key |
 	key := aPackageDefinition key.
@@ -155,11 +139,6 @@ RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackageNamed: packageName [
 	^ self removePackage: (self packageNamed: packageName)
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> removeProjectNamed: aProjectName [
-	^ self components removeProjectNamed: aProjectName
 ]
 
 { #category : 'properties' }

@@ -2862,7 +2862,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 		projectAlias: projectName;
 		revision: 'spec_0052';
 		gitUrl: self projectUrl;
-		componentNames: {componentName};
+		componentNames: {};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		customConditionalAttributes: { 'tests' }
 		yourself.

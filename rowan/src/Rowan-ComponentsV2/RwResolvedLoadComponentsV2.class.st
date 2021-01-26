@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'components'
 	],
-	#category : 'Rowan-Components'
+	#category : 'Rowan-ComponentsV2'
 }
 
 { #category : 'instance creation' }
