@@ -6,6 +6,12 @@ RwProjectTool class >> createV2 [
 ]
 
 { #category : '*rowan-tools-corev2' }
+RwProjectTool class >> installV2 [
+
+	^RwPrjInstallToolV2 new
+]
+
+{ #category : '*rowan-tools-corev2' }
 RwProjectTool class >> loadV2 [
 
 	^RwPrjLoadToolV2 new

@@ -7132,6 +7132,24 @@ removeallclassmethods RwPrjEditTool
 
 doit
 (RwProjectTool
+	subclass: 'RwPrjInstallToolV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-Tools-CoreV2';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPrjInstallToolV2
+removeallclassmethods RwPrjInstallToolV2
+
+doit
+(RwProjectTool
 	subclass: 'RwPrjLoadToolV2'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -58668,7 +58686,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 				platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | resolvedProject components _addComponent: cmp ].
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
 	^ visitor
 %
 
@@ -58780,7 +58798,7 @@ _readComponentsForResolvedProject: aResolvedProject withComponentNames: componen
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 
-	resolvedProject _projectDefinition components: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectComponents: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]
@@ -63459,6 +63477,7 @@ loadSpecification
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectComponents: projectComponents;
 		_projectStructure: projectStructure;
 		yourself
 %
@@ -63510,6 +63529,7 @@ projectDefinition
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectComponents: projectComponents;
 		_projectStructure: projectStructure;
 		yourself
 %
@@ -63522,6 +63542,7 @@ projectSpecification
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectComponents: projectComponents;
 		_projectStructure: projectStructure;
 		yourself
 %
@@ -63534,6 +63555,7 @@ repository
 		_projectRepository: projectRepository;
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
+		_projectComponents: projectComponents;
 		_projectStructure: projectStructure;
 		yourself
 %
@@ -63542,6 +63564,26 @@ category: 'testing'
 method: RwAbstractResolvedProjectV2
 repositoryExists
 	^ self _projectRepository repositoryExists
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectComponents
+	"project components should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents ]
+		ifFalse: [ self _projectDefinition components ]
+%
+
+category: 'private'
+method: RwAbstractResolvedProjectV2
+_projectComponents: object
+	"project components should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents := object ]
+		ifFalse: [ self _projectDefinition components: object ]
 %
 
 category: 'private'
@@ -63663,7 +63705,9 @@ method: RwAbstractResolvedProjectV2
 _projectStructure
 	"project structure should not be accessed directly -- Rowan private state"
 
-	^ projectStructure
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents ifNil: [ projectStructure ] ]
+		ifFalse: [ projectStructure ]
 %
 
 category: 'private'
@@ -63671,7 +63715,13 @@ method: RwAbstractResolvedProjectV2
 _projectStructure: object
 	"project structure should not be accessed directly -- Rowan private state"
 
-	projectStructure := object
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ 
+			object
+				ifNotNil: [ :obj | 
+					"work around current ambiguity of _projectStructure: where projectStructure forced to nil"
+					projectComponents := obj ] ]
+		ifFalse: [ projectStructure := object ]
 %
 
 category: 'private'
@@ -63841,7 +63891,10 @@ basicLoadSpecification: anRwLoadSpecificationV2
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| loadSpecification projectDefinition |
+	| loadSpecification projectDefinition pdComponents rpComponents |
+	self _defaultUseNewProjectComponentClass
+		ifTrue: [ rpComponents := RwResolvedLoadComponentsV2 new ]
+		ifFalse: [ pdComponents := RwResolvedLoadComponentsV2 new ].
 	loadSpecification := anRwLoadSpecificationV2 copy.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
@@ -63849,11 +63902,13 @@ basicLoadSpecification: anRwLoadSpecificationV2
 						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
-		components: RwResolvedLoadComponentsV2 new;
-		projectDefinitionSourceProperty: RwLoadedProject _projectModifiedProjectSourceValue;
+		components: pdComponents;
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectModifiedProjectSourceValue;
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
+		_projectComponents: rpComponents;
 		_loadSpecification: loadSpecification;
 		yourself
 %
@@ -63904,6 +63959,12 @@ loadSpecificationProjectSet: anRwLoadSpecificationV2 platformAttributes: platfor
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
 		resolveProjectSet: platformAttributes
+%
+
+category: 'private'
+classmethod: RwResolvedProjectV2
+_defaultUseNewProjectComponentClass
+^true
 %
 
 !		Instance methods for 'RwResolvedProjectV2'
@@ -65292,7 +65353,7 @@ _checkProjectDirectoryStructure
 category: 'private'
 method: RwResolvedProjectV2
 _defaultUseNewProjectComponentClass
-^true
+^self class _defaultUseNewProjectComponentClass
 %
 
 category: 'private'
@@ -65300,46 +65361,6 @@ method: RwResolvedProjectV2
 _loadTool
 
 	^ self _projectDefinition _loadTool
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_projectComponents
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ self _projectDefinition components ]
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_projectComponents: object
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ self _projectDefinition components: object ]
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_projectStructure
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ projectStructure ]
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_projectStructure: object
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ projectStructure := object ]
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -69305,6 +69326,126 @@ updateOrAddClass: classDefinition inPackageNamed: packageName inProject: project
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition updateClassDefinition: classDefinition.
 	^ projectDefinition
+%
+
+! Class implementation for 'RwPrjInstallToolV2'
+
+!		Instance methods for 'RwPrjInstallToolV2'
+
+category: 'bootstrap installation'
+method: RwPrjInstallToolV2
+install_3_RowanV2
+	| projectSetDefinition auditFailures reAudit theProjectSetDefinition |
+	Rowan projectTools trace
+		startTracing;
+		trace: '--- installing install_3_RowanV2.tpz'.
+	{{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
+	'$ROWAN_PROJECTS_HOME'}}
+		do: [ :ar | 
+			| specUrl "Load project and packages from disk" projectsHome loadSpec resolvedProject |
+			specUrl := ar at: 1.
+			projectsHome := ar at: 2.
+			loadSpec := RwSpecification fromUrl: specUrl.
+			resolvedProject := loadSpec
+				projectsHome: projectsHome;
+				resolve.
+			projectSetDefinition := resolvedProject readProjectSet ].
+
+	theProjectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition projects
+		do: [ :resolvedProject | 
+			| resolvedProject_copy projectDefinition |
+			"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
+			resolvedProject_copy := resolvedProject copyForLoadedProject.
+			projectDefinition := resolvedProject _projectDefinition copy.
+			(UserGlobals
+				at: #'USE_NEW_PROJECT_COMPONENT_CLASS'
+				ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+				ifTrue: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ]
+				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectStructure ].
+			resolvedProject_copy
+				_projectDefinition: projectDefinition;
+				_projectStructure: nil;
+				yourself.	"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
+			GsFile stdout
+				nextPutAll: 'Project: ' , resolvedProject_copy name;
+				lf.
+			resolvedProject_copy packageNames
+				do: [ :packageName | 
+					GsFile stdout
+						nextPutAll: '	' , packageName;
+						lf.
+					(resolvedProject_copy packageNamed: packageName)
+						classDefinitions: Dictionary new;
+						classExtensions: Dictionary new;
+						yourself ].
+			theProjectSetDefinition addProject: resolvedProject_copy ].	"Load the project shell -- project and empty packages"
+	Rowan projectTools loadV2 loadProjectSetDefinition: theProjectSetDefinition.
+	SessionTemps current removeKey: #'ROWAN_TRACE' ifAbsent: [  ].	"end logging to topaz output file"	"Adopt the project set definition ... 
+		Log and ignore any missing method or missing classes encountered as they may not be
+		present in the .gs bootstrap file for the proejct ... The will be created when we
+		reload the project a little bit later on."
+	[ Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
+		on:
+			RwAdoptMissingMethodErrorNotification , RwAdoptMissingClassErrorNotification
+		do: [ :ex | 
+			ex
+				methodErrorDo: [ 
+					GsFile
+						gciLogServer:
+							'Missing loaded method ' , ex methodPrintString
+								, ' encountered during adopt ... IGNORED' ]
+				classErrorDo: [ 
+					GsFile
+						gciLogServer:
+							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
+			ex resume: nil ].
+
+	projectSetDefinition deriveLoadedThings
+		do: [ :loadedProject | 
+			"mark projects and packages not dirty"
+			loadedProject markNotDirty.
+			loadedProject loadedPackages
+				valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ].
+
+	reAudit := true.	"kick off the first audit"
+	[ reAudit ]
+		whileTrue: [ 
+			auditFailures := {}.
+			reAudit := false.
+			projectSetDefinition projects
+				do: [ :projectDefinition | 
+					| audit projectName |
+					projectName := projectDefinition name.
+					[ audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+						on: RwAuditMethodErrorNotification
+						do: [ :ex | 
+							| beh |
+							GsFile
+								gciLogServer:
+									'extra unpackaged method ' , ex methodPrintString
+										, ' encountered during audit ... REMOVED (audit will be rerun)'.	"method is not present in the current package structure, so it should be removed"
+							beh := Rowan globalNamed: ex className.
+							ex isMetaclass
+								ifTrue: [ beh := beh class ].
+							beh removeSelector: ex selector.	"don't record as an audit error, but make sure that we rerun the audit"
+							reAudit := true.
+							ex resume: false ].
+					GsFile gciLogServer: '	-- audit finished '.
+					audit isEmpty
+						ifFalse: [ 
+							reAudit := false.	"we must have had an audit failure that was not handled"
+							GsFile gciLogServer: 'FAILED AUDIT: ' , projectName.
+							auditFailures add: projectName ] ].
+			reAudit
+				ifTrue: [ GsFile gciLogServer: 'RERUN AUDIT' ] ].
+	auditFailures isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'Post load Rowan audit failed for projects ' , auditFailures printString ]
 %
 
 ! Class implementation for 'RwPrjLoadToolV2'
@@ -99013,6 +99154,13 @@ category: '*rowan-tools-examples'
 classmethod: RwProjectTool
 examples
 	^ RwExamplesTool
+%
+
+category: '*rowan-tools-corev2'
+classmethod: RwProjectTool
+installV2
+
+	^RwPrjInstallToolV2 new
 %
 
 category: '*rowan-tools-onlyv2'

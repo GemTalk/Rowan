@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
+{ #category : 'private' }
+RwResolvedProjectV2 class >> _defaultUseNewProjectComponentClass [
+^true
+]
+
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -11,7 +16,10 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| loadSpecification projectDefinition |
+	| loadSpecification projectDefinition pdComponents rpComponents |
+	self _defaultUseNewProjectComponentClass
+		ifTrue: [ rpComponents := RwResolvedLoadComponentsV2 new ]
+		ifFalse: [ pdComponents := RwResolvedLoadComponentsV2 new ].
 	loadSpecification := anRwLoadSpecificationV2 copy.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
@@ -19,11 +27,13 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
-		components: RwResolvedLoadComponentsV2 new;
-		projectDefinitionSourceProperty: RwLoadedProject _projectModifiedProjectSourceValue;
+		components: pdComponents;
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectModifiedProjectSourceValue;
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
+		_projectComponents: rpComponents;
 		_loadSpecification: loadSpecification;
 		yourself
 ]
@@ -89,50 +99,14 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 ]
 
 { #category : 'private' }
+RwResolvedProjectV2 >> _defaultUseNewProjectComponentClass [
+^self class _defaultUseNewProjectComponentClass
+]
+
+{ #category : 'private' }
 RwResolvedProjectV2 >> _loadTool [
 
 	^ self _projectDefinition _loadTool
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _defaultUseNewProjectComponentClass [
-^true
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _projectComponents [
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ self _projectDefinition components ]
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _projectComponents: object [
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ self _projectDefinition components: object ]
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _projectStructure [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ projectStructure ]
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _projectStructure: object [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ projectStructure := object ]
 ]
 
 { #category : 'visiting' }

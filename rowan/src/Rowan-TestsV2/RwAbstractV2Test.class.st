@@ -115,7 +115,7 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 		addInstanceMethod: 'shared ^''shared'''
 			protocol: 'accessing';
 		yourself.
-	resolvedProject components do: [ :component | self assert: component validate ].
+	resolvedProject _projectComponents do: [ :component | self assert: component validate ].
 	self assert: resolvedProject _validate.
 	^ resolvedProject
 ]
