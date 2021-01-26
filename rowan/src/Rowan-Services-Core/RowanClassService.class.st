@@ -79,6 +79,16 @@ RowanClassService class >> forClassNamed: className package: packageName [
 
 ]
 
+{ #category : 'sparkle' }
+RowanClassService class >> instantiateFromSparkle: sparkleService [
+	"very simple instantiation from a sparkle blob - test commit"
+
+	| service |
+	service := super instantiateFromSparkle: sparkleService.
+	service meta: (sparkleService blobPropertyNamed: #'meta').
+	^ service
+]
+
 { #category : 'instance creation' }
 RowanClassService class >> minimalForClassNamed: className [ 
 	"Don't get method services. Efficient for classes with many methods"
