@@ -64603,7 +64603,7 @@ method: RwResolvedProjectV2
 components
 	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents ]
 		ifFalse: [ self _projectDefinition components ]
 %
@@ -64625,7 +64625,7 @@ copyForLoadedProject
 		_loadSpecification: loadSpecification copy;
 		_projectSpecification: projectSpecification copy;
 		yourself.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
 		ifFalse: [ copy _projectStructure: self _projectComponents copy ].
 	^ copy
@@ -64800,7 +64800,7 @@ initialize
 
 	super initialize.
 	projectDefinition := RwProjectDefinitionV2 new.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
 %
 
@@ -65483,6 +65483,12 @@ _checkProjectDirectoryStructure
 
 category: 'private'
 method: RwResolvedProjectV2
+_defaultUseNewProjectComponentClass
+^true
+%
+
+category: 'private'
+method: RwResolvedProjectV2
 _loadTool
 
 	^ self _projectDefinition _loadTool
@@ -65493,7 +65499,7 @@ method: RwResolvedProjectV2
 _projectComponents
 	"project components should not be accessed directly -- Rowan private state"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents ]
 		ifFalse: [ self _projectDefinition components ]
 %
@@ -65503,7 +65509,29 @@ method: RwResolvedProjectV2
 _projectComponents: object
 	"project components should not be accessed directly -- Rowan private state"
 
-	projectComponents := object
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents := object ]
+		ifFalse: [ self _projectDefinition components: object ]
+%
+
+category: 'private'
+method: RwResolvedProjectV2
+_projectStructure
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents ]
+		ifFalse: [ projectStructure ]
+%
+
+category: 'private'
+method: RwResolvedProjectV2
+_projectStructure: object
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents := object ]
+		ifFalse: [ projectStructure := object ]
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -98842,7 +98870,7 @@ _adoptProjectProjectsInProjectSet: projectSetDefinition
 			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
-			projectDefinition components: resolvedProject_copy _projectStructure.
+			resolvedProject _projectComponents: resolvedProject_copy _projectStructure.
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
 				_projectStructure: nil;

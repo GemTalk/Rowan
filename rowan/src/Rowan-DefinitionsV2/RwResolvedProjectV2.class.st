@@ -95,10 +95,15 @@ RwResolvedProjectV2 >> _loadTool [
 ]
 
 { #category : 'private' }
+RwResolvedProjectV2 >> _defaultUseNewProjectComponentClass [
+^true
+]
+
+{ #category : 'private' }
 RwResolvedProjectV2 >> _projectComponents [
 	"project components should not be accessed directly -- Rowan private state"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents ]
 		ifFalse: [ self _projectDefinition components ]
 ]
@@ -107,7 +112,27 @@ RwResolvedProjectV2 >> _projectComponents [
 RwResolvedProjectV2 >> _projectComponents: object [
 	"project components should not be accessed directly -- Rowan private state"
 
-	projectComponents := object
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents := object ]
+		ifFalse: [ self _projectDefinition components: object ]
+]
+
+{ #category : 'private' }
+RwResolvedProjectV2 >> _projectStructure [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents ]
+		ifFalse: [ projectStructure ]
+]
+
+{ #category : 'private' }
+RwResolvedProjectV2 >> _projectStructure: object [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents := object ]
+		ifFalse: [ projectStructure := object ]
 ]
 
 { #category : 'visiting' }
@@ -577,7 +602,7 @@ RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 RwResolvedProjectV2 >> components [
 	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents ]
 		ifFalse: [ self _projectDefinition components ]
 ]
@@ -597,7 +622,7 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		_loadSpecification: loadSpecification copy;
 		_projectSpecification: projectSpecification copy;
 		yourself.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
 		ifFalse: [ copy _projectStructure: self _projectComponents copy ].
 	^ copy
@@ -757,7 +782,7 @@ RwResolvedProjectV2 >> initialize [
 
 	super initialize.
 	projectDefinition := RwProjectDefinitionV2 new.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ false ])
+	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
 ]
 

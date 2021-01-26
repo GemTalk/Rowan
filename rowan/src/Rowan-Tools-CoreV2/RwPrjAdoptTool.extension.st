@@ -16,7 +16,7 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
-			projectDefinition components: resolvedProject_copy _projectStructure.
+			resolvedProject _projectComponents: resolvedProject_copy _projectStructure.
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
 				_projectStructure: nil;
