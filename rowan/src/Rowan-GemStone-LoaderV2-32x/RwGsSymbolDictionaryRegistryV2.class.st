@@ -1,6 +1,15 @@
-Extension { #name : 'RwGsSymbolDictionaryRegistryV2' }
+Class {
+	#name : 'RwGsSymbolDictionaryRegistryV2',
+	#superclass : 'Object',
+	#instVars : [
+		'symbolDictionary',
+		'packageRegistry',
+		'methodRegistry'
+	],
+	#category : 'Rowan-GemStone-LoaderV2-32x'
+}
 
-{ #category : '*rowan-gemstone-loaderv2-32x' }
+{ #category : 'package adopt' }
 RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName [
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
 	classExtension
@@ -53,3 +62,23 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
 	loadedClassOrExtension addLoadedMethod: loadedMethod
 ]
+
+{ #category : 'initialization' }
+RwGsSymbolDictionaryRegistryV2 >> initialize [
+
+	| symbolDictObjectSecurityPolicy |
+	packageRegistry := KeyValueDictionary new.	"keyed by package name"
+	methodRegistry := IdentityKeyValueDictionary new.       "keyed by compiledMethod"
+
+	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
+	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+]
+
+{ #category : 'accessing' }
+RwGsSymbolDictionaryRegistryV2 >> methodRegistry [
+
+	^ methodRegistry
+
+]
+

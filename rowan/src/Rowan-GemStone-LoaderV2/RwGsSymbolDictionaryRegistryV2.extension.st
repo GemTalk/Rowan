@@ -1,27 +1,18 @@
-Class {
-	#name : 'RwGsSymbolDictionaryRegistryV2',
-	#superclass : 'Object',
-	#instVars : [
-		'symbolDictionary',
-		'packageRegistry',
-		'methodRegistry'
-	],
-	#category : 'Rowan-GemStone-LoaderV2'
-}
+Extension { #name : 'RwGsSymbolDictionaryRegistryV2' }
 
-{ #category : 'accessing' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
 ]
 
-{ #category : 'installation' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 class >> globalSymbol [
 
 	^ #'RwSymbolDictionaryRegistry'
 ]
 
-{ #category : 'installation' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 class >> installIn: aSymbolDictionary [
 
 	| registry |
@@ -30,7 +21,7 @@ RwGsSymbolDictionaryRegistryV2 class >> installIn: aSymbolDictionary [
 	^ registry
 ]
 
-{ #category : 'instance creation' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 class >> newForSymbolDictionary: aSymbolDictionary [
 
 	^ self new
@@ -40,14 +31,14 @@ RwGsSymbolDictionaryRegistryV2 class >> newForSymbolDictionary: aSymbolDictionar
 
 ]
 
-{ #category : 'accessing' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 class >> registry_ImplementationClass [
 
 	^ RwGsSymbolDictionaryRegistry_ImplementationV2
 
 ]
 
-{ #category : 'method - private api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
 
 	"remove a compiled method from loaded things"
@@ -56,7 +47,7 @@ RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compi
 
 ]
 
-{ #category : 'method - private api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior implementationClass: implementationClass [
 
 	"remove a compiled method from loaded things"
@@ -67,7 +58,7 @@ RwGsSymbolDictionaryRegistryV2 >> _doDeleteCompiledMethodFromLoadedThings: compi
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
 
 	self
@@ -80,7 +71,7 @@ RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVers
 						, ' is not identical to the given class' ]
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
 
 	| loadedClass classKey |
@@ -106,19 +97,19 @@ RwGsSymbolDictionaryRegistryV2 >> _loadedClassFor: class noNewVersion: noNewVers
 				, classKey asString printString
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _symbolDictionary [
 
 	^ symbolDictionary
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _symbolDictionary: aSymbolDictionary [
 
 	symbolDictionary := aSymbolDictionary
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: aKey ifPresent: oneArgBlock [
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer nil."
@@ -129,7 +120,7 @@ RwGsSymbolDictionaryRegistryV2 >> _symbolDictionaryAssociationAt: aKey ifPresent
 	^ nil
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toPackageNamed: packageName [
 
 	"Copy the name association to the correct 
@@ -140,7 +131,7 @@ RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toP
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Copy the name association to the correct 
@@ -153,14 +144,14 @@ RwGsSymbolDictionaryRegistryV2 >> addClassAssociation: assoc forClass: class toP
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -169,7 +160,7 @@ RwGsSymbolDictionaryRegistryV2 >> addExtensionCompiledMethod: compiledMethod for
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass [
 
 	"expecting only a single method to be in methDict/catDict"
@@ -180,7 +171,7 @@ RwGsSymbolDictionaryRegistryV2 >> addExtensionSessionMethods: methDict catDict: 
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldClassVersion: oldClass [
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -190,7 +181,7 @@ RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldC
 		instance: self
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldClassVersion: oldClass implementationClass: implementationClass [
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -202,14 +193,14 @@ RwGsSymbolDictionaryRegistryV2 >> addNewClassVersionToAssociation: newClass oldC
 		instance: self
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -218,7 +209,7 @@ RwGsSymbolDictionaryRegistryV2 >> addNewCompiledMethod: compiledMethod for: beha
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName implementationClass: implementationClass [
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -231,7 +222,7 @@ RwGsSymbolDictionaryRegistryV2 >> addNewUnmanagedClassVersionToAssociation: newC
 		instance: self
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
@@ -240,7 +231,7 @@ RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod [
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod implementationClass: implementationClass [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
@@ -251,7 +242,7 @@ RwGsSymbolDictionaryRegistryV2 >> addRecompiledMethod: newCompiledMethod impleme
 
 ]
 
-{ #category : 'private' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass [
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
@@ -262,7 +253,7 @@ RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledM
 
 ]
 
-{ #category : 'package - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -271,7 +262,7 @@ RwGsSymbolDictionaryRegistryV2 >> createLoadedPackageFromDefinition: packageDefi
 
 ]
 
-{ #category : 'class - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
@@ -280,7 +271,7 @@ RwGsSymbolDictionaryRegistryV2 >> deleteClassFromPackage: class [
 
 ]
 
-{ #category : 'class - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> deleteClassNamedFromPackage: className implementationClass: implementationClass [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
@@ -291,7 +282,7 @@ RwGsSymbolDictionaryRegistryV2 >> deleteClassNamedFromPackage: className impleme
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: behavior [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
@@ -300,7 +291,7 @@ RwGsSymbolDictionaryRegistryV2 >> deleteCompiledMethod: compiledMethod from: beh
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -309,14 +300,14 @@ RwGsSymbolDictionaryRegistryV2 >> deleteMethod: selector for: behavior implement
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> deletePackage: packageName [
 
 	^  self class registry_ImplementationClass deletePackage: packageName instance: self
 
 ]
 
-{ #category : 'class disown api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> disownClass: class [
 
 	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
@@ -325,7 +316,7 @@ RwGsSymbolDictionaryRegistryV2 >> disownClass: class [
 
 ]
 
-{ #category : 'class disown api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> disownClassExtensions: class forLoadedPackage: loadedPackage [
 
 	"Remove the extension methods in the named class for the named package"
@@ -334,7 +325,7 @@ RwGsSymbolDictionaryRegistryV2 >> disownClassExtensions: class forLoadedPackage:
 
 ]
 
-{ #category : 'class - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"
@@ -343,7 +334,7 @@ RwGsSymbolDictionaryRegistryV2 >> ensureExtensionClassNamed: className existsFor
 
 ]
 
-{ #category : 'loaded queries' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass [
 
 	"Answer the registered LoadedClass for the given class."
@@ -353,7 +344,7 @@ RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass [
 		ifAbsent: [ self error: 'no loaded class found for ' , aClass name printString ]
 ]
 
-{ #category : 'loaded queries' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass ifAbsent: absentBlock [
 
 	"Answer the registered LoadedClass for the given class."
@@ -361,7 +352,7 @@ RwGsSymbolDictionaryRegistryV2 >> existingForClass: aClass ifAbsent: absentBlock
 	^ self loadedClassForClass: aClass ifAbsent: absentBlock
 ]
 
-{ #category : 'session methods' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> homeSessionMethods [
 
 	| package |
@@ -370,61 +361,41 @@ RwGsSymbolDictionaryRegistryV2 >> homeSessionMethods [
 	^ package
 ]
 
-{ #category : 'initialization' }
-RwGsSymbolDictionaryRegistryV2 >> initialize [
-
-	| symbolDictObjectSecurityPolicy |
-	packageRegistry := KeyValueDictionary new.	"keyed by package name"
-	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
-
-	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
-	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
-
-]
-
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass [
 	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
 	^ self class registry_ImplementationClass loadedClassExtensionsForClass: aClass ifAbsent: absentBlock
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass [
 	^ self class registry_ImplementationClass loadedClassForClass: aClass
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedClassForClass: aClass ifAbsent: absentBlock [
 	^ self class registry_ImplementationClass loadedClassForClass: aClass ifAbsent: absentBlock
 ]
 
-{ #category : 'loaded queries' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
 
 	^ self class registry_ImplementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
 
 ]
 
-{ #category : 'loaded queries' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ self class registry_ImplementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
 
 ]
 
-{ #category : 'accessing' }
-RwGsSymbolDictionaryRegistryV2 >> methodRegistry [
-
-   ^methodRegistry
-
-]
-
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
 	"move a compiled method into a different protocol and update loaded things"
@@ -433,7 +404,7 @@ RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol:
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol: newProtocol implementationClass: implementationClass [
 
 	"move a compiled method into a different protocol and update loaded things"
@@ -444,7 +415,7 @@ RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol:
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions [
 	^ self class registry_ImplementationClass
 		movePackage: packageName
@@ -453,34 +424,34 @@ RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryN
 		instance: self
 ]
 
-{ #category : 'accessing' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 
    ^packageRegistry
 
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' } 
 RwGsSymbolDictionaryRegistryV2 >> registerLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> registerLoadedClassExtension: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' } 
 RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
 ]
 
-{ #category : 'class - registration' }
+{ #category : '*rowan-gemstone-loaderV2' } 
 RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 ]
 
-{ #category : 'class - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class [
 
 	"class properties have changed, update the clas properties of the loaded things"
@@ -489,7 +460,7 @@ RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class [
 
 ]
 
-{ #category : 'class - patch api' }
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> updateClassProperties: class  implementationClass: implementationClass [
 
 	"class properties have changed, update the clas properties of the loaded things"
