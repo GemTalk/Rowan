@@ -71842,7 +71842,8 @@ projectName: aString
 category: 'accessing'
 method: RwProjectDefinitionV2
 removePackage: aPackageDefinition
-	self components removePackageNamed: aPackageDefinition name.
+	self components 
+		ifNotNil: [:theComponents | theComponents removePackageNamed: aPackageDefinition name ].
 	^ super removePackage: aPackageDefinition
 %
 
