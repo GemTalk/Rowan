@@ -35,14 +35,10 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 with _projectComponents copyForLoadedProject is less destructive ... I think"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
-			(UserGlobals
-				at: #'USE_NEW_PROJECT_COMPONENT_CLASS'
-				ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-				ifTrue: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ]
-				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ].
+			resolvedProject _projectComponents: resolvedProject_copy _projectComponents.
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
-				yourself.
+				yourself.	
 "FIX_ME end"
 			GsFile stdout
 				nextPutAll: 'Project: ' , resolvedProject_copy name;

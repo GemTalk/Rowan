@@ -4,11 +4,6 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'private' }
-RwResolvedProjectV2 class >> _defaultUseNewProjectComponentClass [
-^true
-]
-
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -92,11 +87,6 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 			fileRef exists
 				ifFalse: [ ^ false ] ].
 	^ true
-]
-
-{ #category : 'private' }
-RwResolvedProjectV2 >> _defaultUseNewProjectComponentClass [
-^self class _defaultUseNewProjectComponentClass
 ]
 
 { #category : 'visiting' }
@@ -571,16 +561,12 @@ RwResolvedProjectV2 >> componentsWithDoits [
 RwResolvedProjectV2 >> copyForLoadedProject [
 	"project definition is not part of the copy for loaded projects"
 
-	| copy |
-	copy := RwResolvedProjectV2 new
+	^ RwResolvedProjectV2 new
 		_projectRepository: projectRepository copy;
 		_loadSpecification: loadSpecification copy;
 		_projectSpecification: projectSpecification copy;
-		yourself.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
-		ifFalse: [ copy _projectComponents: self _projectComponents copy ].
-	^ copy
+		_projectComponents: projectComponents copy;
+		yourself
 ]
 
 { #category : 'actions' }

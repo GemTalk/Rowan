@@ -64090,12 +64090,6 @@ loadSpecificationProjectSet: anRwLoadSpecificationV2 platformAttributes: platfor
 		resolveProjectSet: platformAttributes
 %
 
-category: 'private'
-classmethod: RwResolvedProjectV2
-_defaultUseNewProjectComponentClass
-^true
-%
-
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -64607,16 +64601,12 @@ method: RwResolvedProjectV2
 copyForLoadedProject
 	"project definition is not part of the copy for loaded projects"
 
-	| copy |
-	copy := RwResolvedProjectV2 new
+	^ RwResolvedProjectV2 new
 		_projectRepository: projectRepository copy;
 		_loadSpecification: loadSpecification copy;
 		_projectSpecification: projectSpecification copy;
-		yourself.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
-		ifFalse: [ copy _projectComponents: self _projectComponents copy ].
-	^ copy
+		_projectComponents: projectComponents copy;
+		yourself
 %
 
 category: 'actions'
@@ -65466,12 +65456,6 @@ _checkProjectDirectoryStructure
 			fileRef exists
 				ifFalse: [ ^ false ] ].
 	^ true
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_defaultUseNewProjectComponentClass
-^self class _defaultUseNewProjectComponentClass
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -69475,14 +69459,10 @@ install_3_RowanV2
 with _projectComponents copyForLoadedProject is less destructive ... I think"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
-			(UserGlobals
-				at: #'USE_NEW_PROJECT_COMPONENT_CLASS'
-				ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-				ifTrue: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ]
-				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ].
+			resolvedProject _projectComponents: resolvedProject_copy _projectComponents.
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
-				yourself.
+				yourself.	
 "FIX_ME end"
 			GsFile stdout
 				nextPutAll: 'Project: ' , resolvedProject_copy name;
