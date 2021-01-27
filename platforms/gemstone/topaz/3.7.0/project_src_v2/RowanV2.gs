@@ -6444,7 +6444,7 @@ removeallclassmethods RwAbstractResolvedObjectV2
 doit
 (RwAbstractResolvedObjectV2
 	subclass: 'RwAbstractResolvedProjectV2'
-	instVarNames: #( projectDefinition projectStructure projectComponents )
+	instVarNames: #( projectDefinition projectComponents )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -62912,7 +62912,6 @@ loadSpecification
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 %
 
@@ -62952,7 +62951,7 @@ method: RwAbstractResolvedProjectV2
 postCopy
 	super postCopy.
 	projectDefinition := projectDefinition copy.
-	projectStructure := projectStructure copy
+	projectComponents := projectComponents copy
 %
 
 category: 'accessing'
@@ -62964,7 +62963,6 @@ projectDefinition
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 %
 
@@ -62977,7 +62975,6 @@ projectSpecification
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 %
 
@@ -62990,7 +62987,6 @@ repository
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 %
 
@@ -63128,30 +63124,6 @@ _projectRepository
 																				projectsHome: nil
 																				repositoryUrl: nil ] ] ] ] ] ] ] ].
 			projectRepository ]
-%
-
-category: 'private'
-method: RwAbstractResolvedProjectV2
-_projectStructure
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ifNil: [ projectStructure ] ]
-		ifFalse: [ projectStructure ]
-%
-
-category: 'private'
-method: RwAbstractResolvedProjectV2
-_projectStructure: object
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ 
-			object
-				ifNotNil: [ :obj | 
-					"work around current ambiguity of _projectStructure: where projectStructure forced to nil"
-					projectComponents := obj ] ]
-		ifFalse: [ projectStructure := object ]
 %
 
 category: 'private'
@@ -63893,14 +63865,6 @@ componentNamed: aComponentName ifAbsent: absentBlock
 	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock
 %
 
-category: 'components to be cleaned up'
-method: RwResolvedProjectV2
-components
-	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
-
-	^ projectComponents
-%
-
 category: 'accessing'
 method: RwResolvedProjectV2
 componentsWithDoits
@@ -63920,7 +63884,7 @@ copyForLoadedProject
 		yourself.
 	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
-		ifFalse: [ copy _projectStructure: self _projectComponents copy ].
+		ifFalse: [ copy _projectComponents: self _projectComponents copy ].
 	^ copy
 %
 
@@ -64093,8 +64057,7 @@ initialize
 
 	super initialize.
 	projectDefinition := RwProjectDefinition new.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
+	projectComponents := RwResolvedProjectComponentsV2 new
 %
 
 category: 'project definition'
@@ -68774,23 +68737,28 @@ install_3_RowanV2
 			| resolvedProject_copy projectDefinition |
 			"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
-			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
+			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive FIX_ME - I think the following should look like this now:
+
+			resolvedProject_copy := resolvedProject copyForLoadedProject.
+
+with _projectComponents copyForLoadedProject is less destructive ... I think"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
 			(UserGlobals
 				at: #'USE_NEW_PROJECT_COMPONENT_CLASS'
 				ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
 				ifTrue: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ]
-				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectStructure ].
+				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ].
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
-				_projectStructure: nil;
-				yourself.	"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
+				yourself.
+"FIX_ME end"
 			GsFile stdout
 				nextPutAll: 'Project: ' , resolvedProject_copy name;
 				lf.
 			resolvedProject_copy packageNames
 				do: [ :packageName | 
+					"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
 					GsFile stdout
 						nextPutAll: '	' , packageName;
 						lf.
@@ -69112,7 +69080,7 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			theLoadedProject handle _projectStructure: projectDef _projectComponents copy.
+			theLoadedProject handle _projectComponents: projectDef _projectComponents copy.
 			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
 			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
@@ -82120,7 +82088,7 @@ allPackageNamesIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: 
 	componentNames
 		do: [ :componentName | 
 			| aComponent |
-			aComponent := self components
+			aComponent := self _projectComponents
 				componentNamed: componentName
 				ifAbsent: [ notFoundBlock cull: componentName ].
 			packageNames addAll: aComponent packageNames.
@@ -82150,7 +82118,7 @@ asDefinition
 		projectDefinitionPlatformConditionalAttributes:
 				handle projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
-	resolvedProject _projectComponents: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
+	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
 %
 
@@ -82186,13 +82154,13 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 componentForPackageNamed: packageName
 	"Answer nil if no component found"
 
-	^ self components componentForPackageNamed: packageName
+	^ self _projectComponents componentForPackageNamed: packageName
 %
 
 category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 componentNamed: aComponentName ifAbsent: absentBlock
-	^ self components componentNamed: aComponentName ifAbsent: absentBlock
+	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -82200,13 +82168,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 componentNames
 
 	^ handle componentNames
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-components
-
-	^ handle _projectStructure
 %
 
 category: 'properties'
@@ -82264,7 +82225,7 @@ loadedCommitId
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 loadedComponentDefinitions
-	^ self resolvedProject _projectStructure copy
+	^ self resolvedProject _projectComponents copy
 %
 
 category: 'actions'
@@ -82429,7 +82390,7 @@ category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 subcomponentsOf: componentName attributes: attributes do: aBlock
 	| subcomponents |
-	subcomponents := self components
+	subcomponents := self _projectComponents
 		subcomponentsOf: componentName
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [ ^ self ].
@@ -82440,7 +82401,7 @@ category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
 	| subcomponents |
-	subcomponents := self components
+	subcomponents := self _projectComponents
 		subcomponentsOf: componentName
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [^ noneBlock value ].
@@ -82523,6 +82484,12 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 useGit
 
 	^ self resolvedProject useGit
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+_projectComponents
+	^ handle _projectComponents
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
@@ -95121,14 +95088,18 @@ _adoptProjectProjectsInProjectSet: projectSetDefinition
 	projectSetDefinition projects
 		do: [ :resolvedProject | 
 			| resolvedProject_copy projectDefinition |
-			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
+			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive FIX_ME - I think the following should look like this now:
+
+			resolvedProject_copy := resolvedProject copyForLoadedProject.
+
+with _projectComponents copyForLoadedProject is less destructive ... I think"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
-			resolvedProject _projectComponents: resolvedProject_copy _projectStructure.
+			resolvedProject _projectComponents: resolvedProject_copy _projectComponents.
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
-				_projectStructure: nil;
 				yourself.
+"FIX_ME end"
 			tracer trace: 'Project: ' , resolvedProject_copy name.
 			resolvedProject_copy packageNames
 				do: [ :packageName | 
@@ -95829,9 +95800,7 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
 	| resolvedLoadComponents |
-	resolvedLoadComponents := self _projectStructure
-		ifNil: [ self _projectComponents ]
-		ifNotNil: [ :structure | structure ].
+	resolvedLoadComponents := self _projectComponents.
 	^ resolvedLoadComponents
 		gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: userId

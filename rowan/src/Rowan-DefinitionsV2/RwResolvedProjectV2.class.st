@@ -562,13 +562,6 @@ RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectV2 >> components [
-	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
-
-	^ projectComponents
-]
-
 { #category : 'accessing' }
 RwResolvedProjectV2 >> componentsWithDoits [
 	^ self _projectComponents componentsWithDoits
@@ -586,7 +579,7 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself.
 	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ copy _projectComponents: self _projectComponents copy ]
-		ifFalse: [ copy _projectStructure: self _projectComponents copy ].
+		ifFalse: [ copy _projectComponents: self _projectComponents copy ].
 	^ copy
 ]
 
@@ -744,8 +737,7 @@ RwResolvedProjectV2 >> initialize [
 
 	super initialize.
 	projectDefinition := RwProjectDefinition new.
-	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
+	projectComponents := RwResolvedProjectComponentsV2 new
 ]
 
 { #category : 'project definition' }

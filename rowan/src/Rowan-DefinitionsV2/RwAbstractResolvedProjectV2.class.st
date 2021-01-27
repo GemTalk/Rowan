@@ -3,7 +3,6 @@ Class {
 	#superclass : 'RwAbstractResolvedObjectV2',
 	#instVars : [
 		'projectDefinition',
-		'projectStructure',
 		'projectComponents'
 	],
 	#category : 'Rowan-DefinitionsV2'
@@ -135,28 +134,6 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 ]
 
 { #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectStructure [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ifNil: [ projectStructure ] ]
-		ifFalse: [ projectStructure ]
-]
-
-{ #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectStructure: object [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ 
-			object
-				ifNotNil: [ :obj | 
-					"work around current ambiguity of _projectStructure: where projectStructure forced to nil"
-					projectComponents := obj ] ]
-		ifFalse: [ projectStructure := object ]
-]
-
-{ #category : 'private' }
 RwAbstractResolvedProjectV2 >> _validate: platformConfigurationAttributes [
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
@@ -208,7 +185,6 @@ RwAbstractResolvedProjectV2 >> loadSpecification [
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -244,7 +220,7 @@ RwAbstractResolvedProjectV2 >> platformConditionalAttributes [
 RwAbstractResolvedProjectV2 >> postCopy [
 	super postCopy.
 	projectDefinition := projectDefinition copy.
-	projectStructure := projectStructure copy
+	projectComponents := projectComponents copy
 ]
 
 { #category : 'accessing' }
@@ -255,7 +231,6 @@ RwAbstractResolvedProjectV2 >> projectDefinition [
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -267,7 +242,6 @@ RwAbstractResolvedProjectV2 >> projectSpecification [
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 ]
 
@@ -279,7 +253,6 @@ RwAbstractResolvedProjectV2 >> repository [
 		_loadSpecification: loadSpecification;
 		_projectSpecification: projectSpecification;
 		_projectComponents: projectComponents;
-		_projectStructure: projectStructure;
 		yourself
 ]
 

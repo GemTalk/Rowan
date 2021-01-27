@@ -71,9 +71,7 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
 	| resolvedLoadComponents |
-	resolvedLoadComponents := self _projectStructure
-		ifNil: [ self _projectComponents ]
-		ifNotNil: [ :structure | structure ].
+	resolvedLoadComponents := self _projectComponents.
 	^ resolvedLoadComponents
 		gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: userId

@@ -28,23 +28,28 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 			| resolvedProject_copy projectDefinition |
 			"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
-			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive"
+			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive FIX_ME - I think the following should look like this now:
+
+			resolvedProject_copy := resolvedProject copyForLoadedProject.
+
+with _projectComponents copyForLoadedProject is less destructive ... I think"
 			resolvedProject_copy := resolvedProject copyForLoadedProject.
 			projectDefinition := resolvedProject _projectDefinition copy.
 			(UserGlobals
 				at: #'USE_NEW_PROJECT_COMPONENT_CLASS'
 				ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
 				ifTrue: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ]
-				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectStructure ].
+				ifFalse: [ resolvedProject _projectComponents: resolvedProject_copy _projectComponents ].
 			resolvedProject_copy
 				_projectDefinition: projectDefinition;
-				_projectStructure: nil;
-				yourself.	"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
+				yourself.
+"FIX_ME end"
 			GsFile stdout
 				nextPutAll: 'Project: ' , resolvedProject_copy name;
 				lf.
 			resolvedProject_copy packageNames
 				do: [ :packageName | 
+					"wipe out package contents, so we can load *empty* project and packages, that will be adopted in next step"
 					GsFile stdout
 						nextPutAll: '	' , packageName;
 						lf.

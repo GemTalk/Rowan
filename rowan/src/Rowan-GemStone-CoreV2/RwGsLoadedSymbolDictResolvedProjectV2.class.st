@@ -12,6 +12,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 class >> newForResolvedProject: aResolvedP
 		yourself
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectComponents [
+	^ handle _projectComponents
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
@@ -79,7 +84,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArray
 	componentNames
 		do: [ :componentName | 
 			| aComponent |
-			aComponent := self components
+			aComponent := self _projectComponents
 				componentNamed: componentName
 				ifAbsent: [ notFoundBlock cull: componentName ].
 			packageNames addAll: aComponent packageNames.
@@ -108,7 +113,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 		projectDefinitionPlatformConditionalAttributes:
 				handle projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
-	resolvedProject _projectComponents: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
+	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
 ]
 
@@ -139,24 +144,18 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
 
-	^ self components componentForPackageNamed: packageName
+	^ self _projectComponents componentForPackageNamed: packageName
 ]
 
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
-	^ self components componentNamed: aComponentName ifAbsent: absentBlock
+	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
 
 	^ handle componentNames
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> components [
-
-	^ handle _projectStructure
 ]
 
 { #category : 'properties' }
@@ -207,7 +206,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedCommitId [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedComponentDefinitions [
-	^ self resolvedProject _projectStructure copy
+	^ self resolvedProject _projectComponents copy
 ]
 
 { #category : 'actions' }
@@ -353,7 +352,7 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes do: aBlock [
 	| subcomponents |
-	subcomponents := self components
+	subcomponents := self _projectComponents
 		subcomponentsOf: componentName
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [ ^ self ].
@@ -363,7 +362,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attribut
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
 	| subcomponents |
-	subcomponents := self components
+	subcomponents := self _projectComponents
 		subcomponentsOf: componentName
 		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
 		ifNone: [^ noneBlock value ].
