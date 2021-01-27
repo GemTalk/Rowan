@@ -1,7 +1,7 @@
-Extension { #name : 'RwAbstractProjectDefinitionV2' }
+Extension { #name : 'RwProjectDefinition' }
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwAbstractProjectDefinitionV2 >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 	({'projectOwnerId'.
 	'spec'.
 	(RwLoadedProject _projectDefinitionSourceKey).
@@ -21,7 +21,7 @@ RwAbstractProjectDefinitionV2 >> _compareProperty: propertyKey propertyVaue: pro
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwAbstractProjectDefinitionV2 >> compareAgainstBase: aDefinition [
+RwProjectDefinition >> compareAgainstBase: aDefinition [
 
 	| modification packagesModification |
 	modification := RwProjectModification before: aDefinition after: self.
@@ -38,13 +38,13 @@ RwAbstractProjectDefinitionV2 >> compareAgainstBase: aDefinition [
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwAbstractProjectDefinitionV2 >> projectDefinitionSourceProperty [
+RwProjectDefinition >> projectDefinitionSourceProperty [
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwAbstractProjectDefinitionV2 >> projectDefinitionSourceProperty: sourceKeyOrNil [
+RwProjectDefinition >> projectDefinitionSourceProperty: sourceKeyOrNil [
 
 	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil

@@ -7464,42 +7464,6 @@ removeallclassmethods RwClassExtensionDefinition
 
 doit
 (RwDefinition
-	subclass: 'RwAbstractProjectDefinitionV2'
-	instVarNames: #( packages components comment )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-DefinitionsV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwAbstractProjectDefinitionV2
-removeallclassmethods RwAbstractProjectDefinitionV2
-
-doit
-(RwAbstractProjectDefinitionV2
-	subclass: 'RwProjectDefinitionV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-DefinitionsV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwProjectDefinitionV2
-removeallclassmethods RwProjectDefinitionV2
-
-doit
-(RwDefinition
 	subclass: 'RwAbstractRepositoryDefinitionV2'
 	instVarNames: #( projectsHome repositoryRoot repositoryUrl )
 	classVars: #(  )
@@ -7696,6 +7660,24 @@ true.
 
 removeallmethods RwPackageDefinition
 removeallclassmethods RwPackageDefinition
+
+doit
+(RwDefinition
+	subclass: 'RwProjectDefinition'
+	instVarNames: #( packages comment )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Definitions';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwProjectDefinition
+removeallclassmethods RwProjectDefinition
 
 doit
 (Object
@@ -63341,7 +63323,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 
 	| loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectDefinition := RwProjectDefinitionV2 basicNew
+	projectDefinition := RwProjectDefinition basicNew
 		properties:
 				(Dictionary new
 						add: 'name' -> loadSpecification projectName;
@@ -64110,7 +64092,7 @@ initialize
 	"repository must be explicitly created"
 
 	super initialize.
-	projectDefinition := RwProjectDefinitionV2 new.
+	projectDefinition := RwProjectDefinition new.
 	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
 %
@@ -71573,227 +71555,6 @@ _classNameForCompare: aDefinition
 		cName ]
 %
 
-! Class implementation for 'RwAbstractProjectDefinitionV2'
-
-!		Instance methods for 'RwAbstractProjectDefinitionV2'
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-comment
-
-	^ comment
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-comment: aString
-
-	comment := aString
-%
-
-category: 'initialization'
-method: RwAbstractProjectDefinitionV2
-initialize
-	super initialize.
-	packages := Dictionary new
-%
-
-category: 'testing'
-method: RwAbstractProjectDefinitionV2
-isEmpty
-	"Answer true if this definition does not actually define anything."
-
-	^super isEmpty & packages isEmpty
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-packageNamed: aString
-
-	^ self
-		packageNamed: aString
-		ifAbsent: [ self error: 'A package named ' , aString printString , ' was not found.' ]
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-packageNamed: aString ifAbsent: absentBlock
-
-	^ self packages at: aString ifAbsent: absentBlock
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-packageNames
-  ^ self packages keys asArray
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-packages
-
-	^packages
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-packages: aPackageDefinitionDictionary
-
-	packages := aPackageDefinitionDictionary
-%
-
-category: 'copying'
-method: RwAbstractProjectDefinitionV2
-postCopy
-
-	| oldPackages |
-	super postCopy.
-	oldPackages := packages.
-	packages := Dictionary new.
-	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-projectDefinitionPlatformConditionalAttributes
-	^ properties
-		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-		ifAbsent: [  ]
-%
-
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil
-	platformConditionalAtttributesOrNil
-		ifNil: [ 
-			^ properties
-				removeKey:
-					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-				ifAbsent: [  ] ].
-	^ properties
-		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-		put: platformConditionalAtttributesOrNil
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-removePackage: aPackageDefinition
-	| key |
-	key := aPackageDefinition key.
-	(packages includesKey: key)
-		ifFalse: [ self error: 'Package not present.' ].
-	^ packages removeKey: key
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-removePackageNamed: packageName
-	^ self removePackage: (self packageNamed: packageName)
-%
-
-category: 'private'
-method: RwAbstractProjectDefinitionV2
-_addPackage: aPackageDefinition
-	^ self
-		_addPackage: aPackageDefinition
-		ifPresent: [ self error: 'Duplicate package' ]
-%
-
-category: 'private'
-method: RwAbstractProjectDefinitionV2
-_addPackage: aPackageDefinition ifPresent: presentBlock
-	| key |
-	key := aPackageDefinition key.
-	(packages includesKey: key)
-		ifTrue: [ ^ presentBlock value ].
-	^ packages at: key put: aPackageDefinition
-%
-
-category: 'private'
-method: RwAbstractProjectDefinitionV2
-_projectDefinition
-	^ self
-%
-
-! Class implementation for 'RwProjectDefinitionV2'
-
-!		Instance methods for 'RwProjectDefinitionV2'
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-addRawPackageNamed: packageName
-	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
-
-	"see similar comment in addPackages:forComponent: and _addComponent"
-
-	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
-%
-
-category: 'properties'
-method: RwProjectDefinitionV2
-key
-	"Answer an object that can be used to uniquely identify myself in the context of my container."
-
-	^self projectName
-%
-
-category: 'querying'
-method: RwProjectDefinitionV2
-packageForClassNamed: className
-	"Answer nil if no class found"
-
-	self packages
-		do: [ :package | 
-			(package classDefinitions includesKey: className)
-				ifTrue: [ ^ package ] ].
-	^ nil
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectName
-	^ self propertyAt: 'name' ifAbsent: [ nil ]
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-projectName: aString
-	self propertyAt: 'name' put: aString
-%
-
-category: 'private'
-method: RwProjectDefinitionV2
-_validate: platformConfigurationAttributes componentPackageNames: componentPackageNames
-	"ensure that the data structures within the receiver contain valid information"
-
-	"make sure that list of packages is consistent between components and project definition
-		It's okay to have a definition that is not managed by a component.
-		It's NOT okay to have component package that is not defined."
-
-	| definitionPackageNames missingFromComponent errorMessage |
-	definitionPackageNames := self packageNames asSet.
-	missingFromComponent := componentPackageNames - definitionPackageNames.
-	missingFromComponent isEmpty
-		ifTrue: [ ^ true ].
-	errorMessage := WriteStream on: String new.
-	errorMessage
-		nextPutAll: 'Component references package(s) that are not defined';
-		lf.
-	errorMessage
-		tab;
-		nextPutAll:
-				'The following packages are defined, but not referenced in a component:';
-		lf.
-	missingFromComponent
-		do: [ :packageName | 
-			errorMessage
-				tab;
-				tab;
-				nextPutAll: packageName;
-				lf ].
-	self error: errorMessage contents
-%
-
 ! Class implementation for 'RwAbstractRepositoryDefinitionV2'
 
 !		Class methods for 'RwAbstractRepositoryDefinitionV2'
@@ -73099,6 +72860,223 @@ method: RwPackageDefinition
 updateClassDefinition: aClassDefinition
 
 	self updateDefinition: aClassDefinition in: classDefinitions
+%
+
+! Class implementation for 'RwProjectDefinition'
+
+!		Instance methods for 'RwProjectDefinition'
+
+category: 'accessing'
+method: RwProjectDefinition
+addRawPackageNamed: packageName
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addPackages:forComponent: and _addComponent"
+
+	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
+%
+
+category: 'properties'
+method: RwProjectDefinition
+comment
+
+	^ comment
+%
+
+category: 'properties'
+method: RwProjectDefinition
+comment: aString
+
+	comment := aString
+%
+
+category: 'initialization'
+method: RwProjectDefinition
+initialize
+	super initialize.
+	packages := Dictionary new
+%
+
+category: 'testing'
+method: RwProjectDefinition
+isEmpty
+	"Answer true if this definition does not actually define anything."
+
+	^super isEmpty & packages isEmpty
+%
+
+category: 'properties'
+method: RwProjectDefinition
+key
+	"Answer an object that can be used to uniquely identify myself in the context of my container."
+
+	^self projectName
+%
+
+category: 'querying'
+method: RwProjectDefinition
+packageForClassNamed: className
+	"Answer nil if no class found"
+
+	self packages
+		do: [ :package | 
+			(package classDefinitions includesKey: className)
+				ifTrue: [ ^ package ] ].
+	^ nil
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+packageNamed: aString
+
+	^ self
+		packageNamed: aString
+		ifAbsent: [ self error: 'A package named ' , aString printString , ' was not found.' ]
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+packageNamed: aString ifAbsent: absentBlock
+
+	^ self packages at: aString ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+packageNames
+  ^ self packages keys asArray
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+packages
+
+	^packages
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+packages: aPackageDefinitionDictionary
+
+	packages := aPackageDefinitionDictionary
+%
+
+category: 'copying'
+method: RwProjectDefinition
+postCopy
+
+	| oldPackages |
+	super postCopy.
+	oldPackages := packages.
+	packages := Dictionary new.
+	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+%
+
+category: 'properties'
+method: RwProjectDefinition
+projectDefinitionPlatformConditionalAttributes
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+%
+
+category: 'properties'
+method: RwProjectDefinition
+projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+projectName
+	^ self propertyAt: 'name' ifAbsent: [ nil ]
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+projectName: aString
+	self propertyAt: 'name' put: aString
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+removePackage: aPackageDefinition
+	| key |
+	key := aPackageDefinition key.
+	(packages includesKey: key)
+		ifFalse: [ self error: 'Package not present.' ].
+	^ packages removeKey: key
+%
+
+category: 'accessing'
+method: RwProjectDefinition
+removePackageNamed: packageName
+	^ self removePackage: (self packageNamed: packageName)
+%
+
+category: 'private'
+method: RwProjectDefinition
+_addPackage: aPackageDefinition
+	^ self
+		_addPackage: aPackageDefinition
+		ifPresent: [ self error: 'Duplicate package' ]
+%
+
+category: 'private'
+method: RwProjectDefinition
+_addPackage: aPackageDefinition ifPresent: presentBlock
+	| key |
+	key := aPackageDefinition key.
+	(packages includesKey: key)
+		ifTrue: [ ^ presentBlock value ].
+	^ packages at: key put: aPackageDefinition
+%
+
+category: 'private'
+method: RwProjectDefinition
+_projectDefinition
+	^ self
+%
+
+category: 'private'
+method: RwProjectDefinition
+_validate: platformConfigurationAttributes componentPackageNames: componentPackageNames
+	"ensure that the data structures within the receiver contain valid information"
+
+	"make sure that list of packages is consistent between components and project definition
+		It's okay to have a definition that is not managed by a component.
+		It's NOT okay to have component package that is not defined."
+
+	| definitionPackageNames missingFromComponent errorMessage |
+	definitionPackageNames := self packageNames asSet.
+	missingFromComponent := componentPackageNames - definitionPackageNames.
+	missingFromComponent isEmpty
+		ifTrue: [ ^ true ].
+	errorMessage := WriteStream on: String new.
+	errorMessage
+		nextPutAll: 'Component references package(s) that are not defined';
+		lf.
+	errorMessage
+		tab;
+		nextPutAll:
+				'The following packages are defined, but not referenced in a component:';
+		lf.
+	missingFromComponent
+		do: [ :packageName | 
+			errorMessage
+				tab;
+				tab;
+				nextPutAll: packageName;
+				lf ].
+	self error: errorMessage contents
 %
 
 ! Class implementation for 'RwElementsModification'
@@ -93159,71 +93137,6 @@ _projects: projectDirPath forProject: ignored
 					RwSpecification fromUrl: url ] ]
 %
 
-! Class extensions for 'RwAbstractProjectDefinitionV2'
-
-!		Instance methods for 'RwAbstractProjectDefinitionV2'
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwAbstractProjectDefinitionV2
-compareAgainstBase: aDefinition
-
-	| modification packagesModification |
-	modification := RwProjectModification before: aDefinition after: self.
-	modification
-		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	packagesModification := RwPackagesModification new.
-	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
-		into: packagesModification
-		elementClass: RwPackageDefinition.
-	modification packagesModification: packagesModification.
-	^ modification
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwAbstractProjectDefinitionV2
-projectDefinitionSourceProperty
-
-	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwAbstractProjectDefinitionV2
-projectDefinitionSourceProperty: sourceKeyOrNil
-
-	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
-	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
-%
-
-category: '*rowan-gemstone-definitions-onlyv2'
-method: RwAbstractProjectDefinitionV2
-symbolDictionaryRegistryClass
-
-	^ RwGsSymbolDictionaryRegistryV2
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwAbstractProjectDefinitionV2
-_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
-	({'projectOwnerId'.
-	'spec'.
-	(RwLoadedProject _projectDefinitionSourceKey).
-	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
-	'projectRef'} includes: propertyKey)
-		ifTrue: [ 
-			"projectRef entries are considered to be equal for comparison purposes"
-			"spec entries are considered to be equal for comparison purposes"
-			"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
-			"_projectDefinitionPlatformConditionalAttributesKey entries are considered equal for comparison purpposes"
-			"projectOwnerId entries are considered equal for comparison purpposes"
-			^ true ].
-	^ super
-		_compareProperty: propertyKey
-		propertyVaue: propertyValue
-		againstBaseValue: baseValue
-%
-
 ! Class extensions for 'RwAbstractRowanProjectLoadComponentV2'
 
 !		Class methods for 'RwAbstractRowanProjectLoadComponentV2'
@@ -95590,6 +95503,71 @@ _repositoryRoot: aFileReference
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
 %
 
+! Class extensions for 'RwProjectDefinition'
+
+!		Instance methods for 'RwProjectDefinition'
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwProjectDefinition
+compareAgainstBase: aDefinition
+
+	| modification packagesModification |
+	modification := RwProjectModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	packagesModification := RwPackagesModification new.
+	self
+		compareDictionary: packages
+		againstBaseDictionary: aDefinition packages
+		into: packagesModification
+		elementClass: RwPackageDefinition.
+	modification packagesModification: packagesModification.
+	^ modification
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwProjectDefinition
+projectDefinitionSourceProperty
+
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwProjectDefinition
+projectDefinitionSourceProperty: sourceKeyOrNil
+
+	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
+%
+
+category: '*rowan-gemstone-definitions-onlyv2'
+method: RwProjectDefinition
+symbolDictionaryRegistryClass
+
+	^ RwGsSymbolDictionaryRegistryV2
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwProjectDefinition
+_compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+	({'projectOwnerId'.
+	'spec'.
+	(RwLoadedProject _projectDefinitionSourceKey).
+	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
+	'projectRef'} includes: propertyKey)
+		ifTrue: [ 
+			"projectRef entries are considered to be equal for comparison purposes"
+			"spec entries are considered to be equal for comparison purposes"
+			"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+			"_projectDefinitionPlatformConditionalAttributesKey entries are considered equal for comparison purpposes"
+			"projectOwnerId entries are considered equal for comparison purpposes"
+			^ true ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
+%
+
 ! Class extensions for 'RwProjectModification'
 
 !		Instance methods for 'RwProjectModification'
@@ -95614,7 +95592,7 @@ compareAgainstBase: aDefinition
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinitionV2.
+		elementClass: RwProjectDefinition.
 	^ result
 %
 
@@ -95630,7 +95608,7 @@ compareAgainstBaseForLoader: aDefinition
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinitionV2.
+		elementClass: RwProjectDefinition.
 	result
 		updateForClassMoves;
 		updateForMethodMoves.

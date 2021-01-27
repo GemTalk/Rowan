@@ -8,7 +8,7 @@ RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinitionV2.
+		elementClass: RwProjectDefinition.
 	^ result
 ]
 
@@ -23,7 +23,7 @@ RwProjectSetDefinition >> compareAgainstBaseForLoader: aDefinition [
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinitionV2.
+		elementClass: RwProjectDefinition.
 	result
 		updateForClassMoves;
 		updateForMethodMoves.

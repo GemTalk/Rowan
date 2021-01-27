@@ -18,7 +18,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 
 	| loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectDefinition := RwProjectDefinitionV2 basicNew
+	projectDefinition := RwProjectDefinition basicNew
 		properties:
 				(Dictionary new
 						add: 'name' -> loadSpecification projectName;
@@ -743,7 +743,7 @@ RwResolvedProjectV2 >> initialize [
 	"repository must be explicitly created"
 
 	super initialize.
-	projectDefinition := RwProjectDefinitionV2 new.
+	projectDefinition := RwProjectDefinition new.
 	(UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
 		ifTrue: [ projectComponents := RwResolvedProjectComponentsV2 new ]
 ]

@@ -1060,7 +1060,7 @@ RwRowanSample9Test >> testIssue_532 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue_549 [
-	"RwProjectDefinitionV2>>removePackageNamed: needs to clean up the component references to the removed package name"
+	"RwProjectDefinition>>removePackageNamed: needs to clean up the component references to the removed package name"
 
 	"https://github.com/dalehenrich/Rowan/issues/549"
 
