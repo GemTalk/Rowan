@@ -108,7 +108,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 		projectDefinitionPlatformConditionalAttributes:
 				handle projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
-	resolvedProject _projectDefinition components: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
+	resolvedProject _projectComponents: handle _projectStructure copy.	"temporary hack until RwProjectStructure gets defined"
 	^ resolvedProject
 ]
 
