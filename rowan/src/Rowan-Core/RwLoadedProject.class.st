@@ -130,7 +130,7 @@ RwLoadedProject >> load [
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self error: 'expected to update the projectDefinition in-place' ].
-	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
+	^ Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'actions' }
@@ -145,7 +145,7 @@ RwLoadedProject >> load: instanceMigrator [
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self halt: 'expected to update the projectDefinition in-place' ].
-	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
+	^ Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
 ]
 
 { #category : 'accessing' }
@@ -277,7 +277,7 @@ RwLoadedProject >> unload [
 
 	| projectDefinition |
 	projectDefinition := self asDefinition.
-	^ projectDefinition _deleteTool deleteProjectDefinition: projectDefinition
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
 ]
 
 { #category : 'testing' }

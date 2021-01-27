@@ -42,21 +42,10 @@ RwAbstractProjectDefinitionV2 >> comment: aString [
 	comment := aString
 ]
 
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> components [
-	^ components
-]
-
-{ #category : 'accessing' }
-RwAbstractProjectDefinitionV2 >> components: aComponentDefinitionDictionary [
-	components := aComponentDefinitionDictionary
-]
-
 { #category : 'initialization' }
 RwAbstractProjectDefinitionV2 >> initialize [
 	super initialize.
-	packages := Dictionary new.
-	components := RwResolvedLoadComponentsV2 new
+	packages := Dictionary new
 ]
 
 { #category : 'testing' }
@@ -139,11 +128,4 @@ RwAbstractProjectDefinitionV2 >> removePackage: aPackageDefinition [
 { #category : 'accessing' }
 RwAbstractProjectDefinitionV2 >> removePackageNamed: packageName [
 	^ self removePackage: (self packageNamed: packageName)
-]
-
-{ #category : 'properties' }
-RwAbstractProjectDefinitionV2 >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self repositoryRootPath asFileReference
 ]

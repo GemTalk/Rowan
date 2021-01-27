@@ -126,14 +126,6 @@ RwRepositoryComponentProjectReaderVisitor >> visit: anObject [
 ]
 
 { #category : 'visiting' }
-RwRepositoryComponentProjectReaderVisitor >> visitComponentProjectDefinition: aRwComponentProjectDefinition [
-
-	self currentProjectDefinition: aRwComponentProjectDefinition.
-	aRwComponentProjectDefinition packages: Dictionary new.
-	self visit: aRwComponentProjectDefinition projectRef
-]
-
-{ #category : 'visiting' }
 RwRepositoryComponentProjectReaderVisitor >> visitResolvedProjectV2: aRwResolvedProjectV2 [
 
 	self currentProjectDefinition: aRwResolvedProjectV2.

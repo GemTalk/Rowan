@@ -52,7 +52,7 @@ RwPrjDeleteTool >> deleteProjectSetDefinition: projectSetDefinitionToDelete [
 
 	projectSetDefinitionToDelete definitions
 		do: [ :projectDef | 
-			loadTool := projectDef _loadTool.
+			loadTool := Rowan projectTools loadV2.
 			projectDef packageNames
 				do: [ :packageName | projectDef removePackageNamed: packageName ] ].
 	loadTool loadProjectSetDefinition: projectSetDefinitionToDelete.

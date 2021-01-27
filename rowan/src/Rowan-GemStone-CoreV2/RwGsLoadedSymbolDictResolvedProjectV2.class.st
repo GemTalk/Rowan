@@ -426,8 +426,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> unload [
 
 	| resolvedProject |
 	resolvedProject := self asDefinition.
-	^ resolvedProject _projectDefinition _deleteTool
-		deleteProjectDefinition: resolvedProject
+	^ Rowan projectTools delete deleteProjectDefinition: resolvedProject
 ]
 
 { #category : 'loading' }

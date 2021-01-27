@@ -10,6 +10,20 @@ Class {
 }
 
 { #category : 'private' }
+RwAbstractResolvedProjectV2 >> _projectComponents [
+	"project components should not be accessed directly -- Rowan private state"
+
+	^ projectComponents
+]
+
+{ #category : 'private' }
+RwAbstractResolvedProjectV2 >> _projectComponents: object [
+	"project components should not be accessed directly -- Rowan private state"
+
+	projectComponents := object
+]
+
+{ #category : 'private' }
 RwAbstractResolvedProjectV2 >> _projectDefinition [
 	"project definition should not be accessed directly -- Rowan private state"
 
@@ -118,6 +132,28 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																				projectsHome: nil
 																				repositoryUrl: nil ] ] ] ] ] ] ] ].
 			projectRepository ]
+]
+
+{ #category : 'private' }
+RwAbstractResolvedProjectV2 >> _projectStructure [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ projectComponents ifNil: [ projectStructure ] ]
+		ifFalse: [ projectStructure ]
+]
+
+{ #category : 'private' }
+RwAbstractResolvedProjectV2 >> _projectStructure: object [
+	"project structure should not be accessed directly -- Rowan private state"
+
+	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
+		ifTrue: [ 
+			object
+				ifNotNil: [ :obj | 
+					"work around current ambiguity of _projectStructure: where projectStructure forced to nil"
+					projectComponents := obj ] ]
+		ifFalse: [ projectStructure := object ]
 ]
 
 { #category : 'private' }
@@ -233,46 +269,6 @@ RwAbstractResolvedProjectV2 >> projectSpecification [
 		_projectComponents: projectComponents;
 		_projectStructure: projectStructure;
 		yourself
-]
-
-{ #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectStructure [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ifNil: [ projectStructure ] ]
-		ifFalse: [ projectStructure ]
-]
-
-{ #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectStructure: object [
-	"project structure should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ 
-			object
-				ifNotNil: [ :obj | 
-					"work around current ambiguity of _projectStructure: where projectStructure forced to nil"
-					projectComponents := obj ] ]
-		ifFalse: [ projectStructure := object ]
-]
-
-{ #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectComponents [
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ self _projectDefinition components ]
-]
-
-{ #category : 'private' }
-RwAbstractResolvedProjectV2 >> _projectComponents: object [
-	"project components should not be accessed directly -- Rowan private state"
-
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ self _projectDefinition components: object ]
 ]
 
 { #category : 'accessing' }

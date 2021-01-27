@@ -62643,15 +62643,6 @@ visit: anObject
 
 category: 'visiting'
 method: RwRepositoryComponentProjectReaderVisitor
-visitComponentProjectDefinition: aRwComponentProjectDefinition
-
-	self currentProjectDefinition: aRwComponentProjectDefinition.
-	aRwComponentProjectDefinition packages: Dictionary new.
-	self visit: aRwComponentProjectDefinition projectRef
-%
-
-category: 'visiting'
-method: RwRepositoryComponentProjectReaderVisitor
 visitResolvedProjectV2: aRwResolvedProjectV2
 
 	self currentProjectDefinition: aRwResolvedProjectV2.
@@ -63571,9 +63562,7 @@ method: RwAbstractResolvedProjectV2
 _projectComponents
 	"project components should not be accessed directly -- Rowan private state"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ self _projectDefinition components ]
+	^ projectComponents
 %
 
 category: 'private'
@@ -63581,9 +63570,7 @@ method: RwAbstractResolvedProjectV2
 _projectComponents: object
 	"project components should not be accessed directly -- Rowan private state"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ RwResolvedProjectV2 _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents := object ]
-		ifFalse: [ self _projectDefinition components: object ]
+	projectComponents := object
 %
 
 category: 'private'
@@ -63891,10 +63878,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| loadSpecification projectDefinition pdComponents rpComponents |
-	self _defaultUseNewProjectComponentClass
-		ifTrue: [ rpComponents := RwResolvedLoadComponentsV2 new ]
-		ifFalse: [ pdComponents := RwResolvedLoadComponentsV2 new ].
+	| loadSpecification projectDefinition |
 	loadSpecification := anRwLoadSpecificationV2 copy.
 	projectDefinition := RwProjectDefinitionV2 basicNew
 		properties:
@@ -63902,13 +63886,12 @@ basicLoadSpecification: anRwLoadSpecificationV2
 						add: 'name' -> loadSpecification projectName;
 						yourself);
 		packages: Dictionary new;
-		components: pdComponents;
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectModifiedProjectSourceValue;
 		yourself.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
-		_projectComponents: rpComponents;
+		_projectComponents: RwResolvedLoadComponentsV2 new;
 		_loadSpecification: loadSpecification;
 		yourself
 %
@@ -64472,9 +64455,7 @@ method: RwResolvedProjectV2
 components
 	"need to differentiat between components (i.e., top level components) and the instance of RwRwsolvedLoadComponentsV2"
 
-	^ (UserGlobals at: #'USE_NEW_PROJECT_COMPONENT_CLASS' ifAbsent: [ self _defaultUseNewProjectComponentClass ])
-		ifTrue: [ projectComponents ]
-		ifFalse: [ self _projectDefinition components ]
+	^ projectComponents
 %
 
 category: 'accessing'
@@ -65354,13 +65335,6 @@ category: 'private'
 method: RwResolvedProjectV2
 _defaultUseNewProjectComponentClass
 ^self class _defaultUseNewProjectComponentClass
-%
-
-category: 'private'
-method: RwResolvedProjectV2
-_loadTool
-
-	^ self _projectDefinition _loadTool
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -69085,7 +69059,7 @@ deleteProjectSetDefinition: projectSetDefinitionToDelete
 
 	projectSetDefinitionToDelete definitions
 		do: [ :projectDef | 
-			loadTool := projectDef _loadTool.
+			loadTool := Rowan projectTools loadV2.
 			projectDef packageNames
 				do: [ :packageName | projectDef removePackageNamed: packageName ] ].
 	loadTool loadProjectSetDefinition: projectSetDefinitionToDelete.
@@ -72156,24 +72130,11 @@ comment: aString
 	comment := aString
 %
 
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-components
-	^ components
-%
-
-category: 'accessing'
-method: RwAbstractProjectDefinitionV2
-components: aComponentDefinitionDictionary
-	components := aComponentDefinitionDictionary
-%
-
 category: 'initialization'
 method: RwAbstractProjectDefinitionV2
 initialize
 	super initialize.
-	packages := Dictionary new.
-	components := RwResolvedLoadComponentsV2 new
+	packages := Dictionary new
 %
 
 category: 'testing'
@@ -72269,14 +72230,6 @@ removePackageNamed: packageName
 	^ self removePackage: (self packageNamed: packageName)
 %
 
-category: 'properties'
-method: RwAbstractProjectDefinitionV2
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ self repositoryRootPath asFileReference
-%
-
 category: 'private'
 method: RwAbstractProjectDefinitionV2
 _addPackage: aPackageDefinition
@@ -72305,13 +72258,6 @@ _projectDefinition
 
 !		Instance methods for 'RwProjectDefinitionV2'
 
-category: 'visiting'
-method: RwProjectDefinitionV2
-acceptVisitor: aVisitor
-
-	^ aVisitor visitComponentProjectDefinition: self
-%
-
 category: 'accessing'
 method: RwProjectDefinitionV2
 addRawPackageNamed: packageName
@@ -72322,36 +72268,12 @@ addRawPackageNamed: packageName
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
 %
 
-category: 'querying'
-method: RwProjectDefinitionV2
-componentForPackageNamed: packageName
-	"Answer nil if no component found"
-
-	^ self components componentForPackageNamed: packageName
-%
-
 category: 'properties'
 method: RwProjectDefinitionV2
 key
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self projectName
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
-load
-	"load the receiver into the image"
-
-	^ self _loadTool loadProjectDefinition: self
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
-load: instanceMigrator
-	"load the receiver into the image"
-
-	^ self _loadTool loadProjectDefinition: self instanceMigrator: instanceMigrator
 %
 
 category: 'querying'
@@ -72366,90 +72288,16 @@ packageForClassNamed: className
 	^ nil
 %
 
-category: 'properties'
+category: 'accessing'
 method: RwProjectDefinitionV2
 projectName
 	^ self propertyAt: 'name' ifAbsent: [ nil ]
 %
 
-category: 'properties'
+category: 'accessing'
 method: RwProjectDefinitionV2
 projectName: aString
 	self propertyAt: 'name' put: aString
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-removePackage: aPackageDefinition
-	self components 
-		ifNotNil: [:theComponents | theComponents removePackageNamed: aPackageDefinition name ].
-	^ super removePackage: aPackageDefinition
-%
-
-category: 'accessing'
-method: RwProjectDefinitionV2
-renamePackageNamed: packageName to: newPackageName
-	| theComponent |
-	theComponent := self componentForPackageNamed: packageName.
-	self
-		movePackageNamed: packageName
-		toComponentNamed: theComponent name
-		asPackageName: newPackageName
-%
-
-category: 'temporary compat'
-method: RwProjectDefinitionV2
-repositoryRootPath
-
-	^ self repositoryRoot fullName
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
-_deleteTool
-
-	^ Rowan projectTools delete
-%
-
-category: 'actions'
-method: RwProjectDefinitionV2
-_loadTool
-
-	^ Rowan projectTools loadV2
-%
-
-category: 'private'
-method: RwProjectDefinitionV2
-_validate: platformConfigurationAttributes
-	"ensure that the data structures within the receiver contain valid information"
-
-	"make sure that list of packages is consistent between components and project definition
-		It's okay to have a definition that is not managed by a component.
-		It's NOT okay to have component package that is not defined."
-
-	| definitionPackageNames componentPackageNames missingFromComponent errorMessage |
-	definitionPackageNames := self packageNames asSet.
-	componentPackageNames := self components _validate: platformConfigurationAttributes.
-	missingFromComponent := componentPackageNames - definitionPackageNames.
-	missingFromComponent isEmpty
-		ifTrue: [ ^ true ].
-	errorMessage := WriteStream on: String new.
-	errorMessage
-		nextPutAll: 'Component references package(s) that are not defined';
-		lf.
-	errorMessage
-		tab;
-		nextPutAll:
-				'The following packages are defined, but not referenced in a component:';
-		lf.
-	missingFromComponent
-		do: [ :packageName | 
-			errorMessage
-				tab;
-				tab;
-				nextPutAll: packageName;
-				lf ].
-	self error: errorMessage contents
 %
 
 category: 'private'
@@ -82573,7 +82421,7 @@ load
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self error: 'expected to update the projectDefinition in-place' ].
-	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
+	^ Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition
 %
 
 category: 'actions'
@@ -82589,7 +82437,7 @@ load: instanceMigrator
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
 			self halt: 'expected to update the projectDefinition in-place' ].
-	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
+	^ Rowan projectTools loadV2 loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator
 %
 
 category: 'accessing'
@@ -82738,7 +82586,7 @@ unload
 
 	| projectDefinition |
 	projectDefinition := self asDefinition.
-	^ projectDefinition _deleteTool deleteProjectDefinition: projectDefinition
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
 %
 
 category: 'testing'
@@ -83221,8 +83069,7 @@ unload
 
 	| resolvedProject |
 	resolvedProject := self asDefinition.
-	^ resolvedProject _projectDefinition _deleteTool
-		deleteProjectDefinition: resolvedProject
+	^ Rowan projectTools delete deleteProjectDefinition: resolvedProject
 %
 
 category: 'loading'
@@ -99042,33 +98889,6 @@ category: '*rowan-corev2'
 method: RwProject
 _repositoryRoot: aFileReference
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
-%
-
-! Class extensions for 'RwProjectDefinitionV2'
-
-!		Instance methods for 'RwProjectDefinitionV2'
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwProjectDefinitionV2
-gemstoneDefaultSymbolDictNameForUser: userId
-	^ self projectSpecification gemstoneDefaultSymbolDictNameForUser: userId
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwProjectDefinitionV2
-gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
-	"this method must be preserved until we are no longer loading this code into an image that WAS NOT bootstrapped from .gs files ... it is used during load"
-
-	^ self components
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: userId
-		ifAbsent: absentBlock
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwProjectDefinitionV2
-_gemstoneAllUsersName
-	^ RwLoadSpecificationV2 _gemstoneAllUsersName
 %
 
 ! Class extensions for 'RwProjectModification'
