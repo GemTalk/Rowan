@@ -25,21 +25,9 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition projects
 		do: [ :resolvedProject | 
-			| resolvedProject_copy projectDefinition |
-			"Create loaded project (if needed), traverse the package definitions and 
-				create loaded packages for each"
-			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive FIX_ME - I think the following should look like this now:
-
-			resolvedProject_copy := resolvedProject copyForLoadedProject.
-
-with _projectComponents copyForLoadedProject is less destructive ... I think"
-			resolvedProject_copy := resolvedProject copyForLoadedProject.
-			projectDefinition := resolvedProject _projectDefinition copy.
-			resolvedProject _projectComponents: resolvedProject_copy _projectComponents.
-			resolvedProject_copy
-				_projectDefinition: projectDefinition;
-				yourself.	
-"FIX_ME end"
+			| resolvedProject_copy |
+			"make a copy of the resolvedProject so we can safely nuke all of the project packages"
+			resolvedProject_copy := resolvedProject copy.
 			GsFile stdout
 				nextPutAll: 'Project: ' , resolvedProject_copy name;
 				lf.

@@ -12,19 +12,9 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 	tracer startTracing.
 	projectSetDefinition projects
 		do: [ :resolvedProject | 
-			| resolvedProject_copy projectDefinition |
-			"make a copy of the resolvedProject (and repair it for now, since copyForLoadedProject is somewhat destructive FIX_ME - I think the following should look like this now:
-
-			resolvedProject_copy := resolvedProject copyForLoadedProject.
-
-with _projectComponents copyForLoadedProject is less destructive ... I think"
-			resolvedProject_copy := resolvedProject copyForLoadedProject.
-			projectDefinition := resolvedProject _projectDefinition copy.
-			resolvedProject _projectComponents: resolvedProject_copy _projectComponents.
-			resolvedProject_copy
-				_projectDefinition: projectDefinition;
-				yourself.
-"FIX_ME end"
+			| resolvedProject_copy  |
+			"make a copy of the resolvedProject so we can safely nuke all of the project packages"
+			resolvedProject_copy := resolvedProject copy.
 			tracer trace: 'Project: ' , resolvedProject_copy name.
 			resolvedProject_copy packageNames
 				do: [ :packageName | 
