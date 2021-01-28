@@ -4,9 +4,14 @@ Class {
 	#category : 'Rowan-GemStone-Core'
 }
 
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictPackage >> classExtensions [
-	^ self classExtensionDefinitions
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictPackage >> classDefinitionsForCompare [
+	^ self loadedClasses
+]
+
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictPackage >> classExtensionsForCompare [
+	^ self loadedClassExtensions
 ]
 
 { #category : 'queries' }
@@ -79,11 +84,6 @@ RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName [
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName: symDictName [
 	self propertyAt: 'gs_SymbolDictionary' put: symDictName asString
-]
-
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictPackage >> properties [
-	^ properties
 ]
 
 { #category : 'private' }

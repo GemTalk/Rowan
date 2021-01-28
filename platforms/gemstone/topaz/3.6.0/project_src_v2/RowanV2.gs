@@ -7622,6 +7622,24 @@ removeallmethods RwProjectSetDefinition
 removeallclassmethods RwProjectSetDefinition
 
 doit
+(RwProjectSetDefinition
+	subclass: 'RwProjectSetDefinitionXXX'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Definitions';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwProjectSetDefinitionXXX
+removeallclassmethods RwProjectSetDefinitionXXX
+
+doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
 	instVarNames: #( source )
@@ -7920,6 +7938,24 @@ true.
 
 removeallmethods RwEntitySet
 removeallclassmethods RwEntitySet
+
+doit
+(RwEntitySet
+	subclass: 'RwEntitySetXXX'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Definitions';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwEntitySetXXX
+removeallclassmethods RwEntitySetXXX
 
 doit
 (Object
@@ -70798,6 +70834,12 @@ properties: propertiesDictionary
 	properties := propertiesDictionary
 %
 
+category: 'comparing'
+method: RwDefinition
+propertiesForCompare
+	^ properties
+%
+
 category: 'accessing'
 method: RwDefinition
 propertyAt: aKey
@@ -70817,6 +70859,13 @@ method: RwDefinition
 propertyAt: aKey put: aValue
 
 	^properties at: aKey put: aValue
+%
+
+category: 'comparing'
+method: RwDefinition
+propertyForCompareAt: aKey ifAbsent: absentBlock
+
+	^self propertyAt: aKey ifAbsent: absentBlock
 %
 
 category: 'private'
@@ -72361,6 +72410,23 @@ projects
 	^ self definitions
 %
 
+! Class implementation for 'RwProjectSetDefinitionXXX'
+
+!		Instance methods for 'RwProjectSetDefinitionXXX'
+
+category: 'deriving'
+method: RwProjectSetDefinitionXXX
+deriveLoadedThings
+
+	"extract the loaded projects that correspond to the project defintions held by the receiver"
+
+	^ RwEntitySetXXX
+		withAll:
+			((self definitionNames
+				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
+%
+
 ! Class implementation for 'RwMethodDefinition'
 
 !		Class methods for 'RwMethodDefinition'
@@ -72640,6 +72706,13 @@ classDefinitions: classDefinitionDictionary
 
 category: 'accessing'
 method: RwPackageDefinition
+classDefinitionsForCompare
+
+	^self classDefinitions
+%
+
+category: 'accessing'
+method: RwPackageDefinition
 classExtensionDefinitionNamed: className
 
 	^ self classExtensionDefinitionNamed: className ifAbsent: [ self error: 'No class extension definition found with the name ', className printString ]
@@ -72664,6 +72737,12 @@ method: RwPackageDefinition
 classExtensions: classExtensionDefinitionsDictionary
 
 	classExtensions := classExtensionDefinitionsDictionary
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+classExtensionsForCompare
+	^ self classExtensions
 %
 
 category: 'initialization'
@@ -74025,6 +74104,20 @@ method: RwEntitySet
 size
 
 	^ entities size
+%
+
+! Class implementation for 'RwEntitySetXXX'
+
+!		Instance methods for 'RwEntitySetXXX'
+
+category: 'definitions'
+method: RwEntitySetXXX
+asProjectDefinitionSet
+
+	| result |
+	result := RwProjectSetDefinitionXXX new.
+	entities do: [ :entity | result addDefinition: entity ].
+	^ result
 %
 
 ! Class implementation for 'RwGsImage'
@@ -79726,6 +79819,12 @@ printOn: aStream
 				nextPutAll: name]
 %
 
+category: 'comparing'
+method: RwLoadedThing
+propertiesForCompare
+	^ self properties
+%
+
 category: 'private'
 method: RwLoadedThing
 propertiesForDefinition
@@ -79754,6 +79853,13 @@ propertyAt: propertyName put: aValue
 
 	self markPackageDirty.
 	^properties at: propertyName put: aValue
+%
+
+category: 'comparing'
+method: RwLoadedThing
+propertyForCompareAt: propertyName ifAbsent: aBlock
+
+	^self propertiesForCompare at: propertyName ifAbsent: aBlock
 %
 
 category: 'accessing'
@@ -81100,6 +81206,19 @@ removeLoadedClassExtension: aLoadedClassExtension
 
 !		Instance methods for 'RwGsLoadedSymbolDictPackage'
 
+category: 'xxx'
+method: RwGsLoadedSymbolDictPackage
+classDefinitionsForCompare
+
+	^self loadedClasses
+%
+
+category: 'xxx'
+method: RwGsLoadedSymbolDictPackage
+classExtensionsForCompare
+	^ self loadedClassExtensions
+%
+
 category: 'queries'
 method: RwGsLoadedSymbolDictPackage
 classOrExtensionForClass: behavior ifAbsent: absentBlock
@@ -81846,6 +81965,20 @@ projectUrl
 	"Return the projectUrl used to clone the project"
 
 	^ self resolvedProject projectUrl
+%
+
+category: 'comparing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+propertiesForCompare
+	| props|
+	props := Dictionary new.
+	props
+		at: 'name' put: handle projectName;
+		at: RwLoadedProject _projectDefinitionSourceKey
+			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+			put: handle projectDefinitionPlatformConditionalAttributes copy.
+	^ props
 %
 
 category: 'definitions'
@@ -93029,13 +93162,13 @@ comparePropertiesAgainstBase: aDefinition
 
 	| keys modification |
 	modification := RwPropertiesModification new.
-	keys := properties keys copy.
-	keys addAll: aDefinition properties keys.
+	keys := self propertiesForCompare keys copy.
+	keys addAll: aDefinition propertiesForCompare keys.
 	keys do: 
 			[:key |
 				| before after |
-				before := aDefinition propertyAt: key ifAbsent: [nil].
-				after := self propertyAt: key ifAbsent: [nil].
+				before := aDefinition propertyForCompareAt: key ifAbsent: [nil].
+				after := self propertyForCompareAt: key ifAbsent: [nil].
 				(self _compareProperty: key propertyVaue: before againstBaseValue: after)
 					ifFalse: 
 						[modification addElementModification: (RwPropertyModification
@@ -94734,12 +94867,12 @@ compareAgainstBase: aDefinition
 	classExtensionsModification := RwClassExtensionsModification new.
 	self
 		compareDictionary: classDefinitions
-		againstBaseDictionary: aDefinition classDefinitions
+		againstBaseDictionary: aDefinition classDefinitionsForCompare
 		into: classesModification
 		elementClass: RwClassDefinition.
 	self
 		compareDictionary: classExtensions
-		againstBaseDictionary: aDefinition classExtensions
+		againstBaseDictionary: aDefinition classExtensionsForCompare
 		into: classExtensionsModification
 		elementClass: RwClassExtensionDefinition.
 	modification

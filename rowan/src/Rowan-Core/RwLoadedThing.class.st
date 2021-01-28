@@ -126,6 +126,11 @@ RwLoadedThing >> printOn: aStream [
 				nextPutAll: name]
 ]
 
+{ #category : 'comparing' }
+RwLoadedThing >> propertiesForCompare [
+	^ properties
+]
+
 { #category : 'private' }
 RwLoadedThing >> propertiesForDefinition [
 
@@ -150,6 +155,12 @@ RwLoadedThing >> propertyAt: propertyName put: aValue [
 
 	self markPackageDirty.
 	^properties at: propertyName put: aValue
+]
+
+{ #category : 'comparing' }
+RwLoadedThing >> propertyForCompareAt: propertyName ifAbsent: aBlock [
+
+	^self propertiesForCompare at: propertyName ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }

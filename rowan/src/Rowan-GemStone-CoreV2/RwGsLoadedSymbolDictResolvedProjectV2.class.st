@@ -17,8 +17,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectComponents [
 	^ handle _projectComponents
 ]
 
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinition [
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionForCompare [
 	^ self
 ]
 
@@ -272,8 +272,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
 	^ self resolvedProject packageConvention
 ]
 
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> packages [
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> packagesForCompare [
 	^ self loadedPackages
 ]
 
@@ -311,8 +311,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectUrl [
 	^ self resolvedProject projectUrl
 ]
 
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> properties [
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForCompare [
 	| props|
 	props := Dictionary new.
 	props
@@ -332,12 +332,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
 self halt.
 	props at: 'projectRef' put: handle copy.
 	^ props
-]
-
-{ #category : 'xxx' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> propertyAt: propertyName ifAbsent: aBlock [
-
-	^self properties at: propertyName ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }

@@ -89,6 +89,11 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	^ true
 ]
 
+{ #category : 'comparing' }
+RwResolvedProjectV2 >> _projectDefinitionForCompare [
+	^ self _projectDefinition
+]
+
 { #category : 'visiting' }
 RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
@@ -916,6 +921,11 @@ RwResolvedProjectV2 >> packages [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packages: aPackageDictionary [
 	^ self _projectDefinition packages: aPackageDictionary
+]
+
+{ #category : 'comparing' }
+RwResolvedProjectV2 >> packagesForCompare [
+	^ self packages
 ]
 
 { #category : 'printing' }

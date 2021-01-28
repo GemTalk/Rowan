@@ -162,6 +162,11 @@ RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> classDefinitionsForCompare [
+	^ self classDefinitions
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classExtensionDefinitionNamed: className [
 
 	^ self classExtensionDefinitionNamed: className ifAbsent: [ self error: 'No class extension definition found with the name ', className printString ]
@@ -183,6 +188,11 @@ RwPackageDefinition >> classExtensions [
 RwPackageDefinition >> classExtensions: classExtensionDefinitionsDictionary [
 
 	classExtensions := classExtensionDefinitionsDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classExtensionsForCompare [
+	^ self classExtensions
 ]
 
 { #category : 'initialization' }

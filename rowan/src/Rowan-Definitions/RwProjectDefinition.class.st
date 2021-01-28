@@ -29,6 +29,11 @@ RwProjectDefinition >> _projectDefinition [
 	^ self
 ]
 
+{ #category : 'comparing' }
+RwProjectDefinition >> _projectDefinitionForCompare [
+	^ self _projectDefinition
+]
+
 { #category : 'private' }
 RwProjectDefinition >> _validate: platformConfigurationAttributes componentPackageNames: componentPackageNames [
 	"ensure that the data structures within the receiver contain valid information"
@@ -142,6 +147,11 @@ RwProjectDefinition >> packages [
 RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 
 	packages := aPackageDefinitionDictionary
+]
+
+{ #category : 'comparing' }
+RwProjectDefinition >> packagesForCompare [
+	^ self packages
 ]
 
 { #category : 'copying' }

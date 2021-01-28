@@ -148,6 +148,11 @@ RwDefinition >> properties: propertiesDictionary [
 	properties := propertiesDictionary
 ]
 
+{ #category : 'comparing' }
+RwDefinition >> propertiesForCompare [
+	^ properties
+]
+
 { #category : 'accessing' }
 RwDefinition >> propertyAt: aKey [
 
@@ -164,6 +169,12 @@ RwDefinition >> propertyAt: aKey ifAbsent: absentBlock [
 RwDefinition >> propertyAt: aKey put: aValue [
 
 	^properties at: aKey put: aValue
+]
+
+{ #category : 'comparing' }
+RwDefinition >> propertyForCompareAt: aKey ifAbsent: absentBlock [
+
+	^self propertyAt: aKey ifAbsent: absentBlock
 ]
 
 { #category : 'private' }

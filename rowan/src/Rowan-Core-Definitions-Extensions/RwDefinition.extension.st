@@ -5,13 +5,13 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 
 	| keys modification |
 	modification := RwPropertiesModification new.
-	keys := properties keys copy.
-	keys addAll: aDefinition properties keys.
+	keys := self propertiesForCompare keys copy.
+	keys addAll: aDefinition propertiesForCompare keys.
 	keys do: 
 			[:key |
 				| before after |
-				before := aDefinition propertyAt: key ifAbsent: [nil].
-				after := self propertyAt: key ifAbsent: [nil].
+				before := aDefinition propertyForCompareAt: key ifAbsent: [nil].
+				after := self propertyForCompareAt: key ifAbsent: [nil].
 				(self _compareProperty: key propertyVaue: before againstBaseValue: after)
 					ifFalse: 
 						[modification addElementModification: (RwPropertyModification
@@ -19,5 +19,4 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 							oldValue: before
 							newValue: after)]].
 	^modification
-
 ]

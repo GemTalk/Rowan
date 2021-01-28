@@ -6,11 +6,11 @@ RwResolvedProjectV2 >> compareAgainstBase: aDefinition [
 	| modification packagesModification |
 	modification := RwProjectModification before: aDefinition after: self.
 	modification
-		propertiesModification: (self _projectDefinition comparePropertiesAgainstBase: aDefinition _projectDefinition).
+		propertiesModification: (self _projectDefinitionForCompare comparePropertiesAgainstBase: aDefinition _projectDefinitionForCompare).
 	packagesModification := RwPackagesModification new.
 	self
-		compareDictionary: self packages
-		againstBaseDictionary: aDefinition packages
+		compareDictionary: self packagesForCompare
+		againstBaseDictionary: aDefinition packagesForCompare
 		into: packagesModification
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.
