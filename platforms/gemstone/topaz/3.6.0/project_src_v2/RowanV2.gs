@@ -64300,6 +64300,12 @@ packages: aPackageDictionary
 	^ self _projectDefinition packages: aPackageDictionary
 %
 
+category: 'comparing'
+method: RwResolvedProjectV2
+packagesForCompare
+	^ self packages
+%
+
 category: 'printing'
 method: RwResolvedProjectV2
 printOn: aStream
@@ -64761,6 +64767,12 @@ _checkProjectDirectoryStructure
 			fileRef exists
 				ifFalse: [ ^ false ] ].
 	^ true
+%
+
+category: 'comparing'
+method: RwResolvedProjectV2
+_projectDefinitionForCompare
+	^ self _projectDefinition
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -69057,9 +69069,14 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 category: 'private'
 method: RwPrjLoadToolV2
 _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList
-	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjects |
-	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
-	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
+	| loadedProjectDefinitionSet diff loadedProjects |
+(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ false ])
+	ifTrue: [ loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet ]
+	ifFalse: [
+		| loadedProjectSet |
+		loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
+		loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet ].
+	
 	projectSetDefinitionToLoad definitions
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
@@ -70987,6 +71004,12 @@ classMethodDefinitions: dictionaryOfDefinitions
 	classMethodDefinitions := dictionaryOfDefinitions
 %
 
+category: 'accessing'
+method: RwAbstractClassDefinition
+classMethodDefinitionsForCompare
+	^ self classMethodDefinitions
+%
+
 category: 'comparing'
 method: RwAbstractClassDefinition
 compareAgainstBase: aDefinition
@@ -71008,14 +71031,14 @@ compareAgainstBase: aDefinition using: aModificationClass
 	classMethodsModification := self _methodsModificationClass
 		extendedClassName: className.
 	self
-		compareDictionary: instanceMethodDefinitions
-		againstBaseDictionary: aDefinition instanceMethodDefinitions
+		compareDictionary: self instanceMethodDefinitionsForCompare
+		againstBaseDictionary: aDefinition instanceMethodDefinitionsForCompare
 		into: instanceMethodsModification
 		elementClass: RwMethodDefinition
 		isMeta: false.
 	self
-		compareDictionary: classMethodDefinitions
-		againstBaseDictionary: aDefinition classMethodDefinitions
+		compareDictionary: self classMethodDefinitionsForCompare
+		againstBaseDictionary: aDefinition classMethodDefinitionsForCompare
 		into: classMethodsModification
 		elementClass: RwMethodDefinition
 		isMeta: true.
@@ -71146,6 +71169,12 @@ method: RwAbstractClassDefinition
 instanceMethodDefinitions: dictionaryOfDefinitions
 
 	instanceMethodDefinitions := dictionaryOfDefinitions
+%
+
+category: 'accessing'
+method: RwAbstractClassDefinition
+instanceMethodDefinitionsForCompare
+	^ self instanceMethodDefinitions
 %
 
 category: 'testing'
@@ -72351,13 +72380,46 @@ packages
 
 ! Class implementation for 'RwProjectSetDefinition'
 
+!		Class methods for 'RwProjectSetDefinition'
+
+category: 'instance creation'
+classmethod: RwProjectSetDefinition
+withAll: someDefinitions
+
+	^(self new)
+		initialize;
+		addAll: someDefinitions;
+		yourself
+%
+
 !		Instance methods for 'RwProjectSetDefinition'
+
+category: 'accessing'
+method: RwProjectSetDefinition
+addAll: aRwDefinitionOrRwLoadedThingCollection
+	aRwDefinitionOrRwLoadedThingCollection
+		do: [ :definition | definitions at: definition name put: definition ].
+	^ aRwDefinitionOrRwLoadedThingCollection
+%
 
 category: 'accessing'
 method: RwProjectSetDefinition
 addProject: aDefinition
 
 	self addDefinition: aDefinition
+%
+
+category: 'deriving'
+method: RwProjectSetDefinition
+deriveLoadedProjectSet
+
+	"extract the loaded projects that correspond to the project defintions held by the receiver"
+
+	^ RwProjectSetDefinition
+		withAll:
+			((self definitionNames
+				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
 %
 
 category: 'deriving'
@@ -72707,8 +72769,7 @@ classDefinitions: classDefinitionDictionary
 category: 'accessing'
 method: RwPackageDefinition
 classDefinitionsForCompare
-
-	^self classDefinitions
+	^ self classDefinitions
 %
 
 category: 'accessing'
@@ -72976,6 +73037,12 @@ packages: aPackageDefinitionDictionary
 	packages := aPackageDefinitionDictionary
 %
 
+category: 'comparing'
+method: RwProjectDefinition
+packagesForCompare
+	^ self packages
+%
+
 category: 'copying'
 method: RwProjectDefinition
 postCopy
@@ -73059,6 +73126,12 @@ category: 'private'
 method: RwProjectDefinition
 _projectDefinition
 	^ self
+%
+
+category: 'comparing'
+method: RwProjectDefinition
+_projectDefinitionForCompare
+	^ self _projectDefinition
 %
 
 category: 'private'
@@ -74029,11 +74102,11 @@ acceptVisitor: aVisitor
 
 category: 'instance creation'
 classmethod: RwEntitySet
-withAll: somePackageRefs
+withAll: someEntities
 
 	^(self new)
 		initialize;
-		addAll: somePackageRefs;
+		addAll: someEntities;
 		yourself
 %
 
@@ -74042,7 +74115,6 @@ withAll: somePackageRefs
 category: 'accessing'
 method: RwEntitySet
 addAll: aRwDefinitionOrRwLoadedThingCollection
-
 	aRwDefinitionOrRwLoadedThingCollection
 		do: [ :entity | entities at: entity name put: entity ].
 	^ aRwDefinitionOrRwLoadedThingCollection
@@ -79771,6 +79843,14 @@ initializeForName: aName
 	name := aName
 %
 
+category: 'comparing'
+method: RwLoadedThing
+isEmpty
+	"Used during definition compareAgainstBase:"
+
+	^ self propertiesForCompare isEmpty
+%
+
 category: 'accessing'
 method: RwLoadedThing
 loadedPackage
@@ -79822,7 +79902,7 @@ printOn: aStream
 category: 'comparing'
 method: RwLoadedThing
 propertiesForCompare
-	^ self properties
+	^ properties
 %
 
 category: 'private'
@@ -79926,6 +80006,12 @@ classMethodDefinitions
 	^self definitionsFor: loadedClassMethods
 %
 
+category: 'comparing'
+method: RwLoadedClass
+classMethodDefinitionsForCompare
+	^ self loadedClassMethods
+%
+
 category: 'accessing'
 method: RwLoadedClass
 classPoolDictionaries
@@ -79961,6 +80047,13 @@ method: RwLoadedClass
 instanceMethodDefinitions
 
 	^self definitionsFor: loadedInstanceMethods
+%
+
+category: 'comparing'
+method: RwLoadedClass
+instanceMethodDefinitionsForCompare
+
+	^self loadedInstanceMethods
 %
 
 category: 'testing'
@@ -80124,6 +80217,15 @@ addLoadedMethod: aLoadedMethod
 	aLoadedMethod classIsMeta
 		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
+%
+
+category: 'comparing'
+method: RwGsLoadedSymbolDictClass
+gs_symbolDictionary
+
+	^ self propertiesForCompare
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
 %
 
 category: 'private-updating'
@@ -80536,6 +80638,12 @@ classMethodDefinitions
 	^self definitionsFor: loadedClassMethods
 %
 
+category: 'private'
+method: RwLoadedClassExtension
+classMethodDefinitionsForCompare
+	^ self loadedClassMethods
+%
+
 category: 'testing'
 method: RwLoadedClassExtension
 includesSelector: aSelector isMeta: isMeta
@@ -80550,6 +80658,12 @@ method: RwLoadedClassExtension
 instanceMethodDefinitions
 
 	^self definitionsFor: loadedInstanceMethods
+%
+
+category: 'private'
+method: RwLoadedClassExtension
+instanceMethodDefinitionsForCompare
+	^ self loadedInstanceMethods
 %
 
 category: 'testing'
@@ -80844,6 +80958,13 @@ classIsMeta
 	^classIsMeta
 %
 
+category: 'comparing'
+method: RwLoadedMethod
+isEmpty
+
+	^super isEmpty & self source isNil
+%
+
 category: 'queries'
 method: RwLoadedMethod
 loadedClass
@@ -81043,12 +81164,24 @@ classDefinitions
 	^self definitionsFor: loadedClasses
 %
 
+category: 'comparing'
+method: RwLoadedPackage
+classDefinitionsForCompare
+	^ self loadedClasses
+%
+
 category: 'private'
 method: RwLoadedPackage
 classExtensionDefinitions
 	"Create definitions from all of the class extensions I define, and answer the collection of them"
 
 	^self definitionsFor: loadedClassExtensions
+%
+
+category: 'comparing'
+method: RwLoadedPackage
+classExtensionsForCompare
+	^ self loadedClassExtensions
 %
 
 category: 'queries'
@@ -81068,7 +81201,7 @@ isDirty
 	^ isDirty
 %
 
-category: 'testing'
+category: 'comparing'
 method: RwLoadedPackage
 isEmpty
 
@@ -81206,19 +81339,6 @@ removeLoadedClassExtension: aLoadedClassExtension
 
 !		Instance methods for 'RwGsLoadedSymbolDictPackage'
 
-category: 'xxx'
-method: RwGsLoadedSymbolDictPackage
-classDefinitionsForCompare
-
-	^self loadedClasses
-%
-
-category: 'xxx'
-method: RwGsLoadedSymbolDictPackage
-classExtensionsForCompare
-	^ self loadedClassExtensions
-%
-
 category: 'queries'
 method: RwGsLoadedSymbolDictPackage
 classOrExtensionForClass: behavior ifAbsent: absentBlock
@@ -81235,6 +81355,15 @@ classOrExtensionForClassNamed: className ifAbsent: absentBlock
 	^ loadedClasses
 		at: className
 		ifAbsent: [ loadedClassExtensions at: className ifAbsent: absentBlock ]
+%
+
+category: 'comparing'
+method: RwGsLoadedSymbolDictPackage
+gs_symbolDictionary
+
+	^ self propertiesForCompare
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
 %
 
 category: 'initialization'
@@ -81826,6 +81955,14 @@ initializeForResolvedProject: aResolvedProject
 	handle := aResolvedProject copyForLoadedProject
 %
 
+category: 'comparing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+isEmpty
+	"Used during definition compareAgainstBase:"
+
+	^ super isEmpty & self packagesForCompare isEmpty
+%
+
 category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 load
@@ -81926,6 +82063,12 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 packageConvention
 
 	^ self resolvedProject packageConvention
+%
+
+category: 'comparing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+packagesForCompare
+	^ self loadedPackages
 %
 
 category: 'accessing'
@@ -82140,6 +82283,12 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 _projectComponents
 	^ handle _projectComponents
+%
+
+category: 'comparing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+_projectDefinitionForCompare
+	^ self
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
@@ -94866,12 +95015,12 @@ compareAgainstBase: aDefinition
 	classesModification := RwClassesModification new.
 	classExtensionsModification := RwClassExtensionsModification new.
 	self
-		compareDictionary: classDefinitions
+		compareDictionary: self classDefinitionsForCompare
 		againstBaseDictionary: aDefinition classDefinitionsForCompare
 		into: classesModification
 		elementClass: RwClassDefinition.
 	self
-		compareDictionary: classExtensions
+		compareDictionary: self classExtensionsForCompare
 		againstBaseDictionary: aDefinition classExtensionsForCompare
 		into: classExtensionsModification
 		elementClass: RwClassExtensionDefinition.
@@ -95570,8 +95719,8 @@ compareAgainstBase: aDefinition
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	packagesModification := RwPackagesModification new.
 	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
+		compareDictionary: self packagesForCompare
+		againstBaseDictionary: aDefinition packagesForCompare
 		into: packagesModification
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.
@@ -95771,11 +95920,11 @@ compareAgainstBase: aDefinition
 	| modification packagesModification |
 	modification := RwProjectModification before: aDefinition after: self.
 	modification
-		propertiesModification: (self _projectDefinition comparePropertiesAgainstBase: aDefinition _projectDefinition).
+		propertiesModification: (self _projectDefinitionForCompare comparePropertiesAgainstBase: aDefinition _projectDefinitionForCompare).
 	packagesModification := RwPackagesModification new.
 	self
-		compareDictionary: self packages
-		againstBaseDictionary: aDefinition packages
+		compareDictionary: self packagesForCompare
+		againstBaseDictionary: aDefinition packagesForCompare
 		into: packagesModification
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.

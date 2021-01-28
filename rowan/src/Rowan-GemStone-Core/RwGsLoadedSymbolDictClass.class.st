@@ -43,6 +43,14 @@ RwGsLoadedSymbolDictClass >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictClass >> gs_symbolDictionary [
+
+	^ self propertiesForCompare
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
+]
+
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> handleClassDeletion [
 

@@ -58,11 +58,21 @@ RwLoadedPackage >> classDefinitions [
 	^self definitionsFor: loadedClasses
 ]
 
+{ #category : 'comparing' }
+RwLoadedPackage >> classDefinitionsForCompare [
+	^ self loadedClasses
+]
+
 { #category : 'private' }
 RwLoadedPackage >> classExtensionDefinitions [
 	"Create definitions from all of the class extensions I define, and answer the collection of them"
 
 	^self definitionsFor: loadedClassExtensions
+]
+
+{ #category : 'comparing' }
+RwLoadedPackage >> classExtensionsForCompare [
+	^ self loadedClassExtensions
 ]
 
 { #category : 'queries' }
@@ -80,7 +90,7 @@ RwLoadedPackage >> isDirty [
 	^ isDirty
 ]
 
-{ #category : 'testing' }
+{ #category : 'comparing' }
 RwLoadedPackage >> isEmpty [
 
 	^loadedClasses isEmpty and: [loadedClassExtensions isEmpty]

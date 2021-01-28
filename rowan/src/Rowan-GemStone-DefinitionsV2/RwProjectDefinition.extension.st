@@ -29,8 +29,8 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	packagesModification := RwPackagesModification new.
 	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
+		compareDictionary: self packagesForCompare
+		againstBaseDictionary: aDefinition packagesForCompare
 		into: packagesModification
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.

@@ -13,17 +13,16 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwEntitySet class >> withAll: somePackageRefs [
+RwEntitySet class >> withAll: someEntities [
 
 	^(self new)
 		initialize;
-		addAll: somePackageRefs;
+		addAll: someEntities;
 		yourself
 ]
 
 { #category : 'accessing' }
 RwEntitySet >> addAll: aRwDefinitionOrRwLoadedThingCollection [
-
 	aRwDefinitionOrRwLoadedThingCollection
 		do: [ :entity | entities at: entity name put: entity ].
 	^ aRwDefinitionOrRwLoadedThingCollection

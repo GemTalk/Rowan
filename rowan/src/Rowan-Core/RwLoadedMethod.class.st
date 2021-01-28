@@ -29,6 +29,12 @@ RwLoadedMethod >> classIsMeta [
 	^classIsMeta
 ]
 
+{ #category : 'comparing' }
+RwLoadedMethod >> isEmpty [
+
+	^super isEmpty & self source isNil
+]
+
 { #category : 'queries' }
 RwLoadedMethod >> loadedClass [
 

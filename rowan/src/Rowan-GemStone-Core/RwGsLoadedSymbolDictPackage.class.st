@@ -4,16 +4,6 @@ Class {
 	#category : 'Rowan-GemStone-Core'
 }
 
-{ #category : 'comparing' }
-RwGsLoadedSymbolDictPackage >> classDefinitionsForCompare [
-	^ self loadedClasses
-]
-
-{ #category : 'comparing' }
-RwGsLoadedSymbolDictPackage >> classExtensionsForCompare [
-	^ self loadedClassExtensions
-]
-
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: absentBlock [
 
@@ -28,6 +18,14 @@ RwGsLoadedSymbolDictPackage >> classOrExtensionForClassNamed: className ifAbsent
 	^ loadedClasses
 		at: className
 		ifAbsent: [ loadedClassExtensions at: className ifAbsent: absentBlock ]
+]
+
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictPackage >> gs_symbolDictionary [
+
+	^ self propertiesForCompare
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
 ]
 
 { #category : 'initialization' }

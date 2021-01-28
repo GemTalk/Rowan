@@ -31,6 +31,11 @@ RwLoadedClassExtension >> classMethodDefinitions [
 	^self definitionsFor: loadedClassMethods
 ]
 
+{ #category : 'private' }
+RwLoadedClassExtension >> classMethodDefinitionsForCompare [
+	^ self loadedClassMethods
+]
+
 { #category : 'testing' }
 RwLoadedClassExtension >> includesSelector: aSelector isMeta: isMeta [
 
@@ -43,6 +48,11 @@ RwLoadedClassExtension >> includesSelector: aSelector isMeta: isMeta [
 RwLoadedClassExtension >> instanceMethodDefinitions [
 
 	^self definitionsFor: loadedInstanceMethods
+]
+
+{ #category : 'private' }
+RwLoadedClassExtension >> instanceMethodDefinitionsForCompare [
+	^ self loadedInstanceMethods
 ]
 
 { #category : 'testing' }

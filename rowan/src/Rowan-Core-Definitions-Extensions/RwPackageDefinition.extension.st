@@ -10,12 +10,12 @@ RwPackageDefinition >> compareAgainstBase: aDefinition [
 	classesModification := RwClassesModification new.
 	classExtensionsModification := RwClassExtensionsModification new.
 	self
-		compareDictionary: classDefinitions
+		compareDictionary: self classDefinitionsForCompare
 		againstBaseDictionary: aDefinition classDefinitionsForCompare
 		into: classesModification
 		elementClass: RwClassDefinition.
 	self
-		compareDictionary: classExtensions
+		compareDictionary: self classExtensionsForCompare
 		againstBaseDictionary: aDefinition classExtensionsForCompare
 		into: classExtensionsModification
 		elementClass: RwClassExtensionDefinition.

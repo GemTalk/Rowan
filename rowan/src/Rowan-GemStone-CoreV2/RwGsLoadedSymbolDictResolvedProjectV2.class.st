@@ -180,6 +180,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolved
 	handle := aResolvedProject copyForLoadedProject
 ]
 
+{ #category : 'comparing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> isEmpty [
+	"Used during definition compareAgainstBase:"
+
+	^ super isEmpty & self packagesForCompare isEmpty
+]
+
 { #category : 'actions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> load [
 	"

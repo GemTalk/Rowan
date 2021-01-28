@@ -63,6 +63,11 @@ RwLoadedClass >> classMethodDefinitions [
 	^self definitionsFor: loadedClassMethods
 ]
 
+{ #category : 'comparing' }
+RwLoadedClass >> classMethodDefinitionsForCompare [
+	^ self loadedClassMethods
+]
+
 { #category : 'accessing' }
 RwLoadedClass >> classPoolDictionaries [
 
@@ -96,6 +101,12 @@ RwLoadedClass >> includesSelector: aSelector isMeta: isMeta [
 RwLoadedClass >> instanceMethodDefinitions [
 
 	^self definitionsFor: loadedInstanceMethods
+]
+
+{ #category : 'comparing' }
+RwLoadedClass >> instanceMethodDefinitionsForCompare [
+
+	^self loadedInstanceMethods
 ]
 
 { #category : 'testing' }

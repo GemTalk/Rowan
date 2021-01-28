@@ -11,10 +11,38 @@ Class {
 	#category : 'Rowan-Definitions'
 }
 
+{ #category : 'instance creation' }
+RwProjectSetDefinition class >> withAll: someDefinitions [
+
+	^(self new)
+		initialize;
+		addAll: someDefinitions;
+		yourself
+]
+
+{ #category : 'accessing' }
+RwProjectSetDefinition >> addAll: aRwDefinitionOrRwLoadedThingCollection [
+	aRwDefinitionOrRwLoadedThingCollection
+		do: [ :definition | definitions at: definition name put: definition ].
+	^ aRwDefinitionOrRwLoadedThingCollection
+]
+
 { #category : 'accessing' }
 RwProjectSetDefinition >> addProject: aDefinition [
 
 	self addDefinition: aDefinition
+]
+
+{ #category : 'deriving' }
+RwProjectSetDefinition >> deriveLoadedProjectSet [
+
+	"extract the loaded projects that correspond to the project defintions held by the receiver"
+
+	^ RwProjectSetDefinition
+		withAll:
+			((self definitionNames
+				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
 ]
 
 { #category : 'deriving' }

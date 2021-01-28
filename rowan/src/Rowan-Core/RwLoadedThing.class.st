@@ -83,6 +83,13 @@ RwLoadedThing >> initializeForName: aName [
 	name := aName
 ]
 
+{ #category : 'comparing' }
+RwLoadedThing >> isEmpty [
+	"Used during definition compareAgainstBase:"
+
+	^ self propertiesForCompare isEmpty
+]
+
 { #category : 'accessing' }
 RwLoadedThing >> loadedPackage [
 

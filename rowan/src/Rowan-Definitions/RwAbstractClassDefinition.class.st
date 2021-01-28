@@ -83,6 +83,11 @@ RwAbstractClassDefinition >> classMethodDefinitions: dictionaryOfDefinitions [
 	classMethodDefinitions := dictionaryOfDefinitions
 ]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> classMethodDefinitionsForCompare [
+	^ self classMethodDefinitions
+]
+
 { #category : 'comparing' }
 RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 
@@ -102,14 +107,14 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition using: aModificatio
 	classMethodsModification := self _methodsModificationClass
 		extendedClassName: className.
 	self
-		compareDictionary: instanceMethodDefinitions
-		againstBaseDictionary: aDefinition instanceMethodDefinitions
+		compareDictionary: self instanceMethodDefinitionsForCompare
+		againstBaseDictionary: aDefinition instanceMethodDefinitionsForCompare
 		into: instanceMethodsModification
 		elementClass: RwMethodDefinition
 		isMeta: false.
 	self
-		compareDictionary: classMethodDefinitions
-		againstBaseDictionary: aDefinition classMethodDefinitions
+		compareDictionary: self classMethodDefinitionsForCompare
+		againstBaseDictionary: aDefinition classMethodDefinitionsForCompare
 		into: classMethodsModification
 		elementClass: RwMethodDefinition
 		isMeta: true.
@@ -232,6 +237,11 @@ RwAbstractClassDefinition >> instanceMethodDefinitions [
 RwAbstractClassDefinition >> instanceMethodDefinitions: dictionaryOfDefinitions [
 
 	instanceMethodDefinitions := dictionaryOfDefinitions
+]
+
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> instanceMethodDefinitionsForCompare [
+	^ self instanceMethodDefinitions
 ]
 
 { #category : 'testing' }
