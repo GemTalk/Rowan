@@ -17,6 +17,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectComponents [
 	^ handle _projectComponents
 ]
 
+{ #category : 'xxx' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinition [
+	^ self
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
@@ -267,6 +272,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
 	^ self resolvedProject packageConvention
 ]
 
+{ #category : 'xxx' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> packages [
+	^ self loadedPackages
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
 	"Answer the platformConditionalAttributes used to load the project"
@@ -301,6 +311,19 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectUrl [
 	^ self resolvedProject projectUrl
 ]
 
+{ #category : 'xxx' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> properties [
+	| props|
+	props := Dictionary new.
+	props
+		at: 'name' put: handle projectName;
+		at: RwLoadedProject _projectDefinitionSourceKey
+			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+			put: handle projectDefinitionPlatformConditionalAttributes copy.
+	^ props
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
 
@@ -309,6 +332,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
 self halt.
 	props at: 'projectRef' put: handle copy.
 	^ props
+]
+
+{ #category : 'xxx' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> propertyAt: propertyName ifAbsent: aBlock [
+
+	^self properties at: propertyName ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }
