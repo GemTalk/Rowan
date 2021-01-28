@@ -58,22 +58,18 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 { #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList [
 	| loadedProjectDefinitionSet diff loadedProjects |
-(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ true ])
-	ifTrue: [ loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet ]
-	ifFalse: [
-		| loadedProjectSet |
-		loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
-		loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet ].
-	
+	loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet.	"use loaded things to do the diff - convert to definition when a modification is created"
 	projectSetDefinitionToLoad definitions
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
 					| symdictName |
 					"set the target symbol dictionary name for each incoming package definition"
-					symdictName := projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName.
-						packageDefinition gs_symbolDictionary: symdictName.
-						packageDefinition classDefinitions values do: [:classDef | classDef gs_symbolDictionary: symdictName ] ] ].
+					symdictName := projectDefinition
+						gemstoneSymbolDictNameForPackageNamed: packageName.
+					packageDefinition gs_symbolDictionary: symdictName.
+					packageDefinition classDefinitions values
+						do: [ :classDef | classDef gs_symbolDictionary: symdictName ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
@@ -81,7 +77,10 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			| componentsWithDoits |
 			componentsWithDoits := diff componentsWithDoits.
 			componentsWithDoits do: [ :component | component executePreloadDoit ].
-			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator symbolList: symbolList.
+			Rowan image
+				applyModification_V2: diff
+				instanceMigrator: instanceMigrator
+				symbolList: symbolList.
 			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
@@ -89,10 +88,15 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			theLoadedProject handle _projectComponents: projectDef _projectComponents copy.
-			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
-			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
-			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
+			theLoadedProject handle
+				_projectComponents: projectDef _projectComponents copy.
+			theLoadedProject handle
+				_loadSpecification: projectDef _loadSpecification copy.
+			theLoadedProject handle
+				_projectRepository: projectDef _projectRepository copy.
+			theLoadedProject handle
+				projectDefinitionPlatformConditionalAttributes:
+					projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 

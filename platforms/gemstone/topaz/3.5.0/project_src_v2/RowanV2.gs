@@ -7704,24 +7704,6 @@ removeallmethods RwProjectSetDefinition
 removeallclassmethods RwProjectSetDefinition
 
 doit
-(RwProjectSetDefinition
-	subclass: 'RwProjectSetDefinitionXXX'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Definitions';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwProjectSetDefinitionXXX
-removeallclassmethods RwProjectSetDefinitionXXX
-
-doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
 	instVarNames: #( source )
@@ -8020,24 +8002,6 @@ true.
 
 removeallmethods RwEntitySet
 removeallclassmethods RwEntitySet
-
-doit
-(RwEntitySet
-	subclass: 'RwEntitySetXXX'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-Definitions';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwEntitySetXXX
-removeallclassmethods RwEntitySetXXX
 
 doit
 (Object
@@ -69615,22 +69579,18 @@ category: 'private'
 method: RwPrjLoadToolV2
 _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList
 	| loadedProjectDefinitionSet diff loadedProjects |
-(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ true ])
-	ifTrue: [ loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet ]
-	ifFalse: [
-		| loadedProjectSet |
-		loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
-		loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet ].
-	
+	loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet.	"use loaded things to do the diff - convert to definition when a modification is created"
 	projectSetDefinitionToLoad definitions
 		keysAndValuesDo: [ :projectName :projectDefinition | 
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
 					| symdictName |
 					"set the target symbol dictionary name for each incoming package definition"
-					symdictName := projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName.
-						packageDefinition gs_symbolDictionary: symdictName.
-						packageDefinition classDefinitions values do: [:classDef | classDef gs_symbolDictionary: symdictName ] ] ].
+					symdictName := projectDefinition
+						gemstoneSymbolDictNameForPackageNamed: packageName.
+					packageDefinition gs_symbolDictionary: symdictName.
+					packageDefinition classDefinitions values
+						do: [ :classDef | classDef gs_symbolDictionary: symdictName ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
@@ -69638,7 +69598,10 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			| componentsWithDoits |
 			componentsWithDoits := diff componentsWithDoits.
 			componentsWithDoits do: [ :component | component executePreloadDoit ].
-			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator symbolList: symbolList.
+			Rowan image
+				applyModification_V2: diff
+				instanceMigrator: instanceMigrator
+				symbolList: symbolList.
 			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
@@ -69646,10 +69609,15 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			| theLoadedProject |
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
-			theLoadedProject handle _projectComponents: projectDef _projectComponents copy.
-			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
-			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
-			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
+			theLoadedProject handle
+				_projectComponents: projectDef _projectComponents copy.
+			theLoadedProject handle
+				_loadSpecification: projectDef _loadSpecification copy.
+			theLoadedProject handle
+				_projectRepository: projectDef _projectRepository copy.
+			theLoadedProject handle
+				projectDefinitionPlatformConditionalAttributes:
+					projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 
@@ -73027,23 +72995,6 @@ projects
 	^ self definitions
 %
 
-! Class implementation for 'RwProjectSetDefinitionXXX'
-
-!		Instance methods for 'RwProjectSetDefinitionXXX'
-
-category: 'deriving'
-method: RwProjectSetDefinitionXXX
-deriveLoadedThings
-
-	"extract the loaded projects that correspond to the project defintions held by the receiver"
-
-	^ RwEntitySetXXX
-		withAll:
-			((self definitionNames
-				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
-				select: [ :each | each notNil ])
-%
-
 ! Class implementation for 'RwMethodDefinition'
 
 !		Class methods for 'RwMethodDefinition'
@@ -74731,20 +74682,6 @@ method: RwEntitySet
 size
 
 	^ entities size
-%
-
-! Class implementation for 'RwEntitySetXXX'
-
-!		Instance methods for 'RwEntitySetXXX'
-
-category: 'definitions'
-method: RwEntitySetXXX
-asProjectDefinitionSet
-
-	| result |
-	result := RwProjectSetDefinitionXXX new.
-	entities do: [ :entity | result addDefinition: entity ].
-	^ result
 %
 
 ! Class implementation for 'RwGsImage'
