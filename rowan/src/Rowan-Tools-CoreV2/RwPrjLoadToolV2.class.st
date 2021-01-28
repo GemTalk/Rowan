@@ -58,7 +58,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 { #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList [
 	| loadedProjectDefinitionSet diff loadedProjects |
-(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ false ])
+(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ true ])
 	ifTrue: [ loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet ]
 	ifFalse: [
 		| loadedProjectSet |

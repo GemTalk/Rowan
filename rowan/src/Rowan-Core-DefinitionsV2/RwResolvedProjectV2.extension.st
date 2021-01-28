@@ -26,8 +26,18 @@ RwResolvedProjectV2 >> compareDictionary: myDictionary againstBaseDictionary: ba
 	keys do: 
 			[:key |
 			| before after modification |
-			before := baseDictionary at: key ifAbsent: [elementClass new].
-			after := myDictionary at: key ifAbsent: [elementClass new].
+			before := baseDictionary at: key ifAbsent: [].
+			before := before
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			after := myDictionary at: key ifAbsent: [].
+			after := after
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]

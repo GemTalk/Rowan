@@ -501,6 +501,11 @@ RwResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames matchBlock
 	^ packageNames asArray sort
 ]
 
+{ #category : 'converting' }
+RwResolvedProjectV2 >> asDefinition [
+  ^ self
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish

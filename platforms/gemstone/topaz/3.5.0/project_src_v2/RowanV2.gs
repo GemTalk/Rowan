@@ -64368,6 +64368,12 @@ allPackageNamesIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: 
 	^ packageNames asArray sort
 %
 
+category: 'converting'
+method: RwResolvedProjectV2
+asDefinition
+  ^ self
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 checkout: aCommittish
@@ -69609,7 +69615,7 @@ category: 'private'
 method: RwPrjLoadToolV2
 _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList
 	| loadedProjectDefinitionSet diff loadedProjects |
-(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ false ])
+(UserGlobals at: #USE_LOADED_PROJECT_FOR_COMPARISON ifAbsent: [ true ])
 	ifTrue: [ loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet ]
 	ifFalse: [
 		| loadedProjectSet |
@@ -71324,8 +71330,18 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 	keys do: 
 			[:key |
 			| before after modification |
-			before := baseDictionary at: key ifAbsent: [elementClass new].
-			after := myDictionary at: key ifAbsent: [elementClass new].
+			before := baseDictionary at: key ifAbsent: [].
+			before := before
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			after := myDictionary at: key ifAbsent: [].
+			after := after
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
@@ -99251,8 +99267,18 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 	keys do: 
 			[:key |
 			| before after modification |
-			before := baseDictionary at: key ifAbsent: [elementClass new].
-			after := myDictionary at: key ifAbsent: [elementClass new].
+			before := baseDictionary at: key ifAbsent: [].
+			before := before
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			after := myDictionary at: key ifAbsent: [].
+			after := after
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
