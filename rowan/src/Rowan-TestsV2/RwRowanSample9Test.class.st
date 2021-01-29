@@ -4402,6 +4402,7 @@ RwRowanSample9Test >> testSpec_0029 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
 [ 
+"Ensure that when we are using the new component classes, we can still load the old component classes"
 UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 
 	loadSpec := self _loadSpecNamed: 'spec_0029'.
