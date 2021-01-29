@@ -378,7 +378,6 @@ ZnBufferedReadStream >> shouldBufferReadOfCount: elementCount [
 
 { #category : 'private' }
 ZnBufferedReadStream >> sizeBuffer: size [
-  stream atEnd ifTrue:[ Error signal:'already at end'].
   buffer := self collectionSpecies new: size .
 ]
 

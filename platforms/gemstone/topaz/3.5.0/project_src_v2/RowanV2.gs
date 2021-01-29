@@ -90416,7 +90416,6 @@ size
 category: 'private'
 method: ZnBufferedReadStream
 sizeBuffer: size
-  stream atEnd ifTrue:[ Error signal:'already at end'].
   buffer := self collectionSpecies new: size .
 %
 
@@ -100327,7 +100326,10 @@ stonProcessSubObjects: block
 category: '*filesystem-gemstone-kernel'
 method: Utf8
 asByteArray
-  ^ self 
+	"used to keep the tests portable between GemStone and Pharo - may not be required long term?"
+	^ ByteArray streamContents: [ :stream |
+		self do: [ :each |
+			stream nextPut: each ] ]
 %
 
 category: '*filesystem-gemstone-kernel-32x'
