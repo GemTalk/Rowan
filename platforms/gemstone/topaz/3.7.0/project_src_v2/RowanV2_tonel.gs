@@ -4,9 +4,9 @@
 doit
 (Error
 	subclass: 'RwTonelParseError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -24,9 +24,9 @@ removeallclassmethods RwTonelParseError
 doit
 (Error
 	subclass: 'STONReaderError'
-	instVarNames: #( streamPosition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( streamPosition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -44,9 +44,9 @@ removeallclassmethods STONReaderError
 doit
 (Error
 	subclass: 'STONWriterError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -63,9 +63,9 @@ removeallclassmethods STONWriterError
 doit
 (Notification
 	subclass: 'RwTonelParseRequireMethodCategoryNotification'
-	instVarNames: #( className isMeta selector  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( className isMeta selector )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -86,9 +86,9 @@ removeallclassmethods RwTonelParseRequireMethodCategoryNotification
 doit
 (Object
 	subclass: 'RwTonelParser'
-	instVarNames: #( packageReader stream lastSelectorParsed  )
-	classVars: #( Character_lf  )
-	classInstVars: #(  )
+	instVarNames: #( packageReader stream lastSelectorParsed )
+	classVars: #( Character_lf )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -148,9 +148,9 @@ removeallclassmethods RwTonelParser
 doit
 (Object
 	subclass: 'RwTopazTonelReader'
-	instVarNames: #( environmentId  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( environmentId )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -173,9 +173,9 @@ removeallclassmethods RwTopazTonelReader
 doit
 (Object
 	subclass: 'STON'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -285,9 +285,9 @@ removeallclassmethods STON
 doit
 (Object
 	subclass: 'STONReader'
-	instVarNames: #( readStream objects classes unresolvedReferences stringStream allowComplexMapKeys stack  )
-	classVars: #( Character_lf Character_backspace Character_newPage Character_cr Character_tab  )
-	classInstVars: #(  )
+	instVarNames: #( readStream objects classes unresolvedReferences stringStream allowComplexMapKeys stack )
+	classVars: #( Character_lf Character_backspace Character_newPage Character_cr Character_tab )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -306,9 +306,9 @@ removeallclassmethods STONReader
 doit
 (Object
 	subclass: 'STONReference'
-	instVarNames: #( index  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( index )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -326,9 +326,9 @@ removeallclassmethods STONReference
 doit
 (Object
 	subclass: 'STONStreamWriter'
-	instVarNames: #( writer first  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( writer first )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -346,9 +346,9 @@ removeallclassmethods STONStreamWriter
 doit
 (STONStreamWriter
 	subclass: 'STONListWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -366,9 +366,9 @@ removeallclassmethods STONListWriter
 doit
 (STONListWriter
 	subclass: 'STONShortListWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -386,9 +386,9 @@ removeallclassmethods STONShortListWriter
 doit
 (STONStreamWriter
 	subclass: 'STONMapWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -405,9 +405,9 @@ removeallclassmethods STONMapWriter
 doit
 (Object
 	subclass: 'STONWriter'
-	instVarNames: #( writeStream prettyPrint newLine jsonMode referencePolicy level objects  )
-	classVars: #( STONCharacters STONSimpleSymbolCharacters  )
-	classInstVars: #(  )
+	instVarNames: #( writeStream prettyPrint newLine jsonMode referencePolicy level objects )
+	classVars: #( STONCharacters STONSimpleSymbolCharacters )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )

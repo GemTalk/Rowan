@@ -4,9 +4,9 @@
 doit
 (ByteArray
 	subclass: 'UUID'
-	instVarNames: #(  )
-	classVars: #( GeneratorClass  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( GeneratorClass )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -22,9 +22,9 @@ removeallclassmethods UUID
 doit
 (Error
 	subclass: 'CypressError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -41,9 +41,9 @@ removeallclassmethods CypressError
 doit
 (Error
 	subclass: 'CypressJsonError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -60,9 +60,9 @@ removeallclassmethods CypressJsonError
 doit
 (Error
 	subclass: 'CypressLoaderError'
-	instVarNames: #( exception patchOperation  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( exception patchOperation )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -91,9 +91,9 @@ removeallclassmethods CypressLoaderError
 doit
 (Error
 	subclass: 'CypressLoaderMissingClasses'
-	instVarNames: #( requirementsMap  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( requirementsMap )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -110,9 +110,9 @@ removeallclassmethods CypressLoaderMissingClasses
 doit
 (Error
 	subclass: 'FileException'
-	instVarNames: #( fileName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( fileName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -129,9 +129,9 @@ removeallclassmethods FileException
 doit
 (FileException
 	subclass: 'CannotDeleteFileException'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -148,9 +148,9 @@ removeallclassmethods CannotDeleteFileException
 doit
 (FileException
 	subclass: 'FileAlreadyExistsException'
-	instVarNames: #( file  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( file )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -167,9 +167,9 @@ removeallclassmethods FileAlreadyExistsException
 doit
 (FileException
 	subclass: 'FileDoesNotExistException'
-	instVarNames: #( readOnly  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( readOnly )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -198,9 +198,9 @@ removeallclassmethods FileDoesNotExistException
 doit
 (FileException
 	subclass: 'FileWriteError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -217,9 +217,9 @@ removeallclassmethods FileWriteError
 doit
 (Error
 	subclass: 'FileSystemError'
-	instVarNames: #( reference  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( reference )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -236,9 +236,9 @@ removeallclassmethods FileSystemError
 doit
 (FileSystemError
 	subclass: 'DirectoryDoesNotExist'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -255,9 +255,9 @@ removeallclassmethods DirectoryDoesNotExist
 doit
 (FileSystemError
 	subclass: 'DirectoryExists'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -274,9 +274,9 @@ removeallclassmethods DirectoryExists
 doit
 (FileSystemError
 	subclass: 'DirectoryIsNotEmpty'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -293,9 +293,9 @@ removeallclassmethods DirectoryIsNotEmpty
 doit
 (FileSystemError
 	subclass: 'FileExists'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -312,9 +312,9 @@ removeallclassmethods FileExists
 doit
 (FileSystemError
 	subclass: 'IllegalName'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -332,9 +332,9 @@ removeallclassmethods IllegalName
 doit
 (Error
 	subclass: 'ZnCharacterEncodingError'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -356,9 +356,9 @@ removeallclassmethods ZnCharacterEncodingError
 doit
 (Magnitude
 	indexableSubclass: 'RwGemStoneVersionNumber'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -377,9 +377,9 @@ removeallclassmethods RwGemStoneVersionNumber
 doit
 (Magnitude
 	subclass: 'RwSemanticVersionNumber'
-	instVarNames: #( normalVersion preReleaseVersion buildVersion  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( normalVersion preReleaseVersion buildVersion )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -737,9 +737,9 @@ removeallclassmethods RwSemanticVersionNumber
 doit
 (Notification
 	subclass: 'CypressLoaderErrorNotification'
-	instVarNames: #( exception patchOperation  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( exception patchOperation )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -766,9 +766,9 @@ removeallclassmethods CypressLoaderErrorNotification
 doit
 (Notification
 	subclass: 'GsInteractionRequest'
-	instVarNames: #( interaction  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( interaction )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -784,9 +784,9 @@ removeallclassmethods GsInteractionRequest
 doit
 (Notification
 	subclass: 'ResolutionRequest'
-	instVarNames: #( origin  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( origin )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -803,9 +803,9 @@ removeallclassmethods ResolutionRequest
 doit
 (Notification
 	subclass: 'RwNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -822,9 +822,9 @@ removeallclassmethods RwNotification
 doit
 (RwNotification
 	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
-	instVarNames: #( errorMessage  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( errorMessage )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -840,9 +840,9 @@ removeallclassmethods RwAddUpdateRemoveMethodForUnpackagedClassNotification
 doit
 (RwNotification
 	subclass: 'RwAdoptAuditErrorNotification'
-	instVarNames: #( className isClassExtension packageName description  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( className isClassExtension packageName description )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -858,9 +858,9 @@ removeallclassmethods RwAdoptAuditErrorNotification
 doit
 (RwAdoptAuditErrorNotification
 	subclass: 'RwAdoptAuditClassErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -876,9 +876,9 @@ removeallclassmethods RwAdoptAuditClassErrorNotification
 doit
 (RwAdoptAuditClassErrorNotification
 	subclass: 'RwAdoptMissingClassErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -894,9 +894,9 @@ removeallclassmethods RwAdoptMissingClassErrorNotification
 doit
 (RwAdoptAuditClassErrorNotification
 	subclass: 'RwAuditClassErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -912,9 +912,9 @@ removeallclassmethods RwAuditClassErrorNotification
 doit
 (RwAdoptAuditErrorNotification
 	subclass: 'RwAdoptAuditMethodErrorNotification'
-	instVarNames: #( selector isMetaclass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( selector isMetaclass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -930,9 +930,9 @@ removeallclassmethods RwAdoptAuditMethodErrorNotification
 doit
 (RwAdoptAuditMethodErrorNotification
 	subclass: 'RwAdoptMissingMethodErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -948,9 +948,9 @@ removeallclassmethods RwAdoptMissingMethodErrorNotification
 doit
 (RwAdoptAuditMethodErrorNotification
 	subclass: 'RwAuditMethodErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -966,9 +966,9 @@ removeallclassmethods RwAuditMethodErrorNotification
 doit
 (RwNotification
 	subclass: 'RwAllowChangeRepositoryRevisionOnResolveNotification'
-	instVarNames: #( loadSpecification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( loadSpecification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -984,9 +984,9 @@ removeallclassmethods RwAllowChangeRepositoryRevisionOnResolveNotification
 doit
 (RwNotification
 	subclass: 'RwDeleteClassFromSystemNotification'
-	instVarNames: #( candidateClass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( candidateClass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1002,9 +1002,9 @@ removeallclassmethods RwDeleteClassFromSystemNotification
 doit
 (RwNotification
 	subclass: 'RwExecuteClassInitializeMethodsAfterLoadNotification'
-	instVarNames: #( candidateClass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( candidateClass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1020,9 +1020,9 @@ removeallclassmethods RwExecuteClassInitializeMethodsAfterLoadNotification
 doit
 (RwNotification
 	subclass: 'RwExistingAssociationWithSameKeyNotification'
-	instVarNames: #( errorMessage  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( errorMessage )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1038,9 +1038,9 @@ removeallclassmethods RwExistingAssociationWithSameKeyNotification
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
-	instVarNames: #( class classDefinition loadedProject  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( class classDefinition loadedProject )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1056,9 +1056,9 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 doit
 (RwNotification
 	subclass: 'RwInvalidCategoryProtocolConventionErrorNotification'
-	instVarNames: #( packageName packageConvention  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageName packageConvention )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1074,9 +1074,9 @@ removeallclassmethods RwInvalidCategoryProtocolConventionErrorNotification
 doit
 (RwInvalidCategoryProtocolConventionErrorNotification
 	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
-	instVarNames: #( classDefinition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classDefinition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1092,9 +1092,9 @@ removeallclassmethods RwInvalidClassCategoryConventionErrorNotification
 doit
 (RwInvalidCategoryProtocolConventionErrorNotification
 	subclass: 'RwInvalidMethodProtocolConventionErrorNotification'
-	instVarNames: #( methodDefinition className isMeta  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( methodDefinition className isMeta )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1110,9 +1110,9 @@ removeallclassmethods RwInvalidMethodProtocolConventionErrorNotification
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
 	subclass: 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1128,9 +1128,9 @@ removeallclassmethods RwExtensionProtocolExtensionMethodPackageMismatchErrorNoti
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
 	subclass: 'RwExtensionProtocolNonExtensionMethodErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1146,9 +1146,9 @@ removeallclassmethods RwExtensionProtocolNonExtensionMethodErrorNotification
 doit
 (RwInvalidMethodProtocolConventionErrorNotification
 	subclass: 'RwNonExtensionProtocolExtensionMethodErrorNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1164,9 +1164,9 @@ removeallclassmethods RwNonExtensionProtocolExtensionMethodErrorNotification
 doit
 (RwNotification
 	subclass: 'RwPerformingUnpackagedEditNotification'
-	instVarNames: #( informMessage  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( informMessage )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1182,9 +1182,9 @@ removeallclassmethods RwPerformingUnpackagedEditNotification
 doit
 (Object
 	subclass: 'AbstractFileReference'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1201,9 +1201,9 @@ removeallclassmethods AbstractFileReference
 doit
 (AbstractFileReference
 	subclass: 'FileLocator'
-	instVarNames: #( origin path  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( origin path )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1250,9 +1250,9 @@ removeallclassmethods FileLocator
 doit
 (AbstractFileReference
 	subclass: 'FileReference'
-	instVarNames: #( filesystem path  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( filesystem path )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1278,9 +1278,9 @@ removeallclassmethods FileReference
 doit
 (Object
 	subclass: 'CypressAbstractPackageFiler'
-	instVarNames: #( repository packageDirectory packageStructure  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( repository packageDirectory packageStructure )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1297,9 +1297,9 @@ removeallclassmethods CypressAbstractPackageFiler
 doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractFileoutWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1316,9 +1316,9 @@ removeallclassmethods CypressAbstractFileoutWriter
 doit
 (CypressAbstractFileoutWriter
 	subclass: 'CypressSmalltalkFileoutWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1335,9 +1335,9 @@ removeallclassmethods CypressSmalltalkFileoutWriter
 doit
 (CypressAbstractFileoutWriter
 	subclass: 'CypressTopazFileoutWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1354,9 +1354,9 @@ removeallclassmethods CypressTopazFileoutWriter
 doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractPackageReader'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1373,9 +1373,9 @@ removeallclassmethods CypressAbstractPackageReader
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressDoNothingPackageReader'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1392,9 +1392,9 @@ removeallclassmethods CypressDoNothingPackageReader
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressFileTreeFormatPackageReader'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1411,9 +1411,9 @@ removeallclassmethods CypressFileTreeFormatPackageReader
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressFlexiblePackageReader'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1430,9 +1430,9 @@ removeallclassmethods CypressFlexiblePackageReader
 doit
 (CypressAbstractPackageReader
 	subclass: 'CypressPackageReader'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1449,9 +1449,9 @@ removeallclassmethods CypressPackageReader
 doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractPackageWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #( specials  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1468,9 +1468,9 @@ removeallclassmethods CypressAbstractPackageWriter
 doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressFileTreeFormatPackageWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1487,9 +1487,9 @@ removeallclassmethods CypressFileTreeFormatPackageWriter
 doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressPackageWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1506,9 +1506,9 @@ removeallclassmethods CypressPackageWriter
 doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressStrictFileTreeFormatDoNothingPackageWriter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1525,9 +1525,9 @@ removeallclassmethods CypressStrictFileTreeFormatDoNothingPackageWriter
 doit
 (Object
 	subclass: 'CypressAbstractRepository'
-	instVarNames: #( url properties readerClass writerClass  )
-	classVars: #( DefaultCopyrightNotice  )
-	classInstVars: #(  )
+	instVarNames: #( url properties readerClass writerClass )
+	classVars: #( DefaultCopyrightNotice )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1544,9 +1544,9 @@ removeallclassmethods CypressAbstractRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressAbstractFileoutRepository'
-	instVarNames: #( directoryPath  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( directoryPath )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1563,9 +1563,9 @@ removeallclassmethods CypressAbstractFileoutRepository
 doit
 (CypressAbstractFileoutRepository
 	subclass: 'CypressSmalltalkRepository'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1586,9 +1586,9 @@ removeallclassmethods CypressSmalltalkRepository
 doit
 (CypressAbstractFileoutRepository
 	subclass: 'CypressTopazRepository'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1609,9 +1609,9 @@ removeallclassmethods CypressTopazRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressDictionaryRepository'
-	instVarNames: #( dictionary  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( dictionary )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1628,9 +1628,9 @@ removeallclassmethods CypressDictionaryRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressFileSystemRepository'
-	instVarNames: #( directoryPath  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( directoryPath )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1647,9 +1647,9 @@ removeallclassmethods CypressFileSystemRepository
 doit
 (CypressFileSystemRepository
 	subclass: 'CypressFileSystemGitRepository'
-	instVarNames: #( remoteUrl  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( remoteUrl )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1666,9 +1666,9 @@ removeallclassmethods CypressFileSystemGitRepository
 doit
 (Object
 	subclass: 'CypressFileUtilities'
-	instVarNames: #(  )
-	classVars: #( Current  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( Current )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1685,9 +1685,9 @@ removeallclassmethods CypressFileUtilities
 doit
 (CypressFileUtilities
 	subclass: 'CypressGemStoneDirectoryUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1704,9 +1704,9 @@ removeallclassmethods CypressGemStoneDirectoryUtilities
 doit
 (Object
 	subclass: 'CypressGsGeneralDependencySorter'
-	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1723,9 +1723,9 @@ removeallclassmethods CypressGsGeneralDependencySorter
 doit
 (Object
 	subclass: 'CypressJsonParser'
-	instVarNames: #( stream  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( stream )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1742,9 +1742,9 @@ removeallclassmethods CypressJsonParser
 doit
 (Object
 	subclass: 'CypressObject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1761,9 +1761,9 @@ removeallclassmethods CypressObject
 doit
 (CypressObject
 	subclass: 'CypressAbstractPackageInformation'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1780,9 +1780,9 @@ removeallclassmethods CypressAbstractPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressConflictingPackageInformation'
-	instVarNames: #( conflictsWith  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( conflictsWith )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1799,9 +1799,9 @@ removeallclassmethods CypressConflictingPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressEclipsedPackageInformation'
-	instVarNames: #( eclipsedBy  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( eclipsedBy )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1818,9 +1818,9 @@ removeallclassmethods CypressEclipsedPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressKnownPackageInformation'
-	instVarNames: #( repositories digests  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( repositories digests )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1837,9 +1837,9 @@ removeallclassmethods CypressKnownPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressUnknownPackageInformation'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1856,9 +1856,9 @@ removeallclassmethods CypressUnknownPackageInformation
 doit
 (CypressObject
 	subclass: 'CypressDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1875,9 +1875,9 @@ removeallclassmethods CypressDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1894,9 +1894,9 @@ removeallclassmethods CypressClassDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressMethodDefinition'
-	instVarNames: #( category classIsMeta className selector source  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( category classIsMeta className selector source )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1913,9 +1913,9 @@ removeallclassmethods CypressMethodDefinition
 doit
 (CypressMethodDefinition
 	subclass: 'RwCypressMethodDefinition'
-	instVarNames: #( isExtensionMethod  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isExtensionMethod )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -1931,9 +1931,9 @@ removeallclassmethods RwCypressMethodDefinition
 doit
 (CypressObject
 	subclass: 'CypressDefinitionIndex'
-	instVarNames: #( definitionMap  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definitionMap )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1950,9 +1950,9 @@ removeallclassmethods CypressDefinitionIndex
 doit
 (CypressObject
 	subclass: 'CypressDependencySorter'
-	instVarNames: #( orderedItems provided required  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( orderedItems provided required )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1969,9 +1969,9 @@ removeallclassmethods CypressDependencySorter
 doit
 (CypressDependencySorter
 	subclass: 'CypressEnvironmentDependencySorter'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -1987,9 +1987,9 @@ removeallclassmethods CypressEnvironmentDependencySorter
 doit
 (CypressObject
 	subclass: 'CypressLoader'
-	instVarNames: #( additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2006,9 +2006,9 @@ removeallclassmethods CypressLoader
 doit
 (CypressLoader
 	subclass: 'CypressEnvironmentLoader'
-	instVarNames: #( defaultEnvironmentId lookupSymbolList compilationSymbolList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( defaultEnvironmentId lookupSymbolList compilationSymbolList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2024,9 +2024,9 @@ removeallclassmethods CypressEnvironmentLoader
 doit
 (CypressObject
 	subclass: 'CypressPackageDefinition'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2043,9 +2043,9 @@ removeallclassmethods CypressPackageDefinition
 doit
 (CypressPackageDefinition
 	subclass: 'CypressEnvironmentPackageDefinition'
-	instVarNames: #( lookupSymbolList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( lookupSymbolList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2067,9 +2067,9 @@ removeallclassmethods CypressEnvironmentPackageDefinition
 doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2109,9 +2109,9 @@ removeallclassmethods CypressPackageInformation
 doit
 (CypressObject
 	subclass: 'CypressPatch'
-	instVarNames: #( operations  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( operations )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2128,9 +2128,9 @@ removeallclassmethods CypressPatch
 doit
 (CypressObject
 	subclass: 'CypressPatchOperation'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2147,9 +2147,9 @@ removeallclassmethods CypressPatchOperation
 doit
 (CypressPatchOperation
 	subclass: 'CypressAddition'
-	instVarNames: #( definition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2166,9 +2166,9 @@ removeallclassmethods CypressAddition
 doit
 (CypressPatchOperation
 	subclass: 'CypressModification'
-	instVarNames: #( modification obsoletion  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( modification obsoletion )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2185,9 +2185,9 @@ removeallclassmethods CypressModification
 doit
 (CypressPatchOperation
 	subclass: 'CypressRemoval'
-	instVarNames: #( definition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2204,9 +2204,9 @@ removeallclassmethods CypressRemoval
 doit
 (CypressObject
 	subclass: 'CypressSnapshot'
-	instVarNames: #( definitions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definitions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2223,9 +2223,9 @@ removeallclassmethods CypressSnapshot
 doit
 (CypressObject
 	subclass: 'CypressStructure'
-	instVarNames: #( name properties packageStructure  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name properties packageStructure )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2242,9 +2242,9 @@ removeallclassmethods CypressStructure
 doit
 (CypressStructure
 	subclass: 'CypressClassStructure'
-	instVarNames: #( instanceMethods classMethods comment isClassExtension  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( instanceMethods classMethods comment isClassExtension )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2261,9 +2261,9 @@ removeallclassmethods CypressClassStructure
 doit
 (CypressStructure
 	subclass: 'CypressMethodStructure'
-	instVarNames: #( source isMetaclass classStructure  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( source isMetaclass classStructure )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2280,9 +2280,9 @@ removeallclassmethods CypressMethodStructure
 doit
 (CypressMethodStructure
 	subclass: 'RwCypressMethodStructure'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -2298,9 +2298,9 @@ removeallclassmethods RwCypressMethodStructure
 doit
 (CypressStructure
 	subclass: 'CypressPackageStructure'
-	instVarNames: #( classes extensions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classes extensions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2317,9 +2317,9 @@ removeallclassmethods CypressPackageStructure
 doit
 (CypressPackageStructure
 	subclass: 'RwCypressPackageStructure'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -2335,9 +2335,9 @@ removeallclassmethods RwCypressPackageStructure
 doit
 (Object
 	subclass: 'CypressPackageComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2354,9 +2354,9 @@ removeallclassmethods CypressPackageComparator
 doit
 (Object
 	subclass: 'CypressPackageManager'
-	instVarNames: #( knownPackages knownRepositories packageInformationList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( knownPackages knownRepositories packageInformationList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2373,9 +2373,9 @@ removeallclassmethods CypressPackageManager
 doit
 (Object
 	subclass: 'CypressPackageManager2'
-	instVarNames: #( knownRepositories packageInformationList  )
-	classVars: #( SavedPackageManagers  )
-	classInstVars: #(  )
+	instVarNames: #( knownRepositories packageInformationList )
+	classVars: #( SavedPackageManagers )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2392,9 +2392,9 @@ removeallclassmethods CypressPackageManager2
 doit
 (Object
 	subclass: 'CypressPackageManager3'
-	instVarNames: #( knownRepositories defaultSymbolDictionaryName resolvedPackageReferences  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( knownRepositories defaultSymbolDictionaryName resolvedPackageReferences )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2411,9 +2411,9 @@ removeallclassmethods CypressPackageManager3
 doit
 (CypressPackageManager3
 	subclass: 'CypressEnvironmentPackageManager'
-	instVarNames: #( defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2429,9 +2429,9 @@ removeallclassmethods CypressEnvironmentPackageManager
 doit
 (Object
 	subclass: 'CypressPackageStringComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2448,9 +2448,9 @@ removeallclassmethods CypressPackageStringComparator
 doit
 (Object
 	subclass: 'CypressReference'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2469,9 +2469,9 @@ removeallclassmethods CypressReference
 doit
 (CypressReference
 	subclass: 'CypressPackageReference'
-	instVarNames: #( package branch  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( package branch )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2490,9 +2490,9 @@ removeallclassmethods CypressPackageReference
 doit
 (CypressPackageReference
 	subclass: 'CypressResolvedReference'
-	instVarNames: #( repository  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( repository )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2511,9 +2511,9 @@ removeallclassmethods CypressResolvedReference
 doit
 (Object
 	subclass: 'CypressUrl'
-	instVarNames: #( fragment  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( fragment )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2532,9 +2532,9 @@ removeallclassmethods CypressUrl
 doit
 (CypressUrl
 	subclass: 'CypressFileUrl'
-	instVarNames: #( host path isAbsolute  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( host path isAbsolute )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2600,9 +2600,9 @@ removeallclassmethods CypressFileUrl
 doit
 (CypressFileUrl
 	subclass: 'CypressAbstractFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2619,9 +2619,9 @@ removeallclassmethods CypressAbstractFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressCypressFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2638,9 +2638,9 @@ removeallclassmethods CypressCypressFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileTreeFormatFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2657,9 +2657,9 @@ removeallclassmethods CypressFileTreeFormatFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileTreeReadOnlyFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2676,9 +2676,9 @@ removeallclassmethods CypressFileTreeReadOnlyFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressGitFileUrl'
-	instVarNames: #( projectPath projectBranchOrTag repositoryPath  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2695,9 +2695,9 @@ removeallclassmethods CypressGitFileUrl
 doit
 (CypressGitFileUrl
 	subclass: 'CypressGitFileTreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2714,9 +2714,9 @@ removeallclassmethods CypressGitFileTreeUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressLaxFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2733,9 +2733,9 @@ removeallclassmethods CypressLaxFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressSmalltalkUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2752,9 +2752,9 @@ removeallclassmethods CypressSmalltalkUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressTopazUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2771,9 +2771,9 @@ removeallclassmethods CypressTopazUrl
 doit
 (CypressUrl
 	subclass: 'CypressGenericUrl'
-	instVarNames: #( schemeName locator  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( schemeName locator )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2792,9 +2792,9 @@ removeallclassmethods CypressGenericUrl
 doit
 (CypressGenericUrl
 	subclass: 'CypressBrowserUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2813,9 +2813,9 @@ removeallclassmethods CypressBrowserUrl
 doit
 (CypressGenericUrl
 	subclass: 'CypressMailtoUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2834,9 +2834,9 @@ removeallclassmethods CypressMailtoUrl
 doit
 (CypressUrl
 	subclass: 'CypressHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( schemeName authority path query port username password )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2855,9 +2855,9 @@ removeallclassmethods CypressHierarchicalUrl
 doit
 (CypressHierarchicalUrl
 	subclass: 'CypressFtpUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2874,9 +2874,9 @@ removeallclassmethods CypressFtpUrl
 doit
 (CypressHierarchicalUrl
 	subclass: 'CypressHttpUrl'
-	instVarNames: #( realm  )
-	classVars: #( Passwords  )
-	classInstVars: #(  )
+	instVarNames: #( realm )
+	classVars: #( Passwords )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2903,9 +2903,9 @@ removeallclassmethods CypressHttpUrl
 doit
 (CypressHttpUrl
 	subclass: 'CypressHttpsUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2922,9 +2922,9 @@ removeallclassmethods CypressHttpsUrl
 doit
 (Object
 	subclass: 'CypressVersionReference'
-	instVarNames: #( name package author branch versionNumber  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name package author branch versionNumber )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2943,9 +2943,9 @@ removeallclassmethods CypressVersionReference
 doit
 (Object
 	subclass: 'FastUUIDGenerator'
-	instVarNames: #( bits1 bits2 bits3 bits4 random semaphoreForGenerator  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( bits1 bits2 bits3 bits4 random semaphoreForGenerator )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -2961,9 +2961,9 @@ removeallclassmethods FastUUIDGenerator
 doit
 (Object
 	subclass: 'File'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3018,9 +3018,9 @@ removeallclassmethods File
 doit
 (Object
 	subclass: 'FileSystem'
-	instVarNames: #( store  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( store )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3050,9 +3050,9 @@ removeallclassmethods FileSystem
 doit
 (Object
 	subclass: 'FileSystemDirectoryEntry'
-	instVarNames: #( reference creation modification isDirectory isSymlink size posixPermissions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( reference creation modification isDirectory isSymlink size posixPermissions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3086,9 +3086,9 @@ removeallclassmethods FileSystemDirectoryEntry
 doit
 (Object
 	subclass: 'FileSystemGuide'
-	instVarNames: #( visitor work selectChildren  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( visitor work selectChildren )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3111,9 +3111,9 @@ removeallclassmethods FileSystemGuide
 doit
 (FileSystemGuide
 	subclass: 'BreadthFirstGuide'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3141,9 +3141,9 @@ removeallclassmethods BreadthFirstGuide
 doit
 (FileSystemGuide
 	subclass: 'PostorderGuide'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3170,9 +3170,9 @@ removeallclassmethods PostorderGuide
 doit
 (FileSystemGuide
 	subclass: 'PreorderGuide'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3199,9 +3199,9 @@ removeallclassmethods PreorderGuide
 doit
 (Object
 	subclass: 'FileSystemHandle'
-	instVarNames: #( reference writable  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( reference writable )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3218,9 +3218,9 @@ removeallclassmethods FileSystemHandle
 doit
 (FileSystemHandle
 	subclass: 'FileHandle'
-	instVarNames: #( id  )
-	classVars: #( Registry  )
-	classInstVars: #(  )
+	instVarNames: #( id )
+	classVars: #( Registry )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3239,9 +3239,9 @@ removeallclassmethods FileHandle
 doit
 (FileSystemHandle
 	subclass: 'MemoryHandle'
-	instVarNames: #( entry  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( entry )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3258,9 +3258,9 @@ removeallclassmethods MemoryHandle
 doit
 (Object
 	subclass: 'FileSystemPermission'
-	instVarNames: #( posixPermission  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( posixPermission )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3277,9 +3277,9 @@ removeallclassmethods FileSystemPermission
 doit
 (Object
 	subclass: 'FileSystemResolver'
-	instVarNames: #( next  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( next )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3300,9 +3300,9 @@ removeallclassmethods FileSystemResolver
 doit
 (FileSystemResolver
 	subclass: 'InteractiveResolver'
-	instVarNames: #( cache  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( cache )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3319,9 +3319,9 @@ removeallclassmethods InteractiveResolver
 doit
 (FileSystemResolver
 	subclass: 'PlatformResolver'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3338,9 +3338,9 @@ removeallclassmethods PlatformResolver
 doit
 (PlatformResolver
 	subclass: 'MacOSResolver'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3357,9 +3357,9 @@ removeallclassmethods MacOSResolver
 doit
 (PlatformResolver
 	subclass: 'UnixResolver'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3376,9 +3376,9 @@ removeallclassmethods UnixResolver
 doit
 (PlatformResolver
 	subclass: 'WindowsResolver'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3395,9 +3395,9 @@ removeallclassmethods WindowsResolver
 doit
 (FileSystemResolver
 	subclass: 'SystemResolver'
-	instVarNames: #(  )
-	classVars: #( UserLocalDirectory  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( UserLocalDirectory )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3414,9 +3414,9 @@ removeallclassmethods SystemResolver
 doit
 (Object
 	subclass: 'FileSystemStore'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3440,9 +3440,9 @@ removeallclassmethods FileSystemStore
 doit
 (FileSystemStore
 	subclass: 'DiskStore'
-	instVarNames: #( maxFileNameLength  )
-	classVars: #( CurrentFS DefaultWorkingDirectory  )
-	classInstVars: #(  )
+	instVarNames: #( maxFileNameLength )
+	classVars: #( CurrentFS DefaultWorkingDirectory )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3460,9 +3460,9 @@ removeallclassmethods DiskStore
 doit
 (DiskStore
 	subclass: 'UnixStore'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3479,9 +3479,9 @@ removeallclassmethods UnixStore
 doit
 (UnixStore
 	subclass: 'MacStore'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3498,9 +3498,9 @@ removeallclassmethods MacStore
 doit
 (DiskStore
 	subclass: 'WindowsStore'
-	instVarNames: #( disk  )
-	classVars: #( Disks  )
-	classInstVars: #(  )
+	instVarNames: #( disk )
+	classVars: #( Disks )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3517,9 +3517,9 @@ removeallclassmethods WindowsStore
 doit
 (FileSystemStore
 	subclass: 'MemoryStore'
-	instVarNames: #( root  )
-	classVars: #( CurrentFS  )
-	classInstVars: #(  )
+	instVarNames: #( root )
+	classVars: #( CurrentFS )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3536,9 +3536,9 @@ removeallclassmethods MemoryStore
 doit
 (Object
 	subclass: 'FileSystemVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3555,9 +3555,9 @@ removeallclassmethods FileSystemVisitor
 doit
 (FileSystemVisitor
 	subclass: 'AbstractEnumerationVisitor'
-	instVarNames: #( out block  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( out block )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3574,9 +3574,9 @@ removeallclassmethods AbstractEnumerationVisitor
 doit
 (AbstractEnumerationVisitor
 	subclass: 'CollectVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3595,9 +3595,9 @@ removeallclassmethods CollectVisitor
 doit
 (AbstractEnumerationVisitor
 	subclass: 'SelectVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3616,9 +3616,9 @@ removeallclassmethods SelectVisitor
 doit
 (FileSystemVisitor
 	subclass: 'CopyVisitor'
-	instVarNames: #( source dest  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( source dest )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3635,9 +3635,9 @@ removeallclassmethods CopyVisitor
 doit
 (FileSystemVisitor
 	subclass: 'DeleteVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3654,9 +3654,9 @@ removeallclassmethods DeleteVisitor
 doit
 (Object
 	subclass: 'GsInteraction'
-	instVarNames: #( defaultActionBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( defaultActionBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3672,9 +3672,9 @@ removeallclassmethods GsInteraction
 doit
 (GsInteraction
 	subclass: 'GsChoiceInteraction'
-	instVarNames: #( prompt labels values lines  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( prompt labels values lines )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3690,9 +3690,9 @@ removeallclassmethods GsChoiceInteraction
 doit
 (GsInteraction
 	subclass: 'GsConfirmInteraction'
-	instVarNames: #( prompt confirm cancel abort  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( prompt confirm cancel abort )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3708,9 +3708,9 @@ removeallclassmethods GsConfirmInteraction
 doit
 (GsConfirmInteraction
 	subclass: 'GsNotifyInteraction'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3726,9 +3726,9 @@ removeallclassmethods GsNotifyInteraction
 doit
 (GsInteraction
 	subclass: 'GsInformInteraction'
-	instVarNames: #( message  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( message )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3744,9 +3744,9 @@ removeallclassmethods GsInformInteraction
 doit
 (GsInteraction
 	subclass: 'GsInspectInteraction'
-	instVarNames: #( theObject  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( theObject )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3762,9 +3762,9 @@ removeallclassmethods GsInspectInteraction
 doit
 (GsInspectInteraction
 	subclass: 'GsExploreInteraction'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3780,9 +3780,9 @@ removeallclassmethods GsExploreInteraction
 doit
 (GsInteraction
 	subclass: 'GsTextInteraction'
-	instVarNames: #( prompt template requestPassword  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( prompt template requestPassword )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3798,9 +3798,9 @@ removeallclassmethods GsTextInteraction
 doit
 (GsTextInteraction
 	subclass: 'GsMultiLineTextInteraction'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3816,9 +3816,9 @@ removeallclassmethods GsMultiLineTextInteraction
 doit
 (Object
 	subclass: 'GsInteractionHandler'
-	instVarNames: #( choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3834,9 +3834,9 @@ removeallclassmethods GsInteractionHandler
 doit
 (Object
 	subclass: 'GsTonelOrderedDictionary'
-	instVarNames: #( size keys values  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( size keys values )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3853,9 +3853,9 @@ removeallclassmethods GsTonelOrderedDictionary
 doit
 (Object
 	subclass: 'JadeServer'
-	instVarNames: #( classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult  )
-	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64  )
-	classInstVars: #(  )
+	instVarNames: #( classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult )
+	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64 )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3871,9 +3871,9 @@ removeallclassmethods JadeServer
 doit
 (JadeServer
 	subclass: 'JadeServer64bit'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3889,9 +3889,9 @@ removeallclassmethods JadeServer64bit
 doit
 (JadeServer64bit
 	subclass: 'JadeServer64bit24'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3907,9 +3907,9 @@ removeallclassmethods JadeServer64bit24
 doit
 (JadeServer64bit24
 	subclass: 'JadeServer64bit3x'
-	instVarNames: #( environment  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( environment )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3925,9 +3925,9 @@ removeallclassmethods JadeServer64bit3x
 doit
 (JadeServer64bit3x
 	subclass: 'JadeServer64bit32'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3943,9 +3943,9 @@ removeallclassmethods JadeServer64bit32
 doit
 (JadeServer64bit32
 	subclass: 'JadeServer64bit35'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #( #logCreation )
@@ -3961,9 +3961,9 @@ removeallclassmethods JadeServer64bit35
 doit
 (Object
 	subclass: 'MemoryFileSystemEntry'
-	instVarNames: #( creationTime modificationTime basename  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( creationTime modificationTime basename )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -3981,9 +3981,9 @@ removeallclassmethods MemoryFileSystemEntry
 doit
 (MemoryFileSystemEntry
 	subclass: 'MemoryFileSystemDirectory'
-	instVarNames: #( entries  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( entries )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4000,9 +4000,9 @@ removeallclassmethods MemoryFileSystemDirectory
 doit
 (MemoryFileSystemEntry
 	subclass: 'MemoryFileSystemFile'
-	instVarNames: #( bytes size closed  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( bytes size closed )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4019,9 +4019,9 @@ removeallclassmethods MemoryFileSystemFile
 doit
 (Object
 	subclass: 'MemoryFileWriteStream'
-	instVarNames: #( file writeStream stream  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( file writeStream stream )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4038,9 +4038,9 @@ removeallclassmethods MemoryFileWriteStream
 doit
 (Object
 	indexableSubclass: 'Path'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4069,9 +4069,9 @@ removeallclassmethods Path
 doit
 (Path
 	subclass: 'AbsolutePath'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4088,9 +4088,9 @@ removeallclassmethods AbsolutePath
 doit
 (Path
 	subclass: 'RelativePath'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -4107,9 +4107,9 @@ removeallclassmethods RelativePath
 doit
 (Object
 	subclass: 'RBParser'
-	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4138,9 +4138,9 @@ removeallclassmethods RBParser
 doit
 (RBParser
 	subclass: 'RBPatternParser'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4158,9 +4158,9 @@ removeallclassmethods RBPatternParser
 doit
 (RBParser
 	subclass: 'RBTonelParser'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4176,9 +4176,9 @@ removeallclassmethods RBTonelParser
 doit
 (Object
 	subclass: 'RBParseTreeRule'
-	instVarNames: #( searchTree owner  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( searchTree owner )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4201,9 +4201,9 @@ removeallclassmethods RBParseTreeRule
 doit
 (RBParseTreeRule
 	subclass: 'RBReplaceRule'
-	instVarNames: #( verificationBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( verificationBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4229,9 +4229,9 @@ removeallclassmethods RBReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBBlockReplaceRule'
-	instVarNames: #( replaceBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( replaceBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4252,9 +4252,9 @@ removeallclassmethods RBBlockReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBStringReplaceRule'
-	instVarNames: #( replaceTree  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( replaceTree )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4276,9 +4276,9 @@ removeallclassmethods RBStringReplaceRule
 doit
 (RBParseTreeRule
 	subclass: 'RBSearchRule'
-	instVarNames: #( answerBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( answerBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4300,9 +4300,9 @@ removeallclassmethods RBSearchRule
 doit
 (Object
 	subclass: 'RBProgramNode'
-	instVarNames: #( parent comments properties  )
-	classVars: #( FormatterClass  )
-	classInstVars: #(  )
+	instVarNames: #( parent comments properties )
+	classVars: #( FormatterClass )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4341,9 +4341,9 @@ removeallclassmethods RBProgramNode
 doit
 (RBProgramNode
 	subclass: 'RBMethodNode'
-	instVarNames: #( selector selectorParts body source arguments pragmas replacements nodeReplacements  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( selector selectorParts body source arguments pragmas replacements nodeReplacements )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4372,9 +4372,9 @@ removeallclassmethods RBMethodNode
 doit
 (RBMethodNode
 	subclass: 'RBPatternMethodNode'
-	instVarNames: #( isList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4396,9 +4396,9 @@ removeallclassmethods RBPatternMethodNode
 doit
 (RBProgramNode
 	subclass: 'RBPragmaNode'
-	instVarNames: #( selector selectorParts arguments isProtected left right  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( selector selectorParts arguments isProtected left right )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4422,9 +4422,9 @@ removeallclassmethods RBPragmaNode
 doit
 (RBPragmaNode
 	subclass: 'RBPatternPragmaNode'
-	instVarNames: #( isList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4440,9 +4440,9 @@ removeallclassmethods RBPatternPragmaNode
 doit
 (RBProgramNode
 	subclass: 'RBReturnNode'
-	instVarNames: #( return value  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( return value )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4465,9 +4465,9 @@ removeallclassmethods RBReturnNode
 doit
 (RBProgramNode
 	subclass: 'RBSequenceNode'
-	instVarNames: #( leftBar rightBar statements periods temporaries  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( leftBar rightBar statements periods temporaries )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4493,9 +4493,9 @@ removeallclassmethods RBSequenceNode
 doit
 (RBProgramNode
 	subclass: 'RBValueNode'
-	instVarNames: #( parentheses  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( parentheses )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4524,9 +4524,9 @@ removeallclassmethods RBValueNode
 doit
 (RBValueNode
 	subclass: 'RBArrayNode'
-	instVarNames: #( left right statements periods  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( left right statements periods )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4549,9 +4549,9 @@ removeallclassmethods RBArrayNode
 doit
 (RBValueNode
 	subclass: 'RBAssignmentNode'
-	instVarNames: #( variable assignment value  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( variable assignment value )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4575,9 +4575,9 @@ removeallclassmethods RBAssignmentNode
 doit
 (RBValueNode
 	subclass: 'RBBlockNode'
-	instVarNames: #( left right colons arguments bar body  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( left right colons arguments bar body )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4604,9 +4604,9 @@ removeallclassmethods RBBlockNode
 doit
 (RBBlockNode
 	subclass: 'RBPatternBlockNode'
-	instVarNames: #( valueBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( valueBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4628,9 +4628,9 @@ removeallclassmethods RBPatternBlockNode
 doit
 (RBPatternBlockNode
 	subclass: 'RBPatternWrapperBlockNode'
-	instVarNames: #( wrappedNode  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( wrappedNode )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4650,9 +4650,9 @@ removeallclassmethods RBPatternWrapperBlockNode
 doit
 (RBBlockNode
 	subclass: 'RBQueryBlockNode'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4668,9 +4668,9 @@ removeallclassmethods RBQueryBlockNode
 doit
 (RBValueNode
 	subclass: 'RBCascadeNode'
-	instVarNames: #( messages semicolons  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( messages semicolons )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4693,9 +4693,9 @@ removeallclassmethods RBCascadeNode
 doit
 (RBValueNode
 	subclass: 'RBLiteralNode'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4712,9 +4712,9 @@ removeallclassmethods RBLiteralNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralArrayNode'
-	instVarNames: #( isByteArray stop contents start  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isByteArray stop contents start )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4737,9 +4737,9 @@ removeallclassmethods RBLiteralArrayNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralValueNode'
-	instVarNames: #( token  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( token )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4759,9 +4759,9 @@ removeallclassmethods RBLiteralValueNode
 doit
 (RBValueNode
 	subclass: 'RBMessageNode'
-	instVarNames: #( receiver selector selectorParts arguments  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( receiver selector selectorParts arguments )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4786,9 +4786,9 @@ removeallclassmethods RBMessageNode
 doit
 (RBMessageNode
 	subclass: 'RBPatternMessageNode'
-	instVarNames: #( isList isCascadeList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isList isCascadeList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4809,9 +4809,9 @@ removeallclassmethods RBPatternMessageNode
 doit
 (RBValueNode
 	subclass: 'RBVariableNode'
-	instVarNames: #( token  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( token )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4833,9 +4833,9 @@ removeallclassmethods RBVariableNode
 doit
 (RBVariableNode
 	subclass: 'RBPatternVariableNode'
-	instVarNames: #( recurseInto isList isLiteral isStatement isAnything  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( recurseInto isList isLiteral isStatement isAnything )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4867,9 +4867,9 @@ removeallclassmethods RBPatternVariableNode
 doit
 (Object
 	subclass: 'RBProgramNodeVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4888,9 +4888,9 @@ removeallclassmethods RBProgramNodeVisitor
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBConfigurableFormatter'
-	instVarNames: #( codeStream indent lookaheadCode originalSource lineStart inQueryBlock  )
-	classVars: #( CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses  )
-	classInstVars: #(  )
+	instVarNames: #( codeStream indent lookaheadCode originalSource lineStart inQueryBlock )
+	classVars: #( CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4916,9 +4916,9 @@ removeallclassmethods RBConfigurableFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBFormatter'
-	instVarNames: #( codeStream lineStart firstLineLength tabs inQueryBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( codeStream lineStart firstLineLength tabs inQueryBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4943,9 +4943,9 @@ removeallclassmethods RBFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBParseTreeSearcher'
-	instVarNames: #( searches answer argumentSearches context messages  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( searches answer argumentSearches context messages )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4969,9 +4969,9 @@ removeallclassmethods RBParseTreeSearcher
 doit
 (RBParseTreeSearcher
 	subclass: 'RBParseTreeRewriter'
-	instVarNames: #( tree  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( tree )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4991,9 +4991,9 @@ removeallclassmethods RBParseTreeRewriter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBReadBeforeWrittenTester'
-	instVarNames: #( read checkNewTemps scopeStack  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( read checkNewTemps scopeStack )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5017,9 +5017,9 @@ removeallclassmethods RBReadBeforeWrittenTester
 doit
 (Object
 	subclass: 'RBScanner'
-	instVarNames: #( stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock  )
-	classVars: #( PatternVariableCharacter  )
-	classInstVars: #( classificationTable  )
+	instVarNames: #( stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock )
+	classVars: #( PatternVariableCharacter )
+	classInstVars: #( classificationTable )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5056,9 +5056,9 @@ removeallclassmethods RBScanner
 doit
 (RBScanner
 	subclass: 'RBPatternScanner'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5076,9 +5076,9 @@ removeallclassmethods RBPatternScanner
 doit
 (RBScanner
 	subclass: 'RBTonelScanner'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5094,9 +5094,9 @@ removeallclassmethods RBTonelScanner
 doit
 (Object
 	subclass: 'RBSmallDictionary'
-	instVarNames: #( keys values tally  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( keys values tally )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5119,9 +5119,9 @@ removeallclassmethods RBSmallDictionary
 doit
 (Object
 	subclass: 'RBStringReplacement'
-	instVarNames: #( startPosition stopPosition string  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( startPosition stopPosition string )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5145,9 +5145,9 @@ removeallclassmethods RBStringReplacement
 doit
 (Object
 	subclass: 'RBToken'
-	instVarNames: #( sourcePointer comments  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( sourcePointer comments )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5172,9 +5172,9 @@ removeallclassmethods RBToken
 doit
 (RBToken
 	subclass: 'RBAssignmentToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5192,9 +5192,9 @@ removeallclassmethods RBAssignmentToken
 doit
 (RBAssignmentToken
 	subclass: 'RBShortAssignmentToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5210,9 +5210,9 @@ removeallclassmethods RBShortAssignmentToken
 doit
 (RBToken
 	subclass: 'RBValueToken'
-	instVarNames: #( value  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( value )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5234,9 +5234,9 @@ removeallclassmethods RBValueToken
 doit
 (RBValueToken
 	subclass: 'RBBinarySelectorToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5254,9 +5254,9 @@ removeallclassmethods RBBinarySelectorToken
 doit
 (RBValueToken
 	subclass: 'RBIdentifierToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5274,9 +5274,9 @@ removeallclassmethods RBIdentifierToken
 doit
 (RBIdentifierToken
 	subclass: 'RBPathToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5292,9 +5292,9 @@ removeallclassmethods RBPathToken
 doit
 (RBValueToken
 	subclass: 'RBKeywordToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5311,9 +5311,9 @@ removeallclassmethods RBKeywordToken
 doit
 (RBValueToken
 	subclass: 'RBLiteralArrayToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5329,9 +5329,9 @@ removeallclassmethods RBLiteralArrayToken
 doit
 (RBValueToken
 	subclass: 'RBLiteralToken'
-	instVarNames: #( stopPosition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( stopPosition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5353,9 +5353,9 @@ removeallclassmethods RBLiteralToken
 doit
 (RBLiteralToken
 	subclass: 'RBMultiKeywordLiteralToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5371,9 +5371,9 @@ removeallclassmethods RBMultiKeywordLiteralToken
 doit
 (RBLiteralToken
 	subclass: 'RBNumberLiteralToken'
-	instVarNames: #( source  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( source )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5389,9 +5389,9 @@ removeallclassmethods RBNumberLiteralToken
 doit
 (RBValueToken
 	subclass: 'RBPatternBlockToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5410,9 +5410,9 @@ removeallclassmethods RBPatternBlockToken
 doit
 (RBValueToken
 	subclass: 'RBSpecialCharacterToken'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5431,9 +5431,9 @@ removeallclassmethods RBSpecialCharacterToken
 doit
 (Object
 	subclass: 'Rowan'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #( configuration  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( configuration )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5453,9 +5453,9 @@ removeallclassmethods Rowan
 doit
 (Object
 	subclass: 'RowanCommandResult'
-	instVarNames: #( executionTime  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( executionTime )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5472,9 +5472,9 @@ removeallclassmethods RowanCommandResult
 doit
 (Object
 	subclass: 'RowanGsGeneralDependencySorter'
-	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5491,9 +5491,9 @@ removeallclassmethods RowanGsGeneralDependencySorter
 doit
 (Object
 	subclass: 'RowanInterface'
-	instVarNames: #( name  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5509,9 +5509,9 @@ removeallclassmethods RowanInterface
 doit
 (RowanInterface
 	subclass: 'RwAbstractProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5527,9 +5527,9 @@ removeallclassmethods RwAbstractProject
 doit
 (RwAbstractProject
 	subclass: 'RwAbstractUnloadedProject'
-	instVarNames: #( resolvedProject  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( resolvedProject )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5545,9 +5545,9 @@ removeallclassmethods RwAbstractUnloadedProject
 doit
 (RwAbstractUnloadedProject
 	subclass: 'RwDefinedProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5563,9 +5563,9 @@ removeallclassmethods RwDefinedProject
 doit
 (RwAbstractUnloadedProject
 	subclass: 'RwResolvedProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5581,9 +5581,9 @@ removeallclassmethods RwResolvedProject
 doit
 (RwAbstractProject
 	subclass: 'RwProject'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5599,9 +5599,9 @@ removeallclassmethods RwProject
 doit
 (RowanInterface
 	subclass: 'RwPackage'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5617,9 +5617,9 @@ removeallclassmethods RwPackage
 doit
 (Object
 	subclass: 'RowanService'
-	instVarNames: #( definition updates command commandArgs updateType organizer  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definition updates command commandArgs updateType organizer )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5648,9 +5648,9 @@ removeallclassmethods RowanService
 doit
 (RowanService
 	subclass: 'RowanAnsweringService'
-	instVarNames: #( answer  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( answer )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5672,9 +5672,9 @@ removeallclassmethods RowanAnsweringService
 doit
 (RowanService
 	subclass: 'RowanAutoCommitService'
-	instVarNames: #( autoCommit  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( autoCommit )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5691,9 +5691,9 @@ removeallclassmethods RowanAutoCommitService
 doit
 (RowanService
 	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5711,9 +5711,9 @@ removeallclassmethods RowanBrowserService
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5732,9 +5732,9 @@ removeallclassmethods RowanClassService
 doit
 (RowanService
 	subclass: 'RowanDebuggerService'
-	instVarNames: #( initialProcessOop processes  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( initialProcessOop processes )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5750,9 +5750,9 @@ removeallclassmethods RowanDebuggerService
 doit
 (RowanService
 	subclass: 'RowanDictionaryService'
-	instVarNames: #( name classes hierarchyServices globals defaultTemplate  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name classes hierarchyServices globals defaultTemplate )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5768,9 +5768,9 @@ removeallclassmethods RowanDictionaryService
 doit
 (RowanService
 	subclass: 'RowanFrameService'
-	instVarNames: #( label method stepPoint vars oop homeMethodSelector homeMethodClassName classIsResolvable  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( label method stepPoint vars oop homeMethodSelector homeMethodClassName classIsResolvable )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5786,9 +5786,9 @@ removeallclassmethods RowanFrameService
 doit
 (RowanService
 	subclass: 'RowanInspectorService'
-	instVarNames: #( oop objects myself className indexedSize visibleIndices nextIndices maxIndexedVars compileErrorArray isOop instVarNames instVarsAreRemovable isDictionary isVariable selectionOop isUnordered statusText  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( oop objects myself className indexedSize visibleIndices nextIndices maxIndexedVars compileErrorArray isOop instVarNames instVarsAreRemovable isDictionary isVariable selectionOop isUnordered statusText )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5804,9 +5804,9 @@ removeallclassmethods RowanInspectorService
 doit
 (RowanService
 	subclass: 'RowanLoggingService'
-	instVarNames: #( fileName id groupId date time comment services mode location isLogging  )
-	classVars: #( Current  )
-	classInstVars: #(  )
+	instVarNames: #( fileName id groupId date time comment services mode location isLogging )
+	classVars: #( Current )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5822,9 +5822,9 @@ removeallclassmethods RowanLoggingService
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop hasMethodHistory searchString definedClassName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop hasMethodHistory searchString definedClassName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5840,9 +5840,9 @@ removeallclassmethods RowanMethodService
 doit
 (RowanService
 	subclass: 'RowanPackageService'
-	instVarNames: #( projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5858,9 +5858,9 @@ removeallclassmethods RowanPackageService
 doit
 (RowanService
 	subclass: 'RowanProcessService'
-	instVarNames: #( frames oop status  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( frames oop status )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5876,9 +5876,9 @@ removeallclassmethods RowanProcessService
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5894,9 +5894,9 @@ removeallclassmethods RowanProjectService
 doit
 (RowanService
 	subclass: 'RowanQueryService'
-	instVarNames: #( queryResults  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( queryResults )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5912,9 +5912,9 @@ removeallclassmethods RowanQueryService
 doit
 (RowanService
 	subclass: 'RowanTestService'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5930,9 +5930,9 @@ removeallclassmethods RowanTestService
 doit
 (RowanService
 	subclass: 'RowanVariableService'
-	instVarNames: #( oop key value className  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( oop key value className )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -5948,9 +5948,9 @@ removeallclassmethods RowanVariableService
 doit
 (Object
 	subclass: 'RwAbstractComponent'
-	instVarNames: #( name comment componentNames packageNames  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name comment componentNames packageNames )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -5966,9 +5966,9 @@ removeallclassmethods RwAbstractComponent
 doit
 (RwAbstractComponent
 	subclass: 'RwAbstractActiveComponent'
-	instVarNames: #( projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict projectNames  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict projectNames )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -5984,9 +5984,9 @@ removeallclassmethods RwAbstractActiveComponent
 doit
 (RwAbstractActiveComponent
 	subclass: 'RwLoadComponent'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6002,9 +6002,9 @@ removeallclassmethods RwLoadComponent
 doit
 (RwLoadComponent
 	subclass: 'RwSubcomponent'
-	instVarNames: #( condition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( condition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6020,9 +6020,9 @@ removeallclassmethods RwSubcomponent
 doit
 (RwSubcomponent
 	subclass: 'RwPackageGroup'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6038,9 +6038,9 @@ removeallclassmethods RwPackageGroup
 doit
 (RwSubcomponent
 	subclass: 'RwPlatformSubcomponent'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6056,9 +6056,9 @@ removeallclassmethods RwPlatformSubcomponent
 doit
 (Object
 	subclass: 'RwAbstractConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern patternMatchBlock  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( pattern patternMatchBlock )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6074,9 +6074,9 @@ removeallclassmethods RwAbstractConfigurationPlatformAttributeMatcher
 doit
 (RwAbstractConfigurationPlatformAttributeMatcher
 	subclass: 'RwGemStoneVersionConfigurationPlatformAttributeMatcher'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6092,9 +6092,9 @@ removeallclassmethods RwGemStoneVersionConfigurationPlatformAttributeMatcher
 doit
 (RwGemStoneVersionConfigurationPlatformAttributeMatcher
 	subclass: 'RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern2  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( pattern2 )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6110,9 +6110,9 @@ removeallclassmethods RwGemStoneVersionRangeConfigurationPlatformAttributeMatche
 doit
 (RwAbstractConfigurationPlatformAttributeMatcher
 	subclass: 'RwStringConfigurationPlatformAttributeMatcher'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6128,9 +6128,9 @@ removeallclassmethods RwStringConfigurationPlatformAttributeMatcher
 doit
 (RwAbstractConfigurationPlatformAttributeMatcher
 	subclass: 'RwUnconditionalPlatformAttributeMatcher'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6146,9 +6146,9 @@ removeallclassmethods RwUnconditionalPlatformAttributeMatcher
 doit
 (Object
 	subclass: 'RwAbstractProjectComponentVisitorV2'
-	instVarNames: #( projectLoadSpecs readComponents readProjects visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectLoadSpecs readComponents readProjects visitedComponents visitedComponentNames platformConditionalAttributes definedGroupNames projectNames groupNames componentNames )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6164,9 +6164,9 @@ removeallclassmethods RwAbstractProjectComponentVisitorV2
 doit
 (RwAbstractProjectComponentVisitorV2
 	subclass: 'RwResolvedProjectComponentVisitorV2'
-	instVarNames: #( resolvedProject  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( resolvedProject )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6182,9 +6182,9 @@ removeallclassmethods RwResolvedProjectComponentVisitorV2
 doit
 (Object
 	subclass: 'RwAbstractProjectSetModificationVisitor'
-	instVarNames: #( currentProjectDefinition currentPackageDefinition currentClassDefinition currentClassExtension  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( currentProjectDefinition currentPackageDefinition currentClassDefinition currentClassExtension )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6200,9 +6200,9 @@ removeallclassmethods RwAbstractProjectSetModificationVisitor
 doit
 (Object
 	subclass: 'RwAbstractReaderWriterVisitor'
-	instVarNames: #( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6218,9 +6218,9 @@ removeallclassmethods RwAbstractReaderWriterVisitor
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwModificationWriterVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6240,9 +6240,9 @@ removeallclassmethods RwModificationWriterVisitor
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath  )
-	classVars: #( Character_lf  )
-	classInstVars: #(  )
+	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	classVars: #( Character_lf )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6264,9 +6264,9 @@ removeallclassmethods RwGsModificationTopazWriterVisitorV2
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
-	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6282,9 +6282,9 @@ removeallclassmethods RwModificationCypressFamilyWriterVisitor
 doit
 (RwModificationCypressFamilyWriterVisitor
 	subclass: 'RwModificationFiletreeWriterVisitor'
-	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata  )
-	classVars: #(  )
-	classInstVars: #( specials  )
+	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
+	classVars: #( )
+	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6300,9 +6300,9 @@ removeallclassmethods RwModificationFiletreeWriterVisitor
 doit
 (RwModificationCypressFamilyWriterVisitor
 	subclass: 'RwModificationTonelWriterVisitor'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6318,9 +6318,9 @@ removeallclassmethods RwModificationTonelWriterVisitor
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitorV2'
-	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap packagesRoot  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap packagesRoot )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6336,9 +6336,9 @@ removeallclassmethods RwModificationCypressFamilyWriterVisitorV2
 doit
 (RwModificationCypressFamilyWriterVisitorV2
 	subclass: 'RwModificationFiletreeWriterVisitorV2'
-	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata  )
-	classVars: #(  )
-	classInstVars: #( specials  )
+	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
+	classVars: #( )
+	classInstVars: #( specials )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6354,9 +6354,9 @@ removeallclassmethods RwModificationFiletreeWriterVisitorV2
 doit
 (RwModificationCypressFamilyWriterVisitorV2
 	subclass: 'RwModificationTonelWriterVisitorV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -6372,9 +6372,9 @@ removeallclassmethods RwModificationTonelWriterVisitorV2
 doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
-	instVarNames: #( packageNames packageNamesBlock currentProjectReferenceDefinition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageNames packageNamesBlock currentProjectReferenceDefinition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6390,9 +6390,9 @@ removeallclassmethods RwRepositoryComponentProjectReaderVisitor
 doit
 (RwRepositoryComponentProjectReaderVisitor
 	subclass: 'RwRepositoryResolvedProjectFiletreeReaderVisitorV2'
-	instVarNames: #( packageExtension  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageExtension )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6408,9 +6408,9 @@ removeallclassmethods RwRepositoryResolvedProjectFiletreeReaderVisitorV2
 doit
 (RwRepositoryComponentProjectReaderVisitor
 	subclass: 'RwRepositoryResolvedProjectTonelReaderVisitorV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6426,9 +6426,9 @@ removeallclassmethods RwRepositoryResolvedProjectTonelReaderVisitorV2
 doit
 (Object
 	subclass: 'RwAbstractResolvedObjectV2'
-	instVarNames: #( projectRepository loadSpecification projectSpecification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectRepository loadSpecification projectSpecification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6444,9 +6444,9 @@ removeallclassmethods RwAbstractResolvedObjectV2
 doit
 (RwAbstractResolvedObjectV2
 	subclass: 'RwAbstractResolvedProjectV2'
-	instVarNames: #( projectDefinition projectComponents  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectDefinition projectComponents )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6462,9 +6462,9 @@ removeallclassmethods RwAbstractResolvedProjectV2
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedLoadSpecificationV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6480,9 +6480,9 @@ removeallclassmethods RwResolvedLoadSpecificationV2
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectSpecificationV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6498,9 +6498,9 @@ removeallclassmethods RwResolvedProjectSpecificationV2
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6516,9 +6516,9 @@ removeallclassmethods RwResolvedProjectV2
 doit
 (RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedRepositoryV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6534,9 +6534,9 @@ removeallclassmethods RwResolvedRepositoryV2
 doit
 (Object
 	subclass: 'RwAbstractTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6567,9 +6567,9 @@ removeallclassmethods RwAbstractTool
 doit
 (RwAbstractTool
 	subclass: 'RwClassTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6585,9 +6585,9 @@ removeallclassmethods RwClassTool
 doit
 (RwClassTool
 	subclass: 'RwClsAuditTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6604,9 +6604,9 @@ removeallclassmethods RwClsAuditTool
 doit
 (RwClsAuditTool
 	subclass: 'RwClsExtensionAuditTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6622,9 +6622,9 @@ removeallclassmethods RwClsExtensionAuditTool
 doit
 (RwClassTool
 	subclass: 'RwClsDiffTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6640,9 +6640,9 @@ removeallclassmethods RwClsDiffTool
 doit
 (RwAbstractTool
 	subclass: 'RwExamplesTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6658,9 +6658,9 @@ removeallclassmethods RwExamplesTool
 doit
 (RwExamplesTool
 	subclass: 'RwExampleComponentRefactoringTool'
-	instVarNames: #( definedProject components packages conditions platformConditions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definedProject components packages conditions platformConditions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6709,9 +6709,9 @@ removeallclassmethods RwExampleComponentRefactoringTool
 doit
 (RwAbstractTool
 	subclass: 'RwGitTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6727,9 +6727,9 @@ removeallclassmethods RwGitTool
 doit
 (RwAbstractTool
 	subclass: 'RwPackageTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6745,9 +6745,9 @@ removeallclassmethods RwPackageTool
 doit
 (RwPackageTool
 	subclass: 'RwPkgAdoptTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6763,9 +6763,9 @@ removeallclassmethods RwPkgAdoptTool
 doit
 (RwPackageTool
 	subclass: 'RwPkgCreateTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6781,9 +6781,9 @@ removeallclassmethods RwPkgCreateTool
 doit
 (RwPackageTool
 	subclass: 'RwPkgDisownTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6799,9 +6799,9 @@ removeallclassmethods RwPkgDisownTool
 doit
 (RwPackageTool
 	subclass: 'RwPkgLoadTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6817,9 +6817,9 @@ removeallclassmethods RwPkgLoadTool
 doit
 (RwPackageTool
 	subclass: 'RwPkgRevertTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6835,9 +6835,9 @@ removeallclassmethods RwPkgRevertTool
 doit
 (RwAbstractTool
 	subclass: 'RwPkgAuditToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6853,9 +6853,9 @@ removeallclassmethods RwPkgAuditToolV2
 doit
 (RwAbstractTool
 	subclass: 'RwProjectTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6871,9 +6871,9 @@ removeallclassmethods RwProjectTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjAdoptTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6889,9 +6889,9 @@ removeallclassmethods RwPrjAdoptTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjAuditTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6907,9 +6907,9 @@ removeallclassmethods RwPrjAuditTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjBrowserToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6925,9 +6925,9 @@ removeallclassmethods RwPrjBrowserToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjCloneTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6943,9 +6943,9 @@ removeallclassmethods RwPrjCloneTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjCommitTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6961,9 +6961,9 @@ removeallclassmethods RwPrjCommitTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjCreateToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6979,9 +6979,9 @@ removeallclassmethods RwPrjCreateToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjDeleteTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -6997,9 +6997,9 @@ removeallclassmethods RwPrjDeleteTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjDiffTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7015,9 +7015,9 @@ removeallclassmethods RwPrjDiffTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjDisownTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7033,9 +7033,9 @@ removeallclassmethods RwPrjDisownTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjEditTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7051,9 +7051,9 @@ removeallclassmethods RwPrjEditTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjInstallToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7069,9 +7069,9 @@ removeallclassmethods RwPrjInstallToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjLoadToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7087,9 +7087,9 @@ removeallclassmethods RwPrjLoadToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjQueryTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7105,9 +7105,9 @@ removeallclassmethods RwPrjQueryTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjReadToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7123,9 +7123,9 @@ removeallclassmethods RwPrjReadToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjReconcileToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7141,9 +7141,9 @@ removeallclassmethods RwPrjReconcileToolV2
 doit
 (RwProjectTool
 	subclass: 'RwPrjTestTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7159,9 +7159,9 @@ removeallclassmethods RwPrjTestTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjTraceTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7177,9 +7177,9 @@ removeallclassmethods RwPrjTraceTool
 doit
 (RwProjectTool
 	subclass: 'RwPrjWriteToolV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7195,9 +7195,9 @@ removeallclassmethods RwPrjWriteToolV2
 doit
 (Object
 	subclass: 'RwAuditDetail'
-	instVarNames: #( message owner  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( message owner )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7213,9 +7213,9 @@ removeallclassmethods RwAuditDetail
 doit
 (Object
 	subclass: 'RwBasicProjectLoadComponentV2'
-	instVarNames: #( name comment projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( name comment projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7231,9 +7231,9 @@ removeallclassmethods RwBasicProjectLoadComponentV2
 doit
 (RwBasicProjectLoadComponentV2
 	subclass: 'RwAbstractSimpleProjectLoadComponentV2'
-	instVarNames: #( packageNames condition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageNames condition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7249,9 +7249,9 @@ removeallclassmethods RwAbstractSimpleProjectLoadComponentV2
 doit
 (RwAbstractSimpleProjectLoadComponentV2
 	subclass: 'RwAbstractRowanProjectLoadComponentV2'
-	instVarNames: #( componentNames  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( componentNames )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7267,9 +7267,9 @@ removeallclassmethods RwAbstractRowanProjectLoadComponentV2
 doit
 (RwAbstractRowanProjectLoadComponentV2
 	subclass: 'RwSimpleProjectLoadComponentV2'
-	instVarNames: #( projectNames  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectNames )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7285,9 +7285,9 @@ removeallclassmethods RwSimpleProjectLoadComponentV2
 doit
 (RwSimpleProjectLoadComponentV2
 	subclass: 'RwSimpleNestedProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7303,9 +7303,9 @@ removeallclassmethods RwSimpleNestedProjectLoadComponentV2
 doit
 (RwSimpleNestedProjectLoadComponentV2
 	subclass: 'RwPlatformNestedProjectLoadComponentV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7321,9 +7321,9 @@ removeallclassmethods RwPlatformNestedProjectLoadComponentV2
 doit
 (Object
 	subclass: 'RwClassAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classKey classesModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectDefinition packageDefinition classKey classesModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7343,9 +7343,9 @@ removeallclassmethods RwClassAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwConfiguration'
-	instVarNames: #( packageInfoSource  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageInfoSource )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7377,9 +7377,9 @@ removeallclassmethods RwConfiguration
 doit
 (Object
 	subclass: 'RwDefinition'
-	instVarNames: #( properties  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( properties )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7403,9 +7403,9 @@ removeallclassmethods RwDefinition
 doit
 (RwDefinition
 	subclass: 'RwAbstractClassDefinition'
-	instVarNames: #( classMethodDefinitions instanceMethodDefinitions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classMethodDefinitions instanceMethodDefinitions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7421,9 +7421,9 @@ removeallclassmethods RwAbstractClassDefinition
 doit
 (RwAbstractClassDefinition
 	subclass: 'RwClassDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7444,9 +7444,9 @@ removeallclassmethods RwClassDefinition
 doit
 (RwAbstractClassDefinition
 	subclass: 'RwClassExtensionDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7465,9 +7465,9 @@ removeallclassmethods RwClassExtensionDefinition
 doit
 (RwDefinition
 	subclass: 'RwAbstractRepositoryDefinitionV2'
-	instVarNames: #( projectsHome repositoryRoot repositoryUrl  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectsHome repositoryRoot repositoryUrl )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7483,9 +7483,9 @@ removeallclassmethods RwAbstractRepositoryDefinitionV2
 doit
 (RwAbstractRepositoryDefinitionV2
 	subclass: 'RwDiskRepositoryDefinitionV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7501,9 +7501,9 @@ removeallclassmethods RwDiskRepositoryDefinitionV2
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwGitRepositoryDefinitionV2'
-	instVarNames: #( remote remoteUrl committish  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( remote remoteUrl committish )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7519,9 +7519,9 @@ removeallclassmethods RwGitRepositoryDefinitionV2
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwNoRepositoryDefinitionV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7537,9 +7537,9 @@ removeallclassmethods RwNoRepositoryDefinitionV2
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwReadOnlyDiskRepositoryDefinitionV2'
-	instVarNames: #( sesstionTempsKey commitId  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( sesstionTempsKey commitId )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7555,9 +7555,9 @@ removeallclassmethods RwReadOnlyDiskRepositoryDefinitionV2
 doit
 (RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
-	instVarNames: #( definitions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( definitions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7578,9 +7578,9 @@ removeallclassmethods RwDefinitionSetDefinition
 doit
 (RwDefinitionSetDefinition
 	subclass: 'RwPackageSetDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7601,9 +7601,9 @@ removeallclassmethods RwPackageSetDefinition
 doit
 (RwDefinitionSetDefinition
 	subclass: 'RwProjectSetDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7624,9 +7624,9 @@ removeallclassmethods RwProjectSetDefinition
 doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
-	instVarNames: #( source  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( source )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7642,9 +7642,9 @@ removeallclassmethods RwMethodDefinition
 doit
 (RwDefinition
 	subclass: 'RwPackageDefinition'
-	instVarNames: #( classDefinitions classExtensions  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classDefinitions classExtensions )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7664,9 +7664,9 @@ removeallclassmethods RwPackageDefinition
 doit
 (RwDefinition
 	subclass: 'RwProjectDefinition'
-	instVarNames: #( packages comment  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packages comment )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7682,9 +7682,9 @@ removeallclassmethods RwProjectDefinition
 doit
 (Object
 	subclass: 'RwElementsModification'
-	instVarNames: #( elementsModified  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( elementsModified )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7707,9 +7707,9 @@ removeallclassmethods RwElementsModification
 doit
 (RwElementsModification
 	subclass: 'RwClassesModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7726,9 +7726,9 @@ removeallclassmethods RwClassesModification
 doit
 (RwElementsModification
 	subclass: 'RwClassExtensionsModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7749,9 +7749,9 @@ removeallclassmethods RwClassExtensionsModification
 doit
 (RwElementsModification
 	subclass: 'RwEntitySetModification'
-	instVarNames: #( movedClasses movedMethods  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( movedClasses movedMethods )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7767,9 +7767,9 @@ removeallclassmethods RwEntitySetModification
 doit
 (RwEntitySetModification
 	subclass: 'RwPackageSetModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7788,9 +7788,9 @@ removeallclassmethods RwPackageSetModification
 doit
 (RwEntitySetModification
 	subclass: 'RwProjectSetModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7809,9 +7809,9 @@ removeallclassmethods RwProjectSetModification
 doit
 (RwElementsModification
 	subclass: 'RwMethodsModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7828,9 +7828,9 @@ removeallclassmethods RwMethodsModification
 doit
 (RwMethodsModification
 	subclass: 'RwExtensionMethodsModification'
-	instVarNames: #( extendedClassName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( extendedClassName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7846,9 +7846,9 @@ removeallclassmethods RwExtensionMethodsModification
 doit
 (RwElementsModification
 	subclass: 'RwPackagesModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7865,9 +7865,9 @@ removeallclassmethods RwPackagesModification
 doit
 (RwElementsModification
 	subclass: 'RwPropertiesModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7884,9 +7884,9 @@ removeallclassmethods RwPropertiesModification
 doit
 (RwElementsModification
 	subclass: 'RwSourceModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7903,9 +7903,9 @@ removeallclassmethods RwSourceModification
 doit
 (Object
 	subclass: 'RwEntitySet'
-	instVarNames: #( entities  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( entities )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -7924,9 +7924,9 @@ removeallclassmethods RwEntitySet
 doit
 (Object
 	subclass: 'RwGsImage'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7943,9 +7943,9 @@ removeallclassmethods RwGsImage
 doit
 (Object
 	subclass: 'RwGsImagePatchVisitor_V2'
-	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -7962,9 +7962,9 @@ removeallclassmethods RwGsImagePatchVisitor_V2
 doit
 (Object
 	subclass: 'RwGsInstanceMigrator'
-	instVarNames: #( migrationEnabled maxThreads maxCpuPercentage  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( migrationEnabled maxThreads maxCpuPercentage )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7980,9 +7980,9 @@ removeallclassmethods RwGsInstanceMigrator
 doit
 (RwGsInstanceMigrator
 	subclass: 'RwGsDeferredInstanceMigrator'
-	instVarNames: #( classesToMigrate  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classesToMigrate )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -7998,9 +7998,9 @@ removeallclassmethods RwGsDeferredInstanceMigrator
 doit
 (Object
 	subclass: 'RwGsPatchSet_V2'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition movedClassesSymbolList addedUnmanagedClasses loadSymbolList  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition movedClassesSymbolList addedUnmanagedClasses loadSymbolList )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8017,9 +8017,9 @@ removeallclassmethods RwGsPatchSet_V2
 doit
 (Object
 	subclass: 'RwGsPatchV2'
-	instVarNames: #( packageDefinition projectDefinition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageDefinition projectDefinition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8035,9 +8035,9 @@ removeallclassmethods RwGsPatchV2
 doit
 (RwGsPatchV2
 	subclass: 'RwGsClassPatchV2'
-	instVarNames: #( classDefinition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classDefinition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8053,9 +8053,9 @@ removeallclassmethods RwGsClassPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassAdditionSymbolDictPatchV2'
-	instVarNames: #( newClass symbolAssociation  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( newClass symbolAssociation )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8071,9 +8071,9 @@ removeallclassmethods RwGsClassAdditionSymbolDictPatchV2
 doit
 (RwGsClassAdditionSymbolDictPatchV2
 	subclass: 'RwGsClassUnmanagedAdditionSymbolDictPatchV2'
-	instVarNames: #( oldClassVersion  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( oldClassVersion )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8089,9 +8089,9 @@ removeallclassmethods RwGsClassUnmanagedAdditionSymbolDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassConstraintsSymDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8107,9 +8107,9 @@ removeallclassmethods RwGsClassConstraintsSymDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassDeletionSymbolDictPatchV2'
-	instVarNames: #( existingClass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( existingClass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8125,9 +8125,9 @@ removeallclassmethods RwGsClassDeletionSymbolDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassExtensionSymbolDictPatchV2'
-	instVarNames: #( patchClass  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( patchClass )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8143,9 +8143,9 @@ removeallclassmethods RwGsClassExtensionSymbolDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassPropertiesSymDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8161,9 +8161,9 @@ removeallclassmethods RwGsClassPropertiesSymDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassSymbolDictionaryMoveSymDictPatchV2'
-	instVarNames: #( classModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8179,9 +8179,9 @@ removeallclassmethods RwGsClassSymbolDictionaryMoveSymDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassVariableChangeSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8197,9 +8197,9 @@ removeallclassmethods RwGsClassVariableChangeSymbolDictPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassVersioningPatchV2'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8215,9 +8215,9 @@ removeallclassmethods RwGsClassVersioningPatchV2
 doit
 (RwGsClassPatchV2
 	subclass: 'RwGsClassVersioningSymbolDictPatchV2'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8233,9 +8233,9 @@ removeallclassmethods RwGsClassVersioningSymbolDictPatchV2
 doit
 (RwGsClassVersioningSymbolDictPatchV2
 	subclass: 'RwGsClassUnmanagedVersioningSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8251,9 +8251,9 @@ removeallclassmethods RwGsClassUnmanagedVersioningSymbolDictPatchV2
 doit
 (RwGsPatchV2
 	subclass: 'RwGsMethodPatchV2'
-	instVarNames: #( isMeta methodDefinition classDefinition behavior selector compiledMethod  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( isMeta methodDefinition classDefinition behavior selector compiledMethod )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8269,9 +8269,9 @@ removeallclassmethods RwGsMethodPatchV2
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodAdditionSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8287,9 +8287,9 @@ removeallclassmethods RwGsMethodAdditionSymbolDictPatchV2
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodDeletionSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8305,9 +8305,9 @@ removeallclassmethods RwGsMethodDeletionSymbolDictPatchV2
 doit
 (RwGsMethodDeletionSymbolDictPatchV2
 	subclass: 'RwGsMethodDeletionExtensionSymbolDictPatchV2'
-	instVarNames: #( extendedClassName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( extendedClassName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8323,9 +8323,9 @@ removeallclassmethods RwGsMethodDeletionExtensionSymbolDictPatchV2
 doit
 (RwGsMethodDeletionExtensionSymbolDictPatchV2
 	subclass: 'RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8341,9 +8341,9 @@ removeallclassmethods RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodExtensionSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8359,9 +8359,9 @@ removeallclassmethods RwGsMethodExtensionSymbolDictPatchV2
 doit
 (RwGsMethodExtensionSymbolDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodSymbolDictPatchV2'
-	instVarNames: #( sessionDictsArray methDict catDict pArray  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( sessionDictsArray methDict catDict pArray )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8377,9 +8377,9 @@ removeallclassmethods RwGsMethodExtensionSessionMethodSymbolDictPatchV2
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodPropertiesSymDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8395,9 +8395,9 @@ removeallclassmethods RwGsMethodPropertiesSymDictPatchV2
 doit
 (RwGsMethodPropertiesSymDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8413,9 +8413,9 @@ removeallclassmethods RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2
 doit
 (RwGsMethodPatchV2
 	subclass: 'RwGsMethodSourceSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8431,9 +8431,9 @@ removeallclassmethods RwGsMethodSourceSymbolDictPatchV2
 doit
 (RwGsMethodSourceSymbolDictPatchV2
 	subclass: 'RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8449,9 +8449,9 @@ removeallclassmethods RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2
 doit
 (RwGsPatchV2
 	subclass: 'RwGsPackagePatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8467,9 +8467,9 @@ removeallclassmethods RwGsPackagePatchV2
 doit
 (RwGsPackagePatchV2
 	subclass: 'RwGsPackageAdditionSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8485,9 +8485,9 @@ removeallclassmethods RwGsPackageAdditionSymbolDictPatchV2
 doit
 (RwGsPackagePatchV2
 	subclass: 'RwGsPackageDeletionSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8503,9 +8503,9 @@ removeallclassmethods RwGsPackageDeletionSymbolDictPatchV2
 doit
 (RwGsPackagePatchV2
 	subclass: 'RwGsPackageMoveSymbolDictPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8521,9 +8521,9 @@ removeallclassmethods RwGsPackageMoveSymbolDictPatchV2
 doit
 (RwGsPatchV2
 	subclass: 'RwGsProjectPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8539,9 +8539,9 @@ removeallclassmethods RwGsProjectPatchV2
 doit
 (RwGsProjectPatchV2
 	subclass: 'RwGsProjectAdditionPatchV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8557,9 +8557,9 @@ removeallclassmethods RwGsProjectAdditionPatchV2
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistryV2'
-	instVarNames: #( symbolDictionary packageRegistry  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( symbolDictionary packageRegistry )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8575,9 +8575,9 @@ removeallclassmethods RwGsSymbolDictionaryRegistryV2
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistry_ImplementationV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanLoader
 	options: #( #logCreation )
@@ -8622,9 +8622,9 @@ removeallclassmethods RwGsSymbolDictionaryRegistry_ImplementationV2
 doit
 (Object
 	subclass: 'RwLoadedThing'
-	instVarNames: #( properties name handle  )
-	classVars: #( AbsentToken  )
-	classInstVars: #(  )
+	instVarNames: #( properties name handle )
+	classVars: #( AbsentToken )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8643,9 +8643,9 @@ removeallclassmethods RwLoadedThing
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClass'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8663,9 +8663,9 @@ removeallclassmethods RwLoadedClass
 doit
 (RwLoadedClass
 	subclass: 'RwGsLoadedSymbolDictClass'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8681,9 +8681,9 @@ removeallclassmethods RwGsLoadedSymbolDictClass
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClassExtension'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8704,9 +8704,9 @@ removeallclassmethods RwLoadedClassExtension
 doit
 (RwLoadedClassExtension
 	subclass: 'RwGsLoadedSymbolDictClassExtension'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8722,9 +8722,9 @@ removeallclassmethods RwGsLoadedSymbolDictClassExtension
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedMethod'
-	instVarNames: #( loadedClass classIsMeta  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( loadedClass classIsMeta )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8745,9 +8745,9 @@ removeallclassmethods RwLoadedMethod
 doit
 (RwLoadedMethod
 	subclass: 'RwGsLoadedSymbolDictMethod'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8764,9 +8764,9 @@ removeallclassmethods RwGsLoadedSymbolDictMethod
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedPackage'
-	instVarNames: #( repository commitId loadedClasses loadedClassExtensions isDirty loadedProject  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( repository commitId loadedClasses loadedClassExtensions isDirty loadedProject )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8786,9 +8786,9 @@ removeallclassmethods RwLoadedPackage
 doit
 (RwLoadedPackage
 	subclass: 'RwGsLoadedSymbolDictPackage'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8804,9 +8804,9 @@ removeallclassmethods RwGsLoadedSymbolDictPackage
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedProject'
-	instVarNames: #( loadedPackages isDirty  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( loadedPackages isDirty )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8822,9 +8822,9 @@ removeallclassmethods RwLoadedProject
 doit
 (RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictResolvedProjectV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8840,9 +8840,9 @@ removeallclassmethods RwGsLoadedSymbolDictResolvedProjectV2
 doit
 (Object
 	subclass: 'RwMethodAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8862,9 +8862,9 @@ removeallclassmethods RwMethodAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwModification'
-	instVarNames: #( propertiesModification before after  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( propertiesModification before after )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8886,9 +8886,9 @@ removeallclassmethods RwModification
 doit
 (RwModification
 	subclass: 'RwClassModification'
-	instVarNames: #( instanceMethodsModification classMethodsModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( instanceMethodsModification classMethodsModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8911,9 +8911,9 @@ removeallclassmethods RwClassModification
 doit
 (RwClassModification
 	subclass: 'RwClassExtensionModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8929,9 +8929,9 @@ removeallclassmethods RwClassExtensionModification
 doit
 (RwClassModification
 	subclass: 'RwClassModificationForcingNewClassVersion'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8947,9 +8947,9 @@ removeallclassmethods RwClassModificationForcingNewClassVersion
 doit
 (RwClassModification
 	subclass: 'RwClassUnmanagedModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8965,9 +8965,9 @@ removeallclassmethods RwClassUnmanagedModification
 doit
 (RwModification
 	subclass: 'RwMethodModification'
-	instVarNames: #( sourceModification isMeta classDefinition  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( sourceModification isMeta classDefinition )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -8990,9 +8990,9 @@ removeallclassmethods RwMethodModification
 doit
 (RwMethodModification
 	subclass: 'RwExtensionMethodModification'
-	instVarNames: #( extendedClassName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( extendedClassName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9008,9 +9008,9 @@ removeallclassmethods RwExtensionMethodModification
 doit
 (RwMethodModification
 	subclass: 'RwMethodModificationForNewClassVersion'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9026,9 +9026,9 @@ removeallclassmethods RwMethodModificationForNewClassVersion
 doit
 (RwMethodModificationForNewClassVersion
 	subclass: 'RwExtensionMethodModificationForNewClassVersion'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9044,9 +9044,9 @@ removeallclassmethods RwExtensionMethodModificationForNewClassVersion
 doit
 (RwModification
 	subclass: 'RwPackageModification'
-	instVarNames: #( classesModification classExtensionsModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classesModification classExtensionsModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9069,9 +9069,9 @@ removeallclassmethods RwPackageModification
 doit
 (RwModification
 	subclass: 'RwProjectModification'
-	instVarNames: #( packagesModification  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packagesModification )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9094,9 +9094,9 @@ removeallclassmethods RwProjectModification
 doit
 (Object
 	subclass: 'RwMove'
-	instVarNames: #( projectBefore projectAfter packageBefore packageAfter  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectBefore projectAfter packageBefore packageAfter )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9112,9 +9112,9 @@ removeallclassmethods RwMove
 doit
 (RwMove
 	subclass: 'RwClassExtensionMove'
-	instVarNames: #( classExtensionBefore classExtensionAfter  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classExtensionBefore classExtensionAfter )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9130,9 +9130,9 @@ removeallclassmethods RwClassExtensionMove
 doit
 (RwMove
 	subclass: 'RwClassMove'
-	instVarNames: #( classBefore classAfter  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( classBefore classAfter )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9149,9 +9149,9 @@ removeallclassmethods RwClassMove
 doit
 (RwMove
 	subclass: 'RwMethodMove'
-	instVarNames: #( methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9168,9 +9168,9 @@ removeallclassmethods RwMethodMove
 doit
 (RwMove
 	subclass: 'RwPackageMove'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9186,9 +9186,9 @@ removeallclassmethods RwPackageMove
 doit
 (Object
 	subclass: 'RwPlatform'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9206,9 +9206,9 @@ removeallclassmethods RwPlatform
 doit
 (RwPlatform
 	subclass: 'RwGsPlatform'
-	instVarNames: #( alternateImageClass enableInstanceMigration instanceMigrator  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( alternateImageClass enableInstanceMigration instanceMigrator )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9226,9 +9226,9 @@ removeallclassmethods RwGsPlatform
 doit
 (Object
 	subclass: 'RwPropertyModification'
-	instVarNames: #( key oldValue newValue  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( key oldValue newValue )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9250,9 +9250,9 @@ removeallclassmethods RwPropertyModification
 doit
 (RwPropertyModification
 	subclass: 'RwUnconditionalPropertyModification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9274,9 +9274,9 @@ removeallclassmethods RwUnconditionalPropertyModification
 doit
 (Object
 	subclass: 'RwResolvedLoadComponentsV2'
-	instVarNames: #( components  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( components )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9292,9 +9292,9 @@ removeallclassmethods RwResolvedLoadComponentsV2
 doit
 (Object
 	subclass: 'RwResolvedProjectComponentsV2'
-	instVarNames: #( components  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( components )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9310,9 +9310,9 @@ removeallclassmethods RwResolvedProjectComponentsV2
 doit
 (Object
 	subclass: 'RwSpecification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9328,9 +9328,9 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9346,9 +9346,9 @@ removeallclassmethods RwLoadSpecificationV2
 doit
 (RwLoadSpecificationV2
 	subclass: 'RwEmbeddedLoadSpecificationV2'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9364,9 +9364,9 @@ removeallclassmethods RwEmbeddedLoadSpecificationV2
 doit
 (RwSpecification
 	subclass: 'RwProjectSpecificationV2'
-	instVarNames: #( specName projectName projectSpecPath componentsPath packagesPath projectsPath specsPath packageFormat packageConvention comment repoType loadedCommitId  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( specName projectName projectSpecPath componentsPath packagesPath projectsPath specsPath packageFormat packageConvention comment repoType loadedCommitId )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9382,9 +9382,9 @@ removeallclassmethods RwProjectSpecificationV2
 doit
 (Object
 	subclass: 'RwUrl'
-	instVarNames: #( fragment  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( fragment )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9444,9 +9444,9 @@ removeallclassmethods RwUrl
 doit
 (RwUrl
 	subclass: 'RwFileUrl'
-	instVarNames: #( host path isAbsolute  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( host path isAbsolute )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9510,9 +9510,9 @@ removeallclassmethods RwFileUrl
 doit
 (RwUrl
 	subclass: 'RwGenericUrl'
-	instVarNames: #( schemeName locator  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( schemeName locator )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9529,9 +9529,9 @@ removeallclassmethods RwGenericUrl
 doit
 (RwUrl
 	subclass: 'RwHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( schemeName authority path query port username password )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9548,9 +9548,9 @@ removeallclassmethods RwHierarchicalUrl
 doit
 (RwHierarchicalUrl
 	subclass: 'RwHttpUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9566,9 +9566,9 @@ removeallclassmethods RwHttpUrl
 doit
 (RwHttpUrl
 	subclass: 'RwHttpsUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9584,9 +9584,9 @@ removeallclassmethods RwHttpsUrl
 doit
 (Object
 	subclass: 'ZnBufferedReadStream'
-	instVarNames: #( stream buffer position limit species  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( stream buffer position limit species )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9611,9 +9611,9 @@ removeallclassmethods ZnBufferedReadStream
 doit
 (Object
 	subclass: 'ZnBufferedReadWriteStream'
-	instVarNames: #( readStream writeStream lastRead  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( readStream writeStream lastRead )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9640,9 +9640,9 @@ removeallclassmethods ZnBufferedReadWriteStream
 doit
 (Object
 	subclass: 'ZnBufferedWriteStream'
-	instVarNames: #( stream buffer position  )
-	classVars: #( Character_cr Character_lf Character_space Character_tab  )
-	classInstVars: #(  )
+	instVarNames: #( stream buffer position )
+	classVars: #( Character_cr Character_lf Character_space Character_tab )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9668,9 +9668,9 @@ removeallclassmethods ZnBufferedWriteStream
 doit
 (Object
 	subclass: 'ZnCharacterEncoder'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9720,9 +9720,9 @@ removeallclassmethods ZnCharacterEncoder
 doit
 (ZnCharacterEncoder
 	subclass: 'ZnUTF8Encoder'
-	instVarNames: #(  )
-	classVars: #( Default  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( Default )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9746,9 +9746,9 @@ removeallclassmethods ZnUTF8Encoder
 doit
 (Object
 	subclass: 'ZnCharacterReadWriteStream'
-	instVarNames: #( readStream writeStream  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( readStream writeStream )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9765,9 +9765,9 @@ removeallclassmethods ZnCharacterReadWriteStream
 doit
 (Object
 	subclass: 'ZnEncodedStream'
-	instVarNames: #( stream encoder  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( stream encoder )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9786,9 +9786,9 @@ removeallclassmethods ZnEncodedStream
 doit
 (ZnEncodedStream
 	subclass: 'ZnEncodedReadStream'
-	instVarNames: #( peeked  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( peeked )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9807,9 +9807,9 @@ removeallclassmethods ZnEncodedReadStream
 doit
 (ZnEncodedReadStream
 	subclass: 'ZnCharacterReadStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9832,9 +9832,9 @@ removeallclassmethods ZnCharacterReadStream
 doit
 (ZnEncodedStream
 	subclass: 'ZnEncodedWriteStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9853,9 +9853,9 @@ removeallclassmethods ZnEncodedWriteStream
 doit
 (ZnEncodedWriteStream
 	subclass: 'ZnCharacterWriteStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9875,9 +9875,9 @@ removeallclassmethods ZnCharacterWriteStream
 doit
 (STONWriter
 	subclass: 'TonelSTONWriter'
-	instVarNames: #( aliases  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( aliases )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -9897,9 +9897,9 @@ removeallclassmethods TonelSTONWriter
 doit
 (Stream
 	subclass: 'AbstractBinaryFileStream'
-	instVarNames: #( file handle forWrite  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( file handle forWrite )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9946,9 +9946,9 @@ removeallclassmethods AbstractBinaryFileStream
 doit
 (AbstractBinaryFileStream
 	subclass: 'BinaryFileStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -9970,9 +9970,9 @@ removeallclassmethods BinaryFileStream
 doit
 (StringKeyValueDictionary
 	subclass: 'RwAuditReport'
-	instVarNames: #( owner  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( owner )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -9988,9 +9988,9 @@ removeallclassmethods RwAuditReport
 doit
 (StringKeyValueDictionary
 	subclass: 'RwPackageAuditReport'
-	instVarNames: #( packageName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( packageName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -10006,9 +10006,9 @@ removeallclassmethods RwPackageAuditReport
 doit
 (StringKeyValueDictionary
 	subclass: 'RwProjectAuditReport'
-	instVarNames: #( projectName  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( projectName )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: RowanTools
 	options: #( #logCreation )
@@ -10024,9 +10024,9 @@ removeallclassmethods RwProjectAuditReport
 doit
 (WriteStream
 	subclass: 'CypressMessageDigestStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -10043,9 +10043,9 @@ removeallclassmethods CypressMessageDigestStream
 doit
 (WriteStreamPortable
 	subclass: 'MemoryWriteStream'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #( )
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -59703,7 +59703,7 @@ _fileOutClassDeclaration: classDefinition on: aStream
 			aStream
 				nextPutAll: '	instVarNames: #( ' .
       self _stringForVariables: classDefinition instVarNames to: aStream .
-      aStream nextPutAll: ' )' ; lf ].
+      aStream nextPutAll: ')' ; lf ].
 	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
@@ -59723,12 +59723,12 @@ _fileOutClassDeclaration: classDefinition on: aStream
 	aStream
 		nextPutAll: '	classVars: #( ' . 
   self _stringForVariables: classDefinition classVarNames to: aStream .
-  aStream nextPutAll:' )' ; lf .
+  aStream nextPutAll:')' ; lf .
 	hasClassInstVars
 		ifTrue: [ 
 			aStream nextPutAll: '	classInstVars: #( ' .
 			self _stringForVariables: classDefinition classInstVarNames to: aStream .
-      aStream nextPutAll:' )' ; lf 
+      aStream nextPutAll:')' ; lf 
     ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
