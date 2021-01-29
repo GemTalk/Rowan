@@ -190,11 +190,12 @@ RwFileUrl >> pathDirString [
 	"Path to directory as url, using slash as delimiter.
 	Filename is left out."
 
-	^String streamContents: [ :s |
-		isAbsolute ifTrue: [ s nextPut: $/ ].
-		1 to: self path size - 1 do: [ :ii |
-			s nextPutAll: (path at: ii); nextPut: $/]]
-
+  | s |
+  s := String new .
+	isAbsolute ifTrue: [ s add:  $/ ].
+	1 to: self path size - 1 do: [ :ii |
+		s addAll: (path at: ii); add: $/ ].
+  ^ s
 ]
 
 { #category : 'paths' }
@@ -204,13 +205,14 @@ RwFileUrl >> pathForDirectory [
 	be prepended with a delimiter even though
 	they are absolute. Filename is left out."
 
-	| delimiter |
-	delimiter :=  '/'.
-	^String streamContents: [ :s |
-		(self isAbsolute and: [self firstPartIsDriveLetter not])
-			ifTrue: [ s nextPutAll: delimiter ].
-		1 to: self path size - 1 do: [ :ii |
-			s nextPutAll: (path at: ii); nextPutAll: delimiter]]
+	| delimiter s |
+	delimiter :=  $/ .
+	s := String new .
+	(self isAbsolute and: [self firstPartIsDriveLetter not])
+		ifTrue: [ s add: delimiter ].
+	1 to: self path size - 1 do: [ :ii |
+		s addAll: (path at: ii); add: delimiter].
+  ^ s
 ]
 
 { #category : 'paths' }
@@ -230,14 +232,15 @@ RwFileUrl >> pathParts: aCollection isAbsolute: aBoolean [
 RwFileUrl >> pathString [
 	"Path as it appears in a URL with $/ as delimiter."
 	
-	
-	^String streamContents: [ :s | | first |
-		self isAbsolute ifTrue:[ s nextPut: $/ ].
-		first := true.
-		self path do: [ :p |
-			first ifFalse: [ s nextPut: $/ ].
-			first := false.
-			s nextPutAll: p  ] ]
+  | s first |
+  s := String new .
+	self isAbsolute ifTrue:[ s add: $/ ].
+	first := true.
+	self path do: [ :p |
+		first ifFalse: [ s add: $/ ].
+		first := false.
+		s addAll: p  ].
+  ^ s
 ]
 
 { #category : 'copying' }

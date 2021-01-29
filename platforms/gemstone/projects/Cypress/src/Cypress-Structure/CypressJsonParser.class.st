@@ -115,7 +115,14 @@ CypressJsonParser >> expect: aString [
 
 	^(self match: aString)
 		ifFalse: [CypressJsonError signal: aString , ' expected']
+]
 
+{ #category : 'private' }
+CypressJsonParser >> expectChar: aCharacter [
+	"Expects aString and consume input, throw an error otherwise."
+
+	^(self matchChar: aCharacter)
+		ifFalse: [CypressJsonError signal: (String with: aCharacter) , ' expected']
 ]
 
 { #category : 'initialization' }
@@ -131,12 +138,24 @@ CypressJsonParser >> match: aString [
 	| position |
 	position := stream position.
 	aString do: [ :each |
-		(stream atEnd or: [ stream next ~= each ]) ifTrue: [ 
+		(stream atEnd or: [ stream next ~~ each ]) ifTrue: [ 
 			stream position: position.
 			^ false ] ].
 	self whitespace.
 	^ true
+]
 
+{ #category : 'private' }
+CypressJsonParser >> matchChar: aCharacter [
+	"Tries to match aCharacter, consume input and answer true if successful."
+	
+	| position |
+	position := stream position.
+	(stream atEnd or: [ stream next ~~ aCharacter ]) ifTrue: [ 
+			stream position: position.
+			^ false ].
+	self whitespace.
+	^ true
 ]
 
 { #category : 'parsing' }
@@ -155,13 +174,13 @@ CypressJsonParser >> parse [
 CypressJsonParser >> parseArray [
 
 	| result |
-	self expect: '['.
+	self expectChar: $[ .
 	result := self createArray.
-	(self match: ']') ifTrue: [^result].
+	(self matchChar: $] ) ifTrue: [^result].
 	[stream atEnd] whileFalse: 
 			[result := self addValue: self parseValue to: result.
-			(self match: ']') ifTrue: [^result].
-			self expect: ','].
+			(self matchChar: $] ) ifTrue: [^result].
+			self expectChar: $, ].
 	CypressJsonError signal: 'end of array expected'
 
 ]
@@ -169,25 +188,25 @@ CypressJsonParser >> parseArray [
 { #category : 'parsing-internal' }
 CypressJsonParser >> parseCharacter [
 	| char |
-	(char := stream next) = $\ 
+	(char := stream next) == $\ 
 		ifFalse: [ ^ char ].
-	(char := stream next) = $" 
+	(char := stream next) == $" 
 		ifTrue: [ ^ char ].
-	char = $\
+	char == $\
 		ifTrue: [ ^ char ].
-	char = $/
+	char == $/
 		ifTrue: [ ^ char ].
-	char = $b
+	char == $b
 		ifTrue: [ ^ Character backspace ].
-	char = $f
+	char == $f
 		ifTrue: [ ^ Character newPage ].
-	char = $n
+	char == $n
 		ifTrue: [ ^ Character lf ].
-	char = $r
+	char == $r
 		ifTrue: [ ^ Character cr ].
-	char = $t
+	char == $t
 		ifTrue: [ ^ Character tab ].
-	char = $u
+	char == $u
 		ifTrue: [ ^ self parseCharacterHex ].
 	CypressJsonError signal: 'invalid escape character \' , (String with: char)
 
@@ -221,13 +240,13 @@ CypressJsonParser >> parseCharacterHexDigit [
 { #category : 'parsing-internal' }
 CypressJsonParser >> parseNumber [
 	| negated number |
-	negated := stream peek = $-.
+	negated := stream peek == $-.
 	negated ifTrue: [ stream next ].
 	number := self parseNumberInteger.
-	(stream peek = $.) ifTrue: [
+	(stream peek == $.) ifTrue: [
 		stream next. 
 		number := number + self parseNumberFraction ].
-	(stream peek = $e or: [ stream peek = $E ]) ifTrue: [
+	(stream peek == $e or: [ stream peek == $E ]) ifTrue: [
 		stream next.
 		number := number * self parseNumberExponent ].
 	negated ifTrue: [ number := number negated ].
@@ -240,8 +259,8 @@ CypressJsonParser >> parseNumber [
 CypressJsonParser >> parseNumberExponent [
     | number negated |
     number := 0.
-    negated := stream peek = $-.
-    (negated or: [ stream peek = $+ ])
+    negated := stream peek == $-.
+    (negated or: [ stream peek == $+ ])
         ifTrue: [ stream next ].
     [ stream atEnd not and: [ stream peek isDigit ] ] whileTrue: [ number := 10 * number + (stream next codePoint - 48) ].
     negated
@@ -276,13 +295,13 @@ CypressJsonParser >> parseNumberInteger [
 CypressJsonParser >> parseObject [
 
 	| result |
-	self expect: '{'.
+	self expectChar: ${ .
 	result := self createObject.
-	(self match: '}') ifTrue: [^result].
+	(self matchChar: $} ) ifTrue: [^result].
 	[stream atEnd] whileFalse: 
 			[result := self addProperty: self parseProperty to: result.
-			(self match: '}') ifTrue: [^result].
-			self expect: ','].
+			(self matchChar: $} ) ifTrue: [^result].
+			self expectChar: $, ].
 	CypressJsonError signal: 'end of object expected'
 
 ]
@@ -291,7 +310,7 @@ CypressJsonParser >> parseObject [
 CypressJsonParser >> parseProperty [
 	| name value |
 	name := self parseString.
-	self expect: ':'.
+	self expectChar: $: .
 	value := self parseValue.
 	^ self createProperty: name with: value.
 
@@ -300,11 +319,11 @@ CypressJsonParser >> parseProperty [
 { #category : 'parsing-internal' }
 CypressJsonParser >> parseString [
 	| result |
-	self expect: '"'.
-	result := WriteStreamPortable on: String new.
-	[ stream atEnd or: [ stream peek = $" ] ] 
-		whileFalse: [ result nextPut: self parseCharacter ].
-	^ self expect: '"'; createString: result contents
+	self expectChar: $" .
+	result := String new.
+	[ stream atEnd or: [ stream peek == $" ] ] 
+		whileFalse: [ result add: self parseCharacter ].
+	^ self expectChar: $" ; createString: result 
 
 ]
 
@@ -313,13 +332,13 @@ CypressJsonParser >> parseValue [
 	| char |
 	stream atEnd ifFalse: [ 
 		char := stream peek.
-		char = ${
+		char == ${
 			ifTrue: [ ^ self parseObject ].
-		char = $[
+		char == $[
 			ifTrue: [ ^ self parseArray ].
-		char = $"
+		char == $"
 			ifTrue: [ ^ self parseString ].
-		(char = $- or: [ char between: $0 and: $9 ])
+		(char == $- or: [ char between: $0 and: $9 ])
 			ifTrue: [ ^ self parseNumber ].
 		(self match: 'true')
 			ifTrue: [ ^ self createTrue ].

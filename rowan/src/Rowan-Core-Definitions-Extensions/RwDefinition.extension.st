@@ -5,8 +5,8 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 
 	| keys modification |
 	modification := RwPropertiesModification new.
-	keys := self propertiesForCompare keys copy.
-	keys addAll: aDefinition propertiesForCompare keys.
+	keys := self propertiesForCompare keys . "properties is a dictionary, keys is a copy"
+  aDefinition propertiesForCompare keysDo:[:k | keys add: k ].
 	keys do: 
 			[:key |
 				| before after |

@@ -63,7 +63,7 @@ RwLoadedMethod >> markPackageDirty [
 { #category : 'accessing' }
 RwLoadedMethod >> methodCategory [
 
-	^ properties at: 'protocol'
+	^ properties at: #'protocol'
 
 ]
 
@@ -72,14 +72,14 @@ RwLoadedMethod >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'selector' put: name.
+	props at: #'selector' put: name.
 	^props
 ]
 
 { #category : 'accessing' }
 RwLoadedMethod >> selector [
 
-	^ properties at: 'selector'
+	^ properties at: #'selector'
 ]
 
 { #category : 'accessing' }

@@ -32,8 +32,8 @@ RwGsLoadedSymbolDictPackage >> gs_symbolDictionary [
 RwGsLoadedSymbolDictPackage >> initialize [
 
 	super initialize.
-	loadedClasses := KeyValueDictionary new.
-	loadedClassExtensions := KeyValueDictionary new.
+	loadedClasses := StringKeyValueDictionary new.
+	loadedClassExtensions := StringKeyValueDictionary new.
 	"A new package is dirty until it has been shown to be identical to a repository."
 	isDirty := true
 ]
@@ -42,7 +42,7 @@ RwGsLoadedSymbolDictPackage >> initialize [
 RwGsLoadedSymbolDictPackage >> initializeForName: aName [
 
 	super initializeForName: aName.
-	properties at: 'name' put: aName
+	properties at: #'name' put: aName
 ]
 
 { #category : 'queries' }
@@ -76,12 +76,12 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName [
 
-	^self propertyAt: 'gs_SymbolDictionary'
+	^self propertyAt: #'gs_SymbolDictionary'
 ]
 
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName: symDictName [
-	self propertyAt: 'gs_SymbolDictionary' put: symDictName asString
+	self propertyAt: #'gs_SymbolDictionary' put: symDictName asString
 ]
 
 { #category : 'private' }
@@ -89,7 +89,7 @@ RwGsLoadedSymbolDictPackage >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-	props at:  'gs_SymbolDictionary' put: (Rowan image loadedRegistryForPackageNamed: self name) _symbolDictionary name asString.
+	props at:  #'gs_SymbolDictionary' put: (Rowan image loadedRegistryForPackageNamed: self name) _symbolDictionary name asString.
 	^ props
 
 ]
@@ -100,7 +100,7 @@ RwGsLoadedSymbolDictPackage >> updatePropertiesFromRegistryFor: aSymbolDictionar
 
 	| newName oldName |
 	newName := aSymbolDictionaryRegistry _symbolDictionary name.
-	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName := self propertyAt: #'gs_SymbolDictionary'.
 	oldName = newName
 		ifFalse: [ self packageSymbolDictionaryName: newName ]
 ]

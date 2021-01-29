@@ -355,7 +355,7 @@ RwAbstractTest >> methodDefsFromSpec: specArray [
         put:
           (RwMethodDefinition
             withProperties:
-              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+              (SymbolDictionary with: #'selector' -> selector with: #'protocol' -> protocol)
             source: source) ].
   ^ dict
 ]
@@ -364,7 +364,7 @@ RwAbstractTest >> methodDefsFromSpec: specArray [
 RwAbstractTest >> packageDefinition: packageName [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: Dictionary new
 		classExtensions: Dictionary new
 
@@ -374,7 +374,7 @@ RwAbstractTest >> packageDefinition: packageName [
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self classDefinition: className super: superClassName inPackage: packageName)
 		classExtensions: Dictionary new
@@ -385,7 +385,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName category: category [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -400,7 +400,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName classVars: classVars [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -415,7 +415,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName comment: comment [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -430,7 +430,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -446,7 +446,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instVars: instVars [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -461,7 +461,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 RwAbstractTest >> packageDefinition: packageName extendClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
+		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: Dictionary new
 		classExtensions:
 			(self
@@ -570,10 +570,9 @@ RwAbstractTest >> packageSetDefinition: packageName extendClassNamed: className 
 RwAbstractTest >> propertiesForClassExtensionNamed: className [
 
 	| dict |
-	dict := Dictionary new.
+	dict := SymbolDictionary new.
 	dict
-		at: 'name' put: className;
-		yourself.
+		at: #'name' put: className .
 	^ dict
 ]
 
@@ -653,26 +652,25 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName inPac
 RwAbstractTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
 
 	| dict |
-	dict := Dictionary new.
+	dict := SymbolDictionary new.
 	category
 		ifNotNil: [ 
 			dict
-				at: 'category' put: category;
-				yourself ].
+				at: #'category' put: category ].
 	dict
-		at: 'classinstvars' put: classinstvars;
-		at: 'classvars' put: classvars;
-		at: 'gs_SymbolDictionary' put: gs_SymbolDictionary;
-		at: 'instvars' put: instvars;
-		at: 'name' put: className;
-		at: 'pools' put: pools;
-		at: 'superclass' put: superClassName;
-		at: 'type' put: type.
-	comment ifNotNil: [ dict at: 'comment' put: comment ].
+		at: #'classinstvars' put: classinstvars;
+		at: #'classvars' put: classvars;
+		at: #'gs_SymbolDictionary' put: gs_SymbolDictionary;
+		at: #'instvars' put: instvars;
+		at: #'name' put: className;
+		at: #'pools' put: pools;
+		at: #'superclass' put: superClassName;
+		at: #'type' put: type.
+	comment ifNotNil: [ dict at: #'comment' put: comment ].
 	(gs_options _isArray and: [ gs_options isEmpty not ])
 		ifTrue: [ 
 			dict
-				at: 'gs_options'
+				at: #'gs_options'
 				put:
 					(gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
 	^ dict

@@ -12,7 +12,7 @@ Class {
 RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 
-	^ '_Project_Definition_PlatformConditionalAttributes'
+	^ #'_Project_Definition_PlatformConditionalAttributes'
 ]
 
 { #category : 'accessing' }
@@ -22,7 +22,7 @@ RwLoadedProject class >> _projectDefinitionSourceKey [
 		if the load is derived from a loaded project (RwLoadedProject class _projectDefinitionSourceValue), 
 		then it isn't necessary to update the loaded commit id."
 
-	^ '_Project_Definition_Source'
+	^ #'_Project_Definition_Source'
 ]
 
 { #category : 'accessing' }
@@ -30,7 +30,7 @@ RwLoadedProject class >> _projectDiskDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition was loaded from disk, 
 		then it isn't necessary to update the loaded commit id."
 
-	^ 'loaded from disk'
+	^ #'loaded from disk'
 ]
 
 { #category : 'accessing' }
@@ -38,7 +38,7 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition was derived from
 		a loaded project, then it isn't necessary to update the loaded commit id."
 
-	^ 'loaded project'
+	^ #'loaded project'
 ]
 
 { #category : 'accessing' }
@@ -46,21 +46,21 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceWithDependentProjectsValu
 	"This value of the property key indicates that the source of the project definition was loaded from disk, 
 		however, the project has dependent projects that will need to be reread from disk on load."
 
-	^ 'loaded from disk with dependent projects'
+	^ #'loaded from disk with dependent projects'
 ]
 
 { #category : 'accessing' }
 RwLoadedProject class >> _projectModifiedProjectSourceValue [
 	"This value of the property key indicates that the source of the project definition is newly created project or explicitly modified, so we don't want to read project from disk on load."
 
-	^ 'modified project'
+	^ #'modified project'
 ]
 
 { #category : 'accessing' }
 RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition is unknown."
 
-	^ 'unknown'
+	^ #'unknown'
 ]
 
 { #category : 'accessing' }
@@ -247,7 +247,7 @@ RwLoadedProject >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'name' put: name.
+	props at: #'name' put: name.
 	props at: self class _projectDefinitionSourceKey put: self class _projectLoadedDefinitionSourceValue.
 	^ props
 ]

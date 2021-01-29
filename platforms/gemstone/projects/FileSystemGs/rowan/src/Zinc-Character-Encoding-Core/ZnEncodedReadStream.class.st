@@ -14,7 +14,7 @@ Class {
 
 { #category : 'testing' }
 ZnEncodedReadStream >> atEnd [
-	^ peeked isNil and: [ stream atEnd ]
+	^ peeked == nil and: [ stream atEnd ]
 ]
 
 { #category : 'accessing' }

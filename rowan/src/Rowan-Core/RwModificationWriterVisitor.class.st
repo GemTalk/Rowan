@@ -221,9 +221,9 @@ RwModificationWriterVisitor >> visitClassModification: aClassModification [
 		| propertiesModification elementsModified |
 		propertiesModification := aClassModification propertiesModification.
 		elementsModified := propertiesModification elementsModified.
-		(elementsModified size = 1 and: [ (elementsModified at: 'gs_SymbolDictionary' ifAbsent: []) notNil])
+		(elementsModified size = 1 and: [ (elementsModified at: #'gs_SymbolDictionary' ifAbsent: []) notNil])
 			ifTrue: [
-				"'gs_symbolDictionary' property is not written to disk, so we can skip this class"
+				" #'gs_symbolDictionary' property is not written to disk, so we can skip this class"
 				^ self ]].
 	^ self changedClass: aClassModification
 

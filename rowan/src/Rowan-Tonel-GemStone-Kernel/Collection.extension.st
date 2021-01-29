@@ -21,7 +21,19 @@ Collection >> flattened [
 	#(1 #(2 3) #(4 (#5))) flattened returns #(1 2 3 4 5) 
 	#('string1' #('string2' 'string3')) flattened returns #('string1' 'string2' 'string3')"
 	
-	^ Array streamContents: [ :stream | self flattenOn: stream].
+	"^ Array streamContents: [ :stream | self flattenOn: stream]."
+  | a |
+  a := Array new .
+  self _flattendAppend: a .
+  ^ a
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+Collection >> _flattendAppend: anArray [
+
+	self do: [ :each | (each isCollection and: [each isString not]) 
+						ifTrue: [each _flattendAppend: anArray]
+						ifFalse: [anArray add: each]].
 
 ]
 

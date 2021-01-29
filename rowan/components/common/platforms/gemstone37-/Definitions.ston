@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone37-/Definitions',
+	#condition : [
+		'gs3.[7-]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Definitions-Extensions-37x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Definitions-Extensions-37x' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Definitions gemstone packages 3.7.x'
+}

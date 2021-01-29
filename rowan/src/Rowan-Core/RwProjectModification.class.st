@@ -34,7 +34,7 @@ RwProjectModification >> initialize [
 { #category : 'testing' }
 RwProjectModification >> isEmpty [
 
-	^ super isEmpty & packagesModification isEmpty
+  ^ packagesModification isEmpty and:[ super isEmpty ]
 ]
 
 { #category : 'accessing' }

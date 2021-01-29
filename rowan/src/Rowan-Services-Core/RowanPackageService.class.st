@@ -146,7 +146,7 @@ RowanPackageService >> jadeite_testClasses [
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^ StringKeyValueDictionary new].
 	^loadedPackage loadedClasses
 ]
 
@@ -154,7 +154,7 @@ RowanPackageService >> loadedClasses [
 RowanPackageService >> loadedClassExtensions [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^ StringKeyValueDictionary new].
 	^loadedPackage loadedClassExtensions
 ]
 

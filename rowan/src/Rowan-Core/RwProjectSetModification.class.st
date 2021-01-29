@@ -257,7 +257,7 @@ RwProjectSetModification >> initialize [
 
 { #category : 'testing' }
 RwProjectSetModification >> isEmpty [
-	^ super isEmpty and: [ movedClasses isEmpty and: [ movedMethods isEmpty ] ]
+  ^ movedMethods isEmpty and:[ movedClasses isEmpty and:[ super isEmpty]]
 ]
 
 { #category : 'private - moves' }

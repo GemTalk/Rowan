@@ -97,7 +97,7 @@ RwProjectDefinition >> initialize [
 RwProjectDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & packages isEmpty
+	^ packages isEmpty and:[ super isEmpty]
 ]
 
 { #category : 'properties' }
@@ -186,12 +186,12 @@ RwProjectDefinition >> projectDefinitionPlatformConditionalAttributes: platformC
 
 { #category : 'accessing' }
 RwProjectDefinition >> projectName [
-	^ self propertyAt: 'name' ifAbsent: [ nil ]
+	^ self propertyAt: #'name' ifAbsent: [ nil ]
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> projectName: aString [
-	self propertyAt: 'name' put: aString
+	self propertyAt: #'name' put: aString
 ]
 
 { #category : 'accessing' }

@@ -74,7 +74,7 @@ RwLoadedThing >> handle: anObject [
 { #category : 'initialization' }
 RwLoadedThing >> initialize [
 
-	properties := Dictionary new
+	properties := SymbolDictionary new
 ]
 
 { #category : 'initialization' }
@@ -180,5 +180,6 @@ RwLoadedThing >> removeProperty: propertyName [
 { #category : 'accessing' }
 RwLoadedThing >> setPropertiesTo: aDictionary [
 
+  aDictionary _validateClass: SymbolDictionary .
 	properties := aDictionary copy
 ]

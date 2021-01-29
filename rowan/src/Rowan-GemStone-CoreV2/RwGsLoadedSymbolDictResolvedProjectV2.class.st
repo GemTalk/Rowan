@@ -301,13 +301,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectDefinitionPlatformConditionalAtt
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId [
 
-	^ self propertyAt: 'projectOwnerId'
+	^ self propertyAt: #'projectOwnerId'
 ]
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId: aString [
 
-	^ self propertyAt: 'projectOwnerId' put: aString
+	^ self propertyAt: #'projectOwnerId' put: aString
 ]
 
 { #category : 'accessing' }
@@ -336,8 +336,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-self halt.
-	props at: 'projectRef' put: handle copy.
+self halt. "do not checkin ??"
+	props at: #'projectRef' put: handle copy.
 	^ props
 ]
 

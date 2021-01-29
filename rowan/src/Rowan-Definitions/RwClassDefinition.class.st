@@ -73,21 +73,21 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 { #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 	| propertiesDictionary |
-	propertiesDictionary := Dictionary new.
+	propertiesDictionary := SymbolDictionary new.
 	category
 		ifNotNil: [ 
 			propertiesDictionary
-				at: 'category' put: category asString;
+				at: #'category' put: category asString;
 				yourself ].
 	propertiesDictionary
-		at: 'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
-		at: 'classvars' put: (classvars collect: [ :each | each asString ]);
-		at: 'instvars' put: (instvars collect: [ :each | each asString ]);
-		at: 'name' put: className asString;
-		at: 'pools' put: pools;
-		at: 'superclass' put: superClassName asString;
-		at: 'type' put: type asString.
-	comment ifNotNil: [ propertiesDictionary at: 'comment' put: comment ].
+		at: #'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
+		at: #'classvars' put: (classvars collect: [ :each | each asString ]);
+		at: #'instvars' put: (instvars collect: [ :each | each asString ]);
+		at: #'name' put: className asString;
+		at: #'pools' put: pools;
+		at: #'superclass' put: superClassName asString;
+		at: #'type' put: type asString.
+	comment ifNotNil: [ propertiesDictionary at: #'comment' put: comment ].
 	^ self
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
@@ -100,7 +100,7 @@ RwClassDefinition >> _removeSubclassesDisallowed [
    image bootstrap code responsible for setting subclassesDisallowed on
    appropriate classes after they are all defined."
   | propertyName oldValue newValue |
-  propertyName := 'gs_options'.
+  propertyName := #'gs_options'.
   oldValue := self propertyAt: propertyName ifAbsent:[ #() ].
   oldValue isEmpty ifFalse:[
      newValue := oldValue reject:[:x | x = 'subclassesDisallowed'].
@@ -112,36 +112,36 @@ RwClassDefinition >> _removeSubclassesDisallowed [
 RwClassDefinition >> classType [
 	"Legal types are normal, variable, and byteSubclass."
 
-	^self propertyAt: 'type' ifAbsent: ['normal']
+	^self propertyAt: #'type' ifAbsent: ['normal']
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> classVarNames [
-  ^ properties at: 'classvars'
+  ^ properties at: #'classvars'
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> classVarNames: anArrayOfClassVarNames [
 
-	^ properties at: 'classvars' put: anArrayOfClassVarNames
+	^ properties at: #'classvars' put: anArrayOfClassVarNames
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> comment: aString [
-  properties at: 'comment' put: aString
+  properties at: #'comment' put: aString
 
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> instVarNames [
 
-	^ properties at: 'instvars'
+	^ properties at: #'instvars'
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 
-	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+	^ properties at: #'instvars' put: arrayOfInstanceVariableNames
 ]
 
 { #category : 'accessing' }
@@ -158,24 +158,24 @@ RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePa
 { #category : 'accessing' }
 RwClassDefinition >> shebang [
 
-	^ self propertyAt: 'shebang' ifAbsent: []
+	^ self propertyAt: #'shebang' ifAbsent: []
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> shebang: aStringOrNil [
 
-	aStringOrNil ifNil: [ ^ self properties removeKey: 'shebang' ifAbsent: [] ].
-	^ self propertyAt: 'shebang' put: aStringOrNil
+	aStringOrNil ifNil: [ ^ self properties removeKey: #'shebang' ifAbsent: [] ].
+	^ self propertyAt: #'shebang' put: aStringOrNil
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> superclassName [
 
-	^self propertyAt: 'superclass' ifAbsent: [self propertyAt: 'super']
+	^self propertyAt: #'superclass' ifAbsent: [self propertyAt: 'super']
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> superclassName: aString [
 
-	^ self propertyAt: 'superclass' put: aString
+	^ self propertyAt: #'superclass' put: aString
 ]
