@@ -59,9 +59,9 @@ RwModificationTonelWriterVisitorV2 >> _hasShebangOf: aClassDefinition [
 RwModificationTonelWriterVisitorV2 >> _methodDefinitionOf: aMethodDefinition [
 	| excludedMethodProperties methodProperties exportedProperties |
 	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
-	exportedProperties := self class orderedDictionaryClass new
-		at: #'category' put: aMethodDefinition protocol;
-		yourself.
+	(exportedProperties := self class orderedDictionaryClass new)
+		at: #'category' put: aMethodDefinition protocol .
+
 	methodProperties := aMethodDefinition properties.
 	(methodProperties keys
 		reject: [ :each | excludedMethodProperties includes: each ]) asArray sort
@@ -120,10 +120,9 @@ RwModificationTonelWriterVisitorV2 >> _splitMethodSource: aMethodDefinition into
 RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 	| definition |
 	
-	definition := self class orderedDictionaryClass new 
+	(definition := self class orderedDictionaryClass new )
 		at: #name put: aClassDefinition name; 
-		at: #superclass put: aClassDefinition superclassName;
-		yourself.
+		at: #superclass put: aClassDefinition superclassName .
 
 	aClassDefinition classType = 'normal' ifFalse: [ 
 		definition at: #type put: aClassDefinition classType ].
@@ -236,7 +235,7 @@ RwModificationTonelWriterVisitorV2 >> addedPackage: aPackageModification [
 	(packageProperties at: 'comment' ifAbsent: [  ])
 		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
 	(packageProperties keys
-		reject: [ :key | key = 'name' or: [ key = 'gs_SymbolDictionary' ] ]) asArray
+		reject: [ :key | key == #'name' or: [ key == #'gs_SymbolDictionary' ] ]) asArray
 		sort
 		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
 
@@ -315,8 +314,8 @@ RwModificationTonelWriterVisitorV2 >> processProject: aProjectModification [
 				fileStream 
 					nextPutAll: '{ #format : ' , format printString , '}';
 					lf;
-					nextPutAll: '{ #convention : ' , currentProjectDefinition packageConvention printString , '}';
-					yourself ] ].
+					nextPutAll: '{ #convention : ' , currentProjectDefinition packageConvention printString , '}' .
+					] ].
 
 	super processProject: aProjectModification.
 ]

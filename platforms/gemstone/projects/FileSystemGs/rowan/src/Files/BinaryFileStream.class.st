@@ -59,3 +59,8 @@ BinaryFileStream >> truncate: pos [
 
 	^ File truncate: handle to: pos
 ]
+
+{ #category : 'accessing' }
+BinaryFileStream >> contents [
+  ^ handle contentsAsUtf8 "GsFile >> contentsAsUtf8"
+]

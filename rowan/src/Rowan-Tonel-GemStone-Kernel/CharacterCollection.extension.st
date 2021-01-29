@@ -29,11 +29,11 @@ CharacterCollection >> findString: subString startingAt: startIndex caseSensitiv
 CharacterCollection >> join: aCollection [ 
 	"'*' join: #('WWWWW' 'W  EW' 'zzzz')
 		->  'WWWWW*W  EW*zzzz' "
-	^ self class new: (aCollection size * self size) streamContents: [:stream | 
-			aCollection
-				do: [:each | stream nextPutAll: each asString] 
-				separatedBy: [stream nextPutAll: self]]
-
+  | res |
+  res := self class new .
+  aCollection do:[:each | res addAll: each asString ] 
+			 separatedBy:[ res addAll: self ] .
+  ^ res
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
@@ -51,16 +51,16 @@ CharacterCollection >> lineIndicesDo: aBlock [
 	lf := Character lf.
 	nextLF := self indexOf: lf startingAt: 1.
 	[ start <= sz ] whileTrue: [
-		(nextLF = 0 and: [ nextCR = 0 ])
+		(nextLF == 0 and: [ nextCR == 0 ])
 			ifTrue: [ "No more CR, nor LF, the string is over"
 					aBlock value: start value: sz value: sz.
 					^self ].
-		(nextCR = 0 or: [ 0 < nextLF and: [ nextLF < nextCR ] ])
+		(nextCR == 0 or: [ 0 < nextLF and: [ nextLF < nextCR ] ])
 			ifTrue: [ "Found a LF"
 					aBlock value: start value: nextLF - 1 value: nextLF.
 					start := 1 + nextLF.
 					nextLF := self indexOf: lf startingAt: start ]
-			ifFalse: [ 1 + nextCR = nextLF
+			ifFalse: [ 1 + nextCR == nextLF
 				ifTrue: [ "Found a CR-LF pair"
 					aBlock value: start value: nextCR - 1 value: nextLF.
 					start := 1 + nextLF.
@@ -84,36 +84,64 @@ CharacterCollection >> putOn: aStream [
 CharacterCollection >> substrings: separators [ 
 	"Answer an array containing the substrings in the receiver separated 
 	by the elements of separators."
-	| result sourceStream subStringStream |
+	| result subString ofs sz |
 	
 	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
 		ifFalse: [ ^ self error: 'separators must be Characters.' ].
-	sourceStream := self readStream.
-	result := OrderedCollection new.
-	subStringStream := String new writeStreamPortable.
-	[ sourceStream atEnd ] whileFalse: [
+	ofs := 1 .
+  sz := self size .
+	result := { } .
+	subString := String new .
+	[ ofs > sz ] whileFalse: [
 		| char |
-		char := sourceStream next.
-		(separators includes: char)
+		char := self at: ofs . ofs := ofs + 1 . 
+		(separators includesValue: char)
 			ifTrue: [
-				subStringStream isEmpty ifFalse: [
-					result add: subStringStream contents.
-					subStringStream := String new writeStreamPortable ] ]
+				subString size == 0 ifFalse: [
+					result add: subString .
+					subString := String new ] ]
 			ifFalse: [
-				subStringStream nextPut: char ] ].
-	subStringStream isEmpty ifFalse: [
-		result add: subStringStream contents ].
-	^ result asArray
+				subString add: char ] ].
+	subString size == 0 ifFalse: [ result add: subString ].
+	^ result 
 
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
+CharacterCollection >> substringsSpace [
+	"Answer an array containing the substrings in the receiver separated 
+	by  Character space"
+	| result ofs subStr sepChar sz |
+  sepChar := $  "Character space".
+	ofs := 1 .
+  sz := self size .
+	result := { } .
+	subStr := String new .
+	[ ofs > sz ] whileFalse: [
+		| char |
+		char := self at: ofs . ofs := ofs + 1 .
+		char == sepChar 
+			ifTrue: [
+				subStr size == 0 ifFalse: [
+					result add: subStr .
+					subStr := String new ] ]
+			ifFalse: [
+				subStr add: char ] ].
+	subStr size == 0 ifFalse: [ result add: subStr ].
+	^ result 
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
 CharacterCollection >> trimBoth [
 
 	"Trim separators from both sides of the receiving string."
-
-	^ self trimBoth: [ :char | char isSeparator ]
-
+  | left right |
+  left := 1 .
+  right := self size .
+  [ left <= right and:[ (self at: left) isSeparator ]] whileTrue:[ left := left + 1].
+  left > right ifTrue:[ ^ self class new ].
+  [ (self at: right) isSeparator ] whileTrue:[ right := right - 1].
+	^ self copyFrom: left to: right .
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
@@ -129,9 +157,12 @@ CharacterCollection >> trimBoth: aBlock [
 CharacterCollection >> trimLeft [
 
 	"Trim separators from the left side of the receiving string."
-
-	^ self trimLeft: [ :char | char isSeparator ]
-
+  | left right |
+  left := 1 .
+  right := self size .
+  [ left <= right and:[ (self at: left) isSeparator ]] whileTrue:[ left := left + 1].
+  left > right ifTrue:[ ^ self class new ].
+	^ self copyFrom: left to: right .
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }
@@ -163,9 +194,11 @@ CharacterCollection >> trimLeft: aLeftBlock right: aRightBlock [
 CharacterCollection >> trimRight [
 
 	"Trim separators from the right side of the receiving string."
-
-	^ self trimRight: [ :char | char isSeparator ]
-
+  | right |
+  right := self size .
+  [ right >= 1 and:[ (self at: right) isSeparator ]] whileTrue:[ right := right - 1].
+  right == 0 ifTrue:[ ^ self class new ].
+	^ self copyFrom: 1 to: right .
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }

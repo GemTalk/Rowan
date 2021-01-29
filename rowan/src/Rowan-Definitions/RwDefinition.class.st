@@ -84,7 +84,7 @@ RwDefinition >> compareAgainstBaseForNewClassVersion: aBaseDefinition [
 RwDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
 
 	| keys |
-	keys := myDictionary keys copy.
+	keys := myDictionary keys . "keys is already a copy"
 	keys addAll: baseDictionary keys.
 	keys do: 
 			[:key |
@@ -99,7 +99,7 @@ RwDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDicti
 { #category : 'initialization' }
 RwDefinition >> initialize [
 
-	properties := Dictionary new
+	properties := SymbolDictionary new
 ]
 
 { #category : 'testing' }
@@ -123,7 +123,7 @@ RwDefinition >> postCopy [
 	| oldProperties |
 	super postCopy.
 	oldProperties := properties.
-	properties := Dictionary new.
+	properties := SymbolDictionary new.
 	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 ]
 
@@ -134,6 +134,12 @@ RwDefinition >> printOn: aStream [
 	aStream
 		nextPutAll: ' for ';
 		nextPutAll: (self key ifNil: ['nil'])
+]
+
+{ #category : 'printing' }
+RwDefinition >> printSTON [
+
+  ^ STON toStringPretty: self
 ]
 
 { #category : 'accessing' }

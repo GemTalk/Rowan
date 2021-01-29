@@ -114,7 +114,7 @@ RBSmallDictionary >> initialize: anInteger [
 
 { #category : 'testing' }
 RBSmallDictionary >> isEmpty [
-	^ tally = 0
+	^ tally == 0
 ]
 
 { #category : 'accessing' }

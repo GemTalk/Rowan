@@ -73,9 +73,10 @@ FileSystem >> checkName: aString fixErrors: fixErrors [
 
 { #category : 'public-enumerating' }
 FileSystem >> childNamesAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self childNamesAt: aResolvable do: [ :path|
-			out nextPut: path ]].
+  | res |
+  res := { } .
+  self childNamesAt: aResolvable do: [ :path| res add: path ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }
@@ -91,9 +92,10 @@ FileSystem >> childNamesAt: aResolvable do: aBlock [
 
 { #category : 'public-enumerating' }
 FileSystem >> childrenAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self childrenAt: aResolvable do: [ :path|
-			out nextPut: path ]].
+  | res |
+  res := { } .
+	self childrenAt: aResolvable do: [ :path| res add: path ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }
@@ -215,9 +217,10 @@ FileSystem >> delimiter [
 
 { #category : 'public-enumerating' }
 FileSystem >> directoriesAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self directoriesAt: aResolvable do: [ :path|
-			out nextPut: path ]].
+  | res |
+  res := { } .
+	self directoriesAt: aResolvable do: [ :path| res add: path ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }
@@ -233,9 +236,10 @@ FileSystem >> directoriesAt: aResolvable do: aBlock [
 
 { #category : 'public-enumerating' }
 FileSystem >> directoryNamesAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self directoryNamesAt: aResolvable do: [ :name|
-			out nextPut: name ]].
+  | res |
+  res := { } .
+  self directoryNamesAt: aResolvable do: [ :name| res add: name ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }
@@ -259,10 +263,10 @@ FileSystem >> ensureCreateDirectory: aResolvable [
 
 { #category : 'public-enumerating' }
 FileSystem >> entriesAt: aResolvable [
-	^ Array
-		streamContents: [ :out | 
-			self entriesAt: aResolvable do: [ :entry | out nextPut: entry ]
-		]
+  | res |
+  res := { } .
+	self entriesAt: aResolvable do: [ :entry | res add: entry ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }
@@ -311,9 +315,10 @@ FileSystem >> extensionDelimiter [
 
 { #category : 'public-enumerating' }
 FileSystem >> fileNamesAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self fileNamesAt: aResolvable do: [ :path|
-			out nextPut: path ]].
+  | res |
+  res := { } .
+  self fileNamesAt: aResolvable do: [ :path| res add: path ].
+  ^ res .
 ]
 
 { #category : 'public-enumerating' }
@@ -329,9 +334,10 @@ FileSystem >> fileNamesAt: aResolvable do: aBlock [
 
 { #category : 'public-enumerating' }
 FileSystem >> filesAt: aResolvable [
-	^ Array streamContents: [ :out | 
-		self filesAt: aResolvable do: [ :path|
-			out nextPut: path ]].
+  | res |
+  res := { } .
+	self filesAt: aResolvable do: [ :path| res add: path ].
+  ^ res
 ]
 
 { #category : 'public-enumerating' }

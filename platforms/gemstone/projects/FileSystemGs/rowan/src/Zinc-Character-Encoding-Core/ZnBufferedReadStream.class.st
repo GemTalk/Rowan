@@ -16,7 +16,8 @@ Class {
 		'stream',
 		'buffer',
 		'position',
-		'limit'
+		'limit',
+    'species'
 	],
 	#category : 'Zinc-Character-Encoding-Core'
 }
@@ -31,6 +32,8 @@ ZnBufferedReadStream class >> new [
 
 { #category : 'instance creation' }
 ZnBufferedReadStream class >> on: readStream [
+  "Bypass work around for  https://github.com/GemTalk/FileSystemGs/issues/9 "
+  readStream class == self ifTrue:[ ^ readStream ].
 	^ self new
 		on: readStream;
 		yourself
@@ -47,7 +50,12 @@ ZnBufferedReadStream class >> on: readStream do: block [
 { #category : 'testing' }
 ZnBufferedReadStream >> atEnd [
 	^ position > limit and: [ stream atEnd ]
-	
+]
+
+{ #category : 'testing' }
+ZnBufferedReadStream >> beforeEnd [
+	position <= limit ifTrue:[ ^ true ].
+  ^ stream atEnd not 
 ]
 
 { #category : 'initialize-release' }
@@ -62,9 +70,10 @@ ZnBufferedReadStream >> closed [
 
 { #category : 'accessing' }
 ZnBufferedReadStream >> collectionSpecies [
-	^ stream isBinary
-		ifTrue: [ ByteArray ]
-		ifFalse: [ String ]
+  species ifNil:[ 
+	  species := stream isBinary ifTrue: [ ByteArray ] ifFalse: [ String ]
+  ].
+  ^ species
 ]
 
 { #category : 'accessing' }
@@ -120,15 +129,20 @@ ZnBufferedReadStream >> isStream [
 ZnBufferedReadStream >> next [
 	"Return the next element and move over it"
 	
-	position > limit
-		ifTrue: [ self nextBuffer ].
-	^ position <= limit
+	position <= limit
 		ifTrue: [ 
 			| char |
 			char := buffer at: position.
 			position := position + 1.
-			char ]
-		ifFalse: [ nil ]
+			^ char ].
+	self nextBuffer .
+  ^ position <= limit
+    ifTrue: [
+      | char |
+      char := buffer at: position.
+      position := position + 1.
+      char ]
+    ifFalse: [ nil ]
 ]
 
 { #category : 'accessing' }
@@ -138,7 +152,7 @@ ZnBufferedReadStream >> next: requestedCount [
 
 	^ self 
 		next: requestedCount 
-		into: (self collectionSpecies new: requestedCount)
+		into: ((species ifNil:[ self collectionSpecies]) new: requestedCount)
 ]
 
 { #category : 'accessing' }
@@ -162,7 +176,7 @@ ZnBufferedReadStream >> next: requestedCount into: collection startingAt: offset
 		readInto: collection 
 		startingAt: offset 
 		count: requestedCount.
-	^ read = requestedCount 
+	^ read == requestedCount 
 		ifTrue: [ collection ]
 		ifFalse: [ collection copyFrom: 1 to: offset + read - 1 ]     
 ]
@@ -221,7 +235,7 @@ Handle a zoo of line delimiters CR, LF, or CR-LF pair"
 self atEnd ifTrue: [^nil].
 cr := (chrcls:= Character) cr.
 lf := chrcls  lf.
-result := self collectionSpecies new.
+result := (species ifNil:[ self collectionSpecies]) new.
 [ ch := self next .
   (ch == cr or:[ ch == lf ]) ifTrue:[ 
     ch == cr ifTrue:[ self peekFor: lf ].
@@ -258,8 +272,9 @@ ZnBufferedReadStream >> on: readStream [
 ZnBufferedReadStream >> peek [
 	"Return the next element but do not move over it"
 	
-	position > limit
-		ifTrue: [ self nextBuffer ].
+	position <= limit
+		ifTrue: [ ^ buffer at: position ] .
+	self nextBuffer .
 	^ position <= limit
 		ifTrue: [ buffer at: position ]
 		ifFalse: [ nil ]
@@ -351,7 +366,6 @@ ZnBufferedReadStream >> readInto: collection startingAt: offset count: requested
 
 { #category : 'accessing' }
 ZnBufferedReadStream >> setToEnd [
-	
 	stream setToEnd
 ]
 
@@ -362,15 +376,16 @@ ZnBufferedReadStream >> shouldBufferReadOfCount: elementCount [
 	^ elementCount < (buffer size / 2)
 ]
 
+{ #category : 'private' }
+ZnBufferedReadStream >> sizeBuffer: size [
+  stream atEnd ifTrue:[ Error signal:'already at end'].
+  buffer := self collectionSpecies new: size .
+]
+
 { #category : 'accessing' }
 ZnBufferedReadStream >> size [
 
 	^ stream size
-]
-
-{ #category : 'initialize-release' }
-ZnBufferedReadStream >> sizeBuffer: size [
-	buffer := self collectionSpecies new: size
 ]
 
 { #category : 'accessing' }
@@ -397,22 +412,39 @@ ZnBufferedReadStream >> uint8 [
 ]
 
 { #category : 'accessing' }
-ZnBufferedReadStream >> upTo: value [ 
+ZnBufferedReadStream >> upTo: aCharacter [ 
 	"Read upto but not including value and return them as a collection.
-	If value is not found, return the entire contents of the stream.
-	This could be further optimzed."
-	
-	^ self collectionSpecies 
-		streamContents: [ :writeStream | | element |
-			[ self atEnd or: [ (element := self next) = value ] ] whileFalse: [ 
-				writeStream nextPut: element ] ]
+	If value is not found, return the entire contents of the stream."
+  | res element |
+  position <= limit ifTrue:[ | ofs |
+    ofs := buffer indexOf: aCharacter startingAt: position .  
+    ofs ~~ 0 ifTrue:[ 
+      res := buffer copyFrom: position to: ofs - 1.
+      position := ofs + 1 .
+      ^ res
+    ].
+  ].
+	res := (species ifNil:[ self collectionSpecies ]) new .
+	[ self atEnd or: [ (element := self next) == aCharacter ] ] whileFalse: [ 
+			res add: element ].
+  ^ res
 ]
 
 { #category : 'accessing' }
 ZnBufferedReadStream >> upToAll: aCollection [ 
-"Answer a subcollection from the current access position to the occurrence (if any, but not inclusive) of aCollection. If aCollection is not in the stream, answer the entire rest of the stream."
+"Answer a subcollection from the current access position to the occurrence 
+ (if any, but not inclusive) of aCollection. If aCollection is not in the stream, 
+ answer the entire rest of the stream."
 
-| startPos endMatch result x |
+| startPos endMatch result x argSize |
+position + (argSize := aCollection size) <= limit ifTrue:[ | ofs res |
+  ofs := buffer findString: aCollection startingAt: position . 
+  ofs ~~ 0 ifTrue:[
+    res := buffer copyFrom: position to: ofs - 1 .
+    position := ofs + argSize .  
+    ^ res 
+  ].
+].
 startPos := self position.
 x := self upTo: aCollection first.
 self atEnd ifTrue: [ ^ x ].
@@ -432,13 +464,18 @@ self position: endMatch.
 ZnBufferedReadStream >> upToEnd [
 	"Read elements until the stream is atEnd and return them as a collection."
 
-	^ self collectionSpecies
-		streamContents: [ :out | 
-			[ self atEnd ] whileFalse: [ 
-				position > limit
-					ifTrue: [ self nextBuffer ].	
-				out next: limit - position + 1 putAll: buffer startingAt: position.
-				position := limit + 1 ] ]
+  | res count ofs |
+  res := (species ifNil:[ self collectionSpecies ]) new.
+  ofs := 1 .
+	[ self atEnd ] whileFalse: [ 
+		position > limit
+		  ifTrue: [ self nextBuffer ].	
+    count := limit - position + 1  .
+    res replaceFrom: ofs to: ofs + count - 1 with: buffer startingAt: position.
+		ofs := ofs + count .
+	  position := limit + 1 
+  ].
+  ^ res
 ]
 
 { #category : 'accessing' }
@@ -450,3 +487,13 @@ ZnBufferedReadStream >> wrappedStream [
 ZnBufferedReadStream >> wrappedStreamName [
 	^ stream wrappedStreamName
 ]
+
+{ #category : 'initialization' }
+ZnBufferedReadStream >> onBuffer: aString stream: aStream [
+  stream := aStream .  "expected to be atEnd"
+  buffer := aString .
+  position := 1 .
+  limit := buffer size .
+  species := String .
+]
+

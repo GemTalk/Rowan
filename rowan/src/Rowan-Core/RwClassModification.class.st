@@ -59,8 +59,7 @@ RwClassModification >> instanceMethodsModification: newValue [
 { #category : 'testing' }
 RwClassModification >> isEmpty [
 
-	^super isEmpty & instanceMethodsModification isEmpty
-		& classMethodsModification isEmpty
+  ^ instanceMethodsModification isEmpty and:[ classMethodsModification isEmpty and:[ super isEmpty]]
 ]
 
 { #category : 'merging' }

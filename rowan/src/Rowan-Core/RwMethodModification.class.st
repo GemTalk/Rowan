@@ -158,7 +158,7 @@ RwMethodModification >> classDefinition: aClassDefinition [
 { #category : 'testing' }
 RwMethodModification >> isEmpty [
 
-	^super isEmpty & sourceModification isEmpty
+  ^ sourceModification isEmpty and:[ super isEmpty ]
 ]
 
 { #category : 'Accessing' }

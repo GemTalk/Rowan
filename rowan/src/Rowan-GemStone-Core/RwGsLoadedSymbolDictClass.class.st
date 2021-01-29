@@ -15,8 +15,8 @@ RwGsLoadedSymbolDictClass >> _classBasedProperties [
 
 	"Answer the list of properties that are derived from the class instance itself"
 
-	^ #(  'category' 'classinstvars'  'name' 'type' 'classvars' 'comment' 'gs_constraints' 'instvars'  'gs_options' 
-			'pools' 'superclass' 'gs_SymbolDictionary' )
+	^ #(  #'category' #'classinstvars'  #'name' #'type' #'classvars' #'comment' #'gs_constraints' #'instvars'  #'gs_options' 
+			#'pools' #'superclass' #'gs_SymbolDictionary' )
 ]
 
 { #category : 'methods' }
@@ -95,8 +95,8 @@ RwGsLoadedSymbolDictClass >> handleClassDeletionOrNewVersion [
 RwGsLoadedSymbolDictClass >> initialize [
 
 	super initialize.
-	loadedInstanceMethods := KeyValueDictionary new.
-	loadedClassMethods := KeyValueDictionary new
+	loadedInstanceMethods := StringKeyValueDictionary new.
+	loadedClassMethods := StringKeyValueDictionary new
 ]
 
 { #category : 'initialization' }
@@ -111,7 +111,7 @@ RwGsLoadedSymbolDictClass >> initializeForClass: aClass [
 RwGsLoadedSymbolDictClass >> initializeForName: aClassName [
 
 	super initializeForName: aClassName.
-	properties at: 'name' put: aClassName
+	properties at: #'name' put: aClassName
 ]
 
 { #category : 'accessing' }
@@ -172,14 +172,14 @@ RwGsLoadedSymbolDictClass >> reregisterLoadedInstanceMethods: aDictionary [
 { #category : 'private' }
 RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 
-	self propertyAt: 'gs_SymbolDictionary' put: aName asString
+	self propertyAt: #'gs_SymbolDictionary' put: aName asString
 ]
 
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateCategoryFromClass [
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'category'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'category'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle _classCategory ifNil: [ absentToken ].
@@ -199,7 +199,7 @@ RwGsLoadedSymbolDictClass >> updateClassInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classinstvars'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'classinstvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle class instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -214,7 +214,7 @@ RwGsLoadedSymbolDictClass >> updateClassNameFromClass [
 	oldName = newName
 		ifFalse: 
 			[self name: newName.
-			self propertyAt: 'name' put: name] 	"needs to be listed in _classBasedProperties method"
+			self propertyAt: #'name' put: name] 	"needs to be listed in _classBasedProperties method"
 ]
 
 { #category : 'private-updating' }
@@ -227,7 +227,7 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'type'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	newValue := handle rwClassType.
 
@@ -240,7 +240,7 @@ RwGsLoadedSymbolDictClass >> updateClassVariableNamesFromClass [
 	"Order of variable names does not matter to Cypress (at least not for GemStone) so we keep the names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classvars'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'classvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection asArray.
@@ -251,7 +251,7 @@ RwGsLoadedSymbolDictClass >> updateClassVariableNamesFromClass [
 RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'comment'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'comment'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	(oldValue ~~ absentToken and: [oldValue isEmpty])
@@ -273,7 +273,7 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
 	| propertyName oldValue newValue sortedConstraints |
-	propertyName := 'gs_constraints'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'gs_constraints'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	sortedConstraints := handle _rwSortedConstraints.
 	(sortedConstraints isKindOf: Array ) 
@@ -303,7 +303,7 @@ RwGsLoadedSymbolDictClass >> updateInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'instvars'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'instvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -326,7 +326,7 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 	from the image, and the image is trusted to only have valid values."
 
 	| propertyName oldValue newValue |
-	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'gs_options'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.	"TODO, may need changes to result of _rwOptionsArray , see RwClassDefinition >> _updateOptionsFromClass "
 	newValue := (handle _rwOptionsArray collect: [ :option | option asString ])
 		asArray.
@@ -338,7 +338,7 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 				ifTrue: [ self removeProperty: propertyName ]
 				ifFalse: [ self propertyAt: propertyName put: newValue ] ].
 	handle _rwReservedOop
-		ifNotNil: [ :resOop | self propertyAt: 'gs_reservedoop' put: resOop asString ]
+		ifNotNil: [ :resOop | self propertyAt: #'gs_reservedoop' put: resOop asString ]
 		ifNil: [ self removeProperty: 'gs_reservedoop' ]
 ]
 
@@ -347,7 +347,7 @@ RwGsLoadedSymbolDictClass >> updatePoolDictionaryNamesFromClass [
 	"Order of pool dictionaries *does* matter in GemStone, so we keep the names in the order given in the image."
 
 	| propertyName oldNames newNames |
-	propertyName := 'pools'.	"needs to be listed in _classBasedProperties method"
+	propertyName := #'pools'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle sharedPools collect: [ :each | each name asString ])
 		asArray.
@@ -380,12 +380,12 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateSuperclassNameFromClass [
   | oldName newName |
-  oldName := self propertyAt: 'superclass'.	"needs to be listed in _classBasedProperties method"
+  oldName := self propertyAt: #'superclass'.	"needs to be listed in _classBasedProperties method"
   newName := handle superclass
     ifNil: [ 'nil' ]
     ifNotNil: [ :superclass | superclass name asString ].
   oldName = newName
-    ifFalse: [ self propertyAt: 'superclass' put: newName ]
+    ifFalse: [ self propertyAt: #'superclass' put: newName ]
 ]
 
 { #category : 'private-updating' }
@@ -393,7 +393,7 @@ RwGsLoadedSymbolDictClass >> updateSymbolDictionaryFromClassFor: aSymbolDictiona
 
 	| newName oldName |
 	newName := aSymbolDictionary name.
-	oldName := self propertyAt: 'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
+	oldName := self propertyAt: #'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
 ]

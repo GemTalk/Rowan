@@ -446,7 +446,7 @@ Path >> isContainedBy: anObject [
 
 { #category : 'testing' }
 Path >> isEmpty [
-	^ self size = 0
+	^ self size == 0
 ]
 
 { #category : 'testing' }
@@ -461,7 +461,7 @@ Path >> isRoot [
 
 { #category : 'testing' }
 Path >> isWorkingDirectory [
-	^ self size = 0
+	^ self size == 0
 ]
 
 { #category : 'private' }

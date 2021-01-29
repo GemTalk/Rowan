@@ -15,8 +15,25 @@ Class {
 		'allowComplexMapKeys',
 		'stack'
 	],
+	#classVars : [
+		'Character_lf',
+		'Character_backspace',
+		'Character_newPage',
+		'Character_cr',
+		'Character_tab'
+	],
+
 	#category : 'STON-Core'
 }
+
+{ #category : 'initialization' }
+STONReader class >> initialize [
+	self _addInvariantClassVar: #Character_lf value: Character lf.
+	self _addInvariantClassVar: #Character_backspace value: Character backspace.
+	self _addInvariantClassVar: #Character_newPage value: Character newPage.
+	self _addInvariantClassVar: #Character_cr value: Character cr.
+	self _addInvariantClassVar: #Character_tab value: Character tab.
+]
 
 { #category : 'instance creation' }
 STONReader class >> new [
@@ -43,7 +60,11 @@ STONReader >> allowComplexMapKeys: boolean [
 { #category : 'testing' }
 STONReader >> atEnd [
 	^ readStream atEnd
+]
 
+{ #category : 'testing' }
+STONReader >> beforeEnd [
+	^ readStream beforeEnd
 ]
 
 { #category : 'initialize-release' }
@@ -65,7 +86,7 @@ STONReader >> close [
 STONReader >> consumeWhitespace [
 	"Strip whitespaces from the input stream."
 
-	[ readStream atEnd not and: [ readStream peek isSeparator ] ]
+	[ readStream beforeEnd and: [ readStream peek isSeparator ] ]
 		whileTrue: [ readStream next ]
 
 ]
@@ -101,20 +122,20 @@ STONReader >> initialize [
 ]
 
 { #category : 'private' }
-STONReader >> isClassChar: char [
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' includes: char
+STONReader >> isClassChar: aCharacter [
+	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' includesValue: aCharacter
 
 ]
 
 { #category : 'private' }
-STONReader >> isClassStartChar: char [
-	^ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: char
+STONReader >> isClassStartChar: aCharacter [
+	^ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' includesValue: aCharacter
 
 ]
 
 { #category : 'private' }
-STONReader >> isSimpleSymbolChar: char [
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includes: char
+STONReader >> isSimpleSymbolChar: aCharacter [
+	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includesValue: aCharacter
 
 ]
 
@@ -186,7 +207,7 @@ STONReader >> next [
 
 { #category : 'initialize-release' }
 STONReader >> on: aReadStream [
-	readStream := aReadStream
+	readStream := aReadStream .
 
 ]
 
@@ -200,23 +221,23 @@ STONReader >> optimizeForLargeStructures [
 { #category : 'parsing-internal' }
 STONReader >> parseCharacter [
   | char |
-  (char := readStream next) = $\
+  (char := readStream next) == $\
     ifFalse: [ ^ char ].
-  (#($' $" $/ $\) includes: (char := readStream next))
+  ( #( $' $" $/ $\ ) includesIdentical: (char := readStream next))
     ifTrue: [ ^ char ].
-  char = $b
-    ifTrue: [ ^ Character backspace ].
-  char = $f
-    ifTrue: [ ^ Character newPage ].
-  char = $n
-    ifTrue: [ ^ Character lf ].
-  char = $r
-    ifTrue: [ ^ Character cr ].
-  char = $t
-    ifTrue: [ ^ Character tab ].
-  char = $u
+  char == $b
+    ifTrue: [ ^ Character_backspace ].
+  char == $f
+    ifTrue: [ ^ Character_newPage ].
+  char == $n
+    ifTrue: [ ^ Character_lf ].
+  char == $r
+    ifTrue: [ ^ Character_cr ].
+  char == $t
+    ifTrue: [ ^ Character_tab ].
+  char == $u
     ifTrue: [ ^ self parseCharacterHex ].
-  self error: 'invalid escape character \' , (String with: char)
+  self error: 'invalid escape character \' , char .
 
 ]
 
@@ -247,9 +268,9 @@ STONReader >> parseCharacterHexDigit [
 { #category : 'parsing-internal' }
 STONReader >> parseClass [
 	| className |
-	className := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isClassChar: readStream peek ] ] whileTrue: [ 
-			stream nextPut: readStream next ] ].
+	className := String new .
+	[ readStream beforeEnd and: [ self isClassChar: readStream peek ] ] whileTrue: [ 
+			className add: readStream next ].
 	self consumeWhitespace.
 	^ self lookupClass: className asSymbol
 
@@ -260,20 +281,20 @@ STONReader >> parseConstantDo: block [
 	"Parse and consume either true|false|nil|null and execute block 
 	or else do nothing (but do not back up).
 	Hand written implementation to avoid the use of #position:"
-	
-	(readStream peek = $t)
+  | pChar |	
+	(pChar := readStream peek) == $t
 		ifTrue: [
 			^ self match: 'true' do: [ block value: true ] ].
-	(readStream peek = $f)
+	pChar == $f
 		ifTrue: [
 			^ self match: 'false' do: [ block value: false ] ].
-	(readStream peek = $n)
+	pChar == $n
 		ifTrue: [
 			readStream next.
-			(readStream peek = $i)
+			(pChar := readStream peek) == $i
 				ifTrue: [
 					self match: 'il' do: [ block value: nil ] ].
-			(readStream peek = $u)
+			pChar == $u
 				ifTrue: [
 					self match: 'ull' do: [ block value: nil ] ] ]
 
@@ -283,11 +304,10 @@ STONReader >> parseConstantDo: block [
 STONReader >> parseList [
 	| reference array |
 	reference := self newReference.
-	array := STON listClass streamContents: [ :stream |
-		self parseListDo: [ :each | stream nextPut: each ] ].
+	array := "STON listClass == Array" { } .
+	self parseListDo: [ :each | array add: each ] .
 	self setReference: reference to: array.
 	^ array
-
 ]
 
 { #category : 'parsing' }
@@ -312,7 +332,7 @@ STONReader >> parseListSingleton [
 	| value |
 	value := nil.
 	self parseListDo: [ :each :index |
-		index = 1 ifTrue: [ value := each ] ].
+		index == 1 ifTrue: [ value := each ] ].
 	^ value
 
 ]
@@ -351,9 +371,9 @@ STONReader >> parseMapDo: block [
 { #category : 'parsing-internal' }
 STONReader >> parseNumber [
 	| negated number |
-	negated := readStream peekFor: $-.
+	negated := readStream peekFor: $- .
 	number := self parseNumberInteger.
-	(readStream peekFor: $.)
+	(readStream peekFor: $. )
 		ifTrue: [ number := number + self parseNumberFraction ].
 	((readStream peekFor: $e) or: [ readStream peekFor: $E ])
 		ifTrue: [ number := number * self parseNumberExponent ].
@@ -368,9 +388,9 @@ STONReader >> parseNumber [
 STONReader >> parseNumberExponent [
 	| number negated |
 	number := 0.
-	(negated := readStream peekFor: $-)
+	(negated := readStream peekFor: $- )
 		ifFalse: [ readStream peekFor: $+ ].
-	[ readStream atEnd not and: [ readStream peek isDigit ] ]
+	[ readStream beforeEnd and: [ readStream peek isDigit ] ]
 		whileTrue: [ number := 10 * number + readStream next digitValue ].
 	negated
 		ifTrue: [ number := number negated ].
@@ -383,7 +403,7 @@ STONReader >> parseNumberFraction [
 	| number power |
 	number := 0.
 	power := 1.0.
-	[ readStream atEnd not and: [ readStream peek isDigit ] ] whileTrue: [
+	[ readStream beforeEnd and: [ readStream peek isDigit ] ] whileTrue: [
 		number := 10 * number + readStream next digitValue.
 		power := power * 10.0 ].
 	^ number / power
@@ -394,7 +414,7 @@ STONReader >> parseNumberFraction [
 STONReader >> parseNumberInteger [
 	| number |
 	number := 0.
-	[ readStream atEnd not and: [ readStream peek isDigit ] ] whileTrue: [ 
+	[ readStream beforeEnd and: [ readStream peek isDigit ] ] whileTrue: [ 
 		number := 10 * number + readStream next digitValue ].
 	^ number
 
@@ -432,12 +452,11 @@ STONReader >> parseString [
 STONReader >> parseStringInternal [
   | result delimiter |
   delimiter := readStream next.
-  (delimiter = $' or: [ delimiter = $" ])
+  (delimiter == $' or: [ delimiter == $" ])
     ifFalse: [ self error: ''' or " expected' ].
-  result := self
-    stringStreamContents: [ :stream | 
-      [ readStream atEnd or: [ readStream peek = delimiter ] ]
-        whileFalse: [ stream nextPut: self parseCharacter ] ].
+  result := String new .
+   [ readStream atEnd or: [ readStream peek = delimiter ] ]
+       whileFalse: [ result add: self parseCharacter ].
   self expectChar: delimiter.
   ^ result
 
@@ -447,12 +466,12 @@ STONReader >> parseStringInternal [
 STONReader >> parseSymbol [
 	| string |
 	self expectChar: $#.
-	readStream peek = $'
+	readStream peek == $'
 		ifTrue: [ ^ self parseStringInternal asSymbol ].
-	string := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isSimpleSymbolChar: readStream peek ] ] whileTrue: [
-			stream nextPut: readStream next ] ].
-	string isEmpty
+	string := String new .
+	[ readStream beforeEnd and: [ self isSimpleSymbolChar: readStream peek ] ] whileTrue: [
+		string add: readStream next ] .
+	string size == 0
 		ifFalse: [ 
 			self consumeWhitespace.
 			^ string asSymbol ].
@@ -466,17 +485,17 @@ STONReader >> parseValue [
 	readStream atEnd ifFalse: [ 
 		(self isClassStartChar: (char := readStream peek)) 
 			ifTrue: [ ^ self parseObject ].
-		char = ${
+		char == ${
 			ifTrue: [ ^ self parseMap ].
-		char = $[
+		char == $[
 			ifTrue: [ ^ self parseList ].
-		(char = $' or: [ char = $" ])
+		(char == $' or: [ char == $" ])
 			ifTrue: [ ^ self parseString ].
-		char = $#
+		char == $#
 			ifTrue: [ ^ self parseSymbol ].
-		char = $@
+		char == $@
 			ifTrue: [ ^ self parseReference ].
-		(char = $- or: [ char isDigit ])
+		(char == $- or: [ char isDigit ])
 			ifTrue: [ ^ self parseNumber ].
 		self parseConstantDo: [ :value | ^ value ] ].
 	self error: 'invalid input'
@@ -526,14 +545,5 @@ STONReader >> storeReference: object [
 	index := objects size + 1.
 	objects at: index put: object.
 	^ index
-
-]
-
-{ #category : 'private' }
-STONReader >> stringStreamContents: block [
-  stringStream ifNil: [ stringStream := WriteStream on: String new ].
-  stringStream reset.
-  block value: stringStream.
-  ^ stringStream contents
 
 ]

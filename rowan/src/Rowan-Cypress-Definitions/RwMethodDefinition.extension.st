@@ -10,8 +10,8 @@ RwMethodDefinition class >> fromCypressMethod: cypMethodDef [
 { #category : '*rowan-cypress-definitions' }
 RwMethodDefinition >> fromCypressMethod: cypMethodDef [
   properties
-    at: 'selector' put: cypMethodDef selector asSymbol;
-    at: 'protocol' put: cypMethodDef category;
-    yourself.
+    at: #'selector' put: cypMethodDef selector asSymbol;
+    at: #'protocol' put: cypMethodDef category .
+
   self source: cypMethodDef source
 ]

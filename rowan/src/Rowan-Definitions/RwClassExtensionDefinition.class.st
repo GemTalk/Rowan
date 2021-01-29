@@ -13,8 +13,8 @@ Class {
 RwClassExtensionDefinition class >> newForClassNamed: className [
 
 	| propertiesDictionary |
-	propertiesDictionary := Dictionary new
-		at: 'name' put: className;
+	propertiesDictionary := SymbolDictionary new
+		at: #'name' put: className;
 		yourself.
 	^ self
 		withProperties: propertiesDictionary
@@ -37,8 +37,8 @@ RwClassExtensionDefinition >> _classNameForCompare: aDefinition [
 RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 
 	| keys |
-	keys := myDictionary keys copy.
-	keys addAll: baseDictionary keys.
+	keys := myDictionary keys. "keys is already a copy"
+  baseDictionary keysDo:[:k | keys add: k ].  "keys addAll: baseDictionary keys."
 	keys
 		do: [ :key | 
 			| before after modification |

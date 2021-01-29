@@ -64,13 +64,13 @@ RwGsLoadedSymbolDictMethod >> updateForProtocolChange [
 	"Check to see whether I'm in a different protocol. If I am, that could change which package I'm in and I need to update that."
 
 	| oldProtocol newProtocol |
-	oldProtocol := self propertyAt: 'protocol'.
+	oldProtocol := self propertyAt: #'protocol'.
 	newProtocol := (handle inClass categoryOfSelector: handle selector)
 				asString.
 
 	"Must test for AbsentToken by identity, or a new protocol of '<absent>' would not  be detected."
 	oldProtocol == AbsentToken | (oldProtocol ~= newProtocol)
-		ifTrue: [	self propertyAt: 'protocol' put: newProtocol ]
+		ifTrue: [	self propertyAt: #'protocol' put: newProtocol ]
 ]
 
 { #category : 'private-updating' }
@@ -79,6 +79,6 @@ RwGsLoadedSymbolDictMethod >> updateFromHandle [
 	"update method properties: selector and protocol, and classIsMeta"
 
 	self updateForProtocolChange.
-	self propertyAt: 'selector' put: handle selector asSymbol.
+	self propertyAt: #'selector' put: handle selector asSymbol.
 	classIsMeta := handle inClass isMeta
 ]

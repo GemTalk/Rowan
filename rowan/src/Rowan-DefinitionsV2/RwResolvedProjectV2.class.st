@@ -16,21 +16,18 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
-	| loadSpecification projectDefinition pdComponents rpComponents |
+	| loadSpecification projectDefinition pdComponents rpComponents pDict |
 	self _defaultUseNewProjectComponentClass
 		ifTrue: [ rpComponents := RwResolvedLoadComponentsV2 new ]
 		ifFalse: [ pdComponents := RwResolvedLoadComponentsV2 new ].
 	loadSpecification := anRwLoadSpecificationV2 copy.
-	projectDefinition := RwProjectDefinitionV2 basicNew
-		properties:
-				(Dictionary new
-						add: 'name' -> loadSpecification projectName;
-						yourself);
+	(pDict := SymbolDictionary new)
+						at: #'name' put: loadSpecification projectName .
+	(projectDefinition := RwProjectDefinitionV2 basicNew)
+		properties: pDict ;
 		packages: Dictionary new;
 		components: pdComponents;
-		projectDefinitionSourceProperty:
-				RwLoadedProject _projectModifiedProjectSourceValue;
-		yourself.
+		projectDefinitionSourceProperty: RwLoadedProject _projectModifiedProjectSourceValue.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
 		_projectComponents: rpComponents;
@@ -638,10 +635,10 @@ RwResolvedProjectV2 >> exportComponents [
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportPackages [
 	| projectSetDefinition |
-	projectSetDefinition := [ 
-	RwProjectSetDefinition new
-		addProject: self copy read;
-		yourself ]
+	projectSetDefinition := [  | def |
+	  (def := RwProjectSetDefinition new)
+		  addProject: self copy read .
+		def ]
 		on: Error
 		do: [ :ignored | RwProjectSetDefinition new ].
 	self
@@ -674,9 +671,8 @@ RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: pa
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: diskProjectSetDefinition.
-	visitor := writerVisitorClass new
-		packagesRoot: packagesRoot;
-		yourself.
+	(visitor := writerVisitorClass new)
+		packagesRoot: packagesRoot .
 
 	visitor visit: projectSetModification
 ]
@@ -703,14 +699,14 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitorV2 new
+	(visitor := RwGsModificationTopazWriterVisitorV2 new)
 		logCreation: logClassCreation;
 		excludeClassInitializers: excludeClassInitializers;
 		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
-		filenameExtension: fileReference extension;
-		yourself.
+		filenameExtension: fileReference extension .
+
 	visitor visit: projectSetModification
 ]
 
@@ -722,14 +718,14 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwGsModificationTopazWriterVisitorV2 new
+	(visitor := RwGsModificationTopazWriterVisitorV2 new)
 		logCreation: logClassCreation;
 		excludeClassInitializers: excludeClassInitializers;
 		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
-		topazFilenamePackageNamesMap: packageNamesMap;
-		yourself.
+		topazFilenamePackageNamesMap: packageNamesMap .
+
 	visitor visit: projectSetModification
 ]
 
@@ -1273,7 +1269,7 @@ RwResolvedProjectV2 >> resolve: platformConfigurationAttributes [
 RwResolvedProjectV2 >> resolveProjectSet [
 	"resolve the loadSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (project set will include required projects)"
-
+  | res |
 	self _projectRepository resolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
@@ -1281,16 +1277,16 @@ RwResolvedProjectV2 >> resolveProjectSet [
 				ifTrue: [ 
 					"read project and required projects from disk"
 					^ self readProjectSet ] ].
-	^ RwProjectSetDefinition new
-		addProject: self;
-		yourself
+	(res := RwProjectSetDefinition new)
+		addProject: self .
+  ^ res
 ]
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolveProjectSet: platformConfigurationAttributes [
 	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
-
+  | res |
 	self _projectRepository resolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
@@ -1298,9 +1294,9 @@ RwResolvedProjectV2 >> resolveProjectSet: platformConfigurationAttributes [
 				ifTrue: [ 
 					"update project definition from disk"
 					^ self readProjectSet: platformConfigurationAttributes ] ].
-	^ RwProjectSetDefinition new
-		addProject: self;
-		yourself
+	(res := RwProjectSetDefinition new)
+		addProject: self .
+  ^ res
 ]
 
 { #category : 'load specification' }

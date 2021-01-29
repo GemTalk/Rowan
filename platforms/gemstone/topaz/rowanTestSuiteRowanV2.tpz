@@ -32,6 +32,8 @@ run
 %
 
 !	make sure that tests are run against the current checkout of my rowan clone
+! Without gitRepositoryRoot: ,  tests are run against the $GEMSTONE/upgrade embedded in rowan image
+! Set environment variable ROWAN_PROJECTS_SANDBOX to where tests should create temporary files
 	run
 (Rowan projectNamed: 'Rowan') gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'
 %

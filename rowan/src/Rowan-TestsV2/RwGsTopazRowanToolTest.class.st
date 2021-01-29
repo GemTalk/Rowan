@@ -44,7 +44,7 @@ RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout [
 doit
 (Object
 	subclass: ''RowanSample9Class1''
-	instVarNames: #( ivar1 )
+	instVarNames: #( ivar1  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -293,7 +293,7 @@ RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
 
 "validate"
 	gsFileRef readStreamDo: [:fileStream | fileout := fileStream contents ].
-	self assert: fileout = self _expected_spec_0001_Fileout.
+	self assert: fileout equals: self _expected_spec_0001_Fileout.
 ]
 
 { #category : 'project support' }
@@ -404,11 +404,8 @@ RwGsTopazRowanToolTest >> testTopazListProjects [
 	| x |
 	RwGsTestImage resetTestProjectRegistry.
 	self
-		assert:
-			(x := Rowan gemstoneTools topaz listProjects sort)
-				=
-					#('Cypress' 'Rowan' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage')
-						sort
+		assert: (x := Rowan gemstoneTools topaz listProjects sort) 
+    equals: #( 'Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Issue263' 'Rowan' 'STON' 'UnPackaged')
 ]
 
 { #category : 'project support' }

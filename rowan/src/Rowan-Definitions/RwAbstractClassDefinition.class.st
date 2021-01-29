@@ -10,12 +10,13 @@ Class {
 
 { #category : 'instance creation' }
 RwAbstractClassDefinition class >> withProperties: propertiesDictionary classMethodDefinitions: classMethodDefinitions instanceMethodDefinitions: instanceMethodDefinitions [
-
-	^(self basicNew)
+  | res |
+  propertiesDictionary _validateClass: SymbolDictionary .
+	(res := self basicNew)
 		properties: propertiesDictionary;
 		classMethodDefinitions: classMethodDefinitions;
-		instanceMethodDefinitions: instanceMethodDefinitions;
-		yourself
+		instanceMethodDefinitions: instanceMethodDefinitions .
+  ^ res
 ]
 
 { #category : 'private' }
@@ -65,7 +66,7 @@ RwAbstractClassDefinition >> addInstanceMethodDefinition: aMethodDefinition [
 RwAbstractClassDefinition >> addMethodDefinition: aMethodDefinition to: aDictionary [
 
 	| selector |
-	selector := aMethodDefinition propertyAt: 'selector'.
+	selector := aMethodDefinition propertyAt: #'selector'.
 	(aDictionary includesKey: selector)
 		ifTrue: [self error: 'Duplicate selector in behavior'].
 	aDictionary at: selector put: aMethodDefinition
@@ -170,8 +171,8 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition u
 RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 
 	| keys |
-	keys := myDictionary keys copy.
-	keys addAll: baseDictionary keys.
+	keys := myDictionary keys. "keys is already a copy"
+  baseDictionary keysDo:[:k | keys add: k ].  "keys addAll: baseDictionary keys."
 	keys do: 
 			[:key |
 			| before after modification |
@@ -189,8 +190,8 @@ RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictiona
 RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictionaryForNewClassVersion: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 
 	| keys |
-	keys := myDictionary keys copy.
-	keys addAll: baseDictionary keys.
+	keys := myDictionary keys. "keys is already a copy"
+  baseDictionary keysDo:[:k | keys add: k ].  "keys addAll: baseDictionary keys."
 	keys
 		do: [ :key | 
 			(baseDictionary
@@ -244,14 +245,13 @@ RwAbstractClassDefinition >> isClassExtension [
 RwAbstractClassDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
-	^super isEmpty & classMethodDefinitions isEmpty
-		& instanceMethodDefinitions isEmpty
+  ^ instanceMethodDefinitions isEmpty and:[ classMethodDefinitions isEmpty and:[ super isEmpty]]
 ]
 
 { #category : 'private' }
 RwAbstractClassDefinition >> key [
 
-	^properties at: 'name' ifAbsent: [nil]
+	^properties at: #'name' ifAbsent: [nil]
 ]
 
 { #category : 'accessing' }
@@ -262,7 +262,7 @@ RwAbstractClassDefinition >> moveToPackageNamed: aPackageName packageConvention:
 { #category : 'accessing' }
 RwAbstractClassDefinition >> name: aString [
 
-	properties at: 'name' put: aString
+	properties at: #'name' put: aString
 
 ]
 

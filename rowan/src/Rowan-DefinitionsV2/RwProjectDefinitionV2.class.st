@@ -137,12 +137,12 @@ RwProjectDefinitionV2 >> packageForClassNamed: className [
 
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName [
-	^ self propertyAt: 'name' ifAbsent: [ nil ]
+	^ self propertyAt: #'name' ifAbsent: [ nil ]
 ]
 
 { #category : 'properties' }
 RwProjectDefinitionV2 >> projectName: aString [
-	self propertyAt: 'name' put: aString
+	self propertyAt: #'name' put: aString
 ]
 
 { #category : 'accessing' }
