@@ -4,9 +4,9 @@
 doit
 (Error
 	subclass: 'RwTonelParseError'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -25,8 +25,8 @@ doit
 (Error
 	subclass: 'STONReaderError'
 	instVarNames: #( streamPosition )
-	classVars: #( )
-	classInstVars: #( )
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -44,9 +44,9 @@ removeallclassmethods STONReaderError
 doit
 (Error
 	subclass: 'STONWriterError'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -64,8 +64,8 @@ doit
 (Notification
 	subclass: 'RwTonelParseRequireMethodCategoryNotification'
 	instVarNames: #( className isMeta selector )
-	classVars: #( )
-	classInstVars: #( )
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -88,7 +88,7 @@ doit
 	subclass: 'RwTonelParser'
 	instVarNames: #( packageReader stream lastSelectorParsed )
 	classVars: #( Character_lf )
-	classInstVars: #( )
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -149,8 +149,8 @@ doit
 (Object
 	subclass: 'RwTopazTonelReader'
 	instVarNames: #( environmentId )
-	classVars: #( )
-	classInstVars: #( )
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -173,9 +173,9 @@ removeallclassmethods RwTopazTonelReader
 doit
 (Object
 	subclass: 'STON'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -287,7 +287,7 @@ doit
 	subclass: 'STONReader'
 	instVarNames: #( readStream objects classes unresolvedReferences stringStream allowComplexMapKeys stack )
 	classVars: #( Character_lf Character_backspace Character_newPage Character_cr Character_tab )
-	classInstVars: #( )
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -307,8 +307,8 @@ doit
 (Object
 	subclass: 'STONReference'
 	instVarNames: #( index )
-	classVars: #( )
-	classInstVars: #( )
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -327,8 +327,8 @@ doit
 (Object
 	subclass: 'STONStreamWriter'
 	instVarNames: #( writer first )
-	classVars: #( )
-	classInstVars: #( )
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -346,9 +346,9 @@ removeallclassmethods STONStreamWriter
 doit
 (STONStreamWriter
 	subclass: 'STONListWriter'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -366,9 +366,9 @@ removeallclassmethods STONListWriter
 doit
 (STONListWriter
 	subclass: 'STONShortListWriter'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -386,9 +386,9 @@ removeallclassmethods STONShortListWriter
 doit
 (STONStreamWriter
 	subclass: 'STONMapWriter'
-	instVarNames: #( )
-	classVars: #( )
-	classInstVars: #( )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -407,7 +407,7 @@ doit
 	subclass: 'STONWriter'
 	instVarNames: #( writeStream prettyPrint newLine jsonMode referencePolicy level objects )
 	classVars: #( STONCharacters STONSimpleSymbolCharacters )
-	classInstVars: #( )
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )

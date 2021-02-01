@@ -59,7 +59,7 @@ Class {
 }
 
 { #category : 'initialization' }
-RwGsModificationTopazWriterVisitorV2 class >> initialize [
+RwTonelParser class >> initialize [
 	self _addInvariantClassVar: #Character_lf value: Character lf
 ]
 

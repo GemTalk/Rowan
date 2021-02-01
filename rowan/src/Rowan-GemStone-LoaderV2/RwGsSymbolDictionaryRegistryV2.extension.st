@@ -431,7 +431,7 @@ RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 
 ]
 
-{ #category : '*rowan-gemstone-loaderV2' } 
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> registerLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass registerLoadedClass: loadedClass forClass: aClass
 ]
@@ -441,12 +441,12 @@ RwGsSymbolDictionaryRegistryV2 >> registerLoadedClassExtension: loadedClass forC
 	^ self class registry_ImplementationClass registerLoadedClassExtension: loadedClass forClass: aClass
 ]
 
-{ #category : '*rowan-gemstone-loaderV2' } 
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClass: loadedClass forClass: aClass
 ]
 
-{ #category : '*rowan-gemstone-loaderV2' } 
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 ]

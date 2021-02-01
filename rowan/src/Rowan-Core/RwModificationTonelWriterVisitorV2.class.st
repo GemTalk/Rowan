@@ -58,7 +58,7 @@ RwModificationTonelWriterVisitorV2 >> _hasShebangOf: aClassDefinition [
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _methodDefinitionOf: aMethodDefinition [
 	| excludedMethodProperties methodProperties exportedProperties |
-	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	excludedMethodProperties := #(#'_gsFileOffset' #'_gsFileName' #'category' #'protocol' #'selector').
 	(exportedProperties := self class orderedDictionaryClass new)
 		at: #'category' put: aMethodDefinition protocol .
 

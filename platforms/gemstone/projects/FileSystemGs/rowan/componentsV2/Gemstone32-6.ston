@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Gemstone32-6',
+	#condition : 'gs3.[2-6]',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Zinc-Character-Encoding-Core-32x'
+	],
+	#comment : 'gemstone packages - 3.2.x thru 3.6.x'
+}

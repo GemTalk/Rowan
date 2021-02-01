@@ -9,8 +9,11 @@ RwEmbeddedLoadSpecificationV2 {
 		'Core',
 		'Gemstone32x',
 		'Gemstone32-5',
+		'Gemstone32-6',
 		'Gemstone35-',
+		'Gemstone37-',
 		'Tests'
+
 	],
 	#customConditionalAttributes : [
 		'tests'

@@ -1,6 +1,15 @@
 Extension { #name : 'Collection' }
 
 { #category : '*rowan-tonel-gemstone-kernel' }
+Collection >> _flattendAppend: anArray [
+
+	self do: [ :each | (each isCollection and: [each isString not]) 
+						ifTrue: [each _flattendAppend: anArray]
+						ifFalse: [anArray add: each]].
+
+]
+
+{ #category : '*rowan-tonel-gemstone-kernel' }
 Collection >> asDictionary [
 
   | dict |
@@ -26,15 +35,6 @@ Collection >> flattened [
   a := Array new .
   self _flattendAppend: a .
   ^ a
-]
-
-{ #category : '*rowan-tonel-gemstone-kernel' }
-Collection >> _flattendAppend: anArray [
-
-	self do: [ :each | (each isCollection and: [each isString not]) 
-						ifTrue: [each _flattendAppend: anArray]
-						ifFalse: [anArray add: each]].
-
 ]
 
 { #category : '*rowan-tonel-gemstone-kernel' }

@@ -17,7 +17,7 @@ Class {
 		'buffer',
 		'position',
 		'limit',
-    'species'
+		'species'
 	],
 	#category : 'Zinc-Character-Encoding-Core'
 }
@@ -268,6 +268,15 @@ ZnBufferedReadStream >> on: readStream [
 	self sizeBuffer: self defaultBufferSize
 ]
 
+{ #category : 'initialization' }
+ZnBufferedReadStream >> onBuffer: aString stream: aStream [
+  stream := aStream .  "expected to be atEnd"
+  buffer := aString .
+  position := 1 .
+  limit := buffer size .
+  species := String .
+]
+
 { #category : 'accessing' }
 ZnBufferedReadStream >> peek [
 	"Return the next element but do not move over it"
@@ -376,11 +385,6 @@ ZnBufferedReadStream >> shouldBufferReadOfCount: elementCount [
 	^ elementCount < (buffer size / 2)
 ]
 
-{ #category : 'private' }
-ZnBufferedReadStream >> sizeBuffer: size [
-  buffer := self collectionSpecies new: size .
-]
-
 { #category : 'accessing' }
 ZnBufferedReadStream >> size [
 
@@ -486,13 +490,3 @@ ZnBufferedReadStream >> wrappedStream [
 ZnBufferedReadStream >> wrappedStreamName [
 	^ stream wrappedStreamName
 ]
-
-{ #category : 'initialization' }
-ZnBufferedReadStream >> onBuffer: aString stream: aStream [
-  stream := aStream .  "expected to be atEnd"
-  buffer := aString .
-  position := 1 .
-  limit := buffer size .
-  species := String .
-]
-

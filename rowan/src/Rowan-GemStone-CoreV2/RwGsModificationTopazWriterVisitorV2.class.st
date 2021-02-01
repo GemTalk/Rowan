@@ -36,20 +36,12 @@ Class {
 	#category : 'Rowan-GemStone-CoreV2'
 }
 
-{
-	#category : 'initialization',
-	#protocol : 'initialization',
-	#selector : 'initialize'
-}
+{ #category : 'initialization' }
 RwGsModificationTopazWriterVisitorV2 class >> initialize [
 	self _addInvariantClassVar: #Character_lf value: Character lf
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_fileOutClassDeclaration:on:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinition on: aStream [
 	| optionsString reservedOopString hasClassInstVars |
 	aStream
@@ -62,13 +54,13 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 		on: aStream
 		hasInstanceVariables: [ 
 			aStream
-				nextPutAll: '	instVarNames: #( ' .
+				nextPutAll: '	instVarNames: #(' .
       self _stringForVariables: classDefinition instVarNames to: aStream .
       aStream nextPutAll: ')' ; lf ].
 	optionsString := String new.
 	classDefinition gs_options isEmpty
 		ifFalse: [ 
-			optionsString := ' ' copy .
+			optionsString := String new .
       self _symbolsForVariables: classDefinition gs_options toString: optionsString .
 		  ].
 	self logCreation
@@ -82,12 +74,12 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 				lf.
 		].
 	aStream
-		nextPutAll: '	classVars: #( ' . 
+		nextPutAll: '	classVars: #(' . 
   self _stringForVariables: classDefinition classVarNames to: aStream .
   aStream nextPutAll:')' ; lf .
 	hasClassInstVars
 		ifTrue: [ 
-			aStream nextPutAll: '	classInstVars: #( ' .
+			aStream nextPutAll: '	classInstVars: #(' .
 			self _stringForVariables: classDefinition classInstVarNames to: aStream .
       aStream nextPutAll:')' ; lf 
     ].
@@ -120,11 +112,7 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_fileOutMethod:forClass:isMeta:on:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream [
 
 	aStream
@@ -137,11 +125,7 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClas
 		lf
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_fileoutRemoveAllMethodsFor:on:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className on: aStream [
 	self excludeRemoveAllMethods
 		ifFalse: [ 
@@ -153,21 +137,13 @@ RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className o
 				lf ]
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_setBufferedStreamFor:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename [
 
 	^ self _setBufferedStreamFor: filename extension: self filenameExtension
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_setBufferedStreamFor:extension:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename extension: extension [
 
 	| encodedStream |
@@ -175,38 +151,27 @@ RwGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename extensio
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_stringForVariables:to:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _stringForVariables: variableList to: aStream [
-	variableList do: [:each | aStream nextPutAll: each ; nextPut: $  ].
+	| trailingSpace |
+	trailingSpace := false.
+	variableList do: [ :each | 
+		trailingSpace := true.
+		aStream nextPut: $ ; nextPutAll: each ].
+	trailingSpace ifTrue: [ aStream nextPut: $ ]
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_symbolsForVariables:to:'
-}
-RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList to: aStream [
-	variableList do: [:each | aStream nextPutAll: each asSymbol printString ; nextPut: $  ].
-]
-
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_symbolsForVariables:toString:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList toString: aString [
-	variableList do: [:each | aString addAll: each asSymbol printString ; add: $  ].
+	| trailingSpace |
+	trailingSpace := false.
+	variableList do: [ :each | 
+		trailingSpace := true.
+		aString add: $ ; addAll: each asSymbol printString ].
+	trailingSpace ifTrue: [ aString add: $ ]
 ]
 
-{
-	#category : 'private exporting',
-	#protocol : 'private exporting',
-	#selector : '_writeClassTypeMessage:on:hasInstanceVariables:'
-}
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock [
 	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
 	hasInstanceVariables := true.
@@ -241,11 +206,7 @@ RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition 
 	^ hasClassInstVars
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'bufferedStream'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> bufferedStream [
 
 	^ bufferedStream ifNil: [ 
@@ -254,11 +215,7 @@ RwGsModificationTopazWriterVisitorV2 >> bufferedStream [
 		bufferedStream := ZnBufferedWriteStream on: encodedStream ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'buildPackageNamesMap'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> buildPackageNamesMap [
 
 	"If true, topazFilenamePackageNamesMap will be built from topazFilenameConfigsMap.
@@ -267,137 +224,81 @@ RwGsModificationTopazWriterVisitorV2 >> buildPackageNamesMap [
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classDefinitions'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classDefinitions [
 
 	^ classDefinitions ifNil: [ classDefinitions := Dictionary new ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classDefPackageNameMap'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classDefPackageNameMap [
 
 	^ classDefPackageNameMap ifNil: [ classDefPackageNameMap := Dictionary new ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classExtensions'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classExtensions [
 
 	^ classExtensions ifNil: [ classExtensions := Dictionary new ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classExtPackageNameMap'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classExtPackageNameMap [
 
 	^ classExtPackageNameMap ifNil: [ classExtPackageNameMap := IdentityKeyValueDictionary new ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classInitializationDefinitions'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classInitializationDefinitions [
 
 	^ classInitializationDefinitions
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'classSymbolDictionaryNames'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> classSymbolDictionaryNames [
 
 	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
 ]
 
-{
-	#category : 'actions',
-	#protocol : 'actions',
-	#selector : 'deletededClass:'
-}
+{ #category : 'actions' }
 RwGsModificationTopazWriterVisitorV2 >> deletededClass: aClassModification [
 
 	"a deleted class is ignored for topaz ... the deleted class is simply not written"
 ]
 
-{
-	#category : 'actions',
-	#protocol : 'actions',
-	#selector : 'deletededClassExtension:'
-}
+{ #category : 'actions' }
 RwGsModificationTopazWriterVisitorV2 >> deletededClassExtension: aClassExtensionModification [
 
 	"a deleted class extension is ignored for topaz ... the deleted methods are simply not written"
 ]
 
-{
-	#category : 'actions',
-	#protocol : 'actions',
-	#selector : 'deletededPackage:'
-}
+{ #category : 'actions' }
 RwGsModificationTopazWriterVisitorV2 >> deletededPackage: aPackageModification [
 
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'excludeClassInitializers'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers [
 	^ excludeClassInitializers ifNil: [ false ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'excludeClassInitializers:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers: aBool [
 	excludeClassInitializers := aBool
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'excludeRemoveAllMethods'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods [
 	^ excludeRemoveAllMethods ifNil: [ false ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'excludeRemoveAllMethods:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods: aBool [
 	excludeRemoveAllMethods := aBool
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'export'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> export [
 
 	self fileNamesInFileInOrder do: [:filename | 
@@ -455,11 +356,7 @@ RwGsModificationTopazWriterVisitorV2 >> export [
 		self bufferedStream flush; close ].
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'exportClassDefinitions:'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> exportClassDefinitions: classDefinitionsInOrder [
 
 	| stream |
@@ -474,11 +371,7 @@ RwGsModificationTopazWriterVisitorV2 >> exportClassDefinitions: classDefinitions
 		self _fileOutClassDeclaration: classDef on: stream ].
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'exportClassInitializations'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> exportClassInitializations [
 	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
@@ -502,31 +395,19 @@ RwGsModificationTopazWriterVisitorV2 >> exportClassInitializations [
   ].
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'exportExtensionMethodDefinitions:'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> exportExtensionMethodDefinitions: classDefinitionsInOrder [
 
 	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class extensions'
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'exportMethodDefinitions:'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> exportMethodDefinitions: classDefinitionsInOrder [
 
 	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class implementation'
 ]
 
-{
-	#category : 'exporting',
-	#protocol : 'exporting',
-	#selector : 'exportMethodDefinitions:labeled:'
-}
+{ #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> exportMethodDefinitions: classDefinitionsInOrder labeled: label [
 	| stream |
 	stream := self bufferedStream.
@@ -555,69 +436,41 @@ RwGsModificationTopazWriterVisitorV2 >> exportMethodDefinitions: classDefinition
 				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'filenameExtension'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> filenameExtension [
 
 	^ filenameExtension ifNil: ['gs' ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'filenameExtension:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> filenameExtension: aString [
 
 	filenameExtension := aString
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'fileNamesInFileInOrder'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder [
 	"Normally the order that fileins are created in does not matter"
 
 	^ fileNamesInFileInOrder ifNil: [ self topazFilenamePackageNamesMap keys ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'fileNamesInFileInOrder:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder: object [
 	fileNamesInFileInOrder := object
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'logCreation'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> logCreation [
 	^logCreation ifNil: [ ^false ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'logCreation:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> logCreation: object [
 	logCreation := object
 ]
 
-{
-	#category : 'class writing',
-	#protocol : 'class writing',
-	#selector : 'processClass:'
-}
+{ #category : 'class writing' }
 RwGsModificationTopazWriterVisitorV2 >> processClass: aClassModification [
 
 	| classDefinition symbolDictName clsName |
@@ -634,11 +487,7 @@ RwGsModificationTopazWriterVisitorV2 >> processClass: aClassModification [
 	"no need to visit any further as the class definition records the instance and class methods"
 ]
 
-{
-	#category : 'class writing',
-	#protocol : 'class writing',
-	#selector : 'processClassExtension:'
-}
+{ #category : 'class writing' }
 RwGsModificationTopazWriterVisitorV2 >> processClassExtension: aClassExtensionModification [
 
 	| classExtension |
@@ -651,11 +500,7 @@ RwGsModificationTopazWriterVisitorV2 >> processClassExtension: aClassExtensionMo
 	"no need to visit any further as the class etension records the instance and class methods"
 ]
 
-{
-	#category : 'project writing',
-	#protocol : 'project writing',
-	#selector : 'processProject:'
-}
+{ #category : 'project writing' }
 RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 	self buildPackageNamesMap
 		ifTrue: [ 
@@ -700,101 +545,61 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'repositoryRootPath'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> repositoryRootPath [
 
 	^ repositoryRootPath
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'repositoryRootPath:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> repositoryRootPath: aStringOrFileReference [ 
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFileFooter'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileFooter [
 	^ topazFileFooter ifNil: [ '' ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFileFooter:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileFooter: object [
 	topazFileFooter := object
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFileHeader'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileHeader [
 
 	^ topazFileHeader ifNil: [ '' ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFileHeader:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileHeader: aString [
 
 	topazFileHeader := aString
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilename'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilename [
 
 	^ topazFilename
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilename:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilename: aString [
 
 	topazFilename := aString
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilenameComponentMap'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap [
 
 	^ topazFilenameComponentMap
 		ifNil: [ topazFilenameComponentMap := Dictionary new at: self topazFilename put: Dictionary new; yourself ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilenameComponentMap:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap: aDictionary [
 
 	"keys are topaz file names, values are a dictionary:
@@ -810,21 +615,13 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap: aDictionary [
 	topazFilenameComponentMap := aDictionary
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilenamePackageNamesMap'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap [
 
 	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFilenamePackageNamesMap:'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap: aDictionary [
 
 	"keys are topaz file names, values are a collection of package names"
@@ -838,11 +635,7 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap: aDictionar
 	topazFilenamePackageNamesMap := aDictionary
 ]
 
-{
-	#category : 'accessing',
-	#protocol : 'accessing',
-	#selector : 'topazFileReference'
-}
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileReference [
 
 	^ self repositoryRootPath / self topazFilename, self filenameExtension
