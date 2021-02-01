@@ -62524,7 +62524,8 @@ readClassExtensionFile: file inPackage: packageName
 	fileReference readStreamDo: [:fileStream | | stream |
 		[ | definitions |
 		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		  stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
+			"part of workaround for GemTalk/FileSystemGs#9"
+			stream sizeBufferPatch9: fileReference size.
 		  definitions := (RwTonelParser on: stream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
@@ -62550,7 +62551,8 @@ readClassFile: file inPackage: packageName
 			| definitions clsDef projectDef |
 			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 			stream := ZnBufferedReadStream on: fileStream.
-			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
+			"part of workaround for GemTalk/FileSystemGs#9"
+			stream sizeBufferPatch9: fileReference size.
 			definitions := (RwTonelParser on: stream forReader: self) start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
@@ -87445,6 +87447,12 @@ size
 	^ stream size
 %
 
+category: 'private'
+method: ZnBufferedReadStream
+sizeBuffer: size
+	buffer := self collectionSpecies new: size .
+%
+
 category: 'accessing'
 method: ZnBufferedReadStream
 skip: count
@@ -96664,10 +96672,10 @@ buffer
 	^ buffer
 %
 
-category: '*zinc-character-encoding-core-37x'
+category: '*zinc-character-encoding-core-35x'
 method: ZnBufferedReadStream
-sizeBuffer: size
-  "noop for 3.6.1 and beyond - still used for older versions"
+sizeBufferPatch9: size
+  "noop for 3.5.0 and beyond - still needed for 3.2.15"
 %
 
 ! Class Initialization
