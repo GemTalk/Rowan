@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwUnmanagedClassesV2Test',
 	#superclass : 'RwAbstractV2Test',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests-GemStone-36x'
 }
 
 { #category : 'private' }

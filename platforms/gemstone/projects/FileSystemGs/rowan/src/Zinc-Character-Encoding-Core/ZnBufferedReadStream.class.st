@@ -393,12 +393,7 @@ ZnBufferedReadStream >> size [
 
 { #category : 'private' }
 ZnBufferedReadStream >> sizeBuffer: size [
-  buffer := self collectionSpecies new: size .
-]
-
-{ #category : 'private' }
-ZnBufferedReadStream >> sizeBufferPatch9: size [
-	"noop"
+	buffer := self collectionSpecies new: size .
 ]
 
 { #category : 'accessing' }

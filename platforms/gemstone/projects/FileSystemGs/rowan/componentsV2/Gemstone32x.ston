@@ -4,7 +4,8 @@ RwSimpleProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [
-		'FileSystem-Core-32x'
+		'FileSystem-Core-32x',
+		'Zinc-Character-Encoding-Core-32x'
 	],
 	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser'
 }
