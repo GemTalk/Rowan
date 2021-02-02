@@ -69294,8 +69294,8 @@ install_3_RowanV2
 	| rowanSpecPath rowanProjectsHome |
 	rowanSpecPath := '$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 	rowanProjectsHome := '$ROWAN_PROJECTS_HOME'.
-	^ self rowanSpecPath
-		rowanProjectsHome: rowanProjectsHome;
+	^ self
+		install_3_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome;
 		install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome
 %
 

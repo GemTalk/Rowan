@@ -1,15 +1,27 @@
 # set -e # don't exit on error ... I want the record stript to run at the end ....
 . defStone.env
 
-export vers="3.5.0"
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
 newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableStringComponentV2.tpz $GEMSTONE_NAME -lq
+startTopaz $GEMSTONE_NAME -l << EOF
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuite.tpz $GEMSTONE_NAME -lq
+	iferr 1 stk
+	iferr 2 stack
+	iferr 3 exit 1
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/installPortableString.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/bootstrapRowan${vers}.tpz
+
+#	input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableStringRowanV2.tpz
+
+	set u SystemUser p swordfish
+  login
+
+	input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.gs 
 
 EOF
 
@@ -29,7 +41,7 @@ branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --g
 
 if [ "$branchQuery" = "[ ]" ] ; then
 	# this is a branch for which we have no samples with which to compare, so use issue_308 
-  branch=issue_308
+  branch=masterV2.1
 	echo
 	echo "USING DEFAULT BRANCH -- $branch"
 	echo

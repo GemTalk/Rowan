@@ -48,6 +48,8 @@
 
 # install Rowan source via .gs file
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.0/RowanV2.gs
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.0/RowanV2_stubs.gs
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.0/RowanV2_tonel.gs
 	commit
 
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension

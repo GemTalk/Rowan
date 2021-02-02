@@ -1,12 +1,12 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 set -e
 . defStone.env
-export vers="3.5.0"
+
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
-newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowan  $GEMSTONE_NAME
-
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanRepositoryRootV2.tpz $GEMSTONE_NAME -lq

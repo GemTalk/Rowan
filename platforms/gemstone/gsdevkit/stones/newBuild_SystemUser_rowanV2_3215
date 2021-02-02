@@ -1,0 +1,24 @@
+# set -e # don't exit on error ... I want the record stript to run at the end ....
+. defStone.env
+
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+	iferr 1 stk
+	iferr 2 stack
+	iferr 3 exit 1
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/bootstrapRowan${vers}.tpz
+#	input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanV2.tpz
+
+	exit
+
+EOF
+

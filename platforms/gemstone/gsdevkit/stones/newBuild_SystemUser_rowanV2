@@ -2,10 +2,11 @@
 
 set -e
 . defStone.env
-export vers="3.5.0"
+
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
 newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowanV2.tpz $GEMSTONE_NAME -lq
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/bootstrapRowan${vers}.tpz $GEMSTONE_NAME -lq
