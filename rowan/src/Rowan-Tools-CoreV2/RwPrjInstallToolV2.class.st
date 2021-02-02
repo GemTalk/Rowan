@@ -6,12 +6,27 @@ Class {
 
 { #category : 'bootstrap installation' }
 RwPrjInstallToolV2 >> install_3_RowanV2 [
+	| rowanSpecPath rowanProjectsHome |
+	rowanSpecPath := '$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
+	rowanProjectsHome := '$ROWAN_PROJECTS_HOME'.
+	^ self rowanSpecPath
+		rowanProjectsHome: rowanProjectsHome;
+		install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome
+]
+
+{ #category : 'bootstrap installation' }
+RwPrjInstallToolV2 >> install_3_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome [
+	"
+		Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+		methods into the correct package structure
+	"
+
 	| projectSetDefinition auditFailures reAudit theProjectSetDefinition |
 	Rowan projectTools trace
 		startTracing;
 		trace: '--- installing install_3_RowanV2.tpz'.
-	{{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-	'$ROWAN_PROJECTS_HOME'}}
+	{{('file:' , rowanSpecPath).
+	rowanProjectsHome}}
 		do: [ :ar | 
 			| specUrl "Load project and packages from disk" projectsHome loadSpec resolvedProject |
 			specUrl := ar at: 1.
@@ -43,11 +58,13 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 						yourself ].
 			theProjectSetDefinition addProject: resolvedProject_copy ].	"Load the project shell -- project and empty packages"
 	Rowan projectTools loadV2 loadProjectSetDefinition: theProjectSetDefinition.
-	SessionTemps current removeKey: #'ROWAN_TRACE' ifAbsent: [  ].	"end logging to topaz output file"	"Adopt the project set definition ... 
+	SessionTemps current removeKey: #'ROWAN_TRACE' ifAbsent: [  ].	"end logging to topaz output file"
+	[ 
+	"Adopt the project set definition ... 
 		Log and ignore any missing method or missing classes encountered as they may not be
 		present in the .gs bootstrap file for the proejct ... The will be created when we
 		reload the project a little bit later on."
-	[ Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
+	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
 		on:
 			RwAdoptMissingMethodErrorNotification , RwAdoptMissingClassErrorNotification
 		do: [ :ex | 
@@ -90,8 +107,8 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 							beh := Rowan globalNamed: ex className.
 							ex isMetaclass
 								ifTrue: [ beh := beh class ].
-							beh removeSelector: ex selector.	"don't record as an audit error, but make sure that we rerun the audit"
-							reAudit := true.
+							beh removeSelector: ex selector.
+							reAudit := true.	"don't record as an audit error, but make sure that we rerun the audit"
 							ex resume: false ].
 					GsFile gciLogServer: '	-- audit finished '.
 					audit isEmpty
@@ -106,4 +123,52 @@ RwPrjInstallToolV2 >> install_3_RowanV2 [
 			self
 				error:
 					'Post load Rowan audit failed for projects ' , auditFailures printString ]
+]
+
+{ #category : 'bootstrap installation' }
+RwPrjInstallToolV2 >> install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome [
+	"
+		Load project and packages from disk to pick up any modifications not included in the bootstrap files; 
+		fail if there are CompileWarnings; 
+		audit after load;
+		return true on success
+	"
+
+	| resolvedProject loadSpecUrl loadSpec projectsHome loadedProjects warnings |
+	Rowan projectTools trace
+		startTracing;
+		trace: '--- installing install_4.tpz'.
+	loadSpecUrl := 'file:' , rowanSpecPath.
+	projectsHome := rowanProjectsHome.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	resolvedProject := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+	warnings := {}.
+	[ loadedProjects := resolvedProject load ]
+		on: CompileWarning
+		do: [ :ex | 
+			(ex description includesString: 'not optimized')
+				ifFalse: [ warnings add: ex asString printString ].
+			ex resume ].
+
+	System commit.
+
+	warnings isEmpty
+		ifFalse: [ 
+			GsFile gciLogServer: 'COMPILE WARNINGS: '.
+			warnings do: [ :warning | GsFile gciLogServer: '	' , warning ].
+			self error: 'Warnings during project reload' ].
+
+	loadedProjects
+		do: [ :loadedProject | 
+			| audit |
+			"audit after load"
+			audit := loadedProject audit.
+			audit isEmpty
+				ifFalse: [ 
+					self
+						error:
+							'Post load Rowan audit failed for project ' , loadedProject name printString ] ].
+	^ true
 ]

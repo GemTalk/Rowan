@@ -1,0 +1,72 @@
+#!/usr/bin/gemstone/topaz
+#
+#		3.2.15 install script
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.7.0/installRowan.tpz <gsdevkit-stone-name> -l
+#
+# If you are not using GsDevKit_home, you can directly run this script as long as
+# 	1. $GEMSTONE is defined
+# 	2. $GEMSTONE/bin is your path
+#	then execute using the following invocation
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.7.0/install_Rowan.tpz -lq
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+#
+
+	omit pushonly
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+#	Create Rowan symbol dictionaris
+  run
+	"install_1.tpz"
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	#( #RowanKernel #RowanLoader #RowanTools)
+		do: [:symbolName | 
+			| newDict size |
+			newDict := SymbolDictionary new
+				name: symbolName;
+				objectSecurityPolicy: symbolList objectSecurityPolicy;
+				yourself.
+			size := System myUserProfile symbolList size.
+			System myUserProfile insertDictionary: newDict at: size + 1 
+    ].
+  true
+%
+  commit
+
+# install Rowan source via .gs file
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.2.15/RowanV2.gs
+	commit
+
+# Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+#  methods into the correct package structure
+  run
+	Rowan projectTools installV2 install_3_RowanV2.	
+%
+  commit
+
+# Install Rowan class in Published symbol dict, so it is availailable to all users
+# 
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanKernel associationAt: #Rowan.
+  Published add: rowanAssoc. true
+%
+  commit
+
+	logout
+
+  errorCount
+
