@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
+		'projectName',
 		'comment',
 		'componentNames',
 		'packageNames'
@@ -169,6 +170,13 @@ RwAbstractComponent class >> newNamed: aName [
 		yourself
 ]
 
+{ #category : 'dispatching' }
+RwAbstractComponent >> _addToResolvedProjectComponents: aRwResolvedProjectComponentsV2 [
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	self subclassResponsibility: #'_addToResolvedProjectComponents:'
+]
+
 { #category : 'exporting' }
 RwAbstractComponent >> _exportToUrl: directoryUrl [
 	| url |
@@ -199,6 +207,23 @@ RwAbstractComponent >> _exportToUrl: directoryUrl [
 { #category : 'private' }
 RwAbstractComponent >> _platformPatternMatcherFor: pattern [
 	^ self class _platformPatternMatcherFor: pattern
+]
+
+{ #category : 'doits' }
+RwAbstractComponent >> _readDoitsFrom: componentsRoot [
+	"noop"
+]
+
+{ #category : 'validation' }
+RwAbstractComponent >> _validateDoits [
+	"noop"
+]
+
+{ #category : 'validation' }
+RwAbstractComponent >> _validatedPackageNames [
+	"answer the validated set of package names"
+
+	^ self packageNames asSet
 ]
 
 { #category : 'accessing' }
@@ -248,7 +273,7 @@ RwAbstractComponent >> componentNames [
 RwAbstractComponent >> excludedInstVars [
 	"restore full #instVarNamesInOrderForSton - no exclusions (see super implementation)"
 
-	^ #()
+	^ #( #projectName )
 ]
 
 { #category : 'exporting' }
@@ -270,7 +295,7 @@ RwAbstractComponent >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	"noop"
+	projectName := nil
 ]
 
 { #category : 'initialization' }
@@ -278,7 +303,7 @@ RwAbstractComponent >> initializeForImport [
 	"if spec has been imported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	"noop"
+	projectName := nil
 ]
 
 { #category : 'ston' }
@@ -313,6 +338,26 @@ RwAbstractComponent >> printOn: aStream [
 	aStream
 		space;
 		nextPutAll: name.
+	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
+]
+
+{ #category : 'accessing' }
+RwAbstractComponent >> projectName [
+
+   ^projectName
+
+]
+
+{ #category : 'initialization' }
+RwAbstractComponent >> projectName: anObject [
+
+   projectName := anObject
+
+]
+
+{ #category : 'accessing' }
+RwAbstractComponent >> projectNames [
+	^ #()
 ]
 
 { #category : 'ston' }
@@ -331,4 +376,13 @@ RwAbstractComponent >> stonOn: stonWriter [
 						ifNil: [ 
 							self stonShouldWriteNilInstVars
 								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
+]
+
+{ #category : 'validation' }
+RwAbstractComponent >> validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	self subclassResponsitility: #'validate'
 ]

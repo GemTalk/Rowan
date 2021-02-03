@@ -15,8 +15,8 @@ RwResolvedProjectComponentsV2 class >> new [
 
 ]
 
-{ #category : 'accessing' }
-RwResolvedProjectComponentsV2 >> _addComponent: aComponent [
+{ #category : 'dispatching' }
+RwResolvedProjectComponentsV2 >> _addActiveComponent: aComponent [
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
 	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
@@ -25,6 +25,25 @@ RwResolvedProjectComponentsV2 >> _addComponent: aComponent [
 		component --- presumably freshly read from disk --- wins"
 
 	^ self components at: aComponent name put: aComponent
+]
+
+{ #category : 'dispatching' }
+RwResolvedProjectComponentsV2 >> _addComponent: aComponent [
+	"double dispatch, so that _addActiveComponent: or _addPackageGroup: can be called based on class of aComponent"
+
+	^ aComponent _addToResolvedProjectComponents: self
+]
+
+{ #category : 'dispatching' }
+RwResolvedProjectComponentsV2 >> _addPackageGroup: aPackageGroup [
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
+
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
+
+	^ self packageGroups at: aPackageGroup name put: aPackageGroup
 ]
 
 { #category : 'enumerating' }
@@ -42,7 +61,8 @@ RwResolvedProjectComponentsV2 >> _conditionalComponentsStartingWith: aComponent 
 							(visitedComponentNames includes: cName)
 								ifFalse: [ 
 									self
-										_conditionalComponentsStartingWith: (self componentNamed: cName)
+										_conditionalComponentsStartingWith:
+											(self componentNamed: cName ifAbsent: [ self packageGroupNamed: cName ])
 										platformConditionalAttributes: platformConditionalAttributes
 										visited: visitedComponentNames
 										do: aBlock ] ] ] ]
@@ -447,7 +467,8 @@ RwResolvedProjectComponentsV2 >> gemstoneSymbolDictNameForPackageNamed: packageN
 
 { #category : 'initialization' }
 RwResolvedProjectComponentsV2 >> initialize [
-	components := Dictionary new
+	components := Dictionary new.
+	packageGroups := Dictionary new
 ]
 
 { #category : 'testing' }

@@ -2,7 +2,6 @@ Class {
 	#name : 'RwAbstractActiveComponent',
 	#superclass : 'RwAbstractComponent',
 	#instVars : [
-		'projectName',
 		'conditionalPackageMapSpecs',
 		'preloadDoitName',
 		'postloadDoitName',
@@ -15,6 +14,13 @@ Class {
 { #category : 'private' }
 RwAbstractActiveComponent class >> _gemstoneSupportedPackagePropertyNames [
 	^ #('methodEnv' 'symbolDictName' 'useSessionMethodsForExtensions')
+]
+
+{ #category : 'dispatching' }
+RwAbstractActiveComponent >> _addToResolvedProjectComponents: aRwResolvedProjectComponentsV2 [
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	aRwResolvedProjectComponentsV2 _addActiveComponent: self
 ]
 
 { #category : 'private' }
@@ -107,13 +113,6 @@ RwAbstractActiveComponent >> _validateDoits [
 ]
 
 { #category : 'validation' }
-RwAbstractActiveComponent >> _validatedPackageNames [
-	"answer the validated set of package names"
-
-	self subclassResponsibility: #'_validatedPackageNames'
-]
-
-{ #category : 'validation' }
 RwAbstractActiveComponent >> _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap [
 	"ensure that the data structures within the receiver contain valid information:
 		1. only packages defined in the receiver may be referenced in the reciever
@@ -156,7 +155,8 @@ RwAbstractActiveComponent >> = aRwProjectLoadComponentV2 [
 
 { #category : 'accessing' }
 RwAbstractActiveComponent >> addProjectNamed: aProjectName [
-	self subclassResponsibility: #'addProjectNamed:'
+	self projectNames add: aProjectName.
+	projectNames := projectNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
@@ -236,11 +236,6 @@ RwAbstractActiveComponent >> doitDict: object [
 	doitDict := object
 ]
 
-{ #category : 'ston' }
-RwAbstractActiveComponent >> excludedInstVars [
-	^ #()
-]
-
 { #category : 'doits' }
 RwAbstractActiveComponent >> executePostloadDoit [
 	self postloadDoitName
@@ -300,7 +295,8 @@ RwAbstractActiveComponent >> hash [
 { #category : 'initialization' }
 RwAbstractActiveComponent >> initialize [
 	super initialize.
-	doitDict := Dictionary new
+	doitDict := Dictionary new.
+	projectNames := {}
 ]
 
 { #category : 'initialization' }
@@ -311,7 +307,7 @@ RwAbstractActiveComponent >> initializeForExport [
 	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
 	super initializeForExport.
-	doitDict := projectName := nil.
+	doitDict := nil.
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			conditionalPackageMapSpecs isEmpty
@@ -333,18 +329,9 @@ RwAbstractActiveComponent >> initializeForExport [
 					conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ] ]
 ]
 
-{ #category : 'initialization' }
-RwAbstractActiveComponent >> initializeForImport [
-	"if spec has been imported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	super initializeForImport.
-	projectName := nil
-]
-
 { #category : 'ston' }
 RwAbstractActiveComponent >> instVarNamesInOrderForSton [
-	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
 
 { #category : 'matching' }
@@ -391,24 +378,9 @@ RwAbstractActiveComponent >> preloadDoitName: object [
 	preloadDoitName := object
 ]
 
-{ #category : 'printing' }
-RwAbstractActiveComponent >> printOn: aStream [
-	super printOn: aStream.
-	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
-]
-
 { #category : 'accessing' }
-RwAbstractActiveComponent >> projectName [
-
-   ^projectName
-
-]
-
-{ #category : 'initialization' }
-RwAbstractActiveComponent >> projectName: anObject [
-
-   projectName := anObject
-
+RwAbstractActiveComponent >> projectNames [
+	^projectNames
 ]
 
 { #category : 'accessing' }

@@ -6051,7 +6051,7 @@ removeallclassmethods RowanVariableService
 doit
 (Object
 	subclass: 'RwAbstractComponent'
-	instVarNames: #( name comment componentNames packageNames )
+	instVarNames: #( name projectName comment componentNames packageNames )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6069,7 +6069,7 @@ removeallclassmethods RwAbstractComponent
 doit
 (RwAbstractComponent
 	subclass: 'RwAbstractActiveComponent'
-	instVarNames: #( projectName conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict projectNames )
+	instVarNames: #( conditionalPackageMapSpecs preloadDoitName postloadDoitName doitDict projectNames )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -57805,7 +57805,7 @@ method: RwAbstractComponent
 excludedInstVars
 	"restore full #instVarNamesInOrderForSton - no exclusions (see super implementation)"
 
-	^ #()
+	^ #( #projectName )
 %
 
 category: 'exporting'
@@ -57830,7 +57830,7 @@ initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	"noop"
+	projectName := nil
 %
 
 category: 'initialization'
@@ -57839,7 +57839,7 @@ initializeForImport
 	"if spec has been imported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	"noop"
+	projectName := nil
 %
 
 category: 'ston'
@@ -57877,6 +57877,27 @@ printOn: aStream
 	aStream
 		space;
 		nextPutAll: name.
+	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
+%
+
+category: 'accessing'
+method: RwAbstractComponent
+projectName
+
+   ^projectName
+%
+
+category: 'initialization'
+method: RwAbstractComponent
+projectName: anObject
+
+   projectName := anObject
+%
+
+category: 'accessing'
+method: RwAbstractComponent
+projectNames
+	^ #()
 %
 
 category: 'ston'
@@ -57896,6 +57917,24 @@ stonOn: stonWriter
 						ifNil: [ 
 							self stonShouldWriteNilInstVars
 								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
+%
+
+category: 'validation'
+method: RwAbstractComponent
+validate
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	self subclassResponsitility: #'validate'
+%
+
+category: 'dispatching'
+method: RwAbstractComponent
+_addToResolvedProjectComponents: aRwResolvedProjectComponentsV2
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	self subclassResponsibility: #'_addToResolvedProjectComponents:'
 %
 
 category: 'exporting'
@@ -57932,6 +57971,26 @@ _platformPatternMatcherFor: pattern
 	^ self class _platformPatternMatcherFor: pattern
 %
 
+category: 'doits'
+method: RwAbstractComponent
+_readDoitsFrom: componentsRoot
+	"noop"
+%
+
+category: 'validation'
+method: RwAbstractComponent
+_validateDoits
+	"noop"
+%
+
+category: 'validation'
+method: RwAbstractComponent
+_validatedPackageNames
+	"answer the validated set of package names"
+
+	^ self packageNames asSet
+%
+
 ! Class implementation for 'RwAbstractActiveComponent'
 
 !		Class methods for 'RwAbstractActiveComponent'
@@ -57962,7 +58021,8 @@ method: RwAbstractActiveComponent
 category: 'accessing'
 method: RwAbstractActiveComponent
 addProjectNamed: aProjectName
-	self subclassResponsibility: #'addProjectNamed:'
+	self projectNames add: aProjectName.
+	projectNames := projectNames asSet asArray sort
 %
 
 category: 'accessing'
@@ -58050,12 +58110,6 @@ doitDict: object
 	doitDict := object
 %
 
-category: 'ston'
-method: RwAbstractActiveComponent
-excludedInstVars
-	^ #()
-%
-
 category: 'doits'
 method: RwAbstractActiveComponent
 executePostloadDoit
@@ -58122,7 +58176,8 @@ category: 'initialization'
 method: RwAbstractActiveComponent
 initialize
 	super initialize.
-	doitDict := Dictionary new
+	doitDict := Dictionary new.
+	projectNames := {}
 %
 
 category: 'initialization'
@@ -58134,7 +58189,7 @@ initializeForExport
 	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
 
 	super initializeForExport.
-	doitDict := projectName := nil.
+	doitDict := nil.
 	conditionalPackageMapSpecs
 		ifNotNil: [ 
 			conditionalPackageMapSpecs isEmpty
@@ -58156,20 +58211,10 @@ initializeForExport
 					conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ] ]
 %
 
-category: 'initialization'
-method: RwAbstractActiveComponent
-initializeForImport
-	"if spec has been imported, clear out any of the fields that represent state that should 
-	not be shared"
-
-	super initializeForImport.
-	projectName := nil
-%
-
 category: 'ston'
 method: RwAbstractActiveComponent
 instVarNamesInOrderForSton
-	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+	^ #(#'name' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
 category: 'matching'
@@ -58222,25 +58267,10 @@ preloadDoitName: object
 	preloadDoitName := object
 %
 
-category: 'printing'
-method: RwAbstractActiveComponent
-printOn: aStream
-	super printOn: aStream.
-	projectName ifNotNil: [ aStream nextPutAll: ' for project ' , projectName ]
-%
-
 category: 'accessing'
 method: RwAbstractActiveComponent
-projectName
-
-   ^projectName
-%
-
-category: 'initialization'
-method: RwAbstractActiveComponent
-projectName: anObject
-
-   projectName := anObject
+projectNames
+	^projectNames
 %
 
 category: 'accessing'
@@ -58295,6 +58325,14 @@ validate
 			platformName = 'gemstone'
 				ifTrue: [ self _validateGemStonePlatform: allDefinedPackageNames userIdMap: platformPropertiesMap ] ].
 	^ true
+%
+
+category: 'dispatching'
+method: RwAbstractActiveComponent
+_addToResolvedProjectComponents: aRwResolvedProjectComponentsV2
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	aRwResolvedProjectComponentsV2 _addActiveComponent: self
 %
 
 category: 'private'
@@ -58392,14 +58430,6 @@ _validateDoits
 
 category: 'validation'
 method: RwAbstractActiveComponent
-_validatedPackageNames
-	"answer the validated set of package names"
-
-	self subclassResponsibility: #'_validatedPackageNames'
-%
-
-category: 'validation'
-method: RwAbstractActiveComponent
 _validateGemStonePlatform: allDefinedPackageNames userIdMap: userIdMap
 	"ensure that the data structures within the receiver contain valid information:
 		1. only packages defined in the receiver may be referenced in the reciever
@@ -58452,13 +58482,6 @@ acceptVisitor: aVisitor
 
 category: 'accessing'
 method: RwLoadComponent
-addProjectNamed: aProjectName
-	self projectNames add: aProjectName.
-	projectNames := projectNames asSet asArray sort
-%
-
-category: 'accessing'
-method: RwLoadComponent
 conditionalPropertyMatchers
 	^ Dictionary new
 		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
@@ -58500,13 +58523,6 @@ hash
 	^ super hash bitXor: self projectNames hash
 %
 
-category: 'initialization'
-method: RwLoadComponent
-initialize
-	super initialize.
-	projectNames := {}
-%
-
 category: 'ston'
 method: RwLoadComponent
 instVarNamesInOrderForSton
@@ -58515,22 +58531,8 @@ instVarNamesInOrderForSton
 
 category: 'accessing'
 method: RwLoadComponent
-projectNames
-	^projectNames
-%
-
-category: 'accessing'
-method: RwLoadComponent
 removeProjectNamed: aProjectName
 	self projectNames remove: aProjectName ifAbsent: [  ]
-%
-
-category: 'validation'
-method: RwLoadComponent
-_validatedPackageNames
-	"answer the validated set of package names"
-
-	^ self packageNames asSet
 %
 
 ! Class implementation for 'RwSubcomponent'
@@ -58584,6 +58586,17 @@ category: 'ston'
 method: RwSubcomponent
 instVarNamesInOrderForSton
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
+%
+
+category: 'validation'
+method: RwSubcomponent
+validate
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	self condition ifNil: [ self error: 'conditions is nil' ].
+	^ super validate
 %
 
 ! Class implementation for 'RwPlatformSubcomponent'
@@ -58652,6 +58665,27 @@ category: 'ston'
 method: RwPackageGroup
 instVarNamesInOrderForSton
 	^ #(#'name' #'condition' #'componentNames' #'packageNames' #'comment')
+%
+
+category: 'validation'
+method: RwPackageGroup
+validate
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	self name ifNil: [ self error: 'name is nil' ].
+	self condition ifNil: [ self error: 'name is nil' ].
+	self _validatedPackageNames.
+	^ true
+%
+
+category: 'dispatching'
+method: RwPackageGroup
+_addToResolvedProjectComponents: aRwResolvedProjectComponentsV2
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	aRwResolvedProjectComponentsV2 _addPackageGroup: self
 %
 
 ! Class implementation for 'RwAbstractConfigurationPlatformAttributeMatcher'
@@ -70511,6 +70545,14 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId
 	^ (self conditionalPackageMapSpecs
 		at: 'gemstone'
 		ifAbsent: [ ^ Dictionary new ]) at: userId ifAbsent: [ ^ Dictionary new ]
+%
+
+category: 'dispatching'
+method: RwBasicProjectLoadComponentV2
+_addToResolvedProjectComponents: aRwResolvedProjectComponentsV2
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	aRwResolvedProjectComponentsV2 _addActiveComponent: self
 %
 
 ! Class implementation for 'RwAbstractSimpleProjectLoadComponentV2'
@@ -85269,7 +85311,8 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 category: 'initialization'
 method: RwResolvedProjectComponentsV2
 initialize
-	components := Dictionary new
+	components := Dictionary new.
+	packageGroups := Dictionary new
 %
 
 category: 'testing'
@@ -85391,9 +85434,9 @@ subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
 	^ subcomponents
 %
 
-category: 'accessing'
+category: 'dispatching'
 method: RwResolvedProjectComponentsV2
-_addComponent: aComponent
+_addActiveComponent: aComponent
 	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
 
 	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
@@ -85402,6 +85445,27 @@ _addComponent: aComponent
 		component --- presumably freshly read from disk --- wins"
 
 	^ self components at: aComponent name put: aComponent
+%
+
+category: 'dispatching'
+method: RwResolvedProjectComponentsV2
+_addComponent: aComponent
+	"double dispatch, so that _addActiveComponent: or _addPackageGroup: can be called based on class of aComponent"
+
+	^ aComponent _addToResolvedProjectComponents: self
+%
+
+category: 'dispatching'
+method: RwResolvedProjectComponentsV2
+_addPackageGroup: aPackageGroup
+	"not sure I like how this is used ... the component structure needs to be kept in sync with packages, so this is not quite the route to go, unless we ensure that the component has an entry for the package"
+
+	"see similar comment in addRawPackageNamed: and addPackages:forComponent: "
+
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
+
+	^ self packageGroups at: aPackageGroup name put: aPackageGroup
 %
 
 category: 'enumerating'
@@ -85420,7 +85484,8 @@ _conditionalComponentsStartingWith: aComponent platformConditionalAttributes: pl
 							(visitedComponentNames includes: cName)
 								ifFalse: [ 
 									self
-										_conditionalComponentsStartingWith: (self componentNamed: cName)
+										_conditionalComponentsStartingWith:
+											(self componentNamed: cName ifAbsent: [ self packageGroupNamed: cName ])
 										platformConditionalAttributes: platformConditionalAttributes
 										visited: visitedComponentNames
 										do: aBlock ] ] ] ]

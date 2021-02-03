@@ -4,13 +4,6 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'validation' }
-RwLoadComponent >> _validatedPackageNames [
-	"answer the validated set of package names"
-
-	^ self packageNames asSet
-]
-
 { #category : 'comparing' }
 RwLoadComponent >> = aRwLoadComponent [
 	^ super = aRwLoadComponent
@@ -26,12 +19,6 @@ RwLoadComponent >> acceptNestedVisitor: aVisitor [
 { #category : 'visiting' }
 RwLoadComponent >> acceptVisitor: aVisitor [
 	^ aVisitor visitComponent: self
-]
-
-{ #category : 'accessing' }
-RwLoadComponent >> addProjectNamed: aProjectName [
-	self projectNames add: aProjectName.
-	projectNames := projectNames asSet asArray sort
 ]
 
 { #category : 'accessing' }
@@ -74,20 +61,9 @@ RwLoadComponent >> hash [
 	^ super hash bitXor: self projectNames hash
 ]
 
-{ #category : 'initialization' }
-RwLoadComponent >> initialize [
-	super initialize.
-	projectNames := {}
-]
-
 { #category : 'ston' }
 RwLoadComponent >> instVarNamesInOrderForSton [
 	^ #(#'name' #'projectName' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
-]
-
-{ #category : 'accessing' }
-RwLoadComponent >> projectNames [
-	^projectNames
 ]
 
 { #category : 'accessing' }

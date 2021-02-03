@@ -13,6 +13,13 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
+{ #category : 'dispatching' }
+RwBasicProjectLoadComponentV2 >> _addToResolvedProjectComponents: aRwResolvedProjectComponentsV2 [
+	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"
+
+	aRwResolvedProjectComponentsV2 _addActiveComponent: self
+]
+
 { #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 	"duplication of subclass implementation until we've moved to V2.1, since this method is 

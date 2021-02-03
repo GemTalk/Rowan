@@ -48,3 +48,13 @@ RwSubcomponent >> initialize [
 RwSubcomponent >> instVarNamesInOrderForSton [
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
+
+{ #category : 'validation' }
+RwSubcomponent >> validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. only packages defined in the receiver may be referenced in the reciever
+		2. platform implementation is responsible for validating platform structures"
+
+	self condition ifNil: [ self error: 'conditions is nil' ].
+	^ super validate
+]
