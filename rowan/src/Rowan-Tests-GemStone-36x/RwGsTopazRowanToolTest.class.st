@@ -401,11 +401,14 @@ RwGsTopazRowanToolTest >> testTopazListPackageNames [
 RwGsTopazRowanToolTest >> testTopazListProjects [
 	"return the list of loaded projects"
 
-	| x |
+	| projectList |
 	RwGsTestImage resetTestProjectRegistry.
-	self
-		assert: (x := Rowan gemstoneTools topaz listProjects sort) 
-    equals: #( 'Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Rowan' 'STON' 'UnPackaged')
+	projectList := Rowan gemstoneTools topaz listProjects sort.
+	#('Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Rowan' 'STON' 'UnPackaged')
+		do: [ :projectName | 
+			self
+				assert: (projectList includes: projectName)
+				description: 'expected ' , projectName , ' to be included in project list' ]
 ]
 
 { #category : 'project support' }

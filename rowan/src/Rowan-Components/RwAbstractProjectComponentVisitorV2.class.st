@@ -166,3 +166,26 @@ RwAbstractProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecificatio
 
 	self projectLoadSpecs add: aLoadSpecification
 ]
+
+{ #category : 'visiting' }
+RwAbstractProjectComponentVisitorV2 >> visitPackageGroupComponent: aComponent [
+	(visitedComponentNames includes: aComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponent.
+
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					"package group component does not impact list of packages or projects - only used in project browser"
+					self componentNames addAll: aComponent componentNames ] ].
+
+	(self _components: self componentsPath forProject: aComponent projectName)
+		do: [ :component | 
+			(visitedComponentNames includes: component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
+
+	(self _projects: self projectsPath forProject: aComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+]

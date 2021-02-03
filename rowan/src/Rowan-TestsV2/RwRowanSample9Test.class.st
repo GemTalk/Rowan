@@ -5821,21 +5821,23 @@ RwRowanSample9Test >> testSpec_0061 [
 
 	"package groups example"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
 	loadSpec := self _loadSpecNamed: 'spec_0061'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
 
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
 "load project"
 	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
 
 "validate"
 	self
@@ -5843,7 +5845,19 @@ RwRowanSample9Test >> testSpec_0061 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-true ifTrue: [ self halt ].
+	self
+		assert: project loadedComponent componentNames asArray sort
+		equals:
+			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Tests' 'common/tests/Tests' 'Core')
+				sort.
+
+	self
+		assert: project loadedComponent packageGroupNames asArray sort
+		equals:
+			#('groups/Definitions' 'groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh')
+				sort.
+	true
+		ifTrue: [ self halt ]
 ]
 
 { #category : 'tests' }
