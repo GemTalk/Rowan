@@ -89,7 +89,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResol
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 
-	resolvedProject _projectComponents: RwResolvedLoadComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]

@@ -22,7 +22,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 				RwLoadedProject _projectModifiedProjectSourceValue.
 	^ self basicNew
 		_projectDefinition: projectDefinition;
-		_projectComponents: RwResolvedLoadComponentsV2 new;
+		_projectComponents: RwResolvedProjectComponentsV2 new;
 		_loadSpecification: loadSpecification;
 		yourself
 ]

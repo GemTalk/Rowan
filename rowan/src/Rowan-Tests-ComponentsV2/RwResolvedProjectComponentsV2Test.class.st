@@ -1,16 +1,16 @@
 Class {
-	#name : 'RwResolvedLoadComponentsV2Test',
+	#name : 'RwResolvedProjectComponentsV2Test',
 	#superclass : 'RwAbstractLoadComponentV2Test',
 	#category : 'Rowan-Tests-ComponentsV2'
 }
 
 { #category : 'tests' }
-RwResolvedLoadComponentsV2Test >> testBasic [
+RwResolvedProjectComponentsV2Test >> testBasic [
 	"excercise basic functionality for RwResolvedLoadComponentV2"
 
 	| projectName resolvedComponents allPackageNames stonString |
-	projectName := 'ResolvedLoadComponentsV2Test'.
-	resolvedComponents := RwResolvedLoadComponentsV2 new.
+	projectName := 'ResolvedProjectComponentsV2Test'.
+	resolvedComponents := RwResolvedProjectComponentsV2 new.
 	resolvedComponents
 		addSimpleComponentNamed: 'Core'
 			condition: 'common'
@@ -66,7 +66,7 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		assert:
 			allPackageNames asArray sort
 				=
-					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Shared' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+					#('ResolvedProjectComponentsV2Test-Tests' 'ResolvedProjectComponentsV2Test-GemStone-Tests' 'ResolvedProjectComponentsV2Test-Shared' 'ResolvedProjectComponentsV2Test-Core' 'ResolvedProjectComponentsV2Test-GemStone-Extensions')
 						sort.
 	self
 		assert:
@@ -80,22 +80,22 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
 			condition: 'common'
 			componentNames: {'Tests' .  'GemStone' . 'subs/Nested'}
-			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			packageNames: {'ResolvedProjectComponentsV2Test-Core'}
 			projectNames: {'DependentProject'};
 		_validateComponent: (resolvedComponents componentNamed: 'Tests')
 			condition: 'tests'
 			componentNames: {'GemStoneTests'}
-			packageNames: {'ResolvedLoadComponentsV2Test-Tests'}
+			packageNames: {'ResolvedProjectComponentsV2Test-Tests'}
 			projectNames: {};
 		_validateComponent: (resolvedComponents componentNamed: 'GemStone')
 			condition: 'gemstone'
 			componentNames: {}
-			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Extensions'}
+			packageNames: {'ResolvedProjectComponentsV2Test-GemStone-Extensions'}
 			projectNames: {};
 		_validateComponent: (resolvedComponents componentNamed: 'GemStoneTests')
 			condition: 'gemstone'
 			componentNames: {}
-			packageNames: {'ResolvedLoadComponentsV2Test-GemStone-Tests'}
+			packageNames: {'ResolvedProjectComponentsV2Test-GemStone-Tests'}
 			projectNames: {};
 		yourself.
 
@@ -103,11 +103,11 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		_validateComponent: (resolvedComponents componentNamed: 'subs/Nested')
 			condition: 'common'
 			componentNames: {}
-			packageNames: {'ResolvedLoadComponentsV2Test-Shared'}
+			packageNames: {'ResolvedProjectComponentsV2Test-Shared'}
 			projectNames: {};
 		yourself.
 
-	resolvedComponents removePackageNamed: 'ResolvedLoadComponentsV2Test-Shared'.
+	resolvedComponents removePackageNamed: 'ResolvedProjectComponentsV2Test-Shared'.
 	stonString := STON toStringPretty: resolvedComponents.	"useful to view full structure"
 
 	allPackageNames := resolvedComponents _validate.
@@ -115,7 +115,7 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		assert:
 			allPackageNames asArray sort
 				=
-					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+					#('ResolvedProjectComponentsV2Test-Tests' 'ResolvedProjectComponentsV2Test-GemStone-Tests' 'ResolvedProjectComponentsV2Test-Core' 'ResolvedProjectComponentsV2Test-GemStone-Extensions')
 						sort.
 
 	self
@@ -134,14 +134,14 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		assert:
 			allPackageNames asArray sort
 				=
-					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+					#('ResolvedProjectComponentsV2Test-Tests' 'ResolvedProjectComponentsV2Test-GemStone-Tests' 'ResolvedProjectComponentsV2Test-Core' 'ResolvedProjectComponentsV2Test-GemStone-Extensions')
 						sort.
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
 			condition: 'common'
 			componentNames: { 'GemStone' . 'Tests'}
-			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			packageNames: {'ResolvedProjectComponentsV2Test-Core'}
 			projectNames: {'DependentProject'};
 		yourself.
 	self
@@ -156,14 +156,14 @@ RwResolvedLoadComponentsV2Test >> testBasic [
 		assert:
 			allPackageNames asArray sort
 				=
-					#('ResolvedLoadComponentsV2Test-Tests' 'ResolvedLoadComponentsV2Test-GemStone-Tests' 'ResolvedLoadComponentsV2Test-Core' 'ResolvedLoadComponentsV2Test-GemStone-Extensions')
+					#('ResolvedProjectComponentsV2Test-Tests' 'ResolvedProjectComponentsV2Test-GemStone-Tests' 'ResolvedProjectComponentsV2Test-Core' 'ResolvedProjectComponentsV2Test-GemStone-Extensions')
 						sort.
 
 	self
 		_validateComponent: (resolvedComponents componentNamed: 'Core')
 			condition: 'common'
 			componentNames: {  'GemStone' . 'Tests'}
-			packageNames: {'ResolvedLoadComponentsV2Test-Core'}
+			packageNames: {'ResolvedProjectComponentsV2Test-Core'}
 			projectNames: {};
 		yourself.
 ]
