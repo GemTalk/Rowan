@@ -1,12 +1,12 @@
 Class {
 	#name : 'RwPlatformPatternMatcherTest',
 	#superclass : 'TestCase',
-	#category : 'Rowan-Tests-ComponentsV2'
+	#category : 'Rowan-TestsV2'
 }
 
 { #category : 'private' }
 RwPlatformPatternMatcherTest >> _patternMatcherFor: pattern [
-	^ RwAbstractRowanProjectLoadComponentV2 _platformPatternMatcherFor: pattern
+	^ RwAbstractComponent _platformPatternMatcherFor: pattern
 ]
 
 { #category : 'tests' }
@@ -81,6 +81,14 @@ RwPlatformPatternMatcherTest >> testGemStoneVersionWildCardPattern [
 	self assert: (matcher match: '3.1' asRwGemStoneVersionNumber).
 	self assert: (matcher match: '3' asRwGemStoneVersionNumber).
 	self deny: (matcher match: '2' asRwGemStoneVersionNumber).
+
+	pattern := 'gs3.15.x'.
+	matcher := self _patternMatcherFor: pattern.
+	self assert: (matcher match: '3.15.5.1' asRwGemStoneVersionNumber).
+	self assert: (matcher match: '3.15.5' asRwGemStoneVersionNumber).
+	self assert: (matcher match: '3.15' asRwGemStoneVersionNumber).
+	self deny: (matcher match: '3' asRwGemStoneVersionNumber).
+	self deny: (matcher match: '2' asRwGemStoneVersionNumber).
 ]
 
 { #category : 'tests' }
@@ -111,7 +119,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	self assert: hitExpectedError.
 
 	hitExpectedError := false.
-	pattern := 'gs3.26]'.
+	pattern := 'gs3x]'.
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
 		do: [ :ex | 

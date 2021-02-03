@@ -2,7 +2,8 @@ Class {
 	#name : 'RwResolvedProjectComponentsV2',
 	#superclass : 'Object',
 	#instVars : [
-		'components'
+		'components',
+		'packageGroups'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
@@ -452,6 +453,28 @@ RwResolvedProjectComponentsV2 >> initialize [
 { #category : 'testing' }
 RwResolvedProjectComponentsV2 >> isEmpty [
 	^ self components isEmpty
+]
+
+{ #category : 'other' }
+RwResolvedProjectComponentsV2 >> packageGroupNamed: aPackageGroupName [
+	^ self
+		packageGroupNamed: aPackageGroupName
+		ifAbsent: [ self error: 'No package group named ' , aPackageGroupName printString , ' found' ]
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> packageGroupNamed: aPackageGroupName ifAbsent: absentBlock [
+	^ self packageGroups at: aPackageGroupName ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> packageGroups [
+	^packageGroups
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> packageGroups: object [
+	packageGroups := object
 ]
 
 { #category : 'copying' }

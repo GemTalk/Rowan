@@ -1,10 +1,43 @@
 Class {
 	#name : 'RwPackageGroup',
-	#superclass : 'RwSubcomponent',
+	#superclass : 'RwAbstractComponent',
+	#instVars : [
+		'condition'
+	],
 	#category : 'Rowan-Components'
 }
 
 { #category : 'visiting' }
 RwPackageGroup >> acceptNestedVisitor: aVisitor [
 	^ aVisitor visitPackageGroupComponent: self
+]
+
+{ #category : 'accessing' }
+RwPackageGroup >> condition [
+	^condition
+]
+
+{ #category : 'accessing' }
+RwPackageGroup >> condition: aString [
+	aString isString
+		ifFalse: [ self error: 'The condition is constrained to be a string' ].
+	condition := aString
+]
+
+{ #category : 'accessing' }
+RwPackageGroup >> conditionalPropertyMatchers [
+	^ Dictionary new
+		at: {(self _platformPatternMatcherFor: self condition)} put: {};
+		yourself
+]
+
+{ #category : 'initialization' }
+RwPackageGroup >> initialize [
+	super initialize.
+	condition := 'common'.
+]
+
+{ #category : 'ston' }
+RwPackageGroup >> instVarNamesInOrderForSton [
+	^ #(#'name' #'condition' #'componentNames' #'packageNames' #'comment')
 ]

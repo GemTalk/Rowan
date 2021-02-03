@@ -5846,13 +5846,13 @@ RwRowanSample9Test >> testSpec_0061 [
 		expectedProjectNames: projectNames.
 
 	self
-		assert: project loadedComponent componentNames asArray sort
+		assert: project loadedComponentNames asArray sort
 		equals:
 			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Tests' 'common/tests/Tests' 'Core')
 				sort.
 
 	self
-		assert: project loadedComponent packageGroupNames asArray sort
+		assert: project packageGroupNames asArray sort
 		equals:
 			#('groups/Definitions' 'groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh')
 				sort.

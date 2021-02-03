@@ -38,15 +38,13 @@ RwSubcomponent >> conditionalPropertyMatchers [
 		yourself
 ]
 
-{ #category : 'ston' }
-RwSubcomponent >> excludedInstVars [
-	"restore full #instVarNamesInOrderForSton - no exclusions (see super implementation)"
-
-	^ #()
-]
-
 { #category : 'initialization' }
 RwSubcomponent >> initialize [
 	super initialize.
 	condition := 'common'.
+]
+
+{ #category : 'ston' }
+RwSubcomponent >> instVarNamesInOrderForSton [
+	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
