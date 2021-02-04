@@ -146,14 +146,12 @@ RwLoadedThing >> propertiesForDefinition [
 
 { #category : 'accessing' }
 RwLoadedThing >> propertyAt: propertyName [
-
-	^properties at: propertyName ifAbsent: [AbsentToken]
+	^ properties at: propertyName asSymbol ifAbsent: [ AbsentToken ]
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> propertyAt: propertyName ifAbsent: aBlock [
-
-	^properties at: propertyName ifAbsent: aBlock
+	^ properties at: propertyName asSymbol ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }
@@ -161,13 +159,13 @@ RwLoadedThing >> propertyAt: propertyName put: aValue [
 	"Value should be a string"
 
 	self markPackageDirty.
-	^properties at: propertyName put: aValue
+	^properties at: propertyName asSymbol put: aValue
 ]
 
 { #category : 'comparing' }
 RwLoadedThing >> propertyForCompareAt: propertyName ifAbsent: aBlock [
 
-	^self propertiesForCompare at: propertyName ifAbsent: aBlock
+	^self propertiesForCompare at: propertyName asSymbol ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }

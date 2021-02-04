@@ -171,26 +171,24 @@ RwDefinition >> propertiesForCompare [
 
 { #category : 'accessing' }
 RwDefinition >> propertyAt: aKey [
-
-	^properties at: aKey
+	^ properties at: aKey asSymbol
 ]
 
 { #category : 'accessing' }
 RwDefinition >> propertyAt: aKey ifAbsent: absentBlock [
-
-	^properties at: aKey ifAbsent: absentBlock
+	^ properties at: aKey asSymbol ifAbsent: absentBlock
 ]
 
 { #category : 'properties' }
 RwDefinition >> propertyAt: aKey put: aValue [
 
-	^properties at: aKey put: aValue
+	^properties at: aKey asSymbol put: aValue
 ]
 
 { #category : 'comparing' }
 RwDefinition >> propertyForCompareAt: aKey ifAbsent: absentBlock [
 
-	^self propertyAt: aKey ifAbsent: absentBlock
+	^self propertyAt: aKey asSymbol ifAbsent: absentBlock
 ]
 
 { #category : 'private' }

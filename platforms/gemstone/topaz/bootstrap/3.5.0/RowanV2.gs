@@ -71674,29 +71674,27 @@ propertiesForCompare
 category: 'accessing'
 method: RwDefinition
 propertyAt: aKey
-
-	^properties at: aKey
+	^ properties at: aKey asSymbol
 %
 
 category: 'accessing'
 method: RwDefinition
 propertyAt: aKey ifAbsent: absentBlock
-
-	^properties at: aKey ifAbsent: absentBlock
+	^ properties at: aKey asSymbol ifAbsent: absentBlock
 %
 
 category: 'properties'
 method: RwDefinition
 propertyAt: aKey put: aValue
 
-	^properties at: aKey put: aValue
+	^properties at: aKey asSymbol put: aValue
 %
 
 category: 'comparing'
 method: RwDefinition
 propertyForCompareAt: aKey ifAbsent: absentBlock
 
-	^self propertyAt: aKey ifAbsent: absentBlock
+	^self propertyAt: aKey asSymbol ifAbsent: absentBlock
 %
 
 category: 'private'
@@ -80708,15 +80706,13 @@ propertiesForDefinition
 category: 'accessing'
 method: RwLoadedThing
 propertyAt: propertyName
-
-	^properties at: propertyName ifAbsent: [AbsentToken]
+	^ properties at: propertyName asSymbol ifAbsent: [ AbsentToken ]
 %
 
 category: 'accessing'
 method: RwLoadedThing
 propertyAt: propertyName ifAbsent: aBlock
-
-	^properties at: propertyName ifAbsent: aBlock
+	^ properties at: propertyName asSymbol ifAbsent: aBlock
 %
 
 category: 'accessing'
@@ -80725,14 +80721,14 @@ propertyAt: propertyName put: aValue
 	"Value should be a string"
 
 	self markPackageDirty.
-	^properties at: propertyName put: aValue
+	^properties at: propertyName asSymbol put: aValue
 %
 
 category: 'comparing'
 method: RwLoadedThing
 propertyForCompareAt: propertyName ifAbsent: aBlock
 
-	^self propertiesForCompare at: propertyName ifAbsent: aBlock
+	^self propertiesForCompare at: propertyName asSymbol ifAbsent: aBlock
 %
 
 category: 'accessing'
