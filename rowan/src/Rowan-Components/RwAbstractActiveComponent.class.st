@@ -48,17 +48,6 @@ RwAbstractActiveComponent >> _canonicalizeGemStonePackageMapSpecs: userMap [
 	^ orderedUserMap
 ]
 
-{ #category : 'matching' }
-RwAbstractActiveComponent >> _platformAttributeMatchIn: platformMatchersList for: attributes [
-	platformMatchersList
-		do: [ :platformPatternMatcher | 
-			attributes
-				do: [ :anObject | 
-					(platformPatternMatcher match: anObject)
-						ifTrue: [ ^ true ] ] ].
-	^ false
-]
-
 { #category : 'doits' }
 RwAbstractActiveComponent >> _readDoitsFrom: componentsRoot [
 	| fileRef |
@@ -332,12 +321,6 @@ RwAbstractActiveComponent >> initializeForExport [
 { #category : 'ston' }
 RwAbstractActiveComponent >> instVarNamesInOrderForSton [
 	^ #(#'name' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
-]
-
-{ #category : 'matching' }
-RwAbstractActiveComponent >> matchesAttributes: attributes [
-	self conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | ^ self _platformAttributeMatchIn: platformMatchers for: attributes ]
 ]
 
 { #category : 'accessing' }

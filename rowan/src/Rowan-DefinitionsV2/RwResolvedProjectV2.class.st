@@ -1298,8 +1298,11 @@ RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifN
 	aComponent := self
 		componentNamed: componentName
 		ifAbsent: [ 
-			"noneBlock, if it returns, should answer a component"
-			noneBlock cull: componentName ].
+			self
+				packageGroupNamed: componentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: componentName ] ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -1310,8 +1313,11 @@ RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifN
 			subcomponent := self
 				componentNamed: subcomponentName
 				ifAbsent: [ 
-					"noneBlock, if it returns, should answer a component"
-					noneBlock cull: subcomponentName ].
+					self
+						packageGroupNamed: subcomponentName
+						ifAbsent: [ 
+							"noneBlock, if it returns, should answer a component"
+							noneBlock cull: subcomponentName ] ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

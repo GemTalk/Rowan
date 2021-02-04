@@ -343,6 +343,11 @@ RwResolvedProjectComponentsV2 >> componentNamed: aComponentName ifAbsent: absent
 ]
 
 { #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> componentNames [
+	^ self components keys asArray
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> components [
 	^components
 ]
@@ -489,6 +494,11 @@ RwResolvedProjectComponentsV2 >> packageGroupNamed: aPackageGroupName ifAbsent: 
 ]
 
 { #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> packageGroupNames [
+	^ self packageGroups keys asArray
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> packageGroups [
 	^packageGroups
 ]
@@ -560,8 +570,11 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 	aComponent := self
 		componentNamed: componentName
 		ifAbsent: [ 
-			"noneBlock, if it returns, should answer a component"
-			noneBlock  cull: componentName ].
+			self
+				packageGroupNamed: componentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: componentName ] ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -572,8 +585,11 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 			subcomponent := self
 				componentNamed: subcomponentName
 				ifAbsent: [ 
-					"noneBlock, if it returns, should answer a component"
-					noneBlock  cull: subcomponentName ].
+					self
+						packageGroupNamed: subcomponentName
+						ifAbsent: [ 
+							"noneBlock, if it returns, should answer a component"
+							noneBlock cull: subcomponentName ] ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

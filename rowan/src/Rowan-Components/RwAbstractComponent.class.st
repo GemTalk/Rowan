@@ -204,6 +204,17 @@ RwAbstractComponent >> _exportToUrl: directoryUrl [
 	^ nil	"otherwise a noop"
 ]
 
+{ #category : 'matching' }
+RwAbstractComponent >> _platformAttributeMatchIn: platformMatchersList for: attributes [
+	platformMatchersList
+		do: [ :platformPatternMatcher | 
+			attributes
+				do: [ :anObject | 
+					(platformPatternMatcher match: anObject)
+						ifTrue: [ ^ true ] ] ].
+	^ false
+]
+
 { #category : 'private' }
 RwAbstractComponent >> _platformPatternMatcherFor: pattern [
 	^ self class _platformPatternMatcherFor: pattern
@@ -310,6 +321,12 @@ RwAbstractComponent >> initializeForImport [
 RwAbstractComponent >> instVarNamesInOrderForSton [
 
 	^ self class allInstVarNames
+]
+
+{ #category : 'matching' }
+RwAbstractComponent >> matchesAttributes: attributes [
+	self conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | ^ self _platformAttributeMatchIn: platformMatchers for: attributes ]
 ]
 
 { #category : 'accessing' }

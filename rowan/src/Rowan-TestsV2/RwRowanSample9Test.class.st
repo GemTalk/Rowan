@@ -5856,8 +5856,12 @@ RwRowanSample9Test >> testSpec_0061 [
 		equals:
 			#('groups/Definitions' 'groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh')
 				sort.
-	true
-		ifTrue: [ self halt ]
+
+	self
+		assert: (project classNamesFor: 'groups/Projects') asArray sort
+		equals:
+			#('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9RwAbstractUnloadedProject')
+				sort.
 ]
 
 { #category : 'tests' }

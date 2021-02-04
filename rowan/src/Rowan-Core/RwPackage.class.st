@@ -25,11 +25,21 @@ RwPackage >> definedClasses [
 ]
 
 { #category : 'accessing' }
+RwPackage >> definedClassNames [
+	^ self _loadedPackage loadedClasses keys
+]
+
+{ #category : 'accessing' }
 RwPackage >> extendedClasses [
 
 "	^ self _packageTools query classExtensionsForPackageNamed: self name"
 
 	^ self error: 'not yet implemented'
+]
+
+{ #category : 'accessing' }
+RwPackage >> extendedClassNames [
+	^ self _loadedPackage loadedClassExtensions keys
 ]
 
 { #category : 'testing' }

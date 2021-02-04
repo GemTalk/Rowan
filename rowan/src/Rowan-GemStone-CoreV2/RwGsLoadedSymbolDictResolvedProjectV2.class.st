@@ -50,7 +50,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOf
 
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames [
-	| packageNames visited theBlock attributes componentNames |
+	| packageNames visited theBlock attributes componentNames components |
 	visited := IdentitySet new.
 	packageNames := Set new.
 	attributes := self platformConditionalAttributes.
@@ -63,8 +63,14 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArray
 	componentNames := componentNameOrArrayOfNames _isArray
 		ifTrue: [ componentNameOrArrayOfNames ]
 		ifFalse: [ {componentNameOrArrayOfNames} ].
+	components := self _projectComponents.
 	componentNames
-		do: [ :componentName | self subcomponentsOf: componentName attributes: attributes do: theBlock ].
+		do: [ :componentName | 
+			| theComponent |
+			theComponent := components
+				componentNamed: componentName
+				ifAbsent: [ components packageGroupNamed: componentName ].
+			theBlock value: theComponent ].
 	^ packageNames asArray sort
 ]
 
@@ -424,8 +430,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 	aComponent := self
 		componentNamed: componentName
 		ifAbsent: [ 
-			"noneBlock, if it returns, should answer a component"
-			noneBlock  cull: componentName ].
+			self
+				packageGroupNamed: componentName
+				ifAbsent: [ 
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: componentName ]].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -436,8 +445,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 			subcomponent := self
 				componentNamed: subcomponentName
 				ifAbsent: [ 
+			self
+				packageGroupNamed: subcomponentName
+				ifAbsent: [ 
 					"noneBlock, if it returns, should answer a component"
-					noneBlock  cull: subcomponentName ].
+					noneBlock cull: subcomponentName ]].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

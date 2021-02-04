@@ -114,6 +114,20 @@ RwProject >> checkout: revision [
 	^ self _loadedProject checkout: revision
 ]
 
+{ #category : 'querying' }
+RwProject >> classNamesFor: componentNameOrArrayOfNames [
+	| loadedClassNames |
+	loadedClassNames := Set new.
+	(self allPackageNamesIn: componentNameOrArrayOfNames)
+		do: [ :packageName | 
+			(self packageNamed: packageName ifAbsent: [  ])
+				ifNotNil: [ :loadedPackage | 
+					loadedClassNames
+						addAll: loadedPackage definedClassNames;
+						addAll: loadedPackage extendedClassNames ] ].
+	^ loadedClassNames
+]
+
 { #category : 'properties' }
 RwProject >> comment [
 
@@ -309,7 +323,12 @@ RwProject >> loadedCommitId [
 	^ self _loadedProject loadedCommitId
 ]
 
-{ #category : 'components to be cleaned up' }
+{ #category : 'components' }
+RwProject >> loadedComponentNames [
+	^ self loadedComponents componentNames
+]
+
+{ #category : 'components' }
 RwProject >> loadedComponents [
 	^ self _loadedProject loadedComponentDefinitions
 ]
@@ -359,6 +378,16 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'components' }
+RwProject >> packageGroupNamed: componentName [
+	^ self loadedComponents packageGroupNamed: componentName
+]
+
+{ #category : 'components' }
+RwProject >> packageGroupNames [
+	^ self loadedComponents packageGroupNames
 ]
 
 { #category : 'querying' }
