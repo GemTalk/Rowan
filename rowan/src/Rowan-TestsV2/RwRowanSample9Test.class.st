@@ -5821,7 +5821,7 @@ RwRowanSample9Test >> testSpec_0061 [
 
 	"package groups example"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project projectsPackageNames |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project projectsClassNames |
 	loadSpec := self _loadSpecNamed: 'spec_0061'.
 
 	projectName := loadSpec projectName.
@@ -5830,7 +5830,7 @@ RwRowanSample9Test >> testSpec_0061 [
 	projectNames
 		do: [ :pn | 
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
 
 "resolve project"
 	resolvedProject := loadSpec resolve.
@@ -5848,28 +5848,33 @@ RwRowanSample9Test >> testSpec_0061 [
 	self
 		assert: project loadedComponentNames asArray sort
 		equals:
-			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Tests' 'common/tests/Tests' 'Core')
+			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/platforms/Core' 'common/platforms/gemstone/Core' 'common/platforms/pharo/Core' 'common/Tests' 'common/tests/Tests' 'Core')
 				sort.
 
 	self
 		assert: project packageGroupNames asArray sort
 		equals:
-			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh'  'groups/Loader')
+			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/Loader')
 				sort.
 
-	projectsPackageNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
+	projectsClassNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
+	self
+		assert: (project classNamesFor: 'groups/Examples') isEmpty;
+		assert: (project classNamesFor: 'groups/Rowan') isEmpty;
+		assert: (project classNamesFor: 'groups/Tests') isEmpty.
+
 	self
 		assert: (project classNamesFor: 'groups/Projects') asArray sort
-		equals: projectsPackageNames sort.
+		equals: projectsClassNames sort.
 
 	self
 		assert: (project classNamesFor: 'groups/WorkGroup_dkh') asArray sort
-		equals: (projectsPackageNames , #('Rs9Interface')) sort.
+		equals: (projectsClassNames , #('Rs9Interface')) sort.
 
 	self
 		assert: (project classNamesFor: 'groups/Loader') asArray sort
 		equals:
-			#('Rs9LoadedThing' 'Rs9LoadedProject' 'Rs9LoadedPackage' 'Rs9LoadedMethod' 'Rs9LoadedClassExtension' 'Rs9LoadedClass')
+			#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing')
 				sort
 ]
 

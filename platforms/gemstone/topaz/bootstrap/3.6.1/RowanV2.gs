@@ -8629,7 +8629,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		comment: 'properties: dictionary of properties
 name: name of class or package, selector of method
 handle: reference to the class or method object, or to the native package object for dialects that have that.';
@@ -8650,7 +8650,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		comment: 'package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
 extensions: a collection of CypLoadedExtendedClasses for this class. From these we can tell which methods don''t belong to our default package.';
 		immediateInvariant.
@@ -8688,7 +8688,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		comment: 'No class-specific documentation for CypLoadedClassExtension, hierarchy is: 
 Object
   CypLoadedThing( properties name handle)
@@ -8729,7 +8729,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		comment: 'No class-specific documentation for CypLoadedMethod, hierarchy is: 
 Object
   CypLoadedThing( properties name handle)
@@ -8771,7 +8771,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		comment: 'repository: The repository I was loaded from (if known, nil otherwise)
 commitId: A repository-specific way of identifying source code commit, if it''s a type of repository that has that kind of information (nil otherwise)
 loadedClasses: Dictionary -- keys are (non-meta) classes, values are the LoadedClasses that I define.
@@ -8811,7 +8811,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-Core';
+		category: 'Rowan-Loader';
 		immediateInvariant.
 true.
 %

@@ -3266,9 +3266,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
-	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
+	"Package Group Example 1: define using only packages, including references to conditional packages. 
 
-	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName2 packageGroupName3 packageGroupName4 component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component2 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroups classMap |
+	Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group."
+
+	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName2 packageGroupName3 packageGroupName4 component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroups classMap component2gemstone component2pharo component2gemstonePackageNames component2pharoPackageNames |
 	componentName1 := 'Core'.
 	packageGroupName1a := 'Projects'.
 	packageGroupName1b := 'Loader'.
@@ -3278,6 +3280,10 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 	packageGroupName4 := 'WorkGroup_dkh'.
 
 	component2PackageNames := {(projectName , '-' , componentName1)}.
+	component2gemstonePackageNames := {(projectName , '-' , packageGroupName1b
+		, '-GemStone')}.
+	component2pharoPackageNames := {(projectName , '-' , packageGroupName1b
+		, '-Pharo')}.
 
 	packageGroup1 := {packageGroupName1a.
 	packageGroupName1b.
@@ -3365,17 +3371,35 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 	resolvedProject
 		packageConvention: 'Rowan';
 		comment:
-				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
+				'spec_0061 - Package Group Example 1: define using only packages, including references to conditional packages. A collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 	resolvedProject _loadSpecification componentNames: {}.
 
 	component1 := resolvedProject
 		addLoadComponentNamed: componentName1
 		comment: 'Primary component used for loading the project.'.
 
-	component2 := resolvedProject
-		addSubcomponentStructureFor: componentName1
+	component2gemstone := resolvedProject
+		addComponentStructureFor: componentName1
 		startingAtComponentNamed: componentName1
-		conditionPathArray: {'common'}.
+		pathNameArray:
+			{'common'.
+			'platforms'.
+			'gemstone'}
+		conditionPathArray:
+			{'common'.
+			'common'.
+			{'gemstone'}}.
+	component2pharo := resolvedProject
+		addComponentStructureFor: componentName1
+		startingAtComponentNamed: componentName1
+		pathNameArray:
+			{'common'.
+			'platforms'.
+			'pharo'}
+		conditionPathArray:
+			{'common'.
+			'common'.
+			{'pharo'}}.
 	component3 := resolvedProject
 		addSubcomponentStructureFor: packageGroupName2
 		startingAtComponentNamed: componentName1
@@ -3391,7 +3415,13 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 
 	resolvedProject
 		addPackagesNamed: component2PackageNames
-		toComponentNamed: component2 name.
+		toComponentNamed: 'common/' , componentName1.
+	resolvedProject
+		addPackagesNamed: component2gemstonePackageNames
+		toComponentNamed: 'common/platforms/gemstone/' , componentName1.
+	resolvedProject
+		addPackagesNamed: component2pharoPackageNames
+		toComponentNamed: 'common/platforms/pharo/' , componentName1.
 	resolvedProject
 		addPackagesNamed: component3PackageNames
 		toComponentNamed: component3 name.
@@ -3436,9 +3466,43 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 					packageGroupComponent addPackageNames: {packageName}.
 					package := resolvedProject packageNamed: packageName.
 					(classMap at: packageGroup ifAbsent: [ {} ])
-						do: [ :classDef | package addClassDefinition: classDef ] ] ].
+						do: [ :classDef | package addClassDefinition: classDef ] ].
+			packageGroupName1b = packageGroup
+				ifTrue: [ 
+					"Loader group, so include the two platform packages directly in the group"
+					packageGroupComponent
+						addPackageNames:
+							component2gemstonePackageNames , component2pharoPackageNames ] ].
 
-
+	{{(component2gemstonePackageNames at: 1).
+	(classPrefix , 'Gs')}.
+	{(component2pharoPackageNames at: 1).
+	(classPrefix , 'Ph')}}
+		do: [ :ar | 
+			| platformClassPrefix packageName |
+			packageName := ar at: 1.
+			platformClassPrefix := ar at: 2.
+			{(RwClassDefinition
+				newForClassNamed: platformClassPrefix , 'LoadedClass'
+				super: classPrefix , 'LoadedClass'
+				category: packageGroupName1b).
+			(RwClassDefinition
+				newForClassNamed: platformClassPrefix , 'LoadedClassExtension'
+				super: classPrefix , 'LoadedClassExtension'
+				category: packageGroupName1b).
+			(RwClassDefinition
+				newForClassNamed: platformClassPrefix , 'LoadedMethod'
+				super: classPrefix , 'LoadedMethod'
+				category: packageGroupName1b).
+			(RwClassDefinition
+				newForClassNamed: platformClassPrefix , 'LoadedPackage'
+				super: classPrefix , 'LoadedPackage'
+				category: packageGroupName1b).
+			(RwClassDefinition
+				newForClassNamed: platformClassPrefix , 'LoadedProject'
+				super: classPrefix , 'LoadedProject'
+				category: packageGroupName1b)}
+				do: [ :classDef | (resolvedProject packageNamed: packageName) addClassDefinition: classDef ] ].
 
 	^ resolvedProject
 ]
@@ -6950,7 +7014,9 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
-	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
+	"Package Group Example 1: define using only packages, including references to conditional packages. 
+
+	Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -6961,7 +7027,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 	postfix := '0061'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
-	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
+	title := 'Package Group Example 1: define using only packages, including references to conditional packages. Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 
 	indexCard := (self
 		_createCard: postfix
