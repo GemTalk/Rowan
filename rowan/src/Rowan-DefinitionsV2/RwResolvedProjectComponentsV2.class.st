@@ -94,6 +94,51 @@ RwResolvedProjectComponentsV2 >> _platformAttributeMatchIn: platformMatchersList
 ]
 
 { #category : 'private' }
+RwResolvedProjectComponentsV2 >> _renameComponentNamed: aComponentOrPackageGroupPath to: aComponentName in: aComponentDictionary label: label [
+	"change the basename of aComponentOrPackageGroupPath to <baseName>, i.e., the path is not changed"
+
+	| component referencePath componentPath |
+	component := aComponentDictionary
+		at: aComponentOrPackageGroupPath
+		ifAbsent: [ 
+			self
+				error:
+					'No ' , label , ' named ' , aComponentOrPackageGroupPath printString , ' found' ].
+	referencePath := component referencePath.
+	componentPath := referencePath parent segments size = 0
+		ifTrue: [ 
+			"top-level component, simple rename is sufficient"
+			aComponentName ]
+		ifFalse: [ 
+			"need to preserve the path for the component"
+			(referencePath parent / aComponentName) pathString ].
+	(self componentOrPackageGroupNamed: componentPath ifAbsent: [  ])
+		ifNotNil: [ 
+			self
+				error:
+					'A component or package group with the name ' , componentPath printString
+						, ' already exists' ].
+	component := aComponentDictionary removeKey: aComponentOrPackageGroupPath.
+	component name: componentPath.
+	self components
+		do: [ :comp | 
+			(comp componentNames includes: aComponentOrPackageGroupPath)
+				ifTrue: [ 
+					comp
+						removeComponentNamed: aComponentOrPackageGroupPath;
+						addComponentNamed: componentPath ] ].
+	self packageGroups
+		do: [ :comp | 
+			(comp componentNames includes: aComponentOrPackageGroupPath)
+				ifTrue: [ 
+					comp
+						removeComponentNamed: aComponentOrPackageGroupPath;
+						addComponentNamed: componentPath ] ].
+	aComponentDictionary at: componentPath put: component.
+	^ componentPath
+]
+
+{ #category : 'private' }
 RwResolvedProjectComponentsV2 >> _validate [
 	"ensure that each of the components is valid and return a list of the package names managed by all components"
 
@@ -347,6 +392,23 @@ RwResolvedProjectComponentsV2 >> componentNames [
 	^ self components keys asArray
 ]
 
+{ #category : 'other' }
+RwResolvedProjectComponentsV2 >> componentOrPackageGroupNamed: aComponentName [
+	^ self
+		componentOrPackageGroupNamed: aComponentName
+		ifAbsent: [ 
+			self
+				error:
+					'No component or package group named ' , aComponentName printString , ' found' ]
+]
+
+{ #category : 'other' }
+RwResolvedProjectComponentsV2 >> componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock [
+	^ self
+		componentNamed: aComponentName
+		ifAbsent: [ self packageGroupNamed: aComponentName ifAbsent: absentBlock ]
+]
+
 { #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> components [
 	^components
@@ -533,34 +595,25 @@ RwResolvedProjectComponentsV2 >> removeProjectNamed: aProjectName [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentsV2 >> renameComponentNamed: aComponentPath to: aComponentName [
-	| component referencePath componentPath |
-	component := self components
-		removeKey: aComponentPath
-		ifAbsent: [ self error: 'No component named ' , aComponentPath printString , ' found' ].
-	referencePath := component referencePath.
-	componentPath := referencePath parent segments size = 0
-		ifTrue: [ 
-			"top-level component, simple rename is sufficient"
-			aComponentName ]
-		ifFalse: [ 
-			"need to preserve the path for the component"
-			(referencePath parent / aComponentName) pathString ].
-	(self components includesKey: componentPath)
-		ifTrue: [ 
-			self
-				error:
-					'A component with the name ' , componentPath printString , ' already exists' ].
-	component name: componentPath.
-	self components
-		do: [ :comp | 
-			(comp componentNames includes: aComponentPath)
-				ifTrue: [ 
-					comp
-						removeComponentNamed: aComponentPath;
-						addComponentNamed: componentPath ] ].
-	self components at: componentPath put: component.
-	^ componentPath
+RwResolvedProjectComponentsV2 >> renameComponentNamed: aComponentPath to: baseName [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
+	^ self
+		_renameComponentNamed: aComponentPath
+		to: baseName
+		in: self components
+		label: 'component'
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> renamePackageGroupNamed: aPackageGroupPath to: aPackageGroupName [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
+	^ self
+		_renameComponentNamed: aPackageGroupPath
+		to: aPackageGroupName
+		in: self packageGroups
+		label: 'package group'
 ]
 
 { #category : 'querying' }
@@ -568,13 +621,10 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
-		componentNamed: componentName
+		componentOrPackageGroupName: componentName
 		ifAbsent: [ 
-			self
-				packageGroupNamed: componentName
-				ifAbsent: [ 
-					"noneBlock, if it returns, should answer a component"
-					noneBlock cull: componentName ] ].
+			"noneBlock, if it returns, should answer a component"
+			noneBlock cull: componentName ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -583,13 +633,10 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 		do: [ :subcomponentName | 
 			| subcomponent |
 			subcomponent := self
-				componentNamed: subcomponentName
+				componentOrPackageGroupName: subcomponentName
 				ifAbsent: [ 
-					self
-						packageGroupNamed: subcomponentName
-						ifAbsent: [ 
-							"noneBlock, if it returns, should answer a component"
-							noneBlock cull: subcomponentName ] ].
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: subcomponentName ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

@@ -377,6 +377,27 @@ RwAbstractComponent >> projectNames [
 	^ #()
 ]
 
+{ #category : 'accessing' }
+RwAbstractComponent >> referencePath [
+	^ Path from: self name
+]
+
+{ #category : 'accessing' }
+RwAbstractComponent >> removeComponentNamed: aComponentName [
+	^ self componentNames remove: aComponentName ifAbsent: [  ]
+]
+
+{ #category : 'accessing' }
+RwAbstractComponent >> removePackageNamed: aPackageName [
+	self packageNames remove: aPackageName ifAbsent: [  ]
+]
+
+{ #category : 'accessing' }
+RwAbstractComponent >> renameTo: newComponentName in: aResolvedProject [
+
+	self subclassResponsibility: #renameTo:in:
+]
+
 { #category : 'ston' }
 RwAbstractComponent >> stonOn: stonWriter [
 	| instanceVariableNames allInstanceVariableNames |

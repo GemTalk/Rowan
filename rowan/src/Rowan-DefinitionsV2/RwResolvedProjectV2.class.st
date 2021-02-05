@@ -560,6 +560,18 @@ RwResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> componentOrPackageGroupNamed: aComponentName [
+	^ self _projectComponents componentOrPackageGroupNamed: aComponentName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock [
+	^ self _projectComponents
+		componentOrPackageGroupNamed: aComponentName
+		ifAbsent: absentBlock
+]
+
 { #category : 'accessing' }
 RwResolvedProjectV2 >> componentsWithDoits [
 	^ self _projectComponents componentsWithDoits
@@ -1166,9 +1178,36 @@ RwResolvedProjectV2 >> removeProjectNamed: aProjectName [
 
 { #category : 'components' }
 RwResolvedProjectV2 >> renameComponentNamed: aComponentPath to: aComponentName [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
 	^ self _projectComponents
 		renameComponentNamed: aComponentPath
 		to: aComponentName
+]
+
+{ #category : 'component structure' }
+RwResolvedProjectV2 >> renameComponentStructureFor: oldBaseName to: newBaseName startingAtComponentNamed: startingComponentName [
+	"
+		Renames the component structure for the component named <componentNamePath> 
+			starting at <startingComponentName>. 
+		Each component with the same basename as <componentNamePath> will be renamed 
+			with a new baseName. After the structure
+		rename is complete, all references to renamed components will be changed. If an 
+			existing component is encountered with the same name along the path, the rename
+			process will stop at that point.
+	"
+
+	| refPath theComponent |
+	theComponent := self componentOrPackageGroupNamed: startingComponentName.
+	theComponent componentNames copy
+		do: [ :oldComponentPath | 
+			| component |
+			"we ARE changing the componentNames iv, so make a copy for protections"
+			refPath := Path from: oldComponentPath.
+			refPath basename = oldBaseName
+				ifTrue: [ 
+					component := self componentOrPackageGroupNamed: oldComponentPath.
+					component renameTo: newBaseName in: self ] ]
 ]
 
 { #category : 'project definition' }
@@ -1296,13 +1335,10 @@ RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifN
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
-		componentNamed: componentName
+		componentOrPackageGroupName: componentName
 		ifAbsent: [ 
-			self
-				packageGroupNamed: componentName
-				ifAbsent: [ 
-					"noneBlock, if it returns, should answer a component"
-					noneBlock cull: componentName ] ].
+			"noneBlock, if it returns, should answer a component"
+			noneBlock cull: componentName ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -1311,13 +1347,10 @@ RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifN
 		do: [ :subcomponentName | 
 			| subcomponent |
 			subcomponent := self
-				componentNamed: subcomponentName
+				componentOrPackageGroupName: subcomponentName
 				ifAbsent: [ 
-					self
-						packageGroupNamed: subcomponentName
-						ifAbsent: [ 
-							"noneBlock, if it returns, should answer a component"
-							noneBlock cull: subcomponentName ] ].
+					"noneBlock, if it returns, should answer a component"
+					noneBlock cull: subcomponentName ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

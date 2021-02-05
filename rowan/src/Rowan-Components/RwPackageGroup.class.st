@@ -49,6 +49,13 @@ RwPackageGroup >> instVarNamesInOrderForSton [
 	^ #(#'name' #'condition' #'componentNames' #'packageNames' #'comment')
 ]
 
+{ #category : 'accessing' }
+RwPackageGroup >> renameTo: aString in: aResolvedProject [
+	"need to change all the refereneces, so not enough to just change my name"
+
+	^ aResolvedProject renamePackageGroupNamed: self name to: aString
+]
+
 { #category : 'validation' }
 RwPackageGroup >> validate [
 	"ensure that the data structures within the receiver contain valid information:

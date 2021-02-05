@@ -72,6 +72,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0059: commitComment;
 	genSpec_0060: commitComment;
 	genSpec_0061: commitComment;
+	genSpec_0062: commitComment;
 	yourself
 "
 Class {
@@ -3369,7 +3370,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 		yourself.
 
 	resolvedProject
-		packageConvention: 'Rowan';
 		comment:
 				'spec_0061 - Package Group Example 1: define using only packages, including references to conditional packages. A collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 	resolvedProject _loadSpecification componentNames: {}.
@@ -3503,6 +3503,23 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 				super: classPrefix , 'LoadedProject'
 				category: packageGroupName1b)}
 				do: [ :classDef | (resolvedProject packageNamed: packageName) addClassDefinition: classDef ] ].
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0062: resolvedProject [
+	"Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component."
+
+	| coreComponentName loaderBaseName loaderComponent coreBaseName |
+	coreComponentName := 'common/platforms/Core'.
+	coreBaseName := 'Core'.
+	loaderBaseName := 'Loader'.
+
+	loaderComponent := resolvedProject
+		renameComponentStructureFor: coreBaseName
+		to: loaderBaseName
+		startingAtComponentNamed: coreComponentName.
 
 	^ resolvedProject
 ]
@@ -7036,13 +7053,14 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		index: 61
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #(660);
+		rowanIssues: #(573 660);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
+		packageConvention: 'Rowan';
 		customConditionalAttributes:
 				{'tests'.
 					'examples'.
@@ -7054,6 +7072,58 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0061: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage ]
+		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
+	"Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	[ 
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
+	postfix := '0062'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0061'.
+	title := 'Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 62
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(573 660);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		packageConvention: 'Rowan';
+		customConditionalAttributes:
+				{'tests'.
+					'examples'.
+					'dkh'};
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0062: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

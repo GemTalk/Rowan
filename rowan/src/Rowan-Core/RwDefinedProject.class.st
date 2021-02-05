@@ -529,6 +529,21 @@ RwDefinedProject >> renameComponentNamed: aComponentPath to: aComponentName [
 	^ self _resolvedProject renameComponentNamed: aComponentPath to: aComponentName
 ]
 
+{ #category : 'component structure' }
+RwDefinedProject >> renameComponentStructureFor: componentNamePath to: baseName startingAtComponentNamed: startingComponentName [
+	"
+		Renames the component structure for the component named <componentNamePath> starting at <startingComponentName>. 
+		Each component with the same basename as <componentNamePath> will be renamed with a new baseName. After the structure
+		rename is complete, all references to renamed components will be changed. If an existing component is encountered with the same
+		name along the path, the rename process will stop at that point.
+	"
+
+	^ self _resolvedProject
+		renameComponentStructureFor: componentNamePath
+		to: baseName
+		startingAtComponentNamed: startingComponentName
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> renamePackageNamed: packageName to: newPackageName [
 	^ self _resolvedProject renamePackageNamed: packageName to: newPackageName

@@ -428,13 +428,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
-		componentNamed: componentName
+		componentOrPackageGroupName: componentName
 		ifAbsent: [ 
-			self
-				packageGroupNamed: componentName
-				ifAbsent: [ 
-					"noneBlock, if it returns, should answer a component"
-					noneBlock cull: componentName ]].
+			"noneBlock, if it returns, should answer a component"
+			noneBlock cull: componentName ].
 	(matchBlock value: aComponent)
 		ifFalse: [ 
 			"The component is not loadable, so ignore it's subcomponents"
@@ -443,13 +440,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 		do: [ :subcomponentName | 
 			| subcomponent |
 			subcomponent := self
-				componentNamed: subcomponentName
-				ifAbsent: [ 
-			self
-				packageGroupNamed: subcomponentName
+				componentOrPackageGroupName: subcomponentName
 				ifAbsent: [ 
 					"noneBlock, if it returns, should answer a component"
-					noneBlock cull: subcomponentName ]].
+					noneBlock cull: subcomponentName ].
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents

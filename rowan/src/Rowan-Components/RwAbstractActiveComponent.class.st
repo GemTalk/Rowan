@@ -367,16 +367,6 @@ RwAbstractActiveComponent >> projectNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractActiveComponent >> referencePath [
-	^ Path from: self name
-]
-
-{ #category : 'accessing' }
-RwAbstractActiveComponent >> removeComponentNamed: aComponentName [
-	self componentNames remove: aComponentName ifAbsent: [  ]
-]
-
-{ #category : 'accessing' }
 RwAbstractActiveComponent >> removePackageNamed: aPackageName [
 	self conditionalPackageMapSpecs
 		keysAndValuesDo: [ :platformPattern :packageMapSpecsMap | 
@@ -385,12 +375,21 @@ RwAbstractActiveComponent >> removePackageNamed: aPackageName [
 					(packageMapSpecs at: #'packageNameToPlatformPropertiesMap')
 						removeKey: aPackageName
 						ifAbsent: [  ] ] ].
-	self packageNames remove: aPackageName ifAbsent: [  ]
+	super removePackageNamed: aPackageName
 ]
 
 { #category : 'accessing' }
 RwAbstractActiveComponent >> removeProjectNamed: aProjectName [
 	self subclassResponsibility: #'removeProjectNamed:'
+]
+
+{ #category : 'accessing' }
+RwAbstractActiveComponent >> renameTo: aString in: aResolvedProject [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
+	"need to change all the refereneces, so not enough to just change my name"
+
+	^ aResolvedProject renameComponentNamed: self name to: aString
 ]
 
 { #category : 'validation' }
