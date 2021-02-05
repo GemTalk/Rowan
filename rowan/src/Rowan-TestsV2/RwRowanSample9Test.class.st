@@ -5821,7 +5821,7 @@ RwRowanSample9Test >> testSpec_0061 [
 
 	"package groups example"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project projectsPackageNames |
 	loadSpec := self _loadSpecNamed: 'spec_0061'.
 
 	projectName := loadSpec projectName.
@@ -5854,14 +5854,23 @@ RwRowanSample9Test >> testSpec_0061 [
 	self
 		assert: project packageGroupNames asArray sort
 		equals:
-			#('groups/Definitions' 'groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh')
+			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh'  'groups/Loader')
 				sort.
 
+	projectsPackageNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
 	self
 		assert: (project classNamesFor: 'groups/Projects') asArray sort
+		equals: projectsPackageNames sort.
+
+	self
+		assert: (project classNamesFor: 'groups/WorkGroup_dkh') asArray sort
+		equals: (projectsPackageNames , #('Rs9Interface')) sort.
+
+	self
+		assert: (project classNamesFor: 'groups/Loader') asArray sort
 		equals:
-			#('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9RwAbstractUnloadedProject')
-				sort.
+			#('Rs9LoadedThing' 'Rs9LoadedProject' 'Rs9LoadedPackage' 'Rs9LoadedMethod' 'Rs9LoadedClassExtension' 'Rs9LoadedClass')
+				sort
 ]
 
 { #category : 'tests' }
