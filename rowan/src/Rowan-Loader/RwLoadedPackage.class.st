@@ -15,7 +15,7 @@ Class {
 		'isDirty',
 		'loadedProject'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Loader'
 }
 
 { #category : 'accessing' }

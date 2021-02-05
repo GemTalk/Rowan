@@ -13,7 +13,7 @@ Class {
 		'loadedInstanceMethods',
 		'loadedClassMethods'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Loader'
 }
 
 { #category : 'definitions' }

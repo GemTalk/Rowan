@@ -3266,12 +3266,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
-	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
+	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
 	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName2 packageGroupName3 packageGroupName4 component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component2 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroups classMap |
 	componentName1 := 'Core'.
 	packageGroupName1a := 'Projects'.
-	packageGroupName1b := 'Definitions'.
+	packageGroupName1b := 'Loader'.
 	packageGroupName1c := 'Rowan'.
 	packageGroupName2 := 'Examples'.
 	packageGroupName3 := 'Tests'.
@@ -3314,22 +3314,48 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 								super: classPrefix , 'Interface'
 								category: packageGroupName1a).
 							(RwClassDefinition
-								newForClassNamed: classPrefix , 'RwAbstractUnloadedProject'
+								newForClassNamed: classPrefix , 'AbstractUnloadedProject'
 								super: classPrefix , 'AbstractProject'
 								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'ResolvedProject'
-								super: classPrefix , 'RwAbstractUnloadedProject'
+								super: classPrefix , 'AbstractUnloadedProject'
 								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'DefinedProjects'
-								super: classPrefix , 'RwAbstractUnloadedProject'
+								super: classPrefix , 'AbstractUnloadedProject'
 								category: packageGroupName1a).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'Project'
 								super: classPrefix , 'AbstractProject'
 								category: packageGroupName1a)};
-		add: packageGroupName1b -> {};
+		add:
+				packageGroupName1b
+						->
+							{(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedThing'
+								super: 'Object'
+								category: packageGroupName1b).
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedClass'
+								super: classPrefix , 'LoadedThing'
+								category: packageGroupName1b).
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedClassExtension'
+								super: classPrefix , 'LoadedThing'
+								category: packageGroupName1b).
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedMethod'
+								super: classPrefix , 'LoadedThing'
+								category: packageGroupName1b).
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedPackage'
+								super: classPrefix , 'LoadedThing'
+								category: packageGroupName1b).
+							(RwClassDefinition
+								newForClassNamed: classPrefix , 'LoadedProject'
+								super: classPrefix , 'LoadedThing'
+								category: packageGroupName1b)};
 		add: packageGroupName1c -> {};
 		add: packageGroupName2 -> {};
 		add: packageGroupName3 -> {};
@@ -3339,7 +3365,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 	resolvedProject
 		packageConvention: 'Rowan';
 		comment:
-				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
+				'spec_0061 - a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 	resolvedProject _loadSpecification componentNames: {}.
 
 	component1 := resolvedProject
@@ -6924,7 +6950,7 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
-	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
+	"Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -6935,7 +6961,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 	postfix := '0061'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
-	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Definitions, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
+	title := 'Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, WorkGroups, Packages; where WorkGroups are developer defined sets of packages that represent a personal working set, Packages is a synthetic package group. The WorkGroup will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
 
 	indexCard := (self
 		_createCard: postfix

@@ -14,7 +14,7 @@ Class {
 	#classVars : [
 		'AbsentToken'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Loader'
 }
 
 { #category : 'accessing' }

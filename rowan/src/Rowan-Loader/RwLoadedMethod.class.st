@@ -12,7 +12,7 @@ Class {
 		'loadedClass',
 		'classIsMeta'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Loader'
 }
 
 { #category : 'definitions' }

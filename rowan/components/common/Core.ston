@@ -14,6 +14,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'Rowan-Core-Conditional-Support',
 		'Rowan-Core-Definitions-Extensions',
 		'Rowan-Kernel',
+		'Rowan-Loader',
 		'Rowan-Url-Core'
 	],
 	#conditionalPackageMapSpecs : {

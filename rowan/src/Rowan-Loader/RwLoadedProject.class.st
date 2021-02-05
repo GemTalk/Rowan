@@ -5,7 +5,7 @@ Class {
 		'loadedPackages',
 		'isDirty'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Loader'
 }
 
 { #category : 'accessing' }
