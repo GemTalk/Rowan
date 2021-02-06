@@ -450,13 +450,14 @@ RwResolvedProjectComponentsV2 >> do: aBlock [
 
 { #category : 'exporting' }
 RwResolvedProjectComponentsV2 >> export: componentsRoot [
-
-	self components values do: [:component|
-		component exportToUrl: 'file:',  componentsRoot pathString, '/' ].
-	self components isEmpty
-		ifTrue: [
+	self components values
+		do: [ :component | component exportToUrl: 'file:' , componentsRoot pathString , '/' ].
+	self packageGroups values
+		do: [ :packgeGroup | packgeGroup exportToUrl: 'file:' , componentsRoot pathString , '/' ].
+	(self components isEmpty and: [ self packageGroups isEmpty ])
+		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+			componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
 ]
 
 { #category : 'gemstone support' }

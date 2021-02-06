@@ -3511,12 +3511,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0062: resolvedProject [
 	"Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component."
 
-	| coreComponentName loaderBaseName loaderComponent coreBaseName |
-	coreComponentName := 'common/platforms/Core'.
+	| coreComponentName loaderBaseName coreBaseName |
+	coreComponentName := 'common/Core'.	"start one level higher, but we WILL have to move RowanSample9-Core-Loader into the loader component"
 	coreBaseName := 'Core'.
 	loaderBaseName := 'Loader'.
 
-	loaderComponent := resolvedProject
+	resolvedProject
 		renameComponentStructureFor: coreBaseName
 		to: loaderBaseName
 		startingAtComponentNamed: coreComponentName.

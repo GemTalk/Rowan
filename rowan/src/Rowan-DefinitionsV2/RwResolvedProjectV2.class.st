@@ -1197,17 +1197,27 @@ RwResolvedProjectV2 >> renameComponentStructureFor: oldBaseName to: newBaseName 
 			process will stop at that point.
 	"
 
-	| refPath theComponent |
-	theComponent := self componentOrPackageGroupNamed: startingComponentName.
-	theComponent componentNames copy
-		do: [ :oldComponentPath | 
-			| component |
-			"we ARE changing the componentNames iv, so make a copy for protections"
-			refPath := Path from: oldComponentPath.
-			refPath basename = oldBaseName
-				ifTrue: [ 
-					component := self componentOrPackageGroupNamed: oldComponentPath.
-					component renameTo: newBaseName in: self ] ]
+	| refPath theComponents |
+	theComponents := {(self componentOrPackageGroupNamed: startingComponentName)}.
+	[ theComponents isEmpty ]
+		whileFalse: [ 
+			| theList |
+			theList := theComponents copy.
+			theComponents := {}.
+			theList
+				do: [ :theComponent | 
+					theComponent componentNames copy
+						do: [ :oldComponentPath | 
+							| component |
+							"we ARE changing the componentNames iv, so make a copy for protections"
+							refPath := Path from: oldComponentPath.
+							refPath basename = oldBaseName
+								ifTrue: [ 
+									"rename, then add this component (look up anew) to the list of components we need to scan for newBaseName"
+									component := self componentOrPackageGroupNamed: oldComponentPath.
+									component renameTo: newBaseName in: self.
+									theComponents
+										add: (self componentOrPackageGroupNamed: (refPath parent / newBaseName) pathString) ] ] ] ]
 ]
 
 { #category : 'project definition' }
