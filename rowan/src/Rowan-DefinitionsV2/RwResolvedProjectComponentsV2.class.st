@@ -120,15 +120,17 @@ RwResolvedProjectComponentsV2 >> _renameComponentNamed: aComponentOrPackageGroup
 						, ' already exists' ].
 	component := aComponentDictionary removeKey: aComponentOrPackageGroupPath.
 	component name: componentPath.
-	self components
+	self components values
 		do: [ :comp | 
+			"avoid modifying components during do"
 			(comp componentNames includes: aComponentOrPackageGroupPath)
 				ifTrue: [ 
 					comp
 						removeComponentNamed: aComponentOrPackageGroupPath;
 						addComponentNamed: componentPath ] ].
-	self packageGroups
+	self packageGroups values
 		do: [ :comp | 
+			"avoid modifying package groups during do"
 			(comp componentNames includes: aComponentOrPackageGroupPath)
 				ifTrue: [ 
 					comp

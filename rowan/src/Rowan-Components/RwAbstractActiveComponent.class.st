@@ -144,8 +144,10 @@ RwAbstractActiveComponent >> = aRwProjectLoadComponentV2 [
 
 { #category : 'accessing' }
 RwAbstractActiveComponent >> addProjectNamed: aProjectName [
-	self projectNames add: aProjectName.
-	projectNames := projectNames asSet asArray sort
+	| pn |
+	pn := self projectNames.	" returns copy, so cannot add directly to result"
+	pn add: aProjectName.
+	projectNames := pn asSet asArray sort
 ]
 
 { #category : 'accessing' }
@@ -363,7 +365,7 @@ RwAbstractActiveComponent >> preloadDoitName: object [
 
 { #category : 'accessing' }
 RwAbstractActiveComponent >> projectNames [
-	^projectNames
+	^ projectNames copy
 ]
 
 { #category : 'accessing' }

@@ -238,26 +238,33 @@ RwAbstractComponent >> _validatedPackageNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractComponent >> addComponentNamed: aComponentName [ 
+RwAbstractComponent >> addComponentNamed: aComponentName [
 	"avoid duplicates and keep the list sorted"
-	self componentNames add: aComponentName.
-	componentNames := componentNames asSet asArray sort
+
+	| cn |
+	cn := self componentNames.	" returns copy, so cannot add directly to result"
+	cn add: aComponentName.
+	componentNames := cn asSet asArray sort
 ]
 
 { #category : 'accessing' }
 RwAbstractComponent >> addComponentNames: aComponentNames [
 	"add component names"
 
-	self componentNames addAll: aComponentNames.
-	componentNames := componentNames asSet asArray sort
+	| cn |
+	cn := self componentNames.	" returns copy, so cannot add directly to result"
+	cn addAll: aComponentNames.
+	componentNames := cn asSet asArray sort
 ]
 
 { #category : 'accessing' }
 RwAbstractComponent >> addPackageNames: aPackageNames [
 	"add packages to default conditional/group if applicable"
 
-	self packageNames addAll: aPackageNames.
-	packageNames := packageNames asSet asArray sort
+	| pn |
+	pn := self packageNames.	" returns copy, so cannot add directly to result"
+	pn addAll: aPackageNames.
+	packageNames := pn asSet asArray sort
 ]
 
 { #category : 'accessing' }
@@ -277,7 +284,7 @@ RwAbstractComponent >> comment: anObject [
 { #category : 'accessing' }
 RwAbstractComponent >> componentNames [
 
-	^ componentNames
+	^ componentNames copy
 ]
 
 { #category : 'ston' }
@@ -346,7 +353,7 @@ RwAbstractComponent >> name: anObject [
 { #category : 'accessing' }
 RwAbstractComponent >> packageNames [
 
-	^ packageNames
+	^ packageNames copy
 ]
 
 { #category : 'printing' }
@@ -384,12 +391,18 @@ RwAbstractComponent >> referencePath [
 
 { #category : 'accessing' }
 RwAbstractComponent >> removeComponentNamed: aComponentName [
-	^ self componentNames remove: aComponentName ifAbsent: [  ]
+	| cn |
+	cn := self componentNames.
+	cn remove: aComponentName ifAbsent: [  ].
+	componentNames := cn asSet asArray sort
 ]
 
 { #category : 'accessing' }
 RwAbstractComponent >> removePackageNamed: aPackageName [
-	self packageNames remove: aPackageName ifAbsent: [  ]
+	| pn |
+	pn := self packageNames.	" returns copy, so cannot add directly to result"
+	pn remove: aPackageName ifAbsent: [  ].
+	packageNames := pn asSet asArray sort
 ]
 
 { #category : 'accessing' }

@@ -911,6 +911,18 @@ RwResolvedProjectV2 >> packageFormatIfAbsent: absentBlock [
 	^ self _projectSpecification packageFormatIfAbsent: absentBlock
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> packageGroupNamed: aPackageGroupName [
+	^ self _projectComponents packageGroupNamed: aPackageGroupName
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> packageGroupNamed: aComponentName ifAbsent: absentBlock [
+	^ self _projectComponents
+		packageGroupNamed: aComponentName
+		ifAbsent: absentBlock
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> packageNamed: aString [
 	^ self _projectDefinition packageNamed: aString
@@ -1202,14 +1214,13 @@ RwResolvedProjectV2 >> renameComponentStructureFor: oldBaseName to: newBaseName 
 	[ theComponents isEmpty ]
 		whileFalse: [ 
 			| theList |
-			theList := theComponents copy.
+			theList := theComponents.
 			theComponents := {}.
 			theList
 				do: [ :theComponent | 
-					theComponent componentNames copy
+					theComponent componentNames
 						do: [ :oldComponentPath | 
 							| component |
-							"we ARE changing the componentNames iv, so make a copy for protections"
 							refPath := Path from: oldComponentPath.
 							refPath basename = oldBaseName
 								ifTrue: [ 
@@ -1217,7 +1228,8 @@ RwResolvedProjectV2 >> renameComponentStructureFor: oldBaseName to: newBaseName 
 									component := self componentOrPackageGroupNamed: oldComponentPath.
 									component renameTo: newBaseName in: self.
 									theComponents
-										add: (self componentOrPackageGroupNamed: (refPath parent / newBaseName) pathString) ] ] ] ]
+										add:
+											(self componentOrPackageGroupNamed: (refPath parent / newBaseName) pathString) ] ] ] ]
 ]
 
 { #category : 'project definition' }

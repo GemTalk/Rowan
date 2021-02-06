@@ -404,6 +404,16 @@ RwDefinedProject >> packageConvention: aString [
 	self _projectSpecification packageConvention: aString
 ]
 
+{ #category : 'components' }
+RwDefinedProject >> packageGroupNamed: componentName [
+	^ self _resolvedProject packageGroupNamed: componentName
+]
+
+{ #category : 'components' }
+RwDefinedProject >> packageGroupNames [
+	^ self _resolvedProject packageGroupNames
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> packageNamed: aString [
 	^ self _resolvedProject packageNamed: aString

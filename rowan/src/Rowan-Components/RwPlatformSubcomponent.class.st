@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'accessing' }
+RwPlatformSubcomponent >> condition [
+	^condition copy
+]
+
+{ #category : 'accessing' }
 RwPlatformSubcomponent >> condition: anArray [
 	anArray _isArray
 		ifFalse: [ self error: 'The condition is constrained to be an array' ].
