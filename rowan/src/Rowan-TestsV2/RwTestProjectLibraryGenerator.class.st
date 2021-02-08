@@ -3271,34 +3271,37 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 
 	Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group."
 
-	| componentName1 packageGroupName1a packageGroupName1b packageGroupName1c packageGroupName2 packageGroupName3 packageGroupName4 component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroups classMap component2gemstone component2pharo component2gemstonePackageNames component2pharoPackageNames |
+	| componentName1 componentName2 packageGroupName1a packageGroupName1b  packageGroupName2 packageGroupName3 packageGroupName4 packageGroupName5 component1PackageNames component2PackageNames component3PackageNames component4PackageNames component5PackageNames component1 component1common component3 component4 classPrefix packageGroup1 packageGroup2 packageGroup3 packageGroup5 packageGroups classMap component2gemstone component2pharo component2gemstonePackageNames component2pharoPackageNames |
 	componentName1 := 'Core'.
+componentName2 := 'Loader'.
 	packageGroupName1a := 'Projects'.
-	packageGroupName1b := 'Loader'.
-	packageGroupName1c := 'Rowan'.
+	packageGroupName1b := 'Rowan'.
 	packageGroupName2 := 'Examples'.
 	packageGroupName3 := 'Tests'.
 	packageGroupName4 := 'WorkGroup_dkh'.
+packageGroupName5 :=  'Loader'.
 
-	component2PackageNames := {(projectName , '-' , componentName1)}.
-	component2gemstonePackageNames := {(projectName , '-' , packageGroupName1b
+	component1PackageNames := {(projectName , '-' , componentName1)}.
+	component2PackageNames := {(projectName , '-' , componentName2)}.
+	component2gemstonePackageNames := {(projectName , '-' , packageGroupName5
 		, '-GemStone')}.
-	component2pharoPackageNames := {(projectName , '-' , packageGroupName1b
+	component2pharoPackageNames := {(projectName , '-' , packageGroupName5
 		, '-Pharo')}.
 
 	packageGroup1 := {packageGroupName1a.
-	packageGroupName1b.
-	packageGroupName1c}.
+	packageGroupName1b}.
 
 	packageGroup2 := {packageGroupName2.
 	packageGroupName3}.
 
 	packageGroup3 := {packageGroupName4}.
 
-	packageGroups := packageGroup1 , packageGroup2 , packageGroup3.
+	packageGroup5 := {packageGroupName5}.
+
+	packageGroups := packageGroup1 , packageGroup2 , packageGroup3, packageGroup5.
 
 	packageGroup1
-		do: [ :groupName | component2PackageNames add: projectName , '-' , componentName1 , '-' , groupName ].
+		do: [ :groupName | component1PackageNames add: projectName , '-' , componentName1 , '-' , groupName ].
 	component3PackageNames := {(projectName , '-' , packageGroupName2)}.
 	component4PackageNames := {(projectName , '-' , packageGroupName3)}.
 	component5PackageNames := {(projectName , '-' , componentName1).
@@ -3337,33 +3340,32 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 								super: classPrefix , 'AbstractProject'
 								category: packageGroupName1a)};
 		add:
-				packageGroupName1b
+				packageGroupName5
 						->
 							{(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedThing'
 								super: 'Object'
-								category: packageGroupName1b).
+								category: packageGroupName5).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedClass'
 								super: classPrefix , 'LoadedThing'
-								category: packageGroupName1b).
+								category: packageGroupName5).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedClassExtension'
 								super: classPrefix , 'LoadedThing'
-								category: packageGroupName1b).
+								category: packageGroupName5).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedMethod'
 								super: classPrefix , 'LoadedThing'
-								category: packageGroupName1b).
+								category: packageGroupName5).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedPackage'
 								super: classPrefix , 'LoadedThing'
-								category: packageGroupName1b).
+								category: packageGroupName5).
 							(RwClassDefinition
 								newForClassNamed: classPrefix , 'LoadedProject'
 								super: classPrefix , 'LoadedThing'
-								category: packageGroupName1b)};
-		add: packageGroupName1c -> {};
+								category: packageGroupName5)};
 		add: packageGroupName2 -> {};
 		add: packageGroupName3 -> {};
 		add: packageGroupName4 -> {};
@@ -3377,9 +3379,16 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 	component1 := resolvedProject
 		addLoadComponentNamed: componentName1
 		comment: 'Primary component used for loading the project.'.
+	component1common := resolvedProject
+		addComponentStructureFor: componentName1
+		startingAtComponentNamed: componentName1
+		pathNameArray:
+			{'common'}
+		conditionPathArray:
+			{'common'}.
 
 	component2gemstone := resolvedProject
-		addComponentStructureFor: componentName1
+		addComponentStructureFor: componentName2
 		startingAtComponentNamed: componentName1
 		pathNameArray:
 			{'common'.
@@ -3390,7 +3399,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 			'common'.
 			{'gemstone'}}.
 	component2pharo := resolvedProject
-		addComponentStructureFor: componentName1
+		addComponentStructureFor: componentName2
 		startingAtComponentNamed: componentName1
 		pathNameArray:
 			{'common'.
@@ -3414,14 +3423,17 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 			'tests'}.
 
 	resolvedProject
-		addPackagesNamed: component2PackageNames
+		addPackagesNamed: component1PackageNames
 		toComponentNamed: 'common/' , componentName1.
 	resolvedProject
+		addPackagesNamed: component2PackageNames
+		toComponentNamed: 'common/' , componentName2.
+	resolvedProject
 		addPackagesNamed: component2gemstonePackageNames
-		toComponentNamed: 'common/platforms/gemstone/' , componentName1.
+		toComponentNamed: 'common/platforms/gemstone/' , componentName2.
 	resolvedProject
 		addPackagesNamed: component2pharoPackageNames
-		toComponentNamed: 'common/platforms/pharo/' , componentName1.
+		toComponentNamed: 'common/platforms/pharo/' , componentName2.
 	resolvedProject
 		addPackagesNamed: component3PackageNames
 		toComponentNamed: component3 name.
@@ -3446,6 +3458,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 				ifFalse: [ '' ].
 			(packageGroup3 includes: packageGroup)
 				ifTrue: [ 
+					"packageGroup3 is the WorkGroup component and the packages involved will be handled separately"
 					packageGroupComponent addPackageNames: component5PackageNames.
 					component5PackageNames
 						do: [ :packageName | 
@@ -3461,13 +3474,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 										do: [ :classDef | package addClassDefinition: classDef ] ] ] ]
 				ifFalse: [ 
 					| packageName |
-					"packageGroup3 is the WorkGroup component and the packages involved will be handled separately"
 					packageName := projectName , extraName , '-' , packageGroup.
 					packageGroupComponent addPackageNames: {packageName}.
 					package := resolvedProject packageNamed: packageName.
 					(classMap at: packageGroup ifAbsent: [ {} ])
 						do: [ :classDef | package addClassDefinition: classDef ] ].
-			packageGroupName1b = packageGroup
+			packageGroupName5 = packageGroup
 				ifTrue: [ 
 					"Loader group, so include the two platform packages directly in the group"
 					packageGroupComponent
@@ -3485,23 +3497,23 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0061: resolvedProject [
 			{(RwClassDefinition
 				newForClassNamed: platformClassPrefix , 'LoadedClass'
 				super: classPrefix , 'LoadedClass'
-				category: packageGroupName1b).
+				category: packageGroupName5).
 			(RwClassDefinition
 				newForClassNamed: platformClassPrefix , 'LoadedClassExtension'
 				super: classPrefix , 'LoadedClassExtension'
-				category: packageGroupName1b).
+				category: packageGroupName5).
 			(RwClassDefinition
 				newForClassNamed: platformClassPrefix , 'LoadedMethod'
 				super: classPrefix , 'LoadedMethod'
-				category: packageGroupName1b).
+				category: packageGroupName5).
 			(RwClassDefinition
 				newForClassNamed: platformClassPrefix , 'LoadedPackage'
 				super: classPrefix , 'LoadedPackage'
-				category: packageGroupName1b).
+				category: packageGroupName5).
 			(RwClassDefinition
 				newForClassNamed: platformClassPrefix , 'LoadedProject'
 				super: classPrefix , 'LoadedProject'
-				category: packageGroupName1b)}
+				category: packageGroupName5)}
 				do: [ :classDef | (resolvedProject packageNamed: packageName) addClassDefinition: classDef ] ].
 
 	^ resolvedProject
@@ -3729,6 +3741,18 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName indexCard: index
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecification: theLoadSpec indexCard: indexCard derivedFrom: derivedFrom resolvedRepository: resolvedRepository commitMessage: commitMessage [
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: theLoadSpec
+		indexCard: indexCard
+		derivedFrom: derivedFrom
+		resolvedRepository: resolvedRepository
+		readme: nil
+		commitMessage: commitMessage
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecification: theLoadSpec indexCard: indexCard derivedFrom: derivedFrom resolvedRepository: resolvedRepository readme: readmeBlock commitMessage: commitMessage [
 	| derivedIndexCardFile indexCardDict card |
 	derivedFrom
 		ifNil: [ 
@@ -3747,7 +3771,16 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			resolvedRepository repositoryRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
-						nextPutAll: '# ', projectName, ' - ' , specName;
+						nextPutAll: '# ' , projectName , ' - ' , specName;
+						lf.
+					readmeBlock
+						ifNotNil: [ 
+							readmeBlock value: fileStream.
+							fileStream
+								lf;
+								nextPutAll: '### Description';
+								lf ].
+					fileStream
 						lf;
 						nextPutAll: indexCard title;
 						lf;
@@ -3791,7 +3824,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
-				nextPutAll: '# ', projectName;
+				nextPutAll: '# ' , projectName;
 				lf;
 				nextPutAll: self projectReadmeIntro;
 				lf;
@@ -3957,6 +3990,58 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedPr
 		exportLoadSpecification.	"write the rowan directory structure"
 
 	^ resolvedRepository
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _readmeFor_0061: stream [
+	stream
+		nextPutAll: '### Component Structure Examples';
+		lf;
+		nextPutAll:
+				'The specs **spec_0061**, **spec_0062** and **spec_0063** provide examples of different conventions for organizing component structure.';
+		lf;
+		nextPutAll: 'The code in this set of specs use the same set of packages:';
+		lf;
+		nextPutAll: '- RowanSample9-Core-Projects';
+		lf;
+		nextPutAll: '- RowanSample9-Core-Rowan';
+		lf;
+		nextPutAll: '- RowanSample9-Core-Core';
+		lf;
+		nextPutAll: '- RowanSample9-Examples';
+		lf;
+		nextPutAll: '- RowanSample9-Loader';
+		lf;
+		nextPutAll: '- RowanSample9-Loader-GemStone';
+		lf;
+		nextPutAll: '- RowanSample9-Loader-Pharo';
+		lf;
+		nextPutAll: '- RowanSample9-Tests';
+		lf;
+		lf;
+		nextPutAll: 'and differ only in how the components are organized.';
+		lf;
+		nextPutAll: '#### spec_0061';
+		lf;
+		nextPutAll:
+				'The components in this spec are organized using directory structure and common component name to isolate the conditional components.';
+		lf;
+		lf;
+		nextPutAll:
+				'The packages _RowanSample9-Loader_,  _RowanSample9-Loader-GemStone_, and _RowanSample9-Loader-Pharo_ are referenced by components named **Loader** that are located in different directories in the package structure. The conditional packages _RowanSample9-Loader-GemStone_ and _RowanSample9-Loader-Pharo_ are locatied in subdirectories that reflect the condition used in the subcomponent (i.e., _gemstone_ and _pharo_) and the conditional subdirectories themselves are located in a _platforms_ subdirectory to isolate the condtional component structure from the other components.';
+		lf;
+		lf;
+		nextPutAll:
+				'The advantage of this approach is that as a project is ported to more platforms or versions of the same platform, the number of condtions can increase dramaticaly and without the use of the _platforms_ directory, the number of subcomponents can become unmanageable.';
+		lf;
+		nextPutAll: '#### spec_0062';
+		lf;
+		nextPutAll: '';
+		lf;
+		nextPutAll: '#### spec_0063';
+		lf;
+		nextPutAll: '';
+		lf
 ]
 
 { #category : 'private' }
@@ -7046,13 +7131,18 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title readme |
 	[ 
 	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0061'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
 	title := 'Package Group Example 1: define using only packages, including references to conditional packages. Start with master; create a collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
+
+	readme := String new.
+	(WriteStream on: readme)
+		nextPutAll: '### Component Structure Examples';
+		lf.
 
 	indexCard := (self
 		_createCard: postfix
@@ -7087,6 +7177,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
+		readme: [:stream | self _readmeFor_0061: stream]
 		commitMessage: commitMessage ]
 		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
 ]
@@ -7139,6 +7230,7 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
+		readme: [:stream | self _readmeFor_0061: stream]
 		commitMessage: commitMessage ]
 		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
 ]
