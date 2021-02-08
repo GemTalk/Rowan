@@ -624,7 +624,7 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
-		componentOrPackageGroupName: componentName
+		componentOrPackageGroupNamed: componentName
 		ifAbsent: [ 
 			"noneBlock, if it returns, should answer a component"
 			noneBlock cull: componentName ].
@@ -636,7 +636,7 @@ RwResolvedProjectComponentsV2 >> subcomponentsOf: componentName matchBlock: matc
 		do: [ :subcomponentName | 
 			| subcomponent |
 			subcomponent := self
-				componentOrPackageGroupName: subcomponentName
+				componentOrPackageGroupNamed: subcomponentName
 				ifAbsent: [ 
 					"noneBlock, if it returns, should answer a component"
 					noneBlock cull: subcomponentName ].

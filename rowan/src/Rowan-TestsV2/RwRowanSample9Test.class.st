@@ -368,6 +368,42 @@ RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProje
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _validate_spec_0061: project [
+	| projectsClassNames |
+	self
+		assert: project loadedComponentNames asArray sort
+		equals:
+			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Loader' 'common/platforms/gemstone/Loader' 'common/platforms/Loader' 'common/platforms/pharo/Loader' 'common/Tests' 'common/tests/Tests' 'Core')
+				sort.
+
+	self
+		assert: project packageGroupNames asArray sort
+		equals:
+			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/Loader')
+				sort.
+
+	projectsClassNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
+	self
+		assert: (project classNamesFor: 'groups/Examples') isEmpty;
+		assert: (project classNamesFor: 'groups/Rowan') isEmpty;
+		assert: (project classNamesFor: 'groups/Tests') isEmpty.
+
+	self
+		assert: (project classNamesFor: 'groups/Projects') asArray sort
+		equals: projectsClassNames sort.
+
+	self
+		assert: (project classNamesFor: 'groups/WorkGroup_dkh') asArray sort
+		equals: (projectsClassNames , #('Rs9Interface')) sort.
+
+	self
+		assert: (project classNamesFor: 'groups/Loader') asArray sort
+		equals:
+			#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing')
+				sort
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
 	self
 		_validateComponent: (resolvedProject componentNamed: 'Core')
@@ -5821,7 +5857,7 @@ RwRowanSample9Test >> testSpec_0061 [
 
 	"package groups example"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project projectsClassNames |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
 	loadSpec := self _loadSpecNamed: 'spec_0061'.
 
 	projectName := loadSpec projectName.
@@ -5845,37 +5881,40 @@ RwRowanSample9Test >> testSpec_0061 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self
-		assert: project loadedComponentNames asArray sort
-		equals:
-			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/platforms/Core' 'common/platforms/gemstone/Core' 'common/platforms/pharo/Core' 'common/Tests' 'common/tests/Tests' 'Core')
-				sort.
+	self _validate_spec_0061: project
+]
 
-	self
-		assert: project packageGroupNames asArray sort
-		equals:
-			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/Loader')
-				sort.
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0062 [
+	"spec_0062 should load cleanly -- component structure is different than spec_0061, but using same set of packages. "
 
-	projectsClassNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
-	self
-		assert: (project classNamesFor: 'groups/Examples') isEmpty;
-		assert: (project classNamesFor: 'groups/Rowan') isEmpty;
-		assert: (project classNamesFor: 'groups/Tests') isEmpty.
+	"package groups example"
 
-	self
-		assert: (project classNamesFor: 'groups/Projects') asArray sort
-		equals: projectsClassNames sort.
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0062'.
 
-	self
-		assert: (project classNamesFor: 'groups/WorkGroup_dkh') asArray sort
-		equals: (projectsClassNames , #('Rs9Interface')) sort.
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
 
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
 	self
-		assert: (project classNamesFor: 'groups/Loader') asArray sort
-		equals:
-			#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing')
-				sort
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self _validate_spec_0061: project
 ]
 
 { #category : 'tests' }

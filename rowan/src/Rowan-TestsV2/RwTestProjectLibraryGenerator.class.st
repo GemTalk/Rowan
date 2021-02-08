@@ -3521,25 +3521,17 @@ packageGroupName5 :=  'Loader'.
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0062: resolvedProject [
-	"Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component."
+	"Package Group Example 2: define package groups using packages and components. Start with spec_0061, replace the loader package references in the group/Loader with a reference to the common/Loader component."
 
 	| coreComponentName loaderBaseName coreBaseName loaderPackageGroup |
 	coreComponentName := 'common/Core'.
 	coreBaseName := 'Core'.
 	loaderBaseName := 'Loader'.
 
-	resolvedProject
-		renameComponentStructureFor: coreBaseName
-		to: loaderBaseName
-		startingAtComponentNamed: coreComponentName.
 	loaderPackageGroup := resolvedProject packageGroupNamed: 'groups/Loader'.
 	loaderPackageGroup packageNames
 		do: [ :packageName | loaderPackageGroup removePackageNamed: packageName ].
-	loaderPackageGroup addComponentNamed: 'common/platforms/Loader'.
-
-	resolvedProject
-		movePackageNamed: 'RowanSample9-Core-Loader'
-		toComponentNamed: 'common/platforms/Loader'.
+	loaderPackageGroup addComponentNamed: 'common/Loader'.
 
 	^ resolvedProject
 ]
@@ -4026,6 +4018,9 @@ RwTestProjectLibraryGenerator >> _readmeFor_0061: stream [
 		nextPutAll:
 				'The components in this spec are organized using directory structure and common component name to isolate the conditional components.';
 		lf;
+		nextPutAll:
+				'The package groups are all defined in terms of packages only, including conditional packages.';
+		lf;
 		lf;
 		nextPutAll:
 				'The packages _RowanSample9-Loader_,  _RowanSample9-Loader-GemStone_, and _RowanSample9-Loader-Pharo_ are referenced by components named **Loader** that are located in different directories in the package structure. The conditional packages _RowanSample9-Loader-GemStone_ and _RowanSample9-Loader-Pharo_ are locatied in subdirectories that reflect the condition used in the subcomponent (i.e., _gemstone_ and _pharo_) and the conditional subdirectories themselves are located in a _platforms_ subdirectory to isolate the condtional component structure from the other components.';
@@ -4036,7 +4031,9 @@ RwTestProjectLibraryGenerator >> _readmeFor_0061: stream [
 		lf;
 		nextPutAll: '#### spec_0062';
 		lf;
-		nextPutAll: '';
+		nextPutAll:
+				'The packages and component structure are identical to the structure in spec_0061, however, the _Loader_ package group, is defined using a reference to the common/Loader component instead of conditional packages.';
+		lf;
 		lf;
 		nextPutAll: '#### spec_0063';
 		lf;
@@ -7184,7 +7181,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
-	"Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component."
+	"Package Group Example 2: define package groups using packages and components. Start with spec_0061, replace the loader package references in the group/Loader with a reference to the common/Loader component."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -7195,7 +7192,7 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 	postfix := '0062'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0061'.
-	title := 'Package Group Example 2: define using packages and components. Start with spec_0061, move the Loader packages into a common/Loader subcomponent and replace the loader package references in the group/Loader with a reference to the common/Loader component.'.
+	title := 'Package Group Example 2: define package groups using packages and components. Start with spec_0061, replace the loader package references in the group/Loader with a reference to the common/Loader component.'.
 
 	indexCard := (self
 		_createCard: postfix
