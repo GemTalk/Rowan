@@ -594,7 +594,7 @@ RwResolvedProjectComponentsV2 >> removeComponentNamed: aComponentName [
 { #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> removePackageGroupNamed: aComponentName [
 	| theComponent |
-	theComponent := self components removeKey: aComponentName ifAbsent: [ ^ nil ].
+	theComponent := self packageGroups removeKey: aComponentName ifAbsent: [ ^ nil ].
 	self components
 		do: [ :component | component removeComponentNamed: aComponentName ].
 	self packageGroups

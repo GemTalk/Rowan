@@ -110,7 +110,7 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 RwResolvedProjectV2 >> addComponentOrPackageGroup: aComponentOrPackageGroup [
 	"add existing component "
 
-	^ aComponentOrPackageGroup _addToResolvedProjectComponents: self
+	^ aComponentOrPackageGroup _addToResolvedProjectComponents: self _projectComponents
 ]
 
 { #category : 'components' }

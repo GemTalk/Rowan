@@ -3550,7 +3550,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0063: resolvedProject [
 	loaderPackageGroup addComponentNamed: 'common/Loader'.
 
 	baseComponentNames := #('Core' 'Examples' 'Loader' 'Projects' 'Rowan' 'Tests' 'WorkGroup_dkh').
-
 	baseComponentNames
 		do: [ :bcn | 
 			(resolvedProject removePackageGroupNamed: 'groups/' , bcn)
