@@ -106,6 +106,23 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 		toComponentNamed: toComponentName
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> addComponentOrPackageGroup: aComponentOrPackageGroup [
+	"add existing component "
+
+	^ aComponentOrPackageGroup _addToResolvedProjectComponents: self
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addComponentOrPackageGroup: aComponentOrPackageGroup toComponentNamed: toComponentName [
+	"add existing component to component named toComponentName"
+
+	self addComponentOrPackageGroup: aComponentOrPackageGroup.
+	self
+		addComponentNamed: aComponentOrPackageGroup name
+		toComponentNamed: toComponentName
+]
+
 { #category : 'component structure' }
 RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
 	"
@@ -1166,6 +1183,11 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectComponents removeComponentNamed: aComponentName
 ]
 
+{ #category : 'components' }
+RwResolvedProjectV2 >> removePackageGroupNamed: aComponentName [
+	^ self _projectComponents removePackageGroupNamed: aComponentName
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
 	(self componentForPackageNamed: packageName) removePackageNamed: packageName.
@@ -1230,6 +1252,15 @@ RwResolvedProjectV2 >> renameComponentStructureFor: oldBaseName to: newBaseName 
 									theComponents
 										add:
 											(self componentOrPackageGroupNamed: (refPath parent / newBaseName) pathString) ] ] ] ]
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> renamePackageGroupNamed: aComponentPath to: aComponentName [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
+	^ self _projectComponents
+		renamePackageGroupNamed: aComponentPath
+		to: aComponentName
 ]
 
 { #category : 'project definition' }

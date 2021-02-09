@@ -51,7 +51,7 @@ RwPackageGroup >> instVarNamesInOrderForSton [
 
 { #category : 'accessing' }
 RwPackageGroup >> renameTo: aString in: aResolvedProject [
-	"need to change all the refereneces, so not enough to just change my name"
+	"need to change all the references, so not enough to just change my name"
 
 	^ aResolvedProject renamePackageGroupNamed: self name to: aString
 ]

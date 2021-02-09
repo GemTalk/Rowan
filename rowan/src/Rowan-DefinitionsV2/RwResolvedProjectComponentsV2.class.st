@@ -582,9 +582,24 @@ RwResolvedProjectComponentsV2 >> postCopy [
 
 { #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> removeComponentNamed: aComponentName [
+	| theComponent |
+	theComponent := self components removeKey: aComponentName ifAbsent: [ ^ nil ].
 	self components
 		do: [ :component | component removeComponentNamed: aComponentName ].
-	^ self components removeKey: aComponentName ifAbsent: [  ].
+	self packageGroups
+		do: [ :component | component removeComponentNamed: aComponentName ].
+	^ theComponent
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentsV2 >> removePackageGroupNamed: aComponentName [
+	| theComponent |
+	theComponent := self components removeKey: aComponentName ifAbsent: [ ^ nil ].
+	self components
+		do: [ :component | component removeComponentNamed: aComponentName ].
+	self packageGroups
+		do: [ :component | component removeComponentNamed: aComponentName ].
+	^ theComponent
 ]
 
 { #category : 'accessing' }
@@ -609,14 +624,14 @@ RwResolvedProjectComponentsV2 >> renameComponentNamed: aComponentPath to: baseNa
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentsV2 >> renamePackageGroupNamed: aPackageGroupPath to: aPackageGroupName [
+RwResolvedProjectComponentsV2 >> renamePackageGroupNamed: aComponentPath to: baseName [
 	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
 
 	^ self
-		_renameComponentNamed: aPackageGroupPath
-		to: aPackageGroupName
+		_renameComponentNamed: aComponentPath
+		to: baseName
 		in: self packageGroups
-		label: 'package group'
+		label: 'component'
 ]
 
 { #category : 'querying' }

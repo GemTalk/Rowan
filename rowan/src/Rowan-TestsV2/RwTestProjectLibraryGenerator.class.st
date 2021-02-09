@@ -73,6 +73,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0060: commitComment;
 	genSpec_0061: commitComment;
 	genSpec_0062: commitComment;
+	genSpec_0063: commitComment;
 	yourself
 "
 Class {
@@ -3523,15 +3524,47 @@ packageGroupName5 :=  'Loader'.
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0062: resolvedProject [
 	"Package Group Example 2: define package groups using packages and components. Start with spec_0061, replace the loader package references in the group/Loader with a reference to the common/Loader component."
 
-	| coreComponentName loaderBaseName coreBaseName loaderPackageGroup |
-	coreComponentName := 'common/Core'.
-	coreBaseName := 'Core'.
-	loaderBaseName := 'Loader'.
-
+	| loaderPackageGroup |
 	loaderPackageGroup := resolvedProject packageGroupNamed: 'groups/Loader'.
 	loaderPackageGroup packageNames
 		do: [ :packageName | loaderPackageGroup removePackageNamed: packageName ].
 	loaderPackageGroup addComponentNamed: 'common/Loader'.
+
+	resolvedProject
+		customConditionalAttributes:
+			{'tests'.
+			'examples'.
+			'dkh'}.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0063: resolvedProject [
+	"Package Group Example 3: define package groups using packages and components. Start with spec_0061, and flatten the component structure so that all subcomponents and package groups are in top-level directory."
+
+	| loaderPackageGroup baseComponentNames |
+	loaderPackageGroup := resolvedProject packageGroupNamed: 'groups/Loader'.
+	loaderPackageGroup packageNames
+		do: [ :packageName | loaderPackageGroup removePackageNamed: packageName ].
+	loaderPackageGroup addComponentNamed: 'common/Loader'.
+
+	baseComponentNames := #('Core' 'Examples' 'Loader' 'Projects' 'Rowan' 'Tests' 'WorkGroup_dkh').
+
+	baseComponentNames
+		do: [ :bcn | 
+			(resolvedProject removePackageGroupNamed: 'groups/' , bcn)
+				ifNotNil: [ :packageGroup | 
+					| newName |
+					newName := bcn , '_group'.
+					packageGroup name: newName.
+					resolvedProject addComponentOrPackageGroup: packageGroup toComponentNamed: 'Core' ] ].
+
+	resolvedProject
+		customConditionalAttributes:
+			{'tests'.
+			'examples'.
+			'dkh'}.
 
 	^ resolvedProject
 ]
@@ -4037,7 +4070,9 @@ RwTestProjectLibraryGenerator >> _readmeFor_0061: stream [
 		lf;
 		nextPutAll: '#### spec_0063';
 		lf;
-		nextPutAll: '';
+		nextPutAll:
+				'The components in this spec are not using any directory structure. All of the components are in the top-level _components_ directory.';
+		lf;
 		lf
 ]
 
@@ -7212,7 +7247,9 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 		customConditionalAttributes:
 				{'tests'.
 					'examples'.
-					'dkh'};
+					'dkh'.
+					'gemstone'.
+					'pharo'};
 		specComment: title;
 		yourself.
 
@@ -7220,6 +7257,61 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0062: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		readme: [ :stream | self _readmeFor_0061: stream ]
+		commitMessage: commitMessage ]
+		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0063: commitMessage [
+	"Package Group Example 3: define package groups using packages and components. Start with spec_0061, and flatten the component structure so that all subcomponents and package groups are in top-level directory."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	[ 
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
+	postfix := '0063'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0061'.
+	title := 'Package Group Example 3: define package groups using packages and components. Start with spec_0061, and flatten the component structure so that all subcomponents and package groups are in top-level directory.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 63
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(573 660);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		packageConvention: 'Rowan';
+		customConditionalAttributes:
+				{'tests'.
+					'examples'.
+					'dkh'.
+					'gemstone'.
+					'pharo'};
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0063: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

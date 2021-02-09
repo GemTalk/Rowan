@@ -81,6 +81,15 @@ RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toCompone
 		toComponentNamed: toComponentName
 ]
 
+{ #category : 'components' }
+RwDefinedProject >> addComponentOrPackageGroup: aComponentOrPackageGroup toComponentNamed: toComponentName [
+	"add existing component to component named toComponentName"
+
+	self _resolvedProject
+		addComponentOrPackageGroup: aComponentOrPackageGroup
+		toComponentNamed: toComponentName
+]
+
 { #category : 'component structure' }
 RwDefinedProject >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	"
@@ -523,6 +532,11 @@ RwDefinedProject >> removeComponentNamed: aComponentName [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> removePackageGroupNamed: aComponentName [
+	^ self _resolvedProject removePackageGroupNamed: aComponentName
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> removePackageNamed: packageName [
 	^ self _resolvedProject removePackageNamed: packageName
 ]
@@ -552,6 +566,11 @@ RwDefinedProject >> renameComponentStructureFor: componentNamePath to: baseName 
 		renameComponentStructureFor: componentNamePath
 		to: baseName
 		startingAtComponentNamed: startingComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> renamePackageGroupNamed: aComponentPath to: aComponentName [
+	^ self _resolvedProject renamePackageGroupNamed: aComponentPath to: aComponentName
 ]
 
 { #category : 'accessing' }

@@ -389,7 +389,7 @@ RwAbstractActiveComponent >> removeProjectNamed: aProjectName [
 RwAbstractActiveComponent >> renameTo: aString in: aResolvedProject [
 	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
 
-	"need to change all the refereneces, so not enough to just change my name"
+	"need to change all the references, so not enough to just change my name"
 
 	^ aResolvedProject renameComponentNamed: self name to: aString
 ]
