@@ -7,9 +7,16 @@ rm -rf *.log *.out
 
 newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableStringRowanV2.tpz $GEMSTONE_NAME -lq
+startTopaz $GEMSTONE_NAME -l -T100000 << EOF
+	iferr 1 stk
+	iferr 2 stack
+	iferr 3 exit 1
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  $GEMSTONE_NAME -T100000 -lq
+	input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableStringRowanV2.tpz
+	input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz
+
+	exit
+EOF
 
 #	Report
 # ./record.gs.st rowan_test_stats_350 -- --query=summary
