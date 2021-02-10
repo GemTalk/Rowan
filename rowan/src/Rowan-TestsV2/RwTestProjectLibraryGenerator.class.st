@@ -71,6 +71,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0058: commitComment;
 	genSpec_0059: commitComment;
 	genSpec_0060: commitComment;
+	genSpec_0064: commitComment;
 	yourself
 "
 Class {
@@ -3259,6 +3260,35 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 			superclassName: requiredClassName1;
 			instVarNames: #();
 			yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0064: resolvedProject [
+	"Start with spec_0060; WITHOUT RowanSample10 as an external project ... and add some packages that duplicate RowanSample10 package names and content ... in concert with a reload of spec_0060 reproduce https://github.com/GemTalk/Rowan/issues/680"
+
+	| requiredProjectName packageName className componentName |
+	requiredProjectName := 'RowanSample10'.
+	packageName := requiredProjectName , '-Core'.
+	className := requiredProjectName , 'Class1'.
+componentName := 'Core'.
+
+	resolvedProject
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
+		yourself.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+
+	(resolvedProject componentNamed: componentName)
+		removeProjectNamed: requiredProjectName;
+		yourself.
 
 	^ resolvedProject
 ]
@@ -6767,6 +6797,52 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 		commitMessage: commitMessage
 ]
 
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0064: commitMessage [
+	"Start with spec_0060; WITHOUT RowanSample10 as an external project ... and add some packages that duplicate RowanSample10 package names and content ... in concert with a reload of spec_0060 reproduce https://github.com/GemTalk/Rowan/issues/680"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0064'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0060'.
+	title := 'Start with spec_0060; WITHOUT RowanSample10 as an external project ... and add some packages that duplicate RowanSample10 package names and content ... in concert with a reload of spec_0060 reproduce https://github.com/GemTalk/Rowan/issues/680'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 61
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(680);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0064: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> indexCardMap [
 	^ indexCardMap
@@ -6800,12 +6876,12 @@ RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
 RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	self preserveRowanSHA
 		ifFalse: [ ^ self ].
+	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/', projectName, '.git'.
+		with: 'git@github.com:dalehenrich/' , projectName , '.git'.
 	indexCardMap := Dictionary new.
-	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards')
-		files
+	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
 		do: [ :file | 
 			| indexCard |
 			file

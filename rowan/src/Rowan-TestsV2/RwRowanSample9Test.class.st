@@ -5811,6 +5811,85 @@ RwRowanSample9Test >> testSpec_0060_2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0064_1 [
+	"spec_0064 should load cleanly, including RowanSample10"
+
+	"https://github.com/GemTalk/Rowan/issues/680"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0064'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0064_2 [
+	"First attempt to reproduce #680 ... load spec_0064, then load spec_0060 and the packages should be cleanly moved/adopted by RowanSample10 project. The duplicate packages are in different symbol dictionaries ... but in #680, the duplicate packages are in the same symbol dictionaries (perhaps???)"
+
+	"https://github.com/GemTalk/Rowan/issues/680"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0064'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName}.
+
+	{projectName . requiredProjectName} do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName . requiredProjectName}
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
