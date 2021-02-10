@@ -76,10 +76,16 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArr
 ]
 
 { #category : 'package reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 >> _packageNameFromPackageDir: packageDir [
-	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
+RwRepositoryResolvedProjectTonelReaderVisitorV2 >> _packageNameFromPackageDir: packageDir ifAbsent: absentBlock [
+	"package.st file is REQUIRED for the to be a legal tonel package directory"
 
-	^ ((self _readObjectFrom: packageDir / 'package' , 'st') at: #'name') asString
+	| tonelPackageFile |
+	tonelPackageFile := packageDir / 'package' , 'st'.
+	tonelPackageFile exists
+		ifFalse: [ ^ absentBlock value ].
+	^ ((self _readObjectFrom: tonelPackageFile)
+		at: #'name'
+		ifAbsent: [ ^ absentBlock value ]) asString
 ]
 
 { #category : 'class reading' }

@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'package reading' }
-RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir [
+RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir ifAbsent: absentBlock [
 
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
@@ -102,12 +102,13 @@ RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
 	trace := Rowan projectTools trace.
 	packagesRoot directories
 		do: [ :packageDir | 
-			| dir |
-			dir := packageDir path basename.
-			dir = '.svn'
-				ifFalse: [ 
-					| packageName "tolerate checkout produced by svn version 1.6" |
-					packageName := self _packageNameFromPackageDir: packageDir.
+			(self _packageNameFromPackageDir: packageDir ifAbsent: [  ])
+				ifNil: [ 
+					trace
+						trace:
+							'--- skip reading ' , packageDir printString
+								, ' not a tonel package directory (missing or malformed package.st file' ]
+				ifNotNil: [ :packageName | 
 					trace
 						trace:
 							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
