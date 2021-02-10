@@ -202,7 +202,6 @@ RwProjectSetModification >> findAddedMethods [
 RwProjectSetModification >> findAddedPackages [
 	| addedPackages |
 	addedPackages := Dictionary new.
-(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ addedPackages ].
 	elementsModified
 		do: [ :projectModification | 
 			| packagesModification |
@@ -216,7 +215,7 @@ RwProjectSetModification >> findAddedPackages [
 							addedPackages
 								at: newPackage key
 								put:
-									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+									(RwPackageAdditionOrRemoval
 										projectDefinition: projectModification after
 										packageDefinition: packageModification after
 										packageKey: newPackage key
@@ -276,7 +275,6 @@ RwProjectSetModification >> findRemovedMethods [
 RwProjectSetModification >> findRemovedPackages [
 	| removedPackages |
 	removedPackages := Dictionary new.
-(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ removedPackages ].
 	elementsModified
 		do: [ :projectModification | 
 			| packagesModification |
@@ -290,7 +288,7 @@ RwProjectSetModification >> findRemovedPackages [
 							removedPackages
 								at: oldPackage key
 								put:
-									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+									(RwPackageAdditionOrRemoval
 										projectDefinition: projectModification before
 										packageDefinition: packageModification before
 										packageKey: oldPackage key

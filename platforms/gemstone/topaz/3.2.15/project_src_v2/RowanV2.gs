@@ -9093,6 +9093,24 @@ removeallclassmethods RwPackageMove
 
 doit
 (Object
+	subclass: 'RwPackageAdditionOrRemoval'
+	instVarNames: #( projectDefinition packageDefinition packageKey packagesModification )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPackageAdditionOrRemoval
+removeallclassmethods RwPackageAdditionOrRemoval
+
+doit
+(Object
 	subclass: 'RwPlatform'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -72958,7 +72976,6 @@ method: RwProjectSetModification
 findAddedPackages
 	| addedPackages |
 	addedPackages := Dictionary new.
-(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ addedPackages ].
 	elementsModified
 		do: [ :projectModification | 
 			| packagesModification |
@@ -72972,7 +72989,7 @@ findAddedPackages
 							addedPackages
 								at: newPackage key
 								put:
-									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+									(RwPackageAdditionOrRemoval
 										projectDefinition: projectModification after
 										packageDefinition: packageModification after
 										packageKey: newPackage key
@@ -73033,7 +73050,6 @@ method: RwProjectSetModification
 findRemovedPackages
 	| removedPackages |
 	removedPackages := Dictionary new.
-(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ removedPackages ].
 	elementsModified
 		do: [ :projectModification | 
 			| packagesModification |
@@ -73047,7 +73063,7 @@ findRemovedPackages
 							removedPackages
 								at: oldPackage key
 								put:
-									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+									(RwPackageAdditionOrRemoval
 										projectDefinition: projectModification before
 										packageDefinition: packageModification before
 										packageKey: oldPackage key
@@ -82782,6 +82798,72 @@ category: 'Updating'
 method: RwMethodMove
 methodBefore: newValue
 	methodBefore := newValue
+%
+
+! Class implementation for 'RwPackageAdditionOrRemoval'
+
+!		Class methods for 'RwPackageAdditionOrRemoval'
+
+category: 'instance creation'
+classmethod: RwPackageAdditionOrRemoval
+projectDefinition: aProjectDefinition packageDefinition: aPackageDefinition packageKey: aPackageKey packagesModification: aPackagesModification
+
+	^(self new)
+		projectDefinition: aProjectDefinition;
+		packageDefinition: aPackageDefinition;
+		packageKey: aPackageKey;
+		packagesModification: aPackagesModification;
+		yourself
+%
+
+!		Instance methods for 'RwPackageAdditionOrRemoval'
+
+category: 'Accessing'
+method: RwPackageAdditionOrRemoval
+packageDefinition
+	^packageDefinition
+%
+
+category: 'Updating'
+method: RwPackageAdditionOrRemoval
+packageDefinition: newValue
+	packageDefinition := newValue
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packageKey
+	^packageKey
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packageKey: object
+	packageKey := object
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packagesModification
+	^packagesModification
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packagesModification: object
+	packagesModification := object
+%
+
+category: 'Accessing'
+method: RwPackageAdditionOrRemoval
+projectDefinition
+	^projectDefinition
+%
+
+category: 'Updating'
+method: RwPackageAdditionOrRemoval
+projectDefinition: newValue
+	projectDefinition := newValue
 %
 
 ! Class implementation for 'RwPlatform'
