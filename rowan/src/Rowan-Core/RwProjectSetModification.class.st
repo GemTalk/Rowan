@@ -199,6 +199,32 @@ RwProjectSetModification >> findAddedMethods [
 ]
 
 { #category : 'private - moves' }
+RwProjectSetModification >> findAddedPackages [
+	| addedPackages |
+	addedPackages := Dictionary new.
+(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ addedPackages ].
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification before isEmpty
+						ifTrue: [ 
+							| newPackage |
+							newPackage := packageModification after.
+							addedPackages
+								at: newPackage key
+								put:
+									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										packageKey: newPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ addedPackages
+]
+
+{ #category : 'private - moves' }
 RwProjectSetModification >> findRemovedClasses [
 
 	| removedClasses |
@@ -244,6 +270,32 @@ RwProjectSetModification >> findRemovedMethods [
 					toDictionary: removedMethods]].
 	^removedMethods
 
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> findRemovedPackages [
+	| removedPackages |
+	removedPackages := Dictionary new.
+(Rowan globalNamed: 'RwPackageAdditionOrRemoval') ifNil: [ "ignore additions until we defined the class, at a minimum"^ removedPackages ].
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification after isEmpty
+						ifTrue: [ 
+							| oldPackage |
+							oldPackage := packageModification before.
+							removedPackages
+								at: oldPackage key
+								put:
+									((Rowan globalNamed: 'RwPackageAdditionOrRemoval')
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										packageKey: oldPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ removedPackages
 ]
 
 { #category : 'initialization' }
@@ -366,4 +418,51 @@ RwProjectSetModification >> updateForMethodMoves [
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
 
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> updateForPackageMoveFrom: removal to: addition [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition packageModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal packagesModification
+		modificationOf: removal packageKey) before.
+	newDefinition := (addition packagesModification
+		modificationOf: addition packageKey) after.
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal and the addition."
+	addition packagesModification removeModificationOf: addition packageKey.
+	self movedPackages
+		add:
+			(RwPackageMove
+				packageBefore: oldDefinition
+				packageAfter: newDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).	"Record the move."
+
+	packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
+	packageModification isEmpty
+		ifFalse: [ addition packagesModification addElementModification: packageModification ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> updateForPackageMoves [
+
+	| packageAdditions packageRemovals |
+	packageAdditions := self findAddedPackages.
+	packageRemovals := self findRemovedPackages.
+
+	"Any keys that match between added and removed should be considered a move."
+	packageAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := packageRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForPackageMoveFrom: removal to: addition]]
 ]

@@ -5844,7 +5844,7 @@ RwRowanSample9Test >> testSpec_0064_1 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0064_2 [
-	"First attempt to reproduce #680 ... load spec_0064, then load spec_0060 and the packages should be cleanly moved/adopted by RowanSample10 project. The duplicate packages are in different symbol dictionaries ... but in #680, the duplicate packages are in the same symbol dictionaries (perhaps???)"
+	"First attempt to reproduce #680 ... load spec_0064, then load spec_0060 and the packages should be cleanly moved/adopted by RowanSample10 project."
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 

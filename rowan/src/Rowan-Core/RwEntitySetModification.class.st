@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwElementsModification',
 	#instVars : [
 		'movedClasses',
-		'movedMethods'
+		'movedMethods',
+		'movedPackages'
 	],
 	#category : 'Rowan-Core'
 }
