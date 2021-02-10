@@ -2,16 +2,42 @@
 
 set -e
 . defStone.env
-export vers="3.5.0"
+
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
+
+if [ "$vers" = "3.6.1" ] ; then
+	# 3.6.0 and 3.6.1 share same scripts
+	vers=3.6.0
+fi
 
 rm -rf *.log *.out
 
-newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-startTopaz $GEMSTONE_NAME -l << EOF
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableString.tpz
-EOF
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/newRowanRepositoryTestsRootV2.tpz $GEMSTONE_NAME -lq
 
-startTopaz $GEMSTONE_NAME -l << EOF
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuite.tpz
-EOF
+$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  $GEMSTONE_NAME -T100000 -lq
+
+#	Report
+# ./record.gs.st rowan_test_stats_350 -- --query=summary
+#	Save the testResults.json in the db
+# ./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=issue_308
+# ./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=issue_308
+#	Update the record with the SHA of the commit
+# ./record.gs.st rowan_test_stats_350 -- --updateSHA=92de7b5  --branch=issue_308 --gsVersion=3.2.15
+# ./record.gs.st rowan_test_stats_350 -- --updateSHA=92de7b5  --branch=issue_308 --gsVersion=3.5.0
+
+branch=`git --git-dir=$ROWAN_PROJECTS_HOME/Rowan/.git rev-parse --abbrev-ref HEAD`
+# branch=masterV2.1
+
+branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --gsVersion=$vers`
+
+if [ "$branchQuery" = "[ ]" ] ; then
+	# this is a branch for which we have no samples with which to compare, so use issue_308 
+  branch=masterV2.1
+	echo
+	echo "USING DEFAULT BRANCH -- $branch"
+	echo
+fi
+./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=$branch --compare=$vers
+
