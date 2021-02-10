@@ -22,3 +22,9 @@ RwEntitySetModification >> movedMethods [
 	^ movedMethods
 
 ]
+
+{ #category : 'accessing' }
+RwEntitySetModification >> movedPackages [
+
+	^ movedPackages
+]

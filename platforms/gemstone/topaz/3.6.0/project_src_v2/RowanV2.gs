@@ -71727,6 +71727,13 @@ movedMethods
 	^ movedMethods
 %
 
+category: 'accessing'
+method: RwEntitySetModification
+movedPackages
+
+	^ movedPackages
+%
+
 ! Class implementation for 'RwPackageSetModification'
 
 !		Instance methods for 'RwPackageSetModification'
@@ -72343,8 +72350,8 @@ findRemovedPackages
 category: 'initialization'
 method: RwProjectSetModification
 initialize
-
 	super initialize.
+	movedPackages := Set new.
 	movedClasses := Set new.
 	movedMethods := Set new
 %
@@ -72483,19 +72490,27 @@ updateForPackageMoveFrom: removal to: addition
 		modificationOf: removal packageKey) before.
 	newDefinition := (addition packagesModification
 		modificationOf: addition packageKey) after.
-	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal and the addition."
-	addition packagesModification removeModificationOf: addition packageKey.
-	self movedPackages
-		add:
-			(RwPackageMove
-				packageBefore: oldDefinition
-				packageAfter: newDefinition
-				projectBefore: removal projectDefinition
-				projectAfter: addition projectDefinition).	"Record the move."
-
-	packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
-	packageModification isEmpty
-		ifFalse: [ addition packagesModification addElementModification: packageModification ]
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal. For bug #680, this is sufficient"
+	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition. For bug #680, this is sufficient"
+	false
+		ifTrue: [ 
+			"Record the move."
+			"Technically, we would go ahead and populate movedPackages with RwPackageMove, 
+				but the initial bug that prompted this work: 
+				https://github.com/GemTalk/Rowan/issues/680, does not need additional processing 
+				by the loader, so I'm wiring out this code for the time being. If it ever becomes 
+				necessary for the loader to reason about moved package then this code should 
+				be re-enabled."
+			movedPackages
+				add:
+					(RwPackageMove
+						packageBefore: oldDefinition
+						packageAfter: newDefinition
+						projectBefore: removal projectDefinition
+						projectAfter: addition projectDefinition).
+			packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
+			packageModification isEmpty
+				ifFalse: [ addition packagesModification addElementModification: packageModification ] ]
 %
 
 category: 'moves'
@@ -82067,6 +82082,21 @@ category: 'Updating'
 method: RwMethodMove
 methodBefore: newValue
 	methodBefore := newValue
+%
+
+! Class implementation for 'RwPackageMove'
+
+!		Class methods for 'RwPackageMove'
+
+category: 'instance creation'
+classmethod: RwPackageMove
+packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition projectBefore: beforeProjectDefinition projectAfter: afterProjectDefinition
+	^ self new
+		packageBefore: beforePackageDefinition;
+		packageAfter: afterPackageDefinition;
+		projectBefore: beforeProjectDefinition;
+		projectAfter: afterProjectDefinition;
+		yourself
 %
 
 ! Class implementation for 'RwPackageAdditionOrRemoval'
