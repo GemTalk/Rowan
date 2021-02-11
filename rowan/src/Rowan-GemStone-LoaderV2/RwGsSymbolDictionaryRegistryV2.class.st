@@ -453,6 +453,14 @@ RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryN
 		instance: self
 ]
 
+{ #category : 'package - patch api' }
+RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName toProjectNamed: projectName [
+	^ self class registry_ImplementationClass
+		movePackage: packageName
+		toProjectNamed: projectName
+		instance: self
+]
+
 { #category : 'accessing' }
 RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 

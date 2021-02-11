@@ -72490,27 +72490,21 @@ updateForPackageMoveFrom: removal to: addition
 		modificationOf: removal packageKey) before.
 	newDefinition := (addition packagesModification
 		modificationOf: addition packageKey) after.
-	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal. For bug #680, this is sufficient"
-	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition. For bug #680, this is sufficient"
-	false
-		ifTrue: [ 
-			"Record the move."
-			"Technically, we would go ahead and populate movedPackages with RwPackageMove, 
-				but the initial bug that prompted this work: 
-				https://github.com/GemTalk/Rowan/issues/680, does not need additional processing 
-				by the loader, so I'm wiring out this code for the time being. If it ever becomes 
-				necessary for the loader to reason about moved package then this code should 
-				be re-enabled."
-			movedPackages
-				add:
-					(RwPackageMove
-						packageBefore: oldDefinition
-						packageAfter: newDefinition
-						projectBefore: removal projectDefinition
-						projectAfter: addition projectDefinition).
-			packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
-			packageModification isEmpty
-				ifFalse: [ addition packagesModification addElementModification: packageModification ] ]
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal."
+	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition."
+
+	movedPackages
+		add:
+			(RwPackageMove
+				packageBefore: oldDefinition
+				packageAfter: newDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).	"Record the move."
+	packageModification := newDefinition compareAgainstBase: oldDefinition.
+	packageModification isEmpty
+		ifFalse: [ 
+			"Does the package have other modifications that need to be recorded?"
+			addition packagesModification addElementModification: packageModification ]
 %
 
 category: 'moves'
@@ -73407,6 +73401,8 @@ category: 'visting'
 method: RwGsImagePatchVisitor_V2
 visitProjecteSetModification: aProjectSetModification
 
+	aProjectSetModification movedPackages do: [:movedPackage | 
+		movedPackage addMovedPackageToPatchSet: patchSet ].
 	aProjectSetModification movedClasses do: [:movedClass | 
 		movedClass addMovedClassToPatchSet: patchSet ].
 	aProjectSetModification movedMethods do: [:movedMethod | 
@@ -74111,6 +74107,13 @@ addMovedPackage: packageDefinition inProject: aProjectDefinition
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+%
+
+category: 'building'
+method: RwGsPatchSet_V2
+addPackageMove: anRwPackageMove
+
+	movedPackages add: anRwPackageMove
 %
 
 category: 'building'
@@ -78015,6 +78018,15 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 		instance: self
 %
 
+category: 'package - patch api'
+method: RwGsSymbolDictionaryRegistryV2
+movePackage: packageName toProjectNamed: projectName
+	^ self class registry_ImplementationClass
+		movePackage: packageName
+		toProjectNamed: projectName
+		instance: self
+%
+
 category: 'accessing'
 method: RwGsSymbolDictionaryRegistryV2
 packageRegistry
@@ -78471,7 +78483,7 @@ loadedPackageNamed: packageName ifAbsent: absentBlock instance: registryInstance
 	^ registryInstance packageRegistry at: packageName ifAbsent: absentBlock
 %
 
-category: 'method - patch api'
+category: 'package - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance
 	| loadedPackage toRegistryInstance newClassVersionMap |
@@ -78502,6 +78514,19 @@ movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classe
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
+%
+
+category: 'package - patch api'
+classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
+movePackage: packageName toProjectNamed: projectName instance: registryInstance
+	| loadedPackage loadedProject |
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ registryInstance error: 'package ' , packageName printString , ' not found' ]
+		instance: registryInstance.
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	loadedPackage loadedProject: loadedProject.
+	^ registryInstance
 %
 
 category: 'class - registration'
@@ -82097,6 +82122,14 @@ packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition proj
 		projectBefore: beforeProjectDefinition;
 		projectAfter: afterProjectDefinition;
 		yourself
+%
+
+!		Instance methods for 'RwPackageMove'
+
+category: 'accessing'
+method: RwPackageMove
+packageDefinition
+	^ self packageAfter
 %
 
 ! Class implementation for 'RwPackageAdditionOrRemoval'
@@ -92901,6 +92934,39 @@ false ifTrue: [
 		_compareProperty: propertyKey
 		propertyVaue: propertyValue
 		againstBaseValue: baseValue
+%
+
+! Class extensions for 'RwPackageMove'
+
+!		Instance methods for 'RwPackageMove'
+
+category: '*rowan-gemstone-loader-extensions-onlyv2'
+method: RwPackageMove
+addMovedPackageToPatchSet: aPatchSet
+
+	aPatchSet addPackageMove: self
+%
+
+category: '*rowan-gemstone-loader-extensions-onlyv2'
+method: RwPackageMove
+movePackage: classesWithNewVersions
+	"Move the loaded package from one project to another. 
+		(https://github.com/dalehenrich/Rowan/issues/680)"
+
+	projectBefore name = projectAfter name
+		ifTrue: [ 
+			self
+				error:
+					'internal error - unexpected move for package when source and destination projects ('
+						, projectBefore name , ') are the same' ].
+	packageBefore name = packageAfter name
+		ifFalse: [ 
+			self error: 'internal error - unexpected move for package when source package ('.
+			packageBefore name , ' and destination package (' , packageAfter name
+				, ') are NOT the same' ].
+	(Rowan image loadedRegistryForPackageNamed: packageAfter name)
+		movePackage: packageAfter name
+		toProjectNamed: projectAfter name
 %
 
 ! Class extensions for 'RwPackageSetDefinition'

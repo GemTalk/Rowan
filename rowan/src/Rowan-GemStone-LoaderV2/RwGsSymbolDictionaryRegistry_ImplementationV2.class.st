@@ -550,7 +550,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedPackageNamed: packa
 
 ]
 
-{ #category : 'method - patch api' }
+{ #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance [
 	| loadedPackage toRegistryInstance newClassVersionMap |
 	loadedPackage := fromRegistryInstance packageRegistry
@@ -580,6 +580,18 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName 
 	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
 	loadedPackage updatePropertiesFromRegistryFor: toRegistryInstance.
 	^ fromRegistryInstance
+]
+
+{ #category : 'package - patch api' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName toProjectNamed: projectName instance: registryInstance [
+	| loadedPackage loadedProject |
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ registryInstance error: 'package ' , packageName printString , ' not found' ]
+		instance: registryInstance.
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	loadedPackage loadedProject: loadedProject.
+	^ registryInstance
 ]
 
 { #category : 'class - registration' }
