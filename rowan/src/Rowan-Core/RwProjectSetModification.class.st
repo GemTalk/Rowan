@@ -199,6 +199,31 @@ RwProjectSetModification >> findAddedMethods [
 ]
 
 { #category : 'private - moves' }
+RwProjectSetModification >> findAddedPackages [
+	| addedPackages |
+	addedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification before isEmpty
+						ifTrue: [ 
+							| newPackage |
+							newPackage := packageModification after.
+							addedPackages
+								at: newPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										packageKey: newPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ addedPackages
+]
+
+{ #category : 'private - moves' }
 RwProjectSetModification >> findRemovedClasses [
 
 	| removedClasses |
@@ -246,13 +271,37 @@ RwProjectSetModification >> findRemovedMethods [
 
 ]
 
+{ #category : 'private - moves' }
+RwProjectSetModification >> findRemovedPackages [
+	| removedPackages |
+	removedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification after isEmpty
+						ifTrue: [ 
+							| oldPackage |
+							oldPackage := packageModification before.
+							removedPackages
+								at: oldPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										packageKey: oldPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ removedPackages
+]
+
 { #category : 'initialization' }
 RwProjectSetModification >> initialize [
-
 	super initialize.
+	movedPackages := Set new.
 	movedClasses := Set new.
 	movedMethods := Set new
-
 ]
 
 { #category : 'testing' }
@@ -366,4 +415,59 @@ RwProjectSetModification >> updateForMethodMoves [
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
 
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> updateForPackageMoveFrom: removal to: addition [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition packageModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal packagesModification
+		modificationOf: removal packageKey) before.
+	newDefinition := (addition packagesModification
+		modificationOf: addition packageKey) after.
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal. For bug #680, this is sufficient"
+	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition. For bug #680, this is sufficient"
+	false
+		ifTrue: [ 
+			"Record the move."
+			"Technically, we would go ahead and populate movedPackages with RwPackageMove, 
+				but the initial bug that prompted this work: 
+				https://github.com/GemTalk/Rowan/issues/680, does not need additional processing 
+				by the loader, so I'm wiring out this code for the time being. If it ever becomes 
+				necessary for the loader to reason about moved package then this code should 
+				be re-enabled."
+			movedPackages
+				add:
+					(RwPackageMove
+						packageBefore: oldDefinition
+						packageAfter: newDefinition
+						projectBefore: removal projectDefinition
+						projectAfter: addition projectDefinition).
+			packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
+			packageModification isEmpty
+				ifFalse: [ addition packagesModification addElementModification: packageModification ] ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> updateForPackageMoves [
+
+	| packageAdditions packageRemovals |
+	packageAdditions := self findAddedPackages.
+	packageRemovals := self findRemovedPackages.
+
+	"Any keys that match between added and removed should be considered a move."
+	packageAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := packageRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForPackageMoveFrom: removal to: addition]]
 ]

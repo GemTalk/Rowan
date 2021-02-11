@@ -25,6 +25,7 @@ RwProjectSetDefinition >> compareAgainstBaseForLoader: aDefinition [
 		into: result
 		elementClass: RwProjectDefinition.
 	result
+		updateForPackageMoves;
 		updateForClassMoves;
 		updateForMethodMoves.
 	^ result

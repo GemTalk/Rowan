@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwElementsModification',
 	#instVars : [
 		'movedClasses',
-		'movedMethods'
+		'movedMethods',
+		'movedPackages'
 	],
 	#category : 'Rowan-Core'
 }
@@ -20,4 +21,10 @@ RwEntitySetModification >> movedMethods [
 
 	^ movedMethods
 
+]
+
+{ #category : 'accessing' }
+RwEntitySetModification >> movedPackages [
+
+	^ movedPackages
 ]

@@ -7852,7 +7852,7 @@ removeallclassmethods RwClassExtensionsModification
 doit
 (RwElementsModification
 	subclass: 'RwEntitySetModification'
-	instVarNames: #( movedClasses movedMethods )
+	instVarNames: #( movedClasses movedMethods movedPackages )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9285,6 +9285,24 @@ true.
 
 removeallmethods RwPackageMove
 removeallclassmethods RwPackageMove
+
+doit
+(Object
+	subclass: 'RwPackageAdditionOrRemoval'
+	instVarNames: #( projectDefinition packageDefinition packageKey packagesModification )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPackageAdditionOrRemoval
+removeallclassmethods RwPackageAdditionOrRemoval
 
 doit
 (Object
@@ -63097,12 +63115,13 @@ readPackages: packagesRoot
 	trace := Rowan projectTools trace.
 	packagesRoot directories
 		do: [ :packageDir | 
-			| dir |
-			dir := packageDir path basename.
-			dir = '.svn'
-				ifFalse: [ 
-					| packageName "tolerate checkout produced by svn version 1.6" |
-					packageName := self _packageNameFromPackageDir: packageDir.
+			(self _packageNameFromPackageDir: packageDir ifAbsent: [  ])
+				ifNil: [ 
+					trace
+						trace:
+							'--- skip reading ' , packageDir printString
+								, ' not a tonel package directory (missing or malformed package.st file' ]
+				ifNotNil: [ :packageName | 
 					trace
 						trace:
 							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
@@ -63132,7 +63151,7 @@ visitResolvedProjectV2: aRwResolvedProjectV2
 
 category: 'package reading'
 method: RwRepositoryComponentProjectReaderVisitor
-_packageNameFromPackageDir: packageDir
+_packageNameFromPackageDir: packageDir ifAbsent: absentBlock
 
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
@@ -63581,10 +63600,16 @@ readClassFile: file inPackage: packageName
 
 category: 'package reading'
 method: RwRepositoryResolvedProjectTonelReaderVisitorV2
-_packageNameFromPackageDir: packageDir
-	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
+_packageNameFromPackageDir: packageDir ifAbsent: absentBlock
+	"package.st file is REQUIRED for the to be a legal tonel package directory"
 
-	^ ((self _readObjectFrom: packageDir / 'package' , 'st') at: #'name') asString
+	| tonelPackageFile |
+	tonelPackageFile := packageDir / 'package' , 'st'.
+	tonelPackageFile exists
+		ifFalse: [ ^ absentBlock value ].
+	^ ((self _readObjectFrom: tonelPackageFile)
+		at: #'name'
+		ifAbsent: [ ^ absentBlock value ]) asString
 %
 
 ! Class implementation for 'RwAbstractResolvedObjectV2'
@@ -74454,6 +74479,13 @@ movedMethods
 	^ movedMethods
 %
 
+category: 'accessing'
+method: RwEntitySetModification
+movedPackages
+
+	^ movedPackages
+%
+
 ! Class implementation for 'RwPackageSetModification'
 
 !		Instance methods for 'RwPackageSetModification'
@@ -74969,6 +75001,32 @@ findAddedMethods
 
 category: 'private - moves'
 method: RwProjectSetModification
+findAddedPackages
+	| addedPackages |
+	addedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification before isEmpty
+						ifTrue: [ 
+							| newPackage |
+							newPackage := packageModification after.
+							addedPackages
+								at: newPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										packageKey: newPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ addedPackages
+%
+
+category: 'private - moves'
+method: RwProjectSetModification
 findRemovedClasses
 
 	| removedClasses |
@@ -75015,11 +75073,37 @@ findRemovedMethods
 	^removedMethods
 %
 
+category: 'private - moves'
+method: RwProjectSetModification
+findRemovedPackages
+	| removedPackages |
+	removedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification after isEmpty
+						ifTrue: [ 
+							| oldPackage |
+							oldPackage := packageModification before.
+							removedPackages
+								at: oldPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										packageKey: oldPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ removedPackages
+%
+
 category: 'initialization'
 method: RwProjectSetModification
 initialize
-
 	super initialize.
+	movedPackages := Set new.
 	movedClasses := Set new.
 	movedMethods := Set new
 %
@@ -75138,6 +75222,63 @@ updateForMethodMoves
 			| removal |
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
+%
+
+category: 'private - moves'
+method: RwProjectSetModification
+updateForPackageMoveFrom: removal to: addition
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition packageModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal packagesModification
+		modificationOf: removal packageKey) before.
+	newDefinition := (addition packagesModification
+		modificationOf: addition packageKey) after.
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal. For bug #680, this is sufficient"
+	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition. For bug #680, this is sufficient"
+	false
+		ifTrue: [ 
+			"Record the move."
+			"Technically, we would go ahead and populate movedPackages with RwPackageMove, 
+				but the initial bug that prompted this work: 
+				https://github.com/GemTalk/Rowan/issues/680, does not need additional processing 
+				by the loader, so I'm wiring out this code for the time being. If it ever becomes 
+				necessary for the loader to reason about moved package then this code should 
+				be re-enabled."
+			movedPackages
+				add:
+					(RwPackageMove
+						packageBefore: oldDefinition
+						packageAfter: newDefinition
+						projectBefore: removal projectDefinition
+						projectAfter: addition projectDefinition).
+			packageModification := newDefinition compareAgainstBase: oldDefinition.	"Does the package have other modifications that need to be recorded?"
+			packageModification isEmpty
+				ifFalse: [ addition packagesModification addElementModification: packageModification ] ]
+%
+
+category: 'moves'
+method: RwProjectSetModification
+updateForPackageMoves
+
+	| packageAdditions packageRemovals |
+	packageAdditions := self findAddedPackages.
+	packageRemovals := self findRemovedPackages.
+
+	"Any keys that match between added and removed should be considered a move."
+	packageAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := packageRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForPackageMoveFrom: removal to: addition]]
 %
 
 ! Class implementation for 'RwMethodsModification'
@@ -84495,6 +84636,87 @@ category: 'Updating'
 method: RwMethodMove
 methodBefore: newValue
 	methodBefore := newValue
+%
+
+! Class implementation for 'RwPackageMove'
+
+!		Class methods for 'RwPackageMove'
+
+category: 'instance creation'
+classmethod: RwPackageMove
+packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition projectBefore: beforeProjectDefinition projectAfter: afterProjectDefinition
+	^ self new
+		packageBefore: beforePackageDefinition;
+		packageAfter: afterPackageDefinition;
+		projectBefore: beforeProjectDefinition;
+		projectAfter: afterProjectDefinition;
+		yourself
+%
+
+! Class implementation for 'RwPackageAdditionOrRemoval'
+
+!		Class methods for 'RwPackageAdditionOrRemoval'
+
+category: 'instance creation'
+classmethod: RwPackageAdditionOrRemoval
+projectDefinition: aProjectDefinition packageDefinition: aPackageDefinition packageKey: aPackageKey packagesModification: aPackagesModification
+
+	^(self new)
+		projectDefinition: aProjectDefinition;
+		packageDefinition: aPackageDefinition;
+		packageKey: aPackageKey;
+		packagesModification: aPackagesModification;
+		yourself
+%
+
+!		Instance methods for 'RwPackageAdditionOrRemoval'
+
+category: 'Accessing'
+method: RwPackageAdditionOrRemoval
+packageDefinition
+	^packageDefinition
+%
+
+category: 'Updating'
+method: RwPackageAdditionOrRemoval
+packageDefinition: newValue
+	packageDefinition := newValue
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packageKey
+	^packageKey
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packageKey: object
+	packageKey := object
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packagesModification
+	^packagesModification
+%
+
+category: 'accessing'
+method: RwPackageAdditionOrRemoval
+packagesModification: object
+	packagesModification := object
+%
+
+category: 'Accessing'
+method: RwPackageAdditionOrRemoval
+projectDefinition
+	^projectDefinition
+%
+
+category: 'Updating'
+method: RwPackageAdditionOrRemoval
+projectDefinition: newValue
+	projectDefinition := newValue
 %
 
 ! Class implementation for 'RwPlatform'
@@ -99646,6 +99868,7 @@ compareAgainstBaseForLoader: aDefinition
 		into: result
 		elementClass: RwProjectDefinition.
 	result
+		updateForPackageMoves;
 		updateForClassMoves;
 		updateForMethodMoves.
 	^ result
