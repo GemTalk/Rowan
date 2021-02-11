@@ -727,6 +727,12 @@ RwGsPatchSet_V2 >> addMovedPackage: packageDefinition inProject: aProjectDefinit
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addPackageMove: anRwPackageMove [
+
+	movedPackages add: anRwPackageMove
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.

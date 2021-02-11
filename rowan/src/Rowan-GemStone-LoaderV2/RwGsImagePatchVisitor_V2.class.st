@@ -219,13 +219,14 @@ RwGsImagePatchVisitor_V2 >> visitPackagesModification: aPackagesModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor_V2 >> visitProjecteSetModification: aProjectSetModification [
 
+	aProjectSetModification movedPackages do: [:movedPackage | 
+		movedPackage addMovedPackageToPatchSet: patchSet ].
 	aProjectSetModification movedClasses do: [:movedClass | 
 		movedClass addMovedClassToPatchSet: patchSet ].
 	aProjectSetModification movedMethods do: [:movedMethod | 
 		movedMethod addMovedMethodToPatchSet: patchSet ].
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
-
 ]
 
 { #category : 'visting' }

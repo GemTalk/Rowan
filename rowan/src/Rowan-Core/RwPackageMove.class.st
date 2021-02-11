@@ -13,3 +13,8 @@ RwPackageMove class >> packageBefore: beforePackageDefinition packageAfter: afte
 		projectAfter: afterProjectDefinition;
 		yourself
 ]
+
+{ #category : 'accessing' }
+RwPackageMove >> packageDefinition [
+	^ self packageAfter
+]
