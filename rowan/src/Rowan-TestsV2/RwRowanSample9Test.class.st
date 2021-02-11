@@ -5816,12 +5816,13 @@ RwRowanSample9Test >> testSpec_0064_1 [
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 |
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5839,7 +5840,9 @@ RwRowanSample9Test >> testSpec_0064_1 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName
 ]
 
 { #category : 'tests' }
@@ -5848,12 +5851,13 @@ RwRowanSample9Test >> testSpec_0064_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 |
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
 
 	{projectName . requiredProjectName} do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5873,6 +5877,8 @@ RwRowanSample9Test >> testSpec_0064_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName.
+
 "reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
@@ -5886,7 +5892,9 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: {projectName . requiredProjectName}
+		expectedProjectNames: {projectName . requiredProjectName}.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName
 ]
 
 { #category : 'tests' }
