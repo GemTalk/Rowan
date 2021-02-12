@@ -199,4 +199,5 @@ false ifTrue: [
 			topazFilenamePackageNamesMap: topazFileNameMap;
 			yourself.
 		visitor visit: projectSetModification ].
+	true
 %
