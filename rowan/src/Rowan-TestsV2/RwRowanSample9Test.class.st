@@ -6084,7 +6084,7 @@ RwRowanSample9Test >> testSpec_0064_4 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0064_5 [
-	"Extended test case for #680 ... basically testSpec_0064_3 with ONLY new class version (no method changes and no symbol dictionary change"
+	"Extended test case for #680 ... basically testSpec_0064_3 with ONLY new class version (no method changes and no symbol dictionary change)"
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
