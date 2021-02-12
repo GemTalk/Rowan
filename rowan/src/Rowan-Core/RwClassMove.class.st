@@ -59,3 +59,11 @@ RwClassMove >> classBefore: newValue [
 	classBefore := newValue
 
 ]
+
+{ #category : 'printing' }
+RwClassMove >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: self classAfter name
+]

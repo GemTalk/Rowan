@@ -83825,6 +83825,15 @@ classBefore: newValue
 	classBefore := newValue
 %
 
+category: 'printing'
+method: RwClassMove
+printOn: aStream
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: self classAfter name
+%
+
 ! Class implementation for 'RwMethodMove'
 
 !		Class methods for 'RwMethodMove'
@@ -95061,24 +95070,34 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 category: '*rowan-gemstone-loaderv2-36x'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 moveClassFor: classMove
-	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
+	" move class from <originalSymbolDictionary> to <newSymbolDictionary> "
 
-	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
+	"loaded things are handled elsewhere, just need to move the association"
 
-	"extension methods will be dealt with later"
-
-	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
+	| originalSymbolDictionary newSymbolDictionary before after assoc theClass loadedClass theBehavior |
 	before := classMove classBefore.
+	after := classMove classAfter.
 	originalSymbolDictionary := Rowan image
 		symbolDictNamed: before gs_symbolDictionary.
-	assoc := originalSymbolDictionary associationAt: before key asSymbol.
+	newSymbolDictionary := Rowan image symbolDictNamed: after gs_symbolDictionary.
+
+	assoc := originalSymbolDictionary
+		associationAt: before key asSymbol
+		ifAbsent: [ 
+			assoc := newSymbolDictionary
+				associationAt: after key asSymbol
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no association found for the class ' , before name printString
+								, ' in either of the expected symbol dictionaries ('
+								, before gs_symbolDictionary asString , ' or '
+								, after gs_symbolDictionary asString , ').' ].
+			^ self	"class has already been moved (perhaps new version logic), we're done" ].
 	theClass := assoc value.
 	theBehavior := theClass class.
-	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan image
-		symbolDictNamed: classMove classAfter gs_symbolDictionary.
-	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
+	newSymbolDictionary := Rowan image symbolDictNamed: after gs_symbolDictionary.
 
 	loadedClass := self loadedClassForClass: theClass.
 	originalSymbolDictionary removeKey: assoc key.
@@ -95095,21 +95114,7 @@ moveClassFor: classMove
 								, newSymbolDictionary name asString printString
 								, ' symbol dictionary with a duplicate key ' , assoc key printString
 								, ' while attempting to move class ' , assoc key asString printString ] ]
-		ifAbsent: [ newSymbolDictionary add: assoc ].
-
-	loadedClass loadedInstanceMethods values
-		do: [ :loadedMethod | 
-			| compiledMethod |
-			"this operation can probably be skipped, since the loaded method itself is not changing"
-			compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo: loadedMethod ].
-	loadedClass loadedClassMethods values
-		do: [ :loadedMethod | 
-			| compiledMethod |
-			"this operation can probably be skipped, since the loaded method itself is not changing"
-			compiledMethod := theBehavior
-				compiledMethodAt: loadedMethod selector asSymbol.
-			compiledMethod _rowanPackageInfo: loadedMethod ]
+		ifAbsent: [ newSymbolDictionary add: assoc ]
 %
 
 category: '*rowan-gemstone-loaderv2-36x'

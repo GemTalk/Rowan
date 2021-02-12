@@ -84566,6 +84566,15 @@ classBefore: newValue
 	classBefore := newValue
 %
 
+category: 'printing'
+method: RwClassMove
+printOn: aStream
+	super printOn: aStream.
+	aStream
+		nextPutAll: ' for ';
+		nextPutAll: self classAfter name
+%
+
 ! Class implementation for 'RwMethodMove'
 
 !		Class methods for 'RwMethodMove'
@@ -98807,35 +98816,52 @@ moveClassFor: classMove
 
 	"extension methods will be dealt with later"
 
-	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
+	| originalSymbolDictionary newSymbolDictionary before after assoc theClass loadedClass theBehavior oldRegistry newRegistry |
 	before := classMove classBefore.
+	after := classMove classAfter.
 	originalSymbolDictionary := Rowan image
 		symbolDictNamed: before gs_symbolDictionary.
-	assoc := originalSymbolDictionary associationAt: before key asSymbol.
-	theClass := assoc value.
-	theBehavior := theClass class.
-	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	newSymbolDictionary := Rowan image
-		symbolDictNamed: classMove classAfter gs_symbolDictionary.
-	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	loadedClass := self loadedClassForClass: theClass.
-	originalSymbolDictionary removeKey: assoc key.
-
-	self
-		_symbolDictionary: newSymbolDictionary
-		at: assoc key
-		ifPresent: [ :class | 
-			theClass ~~ class
-				ifTrue: [ 
+	newSymbolDictionary := Rowan image symbolDictNamed: after gs_symbolDictionary.
+	assoc := originalSymbolDictionary
+		associationAt: before key asSymbol
+		otherwise: nil.
+	assoc
+		ifNil: [ 
+			assoc := newSymbolDictionary
+				associationAt: after key asSymbol
+				ifAbsent: [ 
 					self
 						error:
-							' internal error - found an existing association in the '
-								, newSymbolDictionary name asString printString
-								, ' symbol dictionary with a duplicate key ' , assoc key printString
-								, ' while attempting to move class ' , assoc key asString printString ] ]
-		ifAbsent: [ newSymbolDictionary add: assoc ].
+							'internal error - no association found for the class ' , before name printString
+								, ' in either of the expected symbol dictionaries ('
+								, before gs_symbolDictionary asString , ' or '
+								, after gs_symbolDictionary asString , ').' ].	"class has already been moved (perhaps new version logic), we're almost done"
+			theClass := assoc value.
+			loadedClass := self loadedClassForClass: theClass ]
+		ifNotNil: [ 
+			"move association to new symbol dictionary"
+			theClass := assoc value.
+			theBehavior := theClass class.
+			oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
+
+			newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
+
+			loadedClass := self loadedClassForClass: theClass.
+			originalSymbolDictionary removeKey: assoc key.
+
+			self
+				_symbolDictionary: newSymbolDictionary
+				at: assoc key
+				ifPresent: [ :class | 
+					theClass ~~ class
+						ifTrue: [ 
+							self
+								error:
+									' internal error - found an existing association in the '
+										, newSymbolDictionary name asString printString
+										, ' symbol dictionary with a duplicate key ' , assoc key printString
+										, ' while attempting to move class ' , assoc key asString printString ] ]
+				ifAbsent: [ newSymbolDictionary add: assoc ] ].
 
 	loadedClass loadedInstanceMethods values
 		do: [ :loadedMethod | 
