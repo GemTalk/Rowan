@@ -691,7 +691,6 @@ RwGsPatchSet_V2 >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass
 
 { #category : 'modification dispatching' }
 RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationForcingNewClassVersion toPatchSetInPackage: aPackage inProject: aProjectDefinition [
-
 	"Double dispatch from aRwClassModificationForcingNewClassVersion ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
@@ -702,7 +701,8 @@ RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationFo
 	aRwClassModificationForcingNewClassVersion isModification
 		ifTrue: [ 
 			RwGsClassVersioningPatchV2
-				addPatchedClassModificationForcingNewClassVersion: aRwClassModificationForcingNewClassVersion
+				addPatchedClassModificationForcingNewClassVersion:
+					aRwClassModificationForcingNewClassVersion
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self ]

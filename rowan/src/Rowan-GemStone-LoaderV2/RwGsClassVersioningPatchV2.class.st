@@ -237,21 +237,29 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification in
 
 { #category : 'patching' }
 RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
-
 	"Uncontitionally create a new class version"
 
-	| dict existingClass beforeClassDefinition |
+	| dict existingClass beforeClassDefinition afterSymDict beforeSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	beforeClassDefinition := aClassModification before.
-	dict := aRwGsPatchSet loadSymbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
+	dict := aRwGsPatchSet loadSymbolList
+		objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	aRwGsPatchSet
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
-		inProject: aProjectDefinition
+		inProject: aProjectDefinition.
+	afterSymDict := self symbolDictionary name asString.
+	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
+	beforeSymDict ~= afterSymDict
+		ifTrue: [ 
+			aRwGsPatchSet
+				addPatchedClassSymbolDictionaryMove: aClassModification
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 ]
 
 { #category : 'accessing' }
