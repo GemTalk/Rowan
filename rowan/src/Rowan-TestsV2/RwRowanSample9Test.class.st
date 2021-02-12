@@ -5923,12 +5923,13 @@ RwRowanSample9Test >> testSpec_0064_1 [
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 |
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5946,21 +5947,24 @@ RwRowanSample9Test >> testSpec_0064_1 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0064_2 [
-	"First attempt to reproduce #680 ... load spec_0064, then load spec_0060 and the packages should be cleanly moved/adopted by RowanSample10 project."
+	"Reproduce #680 ... load spec_0064, then load spec_0060 and the packages should be cleanly moved/adopted by RowanSample10 project."
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 project |
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
 
 	{projectName . requiredProjectName} do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -5980,6 +5984,8 @@ RwRowanSample9Test >> testSpec_0064_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName.
+
 "reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
@@ -5993,7 +5999,274 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: {projectName . requiredProjectName}
+		expectedProjectNames: {projectName . requiredProjectName}.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName.
+
+	project := Rowan projectNamed: requiredProjectName.
+	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0064_3 [
+	"Extended test case for #680 with changed classes, methods and symbol dictionary ... load spec_0064, 
+		make modifications to RowanSample10Class1: add iv, add class method, change existing method;
+		change symbol dictionary, then load spec_0060 and the packages should be cleanly moved/adopted 
+		by RowanSample10 project."
+
+	"https://github.com/GemTalk/Rowan/issues/680"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 project packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0064'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
+
+	{projectName . requiredProjectName} do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"change default symbol dictionary"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := (loadedProjects at: 1) defined.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName.
+
+"make changes to classes and methods"
+	packageName := requiredProjectName, '-Core'.
+	((project packageNamed: packageName)
+		classDefinitionNamed: className1)
+			instVarNames: #( 'ivar1' 'ivar2');
+		addClassMethod: 'bar ^''var''' protocol: 'accessing';
+		updateInstanceMethod: 'foo "added a comment" ^ 1' protocol: 'new';
+		yourself.
+
+"load project"
+	loadedProjects := project load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName}.
+
+	self assert: (Rowan globalNamed: className1) instVarNames asArray sort 
+		equals: #( #'ivar1' #'ivar2' ) sort.
+	self assert: ((Rowan globalNamed: className1) compiledMethodAt: #foo) sourceString
+		equals: 'foo "added a comment" ^ 1'.
+	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
+		equals: #'new'.
+	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar) sourceString
+		equals: 'bar ^''var'''.
+
+"reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName . requiredProjectName}.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName.
+
+	project := Rowan projectNamed: requiredProjectName.
+	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort.
+	self assert: ((Rowan globalNamed: className1) compiledMethodAt: #foo) sourceString
+		equals: 'foo ^1'.
+	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
+		equals: #'accessing'.
+	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0064_4 [
+	"Extended test case for #680 ... basically testSpec_0064_3 with NO new class version"
+
+	"https://github.com/GemTalk/Rowan/issues/680"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 project packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0064'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
+
+	{projectName . requiredProjectName} do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"change default symbol dictionary"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := (loadedProjects at: 1) defined.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName.
+
+"make changes to classes and methods"
+	packageName := requiredProjectName, '-Core'.
+	((project packageNamed: packageName)
+		classDefinitionNamed: className1)
+		addClassMethod: 'bar ^''var''' protocol: 'accessing';
+		updateInstanceMethod: 'foo "added a comment" ^ 1' protocol: 'new';
+		yourself.
+
+"load project"
+	loadedProjects := project load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName}.
+
+	self assert: ((Rowan globalNamed: className1) compiledMethodAt: #foo) sourceString
+		equals: 'foo "added a comment" ^ 1'.
+	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
+		equals: #'new'.
+	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar) sourceString
+		equals: 'bar ^''var'''.
+
+"reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName . requiredProjectName}.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName.
+
+	project := Rowan projectNamed: requiredProjectName.
+	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort.
+	self assert: ((Rowan globalNamed: className1) compiledMethodAt: #foo) sourceString
+		equals: 'foo ^1'.
+	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
+		equals: #'accessing'.
+	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0064_5 [
+	"Extended test case for #680 ... basically testSpec_0064_3 with ONLY new class version (no method changes and no symbol dictionary change)"
+
+	"https://github.com/GemTalk/Rowan/issues/680"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 project packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0064'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName}.
+	className1 := requiredProjectName , 'Class1'.
+
+	{projectName . requiredProjectName} do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := (loadedProjects at: 1) defined.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: projectName.
+
+"make changes to classes and methods"
+	packageName := requiredProjectName, '-Core'.
+	((project packageNamed: packageName)
+		classDefinitionNamed: className1)
+			instVarNames: #( 'ivar1' 'ivar2');
+		yourself.
+
+"load project"
+	loadedProjects := project load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName}.
+
+	self assert: (Rowan globalNamed: className1) instVarNames asArray sort 
+		equals: #( #'ivar1' #'ivar2' ) sort.
+
+"reproduce #680 - load spec_0060 which has an external project with some duplicate packages names in spec_0064"
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: {projectName . requiredProjectName}.
+
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName.
+
+	project := Rowan projectNamed: requiredProjectName.
+	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort.
+	self assert: ((Rowan globalNamed: className1) compiledMethodAt: #foo) sourceString
+		equals: 'foo ^1'.
+	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
+		equals: #'accessing'.
+	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
 ]
 
 { #category : 'tests' }

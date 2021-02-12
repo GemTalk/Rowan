@@ -425,6 +425,14 @@ RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName to: symbolDictionaryN
 ]
 
 { #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> movePackage: packageName toProjectNamed: projectName [
+	^ self class registry_ImplementationClass
+		movePackage: packageName
+		toProjectNamed: projectName
+		instance: self
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> packageRegistry [
 
    ^packageRegistry
