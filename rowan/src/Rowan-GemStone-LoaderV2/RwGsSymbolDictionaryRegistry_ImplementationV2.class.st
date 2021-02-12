@@ -584,13 +584,15 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName 
 
 { #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName toProjectNamed: projectName instance: registryInstance [
-	| loadedPackage loadedProject |
+	| loadedPackage loadedProjectAfter loadedProjectBefore |
 	loadedPackage := self
 		loadedPackageNamed: packageName
 		ifAbsent: [ registryInstance error: 'package ' , packageName printString , ' not found' ]
 		instance: registryInstance.
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	loadedPackage loadedProject: loadedProject.
+	loadedProjectBefore := loadedPackage loadedProject.
+	loadedProjectBefore removeLoadedPackage: loadedPackage.
+	loadedProjectAfter := Rowan image loadedProjectNamed: projectName.
+	loadedProjectAfter addLoadedPackage: loadedPackage.
 	^ registryInstance
 ]
 

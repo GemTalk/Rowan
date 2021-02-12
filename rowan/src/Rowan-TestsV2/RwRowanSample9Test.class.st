@@ -5851,7 +5851,7 @@ RwRowanSample9Test >> testSpec_0064_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/680"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 |
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName className1 project |
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
@@ -5894,7 +5894,10 @@ RwRowanSample9Test >> testSpec_0064_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: {projectName . requiredProjectName}.
 
-	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName
+	self assert: (Rowan globalNamed: className1) rowanProjectName equals: requiredProjectName.
+
+	project := Rowan projectNamed: requiredProjectName.
+	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort
 ]
 
 { #category : 'tests' }
