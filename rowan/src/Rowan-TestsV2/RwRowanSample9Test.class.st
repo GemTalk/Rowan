@@ -368,39 +368,62 @@ RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProje
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _validate_spec_0061: project [
-	| projectsClassNames |
+RwRowanSample9Test >> _validate_spec_0061_0062_0063: project expectedComponentNames: expectedComponentNames expectedPackageGroupMap: packageGroupMap [
 	self
 		assert: project loadedComponentNames asArray sort
-		equals:
-			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Loader' 'common/platforms/gemstone/Loader' 'common/platforms/Loader' 'common/platforms/pharo/Loader' 'common/Tests' 'common/tests/Tests' 'Core')
-				sort.
+		equals: expectedComponentNames sort.
 
 	self
 		assert: project packageGroupNames asArray sort
-		equals:
-			#('groups/Examples' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/Loader')
-				sort.
+		equals: packageGroupMap keys sort.
 
+	packageGroupMap
+		keysAndValuesDo: [ :componentName :expectedClassNames | 
+			self
+				assert: (project classNamesFor: componentName) asArray sort
+				equals: expectedClassNames sort ]
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _validate_spec_0061: project [
+	| packageGroupMap projectsClassNames |
 	projectsClassNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
-	self
-		assert: (project classNamesFor: 'groups/Examples') isEmpty;
-		assert: (project classNamesFor: 'groups/Rowan') isEmpty;
-		assert: (project classNamesFor: 'groups/Tests') isEmpty.
+	packageGroupMap := Dictionary new
+		at: 'groups/Examples' put: #();
+		at: 'groups/Rowan' put: #();
+		at: 'groups/Tests' put: #();
+		at: 'groups/Projects' put: projectsClassNames;
+		at: 'groups/WorkGroup_dkh' put: projectsClassNames , #('Rs9Interface');
+		at: 'groups/Loader'
+			put:
+				#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing');
+		yourself.
+	^ self
+		_validate_spec_0061_0062_0063: project
+		expectedComponentNames:
+			#('common/Core' 'common/Examples' 'common/examples/Examples' 'common/Loader' 'common/platforms/gemstone/Loader' 'common/platforms/Loader' 'common/platforms/pharo/Loader' 'common/Tests' 'common/tests/Tests' 'Core')
+		expectedPackageGroupMap: packageGroupMap
+]
 
-	self
-		assert: (project classNamesFor: 'groups/Projects') asArray sort
-		equals: projectsClassNames sort.
-
-	self
-		assert: (project classNamesFor: 'groups/WorkGroup_dkh') asArray sort
-		equals: (projectsClassNames , #('Rs9Interface')) sort.
-
-	self
-		assert: (project classNamesFor: 'groups/Loader') asArray sort
-		equals:
-			#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing')
-				sort
+{ #category : 'private' }
+RwRowanSample9Test >> _validate_spec_0063: project [
+	| packageGroupMap projectsClassNames |
+	projectsClassNames := #('Rs9AbstractProject' 'Rs9DefinedProjects' 'Rs9Project' 'Rs9ResolvedProject' 'Rs9AbstractUnloadedProject').
+	packageGroupMap := Dictionary new
+		at: 'Examples_group' put: #();
+		at: 'Rowan_group' put: #();
+		at: 'Tests_group' put: #();
+		at: 'Projects_group' put: projectsClassNames;
+		at: 'WorkGroup_dkh_group' put: projectsClassNames , #('Rs9Interface');
+		at: 'Loader_group'
+			put:
+				#('Rs9GsLoadedClass' 'Rs9GsLoadedClassExtension' 'Rs9GsLoadedMethod' 'Rs9GsLoadedPackage' 'Rs9GsLoadedProject' 'Rs9LoadedClass' 'Rs9LoadedClassExtension' 'Rs9LoadedMethod' 'Rs9LoadedPackage' 'Rs9LoadedProject' 'Rs9LoadedThing');
+		yourself.
+	^ self
+		_validate_spec_0061_0062_0063: project
+		expectedComponentNames:
+			#('Core' 'Examples_examples' 'Loader_common' 'Loader_gemstone' 'Loader_pharo' 'Tests_tests')
+		expectedPackageGroupMap: packageGroupMap
 ]
 
 { #category : 'private' }
@@ -5915,6 +5938,39 @@ RwRowanSample9Test >> testSpec_0062 [
 		expectedProjectNames: projectNames.
 
 	self _validate_spec_0061: project
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0063 [
+	"spec_0063 should load cleanly -- component structure is different than spec_0061 and spec_0062, but using same set of packages. "
+
+	"package groups example"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0063'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	self _validate_spec_0063: project
 ]
 
 { #category : 'tests' }

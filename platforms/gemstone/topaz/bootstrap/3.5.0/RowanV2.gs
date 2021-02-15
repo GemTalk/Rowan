@@ -49720,6 +49720,35 @@ addPackagesNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
+category: 'components'
+method: RwDefinedProject
+addPlatformSubcomponentNamed: componentName condition: condition comment: aString
+	^ self _resolvedProject
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+%
+
+category: 'components'
+method: RwDefinedProject
+addPlatformSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self _resolvedProject
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+		toComponentNamed: toComponentName
+%
+
+category: 'components'
+method: RwDefinedProject
+addPlatformSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self addPlatformSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
+%
+
 category: 'accessing'
 method: RwDefinedProject
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
@@ -64488,18 +64517,57 @@ addPackagesNamed: packageNames toComponentNamed: componentName
 
 category: 'components'
 method: RwResolvedProjectV2
-addPlatformSubcomponentNamed: aComponentName condition: condition comment: aString
+addPlatformSubcomponentNamed: aComponentName condition: conditionArray
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self
+		addPlatformSubcomponentNamed: aComponentName
+		condition: conditionArray
+		comment: ''
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addPlatformSubcomponentNamed: aComponentName condition: conditionArray comment: aString
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
 	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
 		ifTrue: [ 
 			^ self _projectComponents
 				addPlatformSubcomponentNamed: aComponentName
-				condition: condition
+				condition: conditionArray
 				comment: aString ]
 		ifFalse: [ 
 			^ self _projectComponents
 				addPlatformNestedComponentNamed: aComponentName
-				condition: condition
+				condition: conditionArray
 				comment: aString ]
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addPlatformSubcomponentNamed: aComponentName condition: conditionArray comment: aString toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	| sub |
+	sub := self
+		addPlatformSubcomponentNamed: aComponentName
+		condition: conditionArray
+		comment: aString.
+	self addComponentNamed: aComponentName toComponentNamed: toComponentName.
+	^ sub
+%
+
+category: 'components'
+method: RwResolvedProjectV2
+addPlatformSubcomponentNamed: aComponentName condition: conditionArray toComponentNamed: toComponentName
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self
+		addPlatformSubcomponentNamed: aComponentName
+		condition: conditionArray
+		comment: ''
+		toComponentNamed: toComponentName
 %
 
 category: 'accessing'
@@ -64565,9 +64633,13 @@ method: RwResolvedProjectV2
 addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	self
-		addSubcomponentNamed: componentName condition: condition comment: aString;
-		addComponentNamed: componentName toComponentNamed: toComponentName
+	| sub |
+	sub := self
+		addSubcomponentNamed: componentName
+		condition: condition
+		comment: aString.
+	self addComponentNamed: componentName toComponentNamed: toComponentName.
+	^ sub
 %
 
 category: 'components'
