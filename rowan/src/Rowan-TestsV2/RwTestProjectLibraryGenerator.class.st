@@ -3544,7 +3544,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0062: resolvedProject [
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0063: resolvedProject [
 	"Package Group Example 3: define package groups using packages and components. Start with spec_0061, and flatten the component structure so that all subcomponents and package groups are in top-level directory."
 
-	| loaderPackageGroup baseComponentNames |
+	| loaderPackageGroup baseComponentNames component subcomponent |
 	loaderPackageGroup := resolvedProject packageGroupNamed: 'groups/Loader'.
 	loaderPackageGroup packageNames
 		do: [ :packageName | loaderPackageGroup removePackageNamed: packageName ].
@@ -3558,7 +3558,70 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0063: resolvedProject [
 					| newName |
 					newName := bcn , '_group'.
 					packageGroup name: newName.
-					resolvedProject addComponentOrPackageGroup: packageGroup toComponentNamed: 'Core' ] ].
+					resolvedProject
+						addComponentOrPackageGroup: packageGroup
+						toComponentNamed: 'Core' ] ].
+
+	component := resolvedProject componentNamed: 'Core'.
+	subcomponent := resolvedProject removeComponentNamed: 'common/Core'.
+	component addPackageNames: subcomponent packageNames.
+
+	{'Examples'.
+	'Tests'}
+		do: [ :baseName | 
+			| conditionalComponent |
+			conditionalComponent := resolvedProject
+				addSubcomponentNamed: baseName , '_' , baseName asLowercase
+				condition: baseName asLowercase
+				toComponentNamed: 'Core'.
+			subcomponent := resolvedProject removeComponentNamed: 'common/' , baseName.
+			subcomponent componentNames
+				do: [ :each | 
+					| sub |
+					sub := resolvedProject removeComponentNamed: each.
+					conditionalComponent addPackageNames: sub packageNames ].
+			subcomponent packageNames isEmpty
+				ifFalse: [ self error: 'expected package names to be empty' ] ].
+
+	{'Loader'}
+		do: [ :baseName | 
+			| commonComponent commonSubcomponent |
+			commonComponent := resolvedProject
+				addSubcomponentNamed: baseName , '_common'
+				condition: 'common'
+				toComponentNamed: 'Core'.
+			(resolvedProject packageGroupNamed: baseName , '_group')
+				addComponentNamed: baseName , '_common'.
+			commonSubcomponent := resolvedProject
+				removeComponentNamed: 'common/' , baseName.
+			commonComponent addPackageNames: commonSubcomponent packageNames.
+			commonSubcomponent componentNames
+				do: [ :each | 
+					| platformInterimComponent |
+					platformInterimComponent := resolvedProject removeComponentNamed: each.
+					platformInterimComponent packageNames isEmpty
+						ifFalse: [ self error: 'expected package names to be empty' ].
+					platformInterimComponent componentNames
+						do: [ :platformComponentName | 
+							| platformComponent newPlatformComponent |
+							platformComponent := resolvedProject
+								removeComponentNamed: platformComponentName.
+							platformComponent condition = {'gemstone'}
+								ifTrue: [ 
+									newPlatformComponent := resolvedProject
+										addPlatformSubcomponentNamed: 'Loader_gemstone'
+										condition: {'gemstone'}
+										comment: ''
+										toComponentNamed: 'Core' ].
+							platformComponent condition = {'pharo'}
+								ifTrue: [ 
+									newPlatformComponent := resolvedProject
+										addPlatformSubcomponentNamed: 'Loader_pharo'
+										condition: {'pharo'}
+										comment: ''
+										toComponentNamed: 'Core' ].
+							newPlatformComponent addPackageNames: platformComponent packageNames.
+							commonComponent addComponentNamed: newPlatformComponent name ] ] ].
 
 	resolvedProject
 		customConditionalAttributes:

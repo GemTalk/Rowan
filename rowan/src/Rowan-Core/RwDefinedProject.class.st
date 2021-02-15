@@ -217,6 +217,32 @@ RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentNam
 		toComponentNamed: componentName
 ]
 
+{ #category : 'components' }
+RwDefinedProject >> addPlatformSubcomponentNamed: componentName condition: condition comment: aString [
+	^ self _resolvedProject
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addPlatformSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self _resolvedProject
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: aString
+		toComponentNamed: toComponentName
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addPlatformSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName [
+	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
+
+	^ self addPlatformSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName [
 	^ self _resolvedProject
