@@ -1107,13 +1107,16 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 				isMeta: isMeta
 				intoPackageNamed: packageName ]
 		ifNotNil: [ :loadedMethodToBeMoved | 
-			| srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef beh category |
+			| srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef beh category srcLoadedClass |
 			"Move a packaged method to another package"
 			beh := Rowan globalNamed: className.
 			isMeta
 				ifTrue: [ beh := beh class ].
 			category := beh categoryOfSelector: methodSelector asSymbol.
 			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
+			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [  ].
+			srcLoadedClass
+				ifNotNil: [ srcLoadedClassPackage := srcLoadedClass loadedPackage ].
 			srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
 			srcLoadedClassOrExtension := srcLoadedMethodPackage
 				classOrExtensionForClassNamed: className
@@ -1139,7 +1142,8 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 						ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
 					methodDef protocol: category ]
 				ifFalse: [ 
-					| destProjectDef "method is moving to a different package" destPackageDef destClsDef srcPackageDef srcClsDef |
+					| destProjectDef destPackageDef destClsDef srcPackageDef srcClsDef |
+					"method is moving to a different package"
 					destinationLoadedPackage loadedProject name = projectDef name
 						ifTrue: [ destProjectDef := projectDef ]
 						ifFalse: [ 
@@ -1170,6 +1174,18 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 							destPackageDef classExtensions
 								at: className
 								ifAbsentPut: [ RwClassExtensionDefinition newForClassNamed: className ] ].
+
+					destinationLoadedPackage loadedProject packageConvention ~= 'Rowan'
+						ifTrue: [ 
+							"need to fabricate new method protocol"
+							destClsDef isClassExtension
+								ifTrue: [ 
+									"fabricate new class extension protocol"
+									category := '*' , packageName asLowercase ]
+								ifFalse: [ 
+									"fabricate new non-class extensions protocol"
+									category := '(as yet unclassified)' ] ].
+
 					isMeta
 						ifTrue: [ 
 							methodDef := srcClsDef classMethodDefinitions at: methodSelector.

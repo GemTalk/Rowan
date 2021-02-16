@@ -50067,6 +50067,8 @@ componentNamed: aComponentName ifAbsent: absentBlock
 category: 'accessing'
 method: RwDefinedProject
 componentNames
+	"list of component names from the load specification used to load the project "
+
 	^ self _resolvedProject componentNames
 %
 
@@ -50844,7 +50846,22 @@ addSubcomponentNamed: componentName condition: condition toComponentNamed: toCom
 		toComponentNamed: toComponentName
 %
 
-category: 'components'
+category: 'querying'
+method: RwProject
+allClassNamesFor: componentNameOrArrayOfNames
+	| loadedClassNames |
+	loadedClassNames := Set new.
+	(self allPackageNamesIn: componentNameOrArrayOfNames)
+		do: [ :packageName | 
+			(self packageNamed: packageName ifAbsent: [  ])
+				ifNotNil: [ :loadedPackage | 
+					loadedClassNames
+						addAll: loadedPackage definedClassNames;
+						addAll: loadedPackage extendedClassNames ] ].
+	^ loadedClassNames
+%
+
+category: 'querying'
 method: RwProject
 allPackageNamesIn: componentNameOrArrayOfNames
 	^ self _loadedProject allPackageNamesIn: componentNameOrArrayOfNames
@@ -50876,21 +50893,6 @@ category: 'properties'
 method: RwProject
 checkout: revision
 	^ self _loadedProject checkout: revision
-%
-
-category: 'querying'
-method: RwProject
-classNamesFor: componentNameOrArrayOfNames
-	| loadedClassNames |
-	loadedClassNames := Set new.
-	(self allPackageNamesIn: componentNameOrArrayOfNames)
-		do: [ :packageName | 
-			(self packageNamed: packageName ifAbsent: [  ])
-				ifNotNil: [ :loadedPackage | 
-					loadedClassNames
-						addAll: loadedPackage definedClassNames;
-						addAll: loadedPackage extendedClassNames ] ].
-	^ loadedClassNames
 %
 
 category: 'properties'
@@ -50925,12 +50927,14 @@ componentForPackageNamed: packageName
 category: 'components'
 method: RwProject
 componentNamed: componentName
-	^ self loadedComponents componentNamed: componentName
+	^ self _loadedComponents componentNamed: componentName
 %
 
-category: 'components'
+category: 'querying'
 method: RwProject
 componentNames
+	"list of component names from the load specification used to load the project "
+
 	^ self _loadedProject componentNames
 %
 
@@ -51114,16 +51118,20 @@ loadedCommitId
 	^ self _loadedProject loadedCommitId
 %
 
-category: 'components'
+category: 'querying'
 method: RwProject
 loadedComponentNames
-	^ self loadedComponents componentNames
+	"list of defined components in the components"
+
+	^ self _loadedComponents componentNames
 %
 
-category: 'components'
+category: 'querying'
 method: RwProject
-loadedComponents
-	^ self _loadedProject loadedComponentDefinitions
+loadedSubcomponentsOf: componentName
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
 %
 
 category: 'querying'
@@ -51185,24 +51193,16 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 		instanceMigrator: instanceMigrator
 %
 
-category: 'querying'
-method: RwProject
-loadSubcomponentsOf: componentName
-	"list of direct subcomponents of the given <componentName> ...includes package groups"
-
-	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
-%
-
 category: 'components'
 method: RwProject
 packageGroupNamed: componentName
-	^ self loadedComponents packageGroupNamed: componentName
+	^ self _loadedComponents packageGroupNamed: componentName
 %
 
 category: 'components'
 method: RwProject
 packageGroupNames
-	^ self loadedComponents packageGroupNames
+	^ self _loadedComponents packageGroupNames
 %
 
 category: 'querying'
@@ -51336,6 +51336,12 @@ method: RwProject
 useGit
 
 	^self _loadedProject useGit
+%
+
+category: 'private'
+method: RwProject
+_loadedComponents
+	^ self _loadedProject loadedComponentDefinitions
 %
 
 category: 'private'
@@ -63649,6 +63655,8 @@ comment: aString
 category: 'project specification'
 method: RwAbstractResolvedObjectV2
 componentNames
+	"list of component names from the load specification used to load the project "
+
 	^ self _loadSpecification componentNames
 %
 
@@ -68811,13 +68819,16 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: pa
 				isMeta: isMeta
 				intoPackageNamed: packageName ]
 		ifNotNil: [ :loadedMethodToBeMoved | 
-			| srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef beh category |
+			| srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef beh category srcLoadedClass |
 			"Move a packaged method to another package"
 			beh := Rowan globalNamed: className.
 			isMeta
 				ifTrue: [ beh := beh class ].
 			category := beh categoryOfSelector: methodSelector asSymbol.
 			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
+			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [  ].
+			srcLoadedClass
+				ifNotNil: [ srcLoadedClassPackage := srcLoadedClass loadedPackage ].
 			srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
 			srcLoadedClassOrExtension := srcLoadedMethodPackage
 				classOrExtensionForClassNamed: className
@@ -68843,7 +68854,8 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: pa
 						ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
 					methodDef protocol: category ]
 				ifFalse: [ 
-					| destProjectDef "method is moving to a different package" destPackageDef destClsDef srcPackageDef srcClsDef |
+					| destProjectDef destPackageDef destClsDef srcPackageDef srcClsDef |
+					"method is moving to a different package"
 					destinationLoadedPackage loadedProject name = projectDef name
 						ifTrue: [ destProjectDef := projectDef ]
 						ifFalse: [ 
@@ -68874,6 +68886,18 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: pa
 							destPackageDef classExtensions
 								at: className
 								ifAbsentPut: [ RwClassExtensionDefinition newForClassNamed: className ] ].
+
+					destinationLoadedPackage loadedProject packageConvention ~= 'Rowan'
+						ifTrue: [ 
+							"need to fabricate new method protocol"
+							destClsDef isClassExtension
+								ifTrue: [ 
+									"fabricate new class extension protocol"
+									category := '*' , packageName asLowercase ]
+								ifFalse: [ 
+									"fabricate new non-class extensions protocol"
+									category := '(as yet unclassified)' ] ].
+
 					isMeta
 						ifTrue: [ 
 							methodDef := srcClsDef classMethodDefinitions at: methodSelector.
@@ -81445,6 +81469,13 @@ instanceMethodDefinitionsForCompare
 
 category: 'testing'
 method: RwLoadedClass
+isClassExtension
+
+	^ false
+%
+
+category: 'testing'
+method: RwLoadedClass
 isEmpty
 
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
@@ -82051,6 +82082,13 @@ category: 'private'
 method: RwLoadedClassExtension
 instanceMethodDefinitionsForCompare
 	^ self loadedInstanceMethods
+%
+
+category: 'testing'
+method: RwLoadedClassExtension
+isClassExtension
+
+	^ true
 %
 
 category: 'testing'
@@ -83324,6 +83362,7 @@ componentNamed: aComponentName ifAbsent: absentBlock
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 componentNames
+	"list of component names from the load specification used to load the project "
 
 	^ handle componentNames
 %
@@ -85680,22 +85719,6 @@ addSubcomponentNamed: aComponentName condition: aCondition comment: aString
 	^ component
 %
 
-category: 'components to be cleaned up'
-method: RwResolvedProjectComponentsV2
-categoryComponentsFor: componentNameList
-	"category components are the components listed in the top-level loaded components"
-
-	| topLevel categoryComponents |
-	topLevel := componentNameList
-		collect: [ :componentName | self componentNamed: componentName ].
-	categoryComponents := Set new.
-	topLevel
-		do: [ :component | 
-			component componentNames
-				do: [ :componentName | categoryComponents add: (self componentNamed: componentName) ] ].
-	^ categoryComponents asArray
-%
-
 category: 'querying'
 method: RwResolvedProjectComponentsV2
 componentForPackageNamed: packageName
@@ -85726,6 +85749,8 @@ componentNamed: aComponentName ifAbsent: absentBlock
 category: 'accessing'
 method: RwResolvedProjectComponentsV2
 componentNames
+	"list of defined components in the receiver"
+
 	^ self components keys asArray
 %
 
@@ -86368,6 +86393,8 @@ comment: aString
 category: 'accessing'
 method: RwLoadSpecificationV2
 componentNames
+	"list of component names from the load specification used to load the project "
+
 	^ componentNames
 %
 
@@ -99834,7 +99861,7 @@ requiredProjects
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 
 	| requiredProjectNames theComponents |
-	theComponents := self loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
+	theComponents := self _loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
 	requiredProjectNames := Set new.
 	theComponents
 		conditionalComponentsStartingWith: self componentNames

@@ -437,6 +437,90 @@ RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
 	self assert: project packageNames sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone' ) sort.
 ]
 
+{ #category : 'method support' }
+RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
+	"load spec_0009 and then move #foo in RowanSample9-Core to RowanSample9-Extensions and #bar from  RowanSample9-Extensions to  RowanSample9-Core"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project class method audit |
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: project gitShortStatus isEmpty.
+
+"move method"
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+	method := class compiledMethodAt: #foo.
+	Rowan gemstoneTools topaz
+		moveMethod: method toPackageNamed: 'RowanSample9-Extensions'.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+
+"move method"
+	method := class class compiledMethodAt: #bar.
+	Rowan gemstoneTools topaz
+		moveMethod: method toPackageNamed: 'RowanSample9-Core';
+		yourself.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty
+]
+
+{ #category : 'method support' }
+RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
+	"load spec_0012 and then move #bar in RowanSample9-Extensions1 to RowanSample9-Extensions"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project class method audit |
+	loadSpec := self _loadSpecNamed: 'spec_0012'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject 
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: project gitShortStatus isEmpty.
+
+"move method"
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+	method := class class compiledMethodAt: #bar.
+	Rowan gemstoneTools topaz
+		moveMethod: method toPackageNamed: 'RowanSample9-Extensions';
+		yourself.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty
+]
+
 { #category : 'tonel support' }
 RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	"load spec_0001 and then checkout spec_0009 and read 

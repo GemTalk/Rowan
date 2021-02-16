@@ -110,6 +110,12 @@ RwLoadedClass >> instanceMethodDefinitionsForCompare [
 ]
 
 { #category : 'testing' }
+RwLoadedClass >> isClassExtension [
+
+	^ false
+]
+
+{ #category : 'testing' }
 RwLoadedClass >> isEmpty [
 
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
