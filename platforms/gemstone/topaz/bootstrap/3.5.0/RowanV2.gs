@@ -67089,13 +67089,11 @@ adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageN
 
 category: 'smalltalk api'
 method: RwPkgAdoptTool
-adoptMethod: methodSelector protocol: protocolString inClassNamed: className  isMeta: isMeta intoPackageNamed: packageName
-
+adoptMethod: methodSelector protocol: protocolString inClassNamed: className isMeta: isMeta intoPackageNamed: packageName
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior theCompiledMethod |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -67113,22 +67111,33 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
 
 	theCompiledMethod rowanProjectName = Rowan unpackagedName
-		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
+		ifFalse: [ 
+			self
+				error:
+					'The method ' , className printString , '>>' , methodSelector asString
+						, ' is already packaged ... no need to adopt' ].
 
-	theClass  rowanPackageName ~= packageName
+	theClass rowanPackageName ~= packageName
 		ifTrue: [ 
+			| theProtocolString |
+			theProtocolString := protocolString.
+			loadedProject packageConvention ~= 'Rowan'
+				ifTrue: [ 
+					"must fabricate a new protocolString if it does not match convention"
+					(theProtocolString beginsWith: '*')
+						ifFalse: [ theProtocolString := '*' , packageName asLowercase ] ].
 			registry
-				addExtensionCompiledMethod: theCompiledMethod 
-				for: theBehavior 
-				protocol: protocolString 
+				addExtensionCompiledMethod: theCompiledMethod
+				for: theBehavior
+				protocol: theProtocolString
 				toPackageNamed: packageName ]
 		ifFalse: [ 
 			registry
-				adoptCompiledMethod: theCompiledMethod 
+				adoptCompiledMethod: theCompiledMethod
 				classExtension: false
-				for: theBehavior 
+				for: theBehavior
 				protocol: protocolString
-				toPackageNamed: packageName ].
+				toPackageNamed: packageName ]
 %
 
 category: 'smalltalk api'
@@ -68634,7 +68643,7 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: pa
 				ifTrue: [ beh := beh class ].
 			category := beh categoryOfSelector: methodSelector asSymbol.
 			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
-			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [  ].
+			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [ ].
 			srcLoadedClass
 				ifNotNil: [ srcLoadedClassPackage := srcLoadedClass loadedPackage ].
 			srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.

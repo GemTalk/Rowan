@@ -4,44 +4,6 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'private' }
-RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageNames className: className [
-	"validate expected audit failures - according to Monticello conventions"
-
-	self
-		_validateExpectedMonticelloConventionFailure_389: audit
-		packageName: (packageNames at: 2)
-		className: className.
-	audit removeKey: (packageNames at: 2).	"class category not following Monticello conventions"
-	self assert: audit isEmpty
-]
-
-{ #category : 'private' }
-RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_B: audit packageName: packageName className: className [
-
-	"validate expected audit failures - according to Monticello conventions"
-
-	self _validateExpectedMonticelloConventionFailure_389: audit packageName: packageName className: className.
-	audit removeKey: packageName.
-	self assert: audit isEmpty
-]
-
-{ #category : 'private' }
-RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389: audit packageName: packageName className: className [
-
-	"validate expected audit failures - according to Monticello conventions"
-
-	| failures unexpectedFailures |
-	failures := audit at: packageName.
-	self assert: failures size = 1.
-	failures := failures at: className.
-	self assert: failures size = 2.
-
-	"extension categories not named according to Monticello conventions (no leading $*)"
-	unexpectedFailures := failures reject: [:each | (each matches: 'Missing instance method extension category ') or: [ each matches: 'Missing class method extension category ' ] ].
-	self assert: unexpectedFailures isEmpty
-]
-
 { #category : 'tests' }
 RwAdoptToolApiTest >> testAdopt_issue481_A [
 
@@ -806,9 +768,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_1 [
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: instanceMethod rowanPackageName = packageName1.
 	self assert: classMethod rowanPackageName = packageName1.
-
-"audit --> category not correct according to Monticello conventions"
-	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty. " with bug: 'AdoptedClass #*adopt-core'->'Missing instance method extension category '"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }
@@ -876,9 +836,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_2 [
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: instanceMethod rowanPackageName = packageName1.
 	self assert: classMethod rowanPackageName = packageName1.
-
-"audit --> category not correct according to Monticello conventions"
-	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty. " with bug: 'AdoptedClass #*adopt-core'->'Missing instance method extension category '"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }
@@ -1030,11 +988,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: instanceMethod rowanPackageName = packageName2.
 	self assert: classMethod rowanPackageName = packageName2.
-
-"audit --> category not correct according to Monticello conventions"
-	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
-
-	self _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageNames className: className
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }
@@ -1101,11 +1055,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_B [
 	self assert: theClass rowanProjectName = Rowan unpackagedName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
-
-"audit --> category not correct according to Monticello conventions"
-	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
-
-	self _validateExpectedMonticelloConventionFailure_389_B: audit packageName: packageName className: className.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }
@@ -1256,11 +1206,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_D [
 	self assert: theClass rowanProjectName = Rowan unpackagedName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
-
-"audit --> category not correct according to Monticello conventions"
-	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
-
-	self _validateExpectedMonticelloConventionFailure_389_B: audit packageName: packageName className: className
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
 ]
 
 { #category : 'tests' }

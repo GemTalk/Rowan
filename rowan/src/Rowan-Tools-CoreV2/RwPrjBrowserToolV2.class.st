@@ -1114,7 +1114,7 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 				ifTrue: [ beh := beh class ].
 			category := beh categoryOfSelector: methodSelector asSymbol.
 			destinationLoadedPackage := Rowan image loadedPackageNamed: packageName.
-			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [  ].
+			srcLoadedClass := Rowan image loadedClassNamed: className ifAbsent: [ ].
 			srcLoadedClass
 				ifNotNil: [ srcLoadedClassPackage := srcLoadedClass loadedPackage ].
 			srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.

@@ -521,6 +521,64 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
 	self assert: (audit := project audit)  isEmpty
 ]
 
+{ #category : 'method support' }
+RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
+	"load spec_0012 to defined the two packagesRowanSample9-Extensions1 and RowanSample9-Extensions, 
+		then create an unpackaged class, add extension methods to the class in each package and then
+		move the methods to the other package ... "
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project class method audit |
+	loadSpec := self _loadSpecNamed: 'spec_0012'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject 
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: project gitShortStatus isEmpty.
+
+"unpackage class"
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+
+	Rowan gemstoneTools topaz unpackageClass: class. "bar is still packaged and foo is not"
+
+"validate"
+	self assert: (audit := project audit)  isEmpty.
+
+"move method"
+	method := class class compiledMethodAt: #bar.
+	Rowan gemstoneTools topaz
+		moveMethod: method toPackageNamed: 'RowanSample9-Extensions';
+		yourself.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty.
+
+"move method"
+	method := class compiledMethodAt: #foo.
+	Rowan gemstoneTools topaz
+		moveMethod: method toPackageNamed: 'RowanSample9-Extensions1';
+		yourself.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty
+]
+
 { #category : 'tonel support' }
 RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	"load spec_0001 and then checkout spec_0009 and read 
