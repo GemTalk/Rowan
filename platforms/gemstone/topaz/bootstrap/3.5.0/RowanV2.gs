@@ -70458,43 +70458,39 @@ _checkExpectedSymbolDictForClassDefinition: classDef packageDef: packageDef proj
 category: 'private'
 method: RwPrjReconcileToolV2
 _moveClassExtension: theClassExtension toNewPackageClonedFrom: packageDef inSymbolDictionary: expectedSymDictName inProject: projectDef
-
 	| newPackageName newPackageDef |
-	newPackageName := packageDef name, '-ext-', expectedSymDictName.
-	newPackageDef := projectDef 
-		packageNamed: newPackageName 
+	newPackageName := packageDef name , '-ext-' , expectedSymDictName.
+	newPackageDef := projectDef
+		packageNamed: newPackageName
 		ifAbsent: [ 
-			| component  |
+			| component |
 			component := projectDef componentForPackageNamed: packageDef name.
 			projectDef addPackageNamed: newPackageName toComponentNamed: component name ].
-	packageDef removeClassExtensionDefinition: theClassExtension.
-	newPackageDef addClassExtensionDefinition: theClassExtension.
-	"update the method categories --- hybrid only ... but that is what we're doing"
-	theClassExtension instanceMethodDefinitions values do: [:methodDef |
-		methodDef protocol: '*', newPackageName ].
-	theClassExtension classMethodDefinitions values do: [:methodDef |
-		methodDef protocol: '*', newPackageName ].
+	packageDef
+		moveClassExtension: theClassExtension
+		modifyMethodDefinitions: [ :methodDef | 
+			"update the method categories --- hybrid only ... but that is what we're doing"
+			methodDef protocol: '*' , newPackageName ]
+		toPackage: newPackageDef.
 	^ newPackageDef
 %
 
 category: 'private'
 method: RwPrjReconcileToolV2
 _moveClassExtension: theClassExtension toNewPackageNamed: newPackageName clonedFrom: packageDef inProject: projectDef
-
 	| newPackageDef |
-	newPackageDef := projectDef 
-		packageNamed: newPackageName 
+	newPackageDef := projectDef
+		packageNamed: newPackageName
 		ifAbsent: [ 
-			| component  |
+			| component |
 			component := projectDef componentForPackageNamed: packageDef name.
 			projectDef addPackageNamed: newPackageName toComponentNamed: component name ].
-	packageDef removeClassExtensionDefinition: theClassExtension.
-	newPackageDef addClassExtensionDefinition: theClassExtension.
-	"update the method categories --- hybrid only ... but that is what we're doing"
-	theClassExtension instanceMethodDefinitions values do: [:methodDef |
-		methodDef protocol: '*', newPackageName ].
-	theClassExtension classMethodDefinitions values do: [:methodDef |
-		methodDef protocol: '*', newPackageName ].
+	packageDef
+		moveClassExtension: theClassExtension
+		modifyMethodDefinitions: [ :methodDef | 
+			"update the method categories --- hybrid only ... but that is what we're doing"
+			methodDef protocol: '*' , newPackageName ]
+		toPackage: newPackageDef.
 	^ newPackageDef
 %
 
@@ -73920,6 +73916,46 @@ key
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self propertyAt: #'name' ifAbsent: [nil]
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassExtension: classExtensionDefinition modifyMethodDefinitions: modifyMethodDefBlock toPackage: packageDefinition
+	classExtensionDefinition classMethodDefinitions values
+		, classExtensionDefinition instanceMethodDefinitions values
+		do: [ :methodDef | modifyMethodDefBlock cull: methodDef ].
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassExtension: classExtensionDefinition toPackage: packageDefinition
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: [  ]
+		toPackage: packageDefinition
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassExtensionNamed: className modifyMethodDefinitions: modifyMethodDefBlock toPackage: packageDefinition
+	| classExtensionDefinition |
+	classExtensionDefinition := self classExtensionDefinitionNamed: className.
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: modifyMethodDefBlock
+		toPackage: packageDefinition
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+moveClassExtensionNamed: className toPackage: packageDefinition
+	| classExtensionDefinition |
+	classExtensionDefinition := self classExtensionNamed: className.
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: [  ]
+		toPackage: packageDefinition
 %
 
 category: 'accessing'

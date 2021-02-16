@@ -437,6 +437,46 @@ RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
 	self assert: project packageNames sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-GemStone' ) sort.
 ]
 
+{ #category : 'class support' }
+RwGsTopazRowanToolTest >> testTopazMoveClassToPackage [
+	"load spec_0012 and then move RowanSample9Class1 in RowanSample9-Core to RowanSample9-Extensions"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project class audit |
+	loadSpec := self _loadSpecNamed: 'spec_0012'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+	resolvedProject 
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		yourself.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty.
+
+"move class"
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+	Rowan gemstoneTools topaz
+		moveClass: class 
+			toPackageNamed: 'RowanSample9-Extensions';
+		yourself.
+
+"validate"
+	self assert: (audit := project audit)  isEmpty
+]
+
 { #category : 'method support' }
 RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
 	"load spec_0009 and then move #foo in RowanSample9-Core to RowanSample9-Extensions and #bar from  RowanSample9-Extensions to  RowanSample9-Core"

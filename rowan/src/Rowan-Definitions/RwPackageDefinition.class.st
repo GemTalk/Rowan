@@ -218,6 +218,42 @@ RwPackageDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> moveClassExtension: classExtensionDefinition modifyMethodDefinitions: modifyMethodDefBlock toPackage: packageDefinition [
+	classExtensionDefinition classMethodDefinitions values
+		, classExtensionDefinition instanceMethodDefinitions values
+		do: [ :methodDef | modifyMethodDefBlock cull: methodDef ].
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassExtension: classExtensionDefinition toPackage: packageDefinition [
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: [  ]
+		toPackage: packageDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassExtensionNamed: className modifyMethodDefinitions: modifyMethodDefBlock toPackage: packageDefinition [
+	| classExtensionDefinition |
+	classExtensionDefinition := self classExtensionDefinitionNamed: className.
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: modifyMethodDefBlock
+		toPackage: packageDefinition
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> moveClassExtensionNamed: className toPackage: packageDefinition [
+	| classExtensionDefinition |
+	classExtensionDefinition := self classExtensionNamed: className.
+	self
+		moveClassExtension: classExtensionDefinition
+		modifyMethodDefinitions: [  ]
+		toPackage: packageDefinition
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> moveClassNamed: className modifyClassDefinition: classDefinitionBlock toPackage: packageDefinition [
 	| classDefinition |
 	classDefinition := self removeKey: className from: classDefinitions.
