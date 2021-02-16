@@ -3518,6 +3518,53 @@ RwRowanSample9Test >> testIssue571 [
 		present: true) copy.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue653 [
+	"use spec_0061 to test compoent API "
+
+	"https://github.com/GemTalk/Rowan/issues/653"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"component API"
+	self 
+		assert: ((project loadSubcomponentsOf: 'Core') collect: [:each | each name]) sort
+		equals: #( 'common/Core' 'common/Examples' 'common/Loader' 'common/Tests' 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+	self 
+		assert: ((project loadSubcomponentsOf: 'common/Core') collect: [:each | each name]) sort
+		equals: #() sort.
+	self 
+		assert: ((project loadSubcomponentsOf: 'common/Loader') collect: [:each | each name]) sort
+		equals: #('common/platforms/Loader') sort.
+	self 
+		assert: ((project loadSubcomponentsOf: 'common/platforms/Loader') collect: [:each | each name]) sort
+		equals: #('common/platforms/gemstone/Loader') sort.
+	self 
+		assert: (project loadedSubcomponentsOf: 'common/examples/Examples' ifNone: []) isNil.
+	self
+		assert: ((project loadedSubcomponentsOf: 'common/Tests' attributes: #('common' 'tests') ifNone: [])  collect: [:each | each name])
+		equals: #('common/tests/Tests') .
+	self
+		assert: (project loadedSubcomponentsOf: 'common/Tests' attributes: #('common') ifNone: [#()])
+		equals: #() .
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"

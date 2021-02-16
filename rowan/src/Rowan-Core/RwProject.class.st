@@ -333,12 +333,19 @@ RwProject >> loadedComponents [
 	^ self _loadedProject loadedComponentDefinitions
 ]
 
-{ #category : 'components to be cleaned up' }
-RwProject >> loadedTopLevelComponents [
-	| lc |
-	lc := self loadedComponents.
-	^ self componentNames
-		collect: [ :componentName | lc componentNamed: componentName ]
+{ #category : 'querying' }
+RwProject >> loadedSubcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+]
+
+{ #category : 'querying' }
+RwProject >> loadedSubcomponentsOf: componentName ifNone: noneBlock [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 ]
 
 { #category : 'actions' }
@@ -378,6 +385,13 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'querying' }
+RwProject >> loadSubcomponentsOf: componentName [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
 ]
 
 { #category : 'components' }
@@ -489,38 +503,9 @@ RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMi
 	^ self error: 'Not yet implmented'
 ]
 
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName [
-	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
-]
-
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
-	^ self _loadedProject
-		subcomponentsOf: componentName
-		attributes: attributes
-		ifNone: noneBlock
-]
-
-{ #category : 'components' }
-RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
-	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
-]
-
 { #category : 'actions' }
 RwProject >> testSuite [
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
-]
-
-{ #category : 'components to be cleaned up' }
-RwProject >> topLevelComponentNames [
-	^ self _loadedProject resolvedProject _loadSpecification componentNames
-]
-
-{ #category : 'components to be cleaned up' }
-RwProject >> topLevelComponents [
-	^ self loadedComponents components values
-		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
 ]
 
 { #category : 'actions' }

@@ -163,18 +163,6 @@ RwAbstractActiveComponent >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
-RwAbstractActiveComponent >> conditionalPackageMapSpecs: aDictionary [
-	conditionalPackageMapSpecs := aDictionary
-]
-
-{ #category : 'accessing' }
-RwAbstractActiveComponent >> conditionalPackageMapSpecsAt: key ifAbsent: absentBlock [
-	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
-
-	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
 RwAbstractActiveComponent >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])

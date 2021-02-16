@@ -240,7 +240,11 @@ RwDefinedProject >> addPlatformSubcomponentNamed: componentName condition: condi
 RwDefinedProject >> addPlatformSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName [
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addPlatformSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
+	^ self
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
 ]
 
 { #category : 'accessing' }
@@ -269,6 +273,13 @@ RwDefinedProject >> addProjectNamed: projectName toComponentNamed: toComponentNa
 { #category : 'accessing' }
 RwDefinedProject >> addRawPackageNamed: packageName [
 	^ self _resolvedProject addRawPackageNamed: packageName
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addSubcomponentNamed: componentName condition: condition [
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
 ]
 
 { #category : 'components' }

@@ -926,11 +926,9 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0019: resolvedProject [
 
 	resolvedProject
 		addSubcomponentNamed: componentName1
-			condition: 'common'
-			comment: '';
+			condition: 'common';
 		addSubcomponentNamed: componentName2
-			condition: 'common'
-			comment: '';
+			condition: 'common';
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: nil forPackageNamed: packageName2;
 		removePackageNamed: packageName1
@@ -3611,14 +3609,12 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0063: resolvedProject [
 									newPlatformComponent := resolvedProject
 										addPlatformSubcomponentNamed: 'Loader_gemstone'
 										condition: {'gemstone'}
-										comment: ''
 										toComponentNamed: 'Core' ].
 							platformComponent condition = {'pharo'}
 								ifTrue: [ 
 									newPlatformComponent := resolvedProject
 										addPlatformSubcomponentNamed: 'Loader_pharo'
 										condition: {'pharo'}
-										comment: ''
 										toComponentNamed: 'Core' ].
 							newPlatformComponent addPackageNames: platformComponent packageNames.
 							commonComponent addComponentNamed: newPlatformComponent name ] ] ].

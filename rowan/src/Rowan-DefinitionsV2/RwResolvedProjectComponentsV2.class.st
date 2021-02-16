@@ -417,11 +417,6 @@ RwResolvedProjectComponentsV2 >> components [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentsV2 >> components: object [
-	components := object
-]
-
-{ #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> componentsWithDoits [
 	^ self components select: [ :each | each hasDoits ]
 ]
@@ -566,11 +561,6 @@ RwResolvedProjectComponentsV2 >> packageGroupNames [
 { #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> packageGroups [
 	^packageGroups
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectComponentsV2 >> packageGroups: object [
-	packageGroups := object
 ]
 
 { #category : 'copying' }

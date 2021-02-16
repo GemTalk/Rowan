@@ -334,16 +334,6 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'components' }
-RwResolvedProjectV2 >> addPlatformSubcomponentNamed: aComponentName condition: conditionArray [
-	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
-
-	^ self
-		addPlatformSubcomponentNamed: aComponentName
-		condition: conditionArray
-		comment: ''
-]
-
-{ #category : 'components' }
 RwResolvedProjectV2 >> addPlatformSubcomponentNamed: aComponentName condition: conditionArray comment: aString [
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 

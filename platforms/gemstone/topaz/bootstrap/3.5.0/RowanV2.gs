@@ -49746,7 +49746,11 @@ method: RwDefinedProject
 addPlatformSubcomponentNamed: componentName condition: condition toComponentNamed: toComponentName
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self addPlatformSubcomponentNamed: componentName condition: condition comment: '' toComponentNamed: toComponentName
+	^ self
+		addPlatformSubcomponentNamed: componentName
+		condition: condition
+		comment: ''
+		toComponentNamed: toComponentName
 %
 
 category: 'accessing'
@@ -49779,6 +49783,14 @@ category: 'accessing'
 method: RwDefinedProject
 addRawPackageNamed: packageName
 	^ self _resolvedProject addRawPackageNamed: packageName
+%
+
+category: 'components'
+method: RwDefinedProject
+addSubcomponentNamed: componentName condition: condition
+	^ self _resolvedProject
+		addSubcomponentNamed: componentName
+		condition: condition
 %
 
 category: 'components'
@@ -50922,13 +50934,21 @@ loadedComponents
 	^ self _loadedProject loadedComponentDefinitions
 %
 
-category: 'components to be cleaned up'
+category: 'querying'
 method: RwProject
-loadedTopLevelComponents
-	| lc |
-	lc := self loadedComponents.
-	^ self componentNames
-		collect: [ :componentName | lc componentNamed: componentName ]
+loadedSubcomponentsOf: componentName attributes: attributes ifNone: noneBlock
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+%
+
+category: 'querying'
+method: RwProject
+loadedSubcomponentsOf: componentName ifNone: noneBlock
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self _loadedProject subcomponentsOf: componentName ifNone: noneBlock
 %
 
 category: 'actions'
@@ -50971,6 +50991,14 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+%
+
+category: 'querying'
+method: RwProject
+loadSubcomponentsOf: componentName
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
 %
 
 category: 'components'
@@ -51095,44 +51123,10 @@ revert: platformConditionalAttributes  instanceMigrator: instanceMigrator
 	^ self error: 'Not yet implmented'
 %
 
-category: 'components'
-method: RwProject
-subcomponentsOf: componentName
-	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
-%
-
-category: 'components'
-method: RwProject
-subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
-	^ self _loadedProject
-		subcomponentsOf: componentName
-		attributes: attributes
-		ifNone: noneBlock
-%
-
-category: 'components'
-method: RwProject
-subcomponentsOf: componentName ifNone: noneBlock
-	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
-%
-
 category: 'actions'
 method: RwProject
 testSuite
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
-%
-
-category: 'components to be cleaned up'
-method: RwProject
-topLevelComponentNames
-	^ self _loadedProject resolvedProject _loadSpecification componentNames
-%
-
-category: 'components to be cleaned up'
-method: RwProject
-topLevelComponents
-	^ self loadedComponents components values
-		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
 %
 
 category: 'actions'
@@ -58049,20 +58043,6 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwAbstractActiveComponent
-conditionalPackageMapSpecs: aDictionary
-	conditionalPackageMapSpecs := aDictionary
-%
-
-category: 'accessing'
-method: RwAbstractActiveComponent
-conditionalPackageMapSpecsAt: key ifAbsent: absentBlock
-	conditionalPackageMapSpecs ifNil: [ ^ absentBlock value ].
-
-	^ conditionalPackageMapSpecs at: key ifAbsent: absentBlock
-%
-
-category: 'accessing'
-method: RwAbstractActiveComponent
 conditionalPackageMapSpecsAtGemStoneUserId: userId 
 
 	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
@@ -64513,17 +64493,6 @@ method: RwResolvedProjectV2
 addPackagesNamed: packageNames toComponentNamed: componentName
 	^ packageNames
 		collect: [ :packageName | self addPackageNamed: packageName toComponentNamed: componentName ]
-%
-
-category: 'components'
-method: RwResolvedProjectV2
-addPlatformSubcomponentNamed: aComponentName condition: conditionArray
-	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
-
-	^ self
-		addPlatformSubcomponentNamed: aComponentName
-		condition: conditionArray
-		comment: ''
 %
 
 category: 'components'
@@ -83437,16 +83406,9 @@ subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
 
 category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-subcomponentsOf: componentName do: aBlock
-	^ self
-		subcomponentsOf: componentName
-		attributes: self platformConditionalAttributes
-		do: aBlock
-%
-
-category: 'querying'
-method: RwGsLoadedSymbolDictResolvedProjectV2
 subcomponentsOf: componentName ifNone: noneBlock
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
 	^ self
 		subcomponentsOf: componentName
 		attributes: self platformConditionalAttributes
@@ -85602,12 +85564,6 @@ components
 
 category: 'accessing'
 method: RwResolvedProjectComponentsV2
-components: object
-	components := object
-%
-
-category: 'accessing'
-method: RwResolvedProjectComponentsV2
 componentsWithDoits
 	^ self components select: [ :each | each hasDoits ]
 %
@@ -85766,12 +85722,6 @@ category: 'accessing'
 method: RwResolvedProjectComponentsV2
 packageGroups
 	^packageGroups
-%
-
-category: 'accessing'
-method: RwResolvedProjectComponentsV2
-packageGroups: object
-	packageGroups := object
 %
 
 category: 'copying'

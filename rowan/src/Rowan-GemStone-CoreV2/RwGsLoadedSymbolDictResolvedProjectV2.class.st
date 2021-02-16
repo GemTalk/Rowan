@@ -408,15 +408,9 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attribut
 ]
 
 { #category : 'querying' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName do: aBlock [
-	^ self
-		subcomponentsOf: componentName
-		attributes: self platformConditionalAttributes
-		do: aBlock
-]
-
-{ #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: noneBlock [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
 	^ self
 		subcomponentsOf: componentName
 		attributes: self platformConditionalAttributes
