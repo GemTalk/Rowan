@@ -380,7 +380,7 @@ RwRowanSample9Test >> _validate_spec_0061_0062_0063: project expectedComponentNa
 	packageGroupMap
 		keysAndValuesDo: [ :componentName :expectedClassNames | 
 			self
-				assert: (project classNamesFor: componentName) asArray sort
+				assert: (project allClassNamesFor: componentName) asArray sort
 				equals: expectedClassNames sort ]
 ]
 
@@ -3544,16 +3544,16 @@ RwRowanSample9Test >> testIssue653 [
 
 "component API"
 	self 
-		assert: ((project loadSubcomponentsOf: 'Core') collect: [:each | each name]) sort
+		assert: ((project loadedSubcomponentsOf: 'Core') collect: [:each | each name]) sort
 		equals: #( 'common/Core' 'common/Examples' 'common/Loader' 'common/Tests' 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
 	self 
-		assert: ((project loadSubcomponentsOf: 'common/Core') collect: [:each | each name]) sort
+		assert: ((project loadedSubcomponentsOf: 'common/Core') collect: [:each | each name]) sort
 		equals: #() sort.
 	self 
-		assert: ((project loadSubcomponentsOf: 'common/Loader') collect: [:each | each name]) sort
+		assert: ((project loadedSubcomponentsOf: 'common/Loader') collect: [:each | each name]) sort
 		equals: #('common/platforms/Loader') sort.
 	self 
-		assert: ((project loadSubcomponentsOf: 'common/platforms/Loader') collect: [:each | each name]) sort
+		assert: ((project loadedSubcomponentsOf: 'common/platforms/Loader') collect: [:each | each name]) sort
 		equals: #('common/platforms/gemstone/Loader') sort.
 	self 
 		assert: (project loadedSubcomponentsOf: 'common/examples/Examples' ifNone: []) isNil.

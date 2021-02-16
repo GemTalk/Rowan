@@ -85,7 +85,21 @@ RwProject >> addSubcomponentNamed: componentName condition: condition toComponen
 		toComponentNamed: toComponentName
 ]
 
-{ #category : 'components' }
+{ #category : 'querying' }
+RwProject >> allClassNamesFor: componentNameOrArrayOfNames [
+	| loadedClassNames |
+	loadedClassNames := Set new.
+	(self allPackageNamesIn: componentNameOrArrayOfNames)
+		do: [ :packageName | 
+			(self packageNamed: packageName ifAbsent: [  ])
+				ifNotNil: [ :loadedPackage | 
+					loadedClassNames
+						addAll: loadedPackage definedClassNames;
+						addAll: loadedPackage extendedClassNames ] ].
+	^ loadedClassNames
+]
+
+{ #category : 'querying' }
 RwProject >> allPackageNamesIn: componentNameOrArrayOfNames [
 	^ self _loadedProject allPackageNamesIn: componentNameOrArrayOfNames
 ]
@@ -112,20 +126,6 @@ RwProject >> canCommit [
 { #category : 'properties' }
 RwProject >> checkout: revision [
 	^ self _loadedProject checkout: revision
-]
-
-{ #category : 'querying' }
-RwProject >> classNamesFor: componentNameOrArrayOfNames [
-	| loadedClassNames |
-	loadedClassNames := Set new.
-	(self allPackageNamesIn: componentNameOrArrayOfNames)
-		do: [ :packageName | 
-			(self packageNamed: packageName ifAbsent: [  ])
-				ifNotNil: [ :loadedPackage | 
-					loadedClassNames
-						addAll: loadedPackage definedClassNames;
-						addAll: loadedPackage extendedClassNames ] ].
-	^ loadedClassNames
 ]
 
 { #category : 'properties' }
@@ -323,14 +323,21 @@ RwProject >> loadedCommitId [
 	^ self _loadedProject loadedCommitId
 ]
 
-{ #category : 'components' }
+{ #category : 'querying' }
 RwProject >> loadedComponentNames [
 	^ self loadedComponents componentNames
 ]
 
-{ #category : 'components' }
+{ #category : 'querying' }
 RwProject >> loadedComponents [
 	^ self _loadedProject loadedComponentDefinitions
+]
+
+{ #category : 'querying' }
+RwProject >> loadedSubcomponentsOf: componentName [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
 ]
 
 { #category : 'querying' }
@@ -385,13 +392,6 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
-]
-
-{ #category : 'querying' }
-RwProject >> loadSubcomponentsOf: componentName [
-	"list of direct subcomponents of the given <componentName> ...includes package groups"
-
-	^ self loadedSubcomponentsOf: componentName ifNone: [ ^ {} ]
 ]
 
 { #category : 'components' }
