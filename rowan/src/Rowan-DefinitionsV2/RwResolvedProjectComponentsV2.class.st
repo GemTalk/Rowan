@@ -350,21 +350,6 @@ RwResolvedProjectComponentsV2 >> addSubcomponentNamed: aComponentName condition:
 	^ component
 ]
 
-{ #category : 'components to be cleaned up' }
-RwResolvedProjectComponentsV2 >> categoryComponentsFor: componentNameList [
-	"category components are the components listed in the top-level loaded components"
-
-	| topLevel categoryComponents |
-	topLevel := componentNameList
-		collect: [ :componentName | self componentNamed: componentName ].
-	categoryComponents := Set new.
-	topLevel
-		do: [ :component | 
-			component componentNames
-				do: [ :componentName | categoryComponents add: (self componentNamed: componentName) ] ].
-	^ categoryComponents asArray
-]
-
 { #category : 'querying' }
 RwResolvedProjectComponentsV2 >> componentForPackageNamed: packageName [
 	self components
@@ -391,6 +376,8 @@ RwResolvedProjectComponentsV2 >> componentNamed: aComponentName ifAbsent: absent
 
 { #category : 'accessing' }
 RwResolvedProjectComponentsV2 >> componentNames [
+	"list of defined components in the receiver"
+
 	^ self components keys asArray
 ]
 

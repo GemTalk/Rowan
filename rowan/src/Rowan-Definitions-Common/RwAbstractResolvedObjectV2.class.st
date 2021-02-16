@@ -107,6 +107,8 @@ RwAbstractResolvedObjectV2 >> comment: aString [
 
 { #category : 'project specification' }
 RwAbstractResolvedObjectV2 >> componentNames [
+	"list of component names from the load specification used to load the project "
+
 	^ self _loadSpecification componentNames
 ]
 

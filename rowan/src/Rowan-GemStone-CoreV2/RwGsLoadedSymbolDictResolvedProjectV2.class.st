@@ -165,6 +165,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentNamed: aComponentName ifAbsent
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
+	"list of component names from the load specification used to load the project "
 
 	^ handle componentNames
 ]

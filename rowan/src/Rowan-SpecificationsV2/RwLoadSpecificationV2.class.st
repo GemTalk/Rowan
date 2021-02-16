@@ -200,6 +200,8 @@ RwLoadSpecificationV2 >> comment: aString [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> componentNames [
+	"list of component names from the load specification used to load the project "
+
 	^ componentNames
 ]
 

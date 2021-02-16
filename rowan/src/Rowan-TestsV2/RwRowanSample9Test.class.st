@@ -525,46 +525,6 @@ RwRowanSample9Test >> testAutomaticMigration_gitolite [
 				self assert: (instance perform: ivName) == ivName ] ]
 ]
 
-{ #category : 'tests' }
-RwRowanSample9Test >> testCategoryComponents [
-	"based on spec_0029"
-
-	"a category component should be able to answer the list of packages and classes loaded in image"
-
-	"https://github.com/dalehenrich/Rowan/issues/573"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects project components categoryComponents |
-	loadSpec := self _loadSpecNamed: 'spec_0029'.
-
-	projectName := loadSpec projectName.
-	projectNames := {projectName}.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve project"
-	resolvedProject := loadSpec resolve.
-
-"load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-"validate that list of packages and classes from the category components is correct"
-	project := loadedProjects at: 1.
-
-"using the category components, calculate the list of package names and class names in each component"
-	components := project loadedComponents.
-	categoryComponents := components categoryComponentsFor: project componentNames.
-"I think I want a component visitor to extract the list of packages from the loaded components"
-	false ifTrue: [ self halt]
-]
-
 { #category : 'migration tests' }
 RwRowanSample9Test >> testDeferredMigration_gitlab [
 

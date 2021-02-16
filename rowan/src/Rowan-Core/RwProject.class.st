@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'private' }
+RwProject >> _loadedComponents [
+	^ self _loadedProject loadedComponentDefinitions
+]
+
+{ #category : 'private' }
 RwProject >> _loadedProject [
 
 	^ Rowan image loadedProjectNamed: self name
@@ -155,11 +160,13 @@ RwProject >> componentForPackageNamed: packageName [
 
 { #category : 'components' }
 RwProject >> componentNamed: componentName [
-	^ self loadedComponents componentNamed: componentName
+	^ self _loadedComponents componentNamed: componentName
 ]
 
-{ #category : 'components' }
+{ #category : 'querying' }
 RwProject >> componentNames [
+	"list of component names from the load specification used to load the project "
+
 	^ self _loadedProject componentNames
 ]
 
@@ -325,12 +332,9 @@ RwProject >> loadedCommitId [
 
 { #category : 'querying' }
 RwProject >> loadedComponentNames [
-	^ self loadedComponents componentNames
-]
+	"list of defined components in the components"
 
-{ #category : 'querying' }
-RwProject >> loadedComponents [
-	^ self _loadedProject loadedComponentDefinitions
+	^ self _loadedComponents componentNames
 ]
 
 { #category : 'querying' }
@@ -396,12 +400,12 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 
 { #category : 'components' }
 RwProject >> packageGroupNamed: componentName [
-	^ self loadedComponents packageGroupNamed: componentName
+	^ self _loadedComponents packageGroupNamed: componentName
 ]
 
 { #category : 'components' }
 RwProject >> packageGroupNames [
-	^ self loadedComponents packageGroupNames
+	^ self _loadedComponents packageGroupNames
 ]
 
 { #category : 'querying' }
