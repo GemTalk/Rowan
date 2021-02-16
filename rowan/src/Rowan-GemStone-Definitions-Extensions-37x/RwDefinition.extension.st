@@ -19,5 +19,3 @@ RwDefinition >> diffSTON: aRwDefinition [
   ^ self class diffString: (self printSTON ) 
                        to: (aRwDefinition printSTON )
 ]
-
-
