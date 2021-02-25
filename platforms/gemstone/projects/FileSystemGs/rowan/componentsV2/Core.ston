@@ -17,7 +17,9 @@ RwSimpleProjectLoadComponentV2 {
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
-					'FileSystem-GemStone-Kernel' : { 'symbolDictName' : 'Globals' }
+					'FileSystem-GemStone-Kernel' : {
+						'symbolDictName' : 'Globals'
+					}
 				}
 			}
 		}

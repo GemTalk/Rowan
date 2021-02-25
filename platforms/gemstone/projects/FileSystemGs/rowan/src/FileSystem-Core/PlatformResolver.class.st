@@ -10,8 +10,14 @@ Class {
 { #category : 'instance creation' }
 PlatformResolver class >> forCurrentPlatform [
 	| platformName |
-	platformName :=  System gemVersionAt: 'osName' .
-	^ (self allSubclasses detect: [:ea | ea platformName = platformName]) new
+	platformName := System gemVersionAt: 'osName'.
+	^ (self allSubclasses
+		detect: [ :ea | ea platformName = platformName ]
+		ifNone: [ 
+			"in filesystem_dev branch, the FileSytem classes are hidden from all users except SystemUser, so allow development of new FileSystem, so this hack works around the problem"
+			{MacOSResolver.
+			UnixResolver.
+			WindowsResolver} detect: [ :ea | ea platformName = platformName ] ]) new
 ]
 
 { #category : 'accessing' }
