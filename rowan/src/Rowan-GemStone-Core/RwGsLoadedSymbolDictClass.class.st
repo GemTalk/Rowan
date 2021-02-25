@@ -43,21 +43,6 @@ RwGsLoadedSymbolDictClass >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
-{ #category : 'removing' }
-RwGsLoadedSymbolDictClass >> disownFromLoaded: aPackageSymbolDictionary [
-
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
-
-]
-
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> handleClassDeletion [
 
@@ -169,6 +154,22 @@ RwGsLoadedSymbolDictClass >> removeLoadedMethod: aLoadedMethod [
 ]
 
 { #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedClassMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass >> reregisterLoadedInstanceMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
+]
+
+{ #category : 'private' }
 RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 
 	self propertyAt: 'gs_SymbolDictionary' put: aName asString
@@ -226,27 +227,12 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'. 	"needs to be listed in _classBasedProperties method"
+	propertyName := 'type'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
-	newValue := handle isBytes
-						ifTrue: [
-							handle superClass isBytes not
-								ifTrue: [ 'byteSubclass' ]
-								ifFalse: [ 'normal' ]]
-						ifFalse: [ 
-							handle isSpecial
-								ifTrue: [ 'immediate' ]
-								ifFalse: 
-									[ handle isNsc
-										ifTrue: [ 'normal' ]
-										ifFalse:  [
-											(handle isVariable and: [handle superClass isVariable not])
-												ifTrue: [ 'variable' ]
-												ifFalse: [ 'normal' ] ] ] ].
+	newValue := handle rwClassType.
 
 	oldValue = newValue
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ]
 ]
 
 { #category : 'private-updating' }

@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsClassExtensionSymbolDictPatchV2 >> installClassExtensionInSystem [
+RwGsClassExtensionSymbolDictPatchV2 >> installClassExtensionInSystem: aSymbolList [
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
 
@@ -17,7 +17,7 @@ RwGsClassExtensionSymbolDictPatchV2 >> installClassExtensionInSystem [
 		ifTrue: [ 
 			| resolved |
 			Rowan image ensureSessionMethodsEnabled.
-			((resolved := Rowan image symbolList objectNamed: self className asSymbol)
+			((resolved := aSymbolList objectNamed: self className asSymbol)
 				notNil and: [ resolved isBehavior and: [ resolved isMeta not ] ])
 				ifFalse: [ 
 					self

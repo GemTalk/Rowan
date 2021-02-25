@@ -23,7 +23,6 @@ CypressAbstractPackageReader >> _parseMethod: source category: cat using: aSymbo
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -47,13 +46,11 @@ CypressAbstractPackageReader >> _parseMethod: source category: cat using: aSymbo
 									category: cat
 									intoMethodDict: GsMethodDictionary new
 									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].
 						undefSymbol ifFalse: [ex outer]]
 					with: [:ex | ex resume])
-
 ]
 
 { #category : 'private' }

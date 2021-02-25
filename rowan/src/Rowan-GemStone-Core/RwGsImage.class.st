@@ -101,50 +101,6 @@ RwGsImage class >> ensureSessionMethodsEnabled [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> existingSymbolDictionaryNamed: dictName [
-
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName |
-	symbolName := dictName asSymbol.
-	^ self symbolList
-		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
-		ifNone: [ nil ]
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
-
-        "scan the symbol list for a RwLoadedClass instances for the given compiled method"
-
-        self symbolList
-                do: [ :symbolDict |
-                        symbolDict rowanSymbolDictionaryRegistry
-                                ifNotNil: [ :registry |
-                                        (registry classRegistry at: class classHistory ifAbsent: [  ])
-                                                ifNotNil: [ :loadedClass | ^ presentBlock value: symbolDict value: loadedClass ] ] ].
-        ^ absentBlock value
-
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassExtensionsForClass: class [
-
-	"lookup the loadedClassExtensions for the given class"
-
-	| history found |
-	history := class classHistory.
-	found := IdentitySet new.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
-	^ found
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
@@ -152,25 +108,10 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 	| class found |
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
+	
 	found := self loadedClassExtensionsForClass: class.
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
-	^ absentBlock value
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
-
-	"Lookup the given class in the classRegistry"
-
-	| history |
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
 	^ absentBlock value
 ]
 
@@ -192,20 +133,6 @@ RwGsImage class >> loadedClassNamed: className ifAbsent: absentBlock [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
-
-	"scan the symbol list for a RwLoadedClass instance of the given name"
-
-	| class loadedClass |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	loadedClass := self
-		loadedClassForClass: class
-		ifAbsent: [ ^ absentBlock value ].
-	^ foundBlock value: loadedClass
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given hybrid name"
@@ -223,45 +150,6 @@ RwGsImage class >> loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
-
-	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
-
-	| behavior compiledMethod |
-	behavior := self objectNamed: className.
-	behavior ifNil: [ ^ absentBlock value ].
-	isMeta
-		ifTrue: [ behavior := behavior class ].
-	compiledMethod := behavior
-		compiledMethodAt: selector asSymbol
-		environmentId: 0
-		otherwise: nil.
-	compiledMethod ifNil: [ ^ absentBlock value ].
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
-	^ absentBlock value
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock [
-
-        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-        self symbolList
-                do: [ :symbolDict |
-                        symbolDict rowanSymbolDictionaryRegistry
-                                ifNotNil: [ :registry |
-                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
-                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
-        ^ absentBlock value
-
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
@@ -272,20 +160,6 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod [
 			self
 				error:
 					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
-
-	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
-	^ absentBlock value
 ]
 
 { #category : 'querying' }
@@ -367,40 +241,6 @@ RwGsImage class >> loadedProjects [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedRegistryForClassExtensionNamed: className ifAbsent: absentBlock [
-	"scan the symbol list for a RwLoadedClassExtension instance of the given name and return the registry"
-
-	| history class |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classExtensionRegistry includesKey: history)
-						ifTrue: [ ^ registry ] ] ].
-	^ absentBlock value
-]
-
-{ #category : 'querying' }
-RwGsImage class >> loadedRegistryForClassNamed: className ifAbsent: absentBlock [
-	"scan the symbol list for a RwLoadedClass instance of the given name and return the registry"
-
-	| history class |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry classRegistry includesKey: history)
-						ifTrue: [ ^ registry ] ] ].
-	^ absentBlock value
-]
-
-{ #category : 'querying' }
 RwGsImage class >> loadedRegistryForPackageNamed: aName [
 	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
 
@@ -429,10 +269,9 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 	Otherwise, create one, add it to the beginning of both transient and persistent symbol lists, and 
 	answer it."
 
-	| symbolName session symbolList symbolDict |
+	| symbolName  symbolList symbolDict |
 	symbolName := dictName asSymbol.
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
+	symbolList := self symbolList.
 	symbolDict := symbolList
 		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
 		ifNone: [ 
@@ -445,7 +284,7 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 			System myUserProfile insertDictionary: newDict at: size + 1.
 			newDict ].
 	symbolDict rowanSymbolDictionaryRegistry
-		ifNil: [ RwGsSymbolDictionaryRegistry installIn: symbolDict ].
+		ifNil: [ self symbolDictionaryRegistryClass installIn: symbolDict ].
 	^ symbolDict
 ]
 
@@ -508,32 +347,6 @@ RwGsImage class >> projectNames [
 
 	^ (self loadedProjects collect: [ :loadedProject | loadedProject name ]) asArray
 
-]
-
-{ #category : 'querying' }
-RwGsImage class >> removeLoadedClassExtensionsForClass: class [
-
-	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
-		to the given class"
-
-	| history |
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | registry classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
-]
-
-{ #category : 'querying' }
-RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
-
-	"The given compiled method is being removed from the system, remove the loadedMethod associated 
-		with the compiled method."
-
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 ]
 
 { #category : 'querying' }

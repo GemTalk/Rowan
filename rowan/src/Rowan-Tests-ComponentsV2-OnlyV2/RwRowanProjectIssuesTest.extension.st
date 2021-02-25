@@ -297,6 +297,24 @@ RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior 
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _unpackagedClass [
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	^ Object
+		subclass: self _unpackagedClassName
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan image symbolDictNamed: self _symbolDictionaryName2)
+		options: #()
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _unpackagedClassName [
+	^ 'ARowanUnpackageClass'
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
 
 	^ self _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
@@ -2762,7 +2780,7 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	| projectName projectNames packageName1 packageName2 className1 className2 theClass 
 		theSubclass projectDefinition theClassDefinition theSubclassDefinition 
-		packageDefinition1 packageDefinition2 |
+		packageDefinition1 packageDefinition2 x newSubclass project audit |
 
 	projectName := 'Issue198Project'.
 	projectNames := {projectName}.
@@ -2776,6 +2794,9 @@ RwRowanProjectIssuesTest >> testIssue198A [
 		packageNames: {packageName1. packageName2}
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: ''.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	theClass := Object
 		rwSubclass: className1
@@ -2808,7 +2829,11 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: theSubclass rowanPackageName = packageName2.
+	self assert: (audit := project audit) isEmpty.
+
+	newSubclass := Rowan globalNamed: className2.
+	self assert: newSubclass ~~ theSubclass.
+	self assert: (x := newSubclass rowanPackageName) = packageName2.
 
 ]
 
@@ -2822,7 +2847,7 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	| projectName projectNames packageName1 packageName2 className1 className2 className3 theClass 
 		theSubclass theReferenceClass projectDefinition theClassDefinition theSubclassDefinition 
-		packageDefinition1 packageDefinition2 theReferenceClassDefinition |
+		packageDefinition1 packageDefinition2 theReferenceClassDefinition project audit newSubclass |
 
 	projectName := 'Issue198Project'.
 	projectNames := {projectName}.
@@ -2837,6 +2862,9 @@ RwRowanProjectIssuesTest >> testIssue198B [
 		packageNames: {packageName1. packageName2}
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: ''.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	theClass := Object
 		rwSubclass: className1
@@ -2885,8 +2913,13 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
+	self assert: (audit := project audit) isEmpty.
+
 	self assert: ((Rowan globalNamed: className3) new perform: #boom) == (Rowan globalNamed: className2).
-	self assert: theSubclass rowanPackageName = packageName2.
+
+	newSubclass := Rowan globalNamed: className2.
+	self assert: newSubclass ~~ theSubclass.
+	self assert: newSubclass rowanPackageName = packageName2.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3106,139 +3139,6 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 	"validate"
 	self assert: (class new perform: #mover) = 2. "method not installed when class extension does not have a proper class name"
 
-]
-
-{ #category : '*rowan-tests-componentsv2-onlyv2' }
-RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
-
-	"create class and method in same project/package"
-
-	"move class to one package in new project and method to another package in new project"
-
-	"simulating extension method moves during an adopt"
-
-	"simplification of RwRowanSample4Test>>testIssue208_adopt_load"
-
-	| projectName1 projectName2 packageName1 packageName2 packageName3 className projectDefinition1 
-		classDefinition packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition class 
-		ar symDict registry oldClass componentName |
-	projectName1 := 'Issue208_moveMethodBetweenProjects1'.
-	projectName2 := 'Issue208_moveMethodBetweenProjects2'.
-	packageName1 := 'Issue208-Core1'.
-	packageName2 := 'Issue208-Core2'.
-	packageName3 := 'Issue208-Extension2'.
-	className := 'Issue208Class'.
-
-	{projectName1. projectName2}
-		do: [ :pn | 
-			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-"create project 1"
-	componentName := 'Core'.
-	projectDefinition1 := RwResolvedProjectV2 new
-		projectName: projectName1;
-		projectsHome: self _testRowanProjectsSandbox;
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
-		addPackagesNamed: { packageName1 }
-			toComponentNamed: componentName;
-		resolve;
-		yourself.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method1'
-					protocol: 'accessing'
-					source: 'method1 ^1').
-
-	packageDefinition := projectDefinition1 packageNamed: packageName1.
-	packageDefinition addClassDefinition: classDefinition.
-
-"load project1"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition1.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-"validation"
-	class := Rowan globalNamed: className.
-	self assert: class rowanPackageName = packageName1.
-	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
-	self assert: (class new perform: #method1) = 1.
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: ar size = 1.
-	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
-
-"create project2"
-	projectDefinition2 := RwResolvedProjectV2 new
-		projectName: projectName2;
-		projectsHome: self _testRowanProjectsSandbox;
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
-		addNewComponentNamed: componentName;
-		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
-			toComponentNamed: componentName;
-		resolve;
-		yourself.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName2.
-
-	classDefinition 
-		category: packageName2;
-		removeInstanceMethod: #method1.
-	packageDefinition addClassDefinition: classDefinition.
-
-	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method1'
-					protocol: '*', packageName3 asLowercase
-					source: 'method1 ^1').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-"load project2"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition2.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-"validation"
-	oldClass := class.
-	class := Rowan globalNamed: className.
-	self assert: oldClass == class.
-	self assert: class rowanPackageName = packageName2.
-	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
-	self assert: (class new perform: #method1) = 1.
-	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: ar size = 1.
-	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -9450,21 +9350,22 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	| x |
+	| x unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	self 
 		should: [
 			"add an unpackaged method - expect error"
-			Object
+			unpackagedClass
 				rwCompileMethod: 'bar ^''bar'''
 				category: 'accessing' ]
 		raise: Error.
 
-	(Object compiledMethodAt: #bar environmentId: 0 otherwise: nil)
+	(unpackagedClass compiledMethodAt: #bar environmentId: 0 otherwise: nil)
 		ifNotNil: [ Object removeSelector: #'bar' ].
 
 	[
 		"handle notification and abort the operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
@@ -9473,7 +9374,7 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 
 	[
 		"handle notification and complete operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
@@ -9482,14 +9383,13 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"ensure that the new method is not packaged"
 	Rowan image 
 		loadedMethod: #bar 
-		inClassNamed: 'Object' 
+		inClassNamed: self _unpackagedClassName
 		isMeta: false 
 		ifFound: [self assert: false description: 'unexpected loaded method' ] 
 		ifAbsent: ["expected"].
 
-	self assert: Object new bar = 'bar'.
-	Object removeSelector: #'bar'
-
+	self assert: unpackagedClass new bar = 'bar'.
+	unpackagedClass removeSelector: #'bar'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -9583,80 +9483,82 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
+	| unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	[
 		"add unpackaged method"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	self 
 		should: [
 			"attempt to remove existing unpackaged method - expect error"
-			Object rwRemoveSelector: #bar ]
+			unpackagedClass rwRemoveSelector: #bar ]
 		raise: Error.
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and abort the remove"
-		Object rwRemoveSelector: #bar ]
+		unpackagedClass rwRemoveSelector: #bar ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | "abort"].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and complete removal"
-		Object rwRemoveSelector: #bar  ]
+		unpackagedClass rwRemoveSelector: #bar  ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self should: [ Object new bar ] raise: MessageNotUnderstood.
-
+	self should: [ unpackagedClass new bar ] raise: MessageNotUnderstood.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> testIssue72_updateMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
+	| unpackagedClass |
+	unpackagedClass := self _unpackagedClass.
 	[
 		"add unpackaged method"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	self 
 		should: [
 			"attempt to update existing unpackaged method - expect error"
-			Object
+			unpackagedClass
 				rwCompileMethod: 'bar ^''foo'''
 				category: 'accessing' ]
 		raise: Error.
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and abort the operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''foo'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | "abort"].
-	self assert: Object new bar = 'bar'.
+	self assert: unpackagedClass new bar = 'bar'.
 
 	[
 		"handle notification and complete operation"
-		Object
+		unpackagedClass
 			rwCompileMethod: 'bar ^''foo'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ].
-	self assert: Object new bar = 'foo'.
+	self assert: unpackagedClass new bar = 'foo'.
 
-	Object removeSelector: #'bar'
-
+	unpackagedClass removeSelector: #'bar'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

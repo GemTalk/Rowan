@@ -86,7 +86,6 @@ RwSymbolDictionaryTest >> _compileMethodIn: behavior source: sourceString dictio
 		category: nil
 		intoMethodDict: false
 		intoCategories: nil
-		intoPragmas: nil
 		environmentId: 0
 ]
 
@@ -325,7 +324,7 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 	self assert: testClass == class.
 
 	newClass := self _applyClassNewVersionChangesTo: class.
-	dict rowanSymbolDictionaryRegistry addNewClassVersionToAssociation: newClass.
+	dict rowanSymbolDictionaryRegistry addNewClassVersionToAssociation: newClass oldClassVersion: class.
 	superclassName := 'Association'.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
@@ -344,7 +343,6 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
-
 ]
 
 { #category : 'tests' }
@@ -373,7 +371,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
-	methodProtocol := RwGsSymbolDictionaryRegistry defaultProtocolString.
+	methodProtocol := Rowan image symbolDictionaryRegistryClass defaultProtocolString.
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource

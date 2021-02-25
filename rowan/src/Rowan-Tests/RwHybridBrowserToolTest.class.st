@@ -293,9 +293,8 @@ RwHybridBrowserToolTest >> testHybridClassRename [
 ]
 
 { #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridCompileMethod [
-
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
+RwHybridBrowserToolTest >> testHybridCompileMethod_01 [
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -306,6 +305,8 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
@@ -314,19 +315,65 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		poolDictionaries: #()
 		category: packageName1
 		options: #().
+	self assert: (audit := project audit) isEmpty.
 	self assert: normalClass rowanPackageName = packageName1.
 
-	fooMethod := normalClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
 	barMethod := normalClass class
 		rwCompileMethod: 'bar ^''bar'''
-		category: 'accessing'
+		category: '*' , packageName2
 		packageName: packageName2.
 
-	self assert: (normalClass perform: #bar) = 'bar'.
+	self assert: (audit := project audit) isEmpty.
+	self assert: (normalClass perform: #'bar') = 'bar'.
 	normalInstance := normalClass new.
-	self assert: (normalInstance perform: #foo) = 'foo'.
+	self assert: (normalInstance perform: #'foo') = 'foo'.
+
+	self assert: fooMethod rowanPackageName = packageName1.
+	self assert: barMethod rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridCompileMethod_02 [
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: (audit := project audit) isEmpty.
+	self assert: normalClass rowanPackageName = packageName1.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		dictionaries: Rowan image symbolList
+		category: '*' , packageName2
+		packageName: packageName2.
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (normalClass perform: #'bar') = 'bar'.
+	normalInstance := normalClass new.
+	self assert: (normalInstance perform: #'foo') = 'foo'.
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2
@@ -443,111 +490,6 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 
 	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
 	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood
-]
-
-{ #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridCompileMethodRemove_315 [
-
-	"https://github.com/dalehenrich/Rowan/issues/315"
-
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance
-		symDict registry |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project'.
-	normalClass := Object
-		rwSubclass: 'SimpleHybridNormal3'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-
-"add methods"
-	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
-	barMethod := normalClass class
-		rwCompileMethod: 'bar ^''bar'''
-		category: '*' , packageName2 asLowercase.
-
-"validate"
-	self assert: (normalClass perform: #bar) = 'bar'.
-	normalInstance := normalClass new.
-	self assert: (normalInstance perform: #foo) = 'foo'.
-
-	self assert: fooMethod rowanPackageName = packageName1.
-	self assert: barMethod rowanPackageName = packageName2.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 2.
-
-"remove methods"
-	normalClass rwRemoveSelector: #'foo'.
-	normalClass class rwRemoveSelector: #'bar'.
-
-"validate"
-	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-"re-add methods"
-	fooMethod := normalClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName2 asLowercase.
-	barMethod := normalClass class
-		rwCompileMethod: 'bar ^''bar'''
-		category: 'accessing'.
-
-"validate"
-	self assert: fooMethod rowanPackageName = packageName2.
-	self assert: barMethod rowanPackageName = packageName1.
-
-	self assert: (normalClass perform: #bar) = 'bar'.
-	self assert: (normalInstance perform: #foo) = 'foo'.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 2.
-
-"remove methods"
-	normalClass rwRemoveSelector: #'foo'.
-	normalClass class rwRemoveSelector: #'bar'.
-
-"validate"
-	self should: [ normalClass perform: #bar ] raise: MessageNotUnderstood.
-	self should: [ normalInstance perform: #foo ] raise: MessageNotUnderstood.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
 ]
 
 { #category : 'tests' }
@@ -835,333 +777,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 		options: #().
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2
-]
-
-{ #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
-
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	packageNameMap := Dictionary new
-		at: packageName1 put: self _symbolDictionaryName1;
-		at: packageName2 put: self _symbolDictionaryName2;
-		yourself.
-
-	self
-		_loadPackageMappedProjectDefinition: projectName 
-		packageNameMap: packageNameMap 
-		defaultSymbolDictName: self _symbolDictionaryName1.
-
-	normalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category= packageName1.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	movedNormalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName2
-		options: #().
-
-"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	self assert: movedNormalClass == normalClass.
-	self assert: movedNormalClass rowanPackageName = packageName2.
-	self assert: movedNormalClass category= packageName2.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-]
-
-{ #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars [
-
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	packageNameMap := Dictionary new
-		at: packageName1 put: self _symbolDictionaryName1;
-		at: packageName2 put: self _symbolDictionaryName2;
-		yourself.
-
-	self
-		_loadPackageMappedProjectDefinition: projectName 
-		packageNameMap: packageNameMap 
-		defaultSymbolDictName: self _symbolDictionaryName1.
-
-	normalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category= packageName1.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	movedNormalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #()
-		classVars: #(Cvar1)
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName2
-		options: #().
-
-"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	self assert: movedNormalClass == normalClass.
-	self assert: movedNormalClass rowanPackageName = packageName2.
-	self assert: movedNormalClass category= packageName2.
-	self assert: (movedNormalClass classVarNames includes: #Cvar1).
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-]
-
-{ #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints [
-
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	packageNameMap := Dictionary new
-		at: packageName1 put: self _symbolDictionaryName1;
-		at: packageName2 put: self _symbolDictionaryName2;
-		yourself.
-
-	self
-		_loadPackageMappedProjectDefinition: projectName 
-		packageNameMap: packageNameMap 
-		defaultSymbolDictName: self _symbolDictionaryName1.
-
-	normalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #(ivar1)
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category= packageName1.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	movedNormalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #(ivar1)
-		classVars: #(Cvar1)
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName2
-		constraints: {{#ivar1 . Association}}
-		options: #().
-
-"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	self assert: movedNormalClass == normalClass.
-	self assert: movedNormalClass rowanPackageName = packageName2.
-	self assert: movedNormalClass category= packageName2.
-	self assert: (movedNormalClass classVarNames includes: #Cvar1).
-	self assert: (movedNormalClass _constraintOn: #ivar1) = Association.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-]
-
-{ #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints_new_class_version [
-
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	packageNameMap := Dictionary new
-		at: packageName1 put: self _symbolDictionaryName1;
-		at: packageName2 put: self _symbolDictionaryName2;
-		yourself.
-
-	self
-		_loadPackageMappedProjectDefinition: projectName 
-		packageNameMap: packageNameMap 
-		defaultSymbolDictName: self _symbolDictionaryName1.
-
-	normalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #(ivar1)
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category= packageName1.
-	self assert: (normalClass instVarNames includes: #ivar1).
-	self deny: (normalClass instVarNames includes: #ivar2).
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	movedNormalClass := Object
-		rwSubclass: 'SimpleHybridNormal1'
-		instVarNames: #(ivar1 ivar2)
-		classVars: #(Cvar1)
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName2
-		constraints: {{#ivar1 . Association}}
-		options: #().
-
-"validate"
-	project := Rowan projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	self assert: movedNormalClass ~~ normalClass.
-	self assert: movedNormalClass rowanPackageName = packageName2.
-	self assert: movedNormalClass category= packageName2.
-	self assert: (movedNormalClass classVarNames includes: #Cvar1).
-	self assert: (movedNormalClass _constraintOn: #ivar1) = Association.
-	self assert: (movedNormalClass instVarNames includes: #ivar1).
-	self assert: (movedNormalClass instVarNames includes: #ivar2).
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName2.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 1.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
 ]
 
 { #category : 'tests' }
@@ -1525,18 +1140,15 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_185 [
 ]
 
 { #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
+RwHybridBrowserToolTest >> testHybridMoveMethod_simple_A [
+	"move a method from the package of the class to an extension package"
 
-	"https://github.com/dalehenrich/Rowan/issues/309"
-
-	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className symDict registry |
+	|  normalClass projectName packageNames packageName1 packageName2 className audit project |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions1'.
-	packageName3 := 'HybridA-Extensions2'.
 	packageNames := {packageName1.
-	packageName2.
-	packageName3}.
+	packageName2.}.
 	className :=  'SimpleHybridNormal1'.
 
 	self
@@ -1545,8 +1157,11 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	normalClass := Object
-		rwSubclass: className
+		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #(foo)
 		classVars: #(Bar)
 		classInstVars: #(baz)
@@ -1557,133 +1172,55 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 	normalClass
 		rwCompileMethod: 'foo ^foo'
-		category: '*' , packageName2 asLowercase.
+		category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: '*' , packageName2 asLowercase;
+		yourself.
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethod_simple_B [
+	"move an extension method from extension package into the package of the class"
+
+	|  normalClass projectName packageNames packageName1 packageName2 className audit project |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageNames := {packageName1.
+	packageName2.}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
 	normalClass
-		rwCompileMethod: 'bar ^Bar'
-		category: 'accessing'.
-	normalClass class
-		rwCompileMethod: 'baz ^baz'
-		category: 'accessing'.
+		rwCompileMethod: 'foo ^foo'
+		category:  '*' , packageName2 asLowercase.
+	self assert: (audit := project audit) isEmpty.
 
-"validate"
-	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName2 asLowercase) asSymbol.
-	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
-	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 3.
-
-	self
-		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-			packageDef name = packageName2
-				ifTrue: [
-					| classExtension |
-					classExtension := packageDef classExtensions at: className.
-					self assert: (classExtension instanceMethodDefinitions includesKey: #foo).
-					self assert: (classExtension classMethodDefinitions isEmpty) ].
-			packageDef name = packageName3
-				ifTrue: [self assert: false description: 'no class extensions expected in package ', packageDef name printString ] ]
-		forClassExtensionsIn: className.
-	self
-		_assert: [ :classDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ 
-					| instanceMethodDict |
-					self assert: classDef name = className.
-					instanceMethodDict := classDef instanceMethodDefinitions.
-					self deny: (instanceMethodDict includesKey: #foo).
-					self assert: (instanceMethodDict includesKey: #bar).
-					self assert: (classDef classMethodDefinitions includesKey: #baz) ]
-				ifFalse: [ self assert: false description: 'no class definitions expected in package ', packageDef name printString ]  ]
-		forClassNamed: className.
-
-"load"
 	Rowan projectTools browser
-		moveMethod: #'foo' forClassNamed: className isMeta: false toProtocol: 'accessing';
-		moveMethod: #'bar' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
-		moveMethod: #'baz' forClassNamed: className isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
 		yourself.
-
-"validate"
-	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
-	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
-	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 3.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 3.
-
-	self
-		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-			packageDef name = packageName2
-				ifTrue: [
-					| classExtension |
-					classExtension := packageDef classExtensions at: className.
-					self deny: (classExtension instanceMethodDefinitions includesKey: #foo).
-					self assert: (classExtension instanceMethodDefinitions includesKey: #bar).
-					self assert: (classExtension classMethodDefinitions includesKey: #baz) ].
-			packageDef name = packageName3
-				ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ] ]
-		forClassExtensionsIn: className.
-	self
-		_assert: [ :classDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ 
-					self assert: classDef name = className.
-					self assert: (classDef instanceMethodDefinitions includesKey: #foo).
-					self deny: (classDef instanceMethodDefinitions includesKey: #bar).
-					self assert: classDef classMethodDefinitions isEmpty ]
-				ifFalse: [ self assert: false description: 'no class definitions expected in package ', packageDef name printString ] ]
-		forClassNamed: className.
-
-"load"
-	Rowan projectTools browser
-		moveMethod: #'foo' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'bar' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'baz' forClassNamed: className isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
-		yourself.
-"validate"
-	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
-	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
-	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.
-
-	self
-		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			(classExtensionDef instanceMethodDefinitions isEmpty and: [classExtensionDef classMethodDefinitions isEmpty])
-				ifFalse: [ 
-					packageDef name = packageName1
-						ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-					packageDef name = packageName2
-						ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-					packageDef name = packageName3
-						ifTrue: [
-							| classExtension |
-							classExtension := packageDef classExtensions at: className.
-							self assert: (classExtension instanceMethodDefinitions includesKey: #foo).
-							self assert: (classExtension instanceMethodDefinitions includesKey: #bar).
-							self assert: (classExtension classMethodDefinitions includesKey: #baz) ] ] ]
-		forClassExtensionsIn: className.
-	self
-		_assert: [ :classDef :packageDef :projectDef | 
-					self assert: packageDef name = packageName1.
-					self assert: classDef name = className.
-					self assert: classDef instanceMethodDefinitions isEmpty.
-					self assert: classDef classMethodDefinitions isEmpty ]
-		forClassNamed: className.
-
+	self assert: (audit := project audit) isEmpty.
 ]
 
 { #category : 'tests' }

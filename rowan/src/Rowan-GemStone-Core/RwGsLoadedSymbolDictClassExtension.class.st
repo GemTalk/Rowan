@@ -34,25 +34,6 @@ RwGsLoadedSymbolDictClassExtension >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
-{ #category : 'removing' }
-RwGsLoadedSymbolDictClassExtension >> disownFromLoaded: aPackageSymbolDictionary [
-
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
-
-	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) remove: self.
-	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) isEmpty
-		ifTrue: [ aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory ].
-
-]
-
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClassExtension >> handleClassDeletion [
 
@@ -125,10 +106,7 @@ RwGsLoadedSymbolDictClassExtension >> moveFrom: fromRegistryInstance [
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	(fromRegistryInstance classExtensionRegistry at: handle classHistory)
-		remove: self.
-	(fromRegistryInstance classExtensionRegistry at: handle classHistory) isEmpty
-		ifTrue: [ fromRegistryInstance classExtensionRegistry removeKey: handle classHistory ]
+	fromRegistryInstance unregisterLoadedClassExtension: self forClass: handle
 ]
 
 { #category : 'removing' }
@@ -137,9 +115,7 @@ RwGsLoadedSymbolDictClassExtension >> moveTo: toRegistryInstance [
 
 	"https://github.com/dalehenrich/Rowan/issues/495"
 
-	(toRegistryInstance classExtensionRegistry
-		at: handle classHistory
-		ifAbsentPut: [ IdentitySet new ]) add: self
+	toRegistryInstance registerLoadedClassExtension: self forClass: handle
 ]
 
 { #category : 'methods' }
@@ -164,4 +140,20 @@ RwGsLoadedSymbolDictClassExtension >> removeLoadedMethod: aLoadedMethod [
 	aLoadedMethod classIsMeta
 		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClassExtension >> reregisterLoadedClassMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedClassMethods := aDictionary
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClassExtension >> reregisterLoadedInstanceMethods: aDictionary [
+	"transfer the loaded methods in aDictionary to the receiver"
+
+	aDictionary do: [ :loadedMethod | loadedMethod loadedClass: self ].
+	loadedInstanceMethods := aDictionary
 ]

@@ -43,63 +43,81 @@ RwClsAuditTool >> _auditCategory: category selectors: aSelectorSet forBehavior: 
 ]
 
 { #category : 'audit' }
-RwClsAuditTool >> _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass [
-"audit a selector. verify compiled method matches loaded method reference return nil if no problem found"
-
-	^(aLoadedClass loadedMethodAt: aSelector isMeta:  true)
-			ifNil: [
-				| notification |
-				notification := (RwAuditMethodErrorNotification
-					method: aSelector 
-					isMeta: true
-					inClassNamed: aBehavior theNonMetaClass name
-					isClassExtension: aLoadedClass isLoadedClassExtension
-					intoPackageNamed: aLoadedClass packageName )
-						description: 'Missing loaded instance method. ';
-						yourself.
-				(notification signal) 
-					ifTrue: [ (aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded class method. ' ]
-					ifFalse: [ 
-						"don't record audit error"
-						nil ] ]
-			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
-						ifTrue: [
-							| expected actual |
-							((expected := aLoadedMethod propertyAt: 'protocol') equalsNoCase: (actual := aBehavior categoryOfSelector:  aSelector ) ) 
-								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> ('Missing class method category for loaded class (expected: ', expected printString, ' actual: ', actual printString, ')') ]
-						] 
-						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled class method is not identical to loaded class method '] 
-			]
-]
-
-{ #category : 'audit' }
 RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior [
-"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
+	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| res  aDict superclassName |
-	res :=  self _result.
-	superclassName := aBehavior superclass ifNil: [ 'nil' ] ifNotNil: [:superCls | superCls name ].
-	(aLoadedClass classSuperclass isEquivalent: superclassName ) 
-		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
-	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
-	(aLoadedClass classClassVarNames = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
-			keys collect: [:e | e asString]) asSortedCollection asArray) ifFalse: [
-				res  add: (RwAuditDetail for: aLoadedClass message: 'ClassVars changed in compiled class v loaded class')].
-	(aLoadedClass classPoolDictionaries = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
-			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
-	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
-	(aLoadedClass classCategory = (aBehavior _classCategory ifNil: ['']) ) 
-			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
-	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
-			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
-			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
-					ifAbsent: [res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
+	| res aDict superclassName |
+	res := self _result.
+	superclassName := aBehavior superclass
+		ifNil: [ 'nil' ]
+		ifNotNil: [ :superCls | superCls name ].
+	(aLoadedClass classSuperclass isEquivalent: superclassName)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Superclass is different from loaded class') ].
+	aLoadedClass classInstVarNames
+		= (aBehavior instVarNames collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'instVarNames changed in compiled class v loaded class') ].
+	aLoadedClass classClassVarNames
+		=
+			((aBehavior.classVars ifNil: [ SymbolDictionary new ]) keys
+				collect: [ :e | e asString ]) asSortedCollection asArray
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'ClassVars changed in compiled class v loaded class') ].
+	aLoadedClass classPoolDictionaries
+		=
+			((aBehavior.poolDictionaries ifNil: [ Array new ]) collect: [ :e | e asString ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'PoolDictionaries changed in compiled class v loaded class') ].
+	(aLoadedClass classComment isEquivalent: aBehavior rwComment)
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Comment has changed in compiled class v loaded class') ].
+	aLoadedClass classCategory = (aBehavior _classCategory ifNil: [ '' ])
+		ifFalse: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message: 'Class category has changed in compiled class v loaded class') ].
+	(aDict := System myUserProfile
+		resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol)
+		ifNil: [ 
+			res
+				add:
+					(RwAuditDetail
+						for: aLoadedClass
+						message:
+							'Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName) ]
+		ifNotNil: [ :smbd | 
+			smbd value
+				at: aLoadedClass name asSymbol
+				ifAbsent: [ 
+					res
+						add:
+							aLoadedClass name
+								-> 'Compiled class not found in symbol dictionary of loaded class' ] ].
 
-	^res
+	^ res
 ]
 
 { #category : 'audit' }
@@ -116,7 +134,7 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 				add:
 					(RwAuditDetail
 						for: aLoadedClassOrExtension
-						message: 'Missing compiled method>>' , aLoadedMethod name) ]
+						message: 'Missing compiled method>>' , aClassOrMeta printString, '>>', aLoadedMethod selector) ]
 		ifNotNil: [ :aMethod | 
 			aMethod == aLoadedMethod handle
 				ifTrue: [ 
@@ -166,9 +184,20 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 									foundExtensionClass := true ] ].
 					foundExtensionClass
 						ifFalse: [ 
-							res
-								add:
-									(RwAuditDetail for: aLoadedClass message: 'Missing Loaded method>>' , aSelector) ] ]
+							| notification |
+							notification := (RwAuditMethodErrorNotification
+								method: aSelector
+								isMeta: aBehavior isMeta
+								inClassNamed: aBehavior theNonMetaClass name
+								isClassExtension: aLoadedClass isLoadedClassExtension
+								intoPackageNamed: aLoadedClass packageName)
+								description: 'Missing loaded method';
+								yourself.
+							notification signal
+								ifTrue: [ 
+									res
+										add:
+											(RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector) ] ] ]
 				ifNotNil: [ :aLoadedMethod | 
 					res
 						addAll:
@@ -185,7 +214,7 @@ RwClsAuditTool >> _auditRowanHybridCategory: category forBehavior: aBehavior loa
 	"must be an extension. Do basic checks"
 	aPackage := category copyFrom: 2 to: category size.
 	res := self _result.
-	category first == $*
+	(category notEmpty and: [ category first == $* ])
 		ifTrue: [ 
 			"must be an extension category. See if package exists"
 			(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase)
@@ -214,9 +243,22 @@ RwClsAuditTool >> _auditRowanHybridCategory: category forBehavior: aBehavior loa
 										forBehavior: aBehavior
 										loadedClass: aLoadedClass) ]
 						ifFalse: [ 
-							"no basic extension problems found, class extension will be audited separately"
-							 ] ] ]
+							res
+								addAll:
+									(self
+										_auditCategory: category
+										selectors: (aBehavior selectorsIn: category)
+										forBehavior: aBehavior
+										loadedClass: aLoadedClass) ] ] ]
 		ifFalse: [ 
+			aLoadedClass isLoadedClassExtension
+				ifTrue: [ 
+					res
+						add:
+							(RwAuditDetail
+								for: aLoadedClass
+								message:
+									'Extension category name <' , category , '>  must begin with a `*`.') ].
 			res
 				addAll:
 					(self
@@ -232,7 +274,9 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 	"#rentamed from _auidtClassSelector since functionality is same for instanance and class
  verify compiled method matches loaded method reference return nil if no problem found"
 
-	^ (aLoadedClass loadedMethodAt: aSelector isMeta: aBehavior isMeta)
+	| compiledMethod |
+	compiledMethod := aBehavior compiledMethodAt: aSelector otherwise: nil.
+	^ (Rowan image loadedMethodForMethod: compiledMethod ifAbsent: [  ])
 		ifNil: [ 
 			| notification |
 			notification := (RwAuditMethodErrorNotification
@@ -240,8 +284,8 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 				isMeta: aBehavior isMeta
 				inClassNamed: aBehavior theNonMetaClass name
 				isClassExtension: aLoadedClass isLoadedClassExtension
-				intoPackageNamed: aLoadedClass packageName)
-				description: 'Missing loaded method. ';
+				intoPackageNamed: aLoadedClass loadedPackage name)
+				description: 'Missing loaded method';
 				yourself.
 			notification signal
 				ifTrue: [ 
@@ -251,9 +295,9 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 				ifFalse: [ 
 					"don't record audit error"
 					{} ] ]
-		ifNotNil: [ :aLoadedMethod | 
+		ifNotNil: [ :loadedMethod | 
 			self
-				_auditLoadedMethod: aLoadedMethod
+				_auditLoadedMethod: loadedMethod
 				forBehavior: aBehavior
 				loadedClass: aLoadedClass ]
 ]
@@ -269,7 +313,7 @@ RwClsAuditTool >> _result [
 RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	"look for methods compiled into class without Rowan API"
 
-	| res |
+	| res aBehavior |
 	res := self _result.
 	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
@@ -278,65 +322,42 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 				add:
 					(RwAuditDetail
 						for: aLoadedClass
-						message: 'Missing gemstone class for loaded class ') ]
-		ifNotNil: [ :aBehavior | 
-			aBehavior == aLoadedClass handle
-				ifFalse: [ 
-					res
-						add:
-							(RwAuditDetail
-								for: aLoadedClass
-								message:
-									'Not latest version of class (' , aBehavior asOop printString , ')') ].
+						message: 'Missing gemstone class for loaded class ') ].
+	aBehavior := aLoadedClass handle.
+	res
+		addAll:
+			(self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
+	aBehavior
+		categorysDo: [ :category :selectors | 
 			res
 				addAll:
-					(self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
-			aBehavior
-				categorysDo: [ :category :selectors | 
-					res
-						addAll:
-							(self _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass) ].
-			aBehavior class
-				categorysDo: [ :category :selectors | 
+					(self _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass) ].
+	aBehavior class
+		categorysDo: [ :category :selectors | 
+			res
+				addAll:
+					(self
+						_auditCategory: category
+						forBehavior: aBehavior class
+						loadedClass: aLoadedClass) ].
+	aLoadedClass
+		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+			(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
+				ifNil: [ 
 					res
 						addAll:
 							(self
-								_auditCategory: category
+								_auditLoadedMethod: aLoadedMethod
+								forBehavior: aBehavior
+								loadedClass: loadedClass) ] ]
+		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+			(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
+				ifNil: [ 
+					res
+						addAll:
+							(self
+								_auditLoadedMethod: aLoadedMethod
 								forBehavior: aBehavior class
-								loadedClass: aLoadedClass) ].
-			aLoadedClass
-				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
-						ifNil: [ 
-							res
-								addAll:
-									(self
-										_auditLoadedMethod: aLoadedMethod
-										forBehavior: aBehavior
-										loadedClass: loadedClass) ] ]
-				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
-						ifNil: [ 
-							res
-								addAll:
-									(self
-										_auditLoadedMethod: aLoadedMethod
-										forBehavior: aBehavior class
-										loadedClass: loadedClass) ] ] ].
+								loadedClass: loadedClass) ] ].
 	^ res
-]
-
-{ #category : 'audit' }
-RwClsAuditTool >> errorLog: aResult add: aMessage [
-	"add error to results. print to file"
-
-	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString , '  ' , aMessage key asString
-]
-
-{ #category : 'audit' }
-RwClsAuditTool >> errorLog: aResult addAll: aCol [
-	"add all messages to result"
-
-	aCol do: [ :e | self errorLog: aResult add: e ]
 ]

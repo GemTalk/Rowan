@@ -20,10 +20,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -36,10 +35,9 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -52,13 +50,113 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #()
+	options: #( #logCreation )
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension''
+method: Issue361Class1
+method1 ^1
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_A_export [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #( #logCreation )
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class2
+removeallclassmethods Issue361Class2
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #( #logCreation )
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class1
+removeallclassmethods Issue361Class1
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #( #logCreation )
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class3
+removeallclassmethods Issue361Class3
 
 ! Class implementation for ''Issue361Class2''
 
@@ -118,7 +216,7 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
+		comment: ''this is a comment'';
 		immediateInvariant.
 true.
 ', percent, '
@@ -134,7 +232,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -150,7 +247,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -218,7 +314,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -234,7 +329,6 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
@@ -250,10 +344,101 @@ doit
 	options: #()
 )
 		category: ''Issue361-Core'';
-		comment: '''';
 		immediateInvariant.
 true.
 ', percent, '
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+', percent, '
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+', percent, '
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+', percent, '
+
+'
+]
+
+{ #category : 'private' }
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Core_export [
+
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class2
+removeallclassmethods Issue361Class2
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class1
+removeallclassmethods Issue361Class1
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #()
+)
+		category: ''Issue361-Core'';
+		immediateInvariant.
+true.
+', percent, '
+
+removeallmethods Issue361Class3
+removeallclassmethods Issue361Class3
 
 ! Class implementation for ''Issue361Class2''
 
@@ -303,6 +488,11 @@ method1 ^1
 ]
 
 { #category : 'private' }
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Extension1_export [
+	^ self _expectedGsTopazWriterFileContents_C_Issue361Extension1
+]
+
+{ #category : 'private' }
 RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
 
 | percent|
@@ -317,6 +507,11 @@ method5 ^5
 ', percent, '
 
 '
+]
+
+{ #category : 'private' }
+RwProjectTopazWriterTestV2 >> _expectedGsTopazWriterFileContents_C_Issue361Extension2_export [
+	^ self _expectedGsTopazWriterFileContents_C_Issue361Extension2
 ]
 
 { #category : 'tests' }
@@ -431,6 +626,8 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
+		logCreation: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -545,15 +742,19 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 
 "export"
 	repositoryRootPath := projectsHome / projectName / 'topaz'.
-	topazFileReference := repositoryRootPath asFileReference / projectName.
+	topazFileReference := repositoryRootPath asFileReference / projectName, 'gs'.
 	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
-	projectDefinition exportTopazFormatTo: topazFileReference.
+	projectDefinition 
+		exportTopazFormatTo: topazFileReference
+ 		logClassCreation: true
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false.
 
 "validate"
-	stream := ZnBufferedReadStream on: (topazFileReference, 'gs') readStream.
+	stream := ZnBufferedReadStream on: topazFileReference readStream.
 	x := stream contents.
-	y := self _expectedGsTopazWriterFileContents_A.
+	y := self _expectedGsTopazWriterFileContents_A_export.
 	self assert: x = y
 ]
 
@@ -621,7 +822,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a comment'
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -682,6 +883,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -820,6 +1022,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new
@@ -958,7 +1161,12 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 	topazFileReference := repositoryRootPath asFileReference / projectName.
 	self _markForCleanup: (projectsHome / projectName).
 	repositoryRootPath ensureCreateDirectory.
-	projectDefinition exportTopazFormatTo: topazFileReference usingPackageNamesMap: (Dictionary new
+	projectDefinition 
+		exportTopazFormatTo: topazFileReference
+			logClassCreation: false
+			excludeClassInitializers: false
+			excludeRemoveAllMethods: false
+			usingPackageNamesMap: (Dictionary new
 				at: packageName1 put: {packageName1};
 				at: packageName2 put: {packageName2};
 				at: packageName3 put: {packageName3};
@@ -970,7 +1178,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 		do: [:packageName |
 			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, 'gs') readStream.
 			x := stream contents.
-			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-).
+			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-), '_export'.
 			self assert: x = y ].
 ]
 
@@ -1118,6 +1326,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new
@@ -1420,6 +1629,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilename: projectName;
 		yourself.
@@ -1582,6 +1792,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
 		repositoryRootPath: repositoryRootPath;
 		topazFilenamePackageNamesMap: 
 			(Dictionary new

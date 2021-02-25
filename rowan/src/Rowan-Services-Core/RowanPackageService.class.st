@@ -45,8 +45,7 @@ RowanPackageService >> arePackageAndProjectClean [
 RowanPackageService >> changes [
    "diffForPackageName: not implemented yet"
  
-   ^ (Rowan packageTools diff diffForPackageName: name) asString
-
+ self error: 'this message is no longer supported'
 ]
 
 { #category : 'other' }

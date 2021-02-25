@@ -162,7 +162,7 @@ RowanQueryService >> methodsContaining: string [
     | methodService |
     methodService := self methodServiceFrom: (methods first at: index).
     methodService
-      firstReference: (methods last at: index);
+      firstReference: ((methods at: 2) at: index);   "<<<< FIX HERE"
       searchString: string.
     sorted add: methodService ].
   queryResults := sorted asArray.
@@ -197,10 +197,7 @@ RowanQueryService >> projectBranches: projectName [
 { #category : 'queries' }
 RowanQueryService >> projectLog: projectName [
 
-	queryResults := 
-		(Rowan projectTools log
-		commitLogProjectNamed: projectName
-		limit: self defaultProjectLogSize).
+	queryResults := (Rowan projectNamed: projectName) commitLog: self defaultProjectLogSize.
 	RowanCommandResult addResult: self.
 ]
 

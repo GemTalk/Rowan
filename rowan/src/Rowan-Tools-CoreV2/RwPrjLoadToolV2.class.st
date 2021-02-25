@@ -5,21 +5,26 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
+RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
 	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
 	[ 
 	^ self
 		_loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator ]
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList ]
 		on: RwExistingVisitorAddingExistingClassNotification
 		do: [ :ex | 
+			| theProjectName |
 			theClassName := ex classDefinition name.
 			(processedClassNames includes: theClassName)
 				ifTrue: [ ex resume ].
-			theClass := Rowan globalNamed: theClassName.
+			theClass := ex class.
 			theClass isBehavior
 				ifFalse: [ ex pass ].
-			theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
+			theProjectName := theClass rowanProjectName.
+			theProjectName = Rowan unpackagedName
+				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
 			theLoadedProject
 				ifNil: [ 
 					"the loaded project should not be nil - if it is, pass the notification"
@@ -36,19 +41,22 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 					projectDef := theLoadedProject asDefinition.
 					copiedProjectSetDef addProject: projectDef.
 					projectDef ].
-			loadedClass := Rowan image loadedClassNamed: theClassName.
+			loadedClass := Rowan image
+				loadedClassForClass: theClass
+				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
 			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
 			packageDef removeClassNamed: theClassName.
 			processedClassNames add: theClassName ].	"trim the stack"
 	^ self
 		_doProjectSetLoad: copiedProjectSetDef
 		instanceMigrator: instanceMigrator
+		symbolList: symbolList
 		originalProjectSet: originalProjectSet
 		processedClassNames: processedClassNames
 ]
 
 { #category : 'private' }
-RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
+RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList [
 	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjects |
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
 	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
@@ -68,7 +76,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			| componentsWithDoits |
 			componentsWithDoits := diff componentsWithDoits.
 			componentsWithDoits do: [ :component | component executePreloadDoit ].
-			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator.
+			Rowan image applyModification_V2: diff instanceMigrator: instanceMigrator symbolList: symbolList.
 			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
 	loadedProjects := Array new.
 	projectSetDefinitionToLoad definitions
@@ -77,6 +85,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			loadedProjects add: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle _projectStructure: projectDef components copy.
+			theLoadedProject handle _loadSpecification: projectDef _loadSpecification copy.
 			theLoadedProject handle _projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle projectDefinitionPlatformConditionalAttributes: projectDef projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
@@ -123,6 +132,17 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
+	^ self
+		loadProjectDefinition: projectDefinition
+		platformConfigurationAttributes: platformConfigurationAttributes
+		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
 	| projectSetDefinition requiredProjectNames |
 	projectSetDefinition := RwProjectSetDefinition new
 		addProject: projectDefinition;
@@ -136,15 +156,12 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
 			absentProjectNames isEmpty
 				ifFalse: [ 
-					self
-						error:
-							'Missing required projects for the project '
-								, projectDefinition name printString
-								,
-									'. Use loadProjectSet to ensure that all required projects are installed.' ] ].
+					projectSetDefinition := projectDefinition
+						readProjectSet: platformConfigurationAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
+		symbolList: symbolList
 ]
 
 { #category : 'load project by name' }
@@ -192,27 +209,34 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
 { #category : 'load project definitions' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator [
-
 	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
 		project and a definition can have come from anywhere"
 
-	^ self 
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList [
+	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
+		project and a definition can have come from anywhere"
+
+	^ self
 		_doProjectSetLoad: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList
+		originalProjectSet: projectSetDefinition
 		processedClassNames: Set new
 ]
 
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromFile: aFilePathOrReference [
-
-	^ RwSpecification fromFile: aFilePathOrReference
-]
-
-{ #category : 'project load specifications' }
-RwPrjLoadToolV2 >> loadProjectSpecFromUrl: specUrl [
-
-	^ RwSpecification fromUrl: specUrl
+{ #category : 'load project definitions' }
+RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList [
+	^ self
+		loadProjectSetDefinition: projectSetDefinitionToLoad
+		instanceMigrator: Rowan platform instanceMigrator
+		symbolList: symbolList
 ]
 
 { #category : 'utilities' }

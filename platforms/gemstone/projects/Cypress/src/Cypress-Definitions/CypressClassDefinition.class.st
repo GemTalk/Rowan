@@ -359,6 +359,16 @@ CypressClassDefinition >> instVarNames [
 
 ]
 
+{ #category : 'testing' }
+CypressClassDefinition >> isClassDefinition [
+  ^ true
+]
+
+{ #category : 'testing' }
+CypressClassDefinition >> isMethodDefinition [
+  ^ false
+]
+
 { #category : 'loading' }
 CypressClassDefinition >> loadClassDefinition [
   "Create a new version of the defined class. If the class already exists,

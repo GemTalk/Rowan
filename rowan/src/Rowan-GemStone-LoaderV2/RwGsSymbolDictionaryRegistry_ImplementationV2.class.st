@@ -36,44 +36,6 @@ Class {
 }
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _addMovedDeletedMethod: newCompiledMethod  instance: registryInstance [
-
-	"add a recompiled compiled method that was previously removed from loaded things
-		to behavior and update the loaded things appropriately"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [].
-	loadedMethod ifNotNil: [  
-			registryInstance
-				error:
-					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
-
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
-
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	^ registryInstance
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _clearLookupCachesFor: aBehavior env: envId [
 
 "Invalidates method lookup caches for all classes.
@@ -101,7 +63,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteClassFromLoadedT
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
 			loadedClass removeFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory.
+			self unregisterLoadedClass: loadedClass forClass: class.
 			removeClassFromSystem ifTrue: [ registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ] ]
 		instance: registryInstance.
 	^ registryInstance
@@ -121,67 +83,47 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: 
 
 ]
 
-{ #category : 'method - private api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance [
-
-	"remove a compiled method from loaded things"
-
-	| loadedMethod loadedPackage loadedClassOrExtension |
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
-
-	registryInstance methodRegistry removeKey: compiledMethod.
-
-	loadedPackage := loadedMethod loadedPackage.
-	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClass: behavior
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
-
-	loadedClassOrExtension removeLoadedMethod: loadedMethod.
-	loadedClassOrExtension isLoadedClassExtension
-		ifTrue: [
-			loadedClassOrExtension isEmpty
-				ifTrue: [ 
-					| theKey classExtensionRegistry |
-					theKey := loadedClassOrExtension handle classHistory.
-					classExtensionRegistry := registryInstance classExtensionRegistry.
-					(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
-					(classExtensionRegistry at: theKey) isEmpty
-						ifTrue: [ classExtensionRegistry removeKey: theKey ].
-					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
-
-	^ registryInstance
-
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionKey [
+	^ #rowanLoadedClassExtension
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
-	| loadedClassExtensionSet |
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionsFor: class oldClassVersion: oldClass noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
+	| oldLoadedClassExtensionSet |
 	(class isKindOf: Class)
 		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
-	loadedClassExtensionSet := registryInstance classExtensionRegistry
-		at: class classHistory
+
+	oldLoadedClassExtensionSet := self
+		loadedClassExtensionsForClass: oldClass
 		ifAbsent: [ 
 			"we're done here"
 			^ self ].
-	loadedClassExtensionSet
-		do: [ :loadedClassExtension | 
-			| classKey |
+	oldLoadedClassExtensionSet copy
+		do: [ :oldLoadedClassExtension | 
+			| classKey loadedClassExtension loadedPackage |
+			loadedPackage := oldLoadedClassExtension loadedPackage.
+			self
+				unregisterLoadedClassExtension: oldLoadedClassExtension
+				forClass: oldClass.
+			loadedPackage removeLoadedClassExtension: oldLoadedClassExtension.
+			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
+				newForClass: class
+				inPackage: loadedPackage.
+			loadedClassExtension
+				reregisterLoadedInstanceMethods:
+						oldLoadedClassExtension loadedInstanceMethods;
+				reregisterLoadedClassMethods: oldLoadedClassExtension loadedClassMethods;
+				yourself.
+			self registerLoadedClassExtension: loadedClassExtension forClass: class.
 			classKey := loadedClassExtension key asSymbol.
 			self
 				_symbolDictionary: registryInstance _symbolDictionary
 				associationAt: classKey
 				ifPresent: [ :assoc | 
 					assoc value == loadedClassExtension handle
-						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
-						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+						ifTrue: [ noNewVersionBlock cull: loadedClassExtension ]
+						ifFalse: [ newVersionBlock cull: loadedClassExtension ] ] ]
 ]
 
 { #category : 'private' }
@@ -202,21 +144,20 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
-
-	| loadedClass classKey |
 	(class isKindOf: Class)
 		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
-	loadedClass := registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'internal error - No package found for the class ' , class name printString ].
-	classKey := loadedClass key asSymbol.
 	self
 		_symbolDictionary: registryInstance _symbolDictionary
-		associationAt: classKey
+		associationAt: class name
 		ifPresent: [ :assoc | 
+			| loadedClass |
+			loadedClass := self
+				loadedClassForClass: class
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class for the class '
+								, class name asString printString ].
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
@@ -224,7 +165,60 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 	registryInstance
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
-				, classKey asString printString
+				, class name asString printString
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class oldClassVersion: oldClass noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
+	(class isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: class name
+		ifPresent: [ :assoc | 
+			| loadedClass oldLoadedClass loadedPackage |
+			oldLoadedClass := self
+				loadedClassForClass: oldClass
+				ifAbsent: [ 
+					registryInstance
+						error:
+							'internal error - no loaded class found for the old version of '
+								, oldClass name asString printString ].
+			loadedPackage := oldLoadedClass loadedPackage.
+			(self loadedClassForClass: class ifAbsent: [  ])
+				ifNil: [ 
+					loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
+					loadedClass
+						reregisterLoadedInstanceMethods: oldLoadedClass loadedInstanceMethods;
+						reregisterLoadedClassMethods: oldLoadedClass loadedClassMethods;
+						yourself.
+					self unregisterLoadedClass: oldLoadedClass forClass: oldClass.
+					self registerLoadedClass: loadedClass forClass: class.
+					loadedPackage removeLoadedClass: oldLoadedClass.
+					loadedPackage addLoadedClass: loadedClass.
+					loadedClass updatePropertiesFromClassFor: registryInstance ]
+				ifNotNil: [ :unexpectedLoadedClass | 
+					assoc value == class
+						ifTrue: [ ^ noNewVersionBlock cull: unexpectedLoadedClass cull: assoc ]
+						ifFalse: [ 
+							registryInstance
+								error:
+									'internal error - found a loaded class (' , unexpectedLoadedClass printString
+										, ') for ' , class name asString printString
+										, ' when no loaded class expected' ] ].
+			assoc value == class
+				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
+				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
+
+	registryInstance
+		error:
+			'internal error - there is no assocation present in the receiver for the given class '
+				, class name asString printString
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
+	^ #rowanLoadedClass
 ]
 
 { #category : 'private' }
@@ -236,30 +230,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbol
 	anAssoc := symbolDictionary associationAt: aKey otherwise: nil.
 	anAssoc ifNotNil: [ ^ oneArgBlock cull: anAssoc ].
 	^ nil
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
-
-	self
-		_symbolDictionary: symbolDictionary 
-		associationAt: key
-		ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary at: key ifPresent: oneArgBlock [
-
-	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := symbolDictionary at: key ifAbsent: [ ^ nil ].
-	^ oneArgBlock cull: v
 
 ]
 
@@ -284,13 +254,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addClassAssociation: asso
 	| loadedPackage loadedClass |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
 
-	loadedClass := registryInstance classRegistry
-		at: class classHistory
+	loadedClass := self 
+		loadedClassForClass: class 
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
 			loadedPackage addLoadedClass: loadedClass.
 			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
+			self registerLoadedClass: loadedClass forClass: class.
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
@@ -319,146 +289,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addClassAssociation: asso
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			compiledMethod == oldCompiledMethod
-				ifFalse: [ 
-					"only a problem, if the new and old compiled method are not identical"
-					self
-						error:
-							'internal error - Compiled method ' , behavior name asString , '>>'
-								, selector asString
-								,
-									' already exists in method dictionary when new extension method is expected ( package '
-								, packageName , ').' ] ].
-
-	methodDictionary at: selector put: compiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			registryInstance
-				error:
-					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
-						, selector asString , ' found for extension compiled method ( package '
-						, packageName , ').' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := Rowan image
-		loadedPackageNamed: packageName
-		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod.
-	^ registryInstance
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: registryInstance [
-
-
-	"expecting only a single method to be in methDict/catDict"
-
-	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	catDict
-		keysAndValuesDo: [ :protocolSymbol :selectors | 
-			| symbolSet |
-			symbolSet := cDict
-				at: protocolSymbol
-				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
-			symbolSet addAll: selectors ].
-	methDict
-		keysAndValuesDo: [ :sel :meth | 
-			mDict at: sel put: meth.
-			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
-			compiledMethod := meth ].
-
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			registryInstance
-				error:
-					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod.
-
-	^ compiledMethod
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-
-	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
-		back using specialized processing"
-
-	| methodDictionary selector |
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	selector := compiledMethod selector.
-	methodDictionary 
-		at: selector 
-		ifAbsent: [  
-			registryInstance
-				error:
-					'Internal error -- attempt to move a method that does not exist'  ].
-	self _addMovedDeletedMethod: compiledMethod instance: registryInstance.
-	^ self moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewClassVersionToAssociation: newClass instance: registryInstance [
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewClassVersionToAssociation: newClass oldClassVersion: oldClass instance: registryInstance [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
 	self 
 		_loadedClassFor: newClass
+		oldClassVersion: oldClass
 		noNewVersion: [ 
 			"newClass is actually not a new class version of existing class, that's okay... update properties anyway"
 			self updateClassProperties: newClass instance: registryInstance.]
@@ -471,6 +308,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewClassVersionToAssoc
 		instance: registryInstance.
 	self 
 		_loadedClassExtensionsFor: newClass
+		oldClassVersion: oldClass
 		noNewVersion: [ 
 			"newClass is actually not a new class version of existing class, that's okay... noop"
 ]
@@ -481,121 +319,24 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewClassVersionToAssoc
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewUnmanagedClassVersionToAssociation: newClass oldClassVersion: oldClass toPackageNamed: aPackageName instance: registryInstance [
+	"a new class version is being added to the association in the receiver previously occupied by 
+		the original class. No loadedClass or loadedClassExtension is expected for the oldClass"
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self 
-				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
-	methodDictionary at: selector put: compiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
+	(oldClass isKindOf: Class)
+		ifFalse: [ registryInstance error: 'internal error - expected a class' ].
 
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self
-		loadedPackageNamed: packageName
-		ifAbsent: [ 
-			registryInstance
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ]
-		instance: registryInstance.
-
-	loadedClassOrExtension := loadedPackage
-		loadedClassOrClassExtensionForClass: behavior
-		ifAbsent: [ 
-			registryInstance
+	(Rowan image loadedClassForClass: oldClass ifAbsent: [  ])
+		ifNotNil: [ 
+			self
 				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod.
-	^ registryInstance
-]
+					'Unexpected loaded class for old version of class '
+						, oldClass name asString printString ].
 
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newCompiledMethod instance: registryInstance [
-
-	"add a recompiled compiled method to behavior and update the loaded things"
-
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	methodDictionary at: selector put: newCompiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	^ registryInstance
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance [
-
-	"add a recompiled session method compiled method to behavior and update the loaded things"
-
-	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	dictsArray := registryInstance homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	oldCompiledMethod := mDict
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
-
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ registryInstance ].
-	mDict at: selector put: newCompiledMethod.
-	GsPackagePolicy current
-		updateMethodLookupCacheFor: newCompiledMethod
-		in: behavior.
-
-	loadedMethod := registryInstance methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: newClass name
+		ifPresent: [ :assoc | Rowan packageTools adopt adoptClass: newClass intoPackageNamed: aPackageName ]
 ]
 
 { #category : 'package - patch api' }
@@ -673,39 +414,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMethod: selector fo
 ]
 
 { #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance [
-
-	"delete a compiled method from behavior - moved method already removed from the loaded things"
-
-	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedLoadedMethod: selector for: behavior instance: registryInstance [
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteMovedMethod: selector for: behavior instance: registryInstance [
-
-	| compiledMethod |
-
-	compiledMethod := behavior compiledMethodAt: selector.
-	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deletePackage: packageName instance: registryInstance [
 
 	| loadedPackage |
@@ -726,7 +434,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> disownClass: class instan
 		_loadedClassFor: class
 		noNewVersion: [ :loadedClass | 
 			loadedClass disownFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory ]
+			self 
+				unregisterLoadedClass: loadedClass
+				forClass: class ]
 		instance: registryInstance.
 	^ registryInstance
 
@@ -771,9 +481,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> ensureExtensionClassNamed
 			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
 				newForClass: extensionClass
 				inPackage: loadedPackage.
-			(registryInstance classExtensionRegistry
-				at: extensionClass classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ].
+			self
+				registerLoadedClassExtension: loadedClassExtension
+				forClass: extensionClass ].
 	^ registryInstance
 ]
 
@@ -787,6 +497,30 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> existingOrNewLoadedPackag
 					at: packageName
 					put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass [
+	^ self
+		loadedClassExtensionsForClass: aClass 
+		ifAbsent: [ self error: 'No loaded extension class found for: ', aClass name printString]
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassExtensionsForClass: aClass ifAbsent: absentBlock [
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) ifNil: absentBlock
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass [
+	^ self 
+		loadedClassForClass: aClass
+		ifAbsent: [ self error: 'No loaded class found for: ', aClass name printString ]
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedClassForClass: aClass ifAbsent: absentBlock [
+	^ (aClass theNonMetaClass _extraDictAt: self _loadedClassKey) ifNil: absentBlock
 ]
 
 { #category : 'loaded queries' }
@@ -816,101 +550,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedPackageNamed: packa
 
 ]
 
-{ #category : 'class symbol dict - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveClassFor: classMove [
-	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
-
-	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
-
-	"extension methods will be dealt with later"
-
-	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
-
-	before := classMove classBefore.
-	originalSymbolDictionary := Rowan image symbolDictNamed: before gs_symbolDictionary.
-	assoc := originalSymbolDictionary associationAt: before key asSymbol.
-	theClass := assoc value.
-	theBehavior := theClass class.
-	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	newSymbolDictionary := Rowan image symbolDictNamed: (classMove classAfter gs_symbolDictionary) .
-	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
-	originalSymbolDictionary removeKey: assoc key.
-
-	self 
-		_symbolDictionary: newSymbolDictionary 
-		at: assoc key 
-		ifPresent: [:class |
-			theClass ~~ class
-				ifTrue: [ self error: ' internal error - found an existing association in the ',  
-								newSymbolDictionary name asString printString, 
-								' symbol dictionary with a duplicate key ',
-								assoc key printString, 
-								' while attempting to move class ', assoc key asString printString ] ]
-		ifAbsent: [ newSymbolDictionary add: assoc ].
-
-	newRegistry classRegistry at: theClass classHistory put: loadedClass.
-
-	loadedClass loadedInstanceMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-	loadedClass loadedClassMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-]
-
-{ #category : 'method - patch api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance [
-
-	"move a compiled method into a different protocol and update loaded things"
-
-	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
-	selector := compiledMethod selector.
-	behavior := compiledMethod inClass.
-
-	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
-	existingCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
-	existingCompiledMethod == compiledMethod
-		ifFalse: [ 
-			registryInstance
-				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
-
-	oldCat := behavior categoryOfSelector: selector environmentId: 0.
-	catSym := newProtocol asSymbol.
-	catDict := behavior _baseCategorysForStore: 0.
-	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
-	catDict
-		at: catSym
-		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
-	(catDict at: catSym) add: selector.
-
-	behavior moveMethod: selector toCategory: newProtocol.
-
-	loadedMethod := registryInstance methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
-
-	loadedMethod updateForProtocolChange.
-	^ registryInstance
-
-]
-
-{ #category : 'method - patch api' }
+{ #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName to: symbolDictionaryName classesWithNewVersions: classesWithNewVersions instance: fromRegistryInstance [
 	| loadedPackage toRegistryInstance newClassVersionMap |
 	loadedPackage := fromRegistryInstance packageRegistry
@@ -942,13 +582,53 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName 
 	^ fromRegistryInstance
 ]
 
-{ #category : 'package - creation api' }
-RwGsSymbolDictionaryRegistry_ImplementationV2 class >> newLoadedPackageNamed: packageName instance: registryInstance [
+{ #category : 'package - patch api' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> movePackage: packageName toProjectNamed: projectName instance: registryInstance [
+	| loadedPackage loadedProjectAfter loadedProjectBefore |
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ registryInstance error: 'package ' , packageName printString , ' not found' ]
+		instance: registryInstance.
+	loadedProjectBefore := loadedPackage loadedProject.
+	loadedProjectBefore removeLoadedPackage: loadedPackage.
+	loadedProjectAfter := Rowan image loadedProjectNamed: projectName.
+	loadedProjectAfter addLoadedPackage: loadedPackage.
+	^ registryInstance
+]
 
-	(registryInstance packageRegistry includesKey: packageName)
-		ifTrue: [ registryInstance error: 'The package ', packageName printString, ' already exists' ].
-	^ registryInstance existingOrNewLoadedPackageNamed: packageName implementationClass: self
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClass: loadedClass forClass: aClass [
+	aClass theNonMetaClass _extraDictAt: self _loadedClassKey put: loadedClass
+]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClassExtension: loadedClass forClass: aClass [
+	((aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey) 
+		ifNil: [ | set |
+			set := IdentitySet new.
+			aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey put: set.
+			set ])
+		add: loadedClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClass: loadedClass forClass: aClass [
+	| lc |
+	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey) == loadedClass
+		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
+	aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassKey
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
+	(aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey)
+		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
+		ifNotNil: [:aSet |
+			aSet 
+				remove: loadedClassExtension 
+				ifAbsent: [ "if the class extension has already been removed we are okay" ].
+			aSet isEmpty
+				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
 ]
 
 { #category : 'class - patch api' }

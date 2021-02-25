@@ -34,12 +34,11 @@ RwModificationTonelWriterVisitorV2 >> _classSourceFile [
 ]
 
 { #category : 'class writing' }
-RwModificationTonelWriterVisitorV2 >> _fileNameFor: aClassDefinition [
-	^ String streamContents: [ :stream | 
-		stream 
-			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
-			<< '.st'  ]
+RwModificationTonelWriterVisitorV2 >> _commentOf: aClassDefinition [
+	^ (aClassDefinition comment 
+		copyReplaceAll: '"' 
+		with: '""')
+		withLineEndings: self _newLine
 ]
 
 { #category : 'class writing' }

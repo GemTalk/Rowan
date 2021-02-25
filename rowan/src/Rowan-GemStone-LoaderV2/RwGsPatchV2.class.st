@@ -75,15 +75,19 @@ RwGsPatchV2 >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefi
 ]
 
 { #category : 'accessing' }
-RwGsPatchV2 >> symbolDictionaryRegistry [
+RwGsPatchV2 >> symbolDictionaryName [
+	"Need to create the symbol dictionary at this point, if it doesn't already exist"
 
-	^ self symbolDictionary rowanSymbolDictionaryRegistry
-
+	| symDictName |
+	symDictName := (self projectDefinition
+		symbolDictNameForPackageNamed: self packageName) asSymbol.
+	Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+	^ symDictName
 ]
 
 { #category : 'accessing' }
-RwGsPatchV2 >> symbolDictionaryRegistryFor: aPackageName [
+RwGsPatchV2 >> symbolDictionaryRegistry [
 
-	^ (self symbolDictionaryFor: aPackageName) rowanSymbolDictionaryRegistry
+	^ self symbolDictionary rowanSymbolDictionaryRegistry
 
 ]

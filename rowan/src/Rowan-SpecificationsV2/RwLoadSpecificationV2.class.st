@@ -8,6 +8,7 @@ Class {
 		'gitUrl',
 		'diskUrl',
 		'mercurialUrl',
+		'readonlyDiskUrl',
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
@@ -76,11 +77,11 @@ RwLoadSpecificationV2 >> _validate [
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl')
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readonlyDiskUrl)
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ repoUrls = #('diskUrl') ])
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readonlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -162,6 +163,8 @@ RwLoadSpecificationV2 >> = anObject [
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
+																			self readonlyDiskUrl = anObject readonlyDiskUrl
+																				and: [ 
 																					self mercurialUrl = anObject mercurialUrl
 																						and: [ 
 																							self svnUrl = anObject svnUrl
@@ -171,13 +174,18 @@ RwLoadSpecificationV2 >> = anObject [
 																											self comment = anObject comment
 																												and: [ 
 																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
 RwLoadSpecificationV2 >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitLoadSpecification: self
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> addTopLevelComponentNamed: componentName [
+	componentNames add: componentName
 ]
 
 { #category : 'accessing' }
@@ -219,6 +227,7 @@ RwLoadSpecificationV2 >> diskUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> diskUrl: anUrlString [
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	diskUrl := anUrlString
 ]
 
@@ -276,9 +285,9 @@ RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 			gemstoneProperties
 				at: self _gemstoneAllUsersName
 				ifAbsent: [ ^ self _gemstoneDefaultSymbolDictName ] ].
-	^ userProperties
+	^ (userProperties
 		at: #'defaultSymbolDictName'
-		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]
+		ifAbsent: [ self _gemstoneDefaultSymbolDictName ]) asString
 ]
 
 { #category : 'gemstone-support' }
@@ -316,7 +325,7 @@ RwLoadSpecificationV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: sym
 
 	((self platformProperties at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: symbolDictName
+			at: #defaultSymbolDictName put: symbolDictName asString
 ]
 
 { #category : 'gemstone-support' }
@@ -345,6 +354,7 @@ RwLoadSpecificationV2 >> gitUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> gitUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 ]
 
@@ -358,6 +368,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self projectSpecFile hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self diskUrl hash.
+	hashValue := hashValue bitXor: self readonlyDiskUrl hash.
 	hashValue := hashValue bitXor: self mercurialUrl hash.
 	hashValue := hashValue bitXor: self svnUrl hash.
 	hashValue := hashValue bitXor: self revision hash.
@@ -401,6 +412,7 @@ RwLoadSpecificationV2 >> mercurialUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> mercurialUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	mercurialUrl := anUrlString
 ]
 
@@ -504,7 +516,18 @@ RwLoadSpecificationV2 >> projectUrl [
 		ifNil: [ 
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
-				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ] ] ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> readonlyDiskUrl [
+	^ readonlyDiskUrl
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
+	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
+	readonlyDiskUrl := anUrlString
 ]
 
 { #category : 'accessing' }
@@ -561,7 +584,7 @@ RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	self _projectRepository resolve
+	^self  resolve
 ]
 
 { #category : 'accessing' }
@@ -595,6 +618,7 @@ RwLoadSpecificationV2 >> svnUrl [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecificationV2 >> svnUrlUrl: anUrlString [
+RwLoadSpecificationV2 >> svnUrl: anUrlString [
+	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
 ]

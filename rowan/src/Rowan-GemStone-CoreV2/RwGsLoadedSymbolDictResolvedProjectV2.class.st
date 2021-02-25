@@ -44,6 +44,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> checkout: revision [
 	^ self resolvedProject repository checkout: revision
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> commitId [
+
+	^ self resolvedProject commitId
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitLog: logLimit [
 
@@ -73,12 +79,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> components [
 RwGsLoadedSymbolDictResolvedProjectV2 >> defaultSymbolDictName: symDictName [
 
 	self resolvedProject defaultSymbolDictName: symDictName
-]
-
-{ #category : 'properties' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> defaultUseSessionMethodsForExtensions: aBool [
-
-	self resolvedProject defaultUseSessionMethodsForExtensions: aBool
 ]
 
 { #category : 'initialization' }
@@ -128,30 +128,9 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedConfigurationNames: configNames [
-
-	"noop - project ref component keys is list of loaded config names"
-
-	"https://github.com/GemTalk/Rowan/issues/308"
-
-	"eventually this method will be completely removed/deprecated"
-
-	| x y |
-	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
-		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
-]
-
-{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames [
 
 	^ self resolvedProject loadedGroupNames
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadedGroupNames: groupNames [
-
-
-	self resolvedProject loadedGroupNames: groupNames
 ]
 
 { #category : 'actions' }
@@ -193,6 +172,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttr
 		instanceMigrator: instanceMigrator
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadSpecification [
+
+	^ handle _loadSpecification
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 	"... indicates that receiver needs to mark it's container as dirty .... "
@@ -204,12 +189,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> markPackageDirty [
 RwGsLoadedSymbolDictResolvedProjectV2 >> packageConvention [
 
 	^ self resolvedProject packageConvention
-]
-
-{ #category : 'properties' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> packageNameToPlatformPropertiesMap: aDictionary [
-
-	^self resolvedProject packageNameToPlatformPropertiesMap: aDictionary
 ]
 
 { #category : 'accessing' }
@@ -292,6 +271,27 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> specification [
 
 self deprecated: 'temporary patch .. sender should send direct message to receiver'.
 	^ handle
+]
+
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	| subcomponents |
+	subcomponents := self components
+		subcomponentsOf: componentName
+		resolvedProject: self
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+]
+
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: noneBlock [
+	^ self
+		subcomponentsOf: componentName
+		attributes: self platformConditionalAttributes
+		ifNone: noneBlock
 ]
 
 { #category : 'accessing' }

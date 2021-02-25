@@ -18,18 +18,24 @@ RwGsClassPatchV2 class >> for: aClassDefinition inPackage: aPackageDefinition [
 
 { #category : 'private' }
 RwGsClassPatchV2 >> _classFormat: fmt forSubclassType: classType [
-	"Legal types are normal, variable, and byteSubclass."
+	"Legal types are normal, variable, immediate, and byteSubclass."
 
 	"These values need to be moved into Class"
-	^classType = 'normal'
+
+	^ classType = 'normal'
 		ifTrue: [ fmt ]
-		ifFalse: 
-			[ classType = 'variable'
-				ifTrue: [ fmt bitOr: 16r4.	"add indexable bit" ]
-				ifFalse: 
-					[ classType = 'byteSubclass'
+		ifFalse: [ 
+			classType = 'variable'
+				ifTrue: [ fmt bitOr: 16r4	"add indexable bit" ]
+				ifFalse: [ 
+					classType = 'byteSubclass'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
-						ifFalse: [self error: 'Unknown class type']]]
+						ifFalse: [ 
+							classType = 'immediate'
+								ifTrue: [ 
+									"selfCanBeSpecial"
+									fmt bitOr: 16r2000 ]
+								ifFalse: [ self error: 'Unknown class type' ] ] ] ]
 ]
 
 { #category : 'private' }
@@ -53,16 +59,28 @@ RwGsClassPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> addToNewClassesByName: aDictionary [
-
+RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
-	| name |
-	name := classDefinition key.
+	| name symDict symDictName |
+	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
+	symDictName := self symbolDictionaryName.
+	symDict := RwGsPatchSet_V2
+		lookupSymbolDictName: symDictName
+		in: newClassesByNameSymbolList
+		ifAbsent: [ 
+			self
+				error:
+					'SymbolDictionary named ' , symDictName printString
+						, ' not found in new classes symbol list' ].
+	(symDict includesKey: name)
+		ifTrue: [ 
+			self
+				error:
+					'Duplicate new class name ' , name printString , ' in symbol dictionary '
+						, symDictName printString ].
+	symDict at: name put: self
 ]
 
 { #category : 'private' }
@@ -80,9 +98,10 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 	oldConstraints := oldVersion
 		ifNil: [ #() ]
 		ifNotNil: [ oldVersion _rwSortedConstraints ].
-	gs_options := (classDefinition gs_options)
-		collect: [ :each | each asSymbol ].
-	createdClass := type = 'normal'
+	gs_options := classDefinition gs_options collect: [ :each | each asSymbol ].
+	(SessionTemps current at: #'ROWAN_TRACE' otherwise: nil)
+		ifNotNil: [ gs_options add: #'logCreation' ].
+	createdClass := (type = 'normal' or: [ type = 'immediate' ])
 		ifTrue: [ 
 			superclass
 				subclass: classDefinition key
@@ -92,7 +111,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 				poolDictionaries: (classDefinition propertyAt: 'pools')
 				inDictionary: nil
 				newVersionOf: oldVersion
-				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
@@ -106,7 +125,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 						poolDictionaries: (classDefinition propertyAt: 'pools')
 						inDictionary: nil
 						newVersionOf: oldVersion
-						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+						description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
@@ -121,7 +140,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 								poolDictionaries: (classDefinition propertyAt: 'pools')
 								inDictionary: nil
 								newVersionOf: oldVersion
-								description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
@@ -135,8 +154,7 @@ RwGsClassPatchV2 >> classDefinition [
 
 { #category : 'accessing' }
 RwGsClassPatchV2 >> classDefinition: newValue [
-	classDefinition := newValue
-
+	classDefinition := newValue .
 ]
 
 { #category : 'accessing' }
@@ -148,20 +166,33 @@ RwGsClassPatchV2 >> className [
 
 { #category : 'actions' }
 RwGsClassPatchV2 >> createClassFor: aPatchSet [
-
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet.
 	aPatchSet createdClass: createdClass.
 	^ createdClass
 ]
 
+{ #category : 'actions' }
+RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
+	| createdClass |
+	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
+	aPatchSet createdClass: createdClass inSymDict: symDictName.
+	^ createdClass
+]
+
+{ #category : 'installing' }
+RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
+
+	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
+]
+
 { #category : 'patching moved classes' }
-RwGsClassPatchV2 >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
+RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
 
 	| theRegistry |
 	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
 		rowanSymbolDictionaryRegistry.
-	self installPropertiesPatchFor: aPatchSet registry: theRegistry
+	self installPropertiesPatchSymbolListFor: aPatchSet registry: theRegistry
 ]
 
 { #category : 'versioning' }
@@ -180,7 +211,6 @@ RwGsClassPatchV2 >> printOn: aStream [
 
 { #category : 'private' }
 RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
-
 	| superclass |
 	superclass := aPatchSet 
 		superclassNamed: classDefinition superclassName 
@@ -190,6 +220,29 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
 			(aPatchSet tempSymbols 
 				at: classDefinition name asSymbol
 				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
+	superclass
+		ifNil: [ 
+			classDefinition superclassName = 'nil'
+				ifFalse: [ 
+					self
+						error:
+							'The class named ' , classDefinition superclassName printString
+								, ' does not exist.' ] ].
+	^ self privateCreateClassWithSuperclass: superclass
+]
+
+{ #category : 'private' }
+RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
+
+	| superclass |
+	superclass := aPatchSet 
+		superclassNamed: classDefinition superclassName 
+		ifAbsent: [
+			"https://github.com/GemTalk/Rowan/issues/471"
+			"if we can't look up the class, try accessing the superclass from the class itself"
+			(aPatchSet tempSymbols 
+				at: classDefinition name asSymbol
+				ifAbsent: [ self error: 'Class not found ', classDefinition name printString ]) superClass ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'

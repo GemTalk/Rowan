@@ -18,18 +18,12 @@ RwGsLoadedSymbolDictMethod class >> forMethod: aGsNMethod [
 	^ instance
 ]
 
-{ #category : 'private' }
-RwGsLoadedSymbolDictMethod >> definingPackageOfClass [
-
-	^loadedClass loadedPackage
-]
-
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictMethod >> handleClassDeletion [
 
 	"The class to which I refer has been deleted, so I must unregister myself."
 
-	Rowan image removeLoadedMethodForCompileMethod: handle
+	self unpackageMethod
 ]
 
 { #category : 'accessing' }
@@ -55,6 +49,14 @@ RwGsLoadedSymbolDictMethod >> printOn: aStream [
 RwGsLoadedSymbolDictMethod >> source [
 
 	^handle sourceString copy
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictMethod >> unpackageMethod [
+
+	"Remove the loaded method from the package structure - turn the method into an unpackaged method"
+
+	Rowan image removeLoadedMethodForCompileMethod: handle
 ]
 
 { #category : 'private-updating' }

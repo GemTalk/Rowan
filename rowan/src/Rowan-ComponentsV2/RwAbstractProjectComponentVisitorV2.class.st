@@ -49,21 +49,6 @@ RwAbstractProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatche
 ]
 
 { #category : 'private' }
-RwAbstractProjectComponentVisitorV2 >> _processConditionalProperties: aProjectLoadConfiguration [
-	aProjectLoadConfiguration conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :groupMap | 
-			(self _platformAttributeMatchIn: platformMatchers)
-				ifTrue: [ 
-					groupMap
-						keysAndValuesDo: [ :group :map | 
-							self
-								_addPackageNames: (map at: #'packageNames' ifAbsent: [ #() ])
-								for: aProjectLoadConfiguration.
-							self componentNames addAll: (map at: #'componentNames' ifAbsent: [ #() ]).
-							self projectNames addAll: (map at: #'projectNames' ifAbsent: [ #() ]) ] ] ]
-]
-
-{ #category : 'private' }
 RwAbstractProjectComponentVisitorV2 >> _visited: aComponent [
 
 	visitedComponentNames add:  aComponent name.
@@ -156,35 +141,6 @@ RwAbstractProjectComponentVisitorV2 >> visitedComponents [
 RwAbstractProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
 
 	self projectLoadSpecs add: aLoadSpecification
-]
-
-{ #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitNested: aProjectLoadComponent [
-
-	^aProjectLoadComponent acceptNestedVisitor: self
-]
-
-{ #category : 'visiting' }
-RwAbstractProjectComponentVisitorV2 >> visitProjectLoadComponent: aProjectLoadComponent [
-
-	(visitedComponentNames includes: aProjectLoadComponent name)
-		ifTrue: [ ^ self ].
-
-	self _visited: aProjectLoadComponent.
-
-	definedGroupNames := aProjectLoadComponent definedGroupNames.
-
-	self _processConditionalProperties: aProjectLoadComponent.
-
-	(self
-		_components: self componentsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :component | component acceptNestedVisitor: self ].
-
-	(self
-		_projects: self projectsPath
-		forProject: aProjectLoadComponent projectName)
-		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]
 
 { #category : 'visiting' }

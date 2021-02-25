@@ -179,22 +179,14 @@ RowanMethodService >> breakPoints: collection [
 RowanMethodService >> breakPointsFor: aGsNMethod [
   "Answers an Array stepPoints"
 
-  | list theMethod |
-  list := OrderedCollection new.
+  | theMethod |
   theMethod := aGsNMethod isMethodForBlock
     ifTrue: [ 
       isMethodForBlock := true.
       aGsNMethod homeMethod ]
     ifFalse: [ aGsNMethod ].
   homeMethodOop := theMethod asOop.
-  theMethod _allBreakpoints
-    ifNil: [ ^ OrderedCollection new ]
-    ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
-        list
-          add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
-  ^ list asOrderedCollection
+	^ self _initializeBreakPointsFor: theMethod
 ]
 
 { #category : 'Accessing' }

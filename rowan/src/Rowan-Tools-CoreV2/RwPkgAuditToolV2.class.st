@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : 'other' }
-RwPkgAuditToolV2 >> _addAll: aColl to: aDict for: aName [
-
-	aDict at: aName ifAbsentPut: [aColl].
-
-]
-
-{ #category : 'other' }
 RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 	"audit dirty packages"
 
@@ -60,11 +53,8 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 			(self auditLoadedClass: aLoadedClass)
 				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
 		loadedClassExtensionsDo: [ :aLoadedClass | 
-			| loadedClassExtensionRegistry classEtensionSymbolDictionaryName |
-			loadedClassExtensionRegistry := Rowan image
-				loadedRegistryForClassExtensionNamed: aLoadedClass name
-				ifAbsent: [  ].
-			classEtensionSymbolDictionaryName := loadedClassExtensionRegistry
+			| classEtensionSymbolDictionaryName |
+			classEtensionSymbolDictionaryName := loadedPackageRegistry
 				_symbolDictionary name asString.
 			classEtensionSymbolDictionaryName = packageSymbolDictionaryName
 				ifFalse: [ 

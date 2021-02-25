@@ -199,6 +199,31 @@ RwProjectSetModification >> findAddedMethods [
 ]
 
 { #category : 'private - moves' }
+RwProjectSetModification >> findAddedPackages [
+	| addedPackages |
+	addedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification before isEmpty
+						ifTrue: [ 
+							| newPackage |
+							newPackage := packageModification after.
+							addedPackages
+								at: newPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										packageKey: newPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ addedPackages
+]
+
+{ #category : 'private - moves' }
 RwProjectSetModification >> findRemovedClasses [
 
 	| removedClasses |
@@ -246,13 +271,37 @@ RwProjectSetModification >> findRemovedMethods [
 
 ]
 
+{ #category : 'private - moves' }
+RwProjectSetModification >> findRemovedPackages [
+	| removedPackages |
+	removedPackages := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					packageModification after isEmpty
+						ifTrue: [ 
+							| oldPackage |
+							oldPackage := packageModification before.
+							removedPackages
+								at: oldPackage key
+								put:
+									(RwPackageAdditionOrRemoval
+										projectDefinition: projectModification before
+										packageDefinition: packageModification before
+										packageKey: oldPackage key
+										packagesModification: packagesModification) ] ] ].
+	^ removedPackages
+]
+
 { #category : 'initialization' }
 RwProjectSetModification >> initialize [
-
 	super initialize.
+	movedPackages := Set new.
 	movedClasses := Set new.
 	movedMethods := Set new
-
 ]
 
 { #category : 'testing' }
@@ -265,30 +314,32 @@ RwProjectSetModification >> updateForClassMoveFrom: removal to: addition [
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition classModification |
-	oldDefinition := (removal classesModification
-				modificationOf: removal classKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal classesModification modificationOf: removal classKey)
+		before.
 	newDefinition := (addition classesModification
-				modificationOf: addition classKey) after.
-
-	"Delete the removal and the addition."
+		modificationOf: addition classKey) after.	"Delete the removal and the addition."
 	removal classesModification removeModificationOf: removal classKey.
-	addition classesModification removeModificationOf: addition classKey.
-
-	"Record the move."
-	movedClasses add: (RwClassMove
+	addition classesModification removeModificationOf: addition classKey.	"Record the move."
+	movedClasses
+		add:
+			(RwClassMove
 				classBefore: oldDefinition
 				classAfter: newDefinition
 				packageBefore: removal packageDefinition
 				packageAfter: addition packageDefinition
 				projectBefore: removal projectDefinition
-				projectAfter: addition projectDefinition).
-
-	"Does the class have other modifications that need to be recorded?"
+				projectAfter: addition projectDefinition).	"Does the class have other modifications that need to be recorded?"
 	classModification := newDefinition compareAgainstBase: oldDefinition.
 	classModification isEmpty
-		ifFalse: 
-			[addition classesModification addElementModification: classModification]
-
+		ifFalse: [ addition classesModification addElementModification: classModification ]
 ]
 
 { #category : 'moves' }
@@ -308,21 +359,29 @@ RwProjectSetModification >> updateForClassMoves [
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMeta: isMeta [
+RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition isMeta: isMeta [
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition methodModification |
-	oldDefinition := (removal methodsModification
-				modificationOf: removal methodKey) before.
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
+		before.
 	newDefinition := (addition methodsModification
-				modificationOf: addition methodKey) after.
-
+		modificationOf: addition methodKey) after.
 	"Delete the removal and the addition."
 	removal methodsModification removeModificationOf: removal methodKey.
 	addition methodsModification removeModificationOf: addition methodKey.
-
 	"Record the move."
-	movedMethods add: (RwMethodMove
+	movedMethods
+		add:
+			(RwMethodMove
 				methodBefore: oldDefinition
 				methodAfter: newDefinition
 				classOrExtensionBefore: removal classDefinitionOrExtension
@@ -332,16 +391,13 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMet
 				projectBefore: removal projectDefinition
 				projectAfter: addition projectDefinition
 				isMeta: addition isMeta).
-
 	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
-	methodModification 
+	methodModification
 		isMeta: isMeta;
 		classDefinition: addition classDefinitionOrExtension.
 	methodModification isEmpty
-		ifFalse: 
-			[addition methodsModification addElementModification: methodModification]
-
+		ifFalse: [ addition methodsModification addElementModification: methodModification ]
 ]
 
 { #category : 'moves' }
@@ -359,4 +415,53 @@ RwProjectSetModification >> updateForMethodMoves [
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
 
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> updateForPackageMoveFrom: removal to: addition [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition packageModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal packagesModification
+		modificationOf: removal packageKey) before.
+	newDefinition := (addition packagesModification
+		modificationOf: addition packageKey) after.
+	removal packagesModification removeModificationOf: removal packageKey.	"Delete the removal."
+	addition packagesModification removeModificationOf: addition packageKey.	"Delete theaddition."
+
+	movedPackages
+		add:
+			(RwPackageMove
+				packageBefore: oldDefinition
+				packageAfter: newDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).	"Record the move."
+	packageModification := newDefinition compareAgainstBase: oldDefinition.
+	packageModification isEmpty
+		ifFalse: [ 
+			"Does the package have other modifications that need to be recorded?"
+			addition packagesModification addElementModification: packageModification ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> updateForPackageMoves [
+
+	| packageAdditions packageRemovals |
+	packageAdditions := self findAddedPackages.
+	packageRemovals := self findRemovedPackages.
+
+	"Any keys that match between added and removed should be considered a move."
+	packageAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := packageRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForPackageMoveFrom: removal to: addition]]
 ]

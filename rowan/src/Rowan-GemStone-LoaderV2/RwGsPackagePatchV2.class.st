@@ -9,3 +9,9 @@ RwGsPackagePatchV2 class >> for: aPackageDefinition [
 
 	^self new packageDefinition: aPackageDefinition
 ]
+
+{ #category : 'printing' }
+RwGsPackagePatchV2 >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPutAll: '(' , packageDefinition name , ')'
+]

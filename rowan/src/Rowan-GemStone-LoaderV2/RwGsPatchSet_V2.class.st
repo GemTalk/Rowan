@@ -14,7 +14,6 @@ Class {
 		'addedClasses',
 		'deletedClasses',
 		'movedClasses',
-		'movedClassesMap',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithSymbolDictionaryChanges',
@@ -31,7 +30,10 @@ Class {
 		'tempSymbols',
 		'createdClasses',
 		'errors',
-		'currentProjectDefinition'
+		'currentProjectDefinition',
+		'movedClassesSymbolList',
+		'addedUnmanagedClasses',
+		'loadSymbolList'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
@@ -93,6 +95,25 @@ RwGsPatchSet_V2 class >> classPatchesInReverseHierarchyOrder: classPatches tempS
   ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2 class >> lookupSymbolDictName: symDictName in: symbolList [
+	^ self
+		lookupSymbolDictName: symDictName
+		in: symbolList
+		ifAbsent: [ 
+			self
+				error:
+					'the symbol dictionary named ' , symDictName asString printString
+						, ' was not found in the symbol list' ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 class >> lookupSymbolDictName: symDictName in: symbolList ifAbsent: absentBlock [
+	^ symbolList
+		detect: [ :each | (each at: symDictName ifAbsent: [ nil ]) == each ]
+		ifNone: absentBlock
+]
+
 { #category : 'private - method initialization order' }
 RwGsPatchSet_V2 class >> methodPatchesInInitializationOrder: methodPatches [
 
@@ -120,6 +141,20 @@ RwGsPatchSet_V2 class >> methodPatchesInInitializationOrder: methodPatches [
 RwGsPatchSet_V2 class >> new [
 
 	^super new initialize
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 class >> resolveSymbolDictWith: assocation in: symbolList [
+| res aDict |
+res := { } .
+1 to: symbolList size do:[ :j |
+  (aDict := symbolList at: j) ifNotNil:[
+    aDict associationsDo:[ :assoc |
+      assoc == assocation ifTrue:[ res add: aDict]
+    ].
+  ].
+].
+^ res
 ]
 
 { #category : 'private - patch class accessors' }
@@ -159,6 +194,18 @@ RwGsPatchSet_V2 >> _classSymbolDictionaryMovePatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _classUnmanagedAdditionPatchClass [
+
+	^ RwGsClassUnmanagedAdditionSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _classUnmanagedVersioningPatchClass [
+
+	^ RwGsClassUnmanagedVersioningSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _classVariablePatchClass [
 
 	^ RwGsClassVariableChangeSymbolDictPatchV2
@@ -173,7 +220,26 @@ RwGsPatchSet_V2 >> _classVersioningPatchClass [
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> _createMovedClasses [
 	movedClasses
-		do: [ :movedClass | movedClassesMap at: movedClass classBefore name put: movedClass ]
+		do: [ :movedClass | 
+			| symDictName |
+			symDictName := movedClass symbolDictionaryNameBefore asSymbol.
+			( self class  lookupSymbolDictName: symDictName in: self movedClassesSymbolList)
+				at: movedClass classBefore name asSymbol
+				put: movedClass ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> _createNewSymbolList [
+	| new |
+	new := SymbolList new.
+	self loadSymbolList
+		do: [ :symDict | 
+			| newSymDict |
+			newSymDict := SymbolDictionary new
+				name: symDict name;
+				yourself.
+			new addLast: newSymDict ].
+	^ new
 ]
 
 { #category : 'private - applying' }
@@ -347,6 +413,20 @@ RwGsPatchSet_V2 >> addAddedProject: aProjectDefinition [
 		add: (self _projectAdditionPatchClass for: aProjectDefinition) yourself
 ]
 
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addAddedUnmanagedClass: aClassDefinition oldClassVersion: aClass inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	addedUnmanagedClasses
+		add:
+			((self _classUnmanagedAdditionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				oldClassVersion: aClass
+				yourself)
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> addAndUpdateLoadedPackages [
 	"Update the LoadedPackages to reflect the results of this patchSet. Does not update the other loadedThings."
@@ -368,26 +448,71 @@ RwGsPatchSet_V2 >> addAndUpdateLoadedProjects [
 
 { #category : 'modification dispatching' }
 RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
-
 	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
 	aRwClassModification isAddition
 		ifTrue: [ 
+			| symDictName className |
 			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
 				in a project that is not included in this load"
-			(Rowan globalNamed: aRwClassModification after name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: aRwClassModification after) signal ].
+			className := aRwClassModification after name.
+			symDictName := aProjectDefinition
+				symbolDictNameForPackageNamed: aPackage name.
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwClassModification after name)
+				ifNotNil: [ :class | 
+					(Rowan image loadedClassForClass: class ifAbsent: [  ])
+						ifNil: [ 
+							| theClassDefinition theClassModification |
+							"no loaded class exists for the class"
+							theClassDefinition := class
+								rwClassDefinitionInSymbolDictionaryNamed: symDictName.
+							theClassModification := aRwClassModification after
+								compareAgainstBase: theClassDefinition.
+							theClassModification isEmpty
+								ifTrue: [ 
+									self
+										addAddedUnmanagedClass: aRwClassModification after
+										oldClassVersion: class
+										inPackage: aPackage
+										inProject: aProjectDefinition ]
+								ifFalse: [ 
+									aRwClassModification before: theClassDefinition.
+									self
+										addPatchedUnmanagedClassNewVersion: aRwClassModification
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							(aRwClassModification propertiesModification elementsModified
+								at: 'gs_constraints'
+								ifAbsent: [  ])
+								ifNotNil: [ :constraints | 
+									"arrange to add constraints to a newly created class - constraints not created during class creation"
+									self
+										addPatchedClassConstraints: aRwClassModification after
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							^ self ]
+						ifNotNil: [ 
+							"if the class is packaged, then it must be in another project, signal notification"
+							(RwExistingVisitorAddingExistingClassNotification new
+								class: class;
+								classDefinition: aRwClassModification after;
+								yourself) signal ] ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
 				inProject: aProjectDefinition.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
-						inProject: aProjectDefinition ] ].
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
+						inProject: aProjectDefinition ].
+			^ self ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
 			self
@@ -401,12 +526,14 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self.
-			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
-				ifNotNil: [:constraints |  
+			(aRwClassModification propertiesModification elementsModified
+				at: 'gs_constraints'
+				ifAbsent: [  ])
+				ifNotNil: [ :constraints | 
 					"arrange to add constraints to a newly created class - constraints not created during class creation"
-					self 
-						addPatchedClassConstraints: aRwClassModification after 
-						inPackage: aPackage 
+					self
+						addPatchedClassConstraints: aRwClassModification after
+						inPackage: aPackage
 						inProject: aProjectDefinition ] ]
 ]
 
@@ -418,14 +545,15 @@ RwGsPatchSet_V2 >> addClassMove: aRwClassMove [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2 >> addCreatedClassesAndVersionsTo: newClassesByName [
-
-	addedClasses do: [ :patch | patch addToNewClassesByName: newClassesByName ].
+RwGsPatchSet_V2 >> addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList [
+	addedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
+	addedUnmanagedClasses
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithClassVariableChanges
-		do: [ :each | each addToNewClassesByName: newClassesByName ].
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ].
 	classesWithNewVersions
-		do: [ :each | each addToNewClassesByName: newClassesByName ]
-
+		do: [ :patch | patch addToNewClassesByNameSymbolList: newClassesByNameSymbolList ]
 ]
 
 { #category : 'building' }
@@ -517,8 +645,10 @@ RwGsPatchSet_V2 >> addDeletedPackage: packageDefinition inProject: aProjectDefin
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
+	Rowan image
+		newOrExistingSymbolDictionaryNamed:
+			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
@@ -561,7 +691,6 @@ RwGsPatchSet_V2 >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass
 
 { #category : 'modification dispatching' }
 RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationForcingNewClassVersion toPatchSetInPackage: aPackage inProject: aProjectDefinition [
-
 	"Double dispatch from aRwClassModificationForcingNewClassVersion ... needed to isolate the loader methods from meaningful changes 
 		while updating the loader using the loader"
 
@@ -572,7 +701,8 @@ RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationFo
 	aRwClassModificationForcingNewClassVersion isModification
 		ifTrue: [ 
 			RwGsClassVersioningPatchV2
-				addPatchedClassModificationForcingNewClassVersion: aRwClassModificationForcingNewClassVersion
+				addPatchedClassModificationForcingNewClassVersion:
+					aRwClassModificationForcingNewClassVersion
 				inPackage: aPackage
 				inProject: aProjectDefinition
 				toPatchSet: self ]
@@ -594,6 +724,12 @@ RwGsPatchSet_V2 >> addMovedPackage: packageDefinition inProject: aProjectDefinit
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addPackageMove: anRwPackageMove [
+
+	movedPackages add: anRwPackageMove
 ]
 
 { #category : 'building' }
@@ -655,12 +791,11 @@ RwGsPatchSet_V2 >> addPatchedClassMethodProperties: aClassMethodDefinition inCla
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions
 		add:
-			((self _classVersioningPatchClass
+			(((aClassModification classVersioningPatchClassUsing: self)
 				for: aClassModification
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
@@ -787,6 +922,20 @@ RwGsPatchSet_V2 >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition
 				yourself)
 ]
 
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+
+	classesWithNewVersions
+		add:
+			((self _classUnmanagedVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock [
 
@@ -811,7 +960,7 @@ RwGsPatchSet_V2 >> apply [
 
 	"Apply the changes I represent to the running image."
 	"UserGlobals at: #ConditionalHalt put: false"
-
+ 
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
@@ -887,9 +1036,9 @@ RwGsPatchSet_V2 >> commit [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
-
-	aMethodAdditionPatch compileUsingNewClasses: createdClasses
-		andExistingClasses: tempSymbols
+	aMethodAdditionPatch
+		compileUsingNewClassesSymbolList: self createdClasses
+		andExistingClasses: self tempSymbols
 ]
 
 { #category : 'private - applying' }
@@ -901,73 +1050,115 @@ RwGsPatchSet_V2 >> compileMethods [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2 >> createClassesFromWorklist: workList andClassesByName: newClassesByName [
+RwGsPatchSet_V2 >> createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
-	| className |
-	className := self anyElementOfCollection: workList.
-	className ifNil: [self error: 'Empty WorkList.'].
+	| classNames className |
+	classNames := (self class lookupSymbolDictName: symDictName in: workSymbolList)
+		keys.
+	classNames remove: symDictName.
+	className := self anyElementOfCollection: classNames.
+	className ifNil: [ self error: 'Empty WorkList.' ].
 	self
 		createClassNamed: className
-		fromWorkList: workList
-		andClassesByName: newClassesByName
+		fromWorkSymbolList: workSymbolList
+		symDictName: symDictName
+		andClassesByNameSymbolList: newClassesByNameSymbolList
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_V2 >> createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName [
+RwGsPatchSet_V2 >> createClassNamed: className fromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
 	| patch superclassName |
-	workList remove: className.
-	patch := newClassesByName at: className.
-	superclassName := patch superclassName.
-	(workList includes: superclassName)
-		ifTrue: 
-			[self
+	(self class lookupSymbolDictName: symDictName in: workSymbolList)
+		removeKey: className asSymbol.
+	patch := (self class
+		lookupSymbolDictName: symDictName
+		in: newClassesByNameSymbolList) at: className asSymbol.
+	superclassName := patch superclassName asSymbol.
+	(workSymbolList resolveSymbol: superclassName)
+		ifNotNil: [ :superclassAssoc | 
+			| ar |
+			ar := self class resolveSymbolDictWith: superclassAssoc in: workSymbolList.
+			ar size ~= 1
+				ifTrue: [ 
+					self
+						error:
+							'Internal error: more than one symbol dictionary with association for class '
+								, superclassName printString ].
+			self
 				createClassNamed: superclassName
-				fromWorkList: workList
-				andClassesByName: newClassesByName].
-	patch createClassFor: self
+				fromWorkSymbolList: workSymbolList
+				symDictName: (ar at: 1) name
+				andClassesByNameSymbolList: newClassesByNameSymbolList ].
+	patch createClassFor: self inSymDict: symDictName
 ]
 
 { #category : 'patch access' }
 RwGsPatchSet_V2 >> createdClass: aClass [
-
 	| className |
-	className := aClass name.
-	(createdClasses at: className ifAbsent: [ ])
-		ifNil: [ 
-			createdClasses
-				add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [:cl | 
-			cl == aClass
+	className := aClass name asSymbol.
+	(createdClasses resolveSymbol: className)
+		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :assoc | 
+			assoc value == aClass
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
 					createdClasses at: className put: aClass ] ]
+]
 
+{ #category : 'patch access' }
+RwGsPatchSet_V2 >> createdClass: aClass inSymDict: symDictName [
+	| className symDict |
+	className := aClass name.
+	symDict := self class lookupSymbolDictName: symDictName in: self createdClasses.
+	(symDict at: className ifAbsent: [  ])
+		ifNil: [ symDict add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [ :cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					symDict at: className put: aClass ] ]
 ]
 
 { #category : 'accessing' }
 RwGsPatchSet_V2 >> createdClasses [
-	^ createdClasses
+	^ createdClasses ifNil: [ createdClasses :=  self _createNewSymbolList ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
-
 	"Who: Added classes and classes with new versions and classes with class variable changes
 	   How: Create the new class or class version. Superclass by identity, not name resolution.
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	| newClassesByName workList |
-	newClassesByName := Dictionary new.
-	self addCreatedClassesAndVersionsTo: newClassesByName.
-	workList := Set withAll: newClassesByName keys.
-	[ workList isEmpty ]
-		whileFalse: [ self createClassesFromWorklist: workList andClassesByName: newClassesByName ]
+	| newClassesByNameSymbolList workSymbolList |
+	newClassesByNameSymbolList := self _createNewSymbolList.
+	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
+	workSymbolList := self _createNewSymbolList.
+	newClassesByNameSymbolList
+		do: [ :symDict | 
+			| workList symDictName |
+			symDictName := symDict name.
+			workList := symDict keys.
+			workList remove: symDictName.
+			workList
+				do: [ :className | 
+					(self class lookupSymbolDictName: symDictName in: workSymbolList)
+						at: className
+						put: nil ] ].
+	workSymbolList
+		do: [ :symDict | 
+			[ symDict keys size <= 1 ]
+				whileFalse: [ 
+					self
+						createClassesFromWorkSymbolList: workSymbolList
+						symDictName: symDict name
+						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
 ]
 
 { #category : 'private - applying' }
@@ -985,92 +1176,8 @@ RwGsPatchSet_V2 >> doMoveClassesBetweenPackages [
 
 ]
 
-{ #category : 'private - applying' }
-RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
-
-	| image |
-	image := Rowan image.
-	movedMethods 
-		do: [:aMethodMove |
-			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
-			packageDef := aMethodMove packageBefore.
-			classOrExtensionDef := aMethodMove classOrExtensionBefore.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					self error: 'internal error - no loaded class or extension found for class ', 
-						classOrExtensionDef name printString, 
-						'  in package ', 
-						packageDef name printString ].
-			loadedMethods := aMethodMove isMeta
-				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
-				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
-			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
-
-			registry := image loadedRegistryForPackageNamed: loadedPackage name.
-
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-			loadedClassOrExtension isLoadedClassExtension
-				ifTrue: [
-					loadedClassOrExtension isEmpty
-						ifTrue: [ 
-							| theKey classExtensionRegistry |
-							theKey := loadedClassOrExtension handle classHistory.
-							classExtensionRegistry := registry classExtensionRegistry.
-							(classExtensionRegistry at: theKey ifAbsent: [])
-								ifNotNil: [ :loadedClassExtensions |
-									loadedClassExtensions isEmpty
-										ifFalse: [ 
-											loadedClassExtensions remove: loadedClassOrExtension.
-											loadedClassExtensions isEmpty
-												ifTrue: [ classExtensionRegistry removeKey: theKey ] ] ].
-							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
-
-            compiledMethod := loadedMethod handle.
-			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
-
-			packageDef := aMethodMove packageAfter.
-			classOrExtensionDef := aMethodMove classOrExtensionAfter.
-			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan image symbolDictNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
-			loadedClassOrExtension := loadedPackage 
-				classOrExtensionForClassNamed: classOrExtensionDef name 
-				ifAbsent: [ 
-					classOrExtensionDef isClassExtension
-						ifTrue: [ 
-							"add a new class extension on demand"
-							(aMethodMove projectAfter
-								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
-								ifTrue: [ | resolved |
-									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
-										and: [resolved isBehavior and: [ resolved isMeta not ]])
-										ifFalse: [ 
-											self
-												error:
-													'The extension class named ' , self className printString , ' cannot be found.' ].
-"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
-"https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [
-									registry
-										ensureExtensionClassNamed: classOrExtensionDef name
-										existsForPackageNamed: packageDef name
-										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
-							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
-						ifFalse: [ 
-							self error: 'internal error - no loaded class found for class ', 
-								classOrExtensionDef name printString, 
-								'  in package ', 
-								packageDef name printString ] ].
-
-			loadedClassOrExtension addLoadedMethod: loadedMethod.
-
-			registry methodRegistry at: compiledMethod put: loadedMethod ]
-]
-
 { #category : 'initialization' }
 RwGsPatchSet_V2 >> initialize [
-
 	addedPackages := Set new.
 	addedProjects := Set new.
 	deletedPackages := Set new.
@@ -1085,7 +1192,6 @@ RwGsPatchSet_V2 >> initialize [
 	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClasses := Set new.
-	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
@@ -1095,8 +1201,9 @@ RwGsPatchSet_V2 >> initialize [
 	methodsWithPropertyChanges := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
-	errors := Set new
-
+	errors := Set new.
+	createdClasses := nil.
+	addedUnmanagedClasses := Set new
 ]
 
 { #category : 'private - applying' }
@@ -1105,20 +1212,30 @@ RwGsPatchSet_V2 >> installAddedClasses [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	addedClasses do: [:patch |  patch installClassInSystem ]
-
+	addedClasses do: [:patch |  patch installClassInSystem ].
+	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> installAddedClassExtensions [
 
-	extendedClasses do: [ :each | each installClassExtensionInSystem ]
+	extendedClasses do: [ :each | each installClassExtensionInSystem: self loadSymbolList ]
 ]
 
 { #category : 'accessing' }
 RwGsPatchSet_V2 >> instanceMigrator [
 
 	^ instanceMigrator
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> loadSymbolList [
+	^ loadSymbolList ifNil: [ Rowan image symbolList ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> loadSymbolList: aSymbolList [
+	loadSymbolList := aSymbolList
 ]
 
 { #category : 'private - applying' }
@@ -1139,20 +1256,27 @@ RwGsPatchSet_V2 >> migrateInstances [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> moveClassesBetweenSymbolDictionaries [
-
-	classesWithSymbolDictionaryChanges do: [:each | 
-		| className |
-		className := each classDefinition name.
-		(movedClassesMap at: className ifAbsent: [])
-				ifNil: [ each installSymbolDictionaryPatchFor: self ]
-				ifNotNil: [:classMove | each installSymbolDictionaryPatchFor: self classMove: classMove ] ].
-
+	classesWithSymbolDictionaryChanges
+		do: [ :patch | 
+			| className |
+			className := patch classDefinition name asSymbol.
+			(self movedClassesSymbolList resolveSymbol: className)
+				ifNil: [ patch installSymbolDictionaryPatchFor: self ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					patch installSymbolDictionaryPatchFor: self classMove: classMove ] ]
 ]
 
 { #category : 'accessing' }
-RwGsPatchSet_V2 >> movedClassesMap [
-	^ movedClassesMap
+RwGsPatchSet_V2 >> movedClassesSymbolList [
+	^ movedClassesSymbolList
+		ifNil: [ movedClassesSymbolList := self _createNewSymbolList ]
+]
 
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> movedMethods [
+	^ movedMethods
 ]
 
 { #category : 'private - applying' }
@@ -1162,9 +1286,11 @@ RwGsPatchSet_V2 >> movePackages [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> recordCompiledForNewClassVersionDeletions [
-
 	deleteNewVersionMethods
-		do: [ :each | each primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		do: [ :each | 
+			each
+				primeBehaviorNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 ]
 
 { #category : 'private - applying' }
@@ -1186,17 +1312,18 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> removeDeletedMethods [
-
 	deletedMethods
 		do: [ :methodDeletionPatch | 
 			| className |
 			className := methodDeletionPatch className.
-			methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+			methodDeletionPatch
+				deleteMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
-				deleteNewVersionMethodNewClasses: createdClasses
-				andExistingClasses: tempSymbols  ]
+				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
 ]
 
 { #category : 'private - applying' }
@@ -1276,35 +1403,25 @@ RwGsPatchSet_V2 >> setupForNewClassVersionUpdates [
 ]
 
 { #category : 'patch access' }
-RwGsPatchSet_V2 >> superclassNamed: aName [
-
-	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
-]
-
-{ #category : 'patch access' }
 RwGsPatchSet_V2 >> superclassNamed: aName ifAbsent: absentBlock [
-
 	| superclassName |
 	superclassName := aName asSymbol.
-	^ createdClasses
-		at: superclassName
-		ifAbsent: [ 
-			tempSymbols
-				at: superclassName
-				ifAbsent: absentBlock ]
+	^ (self createdClasses resolveSymbol: superclassName)
+		ifNotNil: [ :assoc | assoc value ]
+		ifNil: [ self tempSymbols at: superclassName ifAbsent: absentBlock ]
 ]
 
 { #category : 'accessing' }
 RwGsPatchSet_V2 >> symbolDictionaryRegistryClass [
 
 	^ self _currentProjectDefinition
-		ifNil: [ RwGsSymbolDictionaryRegistry ]
+		ifNil: [ RwGsSymbolDictionaryRegistryV2 ]
 		ifNotNil: [ :projectDefinition | projectDefinition symbolDictionaryRegistryClass ]
 ]
 
 { #category : 'patch access' }
 RwGsPatchSet_V2 >> tempAssociationFor: aName [
-	^ tempSymbols associationAt: aName
+	^ self tempSymbols associationAt: aName
 ]
 
 { #category : 'accessing' }
@@ -1314,23 +1431,33 @@ RwGsPatchSet_V2 >> tempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateClassProperties [
-
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
 	| classPatches ts |
 	ts := self tempSymbols.
 	classPatches := OrderedCollection new.
-	classPatches 
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges tempSymbols: ts);
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithPropertyChanges tempSymbols: ts);
-		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithConstraintChanges tempSymbols: ts);
+	classPatches
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges
+						tempSymbols: ts);
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithPropertyChanges
+						tempSymbols: ts);
+		addAll:
+				(self class
+						classPatchesInReverseHierarchyOrder: classesWithConstraintChanges
+						tempSymbols: ts);
 		yourself.
-	classPatches 
-		do: [ :each | 
-			(movedClassesMap at: each className ifAbsent: [])
-				ifNil: [ each installPropertiesPatchFor: self ]
-				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]
+	classPatches
+		do: [ :patch | 
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
+				ifNil: [ patch installPropertiesPatchSymbolListFor: self ]
+				ifNotNil: [ :aClassMove | patch installPropertiesPatchSymbolListFor: self classMove: aClassMove ] ]
 ]
 
 { #category : 'private - applying' }
@@ -1341,66 +1468,108 @@ RwGsPatchSet_V2 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedClassesWithNewVersionMap movedExtensionMethodsMap |
-	movedClassesWithNewVersionMap := Dictionary new.
-	classesWithNewVersions do: [:patch | 
-		(movedClassesMap at: patch className ifAbsent: []) 
-			ifNotNil: [:aClassMove | 
-				movedClassesWithNewVersionMap at: patch className put: {aClassMove . patch} ] ]. 
-	addedMethods do: [:patch |
-		| className |
-		className := patch className.
-		(movedClassesWithNewVersionMap at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
-	movedClassesWithNewVersionMap isEmpty
-		ifFalse: [
+	| movedClassesWithNewVersionMap movedExtensionMethodsMap emptyMap |
+	movedClassesWithNewVersionMap := self _createNewSymbolList.
+	emptyMap := true.
+	classesWithNewVersions
+		do: [ :patch | 
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: self movedClassesSymbolList) at: patch className asSymbol ifAbsent: [  ])
+				ifNotNil: [ :aClassMove | 
+					(self class
+						lookupSymbolDictName: aClassMove symbolDictionaryNameAfter asSymbol
+						in: movedClassesWithNewVersionMap)
+						at: patch className asSymbol
+						put:
+							{aClassMove.
+							patch}.
+					emptyMap := false ] ].
+	addedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			((self class
+				lookupSymbolDictName: patch symbolDictionaryName
+				in: movedClassesWithNewVersionMap) at: className ifAbsent: [  ])
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :ar | 
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+	emptyMap
+		ifFalse: [ 
 			"calculate moved extension methods map only if there are moved new class versions as well"
-			movedExtensionMethodsMap := Dictionary new.
-			movedMethods do: [:aMethodMove |
-				| classExtDict key methodDict  |
-				classExtDict := movedExtensionMethodsMap  at: aMethodMove classOrExtensionAfter name ifAbsentPut: [ Dictionary new].
-				key := aMethodMove isMeta ifTrue: [ 'class' ] ifFalse: [ 'instance'].
-				methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ]. 
-				methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
-	extendedMethods do: [:patch |
-		| className |
-		className := patch className.
-		(movedClassesWithNewVersionMap at: className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [:ar | 
-				"https://github.com/dalehenrich/Rowan/issues/316"
-				(movedExtensionMethodsMap at: className ifAbsent: [])
-					ifNil: [ patch installMethod ]
-					ifNotNil: [:classExtDict |
-						| methodDict |
-						methodDict := patch isMeta
-							ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
-							ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
-						(methodDict at: patch methodDefinition selector ifAbsent: [])
-							ifNil: [ patch installMethod ]
-							ifNotNil: [:aMethodMove |
-								patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
-	methodsNeedingRecompile do: [:each | each installSourcePatch ]
-
+			movedExtensionMethodsMap := self _createNewSymbolList.
+			movedMethods
+				do: [ :aMethodMove | 
+					| classExtDict key methodDict |
+					classExtDict := (self class
+						lookupSymbolDictName: aMethodMove symbolDictionaryNameAfter asSymbol
+						in: movedExtensionMethodsMap)
+						at: aMethodMove classOrExtensionBefore name asSymbol
+						ifAbsentPut: [ Dictionary new ].
+					key := aMethodMove isMeta
+						ifTrue: [ 'class' ]
+						ifFalse: [ 'instance' ].
+					methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ].
+					methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
+	extendedMethods
+		do: [ :patch | 
+			| className |
+			className := patch className asSymbol.
+			(movedClassesWithNewVersionMap resolveSymbol: className)
+				ifNil: [ patch installMethod ]
+				ifNotNil: [ :movedAssoc | 
+					| ar classMove |
+					"https://github.com/dalehenrich/Rowan/issues/316"
+					ar := movedAssoc value.
+					classMove := ar at: 1.
+					((self class
+						lookupSymbolDictName: classMove symbolDictionaryNameAfter
+						in: movedExtensionMethodsMap) at: className ifAbsent: [  ])
+						ifNil: [ patch installMethod ]
+						ifNotNil: [ :assoc | 
+							| classExtDict methodDict |
+							classExtDict := assoc value.
+							methodDict := patch isMeta
+								ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
+								ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
+							(methodDict at: patch methodDefinition selector ifAbsent: [  ])
+								ifNil: [ patch installMethod ]
+								ifNotNil: [ :aMethodMove | patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
+	methodsNeedingRecompile do: [ :each | each installSourcePatch ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateMethodProperties [
-
 	methodsWithPropertyChanges
-		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		do: [ :each | 
+			each
+				installPropertiesPatchNewClassesSymbolList: self createdClasses
+				andExistingClasses: self tempSymbols ]
+]
+
+{ #category : 'dispatching' }
+RwGsPatchSet_V2 >> updatePatchesForNewClassVersion: aClassVersioningPatch projectModification: aProjectSetModification [
+	aClassVersioningPatch
+		updatePatchesForNewClassVersion: aProjectSetModification
+			patchSetSymbolList: self;
+		updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+			patchSet: self;
+		updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+			patchSet: self
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateSymbolAssociations [
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | 
-		(movedClassesMap at: each className ifAbsent: [])
-			ifNil: [ each installNewClassVersionInSystem ]
-			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
-		 ]
+	classesWithNewVersions
+		do: [ :each | 
+			(self movedClassesSymbolList resolveSymbol: each className asSymbol)
+				ifNil: [ each installNewClassVersionInSystem ]
+				ifNotNil: [ :assoc | 
+					| classMove |
+					classMove := assoc value.
+					each moveNewClassVersionInSystem: classMove ] ]
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwProject',
-	#superclass : 'RowanInterface',
+	#superclass : 'RwAbstractProject',
 	#category : 'Rowan-Core'
 }
 
@@ -17,6 +17,11 @@ RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
 		loadedProjectNamed: self name
 		ifPresent: presentBlock
 		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwProject >> _loadSpecification [
+	^ self _loadedProject loadSpecification
 ]
 
 { #category : 'private' }
@@ -56,10 +61,27 @@ RwProject >> comment [
 ]
 
 { #category : 'querying' }
+RwProject >> commitId [
+
+	^ self _loadedProject commitId
+]
+
+{ #category : 'querying' }
+RwProject >> commitLog: logLimit [
+
+	^ self _loadedProject commitLog: logLimit
+]
+
+{ #category : 'querying' }
 RwProject >> componentForPackageNamed: packageName [
 	"Answer nil if no component found"
 
 	^ self _loadedProject componentForPackageNamed: packageName
+]
+
+{ #category : 'components' }
+RwProject >> componentNamed: componentName [
+	^ self loadedComponents componentNamed: componentName
 ]
 
 { #category : 'accessing' }
@@ -72,6 +94,21 @@ RwProject >> currentBranchName [
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
 
+]
+
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes [
+	^ self _loadSpecification customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwProject >> customConditionalAttributes: anArray [
+	self _loadSpecification customConditionalAttributes: anArray
+]
+
+{ #category : 'transitions' }
+RwProject >> defined [
+	^ RwDefinedProject fromLoadedProject: self
 ]
 
 { #category : 'accessing' }
@@ -92,16 +129,72 @@ RwProject >> existsOnDisk [
 			ifAbsent: [ false ]
 ]
 
-{ #category : 'exporting' }
-RwProject >> exportSpecification [
-
-	self _loadedProject asDefinition exportSpecification
-]
-
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 
 	^ self _projectTools query classExtensionsForProjectNamed: self name
+]
+
+{ #category : 'git support' }
+RwProject >> gitCheckout: branchOrSha [
+	"git checkout a branch or sha"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: branchOrSha
+]
+
+{ #category : 'git support' }
+RwProject >> gitCommit: commitComment [
+	"git checkout a branch or sha"
+
+	^ self _loadedProject resolvedProject commit: commitComment
+]
+
+{ #category : 'git support' }
+RwProject >> gitCreateBranch: branchName [
+	"git create a new branch"
+
+	^ Rowan gitTools gitcheckoutIn: self repositoryRoot with: ' -b ', branchName
+]
+
+{ #category : 'git support' }
+RwProject >> gitLog: logLimit [
+	"return `git log` report"
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
+]
+
+{ #category : 'git support' }
+RwProject >> gitPullRemote: remoteName branch: branchName [
+	"git pull remote and branch name"
+
+	^ Rowan gitTools
+		gitpullIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+]
+
+{ #category : 'git support' }
+RwProject >> gitPushRemote: remoteName branch: branchName [
+	"git push remote and branch name"
+
+	^ Rowan gitTools
+		gitpushIn: self repositoryRoot pathString
+		remote: remoteName
+		branch: branchName
+]
+
+{ #category : 'git support' }
+RwProject >> gitShortStatus [
+	"`git status --short` returns an empty string if there is nothing to commit"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: '--short'
+]
+
+{ #category : 'git support' }
+RwProject >> gitStatus [
+	"return standard `git status` report"
+
+	^ Rowan gitTools gitstatusIn: self repositoryRoot pathString with: ''
 ]
 
 { #category : 'testing' }
@@ -110,6 +203,11 @@ RwProject >> isDirty [
 		have changes that are not written to  disk."
 
 	^ self _loadedProject isDirty
+]
+
+{ #category : 'testing' }
+RwProject >> isLoaded [
+	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
 ]
 
 { #category : 'actions' }
@@ -155,6 +253,14 @@ RwProject >> loadedGroupNames [
 	^ self _loadedProject loadedGroupNames
 ]
 
+{ #category : 'components' }
+RwProject >> loadedTopLevelComponents [
+	| lc |
+	lc := self loadedComponents.
+	^ self componentNames
+		collect: [ :componentName | lc componentNamed: componentName ]
+]
+
 { #category : 'actions' }
 RwProject >> loadProjectSet [
 	"
@@ -194,6 +300,13 @@ RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: ins
 		instanceMigrator: instanceMigrator
 ]
 
+{ #category : 'querying' }
+RwProject >> packageNamed: aString ifAbsent: absentBlock [
+	^ self packages
+		detect: [ :package | package name = aString ]
+		ifNone: absentBlock
+]
+
 { #category : 'accessing' }
 RwProject >> packageNames [
 
@@ -204,12 +317,6 @@ RwProject >> packageNames [
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
-]
-
-{ #category : 'accessing' }
-RwProject >> project [
-
-	^ self
 ]
 
 { #category : 'accessing' }
@@ -226,12 +333,13 @@ RwProject >> projectUrl [
 	^ self _loadedProject projectUrl
 ]
 
-{ #category : 'project creation' }
-RwProject >> register [
-	"Create a loaded project based on the receiver's properties in the image."
+{ #category : 'actions' }
+RwProject >> reload [
+	"
+		load the receiver AND required projects.
+	"
 
-	self _specification register
-
+	^ Rowan projectTools load loadProjectNamed: self name
 ]
 
 { #category : 'properties' }
@@ -254,8 +362,70 @@ RwProject >> repositoryRootPath [
 ]
 
 { #category : 'actions' }
+RwProject >> revert [
+	"
+		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly revert the receiver AND required projects, <TBD>.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'actions' }
+RwProject >> revert: platformConditionalAttributes [
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
+			loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'actions' }
+RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMigrator [
+	"
+		read the reciever using the platformConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+			receiver are only loaded if they are not already present in the image.
+	"
+
+	"should replace places where a projectSet was created for the receiver"
+
+	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName [
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	^ self _loadedProject
+		subcomponentsOf: componentName
+		attributes: attributes
+		ifNone: noneBlock
+]
+
+{ #category : 'components' }
+RwProject >> subcomponentsOf: componentName ifNone: noneBlock [
+	^ self  _loadedProject subcomponentsOf: componentName ifNone: noneBlock
+]
+
+{ #category : 'actions' }
 RwProject >> testSuite [
 	^ Rowan projectTools test testSuiteForProjectNamed: self name
+]
+
+{ #category : 'components' }
+RwProject >> topLevelComponents [
+	^ self loadedComponents components values
+		select: [ :each | each class == RwSimpleProjectLoadComponentV2 ]
 ]
 
 { #category : 'actions' }

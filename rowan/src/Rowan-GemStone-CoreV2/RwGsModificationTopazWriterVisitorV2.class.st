@@ -1,3 +1,11 @@
+"
+No class-specific documentation for RwGsModificationTopazWriterVisitorV2, hierarchy is:
+Object
+  RwAbstractReaderWriterVisitor( currentProjectDefinition packageConvention currentPackageDefinition currentClassDefinition currentClassExtension)
+    RwModificationWriterVisitor
+      RwGsModificationTopazWriterVisitorV2( topazFilenameComponentMap topazFilename topazFileHeader filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath)
+
+"
 Class {
 	#name : 'RwGsModificationTopazWriterVisitorV2',
 	#superclass : 'RwModificationWriterVisitor',
@@ -5,6 +13,11 @@ Class {
 		'topazFilenameComponentMap',
 		'topazFilename',
 		'topazFileHeader',
+		'topazFileFooter',
+		'excludeClassInitializers',
+		'excludeRemoveAllMethods',
+		'fileNamesInFileInOrder',
+		'logCreation',
 		'filenameExtension',
 		'classSymbolDictionaryNames',
 		'classDefinitions',
@@ -31,50 +44,71 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 	hasClassInstVars := self
 		_writeClassTypeMessage: classDefinition
 		on: aStream
-		hasInstanceVariables: [ aStream
-			nextPutAll:
-			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-			lf ].
-	optionsString := ''.
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
+	optionsString := String new.
 	classDefinition gs_options isEmpty
-		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
 	reservedOopString := ''.
 	classDefinition gs_reservedOop isEmpty
-		ifFalse: [
+		ifFalse: [ 
 			| strm |
 			strm := WriteStream on: String new.
-			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
 			reservedOopString := strm contents ].
 	aStream
-		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
 		lf.
 	hasClassInstVars
 		ifTrue: [ 
-		aStream
-			nextPutAll:
-			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-			lf ].
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';
 		lf;
-		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
 		lf;
-		nextPutAll: '	options: #(', optionsString, ')';
+		nextPutAll: '	options: #(' , optionsString , ')';
 		lf;
 		nextPutAll: reservedOopString;
 		nextPutAll: ')';
 		lf;
 		nextPutAll: '		category: ' , classDefinition category printString , ';';
 		lf;
-		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
 		nextPutAll: '		immediateInvariant.';
 		lf;
 		nextPutAll: 'true.';
 		lf;
 		nextPutAll: '%';
 		lf;
-		lf
+		lf.
+	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
 ]
 
 { #category : 'private exporting' }
@@ -88,6 +122,18 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClas
 		ifFalse: [aStream lf].
 	aStream nextPutAll: '%'; lf;
 		lf
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className on: aStream [
+	self excludeRemoveAllMethods
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'removeallmethods ' , className;
+				lf;
+				nextPutAll: 'removeallclassmethods ' , className;
+				lf;
+				lf ]
 ]
 
 { #category : 'private exporting' }
@@ -133,21 +179,23 @@ RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition 
 	classType := classDefinition subclassType.
 	classType = 'variable'
 		ifTrue: [ 
-			classTypeMessage :=  hasReservedOop
+			classTypeMessage := hasReservedOop
 				ifTrue: [ '_newKernelIndexableSubclass:' ]
 				ifFalse: [ 'indexableSubclass: ' ] ]
-		ifFalse: [ classType = 'byteSubclass'
-			ifTrue: [ 
-				classTypeMessage :=  hasReservedOop
-					ifTrue: [ '_newKernelByteSubclass:' ]
-					ifFalse: [ 'byteSubclass: ' ].
-				hasClassInstVars := hasInstanceVariables := false ]
-			ifFalse: [ classType = ''
+		ifFalse: [ 
+			classType = 'byteSubclass'
 				ifTrue: [ 
-					classTypeMessage :=  hasReservedOop
-						ifTrue: [ '_newKernelSubclass:' ]
-						ifFalse: [ 'subclass: ' ] ]
-				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+					classTypeMessage := hasReservedOop
+						ifTrue: [ '_newKernelByteSubclass:' ]
+						ifFalse: [ 'byteSubclass: ' ].
+					hasClassInstVars := hasInstanceVariables := false ]
+				ifFalse: [ 
+					(classType = '' or: [ classType = 'immediate' ])
+						ifTrue: [ 
+							classTypeMessage := hasReservedOop
+								ifTrue: [ '_newKernelSubclass:' ]
+								ifFalse: [ 'subclass: ' ] ]
+						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
 	aStream
 		tab;
 		nextPutAll: classTypeMessage , classDefinition name asString printString;
@@ -231,15 +279,30 @@ RwGsModificationTopazWriterVisitorV2 >> deletededPackage: aPackageModification [
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers [
-  self dynamicInstVarAt: #excludeClassInitializers put: true
+	^ excludeClassInitializers ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeClassInitializers: aBool [
+	excludeClassInitializers := aBool
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods [
+	^ excludeRemoveAllMethods ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods: aBool [
+	excludeRemoveAllMethods := aBool
 ]
 
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> export [
 
-	self topazFilenamePackageNamesMap keysAndValuesDo: [:filename :packageNames |
-		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
-
+	self fileNamesInFileInOrder do: [:filename | 
+		| packageNames classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
+		packageNames := self topazFilenamePackageNamesMap at: filename.
 		self _setBufferedStreamFor: filename.
 		self bufferedStream nextPutAll: self topazFileHeader.
 
@@ -287,6 +350,8 @@ RwGsModificationTopazWriterVisitorV2 >> export [
 
 		self exportClassInitializations.
 
+		self bufferedStream nextPutAll: self topazFileFooter.
+
 		self bufferedStream flush; close ].
 ]
 
@@ -310,7 +375,7 @@ RwGsModificationTopazWriterVisitorV2 >> exportClassInitializations [
 	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
 	stream := self bufferedStream.
-  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude := self excludeClassInitializers.
   exclude ifTrue:[
     stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
   ] ifFalse:[
@@ -382,6 +447,28 @@ RwGsModificationTopazWriterVisitorV2 >> filenameExtension: aString [
 	filenameExtension := aString
 ]
 
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder [
+	"Normally the order that fileins are created in does not matter"
+
+	^ fileNamesInFileInOrder ifNil: [ self topazFilenamePackageNamesMap keys ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> fileNamesInFileInOrder: object [
+	fileNamesInFileInOrder := object
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> logCreation [
+	^logCreation ifNil: [ ^false ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> logCreation: object [
+	logCreation := object
+]
+
 { #category : 'class writing' }
 RwGsModificationTopazWriterVisitorV2 >> processClass: aClassModification [
 
@@ -432,13 +519,15 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
 								at: 2.
-							currentProjectDefinition componentsRoot exists
-								ifTrue: [ 
-									"read the project from disk, if it is present on disk"
-									visitor := readTool
-										readProjectForResolvedProject: currentProjectDefinition
-										withComponentNames: componentNames
-										platformConditionalAttributes: platformConditionalAttributes ].
+							componentNames isEmpty
+								ifFalse: [ 
+									currentProjectDefinition componentsRoot exists
+										ifTrue: [ 
+											"read the project from disk, if it is present on disk"
+											visitor := readTool
+												readProjectForResolvedProject: currentProjectDefinition
+												withComponentNames: componentNames
+												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
@@ -469,6 +558,16 @@ RwGsModificationTopazWriterVisitorV2 >> repositoryRootPath: aStringOrFileReferen
 ]
 
 { #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> topazFileFooter [
+	^ topazFileFooter ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> topazFileFooter: object [
+	topazFileFooter := object
+]
+
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFileHeader [
 
 	^ topazFileHeader ifNil: [ '' ]
@@ -490,13 +589,6 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilename [
 RwGsModificationTopazWriterVisitorV2 >> topazFilename: aString [
 
 	topazFilename := aString
-]
-
-{ #category : 'accessing' }
-RwGsModificationTopazWriterVisitorV2 >> topazFilename: aNameString filenameExtension: anExtensionString [
-
-	topazFilename := aNameString.
-	filenameExtension := anExtensionString
 ]
 
 { #category : 'accessing' }

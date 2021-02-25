@@ -16,6 +16,13 @@ RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet [
 ]
 
 { #category : 'actions' }
+RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
+	newClass := super createClassFor: aPatchSet inSymDict: symDictName.
+	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
+	^ newClass
+]
+
+{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatchV2 >> installClassInSystem [
 
 	"Copy the name association to the correct 
@@ -25,7 +32,7 @@ RwGsClassAdditionSymbolDictPatchV2 >> installClassInSystem [
 	| loadedClass |
 	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
-		forClass: newClass
+		forClass: self newClass
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition

@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/v2/platforms/gemstone36-/Loader',
+	#condition : [
+		'gs3.[6-]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-LoaderV2-36x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-LoaderV2-36x' : {
+						'symbolDictName' : 'RowanLoader'
+					}
+				}
+			}
+		}
+	},
+	#comment : ''
+}

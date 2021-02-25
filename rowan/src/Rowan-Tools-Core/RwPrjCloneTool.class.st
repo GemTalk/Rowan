@@ -40,9 +40,7 @@ The project project has been registered with Rowan at the existing location .'.
 
 { #category : 'smalltalk api' }
 RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
-
 	| gitTool response remoteUrl cloneOption checkout |
-
 	self
 		_validateForGitRepository: aRwGitRepositoryDefinition
 		ifDone: [ :msg | 
@@ -54,7 +52,14 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , remoteUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
+	response := gitTool
+		gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString
+		with:
+			cloneOption , remoteUrl , aRwGitRepositoryDefinition repositoryRoot pathString.
 	checkout
-		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
+		ifNotNil: [ 
+			gitTool := Rowan gitTools.
+			gitTool
+				gitcheckoutIn: aRwGitRepositoryDefinition repositoryRoot
+				with: checkout ]
 ]

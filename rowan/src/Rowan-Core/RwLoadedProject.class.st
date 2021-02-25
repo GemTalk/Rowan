@@ -12,7 +12,7 @@ Class {
 RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 
-	^ '_Project_Definition_PlatformConditionalAttricutes'
+	^ '_Project_Definition_PlatformConditionalAttributes'
 ]
 
 { #category : 'accessing' }
@@ -63,15 +63,6 @@ RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	^ 'unknown'
 ]
 
-{ #category : 'instance creation' }
-RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
-
-	^ self new
-		initialize;
-		initializeForLoadSpecification: aLoadSpecification;
-		yourself
-]
-
 { #category : 'accessing' }
 RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 
@@ -100,13 +91,6 @@ RwLoadedProject >> initialize [
 	loadedPackages := KeyValueDictionary new.
 	isDirty := true. "a project is dirty if it has changes that are not written to disk"
 
-]
-
-{ #category : 'initialization' }
-RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
-
-	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification
 ]
 
 { #category : 'testing' }
@@ -145,7 +129,7 @@ RwLoadedProject >> load [
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
 			"https://github.com/GemTalk/Rowan/issues/488"
-			self halt: 'expected to update the projectDefinition in-place' ].
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ projectDefinition _loadTool loadProjectSetDefinition: projectSetDefinition
 ]
 
@@ -228,12 +212,6 @@ RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
-]
-
-{ #category : 'private' }
-RwLoadedProject >> markProjectDirty [
-
-	self markDirty
 ]
 
 { #category : 'accessing' }

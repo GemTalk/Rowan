@@ -39,45 +39,47 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
    Only used to parse a method to determine the selector.  "
 
 	| undefinedSymbolList undefinedSymbols |
-	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
+	undefinedSymbols := SymbolDictionary new name: #'UndefinedSymbols'.
 	undefinedSymbolList := SymbolList with: undefinedSymbols.
-	^
-	[UndefinedObject
+	^ [ 
+	UndefinedObject
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
 		intoMethodDict: GsMethodDictionary new
 		intoCategories: GsMethodDictionary new
-		intoPragmas: nil
-		environmentId: anEnvironmentId]
-			onSynchronous: (Array with: CompileError with: CompileWarning)
-			do: (Array with: 
-						[:ex |
-						| undefSymbol symbols |
-						undefSymbol := true.
-						symbols := Array new.
-						ex errorDetails do: 
-								[:errArray |
-								(errArray atOrNil: 1) == 1031
-									ifTrue: [symbols add: (errArray atOrNil: 5) asSymbol]
-									ifFalse: [undefSymbol := false]].
-						undefSymbol
-							ifTrue: 
-								["attempt auto-define of undefined symbols"
-								symbols do: [:sym | undefinedSymbols at: sym put: nil].
-								
-								[^UndefinedObject
-									compileMethod: source
-									dictionaries: aSymbolList , undefinedSymbolList
-									category: cat
-									intoMethodDict: GsMethodDictionary new
-									intoCategories: GsMethodDictionary new
-									intoPragmas: nil
-									environmentId: anEnvironmentId]
-										onException: CompileError
-										do: [:exb | undefSymbol := false]].
-						undefSymbol ifFalse: [ex outer]]
-					with: [:ex | ex resume])
+		environmentId: anEnvironmentId ]
+		onSynchronous: (Array with: CompileError with: CompileWarning)
+		do:
+			(Array
+				with: [ :ex | 
+					| undefSymbol symbols |
+					undefSymbol := true.
+					symbols := Array new.
+					ex errorDetails
+						do: [ :errArray | 
+							(errArray atOrNil: 1) == 1031
+								ifTrue: [ symbols add: (errArray atOrNil: 5) asSymbol ]
+								ifFalse: [ undefSymbol := false ] ].
+					undefSymbol
+						ifTrue: [ 
+							"attempt auto-define of undefined symbols"
+							symbols do: [ :sym | undefinedSymbols at: sym put: nil ].
+
+							[ 
+							^ UndefinedObject
+								compileMethod: source
+								dictionaries: aSymbolList , undefinedSymbolList
+								category: cat
+								intoMethodDict: GsMethodDictionary new
+								intoCategories: GsMethodDictionary new
+								environmentId: anEnvironmentId ]
+								onSynchronous: (Array with: CompileError with: CompileWarning)
+								do:
+									(Array with: [ :exb | undefSymbol := false ] with: [ :exc | exc resume ]) ].
+					undefSymbol
+						ifFalse: [ ex outer ] ]
+				with: [ :ex | ex resume ])
 ]
 
 { #category : 'private' }
@@ -224,13 +226,6 @@ RwGsPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 	"global preferences implements default preference"
 
 	^self globalPreferenceFor: preferenceSymbol ifAbsent: aBlock
-]
-
-{ #category : 'queries' }
-RwGsPlatform >> fileUtilities [
-  "Answer the platform-specific object for accessing files and directories"
-
-  ^ RwGsFileUtilities
 ]
 
 { #category : 'queries' }

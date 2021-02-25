@@ -28,12 +28,6 @@ Rowan class >> clearUserAutomaticClassInitializationBlackList [
 ]
 
 { #category : '*rowan-gemstone-core' }
-Rowan class >> gemstoneTools [
-
-	^self platform gemstoneTools
-]
-
-{ #category : '*rowan-gemstone-core' }
 Rowan class >> globalAutomaticClassInitializationBlackList [
 
 	"Answer global list of project names for which automatic class initialiation should be disabled.

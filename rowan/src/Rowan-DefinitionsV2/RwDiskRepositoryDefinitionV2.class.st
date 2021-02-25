@@ -13,11 +13,6 @@ RwDiskRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFi
 		yourself
 ]
 
-{ #category : 'private' }
-RwDiskRepositoryDefinitionV2 >> _fileSystem [
-	^ FileSystem disk
-]
-
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> canCommit [
 
@@ -54,6 +49,13 @@ RwDiskRepositoryDefinitionV2 >> commitLog: logLimit [
 RwDiskRepositoryDefinitionV2 >> create [
 
 	self error: 'not yet implemented'
+]
+
+{ #category : 'actions' }
+RwDiskRepositoryDefinitionV2 >> diskRepositoryRoot: repositoryRootPathString [
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString
 ]
 
 { #category : 'actions' }
@@ -94,5 +96,7 @@ RwDiskRepositoryDefinitionV2 >> resolve [
 
 	"answer true if attaching to an existing repository"
 
-	^ self repositoryRoot exists
+	self repositoryRoot exists
+		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
+	^ true
 ]

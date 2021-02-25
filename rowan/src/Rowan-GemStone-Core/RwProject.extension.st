@@ -1,34 +1,35 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> defaultSymbolDictName [
-
-	^ self _gemstonePlatformSpec defaultSymbolDictName
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwProject >> defaultSymbolDictName: aString [
 
 	^ self _loadedProject defaultSymbolDictName: aString
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> defaultUseSessionMethodsForExtensions [
-
-	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwProject >> exportTopazFormatTo: filePath [
-
-
-	^ self _loadedProject asDefinition exportTopazFormatTo: filePath
+	^ self
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap [
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
 ]
 
@@ -41,7 +42,7 @@ RwProject >> methodEnvForPackageNamed: packageName [
 { #category : '*rowan-gemstone-core' }
 RwProject >> symbolDictNameForPackageNamed: packageName [
 
-	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
+	^ self _loadedProject symbolDictNameForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }

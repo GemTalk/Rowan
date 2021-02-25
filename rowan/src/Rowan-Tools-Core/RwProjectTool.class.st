@@ -18,12 +18,6 @@ RwProjectTool class >> audit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> checkout [
-
-	^RwPrjCheckoutTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> clone [
 
 	^RwPrjCloneTool new
@@ -62,33 +56,9 @@ RwProjectTool class >> edit [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> log [
-
-	^RwPrjLogTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> pull [
-
-	^RwPrjPullTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> push [
-
-	^RwPrjPushTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> query [
 
 	^ RwPrjQueryTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> revert [
-
-	^RwPrjRevertTool new
 ]
 
 { #category : 'commands' }

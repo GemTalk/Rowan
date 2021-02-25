@@ -81,7 +81,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 >> readClassDirectory: classD
 		normalizedMetadata at: key asLowercase asSymbol put: value ].
 	classDef :=	self newClassDefinitionFrom: {
 		nil.
-		classComment. 
+		classComment isEmpty ifTrue: [ nil ] ifFalse: [ classComment ]. 
 		nil. 
 		normalizedMetadata at: 'type' ifAbsent: ['normal']. 
 		nil. 
@@ -99,7 +99,7 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 >> readClassesFor: packageNam
 
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	packageRoot directories do: [:directory |
 		| directoryExtension |
 		directoryExtension := directory extension.

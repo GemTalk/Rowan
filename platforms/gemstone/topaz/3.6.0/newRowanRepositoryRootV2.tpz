@@ -11,19 +11,10 @@
   login
 
 	run
-	Rowan gemstoneTools image 
-		newRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan' 
-		platformConditionalAttributes: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2')
-		forProjectNamed: 'Rowan'
-%
-	commit
-
-	run
-	| specPath |
-	specPath := '$ARCHBASE/image/rowan/specs/GemStone64.ston' asFileReference pathString.
-	Rowan gemstoneTools image
-		adoptGemStone64: 'file://', specPath 
-		projectsHome: '$ARCHBASE/image'
+	(Rowan projectNamed: 'Rowan') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
+	(Rowan projectNamed: 'gemstoneBaseImage') 
+		gitRepositoryRoot: '$ARCHBASE/image'.
 %
 	commit
 

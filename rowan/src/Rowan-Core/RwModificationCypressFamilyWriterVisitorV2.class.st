@@ -22,10 +22,7 @@ RwModificationCypressFamilyWriterVisitorV2 class >> orderedDictionaryClass [
 
 { #category : 'class writing' }
 RwModificationCypressFamilyWriterVisitorV2 >> _commentOf: aClassDefinition [
-	^ (aClassDefinition comment 
-		copyReplaceAll: '"' 
-		with: '""')
-		withLineEndings: self _newLine
+	^ aClassDefinition comment withLineEndings: self _newLine
 ]
 
 { #category : 'package writing' }

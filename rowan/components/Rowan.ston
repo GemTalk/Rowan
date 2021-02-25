@@ -1,0 +1,22 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Rowan',
+	#condition : 'common',
+	#projectNames : [
+		'Cypress',
+		'FileSystemGs',
+		'STON'
+	],
+	#componentNames : [
+		'common/AST',
+		'common/Components',
+		'common/Core',
+		'common/Definitions',
+		'common/Loader',
+		'common/Services',
+		'common/Specifications',
+		'common/Tests',
+		'common/Tools'
+	],
+	#packageNames : [ ],
+	#comment : 'top-level component for loading entire Rowan project.'
+}

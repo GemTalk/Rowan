@@ -122,7 +122,7 @@ RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead [
 			component := self readComponents
 				at: componentName
 				ifAbsentPut: [ 
-					RwBasicProjectLoadComponentV2
+					RwAbstractRowanProjectLoadComponentV2
 						fromComponentsDirectory: componentDirectory
 						named: componentName ].
 			component projectName: projectName.

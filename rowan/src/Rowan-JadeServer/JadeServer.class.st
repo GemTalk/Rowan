@@ -3288,21 +3288,7 @@ JadeServer >> sbChangeClassName: aList [
 JadeServer >> sbChangesInPackage: anOrderedCollection [
 	"where anOrderedCollection is {packageName, projectName}"
 
-	| patch string packageName url |
-	packageName := anOrderedCollection removeFirst.
-	url := anOrderedCollection removeFirst.
-	patch := Rowan packageTools diff patchForPackageName: packageName.
-	string := self
-				_mcDescriptionOfPatch: patch
-				baseName: 'closest ancestor'
-				alternateName: nil.
-	writeStream
-		nextPutAll: 'changesInPackage';
-		lf;
-		nextPutAll: string;
-		yourself
-
-
+	self error: 'this message is no longer supported'
 ]
 
 { #category : 'category' }

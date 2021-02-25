@@ -49,9 +49,3 @@ RwAbstractProjectDefinitionV2 >> projectDefinitionSourceProperty: sourceKeyOrNil
 	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
 ]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwAbstractProjectDefinitionV2 >> symbolDictionaryRegistryClass [
-
-	^ RwGsSymbolDictionaryRegistry
-]

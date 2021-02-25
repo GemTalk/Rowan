@@ -3,14 +3,14 @@ Class {
 	#superclass : 'RwAbstractReaderWriterVisitor',
 	#instVars : [
 		'packageNames',
-		'currentDirectory',
+		'packageNamesBlock',
 		'currentProjectReferenceDefinition'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'package reading' }
-RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir [
+RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir ifAbsent: absentBlock [
 
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
@@ -27,30 +27,6 @@ RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
   self dynamicInstVarAt: #compileWhileReading put: aBoolean 
 ]
 
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentDirectory [
-
-	^ currentDirectory
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentDirectory: aFileReference [
-
-	currentDirectory := aFileReference
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition [
-
-	^ currentProjectReferenceDefinition
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition: aRwProjectReferenceDefinition [
-
-	currentProjectReferenceDefinition := aRwProjectReferenceDefinition
-]
-
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 	| metadata |
@@ -64,7 +40,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
-		comment: (anArray second ifNil: [ '' ])
+		comment: (anArray second )
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
 	^ currentClassDefinition
@@ -103,6 +79,17 @@ RwRepositoryComponentProjectReaderVisitor >> packageNames: anArray [
 	packageNames := anArray
 ]
 
+{ #category : 'accessing' }
+RwRepositoryComponentProjectReaderVisitor >> packageNamesBlock [
+	^ packageNamesBlock
+		ifNil: [ [ :packageName | self packageNames includes: packageName ] ]
+]
+
+{ #category : 'accessing' }
+RwRepositoryComponentProjectReaderVisitor >> packageNamesBlock: object [
+	packageNamesBlock := object
+]
+
 { #category : 'class reading' }
 RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
@@ -111,14 +98,26 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
-	packagesRoot directories do: [:packageDir | | dir |
-    dir := packageDir path basename .
-    dir = '.svn' ifFalse:[  "tolerate checkout produced by svn version 1.6"
-		  | packageName |
-		  packageName := self _packageNameFromPackageDir: packageDir.
-		  (packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
-			  ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
-    ].
+	| trace |
+	trace := Rowan projectTools trace.
+	packagesRoot directories
+		do: [ :packageDir | 
+			(self _packageNameFromPackageDir: packageDir ifAbsent: [  ])
+				ifNil: [ 
+					trace
+						trace:
+							'--- skip reading ' , packageDir printString
+								, ' not a tonel package directory (missing or malformed package.st file' ]
+				ifNotNil: [ :packageName | 
+					trace
+						trace:
+							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
+					packageDir extension = self packageExtension
+						ifFalse: [ trace trace: '      skipped readClasses, extension does not match' ]
+						ifTrue: [ 
+							(self packageNamesBlock value: packageName)
+								ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ]
+								ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ] ]
 ]
 
 { #category : 'public' }
@@ -133,14 +132,6 @@ RwRepositoryComponentProjectReaderVisitor >> visitComponentProjectDefinition: aR
 	self currentProjectDefinition: aRwComponentProjectDefinition.
 	aRwComponentProjectDefinition packages: Dictionary new.
 	self visit: aRwComponentProjectDefinition projectRef
-]
-
-{ #category : 'visiting' }
-RwRepositoryComponentProjectReaderVisitor >> visitProjectReferenceDefinition: aRwProjectReferenceDefinition [
-	"read the packageNames from the repository"
-
-	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
-	self readPackages: aRwProjectReferenceDefinition packagesRoot
 ]
 
 { #category : 'visiting' }

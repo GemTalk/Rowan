@@ -79,7 +79,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 "
 
 	| supr opts ivs civs poolds cvars cons cvarsPatched |
-	cvarsPatched := (anArrayOfClassVars asSortedCollection = oldClass classVarNames asSortedCollection) not.
+	cvarsPatched := (anArrayOfClassVars asSortedCollection = (oldClass classVarNames collect: [:each | each asString ]) asSortedCollection) not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: oldClass
@@ -91,7 +91,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 		newClassVars: anArrayOfClassVars
 		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
-		optsBlock: [ :bool | opts := bool not ]
+		optsBlock: [ :arg | "arg is true or a String" opts := arg ~~ true  ]
 		ivsBlock: [ :bool | ivs := bool not ]
 		civsBlock: [ :bool | civs := bool not ]
 		poolsBlock: [ :bool | poolds := bool not ]
@@ -112,7 +112,6 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 			patchedConstraintsBlock value ].
 	"class property changes that do not affect method compilation"
 	patchedClassPropertiesBlock value
-
 ]
 
 { #category : 'private' }
@@ -156,7 +155,7 @@ RwGsClassVersioningPatchV2 >> _newSubclassWithSuperclass: newSuperclass isEquiva
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
 	suprBlock value: oldClass superClass == newSuperclass.
-	optsBlock value: (oldClass _optionsChangableTo: fmtArr).
+	optsBlock value: (oldClass _optionsChangableTo: fmtArr) == true .
 	ivsBlock value: (oldClass _instVarsEqual: anArrayOfInstvarNames).
 	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
@@ -238,22 +237,29 @@ RwGsClassVersioningPatchV2 >> addPatchedClassModification: aClassModification in
 
 { #category : 'patching' }
 RwGsClassVersioningPatchV2 >> addPatchedClassModificationForcingNewClassVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
-
 	"Uncontitionally create a new class version"
 
-	| dict existingClass beforeClassDefinition |
+	| dict existingClass beforeClassDefinition afterSymDict beforeSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	beforeClassDefinition := aClassModification before.
-	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
+	dict := aRwGsPatchSet loadSymbolList
+		objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
 		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	aRwGsPatchSet
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
-		inProject: aProjectDefinition
-
+		inProject: aProjectDefinition.
+	afterSymDict := self symbolDictionary name asString.
+	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
+	beforeSymDict ~= afterSymDict
+		ifTrue: [ 
+			aRwGsPatchSet
+				addPatchedClassSymbolDictionaryMove: aClassModification
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 ]
 
 { #category : 'accessing' }
@@ -286,14 +292,4 @@ RwGsClassVersioningPatchV2 >> oldClassVersion [
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
-]
-
-{ #category : 'actions' }
-RwGsClassVersioningPatchV2 >> updateSymbolAssociation [
-
-	oldClassVersion == newClassVersion 
-		ifTrue: [ 
-			"no newClassVersion created when property modifications applied .. not a problem"
-			^self ].
-	symbolAssociation value: newClassVersion
 ]

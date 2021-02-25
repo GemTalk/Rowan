@@ -137,41 +137,55 @@ RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention:  method
 
 { #category : 'validation' }
 RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
-
-	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: 'Monticello'
+	(aClassDefinition category beginsWith: packageName)
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'Monticello'
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
-
-	self error: 'not yet implemented'
-]
-
-{ #category : 'validation' }
-RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: protocol  forPackageNamed: packageName [
-
-	| canonProtocol expectedProtocol |
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed: packageName [
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
 	(protocol at: 1) = $*
-		ifTrue: [
+		ifTrue: [ 
 			currentClassDefinition
-				ifNotNil: [
-					"protocol should not start with $* -- an obvious violation"
-					self error: 'not yet implemented']]
-		ifFalse: [
-			currentClassDefinition 
-				ifNotNil:  [ 
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'Monticello'.
+					^ self ] ]
+		ifFalse: [ 
+			currentClassDefinition
+				ifNotNil: [ 
 					"protocol does not start with $* as expected"
-					^ self ] ].			
-	"validate conformance to convention for extension method"
+					^ self ] ].	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'Monticello'.
+			^ self ].
 	canonProtocol := protocol asLowercase.
-	expectedProtocol := '*', packageName asLowercase.
-	"off the top of my head"
-	(canonProtocol beginsWith: expectedProtocol) 
-		ifTrue: [
-			(canonProtocol indexOf: $- startingAt: expectedProtocol size) <= 1 ifTrue: [ ^self ] ].
-	"protocol does not conform to Monticello convention"
-	self error: 'not yet implemented'
+	expectedProtocol := '*' , packageName asLowercase.
+	(canonProtocol beginsWith: expectedProtocol)
+		ifTrue: [ ^ self ].	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'Monticello'
 ]
 
 { #category : 'accessing' }

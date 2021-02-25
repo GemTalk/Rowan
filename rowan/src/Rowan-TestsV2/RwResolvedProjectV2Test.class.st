@@ -42,6 +42,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 		projectName: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #none;
 		yourself.
 	projectSpecification := project _projectSpecification.
 	loadSpecification := project _loadSpecification.
@@ -79,6 +80,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 		projectName: projectName;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		repoType: #none;
 		yourself.
 	projectSpecification := project _projectSpecification.
 	self assert: project _validate.
@@ -226,7 +228,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 
 	resolvedProject exportComponents.
 
-	component := RwBasicProjectLoadComponentV2
+	component := RwAbstractRowanProjectLoadComponentV2
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName1) name , 'ston'.
@@ -237,7 +239,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 				includes: packageName).	"validate move on disk"
 
 
-	component := RwBasicProjectLoadComponentV2
+	component := RwAbstractRowanProjectLoadComponentV2
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName2) name , 'ston'.

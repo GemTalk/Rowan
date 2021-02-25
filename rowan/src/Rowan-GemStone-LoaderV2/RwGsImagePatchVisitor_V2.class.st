@@ -21,12 +21,6 @@ RwGsImagePatchVisitor_V2 class >> new [
 ]
 
 { #category : 'private' }
-RwGsImagePatchVisitor_V2 >> _patchSetClass [
-
-	^ RwGsPatchSet_V2
-]
-
-{ #category : 'private' }
 RwGsImagePatchVisitor_V2 >> addAddedPackage: aPackageDefinition [
 
 	currentPackage := aPackageDefinition.
@@ -39,62 +33,6 @@ RwGsImagePatchVisitor_V2 >> addAddedProject: aProjectDefinition [
 
 	currentProject := aProjectDefinition.
 	patchSet addAddedProject: currentProject
-]
-
-{ #category : 'private' }
-RwGsImagePatchVisitor_V2 >> addClasses: classDefinitions [
-
-	classDefinitions
-		do: [ :classDefinition | 
-			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
-				in a project that is not included in this load"
-			(Rowan globalNamed: classDefinition name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: classDefinition) signal ]].
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addAddedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addAddedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addAddedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-
-]
-
-{ #category : 'private' }
-RwGsImagePatchVisitor_V2 >> addClassExtensions: classExtensions [
-
-	classExtensions
-		do: [ :classDefinition | 
-			patchSet
-				addExtendedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addExtendedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addExtendedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
 ]
 
 { #category : 'private' }
@@ -111,35 +49,10 @@ RwGsImagePatchVisitor_V2 >> addDeletedProject: aProjecteDefinition [
 	self error: 'not yet implemented'
 ]
 
-{ #category : 'private' }
-RwGsImagePatchVisitor_V2 >> deleteClasses: classDefinitions [
-
-	classDefinitions
-		do: [ :classDefinition | 
-			patchSet
-				addDeletedClass: classDefinition
-				inPackage: currentPackage
-				inProject: currentProject.
-			classDefinition classMethodDefinitions
-				do: [ :classMethodDefinition | 
-					patchSet
-						addDeletedClassMethod: classMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ].
-			classDefinition instanceMethodDefinitions
-				do: [ :instanceMethodDefinition | 
-					patchSet
-						addDeletedInstanceMethod: instanceMethodDefinition
-						inClass: classDefinition
-						inPackage: currentPackage
-						inProject: currentProject ] ]
-]
-
 { #category : 'initialization' }
 RwGsImagePatchVisitor_V2 >> initialize [
 
-	patchSet := self _patchSetClass new
+	patchSet := RwGsPatchSet_V2 new
 ]
 
 { #category : 'accessing' }
@@ -260,10 +173,12 @@ RwGsImagePatchVisitor_V2 >> visitPackageModification: aPackageModification [
 	| propertiesModification beforePackage |
 	aPackageModification isAddition
 		ifTrue: [ self addAddedPackage: aPackageModification after ].
-	aPackageModification isDeletion
-		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
 	beforePackage := aPackageModification before.
+	aPackageModification isDeletion
+		ifTrue: [ 
+			self addDeletedPackage: aPackageModification before.
+			currentPackage := beforePackage ].
 	aPackageModification isModification
 		ifTrue: [ 
 			propertiesModification := aPackageModification propertiesModification.
@@ -304,13 +219,14 @@ RwGsImagePatchVisitor_V2 >> visitPackagesModification: aPackagesModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor_V2 >> visitProjecteSetModification: aProjectSetModification [
 
+	aProjectSetModification movedPackages do: [:movedPackage | 
+		movedPackage addMovedPackageToPatchSet: patchSet ].
 	aProjectSetModification movedClasses do: [:movedClass | 
 		movedClass addMovedClassToPatchSet: patchSet ].
 	aProjectSetModification movedMethods do: [:movedMethod | 
 		movedMethod addMovedMethodToPatchSet: patchSet ].
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
-
 ]
 
 { #category : 'visting' }

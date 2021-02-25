@@ -164,6 +164,18 @@ RwGitTool >> gitstatusIn: gitRepoPath with: args [
 	^ self performGitCommand: 'status' in: gitRepoPath with: args
 ]
 
+{ #category : 'smalltalk api' }
+RwGitTool >> isGitHome: dirPath [
+	"Answer true if the given directory path is the home directory for a git repository"
+
+	| dirReference |
+	dirReference := dirPath asFileReference.
+	^ (self gitPresentIn: dirReference pathString)
+		and: [ 
+			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
+				asFileReference = dirReference ]
+]
+
 { #category : 'private' }
 RwGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
 

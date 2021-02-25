@@ -1,204 +1,23 @@
 Extension { #name : 'RwBrowserToolApiTest' }
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
-RwBrowserToolApiTest >> testDeleteComplicatedClass [
-
-	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
-
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 
-		packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames 
-		classDefinition testInstance projectTools symDict registry resolvedProject componentName |
-	projectName1 := 'Simple Browser1'.
-	componentName := 'Core'.
-	packageName1 := 'Simple1-Core'.
-	packageName2 := 'Simple1-Extensions'.
-	packageNames1 := {packageName1}.
-	className1 := 'SimpleBrowse1'.
-	className2 := 'SimpleBrowse2'.
-	projectName2 := 'Simple Browser2'.
-	packageNames2 := {'Simple2-Extensions1'.
-	'Simple2-Extensions2'}.
-	self
-		_loadSimpleProjectDefinition: projectName1
-		packageNames: packageNames1
-		defaultSymbolDictName: self _symbolDictionaryName
-		comment: 'project for testing project browser api'
-		className: className1
-		inPackageName: packageName1.
-
-	testClass := Rowan globalNamed: className1.
-	self assert: testClass notNil.
-
-	projectTools := Rowan projectTools.
-	browserTool := projectTools browser.
-
-	browserTool 
-		addPackageNamed: packageName2  
-		toComponentNamed: componentName 
-		andProjectNamed: projectName1.	"new package packageName2"
-
-	packageNames1 := {packageName1.
-	packageName2}.
-	testProjectDefinition := browserTool projectNamed: projectName1.
-	testPackageNames := testProjectDefinition packageNames.
-	self assert: testPackageNames size = packageNames1 size.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: 'Fun stuff'
-		comment: 'just a class'
-		pools: #()
-		type: 'normal'.
-	browserTool createClass: classDefinition inPackageNamed: packageName2.	"new class className2"
-
-	testClass := Rowan globalNamed: className2.
-	self assert: testClass notNil.
-
-	browserTool
-		addOrUpdateMethod: 'foo ^''foo'''
-		inProtocol: 'accessing'
-		forClassNamed: className1
-		isMeta: false
-		inPackageNamed: packageName2.	"extension method for className1"
-
-	testClass := Rowan globalNamed: className1.
-	self assert: testClass notNil.
-	testInstance := testClass new.
-	self assert: (testInstance perform: #foo) = 'foo'.
-
-	self
-		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
-			packageDef name = packageName2
-				ifTrue: [ 
-					self
-						assert: classExtensionDef instanceMethodDefinitions size = 1;
-						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
-		forClassExtensionsIn: className1.
-
-	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
-
-	resolvedProject := RwResolvedProjectV2 new
-		projectName: projectName2;
-		projectsHome: self _testRowanProjectsSandbox;
-		comment:'another project for testing project browser api';
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
-		addNewComponentNamed: componentName;
-		addPackagesNamed: packageNames2 toComponentNamed: componentName;
-		yourself.
-
-	resolvedProject
-		resolve;
-		load.
-		
-	testProjectDefinition := browserTool projectNamed: projectName2.
-	self
-		assert:
-			testProjectDefinition gemstoneDefaultSymbolDictName = self _symbolDictionaryName1.
-
-	browserTool
-		addOrUpdateMethod: 'bar ^''bar'''
-		inProtocol: 'accessing'
-		forClassNamed: className1
-		isMeta: false
-		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
-
-	self assert: (testInstance  perform: #bar) = 'bar'.
-
-	self
-		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ 
-					self
-						assert: projectDef name = projectName1;
-						assert: classExtensionDef instanceMethodDefinitions size = 0 ].
-			packageDef name = packageName2
-				ifTrue: [ 
-					self
-						assert: projectDef name = projectName1;
-						assert: classExtensionDef instanceMethodDefinitions size = 1;
-						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
-			packageDef name = (packageNames2 at: 1)
-				ifTrue: [ 
-					self
-						assert: projectDef name = projectName2;
-						assert: classExtensionDef instanceMethodDefinitions size = 1;
-						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'bar') ] ]
-		forClassExtensionsIn: className1.
-
-
-	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
-		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
-		ifAbsent: [ 
-			self
-				assert: false
-				description:
-					'Expected class extension for class ' , className1 printString , ' not present' ].
-	symDict := Rowan globalNamed: self _symbolDictionaryName.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 2.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 1.
-	self assert: registry methodRegistry size = 1.
-
-	browserTool removeClassNamed: className1.	"remove class className1"
-
-	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
-		ifPresent: [ :classExtensionSet | 
-			self
-				assert: false
-				description:
-					'Unexpected class extension for class ' , className1 printString , ' found' ]
-		ifAbsent: [ 
-			"expected result"
-			 ].
-
-	testClass := Rowan globalNamed: className1.
-	self assert: testClass isNil.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 1.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
-
-	symDict := Rowan globalNamed: self _symbolDictionaryName1.
-	registry := symDict rowanSymbolDictionaryRegistry.
-
-	self assert: registry packageRegistry size = 2.
-	self assert: registry classRegistry size = 0.
-	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
+	^'Object rwSubclass: ''Association''
+	instVarNames: #( key value)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''Kernel''
+	packageName: ''Filein4Rowan''
+	options: #()
+'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolApiTest >> testDeleteComplicatedPackage [
-
 	"similar to testDeleteComplicatedClass ... but delete package that contains the class ... should be similar result"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 
-		packageName2 browserTool classDefinition projectTools testClass testProjectDefinition 
-		testPackageNames theProjectNames thePackageNames componentName resolvedProject |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 browserTool classDefinition projectTools testClass testProjectDefinition testPackageNames theProjectNames thePackageNames componentName resolvedProject project1 project2 audit |
 	projectName1 := 'Simple Browser1'.
 	componentName := 'Core'.
 	packageName1 := 'Simple1-Core'.
@@ -217,12 +36,15 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		className: className1
 		inPackageName: packageName1.
 
+	project1 := Rowan projectNamed: projectName1.
+	self assert: (audit := project1 audit) isEmpty.
+
 	projectTools := Rowan projectTools.
 	browserTool := projectTools browser.
 
-	browserTool 
-		addPackageNamed: packageName2 
-		toComponentNamed: componentName 
+	browserTool
+		addPackageNamed: packageName2
+		toComponentNamed: componentName
 		andProjectNamed: projectName1.	"new package packageName2"
 
 	packageNames1 := {packageName1.
@@ -242,10 +64,12 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''foo'''
-		inProtocol: 'accessing'
+		inProtocol: '*' , packageName2 asLowercase
 		forClassNamed: className1
 		isMeta: false
 		inPackageNamed: packageName2.	"extension method for className1"
+
+	self assert: (audit := project1 audit) isEmpty.
 
 	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -253,7 +77,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	resolvedProject := RwResolvedProjectV2 new
 		projectName: projectName2;
 		projectsHome: self _testRowanProjectsSandbox;
-		comment:'another project for testing project browser api';
+		comment: 'another project for testing project browser api';
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: true;
 		addNewComponentNamed: componentName;
@@ -264,12 +88,18 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		resolve;
 		load.
 
+	project2 := Rowan projectNamed: projectName2.
+	self assert: (audit := project2 audit) isEmpty.
+
 	browserTool
 		addOrUpdateMethod: 'bar ^''bar'''
-		inProtocol: 'accessing'
+		inProtocol: '*' , (packageNames2 at: 1) asLowercase
 		forClassNamed: className1
 		isMeta: false
 		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
+
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
@@ -295,7 +125,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	testClass := Rowan globalNamed: className1.
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
 		ifAbsent: [ 
 			self
@@ -416,6 +246,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 
 	browserTool removePackageNamed: packageName1.	"remove the package and unload definitions"
 
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
 
 	self should: [ Rowan image loadedPackageNamed: packageName1 ] raise: Error.
 
@@ -431,7 +263,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 									'Session methods should not be present for class ' , className1 printString ] ] ].
 
 	self
-		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		_assertForClassExtensionInClassWithHistory: testClass
 		ifPresent: [ :classExtensionSet | 
 			self
 				assert: false
@@ -578,7 +410,83 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
+]
 
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwBrowserToolApiTest >> testIsExtensionMethod [
+	| projectName packageNames className packageName1 packageName2 browserTool audit project |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageNames := {packageName1.
+	packageName2}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool
+		addOrUpdateMethod: 'bar ^1'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+
+	self
+		deny:
+			(browserTool isExtensionMethod: 'ivar1' forClassNamed: className isMeta: false).
+	self
+		deny:
+			(browserTool isExtensionMethod: 'bar' forClassNamed: className isMeta: true).
+
+	browserTool
+		addOrUpdateMethod: 'foo ^1'
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool
+		addOrUpdateMethod: 'baz ^1'
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (audit := project audit) isEmpty.
+
+	self
+		assert:
+			(browserTool isExtensionMethod: 'foo' forClassNamed: className isMeta: false).
+	self
+		assert:
+			(browserTool isExtensionMethod: 'baz' forClassNamed: className isMeta: true).
+
+	self
+		assert:
+			(browserTool isExtensionMethod: 'yourself' forClassNamed: 'Object' isMeta: false)	"not rowanized at moment"
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -1676,186 +1584,4 @@ RwBrowserToolApiTest >> testRenameClass_5 [
 
 "validate"
    validateBlock value: class1 value: class2 value: class3.
-]
-
-{ #category : '*rowan-tests-componentsv2-onlyv2' }
-RwBrowserToolApiTest >> testRenameClass_Issue_490 [
-
-  "rename a class with no subclasses"
-
-  "https://github.com/dalehenrich/Rowan/issues/490"
-
-  | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition 
-		packageDefinition className1 className2 className3 className4 projectSetDefinition
-		class1 class2 class3 oldClass1 oldClass2 oldClass3 classExtensionDefinition audit symDict 
-		registry extraMethods methodRegistry seenMethodsMap componentName |
-
-  projectName := 'Issue470'.
-  componentName := 'Core'.
-  packageName1 := 'Issue490-Core'.
-  packageName2 := 'Issue490-Extensions'.
-  className1 := 'Issue490Class1'.
-  className2 := 'Issue490Class2'.
-  className3 := 'Issue490Class3'.
-  className4 := 'Issue490Class4'.
-
-  {projectName}
-    do: [ :pn |
-      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
-
-"create project"
-	projectDefinition := RwResolvedProjectV2 new
-		projectName: projectName;
-		projectsHome: self _testRowanProjectsSandbox;
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addNewComponentNamed: componentName;
-		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
-		yourself.
-	projectDefinition resolve.
-
-  packageDefinition := projectDefinition packageNamed: packageName1.
-
-  classDefinition1 := (RwClassDefinition
-    newForClassNamed: className1
-      super: 'Object'
-      instvars: #(ivar1)
-      classinstvars: #()
-      classvars: #()
-      category: packageName1
-      comment: 'comment'
-      pools: #()
-      type: 'normal')
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod1 ^1' protocol: 'accessing');
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod1 ^', className2 protocol: 'accessing');
-    yourself.
-  packageDefinition
-    addClassDefinition: classDefinition1.
-
-  classDefinition := (RwClassDefinition
-    newForClassNamed: className2
-      super: className1
-      instvars: #(ivar2)
-      classinstvars: #()
-      classvars: #()
-      category: packageName1
-      comment: 'comment'
-      pools: #()
-      type: 'normal')
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod2 ^2' protocol: 'accessing');
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod2 ^', className3 protocol: 'accessing');
-    yourself.
-  packageDefinition
-    addClassDefinition: classDefinition.
-
-  classDefinition := (RwClassDefinition
-    newForClassNamed: className3
-      super: className2
-      instvars: #(ivar4 ivar3)
-      classinstvars: #()
-      classvars: #()
-      category: packageName1
-      comment: 'comment'
-      pools: #()
-      type: 'normal')
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'instanceMethod3 ^3' protocol: 'accessing');
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'classMethod3 ^', className1 protocol: 'accessing');
-    yourself.
-  packageDefinition
-    addClassDefinition: classDefinition.
-
-"create extension methods"
-  packageDefinition := projectDefinition packageNamed: packageName2.
-
-  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className1)
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod1 ^1' protocol: '*', packageName2 asLowercase);
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod1 ^1' protocol: '*', packageName2 asLowercase); 
-    yourself.
-  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className2)
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod2 ^2' protocol: '*', packageName2 asLowercase);
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod2 ^2' protocol: '*', packageName2 asLowercase); 
-    yourself.
-  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-  classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: className3)
-    addInstanceMethodDefinition: (RwMethodDefinition newForSource: 'extensionInstanceMethod3 ^3' protocol: '*', packageName2 asLowercase);
-    addClassMethodDefinition: (RwMethodDefinition newForSource: 'extensionClassMethod3 ^3' protocol: '*', packageName2 asLowercase); 
-    yourself.
-  packageDefinition addClassExtensionDefinition: classExtensionDefinition.
-
-"load"
-  projectSetDefinition := RwProjectSetDefinition new.
-  projectSetDefinition addDefinition: projectDefinition.
-  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-  class1 := Rowan globalNamed: className1.
-  class2 := Rowan globalNamed: className2.
-  class3 := Rowan globalNamed: className3.
-
-"perform rename"
-  Rowan projectTools browser
-    renameClassNamed: className2 to: className4.
-
-  self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
-true ifTrue: [ ^self ].	"early exit for now"
-
-"validate"
-  oldClass1 := class1.
-  oldClass2 := class2.
-  oldClass3 := class3.
- 
-  class1 := Rowan globalNamed: className1.
-  self assert: oldClass1 == class1.
-
-  class2 := Rowan globalNamed: className4.
-  self assert: class2 superClass == class1.
-  self assert: oldClass2 ~~ class2. "renamed class"
-
-  class3 := Rowan globalNamed: className3.
-  self assert: class3 superClass == class2.
-  self assert: oldClass3 ~~ class3. "new version, since superclass renamed"
-
-"audit"
-  symDict := Rowan globalNamed: self _symbolDictionaryName1.
-  self assert: (symDict at: className4 asSymbol) == class2.
-  registry := symDict at: #RwSymbolDictionaryRegistry.
-  methodRegistry := registry methodRegistry.
-  seenMethodsMap := Dictionary new.
-  methodRegistry keysAndValuesDo: [:method :loadedMethod |
-    ((seenMethodsMap at: method inClass name ifAbsentPut: [ Dictionary new])
-		at: method selector ifAbsentPut: [ {} ]) add: method ].
-  extraMethods := Dictionary new.
-  seenMethodsMap keysAndValuesDo: [:className :selectorMap |
-    selectorMap keysAndValuesDo: [:selector :ar |
-      ar size > 1 
-        ifTrue: [
-          (extraMethods at: className ifAbsentPut: [ Dictionary new ])
-            at: selector put: ar ] ] ].
-  true ifTrue: [ self assert: extraMethods size = 0 ].
- false ifTrue: [ "repair"
-  extraMethods keysAndValuesDo: [:className :selectorMap |
-    selectorMap keysAndValuesDo: [:selector :ar |
-      ar do: [:method |
-        | theClass x|
-        theClass := method inClass.
-         theClass :=theClass isMeta
-           ifTrue: [ (Rowan globalNamed: theClass theNonMetaClass name) class ]
-           ifFalse: [ Rowan globalNamed: theClass name ].
-        (x := theClass compiledMethodAt: selector) == method
-          ifFalse: [ methodRegistry removeKey: method ] ] ] ].
-
-  seenMethodsMap := Dictionary new.
-  methodRegistry keysAndValuesDo: [:method :loadedMethod |
-    ((seenMethodsMap at: method inClass name ifAbsentPut: [ Dictionary new])
-		at: method selector ifAbsentPut: [ {} ]) add: method ].
-  extraMethods := Dictionary new.
-  seenMethodsMap keysAndValuesDo: [:className :selectorMap |
-    selectorMap keysAndValuesDo: [:selector :ar |
-      ar size > 1 
-        ifTrue: [
-          (extraMethods at: className ifAbsentPut: [ Dictionary new ])
-            at: selector put: ar ] ] ].
-  true ifTrue: [ self assert: extraMethods size = 0 ] ].
 ]

@@ -43,7 +43,7 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 				poolDictionaries: #()
 				inDictionary: nil
 				inClassHistory: hist
-				description: ''
+				description: nil
 				options: oldClass _optionsArrayForDefinition .
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].

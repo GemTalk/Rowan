@@ -102,6 +102,25 @@ RwResolvedProjectV2 >> addComponentNamed: componentName toComponentNamed: toComp
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentStructureFor: componentBasename pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _projectDefinition
+		addComponentStructureFor: componentBasename
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addComponentStructureFor: componentBasename startingAtComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray comment: aString [
+	^ self _projectDefinition
+		addComponentStructureFor: componentBasename
+		startingAtComponentNamed: toComponentName
+		pathNameArray: pathNameArray
+		conditionPathArray: conditionPathArray
+		comment: aString
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 	^ self _projectDefinition addNewComponentNamed: componentName
 ]
@@ -109,6 +128,11 @@ RwResolvedProjectV2 >> addNewComponentNamed: componentName [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> addNewComponentNamed: aComponentName comment: aString [
 	^ self _projectDefinition addNewComponentNamed: aComponentName comment: aString
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addNewComponentNamed: aComponentName condition: condition [
+	^ self _projectDefinition addNewComponentNamed: aComponentName condition: condition
 ]
 
 { #category : 'project definition' }
@@ -171,15 +195,6 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> addPlatformComponentNamed: componentName toComponentNamed: toComponentName alias: alias condition: conditionPathArray [
-	^ self _projectDefinition
-		addPlatformComponentNamed: componentName
-		toComponentNamed: toComponentName
-		alias: alias
-		condition: conditionPathArray
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> addPlatformComponentNamed: aComponentName toComponentNamed: toComponentName pathNameArray: pathNameArray conditionPathArray: conditionPathArray [
 	^ self
 		addPlatformComponentNamed: aComponentName
@@ -204,15 +219,6 @@ RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName condition
 	^ self _projectDefinition
 		addPlatformNestedComponentNamed: aComponentName
 		condition: conditionArray
-		comment: commentString
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> addPlatformNestedComponentNamed: aComponentName pathNameArray: conditionPathArray conditionPathArray: conditionArray comment: commentString [
-	^ self _projectDefinition
-		addPlatformNestedComponentNamed: aComponentName
-		pathNameArray: conditionPathArray
-		conditionPathArray: conditionArray
 		comment: commentString
 ]
 
@@ -272,6 +278,20 @@ RwResolvedProjectV2 >> addSimpleNestedComponentNamed: aComponentName condition: 
 		comment: commentString
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition addNewComponentNamed: componentName
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: componentName condition: condition [
+	self _loadSpecification addTopLevelComponentNamed: componentName.
+	^ self _projectDefinition
+		addNewComponentNamed: componentName
+		condition: condition
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
@@ -285,6 +305,11 @@ RwResolvedProjectV2 >> comment [
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
 	self _projectDefinition comment: aString
+]
+
+{ #category : 'querying' }
+RwResolvedProjectV2 >> commitId [
+	^ self _projectRepository commitId
 ]
 
 { #category : 'querying' }
@@ -345,6 +370,12 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		diskRepositoryRoot: repositoryRootPathString
+]
+
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
 	^ self _loadSpecification diskUrl
@@ -363,15 +394,7 @@ RwResolvedProjectV2 >> export [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
-	self components
-		do: [ :component | 
-			component
-				exportToUrl: 'file:' , self componentsRoot pathString , '/';
-				yourself ].
-	self components isEmpty
-		ifTrue: [ 
-			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self componentsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+	self components export: self componentsRoot
 ]
 
 { #category : 'exporting' }
@@ -435,7 +458,7 @@ RwResolvedProjectV2 >> exportProjectSpecification [
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -443,14 +466,18 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath [
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
+		filenameExtension: fileReference extension;
 		yourself.
 	visitor visit: projectSetModification
 ]
 
 { #category : 'exporting' }
-RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packageNamesMap [
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -458,11 +485,21 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath usingPackageNamesMap: packa
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
 		repositoryRootPath: fileReference parent;
-		topazFilename: fileReference basename;
+		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: packageNamesMap;
 		yourself.
 	visitor visit: projectSetModification
+]
+
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	projectRepository := self _projectRepository
+		gitRepositoryRoot: repositoryRootPathString
+		revision: self _loadSpecification revision
 ]
 
 { #category : 'load specification' }
@@ -610,11 +647,6 @@ RwResolvedProjectV2 >> name [
 	^ self projectName
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> packageConvention [
-	^ self _projectSpecification packageConvention
-]
-
 { #category : 'querying' }
 RwResolvedProjectV2 >> packageForClassNamed: className [
 	"Answer nil if no class found"
@@ -732,6 +764,16 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	projectRepository := self _projectRepository
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> readPackageNames: packageNames [
 	| format visitorClass |
@@ -754,6 +796,28 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 		visit: self
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
+	| format visitorClass |
+	format := self
+		packageFormatIfAbsent: [ 
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor
+				_repositoryPropertyDictFor: self packagesRoot)
+				at: #'format'
+				ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+	self _projectDefinition packages: Dictionary new.
+	visitorClass := format = 'tonel'
+		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
+		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+	^ visitorClass new
+		compileWhileReading: self compileWhileReading;
+		packageNamesBlock: packageNamesBlock;
+		visit: self
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -763,6 +827,23 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 	^ self
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self componentNames: componentNames.	"record the list of component names used to create this instance of the project definition"
+	self _loadSpecification
+		customConditionalAttributes: customConditionalAttributes.	"record customConditionalAttributes in load spec"
+	self projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
+	^ Rowan projectTools readV2
+		readProjectForResolvedProject: self
+		withComponentNames: componentNames
+		platformConditionalAttributes:
+			(self platformConditionalAttributes , customConditionalAttributes) asSet asArray
 ]
 
 { #category : 'actions' }
@@ -828,6 +909,7 @@ RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> removePackageNamed: packageName [
+	(self componentForPackageNamed: packageName) removePackageNamed: packageName.
 	^ self _projectDefinition removePackageNamed: packageName
 ]
 
@@ -873,6 +955,8 @@ RwResolvedProjectV2 >> repositoryCommitId [
 
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
+	"#disk, #git or #none"
+
 	self _projectSpecification repoType: aSymbol
 ]
 

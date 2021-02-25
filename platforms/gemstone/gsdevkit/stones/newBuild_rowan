@@ -2,11 +2,17 @@
 
 set -e
 . defStone.env
-export vers="3.5.0"
+
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
+
+if [ "$vers" = "3.6.1" ] ; then
+	# 3.6.0 and 3.6.1 share same scripts
+	vers=3.6.0
+fi
 
 rm -rf *.log *.out
 
-newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/installRowan  $GEMSTONE_NAME
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/newRowanRepositoryTestsRootV2.tpz $GEMSTONE_NAME -lq
 

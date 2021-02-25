@@ -97,12 +97,16 @@ RwGitRepositoryDefinitionV2 >> clone [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> commitId [
-
-	^ [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+	^ [ 
+	| gitHome gitTools |
+	gitTools := Rowan gitTools.
+	gitHome := (gitTools gitrevparseShowTopLevelIn: self repositoryRoot pathString)
+		trimBoth.
+	gitTools gitcommitShaIn: gitHome ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"
-			'' ].
+			'' ]
 ]
 
 { #category : 'loading' }
@@ -169,6 +173,14 @@ RwGitRepositoryDefinitionV2 >> doCommit: message [
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> fetch [
 	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revision: aString [
+	self
+		repositoryUrl: 'file:' , repositoryRootPathString;
+		repositoryRoot: repositoryRootPathString;
+		committish: aString
 ]
 
 { #category : 'comparing' }

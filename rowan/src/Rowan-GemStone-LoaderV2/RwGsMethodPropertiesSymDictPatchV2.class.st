@@ -29,6 +29,33 @@ RwGsMethodPropertiesSymDictPatchV2 >> installPropertiesPatchNewClasses: createdC
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
+{ #category : 'installing' }
+RwGsMethodPropertiesSymDictPatchV2 >> installPropertiesPatchNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
+	" update method protocol and update loadedMethod with new compiled method"
+
+	| methodDictionary oldCompiledMethod |
+	self
+		primeBehaviorNewClassesSymbolList: createdClasses
+		andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
+
+	methodDictionary := (behavior persistentMethodDictForEnv: 0)
+		ifNil: [ Dictionary new ].
+	selector := methodDefinition selector.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+
+	self symbolDictionaryRegistry
+		moveCompiledMethod: oldCompiledMethod
+		toProtocol: self propertiesProtocolName
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+]
+
 { #category : 'initializers' }
 RwGsMethodPropertiesSymDictPatchV2 >> isAnInitializer [
 
