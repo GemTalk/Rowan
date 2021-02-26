@@ -103,15 +103,19 @@ RwProjectDefinitionV2 >> addComponentStructureFor: componentBasename startingAtC
 	theComponentName := (path / componentBasename) pathString.
 	condition _isArray
 		ifTrue: [ 
+self components componentNamed: theComponentName
+ifAbsent: [
 			self components
 				addPlatformNestedComponentNamed: theComponentName
 				condition: condition
-				comment: aString ]
-		ifFalse: [ 
+				comment: aString ]]
+		ifFalse: [
+self components componentNamed: theComponentName
+ifAbsent: [
 			self components
 				addSimpleNestedComponentNamed: theComponentName
 				condition: condition
-				comment: aString ].
+				comment: aString] ].
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
 ]

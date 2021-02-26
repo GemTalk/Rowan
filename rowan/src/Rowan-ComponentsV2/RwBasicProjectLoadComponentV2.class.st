@@ -24,6 +24,15 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
+RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs: aDict [
+	"duplication of subclass implementation until we've moved to V2.1, since this method is 
+		used during project load and superclass methods removed before subclass methods added.
+		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
+
+	 conditionalPackageMapSpecs := aDict
+]
+
+{ #category : 'accessing' }
 RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [
 	"duplication of subclass implementation until we've moved to V2.1, since this method is 
 		used during project load and superclass methods removed before subclass methods added.
