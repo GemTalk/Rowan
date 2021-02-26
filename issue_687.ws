@@ -1,24 +1,29 @@
-| rowan client coreComponent coreComponentName rowanResolved clientResolved clientPackageNames |
+| rowan client coreComponent coreComponentName rowanResolved clientResolved 
+	clientPackageNames clientComponentNames platformConditionalAttributes |
 "
 	Script used to create RowanClientServices component and package structure
 		from Rowan:masterV2.1
 "
+platformConditionalAttributes := {'tests' . 'v2' . 'v2Only' . 'testsV2' . 'stubs' . 'tonel'. 'common' . '3.2.15' asRwGemStoneVersionNumber . '3.5.0' asRwGemStoneVersionNumber . '3.6.0' asRwGemStoneVersionNumber . '3.6.1' asRwGemStoneVersionNumber . '3.7.0' asRwGemStoneVersionNumber . }.
 rowan := (Rowan projectNamed: 'Rowan') defined.
+rowan := rowan read: platformConditionalAttributes.
 rowanResolved := rowan _resolvedProject.
-coreComponentName := 'Core'.
+coreComponentName := 'RowanClientServices'.
 client := (Rowan newProjectNamed: 'RowanClientServices')
 	projectsHome: '$ROWAN_PROJECTS_HOME';
 	specName: 'RowanClientServices';
-	gitUrl: 'file://$ROWAN_PROJECTS_HOME/RowanClientServices';
-	specComponentNames: {coreComponentName};
+	gitUrl: 'file:$ROWAN_PROJECTS_HOME/RowanClientServices';
+	customConditionalAttributes: { 'v2' . 'v2Only' .  'stubs' . 'tonel'};
 	yourself.
-clientResolved := client _resolvedProject.
+clientResolved := client _resolvedProject resolve.
 coreComponent := client addTopLevelComponentNamed: coreComponentName.
 clientPackageNames := {}.
+clientComponentNames := { 'common/Services' }.
 (rowan componentNamed: 'common/Services') componentNames do: [:compName_1 |
 	| comp_1 componentPathName pathArray conditionArray pathSegments |
 	comp_1 := rowan componentNamed: compName_1.
 	(#('v1') includes: comp_1 condition) ifFalse: [
+		clientComponentNames add: compName_1.
 		pathSegments := compName_1 asFileReference pathSegments.
 		pathArray := pathSegments copyFrom: 1 to: pathSegments size -1.
 		conditionArray := Array new: pathArray size withAll: 'common'.
@@ -33,6 +38,7 @@ clientPackageNames := {}.
 			| comp_2 componentPathName pathArray conditionArray pathSegments clientComp_2 |
 			comp_2 := rowan componentNamed: compName_2.
 			(#('testsV1') includes: comp_2 condition) ifFalse: [
+				clientComponentNames add: compName_2.
 				pathSegments := compName_2 asFileReference pathSegments.
 				pathArray := pathSegments copyFrom: 1 to: pathSegments size -1.
 				conditionArray := Array new: pathArray size withAll: 'common'.
@@ -55,6 +61,7 @@ clientPackageNames := {}.
 					clientPackageNames addAll: comp_2 packageNames].
 				comp_2 componentNames do: [:compName_3 |
 					| comp_3 componentPathName pathArray conditionArray pathSegments clientComp_3 |
+					clientComponentNames add: compName_3.
 					comp_3 := rowan componentNamed: compName_3.
 					pathSegments := compName_3 asFileReference pathSegments.
 					pathArray := pathSegments copyFrom: 1 to: pathSegments size -1.
@@ -79,6 +86,7 @@ clientPackageNames := {}.
 					comp_3 componentNames do: [:compName_4 |
 						| comp_4 componentPathName pathArray conditionArray pathSegments clientComp_4 |
 						comp_4 := rowan componentNamed: compName_4.
+						clientComponentNames add: compName_4.
 						pathSegments := compName_4 asFileReference pathSegments.
 						pathArray := pathSegments copyFrom: 1 to: pathSegments size -1.
 						conditionArray := Array new: pathArray size withAll: 'common'.
@@ -102,6 +110,7 @@ clientPackageNames := {}.
 						comp_4 componentNames do: [:compName_5 |
 							| comp_5 componentPathName pathArray conditionArray pathSegments clientComp_5 |
 							comp_5 := rowan componentNamed: compName_5.
+							clientComponentNames add: compName_5.
 							pathSegments := compName_5 asFileReference pathSegments.
 							pathArray := pathSegments copyFrom: 1 to: pathSegments size -1.
 							conditionArray := Array new: pathArray size withAll: 'common'.
@@ -124,4 +133,8 @@ clientPackageNames := {}.
 								clientPackageNames addAll: comp_5 packageNames].
 							comp_5 componentNames isEmpty ifFalse: [ self halt ].
 		]]]]]]].
-{clientResolved . clientPackageNames }
+clientResolved 
+	export;
+	exportLoadSpecification;
+	yourself.
+{clientResolved . clientPackageNames . clientComponentNames}
