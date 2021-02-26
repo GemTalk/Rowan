@@ -17,9 +17,8 @@
 		gitRepositoryRoot: '$ARCHBASE/image'.
 	
 	"load Rowan test classes"
-	(Rowan projectNamed: 'Rowan') defined
-		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel');
-		load.
+	(Rowan projectNamed: 'Rowan')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
 %
 	commit
 
