@@ -134,12 +134,22 @@ clientComponentNames := { 'common/Services' }.
 							comp_5 componentNames isEmpty ifFalse: [ self halt ].
 		]]]]]]].
 true ifTrue: [
+	| rowanPackageDir |
+	rowanPackageDir := rowanResolved repositoryRoot / 'rowan' / 'src'.
 	clientPackageNames do: [:packageName |
-		clientResolved _projectDefinition _addPackage: (rowanResolved packageNamed: packageName)
+		clientResolved _projectDefinition _addPackage: (rowanResolved packageNamed: packageName).
+		rowanResolved removePackageNamed: packageName.
+		(rowanPackageDir / packageName) ensureDeleteAll.
 		].
 	clientResolved 
 		export;
 		exportLoadSpecification;
 		yourself.
+	clientComponentNames do: [:componentName |
+		rowanResolved removeComponentNamed: componentName
+		].
+	(rowanResolved repositoryRoot / 'rowan' / 'components') ensureDeleteAllChildren.
+	rowanResolved
+		export.
 ].
 {clientResolved . rowanResolved . clientPackageNames . clientComponentNames}
