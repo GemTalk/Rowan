@@ -139,7 +139,6 @@ true ifTrue: [
 	clientPackageNames do: [:packageName |
 		clientResolved _projectDefinition _addPackage: (rowanResolved packageNamed: packageName).
 		rowanResolved removePackageNamed: packageName.
-		(rowanPackageDir / packageName) ensureDeleteAll.
 		].
 	clientResolved 
 		export;
@@ -149,6 +148,7 @@ true ifTrue: [
 		rowanResolved removeComponentNamed: componentName
 		].
 	(rowanResolved repositoryRoot / 'rowan' / 'components') ensureDeleteAllChildren.
+	rowanPackageDir ensureDeleteAllChildren.
 	rowanResolved
 		export.
 ].
