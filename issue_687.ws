@@ -4,7 +4,7 @@
 	Script used to create RowanClientServices component and package structure
 		from Rowan:masterV2.1
 "
-platformConditionalAttributes := {'tests' . 'v2' . 'v2Only' . 'testsV2' . 'stubs' . 'tonel'. 'common' . '3.2.15' asRwGemStoneVersionNumber . '3.5.0' asRwGemStoneVersionNumber . '3.6.0' asRwGemStoneVersionNumber . '3.6.1' asRwGemStoneVersionNumber . '3.7.0' asRwGemStoneVersionNumber . }.
+platformConditionalAttributes := {'tests' . 'v2' . 'v2Only' . 'testsV2' . 'stubs' . 'tonel'. 'common' . 'gemstone' . '3.2.15' asRwGemStoneVersionNumber . '3.5.0' asRwGemStoneVersionNumber . '3.6.0' asRwGemStoneVersionNumber . '3.6.1' asRwGemStoneVersionNumber . '3.7.0' asRwGemStoneVersionNumber . }.
 rowan := (Rowan projectNamed: 'Rowan') defined.
 rowan := rowan read: platformConditionalAttributes.
 rowanResolved := rowan _resolvedProject.
@@ -133,8 +133,13 @@ clientComponentNames := { 'common/Services' }.
 								clientPackageNames addAll: comp_5 packageNames].
 							comp_5 componentNames isEmpty ifFalse: [ self halt ].
 		]]]]]]].
-clientResolved 
-	export;
-	exportLoadSpecification;
-	yourself.
-{clientResolved . clientPackageNames . clientComponentNames}
+true ifTrue: [
+	clientPackageNames do: [:packageName |
+		clientResolved _projectDefinition _addPackage: (rowanResolved packageNamed: packageName)
+		].
+	clientResolved 
+		export;
+		exportLoadSpecification;
+		yourself.
+].
+{clientResolved . rowanResolved . clientPackageNames . clientComponentNames}
