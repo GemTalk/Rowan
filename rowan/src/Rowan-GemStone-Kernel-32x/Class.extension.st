@@ -1,27 +1,6 @@
 Extension { #name : 'Class' }
 
 { #category : '*rowan-gemstone-kernel-32x' }
-Class >> rwClassType [
-	"Answer the string the desribes the class type"
-
-	^ self isBytes
-		ifTrue: [ 
-			self superClass isBytes not
-				ifTrue: [ 'byteSubclass' ]
-				ifFalse: [ 'normal' ] ]
-		ifFalse: [ 
-			self isSpecial
-				ifTrue: [ 'immediate' ]
-				ifFalse: [ 
-					self isNsc
-						ifTrue: [ 'normal' ]
-						ifFalse: [ 
-							(self isVariable and: [ self superClass isVariable not ])
-								ifTrue: [ 'variable' ]
-								ifFalse: [ 'normal' ] ] ] ]
-]
-
-{ #category : '*rowan-gemstone-kernel-32x' }
 Class >> _rwOptionsArray [
   "copy of _optionsArray"
 
@@ -46,4 +25,25 @@ Class >> _rwOptionsArray [
 Class >> _rwReservedOop [
  "returns nil or the SmallInteger specifying a reserved oop ... need System class>>_lastReservedOopNumber to implement correctly"
   ^ nil
+]
+
+{ #category : '*rowan-gemstone-kernel-32x' }
+Class >> rwClassType [
+	"Answer the string the desribes the class type"
+
+	^ self isBytes
+		ifTrue: [ 
+			self superClass isBytes not
+				ifTrue: [ 'byteSubclass' ]
+				ifFalse: [ 'normal' ] ]
+		ifFalse: [ 
+			self isSpecial
+				ifTrue: [ 'immediate' ]
+				ifFalse: [ 
+					self isNsc
+						ifTrue: [ 'normal' ]
+						ifFalse: [ 
+							(self isVariable and: [ self superClass isVariable not ])
+								ifTrue: [ 'variable' ]
+								ifFalse: [ 'normal' ] ] ] ]
 ]
