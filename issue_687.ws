@@ -57,7 +57,7 @@ clientComponentNames := { 'common/Services' }.
 				comp_2 packageNames isEmpty ifFalse: [
 					clientComp_2
 						conditionalPackageMapSpecs: comp_2 conditionalPackageMapSpecs;
-						packageNames: comp_2 packageNames.
+						packageNames: comp_2 packageNames copy.
 					clientPackageNames addAll: comp_2 packageNames].
 				comp_2 componentNames do: [:compName_3 |
 					| comp_3 componentPathName pathArray conditionArray pathSegments clientComp_3 |
@@ -81,7 +81,7 @@ clientComponentNames := { 'common/Services' }.
 					comp_3 packageNames isEmpty ifFalse: [
 						clientComp_3
 							conditionalPackageMapSpecs: comp_3 conditionalPackageMapSpecs;
-							packageNames: comp_3 packageNames.
+							packageNames: comp_3 packageNames copy.
 						clientPackageNames addAll: comp_3 packageNames].
 					comp_3 componentNames do: [:compName_4 |
 						| comp_4 componentPathName pathArray conditionArray pathSegments clientComp_4 |
@@ -105,7 +105,7 @@ clientComponentNames := { 'common/Services' }.
 						comp_4 packageNames isEmpty ifFalse: [
 							clientComp_4
 								conditionalPackageMapSpecs: comp_4 conditionalPackageMapSpecs;
-								packageNames: comp_4 packageNames.
+								packageNames: comp_4 packageNames copy.
 							clientPackageNames addAll: comp_4 packageNames].
 						comp_4 componentNames do: [:compName_5 |
 							| comp_5 componentPathName pathArray conditionArray pathSegments clientComp_5 |
@@ -129,7 +129,7 @@ clientComponentNames := { 'common/Services' }.
 							comp_5 packageNames isEmpty ifFalse: [
 								clientComp_5
 									conditionalPackageMapSpecs: comp_5 conditionalPackageMapSpecs;
-									packageNames: comp_5 packageNames.
+									packageNames: comp_5 packageNames copy.
 								clientPackageNames addAll: comp_5 packageNames].
 							comp_5 componentNames isEmpty ifFalse: [ self halt ].
 		]]]]]]].
