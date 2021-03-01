@@ -1,0 +1,16 @@
+RwLoadSpecificationV2 {
+	#specName : 'RowanClientServices',
+	#projectName : 'RowanClientServices',
+	#gitUrl : 'file:$ROWAN_PROJECTS_HOME/RowanClientServices',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'RowanClientServices'
+	],
+	#customConditionalAttributes : [
+		'v2',
+		'v2Only',
+		'stubs',
+		'tonel'
+	],
+	#comment : ''
+}
