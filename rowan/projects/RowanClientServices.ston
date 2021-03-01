@@ -8,10 +8,7 @@ RwLoadSpecificationV2 {
 		'RowanClientServices'
 	],
 	#customConditionalAttributes : [
-		'v2',
-		'v2Only',
-		'stubs',
-		'tonel'
+		'v2'
 	],
 	#comment : ''
 }
