@@ -405,7 +405,7 @@ RwGsTopazRowanToolTest >> testTopazListProjects [
 		assert:
 			(x := Rowan gemstoneTools topaz listProjects sort)
 				=
-					#('Cypress' 'Rowan' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage')
+					#('Cypress' 'Rowan' 'RowanClientServices' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage')
 						sort
 ]
 
