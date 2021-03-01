@@ -3857,7 +3857,7 @@ doit
 	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64 )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3875,7 +3875,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3893,7 +3893,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3911,7 +3911,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3929,7 +3929,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3947,7 +3947,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -5457,7 +5457,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5621,7 +5621,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5652,7 +5652,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5676,7 +5676,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5695,7 +5695,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5715,7 +5715,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5736,7 +5736,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5754,7 +5754,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5772,7 +5772,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5790,7 +5790,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5808,7 +5808,7 @@ doit
 	classVars: #( Current )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5826,7 +5826,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5844,7 +5844,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5862,7 +5862,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5880,7 +5880,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5898,7 +5898,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5916,7 +5916,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -5934,7 +5934,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanKernel
+	inDictionary: RowanClientServices
 	options: #( #logCreation )
 )
 		category: 'Rowan-Services-Core';
@@ -67713,6 +67713,16 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwBasicProjectLoadComponentV2
+conditionalPackageMapSpecs: aDict
+	"duplication of subclass implementation until we've moved to V2.1, since this method is 
+		used during project load and superclass methods removed before subclass methods added.
+		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
+
+	 conditionalPackageMapSpecs := aDict
+%
+
+category: 'accessing'
+method: RwBasicProjectLoadComponentV2
 conditionalPackageMapSpecsAtGemStoneUserId: userId
 	"duplication of subclass implementation until we've moved to V2.1, since this method is 
 		used during project load and superclass methods removed before subclass methods added.
@@ -67735,6 +67745,12 @@ packageNames
 		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
 
 	^ packageNames
+%
+
+category: 'accessing'
+method: RwAbstractSimpleProjectLoadComponentV2
+packageNames: anArray
+ packageNames := anArray
 %
 
 ! Class implementation for 'RwAbstractRowanProjectLoadComponentV2'
@@ -69857,15 +69873,19 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 	theComponentName := (path / componentBasename) pathString.
 	condition _isArray
 		ifTrue: [ 
+self components componentNamed: theComponentName
+ifAbsent: [
 			self components
 				addPlatformNestedComponentNamed: theComponentName
 				condition: condition
-				comment: aString ]
-		ifFalse: [ 
+				comment: aString ]]
+		ifFalse: [
+self components componentNamed: theComponentName
+ifAbsent: [
 			self components
 				addSimpleNestedComponentNamed: theComponentName
 				condition: condition
-				comment: aString ].
+				comment: aString] ].
 	toComponent addComponentNamed: theComponentName.
 	^ theComponentName
 %

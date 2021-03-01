@@ -10,5 +10,13 @@ RwLoadSpecificationV2 {
 	#customConditionalAttributes : [
 		'v2'
 	],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanClientServices'
+			}
+		}
+	},
+
 	#comment : ''
 }
