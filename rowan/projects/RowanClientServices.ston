@@ -2,6 +2,7 @@ RwLoadSpecificationV2 {
 	#specName : 'RowanClientServices',
 	#projectName : 'RowanClientServices',
 	#gitUrl : 'file:$ROWAN_PROJECTS_HOME/RowanClientServices',
+	#revision : 'master',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
 		'RowanClientServices'
