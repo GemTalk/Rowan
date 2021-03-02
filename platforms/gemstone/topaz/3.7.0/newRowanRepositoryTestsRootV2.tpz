@@ -13,6 +13,8 @@
 	run
 	(Rowan projectNamed: 'Rowan') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
+	(Rowan projectNamed: 'RowanClientServices') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
 	(Rowan projectNamed: 'gemstoneBaseImage') 
 		gitRepositoryRoot: '$ARCHBASE/image'.
 	
