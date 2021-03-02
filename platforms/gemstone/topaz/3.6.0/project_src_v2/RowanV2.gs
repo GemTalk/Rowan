@@ -3857,7 +3857,7 @@ doit
 	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64 )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3875,7 +3875,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3893,7 +3893,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3911,7 +3911,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3929,7 +3929,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
@@ -3947,7 +3947,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: RowanClientServices
+	inDictionary: UserGlobals
 	options: #( #logCreation )
 )
 		category: 'Rowan-JadeServer';
