@@ -1,0 +1,22 @@
+RwLoadSpecificationV2 {
+	#specName : 'RowanClientServices',
+	#projectName : 'RowanClientServices',
+	#gitUrl : 'file:$ROWAN_PROJECTS_HOME/RowanClientServices',
+	#revision : 'masterV2.0',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'RowanClientServices'
+	],
+	#customConditionalAttributes : [
+		'v2'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanClientServices'
+			}
+		}
+	},
+
+	#comment : ''
+}
