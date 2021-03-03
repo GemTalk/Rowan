@@ -7,19 +7,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/tests/Components',
 		'common/v2/Components'
 	],
-	#packageNames : [
-		'Rowan-Components'
-	],
-	#conditionalPackageMapSpecs : {
-		'gemstone' : {
-			'allusers' : {
-				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Components' : {
-						'symbolDictName' : 'RowanTools'
-					}
-				}
-			}
-		}
-	},
+	#packageNames : [ ],
 	#comment : ''
 }

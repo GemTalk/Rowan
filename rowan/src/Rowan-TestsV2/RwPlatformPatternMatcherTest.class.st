@@ -6,7 +6,7 @@ Class {
 
 { #category : 'private' }
 RwPlatformPatternMatcherTest >> _patternMatcherFor: pattern [
-	^ RwAbstractComponent _platformPatternMatcherFor: pattern
+	^ RwAbstractRowanProjectLoadComponentV2 _platformPatternMatcherFor: pattern
 ]
 
 { #category : 'tests' }

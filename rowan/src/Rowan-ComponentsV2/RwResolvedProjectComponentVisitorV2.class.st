@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'resolvedProject'
 	],
-	#category : 'Rowan-Components'
+	#category : 'Rowan-ComponentsV2'
 }
 
 { #category : 'reading' }
