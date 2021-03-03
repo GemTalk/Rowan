@@ -16,3 +16,8 @@ RwAbstractSimpleProjectLoadComponentV2 >> packageNames [
 
 	^ packageNames
 ]
+
+{ #category : 'accessing' }
+RwAbstractSimpleProjectLoadComponentV2 >> packageNames: anArray [
+ packageNames := anArray
+]

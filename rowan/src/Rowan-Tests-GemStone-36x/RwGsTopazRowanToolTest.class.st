@@ -404,7 +404,7 @@ RwGsTopazRowanToolTest >> testTopazListProjects [
 	| projectList |
 	RwGsTestImage resetTestProjectRegistry.
 	projectList := Rowan gemstoneTools topaz listProjects sort.
-	#('Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Rowan' 'STON' 'UnPackaged')
+	#('Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Rowan' 'RowanClientServices' 'STON' 'UnPackaged')
 		do: [ :projectName | 
 			self
 				assert: (projectList includes: projectName)

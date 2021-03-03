@@ -1,6 +1,5 @@
 Extension { #name : 'RwGsImage' }
 
-
 { #category : '*rowan-gemstone-core-32x' }
 RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
 

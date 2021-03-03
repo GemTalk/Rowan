@@ -13,13 +13,14 @@
 	run
 	(Rowan projectNamed: 'Rowan') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
+	(Rowan projectNamed: 'RowanClientServices') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
 	(Rowan projectNamed: 'gemstoneBaseImage') 
 		gitRepositoryRoot: '$ARCHBASE/image'.
 	
 	"load Rowan test classes"
-	(Rowan projectNamed: 'Rowan') defined
-		read: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel');
-		load.
+	(Rowan projectNamed: 'Rowan')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
 %
 	commit
 

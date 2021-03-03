@@ -4,6 +4,7 @@ RwSimpleProjectLoadComponentV2 {
 	#projectNames : [
 		'Cypress',
 		'FileSystemGs',
+		'RowanClientServices',
 		'STON'
 	],
 	#componentNames : [
@@ -12,7 +13,6 @@ RwSimpleProjectLoadComponentV2 {
 		'common/Core',
 		'common/Definitions',
 		'common/Loader',
-		'common/Services',
 		'common/Specifications',
 		'common/Tests',
 		'common/Tools'

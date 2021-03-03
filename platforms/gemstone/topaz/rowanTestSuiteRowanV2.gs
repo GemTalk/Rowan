@@ -12,7 +12,8 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
 	[
-		projectNames := #( 'Rowan' 'STON' 'Cypress' 'FileSystemGs' ).
+		(Rowan projectNamed: 'Rowan') loadProjectSet.	"until RowanClientServices project is being loaded by 3.6.2/3.7.0"
+		projectNames := #( 'Rowan' 'STON' 'Cypress' 'FileSystemGs' 'RowanClientServices' ).
 		"audit before load"
 		projectNames do: [:projectName |
 			| audit |
