@@ -51,12 +51,20 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject |
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
+					| theResolvedProject theLoadSpec |
+					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
+						ifNotNil: [ :project | 
+							"project is already present in image ... so use it"
+							theLoadSpec := project _loadSpecification.
+							theResolvedProject := theLoadSpec resolveWithParentProject: project	"give embedded projects a chance" ]
+						ifNil: [ 
+							"derive resolved project from the load spec"
+							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+							theLoadSpec := loadSpec ].
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(loadSpec componentNames)} ] ].
+							(theLoadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -66,7 +74,6 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 			theResolvedProject readPackageNames: theResolvedProject packageNames.
 			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
-
 ]
 
 { #category : 'instance creation' }
