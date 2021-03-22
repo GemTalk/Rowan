@@ -30,6 +30,11 @@ RwProject >> _loadSpecification [
 ]
 
 { #category : 'private' }
+RwProject >> _projectRepository [
+	^ self _loadedProject handle _projectRepository
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification

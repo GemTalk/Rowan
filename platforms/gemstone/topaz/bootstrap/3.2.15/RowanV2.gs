@@ -51369,6 +51369,12 @@ _loadSpecification
 
 category: 'private'
 method: RwProject
+_projectRepository
+	^ self _loadedProject handle _projectRepository
+%
+
+category: 'private'
+method: RwProject
 _specification
 
 	^ self _loadedProject specification
@@ -59230,12 +59236,20 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject |
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give enbedded projects a chance"
+					| theResolvedProject theLoadSpec |
+					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
+						ifNotNil: [ :project | 
+							"project is already present in image ... so use it"
+							theLoadSpec := project _loadSpecification.
+							theResolvedProject := theLoadSpec resolveWithParentProject: project	"give embedded projects a chance" ]
+						ifNil: [ 
+							"derive resolved project from the load spec"
+							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+							theLoadSpec := loadSpec ].
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(loadSpec componentNames)} ] ].
+							(theLoadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -99821,7 +99835,7 @@ platformConditionalAttributes
 category: '*rowan-corev2'
 method: RwProject
 projectsHome
-	self _loadedProject resolvedProject projectsHome
+	^ self _loadedProject resolvedProject projectsHome
 %
 
 category: '*rowan-corev2'

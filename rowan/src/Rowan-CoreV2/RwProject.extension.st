@@ -108,7 +108,7 @@ RwProject >> platformConditionalAttributes [
 
 { #category : '*rowan-corev2' }
 RwProject >> projectsHome [
-	self _loadedProject resolvedProject projectsHome
+	^ self _loadedProject resolvedProject projectsHome
 ]
 
 { #category : '*rowan-corev2' }
