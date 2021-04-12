@@ -1444,7 +1444,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 				'platform'.
 				'vast'}
 			conditionPathArray:
-				{'test'.
+				{'tests'.
 				'common'.
 				{'vast'}}
 			comment:
