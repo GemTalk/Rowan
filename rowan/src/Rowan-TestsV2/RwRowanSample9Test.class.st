@@ -3316,7 +3316,7 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 
 	"using the migration tests set of definitions"
 
-	| loadSpec projectName resolvedProject loadedProjects project  audit loadSpec2 resolvedProject2 |
+	| loadSpec projectName resolvedProject loadedProjects project  audit loadSpec2 resolvedProject2 hitError errorDescription |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
@@ -3369,13 +3369,15 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	resolvedProject2 := loadSpec2 resolveStrict.
-	loadedProjects := resolvedProject2 load.
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
-	self assert: (audit := project audit) isEmpty.
-
-"watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+	hitError := false.
+	[loadedProjects := resolvedProject2 load] 
+		on: Error 
+		do: [:ex |
+			errorDescription := ex description.
+			errorDescription = 'UserDefinedError: A class (RowanSample9Class1) may not be installed in a symbol dictionary (RowanSample9Class1  with the same name.' ifTrue: [ hitError := true ] ].
+	self 
+		assert: hitError 
+		description: 'Unexpected pass with error description: ', errorDescription printString	"watch out ... jadeite won't behave well with class and symbol dictionary of same name ... but that's okay"
 ]
 
 { #category : 'tests' }

@@ -78028,6 +78028,12 @@ addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 	name := classDefinition key asSymbol.
 	name ifNil: [ self error: 'Class definition with no name.' ].
 	symDictName := self symbolDictionaryName.
+	symDictName = name
+		ifTrue: [ 
+			self
+				error:
+					'A class (' , name asString , ') may not be installed in a symbol dictionary ('
+						, symDictName asString , '  with the same name.' ].
 	symDict := RwGsPatchSet_V2
 		lookupSymbolDictName: symDictName
 		in: newClassesByNameSymbolList
