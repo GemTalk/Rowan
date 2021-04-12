@@ -3279,7 +3279,7 @@ RwRowanSample9Test >> testIssue514 [
 		self deny: propertiesModification isEmpty.
 		propertyElementsModified := propertiesModification elementsModified.
 		self assert: propertyElementsModified size = 1.
-		propertyModification := propertyElementsModified at: 'gs_SymbolDictionary'.
+		propertyModification := propertyElementsModified at: #'gs_SymbolDictionary'.
 		self assert: propertyModification oldValue isNil.
 		self assert: propertyModification newValue = self _symbolDictionaryName asString ].
 	(RwSample1TestValidationVisitor new)
@@ -3296,7 +3296,7 @@ RwRowanSample9Test >> testIssue514 [
 					self assert: packageModification classExtensionsModification isEmpty.
 					propertyModValidationBlock value: packageModification propertiesModification ]
 				ifFalse: [
-					self assert: packageModification propertiesModification isEmpty ] ];
+					self assert: (packageModification propertiesModification isEmpty or: [packageModification propertiesModification elementsModified keys asArray = {#'gs_SymbolDictionary'}] )] ];
 		changedClassBlock: [ :classModification :visitor |
 			| packageName |
 			packageName := visitor currentPackageDefinition key.
