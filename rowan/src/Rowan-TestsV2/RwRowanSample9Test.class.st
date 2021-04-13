@@ -6484,7 +6484,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
-				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
+				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}
 		do: [ :details | 
@@ -6498,7 +6498,6 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 								assert:
 									((methodDetails at: 'method') selector == #'foo'
 										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
-
 ]
 
 { #category : 'tests' }
@@ -6529,7 +6528,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
-				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
+				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}.
 	reports

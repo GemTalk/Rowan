@@ -1309,11 +1309,6 @@ RwResolvedProjectV2 >> renamePackageNamed: packageName to: newPackageName [
 	^ thePackageDef
 ]
 
-{ #category : '-- loader compat --' }
-RwResolvedProjectV2 >> repositoryCommitId [
-	^ self _projectRepository commitId
-]
-
 { #category : 'project specification' }
 RwResolvedProjectV2 >> repoType: aSymbol [
 	"#disk, #git or #none"
@@ -1437,15 +1432,6 @@ RwResolvedProjectV2 >> subcomponentsOf: componentName matchBlock: matchBlock ifN
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents
-]
-
-{ #category : '-- loader compat --' }
-RwResolvedProjectV2 >> symbolDictNameForPackageNamed: aPackageName [
-	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
-		should use gemstoneSymbolDictNameForPackageNamed:, but need to wait until we're no longer 
-		using RwComponentProjectDefinition"
-
-	^ self gemstoneSymbolDictNameForPackageNamed: aPackageName
 ]
 
 { #category : 'project definition' }

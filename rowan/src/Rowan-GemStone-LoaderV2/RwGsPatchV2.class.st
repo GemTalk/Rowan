@@ -70,7 +70,7 @@ RwGsPatchV2 >> symbolDictionaryFor: aPackageName [
 { #category : 'accessing' }
 RwGsPatchV2 >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition [
 	| symDictName |
-	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
+	symDictName := aProjectDefinition gemstoneSymbolDictNameForPackageNamed: aPackageName.
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 ]
 
@@ -80,7 +80,7 @@ RwGsPatchV2 >> symbolDictionaryName [
 
 	| symDictName |
 	symDictName := (self projectDefinition
-		symbolDictNameForPackageNamed: self packageName) asSymbol.
+		gemstoneSymbolDictNameForPackageNamed: self packageName) asSymbol.
 	Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
 	^ symDictName
 ]

@@ -245,6 +245,11 @@ RwAbstractResolvedProjectV2 >> projectSpecification [
 		yourself
 ]
 
+{ #category : 'testing' }
+RwAbstractResolvedProjectV2 >> remote [
+	^ self _projectRepository remote
+]
+
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> repository [
 	^ RwResolvedRepositoryV2 new

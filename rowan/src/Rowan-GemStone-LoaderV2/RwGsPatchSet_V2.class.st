@@ -458,7 +458,7 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 				in a project that is not included in this load"
 			className := aRwClassModification after name.
 			symDictName := aProjectDefinition
-				symbolDictNameForPackageNamed: aPackage name.
+				gemstoneSymbolDictNameForPackageNamed: aPackage name.
 			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
 			(Rowan globalNamed: aRwClassModification after name)
 				ifNotNil: [ :class | 
@@ -648,7 +648,7 @@ RwGsPatchSet_V2 >> addExtendedClass: aClassDefinition inPackage: aPackageDefinit
 	currentProjectDefinition := aProjectDefinition.
 	Rowan image
 		newOrExistingSymbolDictionaryNamed:
-			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
+			(aProjectDefinition gemstoneSymbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass

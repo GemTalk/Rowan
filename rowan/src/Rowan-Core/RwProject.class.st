@@ -469,13 +469,6 @@ RwProject >> remote [
 	^ self _loadedProject remote
 ]
 
-{ #category : 'accessing' }
-RwProject >> repositoryCommitId [
-
-	^ self _loadedProject repositoryCommitId
-
-]
-
 { #category : 'properties' }
 RwProject >> repositoryRootPath [
 

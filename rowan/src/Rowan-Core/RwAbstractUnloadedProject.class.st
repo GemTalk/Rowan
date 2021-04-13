@@ -102,6 +102,12 @@ RwAbstractUnloadedProject >> projectsHome: aProjectHomeReferenceOrString [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> remote [
+
+	^ self _resolvedProject remote
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> repositoryResolutionPolicy [
 	^ self _loadSpecification repositoryResolutionPolicy
 ]

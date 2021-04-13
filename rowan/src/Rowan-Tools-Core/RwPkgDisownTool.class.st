@@ -23,7 +23,7 @@ RwPkgDisownTool >> disownClass: theClass [
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -54,7 +54,7 @@ RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackage
 	loadedPackage := loadedClassExtension loadedPackage.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -103,7 +103,7 @@ RwPkgDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 

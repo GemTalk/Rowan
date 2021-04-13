@@ -188,6 +188,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
 	^ self resolvedProject gemstoneDefaultSymbolDictName
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
+
+	^self resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
 	self initializeForName: aResolvedProject projectName.
@@ -355,12 +361,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryCommitId [
-
-	^ self resolvedProject repositoryCommitId
-]
-
-{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
@@ -442,12 +442,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> symbolDictNameForPackageNamed: packageName [
-
-	^self resolvedProject symbolDictNameForPackageNamed: packageName
 ]
 
 { #category : 'actions' }

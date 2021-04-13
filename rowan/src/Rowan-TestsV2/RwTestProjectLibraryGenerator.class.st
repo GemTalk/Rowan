@@ -3800,8 +3800,8 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 		ifTrue: [ 
 			self indexCardMap
 				at: indexName
-				ifAbsent: [ (RwProject newNamed: 'Rowan') repositoryCommitId ] ]
-		ifFalse: [ (RwProject newNamed: 'Rowan') repositoryCommitId ].
+				ifAbsent: [ (RwProject newNamed: 'Rowan') commitId ] ]
+		ifFalse: [ (RwProject newNamed: 'Rowan') commitId ].
 	^ RwTestProjectLibraryIndexCard new
 		name: indexName;
 		title: title;

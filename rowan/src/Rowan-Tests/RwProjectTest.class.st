@@ -12,7 +12,7 @@ RwProjectTest >> testDiskProjectApi [
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 
-	| projectName definedProject resolvedProject loadedProject componentsRoot |
+	| projectName definedProject resolvedProject loadedProject componentsRoot repositoryRoot |
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'disk'.
 	projectName := definedProject name.
 
@@ -43,6 +43,10 @@ RwProjectTest >> testDiskProjectApi [
 	self
 		assert: resolvedProject _projectDefinitionPlatformConditionalAttributes
 		equals: nil.
+	repositoryRoot := resolvedProject repositoryRoot.
+	self
+		assert: (resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		equals: self _symbolDictionaryName1 asString.
 
 	loadedProject := resolvedProject load first.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
@@ -66,7 +70,11 @@ RwProjectTest >> testDiskProjectApi [
 			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
 	self
 		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
-		equals: nil
+		equals: nil.
+	self assert: repositoryRoot equals: loadedProject repositoryRoot.
+	self
+		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		equals: self _symbolDictionaryName1 asString
 ]
 
 { #category : 'tests' }
@@ -75,7 +83,7 @@ RwProjectTest >> testGitProjectApi [
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 
-	| projectName definedProject resolvedProject loadedProject commitId componentsRoot |
+	| projectName definedProject resolvedProject loadedProject commitId componentsRoot repositoryRoot |
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'git'.
 	projectName := definedProject name.
 
@@ -108,6 +116,11 @@ RwProjectTest >> testGitProjectApi [
 			'gemstone'.
 			'gemstone-kernel'.
 			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
+	self assert: resolvedProject remote equals: 'origin'.
+	repositoryRoot := resolvedProject repositoryRoot.
+	self
+		assert: (resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		equals: self _symbolDictionaryName1 asString.
 
 	loadedProject := resolvedProject load first.
 	loadedProject checkout: 'master'.
@@ -131,6 +144,11 @@ RwProjectTest >> testGitProjectApi [
 			'gemstone'.
 			'gemstone-kernel'.
 			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
+	self assert: loadedProject remote equals: 'origin'.
+	self assert: repositoryRoot equals: loadedProject repositoryRoot.
+	self
+		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		equals: self _symbolDictionaryName1 asString.
 ]
 
 { #category : 'tests' }

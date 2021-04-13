@@ -49485,6 +49485,13 @@ projectsHome: aProjectHomeReferenceOrString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+remote
+
+	^ self _resolvedProject remote
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 repositoryResolutionPolicy
 	^ self _loadSpecification repositoryResolutionPolicy
 %
@@ -50568,6 +50575,13 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 %
 
+category: 'querying'
+method: RwResolvedProject
+gemstoneSymbolDictNameForPackageNamed: packageName
+
+	^ self _resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+%
+
 category: 'accessing'
 method: RwResolvedProject
 packagesRoot
@@ -51127,13 +51141,6 @@ method: RwProject
 remote
 
 	^ self _loadedProject remote
-%
-
-category: 'accessing'
-method: RwProject
-repositoryCommitId
-
-	^ self _loadedProject repositoryCommitId
 %
 
 category: 'properties'
@@ -57150,7 +57157,7 @@ repositoryRootPath
 category: 'rowan'
 method: RowanProjectService
 repositorySha
-	^ self rwProject repositoryCommitId
+	^ self rwProject commitId
 %
 
 category: 'rowan'
@@ -60434,7 +60441,7 @@ processClass: aClassModification
 	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
    self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
 
-	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
+	symbolDictName := self currentProjectDefinition gemstoneSymbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
 	self classDefinitions at: classDefinition name put: classDefinition.
 
@@ -63950,6 +63957,12 @@ projectSpecification
 		yourself
 %
 
+category: 'testing'
+method: RwAbstractResolvedProjectV2
+remote
+	^ self _projectRepository remote
+%
+
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
 repository
@@ -65649,12 +65662,6 @@ renamePackageNamed: packageName to: newPackageName
 	^ thePackageDef
 %
 
-category: '-- loader compat --'
-method: RwResolvedProjectV2
-repositoryCommitId
-	^ self _projectRepository commitId
-%
-
 category: 'project specification'
 method: RwResolvedProjectV2
 repoType: aSymbol
@@ -65787,16 +65794,6 @@ subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents
-%
-
-category: '-- loader compat --'
-method: RwResolvedProjectV2
-symbolDictNameForPackageNamed: aPackageName
-	"sender in loader code that's shared between RwComponentProjectDefinition and RwResolvedProjectV2, 
-		should use gemstoneSymbolDictNameForPackageNamed:, but need to wait until we're no longer 
-		using RwComponentProjectDefinition"
-
-	^ self gemstoneSymbolDictNameForPackageNamed: aPackageName
 %
 
 category: 'project definition'
@@ -66978,7 +66975,7 @@ adoptClass: theClass classExtension: classExtension instanceSelectors: instanceS
 	loadedProject := loadedPackage loadedProject.
 	className := theClass name asString.
 
-	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
 		asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -67099,7 +67096,7 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
 		asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -67180,7 +67177,7 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className isM
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
@@ -67298,7 +67295,7 @@ disownClass: theClass
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -67330,7 +67327,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 	loadedPackage := loadedClassExtension loadedPackage.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -67381,7 +67378,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -70528,7 +70525,7 @@ _checkExpectedSymbolDictForClassDefinition: classDef packageDef: packageDef proj
 			symDict := ar first at: 1.
 			actualSymDictName := symDict name asString.
 			expectedSymDictName := projectDef
-				symbolDictNameForPackageNamed: packageDef name.
+				gemstoneSymbolDictNameForPackageNamed: packageDef name.
 			expectedSymDictName = actualSymDictName
 				ifTrue: [ correctBlock value: classDef value: actualSymDictName ]
 				ifFalse: [ 
@@ -76607,7 +76604,7 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 				in a project that is not included in this load"
 			className := aRwClassModification after name.
 			symDictName := aProjectDefinition
-				symbolDictNameForPackageNamed: aPackage name.
+				gemstoneSymbolDictNameForPackageNamed: aPackage name.
 			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
 			(Rowan globalNamed: aRwClassModification after name)
 				ifNotNil: [ :class | 
@@ -76804,7 +76801,7 @@ addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aPro
 	currentProjectDefinition := aProjectDefinition.
 	Rowan image
 		newOrExistingSymbolDictionaryNamed:
-			(aProjectDefinition symbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
+			(aProjectDefinition gemstoneSymbolDictNameForPackageNamed: aPackageDefinition name).	"ensure that symbol dictionary exists"
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
@@ -78057,7 +78054,7 @@ category: 'accessing'
 method: RwGsPatchV2
 symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition
 	| symDictName |
-	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
+	symDictName := aProjectDefinition gemstoneSymbolDictNameForPackageNamed: aPackageName.
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 %
 
@@ -78068,7 +78065,7 @@ symbolDictionaryName
 
 	| symDictName |
 	symDictName := (self projectDefinition
-		symbolDictNameForPackageNamed: self packageName) asSymbol.
+		gemstoneSymbolDictNameForPackageNamed: self packageName) asSymbol.
 	Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
 	^ symDictName
 %
@@ -78726,7 +78723,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	newSymbolDictionary := Rowan image symbolDictNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (projectDefinition gemstoneSymbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 	loadedClass := registry 
 		addClassAssociation: assoc 
@@ -83128,13 +83125,6 @@ removeLoadedPackage: aLoadedPackage
 	loadedPackages removeKey: aLoadedPackage key
 %
 
-category: 'accessing'
-method: RwLoadedProject
-repositoryCommitId
-
-	self subclassResponsibility: #repositoryCommitId
-%
-
 category: 'properties'
 method: RwLoadedProject
 specification
@@ -83346,6 +83336,13 @@ gemstoneDefaultSymbolDictName
 	^ self resolvedProject gemstoneDefaultSymbolDictName
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+gemstoneSymbolDictNameForPackageNamed: packageName
+
+	^self resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+%
+
 category: 'initialization'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 initializeForResolvedProject: aResolvedProject
@@ -83534,13 +83531,6 @@ remote
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-repositoryCommitId
-
-	^ self resolvedProject repositoryCommitId
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
@@ -83629,13 +83619,6 @@ subcomponentsOf: componentName matchBlock: matchBlock ifNone: noneBlock
 			(matchBlock value: subcomponent)
 				ifTrue: [ subcomponents add: subcomponent ] ].
 	^ subcomponents
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-symbolDictNameForPackageNamed: packageName
-
-	^self resolvedProject symbolDictNameForPackageNamed: packageName
 %
 
 category: 'actions'
@@ -94275,7 +94258,7 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		ifNotNil: [ 
 			| expectedSymDictName specifiedSymDictName |
 			(expectedSymDictName := loadedPackage loadedProject
-				symbolDictNameForPackageNamed: aPackageName)
+				gemstoneSymbolDictNameForPackageNamed: aPackageName)
 				~= (specifiedSymDictName := aDictionary name asString)
 				ifTrue: [ 
 					self
@@ -99530,6 +99513,13 @@ gemstoneDefaultSymbolDictName
 	^ self _loadedProject gemstoneDefaultSymbolDictName
 %
 
+category: '*rowan-gemstone-core'
+method: RwProject
+gemstoneSymbolDictNameForPackageNamed: packageName
+
+	^ self _loadedProject gemstoneSymbolDictNameForPackageNamed: packageName
+%
+
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString
@@ -99679,13 +99669,6 @@ requiredProjects
 		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
 	^ requiredProjectNames asArray
 		collect: [ :projectName | Rowan projectNamed: projectName ]
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
-symbolDictNameForPackageNamed: packageName
-
-	^ self _loadedProject symbolDictNameForPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-core'

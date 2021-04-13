@@ -42,7 +42,7 @@ RwGsClassSymbolDictionaryMoveSymDictPatchV2 >> installSymbolDictionaryPatchFor: 
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	newSymbolDictionary := Rowan image symbolDictNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
+	newSymbolDictionary := Rowan image symbolDictNamed: (projectDefinition gemstoneSymbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 	loadedClass := registry 
 		addClassAssociation: assoc 

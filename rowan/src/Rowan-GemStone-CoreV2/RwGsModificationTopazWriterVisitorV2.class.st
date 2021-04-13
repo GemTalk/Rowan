@@ -478,7 +478,7 @@ RwGsModificationTopazWriterVisitorV2 >> processClass: aClassModification [
 	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
    self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
 
-	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
+	symbolDictName := self currentProjectDefinition gemstoneSymbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
 	self classDefinitions at: classDefinition name put: classDefinition.
 

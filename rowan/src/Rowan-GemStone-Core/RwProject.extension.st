@@ -33,15 +33,15 @@ RwProject >> gemstoneDefaultSymbolDictName [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> methodEnvForPackageNamed: packageName [
+RwProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
-	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
+	^ self _loadedProject gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> symbolDictNameForPackageNamed: packageName [
+RwProject >> methodEnvForPackageNamed: packageName [
 
-	^ self _loadedProject symbolDictNameForPackageNamed: packageName
+	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }

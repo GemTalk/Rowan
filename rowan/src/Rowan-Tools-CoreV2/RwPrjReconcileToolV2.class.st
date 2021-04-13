@@ -20,7 +20,7 @@ RwPrjReconcileToolV2 >> _checkExpectedSymbolDictForClassDefinition: classDef pac
 			symDict := ar first at: 1.
 			actualSymDictName := symDict name asString.
 			expectedSymDictName := projectDef
-				symbolDictNameForPackageNamed: packageDef name.
+				gemstoneSymbolDictNameForPackageNamed: packageDef name.
 			expectedSymDictName = actualSymDictName
 				ifTrue: [ correctBlock value: classDef value: actualSymDictName ]
 				ifFalse: [ 

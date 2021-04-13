@@ -293,7 +293,7 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		ifNotNil: [ 
 			| expectedSymDictName specifiedSymDictName |
 			(expectedSymDictName := loadedPackage loadedProject
-				symbolDictNameForPackageNamed: aPackageName)
+				gemstoneSymbolDictNameForPackageNamed: aPackageName)
 				~= (specifiedSymDictName := aDictionary name asString)
 				ifTrue: [ 
 					self

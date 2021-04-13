@@ -259,12 +259,6 @@ RwLoadedProject >> removeLoadedPackage: aLoadedPackage [
 	loadedPackages removeKey: aLoadedPackage key
 ]
 
-{ #category : 'accessing' }
-RwLoadedProject >> repositoryCommitId [
-
-	self subclassResponsibility: #repositoryCommitId
-]
-
 { #category : 'properties' }
 RwLoadedProject >> specification [
 

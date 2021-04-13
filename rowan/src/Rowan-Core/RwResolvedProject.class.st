@@ -255,6 +255,12 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
+{ #category : 'querying' }
+RwResolvedProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
+
+	^ self _resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+]
+
 { #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
 	^ self _resolvedProject packagesRoot

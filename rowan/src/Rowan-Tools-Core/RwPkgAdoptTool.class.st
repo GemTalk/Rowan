@@ -16,7 +16,7 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 	loadedProject := loadedPackage loadedProject.
 	className := theClass name asString.
 
-	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
 		asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -134,7 +134,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName)
+	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
 		asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
@@ -214,7 +214,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject gemstoneSymbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
