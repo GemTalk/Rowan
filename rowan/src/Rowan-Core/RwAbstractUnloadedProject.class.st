@@ -33,6 +33,11 @@ RwAbstractUnloadedProject >> diskUrl: aString [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneDefaultSymbolDictName [
+	^ self _resolvedProject gemstoneDefaultSymbolDictName
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 ]

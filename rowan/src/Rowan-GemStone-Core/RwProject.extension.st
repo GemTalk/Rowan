@@ -1,12 +1,6 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> defaultSymbolDictName: aString [
-
-	^ self _loadedProject defaultSymbolDictName: aString
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwProject >> exportTopazFormatTo: filePath [
 	^ self
 		logClassCreation: false
@@ -31,6 +25,11 @@ RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation ex
 		excludeClassInitializers: excludeClassInitializers
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwProject >> gemstoneDefaultSymbolDictName [
+	^ self _loadedProject gemstoneDefaultSymbolDictName
 ]
 
 { #category : '*rowan-gemstone-core' }

@@ -231,7 +231,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNames: packageNames;
-		defaultSymbolDictName: self _symbolDictionaryName;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		setUseSessionMethodsForExtensions: true
 			forPackageNamed: 'Simple-Globals-Extensions';
 		yourself.

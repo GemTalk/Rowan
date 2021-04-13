@@ -48865,6 +48865,12 @@ diskUrl: aString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+gemstoneDefaultSymbolDictName
+	^ self _resolvedProject gemstoneDefaultSymbolDictName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
@@ -49899,6 +49905,39 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 
 !		Instance methods for 'RwResolvedProject'
 
+category: 'testing'
+method: RwResolvedProject
+canCommit
+	^ self _resolvedProject canCommit
+%
+
+category: 'actions'
+method: RwResolvedProject
+checkout: revision
+	^ self _resolvedProject checkout: revision
+%
+
+category: 'actions'
+method: RwResolvedProject
+commit: message
+	"commit the repository associated with receiver ..."
+
+	^ self _resolvedProject commit: message
+%
+
+category: 'querying'
+method: RwResolvedProject
+commitId
+
+	^ self _resolvedProject commitId
+%
+
+category: 'querying'
+method: RwResolvedProject
+commitLog: logLimit
+	^ self _resolvedProject commitLog: logLimit
+%
+
 category: 'accessing'
 method: RwResolvedProject
 componentsRoot
@@ -50158,7 +50197,7 @@ canCommit
 	^ self _loadedProject canCommit
 %
 
-category: 'properties'
+category: 'actions'
 method: RwProject
 checkout: revision
 	^ self _loadedProject checkout: revision
@@ -50169,6 +50208,14 @@ method: RwProject
 comment
 
 	^ self _specification comment
+%
+
+category: 'actions'
+method: RwProject
+commit: message
+	"commit the repository associated with receiver ..."
+
+	^ self _loadedProject commit: message
 %
 
 category: 'querying'
@@ -56265,7 +56312,7 @@ createProjectNamed: projectName in: symbolDictionaryName
 	self rowanFixMe. "Dale doesn't like Rowan projectNames"
 	(Rowan projectNames includes: projectName) ifFalse:[
 		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
-				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
+				pd gemstoneSetDefaultSymbolDictNameTo: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
 %
 
 category: 'replication'
@@ -82713,11 +82760,11 @@ componentsRoot
 	^ self resolvedProject componentsRoot
 %
 
-category: 'properties'
+category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-defaultSymbolDictName: symDictName
+gemstoneDefaultSymbolDictName
 
-	self resolvedProject defaultSymbolDictName: symDictName
+	^ self resolvedProject gemstoneDefaultSymbolDictName
 %
 
 category: 'initialization'
@@ -95958,13 +96005,6 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 		toComponentNamed: componentName
 %
 
-category: '*rowan-gemstone-core'
-method: RwProject
-defaultSymbolDictName: aString
-
-	^ self _loadedProject defaultSymbolDictName: aString
-%
-
 category: '*rowan-corev2'
 method: RwProject
 diskRepositoryRoot: repositoryRootPathString
@@ -96015,6 +96055,12 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeClassInitializers: excludeClassInitializers
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
+%
+
+category: '*rowan-gemstone-core'
+method: RwProject
+gemstoneDefaultSymbolDictName
+	^ self _loadedProject gemstoneDefaultSymbolDictName
 %
 
 category: '*rowan-corev2'

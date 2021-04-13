@@ -27,7 +27,7 @@ RwProjectAuditToolTest >> test_Issue_535 [
     newForGitBasedProjectNamed: projectName)
     addPackageNamed: packageName1;
     addPackageNamed: packageName2;
-    defaultSymbolDictName: self _symbolDictionaryName1;
+    gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
     yourself.
 
   packageDefinition := projectDefinition packageNamed: packageName1.

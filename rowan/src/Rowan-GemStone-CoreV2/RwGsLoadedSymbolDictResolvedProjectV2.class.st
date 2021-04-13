@@ -175,10 +175,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
 	^ self resolvedProject componentsRoot
 ]
 
-{ #category : 'properties' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> defaultSymbolDictName: symDictName [
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
 
-	self resolvedProject defaultSymbolDictName: symDictName
+	^ self resolvedProject gemstoneDefaultSymbolDictName
 ]
 
 { #category : 'initialization' }

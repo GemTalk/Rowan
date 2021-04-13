@@ -153,6 +153,34 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself
 ]
 
+{ #category : 'testing' }
+RwResolvedProject >> canCommit [
+	^ self _resolvedProject canCommit
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> checkout: revision [
+	^ self _resolvedProject checkout: revision
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> commit: message [
+	"commit the repository associated with receiver ..."
+
+	^ self _resolvedProject commit: message
+]
+
+{ #category : 'querying' }
+RwResolvedProject >> commitId [
+
+	^ self _resolvedProject commitId
+]
+
+{ #category : 'querying' }
+RwResolvedProject >> commitLog: logLimit [
+	^ self _resolvedProject commitLog: logLimit
+]
+
 { #category : 'accessing' }
 RwResolvedProject >> componentsRoot [
 	^ self _resolvedProject componentsRoot

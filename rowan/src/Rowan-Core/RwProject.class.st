@@ -133,7 +133,7 @@ RwProject >> canCommit [
 	^ self _loadedProject canCommit
 ]
 
-{ #category : 'properties' }
+{ #category : 'actions' }
 RwProject >> checkout: revision [
 	^ self _loadedProject checkout: revision
 ]
@@ -142,6 +142,13 @@ RwProject >> checkout: revision [
 RwProject >> comment [
 
 	^ self _specification comment
+]
+
+{ #category : 'actions' }
+RwProject >> commit: message [
+	"commit the repository associated with receiver ..."
+
+	^ self _loadedProject commit: message
 ]
 
 { #category : 'querying' }

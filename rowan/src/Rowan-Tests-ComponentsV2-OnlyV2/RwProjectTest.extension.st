@@ -40,7 +40,7 @@ RwProjectTest >> _simpleCreateDefinedProjectForRepoType: repoType [
 	((definedProject packageNamed: packageName2)
 		addClassNamed: className2
 		super: 'TestCase'
-		instvars: #()
+		instvars: #('ivar1')
 		category: packageName2
 		comment: 'a test')
 		addInstanceMethod:
