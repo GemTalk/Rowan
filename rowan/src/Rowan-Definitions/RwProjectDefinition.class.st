@@ -34,6 +34,26 @@ RwProjectDefinition >> _projectDefinitionForCompare [
 	^ self _projectDefinition
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> _projectDefinitionPlatformConditionalAttributes [
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> _projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil [
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
+]
+
 { #category : 'private' }
 RwProjectDefinition >> _validate: platformConfigurationAttributes componentPackageNames: componentPackageNames [
 	"ensure that the data structures within the receiver contain valid information"
@@ -169,19 +189,6 @@ RwProjectDefinition >> projectDefinitionPlatformConditionalAttributes [
 	^ properties
 		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
 		ifAbsent: [  ]
-]
-
-{ #category : 'properties' }
-RwProjectDefinition >> projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil [
-	platformConditionalAtttributesOrNil
-		ifNil: [ 
-			^ properties
-				removeKey:
-					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-				ifAbsent: [  ] ].
-	^ properties
-		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-		put: platformConditionalAtttributesOrNil
 ]
 
 { #category : 'accessing' }

@@ -92,6 +92,16 @@ RwResolvedProjectV2 >> _projectDefinitionForCompare [
 	^ self _projectDefinition
 ]
 
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> _projectDefinitionPlatformConditionalAttributes [
+	^ self _projectDefinition _projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'project definition' }
+RwResolvedProjectV2 >> _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes [
+	self _projectDefinition _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'visiting' }
 RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
@@ -1012,16 +1022,6 @@ RwResolvedProjectV2 >> printOn: aStream [
 ]
 
 { #category : 'project definition' }
-RwResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes [
-	^ self _projectDefinition projectDefinitionPlatformConditionalAttributes
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes [
-	self _projectDefinition projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty
 ]
@@ -1144,7 +1144,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 	self componentNames: componentNames.	"record the list of component names used to create this instance of the project definition"
 	self _loadSpecification
 		customConditionalAttributes: customConditionalAttributes.	"record customConditionalAttributes in load spec"
-	self projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
+	self _projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames

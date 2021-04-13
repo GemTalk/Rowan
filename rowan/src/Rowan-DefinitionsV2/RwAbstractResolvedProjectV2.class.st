@@ -212,7 +212,7 @@ RwAbstractResolvedProjectV2 >> packageConvention: aString [
 
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> platformConditionalAttributes [
-	^ self projectDefinitionPlatformConditionalAttributes
+	^ self _projectDefinitionPlatformConditionalAttributes
 		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
 ]
 

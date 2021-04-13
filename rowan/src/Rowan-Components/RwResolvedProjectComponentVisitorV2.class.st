@@ -17,7 +17,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		projectDefinitionPlatformConditionalAttributes:
+		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents

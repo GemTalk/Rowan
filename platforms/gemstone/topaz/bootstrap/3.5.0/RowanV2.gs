@@ -49436,6 +49436,12 @@ load
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+packageConvention
+	^ self _resolvedProject packageConvention
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 packageFormat: aString
 	^ self _resolvedProject packageFormat: aString
 %
@@ -49456,6 +49462,13 @@ category: 'actions'
 method: RwAbstractUnloadedProject
 packages: aPackageDictionary
 	self _resolvedProject packages: aPackageDictionary
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+platformConditionalAttributes
+	"Answer the platformConditionalAttributes that would be used to load the project"
+	^ self _resolvedProject platformConditionalAttributes
 %
 
 category: 'accessing'
@@ -50630,6 +50643,14 @@ write
 		exportLoadSpecification
 %
 
+category: 'accessing'
+method: RwResolvedProject
+_projectDefinitionPlatformConditionalAttributes
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _resolvedProject _projectDefinitionPlatformConditionalAttributes
+%
+
 ! Class implementation for 'RwProject'
 
 !		Instance methods for 'RwProject'
@@ -51084,13 +51105,6 @@ packages
 
 category: 'accessing'
 method: RwProject
-projectDefinitionPlatformConditionalAttributes
-
-	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
-%
-
-category: 'accessing'
-method: RwProject
 projectUrl
 
 	"Return the projectUrl used to clone the project"
@@ -51220,6 +51234,14 @@ category: 'private'
 method: RwProject
 _loadSpecification
 	^ self _loadedProject loadSpecification
+%
+
+category: 'accessing'
+method: RwProject
+_projectDefinitionPlatformConditionalAttributes
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes
 %
 
 category: 'private'
@@ -59056,7 +59078,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		projectDefinitionPlatformConditionalAttributes:
+		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents
@@ -63892,7 +63914,7 @@ packageConvention: aString
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
 platformConditionalAttributes
-	^ self projectDefinitionPlatformConditionalAttributes
+	^ self _projectDefinitionPlatformConditionalAttributes
 		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
 %
 
@@ -65315,18 +65337,6 @@ printOn: aStream
 
 category: 'project definition'
 method: RwResolvedProjectV2
-projectDefinitionPlatformConditionalAttributes
-	^ self _projectDefinition projectDefinitionPlatformConditionalAttributes
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
-	self _projectDefinition projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
 projectDefinitionSourceProperty
 	^ self _projectDefinition projectDefinitionSourceProperty
 %
@@ -65460,7 +65470,7 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 	self componentNames: componentNames.	"record the list of component names used to create this instance of the project definition"
 	self _loadSpecification
 		customConditionalAttributes: customConditionalAttributes.	"record customConditionalAttributes in load spec"
-	self projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
+	self _projectDefinitionPlatformConditionalAttributes: nil.	"reset project platformConditionalAttributes"
 	^ Rowan projectTools readV2
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
@@ -65823,6 +65833,18 @@ category: 'comparing'
 method: RwResolvedProjectV2
 _projectDefinitionForCompare
 	^ self _projectDefinition
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+_projectDefinitionPlatformConditionalAttributes
+	^ self _projectDefinition _projectDefinitionPlatformConditionalAttributes
+%
+
+category: 'project definition'
+method: RwResolvedProjectV2
+_projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+	self _projectDefinition _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 %
 
 ! Class implementation for 'RwResolvedRepositoryV2'
@@ -70249,8 +70271,8 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			theLoadedProject handle
 				_projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle
-				projectDefinitionPlatformConditionalAttributes:
-					projectDef projectDefinitionPlatformConditionalAttributes.
+				_projectDefinitionPlatformConditionalAttributes:
+					projectDef _projectDefinitionPlatformConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 
@@ -74266,20 +74288,6 @@ projectDefinitionPlatformConditionalAttributes
 		ifAbsent: [  ]
 %
 
-category: 'properties'
-method: RwProjectDefinition
-projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil
-	platformConditionalAtttributesOrNil
-		ifNil: [ 
-			^ properties
-				removeKey:
-					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-				ifAbsent: [  ] ].
-	^ properties
-		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-		put: platformConditionalAtttributesOrNil
-%
-
 category: 'accessing'
 method: RwProjectDefinition
 projectName
@@ -74336,6 +74344,28 @@ category: 'comparing'
 method: RwProjectDefinition
 _projectDefinitionForCompare
 	^ self _projectDefinition
+%
+
+category: 'properties'
+method: RwProjectDefinition
+_projectDefinitionPlatformConditionalAttributes
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		ifAbsent: [  ]
+%
+
+category: 'properties'
+method: RwProjectDefinition
+_projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesOrNil
+	platformConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
+		put: platformConditionalAtttributesOrNil
 %
 
 category: 'private'
@@ -83247,8 +83277,8 @@ asDefinition
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue;
-		projectDefinitionPlatformConditionalAttributes:
-				handle projectDefinitionPlatformConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				handle _projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
 	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
@@ -83449,14 +83479,6 @@ platformConditionalAttributes
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-projectDefinitionPlatformConditionalAttributes
-	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
-
-	^ self resolvedProject projectDefinitionPlatformConditionalAttributes
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
 projectOwnerId
 
 	^ self propertyAt: #'projectOwnerId'
@@ -83488,7 +83510,7 @@ propertiesForCompare
 		at: RwLoadedProject _projectDefinitionSourceKey
 			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
 		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-			put: handle projectDefinitionPlatformConditionalAttributes copy.
+			put: handle _projectDefinitionPlatformConditionalAttributes copy.
 	^ props
 %
 
@@ -83650,6 +83672,14 @@ category: 'comparing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 _projectDefinitionForCompare
 	^ self
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+_projectDefinitionPlatformConditionalAttributes
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
@@ -87046,7 +87076,7 @@ initializeForExport
 category: 'accessing'
 method: RwProjectSpecificationV2
 loadedCommitId
-	^ loadedCommitId
+	^ loadedCommitId ifNil: [ '' ]
 %
 
 category: 'accessing'

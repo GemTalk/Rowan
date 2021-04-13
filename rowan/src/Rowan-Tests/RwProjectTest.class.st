@@ -6,6 +6,10 @@ Class {
 
 { #category : 'tests' }
 RwProjectTest >> testDiskProjectApi [
+	"focus on resolved and loaded projects ... defined project coverage is provvided by RwTestProjectLibraryGeneratorTest"
+
+	"https://github.com/GemTalk/Rowan/issues/566"
+
 	"https://github.com/GemTalk/Rowan/issues/566"
 
 	| projectName definedProject resolvedProject loadedProject componentsRoot |
@@ -28,17 +32,47 @@ RwProjectTest >> testDiskProjectApi [
 	self
 		assert: resolvedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
+	self assert: resolvedProject packageConvention equals: 'RowanHybrid'.
+	self
+		assert: resolvedProject platformConditionalAttributes
+		equals:
+			{'common'.
+			'gemstone'.
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
+	self
+		assert: resolvedProject _projectDefinitionPlatformConditionalAttributes
+		equals: nil.
 
 	loadedProject := resolvedProject load first.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
-	self assert: loadedProject loadedCommitId equals: ''
+	self assert: loadedProject loadedCommitId equals: ''.
+
+	self
+		assert: loadedProject loadedComponentNames asArray sort
+		equals:
+			{'Core'.
+			'tests/Test'} sort.
+	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	self
+		assert: loadedProject platformConditionalAttributes
+		equals:
+			{'common'.
+			'gemstone'.
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
+	self
+		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
+		equals: nil
 ]
 
 { #category : 'tests' }
 RwProjectTest >> testGitProjectApi [
+	"focus on resolved and loaded projects ... defined project coverage is provvided by RwTestProjectLibraryGeneratorTest"
+
 	"https://github.com/GemTalk/Rowan/issues/566"
 
 	| projectName definedProject resolvedProject loadedProject commitId componentsRoot |
@@ -66,6 +100,14 @@ RwProjectTest >> testGitProjectApi [
 	self
 		assert: resolvedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
+	self assert: resolvedProject packageConvention equals: 'RowanHybrid'.
+	self
+		assert: resolvedProject platformConditionalAttributes
+		equals:
+			{'common'.
+			'gemstone'.
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
 
 	loadedProject := resolvedProject load first.
 	loadedProject checkout: 'master'.
@@ -75,7 +117,20 @@ RwProjectTest >> testGitProjectApi [
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
-	self assert: loadedProject loadedCommitId equals: commitId
+	self assert: loadedProject loadedCommitId equals: ''.
+	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+
+	loadedProject reload.	"when a project is loaded FROM DISK, the loadedCommitId is set"
+	self assert: loadedProject loadedCommitId equals: commitId.
+
+	self assert: loadedProject loadedComponentNames asArray sort equals: { 'Core'. 'tests/Test'} sort.
+	self
+		assert: loadedProject platformConditionalAttributes
+		equals:
+			{'common'.
+			'gemstone'.
+			'gemstone-kernel'.
+			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
 ]
 
 { #category : 'tests' }

@@ -61,6 +61,11 @@ RwAbstractUnloadedProject >> load [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> packageConvention [
+	^ self _resolvedProject packageConvention
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> packageFormat: aString [
 	^ self _resolvedProject packageFormat: aString
 ]
@@ -78,6 +83,12 @@ RwAbstractUnloadedProject >> packages [
 { #category : 'actions' }
 RwAbstractUnloadedProject >> packages: aPackageDictionary [
 	self _resolvedProject packages: aPackageDictionary
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> platformConditionalAttributes [
+	"Answer the platformConditionalAttributes that would be used to load the project"
+	^ self _resolvedProject platformConditionalAttributes
 ]
 
 { #category : 'accessing' }

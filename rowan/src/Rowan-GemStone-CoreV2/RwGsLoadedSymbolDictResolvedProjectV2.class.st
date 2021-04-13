@@ -22,6 +22,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionForCompare [
 	^ self
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
@@ -121,8 +128,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue;
-		projectDefinitionPlatformConditionalAttributes:
-				handle projectDefinitionPlatformConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				handle _projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
 	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
@@ -299,13 +306,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> projectDefinitionPlatformConditionalAttributes [
-	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
-
-	^ self resolvedProject projectDefinitionPlatformConditionalAttributes
-]
-
-{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId [
 
 	^ self propertyAt: #'projectOwnerId'
@@ -334,7 +334,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForCompare [
 		at: RwLoadedProject _projectDefinitionSourceKey
 			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
 		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-			put: handle projectDefinitionPlatformConditionalAttributes copy.
+			put: handle _projectDefinitionPlatformConditionalAttributes copy.
 	^ props
 ]
 

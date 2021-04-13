@@ -29,6 +29,13 @@ RwProject >> _loadSpecification [
 	^ self _loadedProject loadSpecification
 ]
 
+{ #category : 'accessing' }
+RwProject >> _projectDefinitionPlatformConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes
+]
+
 { #category : 'private' }
 RwProject >> _projectRepository [
 	^ self _loadedProject handle _projectRepository
@@ -437,12 +444,6 @@ RwProject >> packageNames [
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
-]
-
-{ #category : 'accessing' }
-RwProject >> projectDefinitionPlatformConditionalAttributes [
-
-	^ self _loadedProject projectDefinitionPlatformConditionalAttributes
 ]
 
 { #category : 'accessing' }

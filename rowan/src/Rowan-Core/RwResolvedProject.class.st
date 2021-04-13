@@ -153,6 +153,13 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself
 ]
 
+{ #category : 'accessing' }
+RwResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _resolvedProject _projectDefinitionPlatformConditionalAttributes
+]
+
 { #category : 'testing' }
 RwResolvedProject >> canCommit [
 	^ self _resolvedProject canCommit
