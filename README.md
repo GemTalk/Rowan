@@ -3,6 +3,7 @@
 Rowan is a new project/package manager for Smalltalk that supports FileTree and Tonel repositories.
  
 ## GemStone Installation
+
 ### GemStone 3.2.15 or 3.5.0
 
 #### Prerequisites
