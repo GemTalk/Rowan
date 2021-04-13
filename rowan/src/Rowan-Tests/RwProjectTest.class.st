@@ -25,11 +25,16 @@ RwProjectTest >> testDiskProjectApi [
 	self deny: resolvedProject canCommit.
 	componentsRoot := resolvedProject componentsRoot.
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1.
-	self assert: resolvedProject gemstoneDefaultSymbolDictName equals: self _symbolDictionaryName1 asString.
+	self
+		assert: resolvedProject gemstoneDefaultSymbolDictName
+		equals: self _symbolDictionaryName1 asString.
 
 	loadedProject := resolvedProject load first.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
-	self assert: loadedProject gemstoneDefaultSymbolDictName equals: self _symbolDictionaryName1 asString.
+	self
+		assert: loadedProject gemstoneDefaultSymbolDictName
+		equals: self _symbolDictionaryName1 asString.
+	self assert: loadedProject loadedCommitId equals: ''
 ]
 
 { #category : 'tests' }
@@ -58,14 +63,19 @@ RwProjectTest >> testGitProjectApi [
 	self assert: ((resolvedProject commitLog: 1) includesString: 'initial commit').
 	componentsRoot := resolvedProject componentsRoot.
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1.
-	self assert: resolvedProject gemstoneDefaultSymbolDictName equals: self _symbolDictionaryName1 asString.
+	self
+		assert: resolvedProject gemstoneDefaultSymbolDictName
+		equals: self _symbolDictionaryName1 asString.
 
 	loadedProject := resolvedProject load first.
 	loadedProject checkout: 'master'.
 	self assert: commitId equals: loadedProject commitId.
 	self assert: ((loadedProject commitLog: 1) includesString: 'initial commit').
 	self assert: componentsRoot equals: loadedProject componentsRoot.
-	self assert: loadedProject gemstoneDefaultSymbolDictName equals: self _symbolDictionaryName1 asString.
+	self
+		assert: loadedProject gemstoneDefaultSymbolDictName
+		equals: self _symbolDictionaryName1 asString.
+	self assert: loadedProject loadedCommitId equals: commitId
 ]
 
 { #category : 'tests' }

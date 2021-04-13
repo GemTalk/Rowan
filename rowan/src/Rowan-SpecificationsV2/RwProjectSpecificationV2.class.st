@@ -139,7 +139,7 @@ RwProjectSpecificationV2 >> initializeForExport [
 
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> loadedCommitId [
-	^ loadedCommitId
+	^ loadedCommitId ifNil: [ '' ]
 ]
 
 { #category : 'accessing' }
