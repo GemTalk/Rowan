@@ -33,9 +33,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 			toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject loadSpecification
-		componentNames: { componentName };
-		yourself.
+	resolvedProject componentNames: { componentName }.
 
 	packageDefinition := resolvedProject packageNamed: packageName1.
 

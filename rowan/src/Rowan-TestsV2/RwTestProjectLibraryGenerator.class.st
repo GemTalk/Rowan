@@ -1215,7 +1215,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0023: resolvedProject [
 
 	resolvedProject removeComponentNamed: 'Core'.
 	resolvedProject removeComponentNamed: 'tests/Tests'.
-	resolvedProject  loadSpecification componentNames: {}.
+	resolvedProject componentNames: {}.
 	resolvedProject
 		addLoadComponentNamed: 'Core'
 		comment:
@@ -1398,7 +1398,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0024: resolvedProject [
 			protocol: 'accessing';
 		yourself.
 
-	resolvedProject loadSpecification componentNames: {}.
+	resolvedProject componentNames: {}.
 	resolvedProject
 		removeComponentNamed: 'Core';
 		removeComponentNamed: 'tests/Tests';
@@ -2837,9 +2837,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0051: resolvedProject [
 		comment: 'Single component that includes all of the packages';
 		yourself.
 
-	resolvedProject loadSpecification
-		componentNames: { componentName2 };
-		yourself.
+	resolvedProject componentNames: { componentName2 }.
 
 	^ resolvedProject
 ]
@@ -3374,7 +3372,7 @@ packageGroupName5 :=  'Loader'.
 	resolvedProject
 		comment:
 				'spec_0061 - Package Group Example 1: define using only packages, including references to conditional packages. A collection of classes and packages to populate the following packageGroups: Projects, Loader, Rowan, Examples, Tests, and WorkGroups; where Loader will reference all packages directly, including a couple of platform specific packages; WorkGroups contains a developer defined set of packages that represent a personal working set and will contain at least one package that is not already in a group plus at least one package that IS already in a group.'.
-	resolvedProject _loadSpecification componentNames: {}.
+	resolvedProject componentNames: {}.
 
 	component1 := resolvedProject
 		addLoadComponentNamed: componentName1

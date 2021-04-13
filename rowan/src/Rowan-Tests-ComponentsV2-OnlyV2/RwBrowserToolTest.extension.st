@@ -45,7 +45,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		repoType: #'git';
 		yourself.
 
-	projectDefinition loadSpecification componentNames: {componentName}.
+	projectDefinition componentNames: {componentName}.
 
 	(rootPath asFileReference / projectName) ensureDeleteAll.
 
@@ -72,6 +72,6 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		yourself.
-	resolvedProject loadSpecification componentNames: {componentName}.
+	resolvedProject componentNames: {componentName}.
 	^ resolvedProject
 ]
