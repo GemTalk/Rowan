@@ -568,12 +568,12 @@ RwResolvedProjectV2 >> checkout: aCommittish [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
-	^ self _projectDefinition comment
+	^ self _loadSpecification comment
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
-	self _projectDefinition comment: aString
+	self _loadSpecification comment: aString
 ]
 
 { #category : 'querying' }

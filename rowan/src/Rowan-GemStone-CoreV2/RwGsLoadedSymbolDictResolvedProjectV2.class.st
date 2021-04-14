@@ -146,6 +146,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> checkout: revision [
 	^ self resolvedProject repository checkout: revision
 ]
 
+{ #category : 'testing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> comment [
+
+	^ self resolvedProject comment
+]
+
 { #category : 'queries' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitId [
 
@@ -305,6 +311,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> packagesForCompare [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> packagesRoot [
+	^ self resolvedProject packagesRoot
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> platformConditionalAttributes [
 	"Answer the platformConditionalAttributes used to load the project"
 
@@ -321,6 +332,23 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId [
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectOwnerId: aString [
 
 	^ self propertyAt: #'projectOwnerId' put: aString
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectRoots [
+	^ self resolvedProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectsHome [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	^ self resolvedProject projectsHome
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectsRoot [
+	^ self resolvedProject projectsRoot
 ]
 
 { #category : 'accessing' }
@@ -377,6 +405,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryRootPath [
 RwGsLoadedSymbolDictResolvedProjectV2 >> resolvedProject [
 
 	^ self handle
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> revision [
+	^ self resolvedProject revision
 ]
 
 { #category : 'accessing' }

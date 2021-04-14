@@ -150,12 +150,6 @@ RwProject >> checkout: revision [
 	^ self _loadedProject checkout: revision
 ]
 
-{ #category : 'properties' }
-RwProject >> comment [
-
-	^ self _specification comment
-]
-
 { #category : 'actions' }
 RwProject >> commit: message [
 	"commit the repository associated with receiver ..."
@@ -326,19 +320,6 @@ RwProject >> isLoaded [
 ]
 
 { #category : 'actions' }
-RwProject >> load [
-	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
-			present in the image.
-
-		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
-			and send #load to the project set.
-	"
-
-	^ self _loadedProject load
-]
-
-{ #category : 'actions' }
 RwProject >> load: instanceMigrator [
 	"
 		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
@@ -440,15 +421,24 @@ RwProject >> packageNamed: aString ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
-RwProject >> packageNames [
-
-	^ self _loadedProject packageNames
-]
-
-{ #category : 'accessing' }
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
+]
+
+{ #category : 'accessing' }
+RwProject >> packagesRoot [
+	^ self _concreteProject packagesRoot
+]
+
+{ #category : 'accessing' }
+RwProject >> projectRoots [
+	^ self _concreteProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwProject >> projectsRoot [
+	^ self _concreteProject projectsRoot
 ]
 
 { #category : 'accessing' }
@@ -466,12 +456,6 @@ RwProject >> reload [
 	"
 
 	^ Rowan projectTools load loadProjectNamed: self name
-]
-
-{ #category : 'properties' }
-RwProject >> remote [
-
-	^ self _loadedProject remote
 ]
 
 { #category : 'properties' }
@@ -516,6 +500,11 @@ RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMi
 	"should replace places where a projectSet was created for the receiver"
 
 	^ self error: 'Not yet implmented'
+]
+
+{ #category : 'properties' }
+RwProject >> revision [
+	^ self _concreteProject revision
 ]
 
 { #category : 'actions' }

@@ -25,6 +25,7 @@ RwProjectTest >> _simpleCreateDefinedProjectForRepoType: repoType [
 		addSubcomponentNamed: componentName2 condition: 'tests' comment: 'tests';
 		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
 		addComponentNamed: componentName2 toComponentNamed: componentName1;
+		comment: 'This is a simple project';
 		yourself.
 
 	((definedProject packageNamed: packageName1)

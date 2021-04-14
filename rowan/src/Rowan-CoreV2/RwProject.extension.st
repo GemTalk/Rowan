@@ -95,23 +95,6 @@ RwProject >> gitRepositoryRoot: repositoryRootPathString [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> packageConvention [
-	^ self _loadedProject packageConvention
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> platformConditionalAttributes [
-	"Answer the platformConditionalAttributes used to load the project"
-
-	^ self _loadedProject platformConditionalAttributes
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> projectsHome [
-	^ self _loadedProject resolvedProject projectsHome
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
 	| originalRepositoryRoot |
 	repositoryRootPathString isString
@@ -143,11 +126,6 @@ RwProject >> removePackageNamed: packageName [
 	projectDefinition := self defined.
 	projectDefinition removePackageNamed: packageName.
 	^ projectDefinition load
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> repositoryRoot [
-	^ self _loadedProject repositoryRoot
 ]
 
 { #category : '*rowan-corev2' }

@@ -10,9 +10,7 @@ RwProjectTest >> testDiskProjectApi [
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 
-	"https://github.com/GemTalk/Rowan/issues/566"
-
-	| projectName definedProject resolvedProject loadedProject componentsRoot repositoryRoot |
+	| projectName definedProject resolvedProject loadedProject componentsRoot repositoryRoot comment projectsHome remote packagesRoot projectsRoot revision |
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'disk'.
 	projectName := definedProject name.
 
@@ -45,8 +43,20 @@ RwProjectTest >> testDiskProjectApi [
 		equals: nil.
 	repositoryRoot := resolvedProject repositoryRoot.
 	self
-		assert: (resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		assert:
+			(resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
 		equals: self _symbolDictionaryName1 asString.
+	comment := resolvedProject comment.
+	projectsHome := resolvedProject projectsHome.
+	remote := resolvedProject remote.
+	self
+		assert: resolvedProject packageNames asArray sort
+		equals:
+			{'ExampleProject-Core'.
+			'ExampleProject-Tests'}.
+	packagesRoot := resolvedProject packagesRoot.
+	projectsRoot := resolvedProject projectsRoot.
+	revision := resolvedProject revision.
 
 	loadedProject := resolvedProject load first.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
@@ -73,8 +83,20 @@ RwProjectTest >> testDiskProjectApi [
 		equals: nil.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
-		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
-		equals: self _symbolDictionaryName1 asString
+		assert:
+			(loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		equals: self _symbolDictionaryName1 asString.
+	self assert: loadedProject comment equals: comment.
+	self assert: loadedProject projectsHome equals: projectsHome.
+	self assert: loadedProject remote equals: remote.
+	self
+		assert: loadedProject packageNames asArray sort
+		equals:
+			{'ExampleProject-Core'.
+			'ExampleProject-Tests'}.
+	self assert: loadedProject packagesRoot equals: packagesRoot.
+	self assert: loadedProject projectsRoot equals: projectsRoot.
+	self assert: loadedProject revision equals: revision.
 ]
 
 { #category : 'tests' }
@@ -83,7 +105,7 @@ RwProjectTest >> testGitProjectApi [
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 
-	| projectName definedProject resolvedProject loadedProject commitId componentsRoot repositoryRoot |
+	| projectName definedProject resolvedProject loadedProject commitId componentsRoot repositoryRoot comment projectsHome remote packagesRoot projectsRoot revision |
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'git'.
 	projectName := definedProject name.
 
@@ -119,8 +141,20 @@ RwProjectTest >> testGitProjectApi [
 	self assert: resolvedProject remote equals: 'origin'.
 	repositoryRoot := resolvedProject repositoryRoot.
 	self
-		assert: (resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		assert:
+			(resolvedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
 		equals: self _symbolDictionaryName1 asString.
+	comment := resolvedProject comment.
+	projectsHome := resolvedProject projectsHome.
+	remote := resolvedProject remote.
+	self
+		assert: resolvedProject packageNames asArray sort
+		equals:
+			{'ExampleProject-Core'.
+			'ExampleProject-Tests'}.
+	packagesRoot := resolvedProject packagesRoot.
+	projectsRoot := resolvedProject projectsRoot.
+	revision := resolvedProject revision.
 
 	loadedProject := resolvedProject load first.
 	loadedProject checkout: 'master'.
@@ -132,11 +166,20 @@ RwProjectTest >> testGitProjectApi [
 		equals: self _symbolDictionaryName1 asString.
 	self assert: loadedProject loadedCommitId equals: ''.
 	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	self
+		assert: loadedProject packageNames asArray sort
+		equals:
+			{'ExampleProject-Core'.
+			'ExampleProject-Tests'}.
 
 	loadedProject reload.	"when a project is loaded FROM DISK, the loadedCommitId is set"
 	self assert: loadedProject loadedCommitId equals: commitId.
 
-	self assert: loadedProject loadedComponentNames asArray sort equals: { 'Core'. 'tests/Test'} sort.
+	self
+		assert: loadedProject loadedComponentNames asArray sort
+		equals:
+			{'Core'.
+			'tests/Test'} sort.
 	self
 		assert: loadedProject platformConditionalAttributes
 		equals:
@@ -147,8 +190,20 @@ RwProjectTest >> testGitProjectApi [
 	self assert: loadedProject remote equals: 'origin'.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
-		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
+		assert:
+			(loadedProject gemstoneSymbolDictNameForPackageNamed: 'ExampleProject-Core')
 		equals: self _symbolDictionaryName1 asString.
+	self assert: loadedProject comment equals: comment.
+	self assert: loadedProject projectsHome equals: projectsHome.
+	self assert: loadedProject remote equals: remote.
+	self assert: loadedProject packagesRoot equals: packagesRoot.
+	self assert: loadedProject projectsRoot equals: projectsRoot.
+	self assert: loadedProject revision equals: revision.
+	self
+		assert: loadedProject packageNames asArray sort
+		equals:
+			{'ExampleProject-Core'.
+			'ExampleProject-Tests'}
 ]
 
 { #category : 'tests' }

@@ -48810,6 +48810,13 @@ _projectTools
 
 !		Instance methods for 'RwAbstractProject'
 
+category: 'properties'
+method: RwAbstractProject
+comment
+
+	^ self _concreteProject comment
+%
+
 category: 'transitions'
 method: RwAbstractProject
 defined
@@ -48818,9 +48825,76 @@ defined
 
 category: 'accessing'
 method: RwAbstractProject
+gemstoneDefaultSymbolDictName
+	^ self _concreteProject gemstoneDefaultSymbolDictName
+%
+
+category: 'querying'
+method: RwAbstractProject
+gemstoneSymbolDictNameForPackageNamed: packageName
+
+	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
+%
+
+category: 'transitions'
+method: RwAbstractProject
+load
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+			present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
+			and send #load to the project set.
+	"
+
+	^ self _concreteProject load
+%
+
+category: 'accessing'
+method: RwAbstractProject
+packageConvention
+	^ self _concreteProject packageConvention
+%
+
+category: 'accessing'
+method: RwAbstractProject
+packageNames
+	^self _concreteProject packageNames
+%
+
+category: 'accessing'
+method: RwAbstractProject
+platformConditionalAttributes
+	"Answer the platformConditionalAttributes that would be used to load the project"
+	^ self _concreteProject platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwAbstractProject
 project
 
 	^ self
+%
+
+category: 'accessing'
+method: RwAbstractProject
+projectsHome
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	^ self _concreteProject projectsHome
+%
+
+category: 'accessing'
+method: RwAbstractProject
+remote
+
+	^ self _concreteProject remote
+%
+
+category: 'accessing'
+method: RwAbstractProject
+repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'private'
@@ -48853,12 +48927,6 @@ diskUrl: aString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
-gemstoneDefaultSymbolDictName
-	^ self _concreteProject gemstoneDefaultSymbolDictName
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _concreteProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
@@ -48869,36 +48937,10 @@ gitUrl: aString
 	self _loadSpecification gitUrl: aString
 %
 
-category: 'transitions'
-method: RwAbstractUnloadedProject
-load
-	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
-			present in the image.
-
-		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
-			and send #load to the project set.
-	"
-
-	^ self _concreteProject load
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-packageConvention
-	^ self _concreteProject packageConvention
-%
-
 category: 'accessing'
 method: RwAbstractUnloadedProject
 packageFormat: aString
 	^ self _concreteProject packageFormat: aString
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-packageNames
-	^self _concreteProject packageNames
 %
 
 category: 'actions'
@@ -48915,28 +48957,8 @@ packages: aPackageDictionary
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
-platformConditionalAttributes
-	"Answer the platformConditionalAttributes that would be used to load the project"
-	^ self _concreteProject platformConditionalAttributes
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-projectsHome
-	^self _concreteProject projectsHome
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
 projectsHome: aProjectHomeReferenceOrString
 	self _concreteProject projectsHome: aProjectHomeReferenceOrString
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-remote
-
-	^ self _concreteProject remote
 %
 
 category: 'accessing'
@@ -50012,13 +50034,6 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 %
 
-category: 'querying'
-method: RwResolvedProject
-gemstoneSymbolDictNameForPackageNamed: packageName
-
-	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
-%
-
 category: 'accessing'
 method: RwResolvedProject
 packagesRoot
@@ -50053,12 +50068,6 @@ category: 'accessing'
 method: RwResolvedProject
 repository
 	^ self _concreteProject repository
-%
-
-category: 'accessing'
-method: RwResolvedProject
-repositoryRoot
-	^ self _concreteProject repositoryRoot
 %
 
 category: 'transitions'
@@ -50220,13 +50229,6 @@ category: 'actions'
 method: RwProject
 checkout: revision
 	^ self _loadedProject checkout: revision
-%
-
-category: 'properties'
-method: RwProject
-comment
-
-	^ self _specification comment
 %
 
 category: 'actions'
@@ -50423,20 +50425,6 @@ isLoaded
 
 category: 'actions'
 method: RwProject
-load
-	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
-			present in the image.
-
-		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
-			and send #load to the project set.
-	"
-
-	^ self _loadedProject load
-%
-
-category: 'actions'
-method: RwProject
 load: instanceMigrator
 	"
 		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
@@ -50550,16 +50538,27 @@ packageNamed: aString ifAbsent: absentBlock
 
 category: 'accessing'
 method: RwProject
-packageNames
+packages
 
-	^ self _loadedProject packageNames
+	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
 %
 
 category: 'accessing'
 method: RwProject
-packages
+packagesRoot
+	^ self _concreteProject packagesRoot
+%
 
-	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
+category: 'accessing'
+method: RwProject
+projectRoots
+	^ self _concreteProject projectRoots
+%
+
+category: 'accessing'
+method: RwProject
+projectsRoot
+	^ self _concreteProject projectsRoot
 %
 
 category: 'accessing'
@@ -50579,13 +50578,6 @@ reload
 	"
 
 	^ Rowan projectTools load loadProjectNamed: self name
-%
-
-category: 'properties'
-method: RwProject
-remote
-
-	^ self _loadedProject remote
 %
 
 category: 'properties'
@@ -50634,6 +50626,12 @@ revert: platformConditionalAttributes  instanceMigrator: instanceMigrator
 	"should replace places where a projectSet was created for the receiver"
 
 	^ self error: 'Not yet implmented'
+%
+
+category: 'properties'
+method: RwProject
+revision
+	^ self _concreteProject revision
 %
 
 category: 'actions'
@@ -63914,13 +63912,13 @@ checkout: aCommittish
 category: 'project definition'
 method: RwResolvedProjectV2
 comment
-	^ self _projectDefinition comment
+	^ self _loadSpecification comment
 %
 
 category: 'project definition'
 method: RwResolvedProjectV2
 comment: aString
-	self _projectDefinition comment: aString
+	self _loadSpecification comment: aString
 %
 
 category: 'querying'
@@ -72075,6 +72073,12 @@ method: RwDiskRepositoryDefinitionV2
 doCommit: message
 
 	"noop by default"
+%
+
+category: 'accessing'
+method: RwDiskRepositoryDefinitionV2
+remote
+	^ ''
 %
 
 category: 'testing'
@@ -82349,6 +82353,13 @@ checkout: revision
 	^ self resolvedProject repository checkout: revision
 %
 
+category: 'testing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+comment
+
+	^ self resolvedProject comment
+%
+
 category: 'queries'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 commitId
@@ -82530,6 +82541,12 @@ packagesForCompare
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
+packagesRoot
+	^ self resolvedProject packagesRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
 platformConditionalAttributes
 	"Answer the platformConditionalAttributes used to load the project"
 
@@ -82548,6 +82565,26 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 projectOwnerId: aString
 
 	^ self propertyAt: #'projectOwnerId' put: aString
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectRoots
+	^ self resolvedProject projectRoots
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectsHome
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	^ self resolvedProject projectsHome
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectsRoot
+	^ self resolvedProject projectsRoot
 %
 
 category: 'accessing'
@@ -82611,6 +82648,12 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 resolvedProject
 
 	^ self handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+revision
+	^ self resolvedProject revision
 %
 
 category: 'accessing'
@@ -96017,19 +96060,6 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		usingPackageNamesMap: packageNamesMap
 %
 
-category: '*rowan-gemstone-core'
-method: RwProject
-gemstoneDefaultSymbolDictName
-	^ self _loadedProject gemstoneDefaultSymbolDictName
-%
-
-category: '*rowan-gemstone-core'
-method: RwProject
-gemstoneSymbolDictNameForPackageNamed: packageName
-
-	^ self _loadedProject gemstoneSymbolDictNameForPackageNamed: packageName
-%
-
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString
@@ -96051,26 +96081,6 @@ method: RwProject
 methodEnvForPackageNamed: packageName
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
-%
-
-category: '*rowan-corev2'
-method: RwProject
-packageConvention
-	^ self _loadedProject packageConvention
-%
-
-category: '*rowan-corev2'
-method: RwProject
-platformConditionalAttributes
-	"Answer the platformConditionalAttributes used to load the project"
-
-	^ self _loadedProject platformConditionalAttributes
-%
-
-category: '*rowan-corev2'
-method: RwProject
-projectsHome
-	^ self _loadedProject resolvedProject projectsHome
 %
 
 category: '*rowan-corev2'
@@ -96107,12 +96117,6 @@ removePackageNamed: packageName
 	projectDefinition := self defined.
 	projectDefinition removePackageNamed: packageName.
 	^ projectDefinition load
-%
-
-category: '*rowan-corev2'
-method: RwProject
-repositoryRoot
-	^ self _loadedProject repositoryRoot
 %
 
 category: '*rowan-corev2'

@@ -262,12 +262,6 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
-{ #category : 'querying' }
-RwResolvedProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
-
-	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
-]
-
 { #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
 	^ self _concreteProject packagesRoot
@@ -296,11 +290,6 @@ RwResolvedProject >> readPackageNamesBlock: packageNamesBlock [
 { #category : 'accessing' }
 RwResolvedProject >> repository [
 	^ self _concreteProject repository
-]
-
-{ #category : 'accessing' }
-RwResolvedProject >> repositoryRoot [
-	^ self _concreteProject repositoryRoot
 ]
 
 { #category : 'transitions' }

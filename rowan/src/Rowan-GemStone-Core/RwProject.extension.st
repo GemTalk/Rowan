@@ -28,17 +28,6 @@ RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation ex
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> gemstoneDefaultSymbolDictName [
-	^ self _loadedProject gemstoneDefaultSymbolDictName
-]
-
-{ #category : '*rowan-gemstone-core' }
-RwProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
-
-	^ self _loadedProject gemstoneSymbolDictNameForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwProject >> methodEnvForPackageNamed: packageName [
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName

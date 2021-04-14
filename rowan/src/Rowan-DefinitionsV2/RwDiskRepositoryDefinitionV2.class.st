@@ -64,6 +64,11 @@ RwDiskRepositoryDefinitionV2 >> doCommit: message [
 	"noop by default"
 ]
 
+{ #category : 'accessing' }
+RwDiskRepositoryDefinitionV2 >> remote [
+	^ ''
+]
+
 { #category : 'testing' }
 RwDiskRepositoryDefinitionV2 >> repositoryExists [
 
