@@ -1,11 +1,28 @@
 Class {
 	#name : 'RwResolvedProjectComponentVisitorV2',
-	#superclass : 'RwAbstractProjectComponentVisitorV2',
+	#superclass : 'Object',
 	#instVars : [
+		'projectLoadSpecs',
+		'readComponents',
+		'readProjects',
+		'visitedComponents',
+		'visitedComponentNames',
+		'platformConditionalAttributes',
+		'definedGroupNames',
+		'projectNames',
+		'groupNames',
+		'componentNames',
 		'resolvedProject'
 	],
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'instance creation' }
+RwResolvedProjectComponentVisitorV2 class >> new [
+
+	^super new initialize
+
+]
 
 { #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
@@ -91,6 +108,60 @@ RwResolvedProjectComponentVisitorV2 >> _addPackageNames: somePackageNames for: a
 ]
 
 { #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
+	| componentDirectory selected |
+	self componentNames isEmpty
+		ifTrue: [ ^ #() ].
+	componentDirectory := componentDirPath asFileReference.
+	selected := (self componentNames
+		select: [ :componentName | (visitedComponentNames includes: componentName) not ])
+		collect: [ :componentName | 
+			self readComponents
+				at: componentName
+				ifAbsentPut: [ 
+ 					(RwAbstractRowanProjectLoadComponentV2
+						fromComponentsDirectory: componentDirectory
+						named: componentName)
+						projectName: aProjectName;
+						yourself ] ].
+	^ selected
+
+]
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
+
+	self platformConditionalAttributes do: [:anObject |
+		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
+	^false
+]
+
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _platformAttributeMatchIn: platformMatchersList [
+
+	platformMatchersList do: [:platformPatternMatcher |
+		(self _matchPlatformAttributes: platformPatternMatcher) 
+			ifTrue: [ ^true ] ].
+	^false
+
+]
+
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
+	| urlBase |
+	self projectNames isEmpty
+		ifTrue: [ ^ #() ].
+	urlBase := 'file:' , projectDirPath asFileReference pathString , '/'.
+	^ self projectNames
+		collect: [ :prjName | 
+			self readProjects
+				at: prjName
+				ifAbsentPut: [ 
+					| url |
+					url := urlBase , prjName , '.ston'.
+					RwSpecification fromUrl: url ] ]
+
+]
+{ #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes [
 	| theComponentNames  |
 	resolvedProject := aResolvedProject.
@@ -137,10 +208,35 @@ RwResolvedProjectComponentVisitorV2 >> _visitComponents: componentNamesToRead [
 			self visit: component	"expect all component names to represent loadable components - throw error if a nested component is encountered" ]
 ]
 
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _visited: aComponent [
+
+	visitedComponentNames add:  aComponent name.
+	visitedComponents at: aComponent name put: aComponent.
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> componentNames [
+
+	^ componentNames
+]
+
 { #category : 'accessing' }
 RwResolvedProjectComponentVisitorV2 >> componentsPath [
 
 	^ self resolvedProject componentsRoot
+]
+
+{ #category : 'initialization' }
+RwResolvedProjectComponentVisitorV2 >> initialize [
+	visitedComponentNames := Set new.
+	projectNames := Set new.
+	componentNames := Set new.
+	readComponents := Dictionary new.
+	readProjects := Dictionary new.
+	platformConditionalAttributes := #().
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -149,9 +245,45 @@ RwResolvedProjectComponentVisitorV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> platformConditionalAttributes [
+
+	^ platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> platformConditionalAttributes: aColl [
+
+	platformConditionalAttributes := aColl
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectLoadSpecs [
+
+	^ projectLoadSpecs
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> projectNames [
+
+	^ projectNames
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectComponentVisitorV2 >> projectsPath [
 
 	^ self resolvedProject projectsRoot
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> readComponents [
+
+	^ readComponents
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> readProjects [
+
+	^ readProjects
 ]
 
 { #category : 'accessing' }
@@ -168,4 +300,63 @@ RwResolvedProjectComponentVisitorV2 >> resolvedProject: aResolvedProject [
 RwResolvedProjectComponentVisitorV2 >> visit: aProjectLoadComponent [
 
 	^aProjectLoadComponent acceptVisitor: self
+]
+
+{ #category : 'visiting' }
+RwResolvedProjectComponentVisitorV2 >> visitComponent: aComponent [
+	(visitedComponentNames includes: aComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponent.
+
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					self _addPackageNames: aComponent packageNames for: aComponent.
+					self componentNames addAll: aComponent componentNames.
+					self projectNames addAll: aComponent projectNames ] ].
+
+	(self _components: self componentsPath forProject: aComponent projectName)
+		do: [ :component | 
+			(visitedComponentNames includes: component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
+
+	(self _projects: self projectsPath forProject: aComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> visitedComponents [
+
+	^ visitedComponents
+]
+
+{ #category : 'visiting' }
+RwResolvedProjectComponentVisitorV2 >> visitLoadSpecification: aLoadSpecification [
+
+	self projectLoadSpecs add: aLoadSpecification
+]
+
+{ #category : 'visiting' }
+RwResolvedProjectComponentVisitorV2 >> visitPackageGroupComponent: aComponent [
+	(visitedComponentNames includes: aComponent name)
+		ifTrue: [ ^ self ].
+
+	self _visited: aComponent.
+
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self _platformAttributeMatchIn: platformMatchers)
+				ifTrue: [ 
+					"package group component does not impact list of packages or projects - only used in project browser"
+					self componentNames addAll: aComponent componentNames ] ].
+
+	(self _components: self componentsPath forProject: aComponent projectName)
+		do: [ :component | 
+			(visitedComponentNames includes: component name)
+				ifFalse: [ component acceptNestedVisitor: self ] ].
+
+	(self _projects: self projectsPath forProject: aComponent projectName)
+		do: [ :projectSpec | projectSpec acceptVisitor: self ]
 ]

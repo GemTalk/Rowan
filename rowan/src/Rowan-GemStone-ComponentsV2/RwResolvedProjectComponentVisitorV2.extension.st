@@ -1,7 +1,7 @@
-Extension { #name : 'RwAbstractProjectComponentVisitorV2' }
+Extension { #name : 'RwResolvedProjectComponentVisitorV2' }
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
+RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject: aProjectName [
 	| componentDirectory selected |
 	self componentNames isEmpty
 		ifTrue: [ ^ #() ].
@@ -21,7 +21,7 @@ RwAbstractProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }
-RwAbstractProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
+RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ignored [
 	| urlBase |
 	self projectNames isEmpty
 		ifTrue: [ ^ #() ].
