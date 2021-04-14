@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'private' }
+RwProject >> _concreteProject [
+	^ Rowan image loadedProjectNamed: self name
+]
+
+{ #category : 'private' }
 RwProject >> _loadedComponents [
 	^ self _loadedProject loadedComponentDefinitions
 ]

@@ -5630,7 +5630,7 @@ removeallclassmethods RwAbstractProject
 doit
 (RwAbstractProject
 	subclass: 'RwAbstractUnloadedProject'
-	instVarNames: #( resolvedProject )
+	instVarNames: #( concreteProject )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -49554,10 +49554,16 @@ project
 	^ self
 %
 
-category: 'transitions'
+category: 'private'
 method: RwAbstractProject
-resolve
-	self subclassResponsibility: #'resolve'
+_concreteProject
+	self subclassResponsibility: #'_concreteProject'
+%
+
+category: 'private'
+method: RwAbstractProject
+_loadSpecification
+	^ self _concreteProject _loadSpecification
 %
 
 ! Class implementation for 'RwAbstractUnloadedProject'
@@ -49567,7 +49573,7 @@ resolve
 category: 'accessing'
 method: RwAbstractUnloadedProject
 comment: aString
-	self _resolvedProject comment: aString
+	self _concreteProject comment: aString
 %
 
 category: 'accessing'
@@ -49579,13 +49585,13 @@ diskUrl: aString
 category: 'accessing'
 method: RwAbstractUnloadedProject
 gemstoneDefaultSymbolDictName
-	^ self _resolvedProject gemstoneDefaultSymbolDictName
+	^ self _concreteProject gemstoneDefaultSymbolDictName
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self _concreteProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
 
 category: 'accessing'
@@ -49605,63 +49611,63 @@ load
 			and send #load to the project set.
 	"
 
-	^ self _resolvedProject load
+	^ self _concreteProject load
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 packageConvention
-	^ self _resolvedProject packageConvention
+	^ self _concreteProject packageConvention
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 packageFormat: aString
-	^ self _resolvedProject packageFormat: aString
+	^ self _concreteProject packageFormat: aString
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 packageNames
-	^self _resolvedProject packageNames
+	^self _concreteProject packageNames
 %
 
 category: 'actions'
 method: RwAbstractUnloadedProject
 packages
-	^ self _resolvedProject packages
+	^ self _concreteProject packages
 %
 
 category: 'actions'
 method: RwAbstractUnloadedProject
 packages: aPackageDictionary
-	self _resolvedProject packages: aPackageDictionary
+	self _concreteProject packages: aPackageDictionary
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 platformConditionalAttributes
 	"Answer the platformConditionalAttributes that would be used to load the project"
-	^ self _resolvedProject platformConditionalAttributes
+	^ self _concreteProject platformConditionalAttributes
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 projectsHome
-	^self _resolvedProject projectsHome
+	^self _concreteProject projectsHome
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 projectsHome: aProjectHomeReferenceOrString
-	self _resolvedProject projectsHome: aProjectHomeReferenceOrString
+	self _concreteProject projectsHome: aProjectHomeReferenceOrString
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 remote
 
-	^ self _resolvedProject remote
+	^ self _concreteProject remote
 %
 
 category: 'accessing'
@@ -49698,25 +49704,19 @@ category: 'testing'
 method: RwAbstractUnloadedProject
 useGit
 
-	^self _resolvedProject useGit
+	^self _concreteProject useGit
 %
 
 category: 'private'
 method: RwAbstractUnloadedProject
-_loadSpecification
-	^ self _resolvedProject _loadSpecification
+_concreteProject
+	^ concreteProject
 %
 
 category: 'private'
 method: RwAbstractUnloadedProject
-_resolvedProject
-	^ resolvedProject
-%
-
-category: 'private'
-method: RwAbstractUnloadedProject
-_resolvedProject: aResolvedProject
-	resolvedProject := aResolvedProject
+_concreteProject: aResolvedProject
+	concreteProject := aResolvedProject
 %
 
 ! Class implementation for 'RwDefinedProject'
@@ -49727,7 +49727,7 @@ category: 'instance creation'
 classmethod: RwDefinedProject
 fromLoadedProject: aLoadedProject
 	^ (self newNamed: aLoadedProject name)
-		_resolvedProject: aLoadedProject _loadedProject asDefinition;
+		_concreteProject: aLoadedProject _concreteProject asDefinition;
 		yourself
 %
 
@@ -49735,7 +49735,7 @@ category: 'instance creation'
 classmethod: RwDefinedProject
 fromResolvedProject: aResolvedProject
 	^ (self newNamed: aResolvedProject name)
-		_resolvedProject: aResolvedProject _resolvedProject;
+		_concreteProject: aResolvedProject _concreteProject;
 		yourself
 %
 
@@ -49747,7 +49747,7 @@ newEmbeddedProjectNamed: aName
 	spec := RwEmbeddedLoadSpecificationV2 new
 		projectName: aName;
 		yourself.
-	new _resolvedProject _loadSpecification: spec.
+	new _concreteProject _loadSpecification: spec.
 	^ new
 %
 
@@ -49757,7 +49757,7 @@ newNamed: aName
 
 	^ self new
 		initializeForName: aName;
-		_resolvedProject;
+		_concreteProject;
 		yourself
 %
 
@@ -49768,7 +49768,7 @@ method: RwDefinedProject
 addComponentNamed: componentName toComponentNamed: toComponentName
 	"add existing component named componentName to component named toComponentName"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addComponentNamed: componentName
 		toComponentNamed: toComponentName
 %
@@ -49778,7 +49778,7 @@ method: RwDefinedProject
 addComponentOrPackageGroup: aComponentOrPackageGroup toComponentNamed: toComponentName
 	"add existing component to component named toComponentName"
 
-	self _resolvedProject
+	self _concreteProject
 		addComponentOrPackageGroup: aComponentOrPackageGroup
 		toComponentNamed: toComponentName
 %
@@ -49827,7 +49827,7 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 	Return the last component created.
 	"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addComponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
 		pathNameArray: pathNameArray
@@ -49850,13 +49850,13 @@ addLoadComponentNamed: componentName comment: aString
 	"add a new instance of RwLoadComponent to the project components and add the componentName
 		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
-	^ self _resolvedProject addLoadComponentNamed: componentName comment: aString
+	^ self _concreteProject addLoadComponentNamed: componentName comment: aString
 %
 
 category: 'components'
 method: RwDefinedProject
 addPackageGroupNamed: aComponentName condition: condition comment: aString
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPackageGroupNamed: aComponentName
 		condition: condition
 		comment: aString
@@ -49879,7 +49879,7 @@ addPackageGroupStructureFor: componentBasename startingAtComponentNamed: toCompo
 	Return the last component created.
 	"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPackageGroupStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
 		pathNameArray: pathNameArray
@@ -49892,13 +49892,13 @@ method: RwDefinedProject
 addPackageNamed: packageName
 	"the package is expected to already be present in a component - used when reading packages from disk"
 
-	^ self _resolvedProject addPackageNamed: packageName
+	^ self _concreteProject addPackageNamed: packageName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 addPackageNamed: packageName toComponentNamed: componentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPackageNamed: packageName
 		toComponentNamed: componentName
 %
@@ -49906,7 +49906,7 @@ addPackageNamed: packageName toComponentNamed: componentName
 category: 'accessing'
 method: RwDefinedProject
 addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPackageNamed: packageName
 		toComponentNamed: componentName
 		gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
@@ -49915,7 +49915,7 @@ addPackageNamed: packageName toComponentNamed: componentName gemstoneDefaultSymb
 category: 'accessing'
 method: RwDefinedProject
 addPackagesNamed: packageName toComponentNamed: componentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPackagesNamed: packageName
 		toComponentNamed: componentName
 %
@@ -49923,7 +49923,7 @@ addPackagesNamed: packageName toComponentNamed: componentName
 category: 'components'
 method: RwDefinedProject
 addPlatformSubcomponentNamed: componentName condition: condition comment: aString
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPlatformSubcomponentNamed: componentName
 		condition: condition
 		comment: aString
@@ -49934,7 +49934,7 @@ method: RwDefinedProject
 addPlatformSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPlatformSubcomponentNamed: componentName
 		condition: condition
 		comment: aString
@@ -49956,7 +49956,7 @@ addPlatformSubcomponentNamed: componentName condition: condition toComponentName
 category: 'accessing'
 method: RwDefinedProject
 addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPostloadDoitName: doitName
 		withSource: doitSource
 		toComponentNamed: aComponentName
@@ -49965,7 +49965,7 @@ addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponen
 category: 'accessing'
 method: RwDefinedProject
 addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		addPreloadDoitName: doitName
 		withSource: doitSource
 		toComponentNamed: aComponentName
@@ -49974,7 +49974,7 @@ addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponent
 category: 'accessing'
 method: RwDefinedProject
 addProjectNamed: projectName toComponentNamed: toComponentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		addProjectNamed: projectName
 		toComponentNamed: toComponentName
 %
@@ -49982,13 +49982,13 @@ addProjectNamed: projectName toComponentNamed: toComponentName
 category: 'accessing'
 method: RwDefinedProject
 addRawPackageNamed: packageName
-	^ self _resolvedProject addRawPackageNamed: packageName
+	^ self _concreteProject addRawPackageNamed: packageName
 %
 
 category: 'components'
 method: RwDefinedProject
 addSubcomponentNamed: componentName condition: condition
-	^ self _resolvedProject
+	^ self _concreteProject
 		addSubcomponentNamed: componentName
 		condition: condition
 %
@@ -49996,7 +49996,7 @@ addSubcomponentNamed: componentName condition: condition
 category: 'components'
 method: RwDefinedProject
 addSubcomponentNamed: componentName condition: condition comment: aString
-	^ self _resolvedProject
+	^ self _concreteProject
 		addSubcomponentNamed: componentName
 		condition: condition
 		comment: aString
@@ -50007,7 +50007,7 @@ method: RwDefinedProject
 addSubcomponentNamed: componentName condition: condition comment: aString toComponentNamed: toComponentName
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addSubcomponentNamed: componentName
 		condition: condition
 		comment: aString
@@ -50053,7 +50053,7 @@ addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toCompo
 	Return the last component created.
 	"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		addSubcomponentStructureFor: componentBasename
 		startingAtComponentNamed: toComponentName
 		conditionPathArray: conditionPathArray
@@ -50063,13 +50063,13 @@ addSubcomponentStructureFor: componentBasename startingAtComponentNamed: toCompo
 category: 'accessing'
 method: RwDefinedProject
 componentNamed: componentName
-	^ self _resolvedProject componentNamed: componentName
+	^ self _concreteProject componentNamed: componentName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 componentNamed: aComponentName ifAbsent: absentBlock
-	^ self _resolvedProject componentNamed: aComponentName ifAbsent: absentBlock
+	^ self _concreteProject componentNamed: aComponentName ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -50077,13 +50077,13 @@ method: RwDefinedProject
 componentNames
 	"list of component names from the load specification used to load the project "
 
-	^ self _resolvedProject componentNames
+	^ self _concreteProject componentNames
 %
 
 category: 'accessing'
 method: RwDefinedProject
 componentNames: anArray
-	^ self _resolvedProject componentNames: anArray
+	^ self _concreteProject componentNames: anArray
 %
 
 category: 'accessing'
@@ -50113,7 +50113,7 @@ defined
 category: 'accessing'
 method: RwDefinedProject
 gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-	self _resolvedProject
+	self _concreteProject
 		gemstoneSetDefaultSymbolDictNameForUser: userId
 		to: symbolDictName
 %
@@ -50121,7 +50121,7 @@ gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 category: 'accessing'
 method: RwDefinedProject
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
-	self _resolvedProject
+	self _concreteProject
 		gemstoneSetSymbolDictName: symbolDictName
 		forPackageNamed: packageName
 %
@@ -50129,7 +50129,7 @@ gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 category: 'testing'
 method: RwDefinedProject
 isStrict
-	^ self _resolvedProject isStrict
+	^ self _concreteProject isStrict
 %
 
 category: 'transitions'
@@ -50140,20 +50140,20 @@ loadProjectSet
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	^ self _resolvedProject loadProjectSet
+	^ self _concreteProject loadProjectSet
 %
 
 category: 'accessing'
 method: RwDefinedProject
 loadSpecification
 
-	^ self _resolvedProject loadSpecification
+	^ self _concreteProject loadSpecification
 %
 
 category: 'accessing'
 method: RwDefinedProject
 moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageNamed: toPackageName
-	^ self _resolvedProject
+	^ self _concreteProject
 		moveClassExtensionNamed: aClassName
 		fromPackageNamed: fromPackageName
 		toPackageNamed: toPackageName
@@ -50162,13 +50162,13 @@ moveClassExtensionNamed: aClassName fromPackageNamed: fromPackageName toPackageN
 category: 'accessing'
 method: RwDefinedProject
 moveClassNamed: aClassName toPackageNamed: aPackageName
-	^ self _resolvedProject moveClassNamed: aClassName toPackageNamed: aPackageName
+	^ self _concreteProject moveClassNamed: aClassName toPackageNamed: aPackageName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 movePackageNamed: aPackageName toComponentNamed: aComponentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		movePackageNamed: aPackageName
 		toComponentNamed: aComponentName
 %
@@ -50188,25 +50188,25 @@ packageConvention: aString
 category: 'components'
 method: RwDefinedProject
 packageGroupNamed: componentName
-	^ self _resolvedProject packageGroupNamed: componentName
+	^ self _concreteProject packageGroupNamed: componentName
 %
 
 category: 'components'
 method: RwDefinedProject
 packageGroupNames
-	^ self _resolvedProject packageGroupNames
+	^ self _concreteProject packageGroupNames
 %
 
 category: 'accessing'
 method: RwDefinedProject
 packageNamed: aString
-	^ self _resolvedProject packageNamed: aString
+	^ self _concreteProject packageNamed: aString
 %
 
 category: 'accessing'
 method: RwDefinedProject
 packageNamed: aString ifAbsent: absentBlock
-	^ self _resolvedProject packageNamed: aString ifAbsent: absentBlock
+	^ self _concreteProject packageNamed: aString ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -50218,7 +50218,7 @@ packagesPath: aString
 category: 'accessing'
 method: RwDefinedProject
 projectAlias: aString
-	^ self _resolvedProject projectAlias: aString
+	^ self _concreteProject projectAlias: aString
 %
 
 category: 'accessing'
@@ -50230,7 +50230,7 @@ projectsPath: aString
 category: 'accessing'
 method: RwDefinedProject
 projectSpecFile: relativePathString
-	^ self _resolvedProject projectSpecFile: relativePathString
+	^ self _concreteProject projectSpecFile: relativePathString
 %
 
 category: 'accessing'
@@ -50242,7 +50242,7 @@ projectSpecPath: aString
 category: 'accessing'
 method: RwDefinedProject
 projectsRoot
-	^ self _resolvedProject projectsRoot
+	^ self _concreteProject projectsRoot
 %
 
 category: 'transitions'
@@ -50250,7 +50250,7 @@ method: RwDefinedProject
 read
 	"return a RwDefinedProject with definitions read from disk"
 
-	self _resolvedProject read
+	self _concreteProject read
 %
 
 category: 'transitions'
@@ -50258,7 +50258,7 @@ method: RwDefinedProject
 read: platformConditionalAttributes
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 
-	self _resolvedProject read: platformConditionalAttributes
+	self _concreteProject read: platformConditionalAttributes
 %
 
 category: 'transitions'
@@ -50268,7 +50268,7 @@ readProjectComponentNames: componentNames
 
 	"return the receiver with a new set of definitions read from disk"
 
-	self _resolvedProject readProjectComponentNames: componentNames
+	self _concreteProject readProjectComponentNames: componentNames
 %
 
 category: 'transitions'
@@ -50278,7 +50278,7 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 
 	"return the receiver with a new set of definitions read from disk"
 
-	self _resolvedProject
+	self _concreteProject
 		readProjectComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 %
@@ -50290,7 +50290,7 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 
 	"return the receiver with a new set of definitions read from disk"
 
-	self _resolvedProject
+	self _concreteProject
 		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
@@ -50302,7 +50302,7 @@ readProjectSet
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	self _resolvedProject readProjectSet
+	self _concreteProject readProjectSet
 %
 
 category: 'transitions'
@@ -50312,31 +50312,31 @@ readProjectSet: platformConditionalAttributes
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	self _resolvedProject readProjectSet: platformConditionalAttributes
+	self _concreteProject readProjectSet: platformConditionalAttributes
 %
 
 category: 'accessing'
 method: RwDefinedProject
 removeComponentNamed: aComponentName
-	^ self _resolvedProject removeComponentNamed: aComponentName
+	^ self _concreteProject removeComponentNamed: aComponentName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 removePackageGroupNamed: aComponentName
-	^ self _resolvedProject removePackageGroupNamed: aComponentName
+	^ self _concreteProject removePackageGroupNamed: aComponentName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 removePackageNamed: packageName
-	^ self _resolvedProject removePackageNamed: packageName
+	^ self _concreteProject removePackageNamed: packageName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 removePackageNamed: packageName fromComponentNamed: componentName
-	^ self _resolvedProject
+	^ self _concreteProject
 		removePackageNamed: packageName
 		fromComponentNamed: componentName
 %
@@ -50344,7 +50344,7 @@ removePackageNamed: packageName fromComponentNamed: componentName
 category: 'accessing'
 method: RwDefinedProject
 renameComponentNamed: aComponentPath to: aComponentName
-	^ self _resolvedProject renameComponentNamed: aComponentPath to: aComponentName
+	^ self _concreteProject renameComponentNamed: aComponentPath to: aComponentName
 %
 
 category: 'component structure'
@@ -50357,7 +50357,7 @@ renameComponentStructureFor: componentNamePath to: baseName startingAtComponentN
 		name along the path, the rename process will stop at that point.
 	"
 
-	^ self _resolvedProject
+	^ self _concreteProject
 		renameComponentStructureFor: componentNamePath
 		to: baseName
 		startingAtComponentNamed: startingComponentName
@@ -50366,19 +50366,19 @@ renameComponentStructureFor: componentNamePath to: baseName startingAtComponentN
 category: 'accessing'
 method: RwDefinedProject
 renamePackageGroupNamed: aComponentPath to: aComponentName
-	^ self _resolvedProject renamePackageGroupNamed: aComponentPath to: aComponentName
+	^ self _concreteProject renamePackageGroupNamed: aComponentPath to: aComponentName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 renamePackageNamed: packageName to: newPackageName
-	^ self _resolvedProject renamePackageNamed: packageName to: newPackageName
+	^ self _concreteProject renamePackageNamed: packageName to: newPackageName
 %
 
 category: 'accessing'
 method: RwDefinedProject
 repositoryRoot
-	^ self _resolvedProject repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'accessing'
@@ -50386,7 +50386,7 @@ method: RwDefinedProject
 repoType: aSymbol
 	"#disk, #git or #none"
 
-	self _resolvedProject repoType: aSymbol
+	self _concreteProject repoType: aSymbol
 %
 
 category: 'transitions'
@@ -50407,9 +50407,9 @@ resolveWithParentProject: aResolvedRwProject
 	"give embedded projects a chance to resolve cleanly"
 
 	^ (RwResolvedProject newNamed: self name)
-		_resolvedProject:
+		_concreteProject:
 				(self _loadSpecification
-						resolveWithParentProject: aResolvedRwProject _resolvedProject) resolve;
+						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
 		yourself
 %
 
@@ -50433,42 +50433,36 @@ specsPath: aString
 
 category: 'private'
 method: RwDefinedProject
-_gemstoneAllUsersName
-	^ self _resolvedProject _gemstoneAllUsersName
+_concreteProject
+	^ concreteProject
+		ifNil: [ 
+			concreteProject := RwResolvedProjectV2 new
+				projectName: self name;
+				yourself ]
 %
 
 category: 'private'
 method: RwDefinedProject
-_loadSpecification
-	^ self _resolvedProject _loadSpecification
+_gemstoneAllUsersName
+	^ self _concreteProject _gemstoneAllUsersName
 %
 
 category: 'private'
 method: RwDefinedProject
 _projectRepository
-	^ self _resolvedProject _projectRepository
+	^ self _concreteProject _projectRepository
 %
 
 category: 'private'
 method: RwDefinedProject
 _projectSpecification
-	^ self _resolvedProject _projectSpecification
-%
-
-category: 'private'
-method: RwDefinedProject
-_resolvedProject
-	^ resolvedProject
-		ifNil: [ 
-			resolvedProject := RwResolvedProjectV2 new
-				projectName: self name;
-				yourself ]
+	^ self _concreteProject _projectSpecification
 %
 
 category: 'accessing'
 method: RwDefinedProject
 _validate: platformConfigurationAttributes
-	^ self _resolvedProject _validate: platformConfigurationAttributes
+	^ self _concreteProject _validate: platformConfigurationAttributes
 %
 
 ! Class implementation for 'RwResolvedProject'
@@ -50479,7 +50473,7 @@ category: 'instance creation'
 classmethod: RwResolvedProject
 fromDefinedProject: aDefinedProject
 	^ (self newNamed: aDefinedProject name)
-		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolve;
 		yourself
 %
 
@@ -50489,7 +50483,7 @@ fromStrictDefinedProject: aDefinedProject
 	| createBlock oldPolicy |
 	createBlock := [ 
 	(self newNamed: aDefinedProject name)
-		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolve;
 		yourself ].
 	aDefinedProject isStrict
 		ifTrue: [ ^ createBlock value ].
@@ -50507,7 +50501,7 @@ projectFromUrl: loadSpecUrl
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50521,7 +50515,7 @@ projectFromUrl: loadSpecUrl diskUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50535,7 +50529,7 @@ projectFromUrl: loadSpecUrl gitUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50548,7 +50542,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50562,7 +50556,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50577,7 +50571,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50591,7 +50585,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50605,7 +50599,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50618,7 +50612,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttrib
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50632,7 +50626,7 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 %
 
@@ -50641,13 +50635,13 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 category: 'testing'
 method: RwResolvedProject
 canCommit
-	^ self _resolvedProject canCommit
+	^ self _concreteProject canCommit
 %
 
 category: 'actions'
 method: RwResolvedProject
 checkout: revision
-	^ self _resolvedProject checkout: revision
+	^ self _concreteProject checkout: revision
 %
 
 category: 'actions'
@@ -50655,26 +50649,26 @@ method: RwResolvedProject
 commit: message
 	"commit the repository associated with receiver ..."
 
-	^ self _resolvedProject commit: message
+	^ self _concreteProject commit: message
 %
 
 category: 'querying'
 method: RwResolvedProject
 commitId
 
-	^ self _resolvedProject commitId
+	^ self _concreteProject commitId
 %
 
 category: 'querying'
 method: RwResolvedProject
 commitLog: logLimit
-	^ self _resolvedProject commitLog: logLimit
+	^ self _concreteProject commitLog: logLimit
 %
 
 category: 'accessing'
 method: RwResolvedProject
 componentsRoot
-	^ self _resolvedProject componentsRoot
+	^ self _concreteProject componentsRoot
 %
 
 category: 'transitions'
@@ -50686,31 +50680,31 @@ defined
 category: 'actions'
 method: RwResolvedProject
 export
-	^ self _resolvedProject export
+	^ self _concreteProject export
 %
 
 category: 'actions'
 method: RwResolvedProject
 exportComponents
-	^ self _resolvedProject exportComponents
+	^ self _concreteProject exportComponents
 %
 
 category: 'actions'
 method: RwResolvedProject
 exportLoadSpecification
-	^ self _resolvedProject exportLoadSpecification
+	^ self _concreteProject exportLoadSpecification
 %
 
 category: 'actions'
 method: RwResolvedProject
 exportPackages
-	^ self _resolvedProject exportPackages
+	^ self _concreteProject exportPackages
 %
 
 category: 'actions'
 method: RwResolvedProject
 exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
-	^ self _resolvedProject
+	^ self _concreteProject
 		exportPackages: diskProjectSetDefinition
 		packagesRoot: packagesRoot
 		packageFormat: packageFormat
@@ -50720,13 +50714,13 @@ exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageForma
 category: 'actions'
 method: RwResolvedProject
 exportProjects
-	^ self _resolvedProject exportProjects
+	^ self _concreteProject exportProjects
 %
 
 category: 'actions'
 method: RwResolvedProject
 exportProjectSpecification
-	^ self _resolvedProject exportProjectSpecification
+	^ self _concreteProject exportProjectSpecification
 %
 
 category: 'actions'
@@ -50742,7 +50736,7 @@ exportTopazFormatTo: filePath
 category: 'actions'
 method: RwResolvedProject
 exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods
-	^ self _resolvedProject
+	^ self _concreteProject
 		exportTopazFormatTo: filePath
 		logClassCreation: logClassCreation
 		excludeClassInitializers: excludeClassInitializers
@@ -50753,49 +50747,49 @@ category: 'querying'
 method: RwResolvedProject
 gemstoneSymbolDictNameForPackageNamed: packageName
 
-	^ self _resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
 category: 'accessing'
 method: RwResolvedProject
 packagesRoot
-	^ self _resolvedProject packagesRoot
+	^ self _concreteProject packagesRoot
 %
 
 category: 'accessing'
 method: RwResolvedProject
 projectRoots
-	^ self _resolvedProject projectRoots
+	^ self _concreteProject projectRoots
 %
 
 category: 'accessing'
 method: RwResolvedProject
 projectsRoot
-	^ self _resolvedProject projectsRoot
+	^ self _concreteProject projectsRoot
 %
 
 category: 'actions'
 method: RwResolvedProject
 readPackageNames: packageNames
-	^ self _resolvedProject readPackageNames: packageNames
+	^ self _concreteProject readPackageNames: packageNames
 %
 
 category: 'actions'
 method: RwResolvedProject
 readPackageNamesBlock: packageNamesBlock
-	^ self _resolvedProject readPackageNamesBlock: packageNamesBlock
+	^ self _concreteProject readPackageNamesBlock: packageNamesBlock
 %
 
 category: 'accessing'
 method: RwResolvedProject
 repository
-	^ self _resolvedProject repository
+	^ self _concreteProject repository
 %
 
 category: 'accessing'
 method: RwResolvedProject
 repositoryRoot
-	^ self _resolvedProject repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'transitions'
@@ -50807,26 +50801,26 @@ resolve
 category: 'accessing'
 method: RwResolvedProject
 revision
-	^ self _resolvedProject revision
+	^ self _concreteProject revision
 %
 
 category: 'accessing'
 method: RwResolvedProject
 revision: aString
-	self _resolvedProject revision: aString
+	self _concreteProject revision: aString
 %
 
 category: 'accessing'
 method: RwResolvedProject
 specsRoot
-	^ self _resolvedProject specsRoot
+	^ self _concreteProject specsRoot
 %
 
 category: 'transitions'
 method: RwResolvedProject
 write
 
-	self _resolvedProject
+	self _concreteProject
 		export;
 		exportLoadSpecification
 %
@@ -50836,7 +50830,15 @@ method: RwResolvedProject
 _projectDefinitionPlatformConditionalAttributes
 	"Answer theplatformConditionalAttributes that will be used to load the project"
 
-	^ self _resolvedProject _projectDefinitionPlatformConditionalAttributes
+	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwResolvedProject
+_resolvedProject: aResolvedProject
+	"remove once we've done a build with l_, since this method sent from base"
+
+	concreteProject := aResolvedProject
 %
 
 ! Class implementation for 'RwProject'
@@ -51386,6 +51388,12 @@ method: RwProject
 useGit
 
 	^self _loadedProject useGit
+%
+
+category: 'private'
+method: RwProject
+_concreteProject
+	^ Rowan image loadedProjectNamed: self name
 %
 
 category: 'private'

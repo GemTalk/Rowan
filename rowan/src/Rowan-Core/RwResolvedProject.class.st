@@ -7,7 +7,7 @@ Class {
 { #category : 'instance creation' }
 RwResolvedProject class >> fromDefinedProject: aDefinedProject [
 	^ (self newNamed: aDefinedProject name)
-		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolve;
 		yourself
 ]
 
@@ -16,7 +16,7 @@ RwResolvedProject class >> fromStrictDefinedProject: aDefinedProject [
 	| createBlock oldPolicy |
 	createBlock := [ 
 	(self newNamed: aDefinedProject name)
-		_resolvedProject: aDefinedProject _resolvedProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolve;
 		yourself ].
 	aDefinedProject isStrict
 		ifTrue: [ ^ createBlock value ].
@@ -33,7 +33,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl [
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -46,7 +46,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -59,7 +59,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl gitUrl: urlString [
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -71,7 +71,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -84,7 +84,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -98,7 +98,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -111,7 +111,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -124,7 +124,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -136,7 +136,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -149,7 +149,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_resolvedProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolve;
 		yourself
 ]
 
@@ -157,40 +157,47 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 RwResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
 	"Answer theplatformConditionalAttributes that will be used to load the project"
 
-	^ self _resolvedProject _projectDefinitionPlatformConditionalAttributes
+	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> _resolvedProject: aResolvedProject [
+	"remove once we've done a build with l_, since this method sent from base"
+
+	concreteProject := aResolvedProject
 ]
 
 { #category : 'testing' }
 RwResolvedProject >> canCommit [
-	^ self _resolvedProject canCommit
+	^ self _concreteProject canCommit
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> checkout: revision [
-	^ self _resolvedProject checkout: revision
+	^ self _concreteProject checkout: revision
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> commit: message [
 	"commit the repository associated with receiver ..."
 
-	^ self _resolvedProject commit: message
+	^ self _concreteProject commit: message
 ]
 
 { #category : 'querying' }
 RwResolvedProject >> commitId [
 
-	^ self _resolvedProject commitId
+	^ self _concreteProject commitId
 ]
 
 { #category : 'querying' }
 RwResolvedProject >> commitLog: logLimit [
-	^ self _resolvedProject commitLog: logLimit
+	^ self _concreteProject commitLog: logLimit
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> componentsRoot [
-	^ self _resolvedProject componentsRoot
+	^ self _concreteProject componentsRoot
 ]
 
 { #category : 'transitions' }
@@ -200,27 +207,27 @@ RwResolvedProject >> defined [
 
 { #category : 'actions' }
 RwResolvedProject >> export [
-	^ self _resolvedProject export
+	^ self _concreteProject export
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportComponents [
-	^ self _resolvedProject exportComponents
+	^ self _concreteProject exportComponents
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportLoadSpecification [
-	^ self _resolvedProject exportLoadSpecification
+	^ self _concreteProject exportLoadSpecification
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportPackages [
-	^ self _resolvedProject exportPackages
+	^ self _concreteProject exportPackages
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
-	^ self _resolvedProject
+	^ self _concreteProject
 		exportPackages: diskProjectSetDefinition
 		packagesRoot: packagesRoot
 		packageFormat: packageFormat
@@ -229,12 +236,12 @@ RwResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: pack
 
 { #category : 'actions' }
 RwResolvedProject >> exportProjects [
-	^ self _resolvedProject exportProjects
+	^ self _concreteProject exportProjects
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> exportProjectSpecification [
-	^ self _resolvedProject exportProjectSpecification
+	^ self _concreteProject exportProjectSpecification
 ]
 
 { #category : 'actions' }
@@ -248,7 +255,7 @@ RwResolvedProject >> exportTopazFormatTo: filePath [
 
 { #category : 'actions' }
 RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
-	^ self _resolvedProject
+	^ self _concreteProject
 		exportTopazFormatTo: filePath
 		logClassCreation: logClassCreation
 		excludeClassInitializers: excludeClassInitializers
@@ -258,42 +265,42 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 { #category : 'querying' }
 RwResolvedProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
-	^ self _resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
-	^ self _resolvedProject packagesRoot
+	^ self _concreteProject packagesRoot
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> projectRoots [
-	^ self _resolvedProject projectRoots
+	^ self _concreteProject projectRoots
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> projectsRoot [
-	^ self _resolvedProject projectsRoot
+	^ self _concreteProject projectsRoot
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> readPackageNames: packageNames [
-	^ self _resolvedProject readPackageNames: packageNames
+	^ self _concreteProject readPackageNames: packageNames
 ]
 
 { #category : 'actions' }
 RwResolvedProject >> readPackageNamesBlock: packageNamesBlock [
-	^ self _resolvedProject readPackageNamesBlock: packageNamesBlock
+	^ self _concreteProject readPackageNamesBlock: packageNamesBlock
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> repository [
-	^ self _resolvedProject repository
+	^ self _concreteProject repository
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> repositoryRoot [
-	^ self _resolvedProject repositoryRoot
+	^ self _concreteProject repositoryRoot
 ]
 
 { #category : 'transitions' }
@@ -303,23 +310,23 @@ RwResolvedProject >> resolve [
 
 { #category : 'accessing' }
 RwResolvedProject >> revision [
-	^ self _resolvedProject revision
+	^ self _concreteProject revision
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> revision: aString [
-	self _resolvedProject revision: aString
+	self _concreteProject revision: aString
 ]
 
 { #category : 'accessing' }
 RwResolvedProject >> specsRoot [
-	^ self _resolvedProject specsRoot
+	^ self _concreteProject specsRoot
 ]
 
 { #category : 'transitions' }
 RwResolvedProject >> write [
 
-	self _resolvedProject
+	self _concreteProject
 		export;
 		exportLoadSpecification
 ]

@@ -4,6 +4,16 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'private' }
+RwAbstractProject >> _concreteProject [
+	self subclassResponsibility: #'_concreteProject'
+]
+
+{ #category : 'private' }
+RwAbstractProject >> _loadSpecification [
+	^ self _concreteProject _loadSpecification
+]
+
 { #category : 'transitions' }
 RwAbstractProject >> defined [
 	self subclassResponsibility: #'defined'
@@ -13,9 +23,4 @@ RwAbstractProject >> defined [
 RwAbstractProject >> project [
 
 	^ self
-]
-
-{ #category : 'transitions' }
-RwAbstractProject >> resolve [
-	self subclassResponsibility: #'resolve'
 ]

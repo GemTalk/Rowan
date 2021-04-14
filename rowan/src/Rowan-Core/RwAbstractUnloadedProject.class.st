@@ -2,29 +2,24 @@ Class {
 	#name : 'RwAbstractUnloadedProject',
 	#superclass : 'RwAbstractProject',
 	#instVars : [
-		'resolvedProject'
+		'concreteProject'
 	],
 	#category : 'Rowan-Core'
 }
 
 { #category : 'private' }
-RwAbstractUnloadedProject >> _loadSpecification [
-	^ self _resolvedProject _loadSpecification
+RwAbstractUnloadedProject >> _concreteProject [
+	^ concreteProject
 ]
 
 { #category : 'private' }
-RwAbstractUnloadedProject >> _resolvedProject [
-	^ resolvedProject
-]
-
-{ #category : 'private' }
-RwAbstractUnloadedProject >> _resolvedProject: aResolvedProject [
-	resolvedProject := aResolvedProject
+RwAbstractUnloadedProject >> _concreteProject: aResolvedProject [
+	concreteProject := aResolvedProject
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> comment: aString [
-	self _resolvedProject comment: aString
+	self _concreteProject comment: aString
 ]
 
 { #category : 'accessing' }
@@ -34,12 +29,12 @@ RwAbstractUnloadedProject >> diskUrl: aString [
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneDefaultSymbolDictName [
-	^ self _resolvedProject gemstoneDefaultSymbolDictName
+	^ self _concreteProject gemstoneDefaultSymbolDictName
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
-	self _resolvedProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self _concreteProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 ]
 
 { #category : 'accessing' }
@@ -57,54 +52,54 @@ RwAbstractUnloadedProject >> load [
 			and send #load to the project set.
 	"
 
-	^ self _resolvedProject load
+	^ self _concreteProject load
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageConvention [
-	^ self _resolvedProject packageConvention
+	^ self _concreteProject packageConvention
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageFormat: aString [
-	^ self _resolvedProject packageFormat: aString
+	^ self _concreteProject packageFormat: aString
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageNames [
-	^self _resolvedProject packageNames
+	^self _concreteProject packageNames
 ]
 
 { #category : 'actions' }
 RwAbstractUnloadedProject >> packages [
-	^ self _resolvedProject packages
+	^ self _concreteProject packages
 ]
 
 { #category : 'actions' }
 RwAbstractUnloadedProject >> packages: aPackageDictionary [
-	self _resolvedProject packages: aPackageDictionary
+	self _concreteProject packages: aPackageDictionary
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> platformConditionalAttributes [
 	"Answer the platformConditionalAttributes that would be used to load the project"
-	^ self _resolvedProject platformConditionalAttributes
+	^ self _concreteProject platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> projectsHome [
-	^self _resolvedProject projectsHome
+	^self _concreteProject projectsHome
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> projectsHome: aProjectHomeReferenceOrString [
-	self _resolvedProject projectsHome: aProjectHomeReferenceOrString
+	self _concreteProject projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> remote [
 
-	^ self _resolvedProject remote
+	^ self _concreteProject remote
 ]
 
 { #category : 'accessing' }
@@ -135,5 +130,5 @@ RwAbstractUnloadedProject >> specName [
 { #category : 'testing' }
 RwAbstractUnloadedProject >> useGit [
 
-	^self _resolvedProject useGit
+	^self _concreteProject useGit
 ]
