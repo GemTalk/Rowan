@@ -2,8 +2,7 @@ Class {
 	#name : 'RwProjectDefinition',
 	#superclass : 'RwDefinition',
 	#instVars : [
-		'packages',
-		'comment'
+		'packages'
 	],
 	#category : 'Rowan-Definitions'
 }
@@ -93,18 +92,6 @@ RwProjectDefinition >> addRawPackageNamed: packageName [
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
-]
-
-{ #category : 'properties' }
-RwProjectDefinition >> comment [
-
-	^ comment
-]
-
-{ #category : 'properties' }
-RwProjectDefinition >> comment: aString [
-
-	comment := aString
 ]
 
 { #category : 'initialization' }

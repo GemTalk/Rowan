@@ -7749,7 +7749,7 @@ removeallclassmethods RwPackageDefinition
 doit
 (RwDefinition
 	subclass: 'RwProjectDefinition'
-	instVarNames: #( packages comment )
+	instVarNames: #( packages )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -49724,12 +49724,6 @@ repositoryResolutionPolicy: aSymbolOrNil
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
-specComment: aString
-	self _loadSpecification comment: aString
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
 specComponentNames: anArray
 	self _loadSpecification componentNames: anArray
 %
@@ -50890,7 +50884,7 @@ category: 'transitions'
 method: RwResolvedFromDefinedProject
 loadFromSpec
 	"
-		The project is loaded is loaded as defined on disk and the in-memory project definition is ignored.
+		The project is loaded as defined on disk and the in-memory project definition is ignored.
 	"
 
 	^ self _concreteProject _loadSpecification resolve load
@@ -74026,20 +74020,6 @@ addRawPackageNamed: packageName
 	"see similar comment in addPackages:forComponent: and _addComponent"
 
 	^ self _addPackage: (RwPackageDefinition newNamed: packageName)
-%
-
-category: 'properties'
-method: RwProjectDefinition
-comment
-
-	^ comment
-%
-
-category: 'properties'
-method: RwProjectDefinition
-comment: aString
-
-	comment := aString
 %
 
 category: 'initialization'
