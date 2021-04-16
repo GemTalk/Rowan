@@ -75,7 +75,7 @@ RwProjectTest >> _simpleProjectLifeCycleForRepoType: repoType [
 	projectName :=  resolvedProject1 name.
 	packageName2 := projectName , '-Tests'.
 
-	self assert: resolvedProject1 class == RwResolvedProject.
+	self assert: resolvedProject1 class == RwResolvedFromDefinedProject.
 	self assert: (x := resolvedProject1 repositoryRoot) exists.
 
 	self assert: (resolvedProject1 packageNames includes: packageName2). "packageName2 created and written to disk"
@@ -181,7 +181,7 @@ RwProjectTest >> testResolvedProjectAPI [
 	loadSpecUrl := 'file:'
 		, (resolvedProject1 specsRoot / projectName , 'ston') pathString.
 
-	self assert: resolvedProject1 class == RwResolvedProject.
+	self assert: resolvedProject1 class == RwResolvedFromDefinedProject.
 	self assert: (x := resolvedProject1 repositoryRoot) exists.
 
 	self assert: (resolvedProject1 packageNames includes: packageName1).	"packageName1 created and written to disk"

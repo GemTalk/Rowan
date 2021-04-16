@@ -68,11 +68,6 @@ RwAbstractUnloadedProject >> repositoryResolutionPolicy: aSymbolOrNil [
 ]
 
 { #category : 'accessing' }
-RwAbstractUnloadedProject >> specComment: aString [
-	self _loadSpecification comment: aString
-]
-
-{ #category : 'accessing' }
 RwAbstractUnloadedProject >> specComponentNames: anArray [
 	self _loadSpecification componentNames: anArray
 ]

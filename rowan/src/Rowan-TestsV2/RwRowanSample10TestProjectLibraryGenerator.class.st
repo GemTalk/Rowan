@@ -49,7 +49,7 @@ RwRowanSample10TestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		packageConvention: 'Rowan';
 		yourself.
 

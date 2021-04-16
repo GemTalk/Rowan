@@ -97,7 +97,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0000: resolvedProject [
 	componentName1 := 'Core'.
 	componentName2 := 'tests/Tests'.
 	^ resolvedProject
-		comment: 'spec_0000 definitions';
 		addLoadComponentNamed: componentName1
 			comment: 'Primary component used for loading the core classes.';
 		addSubcomponentNamed: componentName2
@@ -773,8 +772,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0018: resolvedProject [
 		yourself.
 
 	resolvedProject
-		comment:
-				'sample vast/gemstone project, based on project structure in https://github.com/dalehenrich/tonel-demos/tree/rowan_553';
 		addLoadComponentNamed: 'Core'
 			comment: 'Primary component used for loading the core classes.';
 		addSubcomponentStructureFor: componentName
@@ -4223,7 +4220,7 @@ RwTestProjectLibraryGenerator >> genSpec_0000: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4269,7 +4266,7 @@ RwTestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4314,7 +4311,7 @@ RwTestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4359,7 +4356,7 @@ RwTestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4405,7 +4402,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core3'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4471,7 +4468,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4525,7 +4522,7 @@ RwTestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4573,7 +4570,7 @@ RwTestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4626,7 +4623,7 @@ RwTestProjectLibraryGenerator >> genSpec_0007: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4677,7 +4674,7 @@ RwTestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4726,7 +4723,7 @@ RwTestProjectLibraryGenerator >> genSpec_0009: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4775,7 +4772,7 @@ RwTestProjectLibraryGenerator >> genSpec_0010: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4823,7 +4820,7 @@ RwTestProjectLibraryGenerator >> genSpec_0011: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4876,7 +4873,7 @@ RwTestProjectLibraryGenerator >> genSpec_0012: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -4929,7 +4926,7 @@ RwTestProjectLibraryGenerator >> genSpec_0013: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -4984,7 +4981,7 @@ RwTestProjectLibraryGenerator >> genSpec_0014: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5048,7 +5045,7 @@ RwTestProjectLibraryGenerator >> genSpec_0015: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5097,7 +5094,7 @@ RwTestProjectLibraryGenerator >> genSpec_0016: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5145,7 +5142,7 @@ RwTestProjectLibraryGenerator >> genSpec_0017: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5193,7 +5190,7 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		specComponentNames: {};
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5241,7 +5238,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5291,7 +5288,7 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5341,7 +5338,7 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5391,7 +5388,7 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5441,7 +5438,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5495,7 +5492,7 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5545,7 +5542,7 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5597,7 +5594,7 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5650,7 +5647,7 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5702,7 +5699,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: {'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5754,7 +5751,7 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5806,7 +5803,7 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5858,7 +5855,7 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5910,7 +5907,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		specComponentNames: {projectName};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -5960,7 +5957,7 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes: #('tests');
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		specComment: indexCard title;
+		comment: indexCard title;
 		yourself.
 
 	resolvedRepository := self
@@ -6005,7 +6002,7 @@ RwTestProjectLibraryGenerator >> genSpec_0034: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  {};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6050,7 +6047,7 @@ RwTestProjectLibraryGenerator >> genSpec_0035: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6095,7 +6092,7 @@ RwTestProjectLibraryGenerator >> genSpec_0036: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6140,7 +6137,7 @@ RwTestProjectLibraryGenerator >> genSpec_0037: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6185,7 +6182,7 @@ RwTestProjectLibraryGenerator >> genSpec_0038: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6230,7 +6227,7 @@ RwTestProjectLibraryGenerator >> genSpec_0039: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6275,7 +6272,7 @@ RwTestProjectLibraryGenerator >> genSpec_0040: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6320,7 +6317,7 @@ RwTestProjectLibraryGenerator >> genSpec_0041: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6365,7 +6362,7 @@ RwTestProjectLibraryGenerator >> genSpec_0042: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6410,7 +6407,7 @@ RwTestProjectLibraryGenerator >> genSpec_0043: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6455,7 +6452,7 @@ RwTestProjectLibraryGenerator >> genSpec_0044: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6500,7 +6497,7 @@ RwTestProjectLibraryGenerator >> genSpec_0045: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6545,7 +6542,7 @@ RwTestProjectLibraryGenerator >> genSpec_0046: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6590,7 +6587,7 @@ RwTestProjectLibraryGenerator >> genSpec_0047: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6635,7 +6632,7 @@ RwTestProjectLibraryGenerator >> genSpec_0048: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6680,7 +6677,7 @@ RwTestProjectLibraryGenerator >> genSpec_0049: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6725,7 +6722,7 @@ RwTestProjectLibraryGenerator >> genSpec_0050: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' . 'renamed'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6770,7 +6767,7 @@ RwTestProjectLibraryGenerator >> genSpec_0051: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6815,7 +6812,7 @@ RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6860,7 +6857,7 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -6905,7 +6902,7 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
@@ -6966,7 +6963,7 @@ RwTestProjectLibraryGenerator >> genSpec_0055: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
@@ -7027,7 +7024,7 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
@@ -7089,7 +7086,7 @@ RwTestProjectLibraryGenerator >> genSpec_0057: commitMessage [
 		packageConvention: 'Rowan';
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7132,7 +7129,7 @@ RwTestProjectLibraryGenerator >> genSpec_0058: commitMessage [
 		packageConvention: 'Rowan';
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7176,7 +7173,7 @@ RwTestProjectLibraryGenerator >> genSpec_0059: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7222,7 +7219,7 @@ RwTestProjectLibraryGenerator >> genSpec_0060: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7280,7 +7277,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 				{'tests'.
 					'examples'.
 					'dkh'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7335,7 +7332,7 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 					'dkh'.
 					'gemstone'.
 					'pharo'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7390,7 +7387,7 @@ RwTestProjectLibraryGenerator >> genSpec_0063: commitMessage [
 					'dkh'.
 					'gemstone'.
 					'pharo'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -7438,7 +7435,7 @@ RwTestProjectLibraryGenerator >> genSpec_0064: commitMessage [
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
