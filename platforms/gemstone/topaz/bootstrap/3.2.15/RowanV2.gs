@@ -5682,6 +5682,24 @@ removeallmethods RwResolvedProject
 removeallclassmethods RwResolvedProject
 
 doit
+(RwResolvedProject
+	subclass: 'RwResolvedFromDefinedProject'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwResolvedFromDefinedProject
+removeallclassmethods RwResolvedFromDefinedProject
+
+doit
 (RwAbstractProject
 	subclass: 'RwProject'
 	instVarNames: #()
@@ -49571,11 +49589,11 @@ category: 'transitions'
 method: RwAbstractProject
 load
 	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
-			present in the image.
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are 
+			not already present in the image.
 
-		To explicitly load the receiver AND required projects, construct a project set containing projects to be loaded 
-			and send #load to the project set.
+		To explicitly load the receiver AND required projects, construct a project set containing projects to 
+			be loaded and send #load to the project set.
 	"
 
 	^ self _concreteProject load
@@ -50414,13 +50432,13 @@ repoType: aSymbol
 category: 'transitions'
 method: RwDefinedProject
 resolve
-	^ RwResolvedProject fromDefinedProject: self
+	^ RwResolvedFromDefinedProject fromDefinedProject: self
 %
 
 category: 'transitions'
 method: RwDefinedProject
 resolveStrict
-	^ RwResolvedProject fromStrictDefinedProject: self
+	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 %
 
 category: 'accessing'
@@ -50428,7 +50446,7 @@ method: RwDefinedProject
 resolveWithParentProject: aResolvedRwProject
 	"give embedded projects a chance to resolve cleanly"
 
-	^ (RwResolvedProject newNamed: self name)
+	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
 				(self _loadSpecification
 						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
@@ -50842,12 +50860,40 @@ _projectDefinitionPlatformConditionalAttributes
 	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
 %
 
-category: 'accessing'
-method: RwResolvedProject
-_resolvedProject: aResolvedProject
-	"remove once we've done a build with l_, since this method sent from base"
+! Class implementation for 'RwResolvedFromDefinedProject'
 
-	concreteProject := aResolvedProject
+!		Instance methods for 'RwResolvedFromDefinedProject'
+
+category: 'transitions'
+method: RwResolvedFromDefinedProject
+load
+	^ self
+		error:
+			'Projects resoved from a defined project are not guaranteed to produce the same loaded state as loaded from disk (via a load spec). Use loadAsDefined to force the project to be loaded AS DEFINED or loadFromSpec to load from disk and ignored the defined project state'
+%
+
+category: 'transitions'
+method: RwResolvedFromDefinedProject
+loadAsDefined
+	"
+		The project is loaded exactly as defined, i.e., the packages present in the defined project will be
+			loaded into the image exactly as is, without applying any of the conditions defined in the 
+			project's components and without regard to the disk-based definitions. If a project is 'loaded 
+			as defined', a subsequent reload of the loaded project will reload the disk-based definitions 
+			(components and packages).
+	"
+
+	^ self _concreteProject load
+%
+
+category: 'transitions'
+method: RwResolvedFromDefinedProject
+loadFromSpec
+	"
+		The project is loaded is loaded as defined on disk and the in-memory project definition is ignored.
+	"
+
+	^ self _concreteProject _loadSpecification resolve load
 %
 
 ! Class implementation for 'RwProject'

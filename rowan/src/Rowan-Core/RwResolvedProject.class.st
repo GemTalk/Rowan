@@ -160,13 +160,6 @@ RwResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
 	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
 ]
 
-{ #category : 'accessing' }
-RwResolvedProject >> _resolvedProject: aResolvedProject [
-	"remove once we've done a build with l_, since this method sent from base"
-
-	concreteProject := aResolvedProject
-]
-
 { #category : 'testing' }
 RwResolvedProject >> canCommit [
 	^ self _concreteProject canCommit

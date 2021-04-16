@@ -626,19 +626,19 @@ RwDefinedProject >> repoType: aSymbol [
 
 { #category : 'transitions' }
 RwDefinedProject >> resolve [
-	^ RwResolvedProject fromDefinedProject: self
+	^ RwResolvedFromDefinedProject fromDefinedProject: self
 ]
 
 { #category : 'transitions' }
 RwDefinedProject >> resolveStrict [
-	^ RwResolvedProject fromStrictDefinedProject: self
+	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 ]
 
 { #category : 'accessing' }
 RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
 	"give embedded projects a chance to resolve cleanly"
 
-	^ (RwResolvedProject newNamed: self name)
+	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
 				(self _loadSpecification
 						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;

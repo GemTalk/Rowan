@@ -10,7 +10,7 @@ RwProjectTest >> testDiskProjectApi [
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 
-	| projectName definedProject resolvedProject loadedProject componentsRoot repositoryRoot comment projectsHome remote packagesRoot projectsRoot revision |
+	| projectName definedProject resolvedProject loadedProject componentsRoot repositoryRoot comment projectsHome remote packagesRoot projectsRoot revision platformConditionalAttributes |
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'disk'.
 	projectName := definedProject name.
 
@@ -31,8 +31,9 @@ RwProjectTest >> testDiskProjectApi [
 		assert: resolvedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
 	self assert: resolvedProject packageConvention equals: 'RowanHybrid'.
+	platformConditionalAttributes := resolvedProject platformConditionalAttributes.
 	self
-		assert: resolvedProject platformConditionalAttributes
+		assert: platformConditionalAttributes
 		equals:
 			{'common'.
 			'gemstone'.
@@ -51,14 +52,12 @@ RwProjectTest >> testDiskProjectApi [
 	remote := resolvedProject remote.
 	self
 		assert: resolvedProject packageNames asArray sort
-		equals:
-			{'ExampleProject-Core'.
-			'ExampleProject-Tests'}.
+		equals: {'ExampleProject-Core'. 'ExampleProject-Tests'}.
 	packagesRoot := resolvedProject packagesRoot.
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject load first.
+	loadedProject := resolvedProject loadFromSpec first.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
@@ -73,14 +72,10 @@ RwProjectTest >> testDiskProjectApi [
 	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
 	self
 		assert: loadedProject platformConditionalAttributes
-		equals:
-			{'common'.
-			'gemstone'.
-			'gemstone-kernel'.
-			((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)}.
+		equals: platformConditionalAttributes.
 	self
 		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
-		equals: nil.
+		equals: platformConditionalAttributes.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
 		assert:
@@ -91,12 +86,10 @@ RwProjectTest >> testDiskProjectApi [
 	self assert: loadedProject remote equals: remote.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals:
-			{'ExampleProject-Core'.
-			'ExampleProject-Tests'}.
+		equals: {'ExampleProject-Core'}.
 	self assert: loadedProject packagesRoot equals: packagesRoot.
 	self assert: loadedProject projectsRoot equals: projectsRoot.
-	self assert: loadedProject revision equals: revision.
+	self assert: loadedProject revision equals: revision
 ]
 
 { #category : 'tests' }
@@ -156,7 +149,7 @@ RwProjectTest >> testGitProjectApi [
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject load first.
+	loadedProject := resolvedProject loadFromSpec first.
 	loadedProject checkout: 'master'.
 	self assert: commitId equals: loadedProject commitId.
 	self assert: ((loadedProject commitLog: 1) includesString: 'initial commit').
@@ -164,13 +157,11 @@ RwProjectTest >> testGitProjectApi [
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
 		equals: self _symbolDictionaryName1 asString.
-	self assert: loadedProject loadedCommitId equals: ''.
+	self assert: loadedProject loadedCommitId equals: commitId.
 	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals:
-			{'ExampleProject-Core'.
-			'ExampleProject-Tests'}.
+		equals: {'ExampleProject-Core'}.
 
 	loadedProject reload.	"when a project is loaded FROM DISK, the loadedCommitId is set"
 	self assert: loadedProject loadedCommitId equals: commitId.
@@ -201,9 +192,7 @@ RwProjectTest >> testGitProjectApi [
 	self assert: loadedProject revision equals: revision.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals:
-			{'ExampleProject-Core'.
-			'ExampleProject-Tests'}
+		equals: {'ExampleProject-Core'}
 ]
 
 { #category : 'tests' }
