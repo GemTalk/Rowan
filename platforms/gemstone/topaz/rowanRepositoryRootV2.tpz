@@ -17,8 +17,10 @@
 		projectNamed: 'RowanClientServices' 
 			ifPresent: [:project | 
 				project gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices' ].
-	(Rowan projectNamed: 'gemstoneBaseImage') 
-		gitRepositoryRoot: '$ARCHBASE/image'.
+	(System gemEnvironmentVariable: 'ARCHBASE') 
+		ifNotNil: [
+			(Rowan projectNamed: 'gemstoneBaseImage') 
+				gitRepositoryRoot: '$ARCHBASE/image' ].
 %
 	commit
 
