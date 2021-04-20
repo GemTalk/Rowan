@@ -96,6 +96,28 @@ patchV200_MethodSource
 	projectModification := aProjectSetModification elementsModified at: ''Rowan'' ifAbsent: [ ^ false ].
 	packageModification := projectModification packagesModification elementsModified at: ''Rowan-GemStone-LoaderV2'' ifAbsent: [ ^ false ].
 	^ packageModification isEmpty not'
+.
+	'*rowan-gemstone-loader-extensions-onlyv2' ->
+		'applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator symbolList: symbolList
+	| visitor patchSet newClassVersionPatchSet |
+	visitor := visitorClass new.
+	visitor visit: aProjectSetModification.
+	patchSet := visitor patchSet.
+	patchSet loadSymbolList: symbolList.
+	patchSet classesWithNewVersions isEmpty
+		ifTrue: [ 
+			patchSet apply.
+			^ self ].
+	patchSet setupForNewClassVersionUpdates.
+	patchSet classesWithNewVersions
+		do: [ :each | 
+			patchSet
+				updatePatchesForNewClassVersion: each
+				projectModification: aProjectSetModification ].
+	visitor := visitorClass new.
+	visitor visit: aProjectSetModification.
+	newClassVersionPatchSet := visitor patchSet.
+	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator'
 	}
 %
 method
@@ -110,12 +132,19 @@ patchV200
 			dictionaries: GsCurrentSession currentSession symbolList
 			category: (self patchV200_MethodSource at: 2) key
 			environmentId: 0.
+	RwGsImage class
+		compileMethod: (self patchV200_MethodSource at: 3) value
+			dictionaries: GsCurrentSession currentSession symbolList
+			category: (self patchV200_MethodSource at: 3) key
+			environmentId: 0.
 %
 method
 upgradeFromV200_common
 	"common code to upgrade from masterV2.0 to issue_660"
 	| bootstrapRoot stream |
+false ifTrue: [
 	self patchV200.
+].
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
 	stream := WriteStream on: String new.
 	stream 
@@ -124,6 +153,8 @@ upgradeFromV200_common
 		do: [:gsFile |
 			stream nextPutAll: 'input ', (bootstrapRoot / gsFile ) pathString; lf ].
 	GsFileIn _fromStream: stream contents readStream.
+	System commit.
+	self halt.
 %
 method
 upgradeFromV200_1
