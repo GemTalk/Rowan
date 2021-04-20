@@ -79,20 +79,42 @@ rowanVersion
 %
 method
 patchV200_MethodSource
-^'resolveWithParentProject: aResolvedProject
+^ {
+	'actions' -> 
+		'resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
 	^self  resolve'
+.
+	'*rowan-gemstone-loader-extensions-onlyv2' ->
+		'_shouldCloneRowanLoader: aProjectSetModification
+
+	"When modifications are made to the Rowan-GemStone-Loader package in the Rowan project, we need to clone the RowanLoader symbol dictionary"
+
+	| projectModification packageModification |
+	projectModification := aProjectSetModification elementsModified at: ''Rowan'' ifAbsent: [ ^ false ].
+	packageModification := projectModification packagesModification elementsModified at: ''Rowan-GemStone-LoaderV2'' ifAbsent: [ ^ false ].
+	^ packageModification isEmpty not'
+	}
 %
 method
 patchV200
-	RwLoadSpecificationV2 compileMethod: self patchV200_MethodSource.
+	RwLoadSpecificationV2 
+		compileMethod: (self patchV200_MethodSource at: 1) value
+			dictionaries: GsCurrentSession currentSession symbolList
+			category: (self patchV200_MethodSource at: 1) key
+			environmentId: 0.
+	RwGsImage class
+		compileMethod: (self patchV200_MethodSource at: 2) value
+			dictionaries: GsCurrentSession currentSession symbolList
+			category: (self patchV200_MethodSource at: 2) key
+			environmentId: 0.
 %
 method
 upgradeFromV200_common
 	"common code to upgrade from masterV2.0 to issue_660"
-	| bootstrapRoot stream projectSet |
+	| bootstrapRoot stream |
 	self patchV200.
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
 	stream := WriteStream on: String new.
@@ -125,8 +147,8 @@ upgradeFromV200_2
 	defined := rowanProject defined.
 	#( 'Rowan-Services-Core' 'Rowan-Services-CoreV2' 'Rowan-Services-Extensions' 'Rowan-JadeServer') 
 		do: [:packageName | defined removePackageNamed: packageName ].
-	defined load.
-	Rowan projectTools load loadProjectNamed: rowanProject name 
+	defined load. "remove the packages that trigger issue #680"
+	rowanProject loadProjectSet. 
 %
 doit
 	self stdout 
