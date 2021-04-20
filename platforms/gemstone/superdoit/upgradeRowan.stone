@@ -78,7 +78,7 @@ rowanVersion
 					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
 %
 method
-patchV220_MethodSource
+patchV200_MethodSource
 ^'resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
@@ -86,18 +86,14 @@ patchV220_MethodSource
 	^self  resolve'
 %
 method
-patchV220
-	RwLoadSpecificationV2 compileMethod: self patchV220_MethodSource.
+patchV200
+	RwLoadSpecificationV2 compileMethod: self patchV200_MethodSource.
 %
 method
-upgradeFromv200_1
-	"
-		initial version --- having difficulty installing RowanClientServices on top of masterv2.2 ...
-			hitting https://github.com/GemTalk/Rowan/issues/680 (Rowan-Services-Extensions package)
-	"
-	"custom code to upgrade from masterV2.0 to issue_660"
+upgradeFromV200_common
+	"common code to upgrade from masterV2.0 to issue_660"
 	| bootstrapRoot stream projectSet |
-	self patchV220.
+	self patchV200.
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
 	stream := WriteStream on: String new.
 	stream 
@@ -106,7 +102,30 @@ upgradeFromv200_1
 		do: [:gsFile |
 			stream nextPutAll: 'input ', (bootstrapRoot / gsFile ) pathString; lf ].
 	GsFileIn _fromStream: stream contents readStream.
+%
+method
+upgradeFromV200_1
+	"
+		initial attempt --- having difficulty installing RowanClientServices on top of masterv2.2 ...
+			hitting https://github.com/GemTalk/Rowan/issues/680 (Rowan-Services-Extensions package)
+	"
+	self upgradeFromV200_common.
 	rowanProject load.
+	Rowan projectTools load loadProjectNamed: rowanProject name 
+%
+method
+upgradeFromV200_2
+	"
+		second try --- explicitly remove the Rowan Services packages (not needed for functionality
+			and will be reloaded in RowanClientServices project when all is said and done
+	"
+	| defined |
+	self upgradeFromV200_common.
+	rowanProject load.
+	defined := rowanProject defined.
+	#( 'Rowan-Services-Core' 'Rowan-Services-CoreV2' 'Rowan-Services-Extensions' 'Rowan-JadeServer') 
+		do: [:packageName | defined removePackageNamed: packageName ].
+	defined load.
 	Rowan projectTools load loadProjectNamed: rowanProject name 
 %
 doit
@@ -120,6 +139,6 @@ doit
 		project _loadedProject handle projectsHome: self projectsHome ]. 
 	rowanProject gitRepositoryRoot: self rowanRoot.
 	rowanVersion = '2.0.0' asRwSemanticVersionNumber
-		ifTrue: [ self upgradeFromv200_1 ].
+		ifTrue: [ self upgradeFromV200_2 ].
 	^'Rowan upgraded [', rowanProject loadedCommitId, ']'
 %
