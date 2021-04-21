@@ -52,6 +52,25 @@ EXAMPLES
 instvars
 rowanVersion
 rowanProject
+originalProjectInfo
+%
+method
+patchV200_MethodSource
+"keep around in case it's needed"
+^ {
+	'category' -> 'source code'
+	}
+%
+method
+patchV200
+"keep around in case it's needed"
+false ifTrue: [ 
+	RwLoadSpecificationV2 
+		compileMethod: (self patchV200_MethodSource at: 1) value
+			dictionaries: GsCurrentSession currentSession symbolList
+			category: (self patchV200_MethodSource at: 1) key
+			environmentId: 0.
+]
 %
 method
 rowanProject
@@ -78,108 +97,48 @@ rowanVersion
 					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
 %
 method
-patchV200_MethodSource
-^ {
-	'actions' -> 
-		'resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	self projectsHome: aResolvedProject projectsHome.
-	^self  resolve'
-.
-	'*rowan-gemstone-loader-extensions-onlyv2' ->
-		'_shouldCloneRowanLoader: aProjectSetModification
-
-	"When modifications are made to the Rowan-GemStone-Loader package in the Rowan project, we need to clone the RowanLoader symbol dictionary"
-
-	| projectModification packageModification |
-	projectModification := aProjectSetModification elementsModified at: ''Rowan'' ifAbsent: [ ^ false ].
-	packageModification := projectModification packagesModification elementsModified at: ''Rowan-GemStone-LoaderV2'' ifAbsent: [ ^ false ].
-	^ packageModification isEmpty not'
-.
-	'*rowan-gemstone-loader-extensions-onlyv2' ->
-		'applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator symbolList: symbolList
-	| visitor patchSet newClassVersionPatchSet |
-	visitor := visitorClass new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet loadSymbolList: symbolList.
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	patchSet setupForNewClassVersionUpdates.
-	patchSet classesWithNewVersions
-		do: [ :each | 
-			patchSet
-				updatePatchesForNewClassVersion: each
-				projectModification: aProjectSetModification ].
-	visitor := visitorClass new.
-	visitor visit: aProjectSetModification.
-	newClassVersionPatchSet := visitor patchSet.
-	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator'
-	}
+createSymbolDictionaries
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
+		do: [:symbolName | 
+			| newDict size |
+			RwGsImage 
+				symbolDictNamed: symbolName
+				ifAbsent: [ 
+					newDict := SymbolDictionary new
+						name: symbolName;
+						objectSecurityPolicy: symbolList objectSecurityPolicy;
+						yourself.
+					size := System myUserProfile symbolList size.
+					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
+  true
 %
 method
-patchV200
-	RwLoadSpecificationV2 
-		compileMethod: (self patchV200_MethodSource at: 1) value
-			dictionaries: GsCurrentSession currentSession symbolList
-			category: (self patchV200_MethodSource at: 1) key
-			environmentId: 0.
-	RwGsImage class
-		compileMethod: (self patchV200_MethodSource at: 2) value
-			dictionaries: GsCurrentSession currentSession symbolList
-			category: (self patchV200_MethodSource at: 2) key
-			environmentId: 0.
-	RwGsImage class
-		compileMethod: (self patchV200_MethodSource at: 3) value
-			dictionaries: GsCurrentSession currentSession symbolList
-			category: (self patchV200_MethodSource at: 3) key
-			environmentId: 0.
-%
-method
-upgradeFromV200_common
-	"common code to upgrade from masterV2.0 to issue_660"
-	| bootstrapRoot stream |
-false ifTrue: [
-	self patchV200.
-].
-	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
-	stream := WriteStream on: String new.
-	stream 
-		nextPutAll: 'set enableremoveall false'; lf.
-	{'RowanV2.gs' . 'RowanV2_stubs.gs' . 'RowanV2_tonel.gs'} 
-		do: [:gsFile |
-			stream nextPutAll: 'input ', (bootstrapRoot / gsFile ) pathString; lf ].
-	GsFileIn _fromStream: stream contents readStream.
+upgradeFromV200
+	"
+		disown everything .... bootstrap Rowan from .gs files ... adopt Rowan and then adopt other projects
+	"
+	| bootstrapRoot disownTool |
+	originalProjectInfo := Dictionary new.
+	disownTool := Rowan projectTools disown.
+	Rowan projects do: [:project |
+		originalProjectInfo 
+			at: project name 
+			put: 
+				(Dictionary new
+					at: 'repositoryRoot' put: project repositoryRootPath;
+					yourself).
+		disownTool disownProjectNamed: project name ].
 	System commit.
-	self halt.
-%
-method
-upgradeFromV200_1
-	"
-		initial attempt --- having difficulty installing RowanClientServices on top of masterv2.2 ...
-			hitting https://github.com/GemTalk/Rowan/issues/680 (Rowan-Services-Extensions package)
-	"
-	self upgradeFromV200_common.
-	rowanProject load.
-	Rowan projectTools load loadProjectNamed: rowanProject name 
-%
-method
-upgradeFromV200_2
-	"
-		second try --- explicitly remove the Rowan Services packages (not needed for functionality
-			and will be reloaded in RowanClientServices project when all is said and done
-	"
-	| defined |
-	self upgradeFromV200_common.
-	rowanProject load.
-	defined := rowanProject defined.
-	#( 'Rowan-Services-Core' 'Rowan-Services-CoreV2' 'Rowan-Services-Extensions' 'Rowan-JadeServer') 
-		do: [:packageName | defined removePackageNamed: packageName ].
-	defined load. "remove the packages that trigger issue #680"
-	rowanProject loadProjectSet. 
+false ifTrue: [ ^ self ].	"ALL Rowan metadata is removed from image"
+	self createSymbolDictionaries.
+	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
+	{ 'RowanV2_stubs_boot.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_tonel.gs' . 'RowanV2_stubs.gs' } 
+		do: [:gsFile |
+			GsFileIn fromServerPath: (bootstrapRoot / gsFile) pathString ].
+	System commit.
 %
 doit
 	self stdout 
@@ -192,6 +151,8 @@ doit
 		project _loadedProject handle projectsHome: self projectsHome ]. 
 	rowanProject gitRepositoryRoot: self rowanRoot.
 	rowanVersion = '2.0.0' asRwSemanticVersionNumber
-		ifTrue: [ self upgradeFromV200_2 ].
+		ifTrue: [ self upgradeFromV200 ].
+
+true ifTrue: [ ^ 'disowned projects: ', originalProjectInfo keys asArray printString, '; bootstrapped projects from .gs files from ', self rowanRoot printString ].
 	^'Rowan upgraded [', rowanProject loadedCommitId, ']'
 %
