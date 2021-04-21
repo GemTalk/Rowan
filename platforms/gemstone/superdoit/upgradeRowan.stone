@@ -56,21 +56,85 @@ originalProjectInfo
 %
 method
 patchV200_MethodSource
-"keep around in case it's needed"
 ^ {
-	'category' -> 'source code'
+	'Updating the Method Dictionary' -> 'compileMethod: sourceString dictionaries: aSymbolList category: aCategoryString environmentId: environmentId
+	"This compiles some source code for the receiver.  The first argument,
+ sourceString, is the string of source code to be compiled.  The second
+ argument is a SymbolList to be used in parsing, along with the list of all
+ class variables and pool dictionaries for the receiver and all of its
+ superclasses.  The third argument (a String) indicates the method''s category.
+
+ sourceString must be a kind of String or DoubleByteString.  Instances of
+ JapaneseString are not supported as source strings.  String literals
+ (''abc'') are generated as instances of the class of sourceString,
+ unless sourceString is a Symbol, in which case ''abc'' produces a String.
+ If sourceString is a DoubleByteSymbol, ''abc'' produces a DoubleByteString.
+
+ anEnvironmentId must be a SmallInteger >= 0 and <= 16rFFFF.
+ 0 denotes the base Smalltalk image.  1 was reserved for use by Ruby .
+
+ If there are no errors, this adds the resulting compiled method to the
+ receiver''s method dictionary and returns that method,
+ otherwise signals a CompileError .
+ A CompileWarning may be signaled, after adding the new method
+ to a receiver''s method dictionary."
+
+	| symList categ meth |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+
+	aSymbolList class == SymbolList
+		ifTrue: [ symList := aSymbolList ]
+		ifFalse: [ 
+			aSymbolList _validateClass: Array.
+			symList := SymbolList withAll: aSymbolList ].
+	categ := aCategoryString asSymbol.
+
+	GsObjectSecurityPolicy
+		setCurrent: self objectSecurityPolicy
+		while: [ 
+			meth := self
+				compileMethod: sourceString
+				dictionaries: symList
+				category: categ
+				intoMethodDict: nil
+				intoCategories: nil
+				environmentId: environmentId ].
+	^ meth
+'
+
+.
+
+	'*rowan-gemstone-kernel-36x' -> 'currentProject: ignored'
+
+.
+
+	'*rowan-gemstone-kernel-36x' -> 'currentPackage: ignored'
+
+.
+
 	}
 %
 method
 patchV200
-"keep around in case it's needed"
-false ifTrue: [ 
-	RwLoadSpecificationV2 
+	"update/add methods that are needed for GsFileIn to be functional
+			use compilation method that has not been touched by Rowan"
+	Behavior 
 		compileMethod: (self patchV200_MethodSource at: 1) value
 			dictionaries: GsCurrentSession currentSession symbolList
-			category: (self patchV200_MethodSource at: 1) key
+			category: (self patchV200_MethodSource at: 1) key asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
 			environmentId: 0.
-]
+
+	2 to: 3 do: [:index |
+		GsFileIn 
+			compileMethod: (self patchV200_MethodSource at: index) value
+				dictionaries: GsCurrentSession currentSession symbolList
+				category: (self patchV200_MethodSource at: index) key asSymbol
+				intoMethodDict: nil
+				intoCategories: nil
+				environmentId: 0 ].
 %
 method
 rowanProject
@@ -97,32 +161,63 @@ rowanVersion
 					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
 %
 method
-createSymbolDictionaries
+createRowanSymbolDictionaries
 	| session symbolList |
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
-		do: [:symbolName | 
+		do: [:symbolDictName | 
 			| newDict size |
 			RwGsImage 
-				symbolDictNamed: symbolName
+				symbolDictNamed: symbolDictName
 				ifAbsent: [ 
 					newDict := SymbolDictionary new
-						name: symbolName;
+						name: symbolDictName;
 						objectSecurityPolicy: symbolList objectSecurityPolicy;
 						yourself.
 					size := System myUserProfile symbolList size.
 					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
-  true
+%
+method
+removeRowanSymbolDictionaries
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	#( #RowanKernel #RowanLoader #RowanTools )
+		do: [:symbolDictName |
+			symbolList removeIdentical: (RwGsImage symbolDictNamed: symbolDictName) ]
+%
+method
+collectRowanExtensionMethods
+	"collect the extension methods for classes that are not in the Rowan project ... 
+		they will be removed before bootstrap .gs files are loaded"
+	|  rowanBaseExtensionMethods |
+	rowanBaseExtensionMethods := IdentitySet new.
+	rowanProject packages 
+		do: [:package |
+			package _loadedPackage loadedClassExtensions do: [:loadedClassExtension |
+				| beh |
+				beh := loadedClassExtension handle.
+				beh rowanProjectName ~= 'Rowan'
+					ifTrue: [
+						loadedClassExtension 
+							loadedInstanceMethodsDo: [:proj :pack :class :meth | rowanBaseExtensionMethods add: meth handle ]
+							loadedClassMethodsDo: [:proj :pack :class :meth | rowanBaseExtensionMethods add: meth handle ] ] ] ]. 
+	^ rowanBaseExtensionMethods asArray
 %
 method
 upgradeFromV200
 	"
-		disown everything .... bootstrap Rowan from .gs files ... adopt Rowan and then adopt other projects
+		- disown everything
+		- remove Rowan classes and Rowan extension methods in non-Rowan classes
+		- bootstrap Rowan from .gs files
+		- adopt/reload Rowan
+		- adopt/reload other projects
 	"
-	| bootstrapRoot disownTool |
+	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths |
 	originalProjectInfo := Dictionary new.
 	disownTool := Rowan projectTools disown.
+	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
 	Rowan projects do: [:project |
 		originalProjectInfo 
 			at: project name 
@@ -132,12 +227,24 @@ upgradeFromV200
 					yourself).
 		disownTool disownProjectNamed: project name ].
 	System commit.
-false ifTrue: [ ^ self ].	"ALL Rowan metadata is removed from image"
-	self createSymbolDictionaries.
+	"get some business out of the way while FileSystemGs is still functional"
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
-	{ 'RowanV2_stubs_boot.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_tonel.gs' . 'RowanV2_stubs.gs' } 
-		do: [:gsFile |
-			GsFileIn fromServerPath: (bootstrapRoot / gsFile) pathString ].
+	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_tonel.gs' . 'RowanV2_stubs.gs' }
+		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
+	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
+	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
+	System commit.
+	rowanBaseExtensionMethods 
+		do: [:meth | 
+			"remove extension methods from classes that aren't in the Rowan project"
+			meth _inClass removeSelector: meth selector ].
+	System commit.
+	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
+	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
+	bootstrapFilePaths
+		do: [:bootstrapFilePath |
+			GsFileIn fromServerPath: bootstrapFilePath ].
+	"END WARNING: Rowan is functional again"
 	System commit.
 %
 doit
