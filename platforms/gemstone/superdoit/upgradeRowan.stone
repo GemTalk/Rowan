@@ -229,7 +229,7 @@ upgradeFromV200
 	System commit.
 	"get some business out of the way while FileSystemGs is still functional"
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
-	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_tonel.gs' . 'RowanV2_stubs.gs' }
+	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2_tonel.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_stubs.gs' }
 		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
 	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
 	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
@@ -243,6 +243,7 @@ upgradeFromV200
 	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
 	bootstrapFilePaths
 		do: [:bootstrapFilePath |
+			self stdout tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
 			GsFileIn fromServerPath: bootstrapFilePath ].
 	"END WARNING: Rowan is functional again"
 	System commit.
