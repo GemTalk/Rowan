@@ -274,7 +274,6 @@ upgradeFromV200
 	rowanBaseExtensionMethods 
 		do: [:meth | 
 			"remove extension methods from classes that aren't in the Rowan project"
-			self log tab; nextPutAll: 'Removing Rowan extension method: ', meth _inClass printString, '>>', meth selector printString; lf.
 			meth _inClass removeSelector: meth selector ].
 	System commit.
 	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
