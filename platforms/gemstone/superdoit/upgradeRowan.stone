@@ -165,8 +165,12 @@ rowanVersion
 method
 log
 	self logging
-		ifTrue: [ ^ self stdout ]
-		ifFalse: [ ^ WriteStream on: String new ].
+		ifTrue: [  
+			SessionTemps current at: #'ROWAN_TRACE' put: #'gciLogServer'.	"enable Rowan tracing"
+			^ self stdout ]
+		ifFalse: [ 
+			SessionTemps current at: #'ROWAN_TRACE' put: nil. "disable Rowan tracing and topaz `input` tracing ... (in 3.7.0 and beyond)"
+			^ WriteStream on: String new ].
 %
 method
 writeSymbolListInfo: symbolList
@@ -239,7 +243,7 @@ adoptAndReloadProject: projectName
 	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
 		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
 	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
-	| loadedProjects audits rowanAssoc tracer wasTracing rowanKernel rowan rowanMetadata |
+	| loadedProjects audits rowanAssoc tracer rowanKernel rowan rowanMetadata |
 	"Create loaded project, traverse the package definitions and create loaded packages"
 	rowanMetadata := self metadataFor: projectName.
 	[ 
@@ -257,8 +261,6 @@ adoptAndReloadProject: projectName
 			do: [ :ex | 
 					| theBehavior |
 					tracer := (rowanKernel at: #Rowan) projectTools trace.
-					wasTracing := tracer isTracing.
-					tracer startTracing.
 					theBehavior := (rowanKernel at: #Rowan) globalNamed: ex className.
 					ex isMetaclass
 						ifTrue: [ theBehavior := theBehavior class ].
@@ -270,11 +272,9 @@ adoptAndReloadProject: projectName
 					 	tracer trace: theBehavior printString, '>>', 
 							ex selector printString, 
 							' is an expected audit failure (Missing loaded method) at this juncture -- IGNORED'.
-						wasTracing ifFalse: [ tracer stopTracing ].
 						ex resume: false	"no audit error" ]
 					ifFalse: [ 
 						"issue audit error"
-						wasTracing ifFalse: [ tracer stopTracing ].
 						ex resume: true ] ].
 	audits do: [:assoc |
 	assoc value isEmpty 
@@ -372,9 +372,12 @@ doit
 		nextPutAll: 'Rown project root = ', self rowanRoot asFileReference pathString;
 		lf; tab;
 		nextPutAll: 'ROWAN_PROJECTS_HOME = ', self projectsHome asFileReference pathString; lf.
-	Rowan projects do: [:project |
-		project _loadedProject handle projectsHome: self projectsHome ]. 
+	(self optionsDict at: 'projectsHome') wasSet
+		ifTrue: [
+			Rowan projects do: [:project |
+				project _loadedProject handle projectsHome: self projectsHome ] ]. 
 	rowanProject gitRepositoryRoot: self rowanRoot.
+	self log.	"trigger desired Rowan logging"
 	rowanVersion = '2.0.0' asRwSemanticVersionNumber
 		ifTrue: [ self upgradeFromV200 ].
 
