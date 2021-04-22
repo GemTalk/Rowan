@@ -250,6 +250,12 @@ upgradeFromV200
 		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
 	RwGsPlatform reset. 
 	RwGsPlatform _userPlatformDictionary removeKey: #RwUserPlatform_Preferences ifAbsent: [].
+	System myUserProfile symbolList do: [:symDict |
+		"remove Rowan metadata from symbol dictionaries that were not dropped on floor (Globals and UserData)" 
+		symDict 
+			removeKey: #RwSymbolDictionaryRegistry ifAbsent: [];
+			removeKey: #RwGsLoadedProjectRegistry ifAbsent: [];
+			yourself ].
 	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
 	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
 	published := GsCurrentSession currentSession objectNamed: #Published.
@@ -263,7 +269,6 @@ upgradeFromV200
 			self stdout tab; nextPutAll: 'Removing Rowan extension method: ', meth _inClass printString, '>>', meth selector printString; lf.
 			meth _inClass removeSelector: meth selector ].
 	System commit.
-self halt.
 	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
 	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
 	bootstrapFilePaths
