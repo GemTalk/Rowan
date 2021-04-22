@@ -235,17 +235,18 @@ metadataFor: projectName
 	^ originalProjectInfo at: projectName
 %
 method
-adoptAndReloadRowan
-	"POST RELOAD OF ROWAN ... so NO COMPILED REFERENCES TO ROWAN CLASSES CAN BE TRUSTED"
+adoptAndReloadProject: projectName
+	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
+		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
 	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
 	| loadedProjects audits rowanAssoc tracer wasTracing rowanKernel rowan rowanMetadata |
-	"Create loaded Rowan project, traverse the package definitions and create loaded packages"
-	rowanMetadata := self metadataFor: 'Rowan'.
+	"Create loaded project, traverse the package definitions and create loaded packages"
+	rowanMetadata := self metadataFor: projectName.
 	[ 
 		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
 		rowan := rowanKernel at: #Rowan.
 		rowan projectTools adopt
-      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/Rowan.ston'
+      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/', (rowanMetadata at: 'specName'), '.ston'
       projectsHome: (rowanMetadata at: 'projectsHome').
     System commit.
     "Reload Rowan and required projects to make sure that we're using the latest code from repository
@@ -279,7 +280,14 @@ adoptAndReloadRowan
 	assoc value isEmpty 
 		ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
 	System commit.
+%
+method
+adoptAndReloadRowan
+	"POST RELOAD OF ROWAN ... so NO COMPILED REFERENCES TO ROWAN CLASSES CAN BE TRUSTED"
+	| rowanKernel rowanAssoc |
+	self adoptAndReloadProject: 'Rowan'.
 	"Install Rowan association in Published"
+	rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
 	rowanAssoc := rowanKernel associationAt: #Rowan.
 	Published add: rowanAssoc. 
 	System commit.
@@ -298,13 +306,18 @@ upgradeFromV200
 	disownTool := Rowan projectTools disown.
 	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
 	Rowan projects do: [:project |
-		originalProjectInfo 
-			at: project name 
-			put: 
-				(Dictionary new
-					at: 'repositoryRoot' put: project repositoryRootPath;
-					at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
-					yourself).
+		project name = 'superDoit'	"for the time being, skip superDoit"
+			ifTrue: [ 
+				self log tab; nextPutAll: 'SKIPPING superDoit ... assumed to be installed in transient symbol list'; lf]
+			ifFalse: [
+				originalProjectInfo 
+					at: project name 
+					put: 
+						(Dictionary new
+							at: 'repositoryRoot' put: project repositoryRootPath;
+							at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
+							at: 'specName' put: project _loadedProject resolvedProject _loadSpecification specName; "avoiding a bug in v2.0.0"
+							yourself) ].
 		disownTool disownProjectNamed: project name ].
 	System commit.
 	"get some business out of the way while FileSystemGs is still functional"
@@ -346,7 +359,11 @@ upgradeFromV200
 	rowan projects do: [:project |
 		originalProjectInfo removeKey: project name ifAbsent: [] ].
 	originalProjectInfo keysAndValuesDo: [:projectName :projectMetaData |
-		self log tab; nextPutAll: 'Adopting ' , projectName; lf ].
+		projectName = Rowan unpackagedProjectName
+			ifTrue: [
+				self log tab; nextPutAll: 'Skipping ' , projectName; lf]
+			ifFalse: [ 
+				self log tab; nextPutAll: 'Adopting ' , projectName; lf ] ].
 %
 doit
 	self stdout 
