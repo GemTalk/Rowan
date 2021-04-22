@@ -21,6 +21,7 @@ options
 {
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanRoot' default: '$ROWAN_PROJECTS_HOME/Rowan'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+	SuperDoitOptionalOptionWithNoArg long: 'logging' short: 'L'.
 }
 %
 usage
@@ -53,6 +54,7 @@ instvars
 rowanVersion
 rowanProject
 originalProjectInfo
+logging
 %
 method
 patchV200_MethodSource
@@ -161,21 +163,27 @@ rowanVersion
 					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
 %
 method
+log
+	self logging
+		ifTrue: [ ^ self stdout ]
+		ifFalse: [ ^ WriteStream on: String new ].
+%
+method
 writeSymbolListInfo: symbolList
 	| transientSymbolList |
-	self stdout tab; nextPutAll: 'SymbolList: ', symbolList class name asString, ' [', symbolList asOop printString, ']'; lf.
+	self log tab; nextPutAll: 'SymbolList: ', symbolList class name asString, ' [', symbolList asOop printString, ']'; lf.
 	symbolList do: [:symbolDict |
-		self stdout tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+		self log tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
 	transientSymbolList := GsSession currentSession symbolList.
-	self stdout tab; nextPutAll: 'Transient SymbolList: ', transientSymbolList class name asString, ' [', transientSymbolList asOop printString, ']'; lf.
+	self log tab; nextPutAll: 'Transient SymbolList: ', transientSymbolList class name asString, ' [', transientSymbolList asOop printString, ']'; lf.
 	transientSymbolList do: [:symbolDict |
-		self stdout tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+		self log tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
 %
 method
 createRowanSymbolDictionaries
 	| symbolList |
 	symbolList := System myUserProfile symbolList.
-	self stdout nextPutAll: 'createRowanSymbolDictionaries (BEFORE)'; lf.
+	self log nextPutAll: 'createRowanSymbolDictionaries (BEFORE)'; lf.
 	self writeSymbolListInfo: symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
 		do: [:symbolDictName | 
@@ -189,19 +197,19 @@ createRowanSymbolDictionaries
 						yourself.
 					size := System myUserProfile symbolList size.
 					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
-	self stdout nextPutAll: 'createRowanSymbolDictionaries (AFTER)'; lf.
+	self log nextPutAll: 'createRowanSymbolDictionaries (AFTER)'; lf.
 	self writeSymbolListInfo: symbolList.
 %
 method
 removeRowanSymbolDictionaries
 	| symbolList |
 	symbolList := System myUserProfile symbolList.
-	self stdout nextPutAll: 'removeRowanSymbolDictionaries (BEFORE)'; lf.
+	self log nextPutAll: 'removeRowanSymbolDictionaries (BEFORE)'; lf.
 	self writeSymbolListInfo: symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools )
 		do: [:symbolDictName |
 			System myUserProfile removeDictionaryAt: (symbolList indexOfIdentical: (symbolList objectNamed: symbolDictName)) ].
-	self stdout nextPutAll: 'removeRowanSymbolDictionaries (AFTER)'; lf.
+	self log nextPutAll: 'removeRowanSymbolDictionaries (AFTER)'; lf.
 	self writeSymbolListInfo: symbolList.
 %
 method
@@ -266,14 +274,14 @@ upgradeFromV200
 	rowanBaseExtensionMethods 
 		do: [:meth | 
 			"remove extension methods from classes that aren't in the Rowan project"
-			self stdout tab; nextPutAll: 'Removing Rowan extension method: ', meth _inClass printString, '>>', meth selector printString; lf.
+			self log tab; nextPutAll: 'Removing Rowan extension method: ', meth _inClass printString, '>>', meth selector printString; lf.
 			meth _inClass removeSelector: meth selector ].
 	System commit.
 	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
 	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
 	bootstrapFilePaths
 		do: [:bootstrapFilePath |
-			self stdout tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
+			self log tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
 			GsFileIn fromServerPath: bootstrapFilePath ].
 	"END WARNING: Rowan is functional again"
 	System commit.
