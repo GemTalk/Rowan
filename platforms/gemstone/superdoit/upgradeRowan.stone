@@ -161,10 +161,22 @@ rowanVersion
 					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
 %
 method
+writeSymbolListInfo: symbolList
+	| transientSymbolList |
+	self stdout tab; nextPutAll: 'SymbolList: ', symbolList class name asString, ' [', symbolList asOop printString, ']'; lf.
+	symbolList do: [:symbolDict |
+		self stdout tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+	transientSymbolList := GsSession currentSession symbolList.
+	self stdout tab; nextPutAll: 'Transient SymbolList: ', transientSymbolList class name asString, ' [', transientSymbolList asOop printString, ']'; lf.
+	transientSymbolList do: [:symbolDict |
+		self stdout tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+%
+method
 createRowanSymbolDictionaries
-	| session symbolList |
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
+	| symbolList |
+	symbolList := System myUserProfile symbolList.
+	self stdout nextPutAll: 'createRowanSymbolDictionaries (BEFORE)'; lf.
+	self writeSymbolListInfo: symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
 		do: [:symbolDictName | 
 			| newDict size |
@@ -177,15 +189,20 @@ createRowanSymbolDictionaries
 						yourself.
 					size := System myUserProfile symbolList size.
 					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
+	self stdout nextPutAll: 'createRowanSymbolDictionaries (AFTER)'; lf.
+	self writeSymbolListInfo: symbolList.
 %
 method
 removeRowanSymbolDictionaries
-	| session symbolList |
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
+	| symbolList |
+	symbolList := System myUserProfile symbolList.
+	self stdout nextPutAll: 'removeRowanSymbolDictionaries (BEFORE)'; lf.
+	self writeSymbolListInfo: symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools )
 		do: [:symbolDictName |
-			symbolList removeIdentical: (RwGsImage symbolDictNamed: symbolDictName) ]
+			System myUserProfile removeDictionaryAt: (symbolList indexOfIdentical: (symbolList objectNamed: symbolDictName)) ].
+	self stdout nextPutAll: 'removeRowanSymbolDictionaries (AFTER)'; lf.
+	self writeSymbolListInfo: symbolList.
 %
 method
 collectRowanExtensionMethods
@@ -214,7 +231,7 @@ upgradeFromV200
 		- adopt/reload Rowan
 		- adopt/reload other projects
 	"
-	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths |
+	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths published |
 	originalProjectInfo := Dictionary new.
 	disownTool := Rowan projectTools disown.
 	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
@@ -231,14 +248,22 @@ upgradeFromV200
 	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
 	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2_tonel.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_stubs.gs' }
 		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
+	RwGsPlatform reset. 
+	RwGsPlatform _userPlatformDictionary removeKey: #RwUserPlatform_Preferences ifAbsent: [].
 	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
 	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
+	published := GsCurrentSession currentSession objectNamed: #Published.
+	published removeAssociation: (published associationAt: #Rowan).
+	
+	rowanProject := nil.	"no longer can be used"
 	System commit.
 	rowanBaseExtensionMethods 
 		do: [:meth | 
 			"remove extension methods from classes that aren't in the Rowan project"
+			self stdout tab; nextPutAll: 'Removing Rowan extension method: ', meth _inClass printString, '>>', meth selector printString; lf.
 			meth _inClass removeSelector: meth selector ].
 	System commit.
+self halt.
 	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
 	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
 	bootstrapFilePaths
@@ -246,6 +271,56 @@ upgradeFromV200
 			self stdout tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
 			GsFileIn fromServerPath: bootstrapFilePath ].
 	"END WARNING: Rowan is functional again"
+	System commit.
+	self adoptAndReloadRowan.
+%
+method
+adoptAndReloadRowan
+	"POST RELOAD OF ROWAN ... so NO COMPILED REFERENCES TO ROWAN CLASSES CAN BE TRUSTED"
+	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
+	| loadedProjects audits rowanAssoc tracer wasTracing rowanKernel rowan |
+	"Create loaded Rowan project, traverse the package definitions and create loaded packages"
+	[ 
+		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+		rowan := rowanKernel at: #Rowan.
+		rowan projectTools adopt
+      adoptProjectFromUrl: 'file:' , ((originalProjectInfo at: 'Rowan') at: 'repositoryRoot'), '/rowan/specs/Rowan.ston'
+      projectsHome: '$ROWAN_PROJECTS_HOME'.
+    System commit.
+    "Reload Rowan and required projects to make sure that we're using the latest code from repository
+       audit the loaded projects after loading"
+    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: 'Rowan') loadProjectSet.
+    audits := loadedProjects collect: [:project | (project name) -> (project audit) ] ]
+			on: (GsCurrentSession currentSession objectNamed: #RwAuditMethodErrorNotification)
+			do: [ :ex | 
+					| theBehavior |
+					tracer := (rowanKernel at: #Rowan) projectTools trace.
+					wasTracing := tracer isTracing.
+					tracer startTracing.
+					theBehavior := (rowanKernel at: #Rowan) globalNamed: ex className.
+					ex isMetaclass
+						ifTrue: [ theBehavior := theBehavior class ].
+					(ex description = 'Missing loaded method' 
+						and: [ (ex selector = #gemstoneTools) 
+							and: [{ (rowanKernel at: #Rowan) class . rowanKernel at: #RwGsPlatform . } includes: theBehavior ]])
+					ifTrue: [
+						"these two methods should be packaged when the base is packaged (part of GemStone-Rowan.gs)" 
+					 	tracer trace: theBehavior printString, '>>', 
+							ex selector printString, 
+							' is an expected audit failure (Missing loaded method) at this juncture -- IGNORED'.
+						wasTracing ifFalse: [ tracer stopTracing ].
+						ex resume: false	"no audit error" ]
+					ifFalse: [ 
+						"issue audit error"
+						wasTracing ifFalse: [ tracer stopTracing ].
+						ex resume: true ] ].
+	audits do: [:assoc |
+	assoc value isEmpty 
+		ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
+	System commit.
+	"Install Rowan association in Published"
+	rowanAssoc := rowanKernel associationAt: #Rowan.
+	Published add: rowanAssoc. 
 	System commit.
 %
 doit
