@@ -231,73 +231,22 @@ collectRowanExtensionMethods
 	^ rowanBaseExtensionMethods asArray
 %
 method
-upgradeFromV200
-	"
-		- disown everything
-		- remove Rowan classes and Rowan extension methods in non-Rowan classes
-		- bootstrap Rowan from .gs files
-		- adopt/reload Rowan
-		- adopt/reload other projects
-	"
-	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths published |
-	originalProjectInfo := Dictionary new.
-	disownTool := Rowan projectTools disown.
-	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
-	Rowan projects do: [:project |
-		originalProjectInfo 
-			at: project name 
-			put: 
-				(Dictionary new
-					at: 'repositoryRoot' put: project repositoryRootPath;
-					yourself).
-		disownTool disownProjectNamed: project name ].
-	System commit.
-	"get some business out of the way while FileSystemGs is still functional"
-	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
-	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2_tonel.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_stubs.gs' }
-		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
-	RwGsPlatform reset. 
-	RwGsPlatform _userPlatformDictionary removeKey: #RwUserPlatform_Preferences ifAbsent: [].
-	System myUserProfile symbolList do: [:symDict |
-		"remove Rowan metadata from symbol dictionaries that were not dropped on floor (Globals and UserData)" 
-		symDict 
-			removeKey: #RwSymbolDictionaryRegistry ifAbsent: [];
-			removeKey: #RwGsLoadedProjectRegistry ifAbsent: [];
-			yourself ].
-	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
-	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
-	published := GsCurrentSession currentSession objectNamed: #Published.
-	published removeAssociation: (published associationAt: #Rowan).
-	
-	rowanProject := nil.	"no longer can be used"
-	System commit.
-	rowanBaseExtensionMethods 
-		do: [:meth | 
-			"remove extension methods from classes that aren't in the Rowan project"
-			meth _inClass removeSelector: meth selector ].
-	System commit.
-	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
-	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
-	bootstrapFilePaths
-		do: [:bootstrapFilePath |
-			self log tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
-			GsFileIn fromServerPath: bootstrapFilePath ].
-	"END WARNING: Rowan is functional again"
-	System commit.
-	self adoptAndReloadRowan.
+metadataFor: projectName
+	^ originalProjectInfo at: projectName
 %
 method
 adoptAndReloadRowan
 	"POST RELOAD OF ROWAN ... so NO COMPILED REFERENCES TO ROWAN CLASSES CAN BE TRUSTED"
 	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
-	| loadedProjects audits rowanAssoc tracer wasTracing rowanKernel rowan |
+	| loadedProjects audits rowanAssoc tracer wasTracing rowanKernel rowan rowanMetadata |
 	"Create loaded Rowan project, traverse the package definitions and create loaded packages"
+	rowanMetadata := self metadataFor: 'Rowan'.
 	[ 
 		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
 		rowan := rowanKernel at: #Rowan.
 		rowan projectTools adopt
-      adoptProjectFromUrl: 'file:' , ((originalProjectInfo at: 'Rowan') at: 'repositoryRoot'), '/rowan/specs/Rowan.ston'
-      projectsHome: '$ROWAN_PROJECTS_HOME'.
+      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/Rowan.ston'
+      projectsHome: (rowanMetadata at: 'projectsHome').
     System commit.
     "Reload Rowan and required projects to make sure that we're using the latest code from repository
        audit the loaded projects after loading"
@@ -334,6 +283,70 @@ adoptAndReloadRowan
 	rowanAssoc := rowanKernel associationAt: #Rowan.
 	Published add: rowanAssoc. 
 	System commit.
+%
+method
+upgradeFromV200
+	"
+		- disown everything
+		- remove Rowan classes and Rowan extension methods in non-Rowan classes
+		- bootstrap Rowan from .gs files
+		- adopt/reload Rowan
+		- adopt/reload other projects
+	"
+	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths published rowanKernel rowan |
+	originalProjectInfo := Dictionary new.
+	disownTool := Rowan projectTools disown.
+	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
+	Rowan projects do: [:project |
+		originalProjectInfo 
+			at: project name 
+			put: 
+				(Dictionary new
+					at: 'repositoryRoot' put: project repositoryRootPath;
+					at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
+					yourself).
+		disownTool disownProjectNamed: project name ].
+	System commit.
+	"get some business out of the way while FileSystemGs is still functional"
+	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
+	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2_tonel.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_stubs.gs' }
+		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
+	RwGsPlatform reset. 
+	RwGsPlatform _userPlatformDictionary removeKey: #RwUserPlatform_Preferences ifAbsent: [].
+	System myUserProfile symbolList do: [:symDict |
+		"remove Rowan metadata from symbol dictionaries that were not dropped on floor (Globals and UserData)" 
+		symDict 
+			removeKey: #RwSymbolDictionaryRegistry ifAbsent: [];
+			removeKey: #RwGsLoadedProjectRegistry ifAbsent: [];
+			yourself ].
+	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
+	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
+	published := GsCurrentSession currentSession objectNamed: #Published.
+	published removeAssociation: (published associationAt: #Rowan).
+	
+	rowanProject := nil.	"no longer can be used"
+	System commit.
+	rowanBaseExtensionMethods 
+		do: [:meth | 
+			"remove extension methods from classes that aren't in the Rowan project"
+			meth _inClass removeSelector: meth selector ].
+	System commit.
+	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
+	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
+	bootstrapFilePaths
+		do: [:bootstrapFilePath |
+			self log tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
+			GsFileIn fromServerPath: bootstrapFilePath ].
+	"END WARNING: Rowan is functional again"
+	System commit.
+	self adoptAndReloadRowan.
+	"Adopt remaining projects"
+	rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+	rowan := rowanKernel at: #Rowan.
+	rowan projects do: [:project |
+		originalProjectInfo removeKey: project name ifAbsent: [] ].
+	originalProjectInfo keysAndValuesDo: [:projectName :projectMetaData |
+		self log tab; nextPutAll: 'Adopting ' , projectName; lf ].
 %
 doit
 	self stdout 
