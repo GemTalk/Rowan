@@ -1,0 +1,430 @@
+#!/usr/bin/env superdoit_stone
+# Standard options are always present unless customoptions section is used
+#
+#options
+#{
+#  SuperDoitOptionalOptionWithNoArg long: 'help' short: 'h'.
+#  SuperDoitOptionalOptionWithNoArg long: 'debug' short: 'D'.
+#}
+#%
+# Example options section
+#
+#options
+#{
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'blue'.
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
+#}
+#%
+#
+options
+{
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanRoot' default: '$ROWAN_PROJECTS_HOME/Rowan'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+	SuperDoitOptionalOptionWithNoArg long: 'logging' short: 'L'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] [-- [<stone-name> [<topaz-command-line-args>] ] ]
+
+DESCRIPTION
+  <put your description here>
+
+OPTIONS
+  <stone-name>               Name of the GsDevKit_home stone. <stone-name> argument
+                             may be skipped if the script is run in a GsDevKit_home
+                             stone directory (i.e., $GS_HOME/server/stones/<stone-name>
+  <topaz-command-line-args>  topaz options that should be passed to topaz when running
+                             running the script
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help
+  $basename -h
+  $basename --debug
+  $basename -D
+  $basename  
+  $basename -- gs_360
+  $basename -- gs_360 -T 100000
+-----
+%
+instvars
+rowanVersion
+rowanProject
+originalProjectInfo
+%
+method
+patchV200_MethodSource
+^ {
+	'Updating the Method Dictionary' -> 'compileMethod: sourceString dictionaries: aSymbolList category: aCategoryString environmentId: environmentId
+	"This compiles some source code for the receiver.  The first argument,
+ sourceString, is the string of source code to be compiled.  The second
+ argument is a SymbolList to be used in parsing, along with the list of all
+ class variables and pool dictionaries for the receiver and all of its
+ superclasses.  The third argument (a String) indicates the method''s category.
+
+ sourceString must be a kind of String or DoubleByteString.  Instances of
+ JapaneseString are not supported as source strings.  String literals
+ (''abc'') are generated as instances of the class of sourceString,
+ unless sourceString is a Symbol, in which case ''abc'' produces a String.
+ If sourceString is a DoubleByteSymbol, ''abc'' produces a DoubleByteString.
+
+ anEnvironmentId must be a SmallInteger >= 0 and <= 16rFFFF.
+ 0 denotes the base Smalltalk image.  1 was reserved for use by Ruby .
+
+ If there are no errors, this adds the resulting compiled method to the
+ receiver''s method dictionary and returns that method,
+ otherwise signals a CompileError .
+ A CompileWarning may be signaled, after adding the new method
+ to a receiver''s method dictionary."
+
+	| symList categ meth |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+
+	aSymbolList class == SymbolList
+		ifTrue: [ symList := aSymbolList ]
+		ifFalse: [ 
+			aSymbolList _validateClass: Array.
+			symList := SymbolList withAll: aSymbolList ].
+	categ := aCategoryString asSymbol.
+
+	GsObjectSecurityPolicy
+		setCurrent: self objectSecurityPolicy
+		while: [ 
+			meth := self
+				compileMethod: sourceString
+				dictionaries: symList
+				category: categ
+				intoMethodDict: nil
+				intoCategories: nil
+				environmentId: environmentId ].
+	^ meth
+'
+
+.
+
+	'*rowan-gemstone-kernel-36x' -> 'currentProject: ignored'
+
+.
+
+	'*rowan-gemstone-kernel-36x' -> 'currentPackage: ignored'
+
+.
+
+	}
+%
+method
+patchV200
+	"update/add methods that are needed for GsFileIn to be functional
+			use compilation method that has not been touched by Rowan"
+	Behavior 
+		compileMethod: (self patchV200_MethodSource at: 1) value
+			dictionaries: GsCurrentSession currentSession symbolList
+			category: (self patchV200_MethodSource at: 1) key asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
+
+	2 to: 3 do: [:index |
+		GsFileIn 
+			compileMethod: (self patchV200_MethodSource at: index) value
+				dictionaries: GsCurrentSession currentSession symbolList
+				category: (self patchV200_MethodSource at: index) key asSymbol
+				intoMethodDict: nil
+				intoCategories: nil
+				environmentId: 0 ].
+%
+method
+rowanProject
+	^ rowanProject ifNil: [ rowanProject := Rowan projectNamed: 'Rowan' ]
+%
+method
+gemstoneVersion
+	^ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber
+%
+method
+rowanVersion
+	^ rowanVersion
+		ifNil: [ 
+		rowanVersion := (Rowan respondsTo: #verion)
+			ifTrue: [ Rowan version ]
+			ifFalse: [
+				| gemstoneVersion |
+				gemstoneVersion := (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber. 
+				gemstoneVersion = '3.6.0' asRwGemStoneVersionNumber
+					ifTrue: [ RwSemanticVersionNumber fromString: '2.0.0' ]
+					ifFalse: [ 
+							gemstoneVersion = '3.6.1' asRwGemStoneVersionNumber
+							ifTrue: [ RwSemanticVersionNumber fromString: '2.1.0' ]
+					ifFalse: [  RwSemanticVersionNumber fromString: '2.2.0' ] ] ] ].
+%
+method
+log
+	self logging
+		ifTrue: [  
+			SessionTemps current at: #'ROWAN_TRACE' put: #'gciLogServer'.	"enable Rowan tracing"
+			^ self stdout ]
+		ifFalse: [ 
+			SessionTemps current at: #'ROWAN_TRACE' put: false. "disable Rowan tracing and topaz `class creation` tracing ... (in 3.7.0 and beyond)"
+			^ WriteStream on: String new ].
+%
+method
+writeSymbolListInfo: symbolList
+	| transientSymbolList |
+	self log tab; nextPutAll: 'SymbolList: ', symbolList class name asString, ' [', symbolList asOop printString, ']'; lf.
+	symbolList do: [:symbolDict |
+		self log tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+	transientSymbolList := GsSession currentSession symbolList.
+	self log tab; nextPutAll: 'Transient SymbolList: ', transientSymbolList class name asString, ' [', transientSymbolList asOop printString, ']'; lf.
+	transientSymbolList do: [:symbolDict |
+		self log tab; tab; nextPutAll: symbolDict name asString, ' -> ', symbolDict asOop printString; lf ].
+%
+method
+createRowanSymbolDictionaries
+	| symbolList |
+	symbolList := System myUserProfile symbolList.
+	self log nextPutAll: 'createRowanSymbolDictionaries (BEFORE)'; lf.
+	self writeSymbolListInfo: symbolList.
+	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
+		do: [:symbolDictName | 
+			| newDict size |
+			RwGsImage 
+				symbolDictNamed: symbolDictName
+				ifAbsent: [ 
+					newDict := SymbolDictionary new
+						name: symbolDictName;
+						objectSecurityPolicy: symbolList objectSecurityPolicy;
+						yourself.
+					size := System myUserProfile symbolList size.
+					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
+	self log nextPutAll: 'createRowanSymbolDictionaries (AFTER)'; lf.
+	self writeSymbolListInfo: symbolList.
+%
+method
+removeRowanSymbolDictionaries
+	| symbolList |
+	symbolList := System myUserProfile symbolList.
+	self log nextPutAll: 'removeRowanSymbolDictionaries (BEFORE)'; lf.
+	self writeSymbolListInfo: symbolList.
+	#( #RowanKernel #RowanLoader #RowanTools )
+		do: [:symbolDictName |
+			System myUserProfile removeDictionaryAt: (symbolList indexOfIdentical: (symbolList objectNamed: symbolDictName)) ].
+	self log nextPutAll: 'removeRowanSymbolDictionaries (AFTER)'; lf.
+	self writeSymbolListInfo: symbolList.
+%
+method
+collectRowanExtensionMethods
+	"collect the extension methods for classes that are not in the Rowan project ... 
+		they will be removed before bootstrap .gs files are loaded"
+	|  rowanBaseExtensionMethods |
+	rowanBaseExtensionMethods := IdentitySet new.
+	rowanProject packages 
+		do: [:package |
+			package _loadedPackage loadedClassExtensions do: [:loadedClassExtension |
+				| beh |
+				beh := loadedClassExtension handle.
+				beh rowanProjectName ~= 'Rowan'
+					ifTrue: [
+						loadedClassExtension 
+							loadedInstanceMethodsDo: [:proj :pack :class :meth | rowanBaseExtensionMethods add: meth handle ]
+							loadedClassMethodsDo: [:proj :pack :class :meth | rowanBaseExtensionMethods add: meth handle ] ] ] ]. 
+	^ rowanBaseExtensionMethods asArray
+%
+method
+metadataFor: projectName
+	^ originalProjectInfo at: projectName
+%
+method
+handleAuditException: ex rowanKernel: rowanKernel
+	| theBehavior tracer |
+	tracer := (rowanKernel at: #Rowan) projectTools trace.
+	theBehavior := (rowanKernel at: #Rowan) globalNamed: ex className.
+	ex isMetaclass
+		ifTrue: [ theBehavior := theBehavior class ].
+	(ex description = 'Missing loaded method' 
+		and: [ (ex selector = #gemstoneTools) 
+			and: [{ (rowanKernel at: #Rowan) class . rowanKernel at: #RwGsPlatform . } includes: theBehavior ]])
+		ifTrue: [
+			"these two methods should be packaged when the base is packaged (part of GemStone-Rowan.gs)" 
+		 	tracer trace: theBehavior printString, '>>', 
+				ex selector printString, 
+				' is an expected audit failure (Missing loaded method) at this juncture -- IGNORED'.
+			ex resume: false	"no audit error" ]
+				ifFalse: [ 
+					"issue audit error"
+					ex resume: true ] 
+%
+method
+adoptAndReloadGemstoneBaseImage: projectName
+	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
+		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
+	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
+	| loadedProjects audits rowanAssoc rowanKernel rowan rowanMetadata |
+	"Create loaded project, traverse the package definitions and create loaded packages"
+	rowanMetadata := self metadataFor: projectName.
+	[ 
+		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+		rowan := rowanKernel at: #Rowan.
+		rowan projectTools adopt
+      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/', (rowanMetadata at: 'specName'), '.ston'
+			readonlyDiskUrl: 'file:' , (rowanMetadata at: 'repositoryRoot')
+      projectsHome: (rowanMetadata at: 'projectsHome').
+    System commit.
+    "Reload Rowan and required projects to make sure that we're using the latest code from repository
+       audit the loaded projects after loading"
+    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: projectName) loadProjectSet.
+    audits := loadedProjects collect: [:project | (project name) -> (project audit) ] ]
+			on: (GsCurrentSession currentSession objectNamed: #RwAuditMethodErrorNotification)
+			do: [ :ex | self handleAuditException: ex rowanKernel: rowanKernel ].
+	audits do: [:assoc |
+		assoc value isEmpty 
+			ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
+	System commit.
+%
+method
+adoptAndReloadProject: projectName
+	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
+		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
+	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
+	| loadedProjects audits rowanAssoc rowanKernel rowan rowanMetadata |
+	"Create loaded project, traverse the package definitions and create loaded packages"
+	rowanMetadata := self metadataFor: projectName.
+	[ 
+		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+		rowan := rowanKernel at: #Rowan.
+		rowan projectTools adopt
+      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/', (rowanMetadata at: 'specName'), '.ston'
+      projectsHome: (rowanMetadata at: 'projectsHome').
+    System commit.
+    "Reload Rowan and required projects to make sure that we're using the latest code from repository
+       audit the loaded projects after loading"
+    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: projectName) loadProjectSet.
+    audits := loadedProjects collect: [:project | (project name) -> (project audit) ] ]
+			on: (GsCurrentSession currentSession objectNamed: #RwAuditMethodErrorNotification)
+			do: [ :ex | self handleAuditException: ex rowanKernel: rowanKernel ].
+	audits do: [:assoc |
+		assoc value isEmpty 
+			ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
+	System commit.
+%
+method
+adoptAndReloadRowan
+	"POST RELOAD OF ROWAN ... so NO COMPILED REFERENCES TO ROWAN CLASSES CAN BE TRUSTED"
+	| rowanKernel rowanAssoc |
+	self adoptAndReloadProject: 'Rowan'.
+	"Install Rowan association in Published"
+	rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+	rowanAssoc := rowanKernel associationAt: #Rowan.
+	Published add: rowanAssoc. 
+	System commit.
+	self adoptAndReloadGemstoneBaseImage: 'gemstoneBaseImage'.
+	System commit
+%
+method
+upgradeFromV200
+	"
+		- disown everything
+		- remove Rowan classes and Rowan extension methods in non-Rowan classes
+		- bootstrap Rowan from .gs files
+		- adopt/reload Rowan
+		- adopt/reload other projects
+	"
+	| bootstrapRoot disownTool rowanBaseExtensionMethods bootstrapFilePaths published rowanKernel rowan |
+	originalProjectInfo := Dictionary new.
+	disownTool := Rowan projectTools disown.
+	rowanBaseExtensionMethods := self collectRowanExtensionMethods.
+	Rowan projects do: [:project |
+		project name = 'superDoit'	"for the time being, skip superDoit"
+			ifTrue: [ 
+				self log tab; nextPutAll: 'SKIPPING superDoit ... assumed to be installed in transient symbol list'; lf]
+			ifFalse: [
+				project name = 'gemstoneBaseImage'
+					ifTrue: [  
+						originalProjectInfo 
+							at: project name 
+							put: 
+								(Dictionary new
+									at: 'repositoryRoot' put: '$GEMSTONE/upgrade/projects/gemstoneBaseImage';
+									at: 'projectsHome' put: '$GEMSTONE/upgrade/projects/gemstoneBaseImage'; 
+									at: 'specName' put: 'gemstoneBaseImage';
+									yourself)  ]
+					ifFalse: [ 
+						originalProjectInfo 
+							at: project name 
+							put: 
+								(Dictionary new
+									at: 'repositoryRoot' put: project repositoryRootPath;
+									at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
+									at: 'specName' put: project _loadedProject resolvedProject _loadSpecification specName; "avoiding a bug in v2.0.0"
+									yourself) ] ].
+		disownTool disownProjectNamed: project name ].
+	System commit.
+	"get some business out of the way while FileSystemGs is still functional"
+	bootstrapRoot := self rowanRoot asFileReference / 'platforms' / 'gemstone' / 'topaz' / 'bootstrap' / self gemstoneVersion printString.
+	bootstrapFilePaths := { 'RowanV2_stubs_boot.gs' . 'RowanV2_tonel.gs' . 'RowanV2.gs' . 'GemStone-Rowan.gs' . 'RowanV2_stubs.gs' }
+		collect: [:gsFile | (bootstrapRoot / gsFile) pathString ].
+	RwGsPlatform reset. 
+	RwGsPlatform _userPlatformDictionary removeKey: #RwUserPlatform_Preferences ifAbsent: [].
+	System myUserProfile symbolList do: [:symDict |
+		"remove Rowan metadata from symbol dictionaries that were not dropped on floor (Globals and UserData)" 
+		symDict 
+			removeKey: #RwSymbolDictionaryRegistry ifAbsent: [];
+			removeKey: #RwGsLoadedProjectRegistry ifAbsent: [];
+			yourself ].
+	"WARNING: Rowan will be non-functional until bootstrap .gs files have been loaded"
+	self removeRowanSymbolDictionaries.	"remove all Rowan classes by dropping symbol dictionaries on the floor"
+	published := GsCurrentSession currentSession objectNamed: #Published.
+	published removeAssociation: (published associationAt: #Rowan).
+	
+	rowanProject := nil.	"no longer can be used"
+	System commit.
+	rowanBaseExtensionMethods 
+		do: [:meth | 
+			"remove extension methods from classes that aren't in the Rowan project"
+			meth _inClass removeSelector: meth selector ].
+	System commit.
+	self createRowanSymbolDictionaries.	"create the Rowan symbol dictionaries"
+	self patchV200. "update/add methods that are needed for GsFileIn to be functional"
+	bootstrapFilePaths
+		do: [:bootstrapFilePath |
+			self log tab; nextPutAll: 'file in ', bootstrapFilePath; lf.
+			GsFileIn fromServerPath: bootstrapFilePath ].
+	"END WARNING: Rowan is functional again"
+	System commit.
+	self adoptAndReloadRowan.
+	"Adopt remaining projects"
+	rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+	rowan := rowanKernel at: #Rowan.
+	rowan projects do: [:project |
+		originalProjectInfo removeKey: project name ifAbsent: [] ].
+	originalProjectInfo keysAndValuesDo: [:projectName :projectMetaData |
+		projectName = Rowan unpackagedProjectName
+			ifTrue: [
+				self log tab; nextPutAll: 'Skipping ' , projectName; lf]
+			ifFalse: [ 
+				self log tab; nextPutAll: 'Adopting ' , projectName; lf ] ].
+%
+doit
+	self stdout 
+		nextPutAll: 'Upgrading ', self rowanProject name,  ' v', self rowanVersion printString, ' to v2.2.0 [', self rowanProject loadedCommitId, ']';
+		lf; tab;
+		nextPutAll: 'Rown project root = ', self rowanRoot asFileReference pathString;
+		lf; tab;
+		nextPutAll: 'ROWAN_PROJECTS_HOME = ', self projectsHome asFileReference pathString; lf.
+	(self optionsDict at: 'projectsHome') wasSet
+		ifTrue: [
+			Rowan projects do: [:project |
+				project name = 'gemstoneBaseImage'
+					ifTrue: [ "GemStone project is NOT in same projects home as other projects" ] 
+					ifFalse: [ project _loadedProject handle projectsHome: self projectsHome  ] ] ]. 
+	rowanProject gitRepositoryRoot: self rowanRoot.
+	self log.	"trigger desired Rowan logging"
+	rowanVersion = '2.0.0' asRwSemanticVersionNumber
+		ifTrue: [ self upgradeFromV200 ].
+
+true ifTrue: [ ^ 'disowned projects: ', originalProjectInfo keys asArray printString, '; bootstrapped projects from .gs files from ', self rowanRoot printString ].
+	^'Rowan upgraded [', rowanProject loadedCommitId, ']'
+%
