@@ -149,7 +149,7 @@ method
 rowanVersion
 	^ rowanVersion
 		ifNil: [ 
-		rowanVersion := (Rowan respondsTo: #verion)
+		rowanVersion := (Rowan respondsTo: #version)
 			ifTrue: [ Rowan version ]
 			ifFalse: [
 				| gemstoneVersion |
@@ -425,6 +425,5 @@ doit
 	rowanVersion = '2.0.0' asRwSemanticVersionNumber
 		ifTrue: [ self upgradeFromV200 ].
 
-true ifTrue: [ ^ 'disowned projects: ', originalProjectInfo keys asArray printString, '; bootstrapped projects from .gs files from ', self rowanRoot printString ].
-	^'Rowan upgraded [', rowanProject loadedCommitId, ']'
+	^'Rowan upgraded [', self rowanProject loadedCommitId, ']'
 %
