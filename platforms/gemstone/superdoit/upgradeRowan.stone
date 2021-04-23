@@ -54,7 +54,6 @@ instvars
 rowanVersion
 rowanProject
 originalProjectInfo
-logging
 %
 method
 patchV200_MethodSource
@@ -169,7 +168,7 @@ log
 			SessionTemps current at: #'ROWAN_TRACE' put: #'gciLogServer'.	"enable Rowan tracing"
 			^ self stdout ]
 		ifFalse: [ 
-			SessionTemps current at: #'ROWAN_TRACE' put: nil. "disable Rowan tracing and topaz `input` tracing ... (in 3.7.0 and beyond)"
+			SessionTemps current at: #'ROWAN_TRACE' put: false. "disable Rowan tracing and topaz `class creation` tracing ... (in 3.7.0 and beyond)"
 			^ WriteStream on: String new ].
 %
 method
@@ -239,11 +238,58 @@ metadataFor: projectName
 	^ originalProjectInfo at: projectName
 %
 method
+handleAuditException: ex rowanKernel: rowanKernel
+	| theBehavior tracer |
+	tracer := (rowanKernel at: #Rowan) projectTools trace.
+	theBehavior := (rowanKernel at: #Rowan) globalNamed: ex className.
+	ex isMetaclass
+		ifTrue: [ theBehavior := theBehavior class ].
+	(ex description = 'Missing loaded method' 
+		and: [ (ex selector = #gemstoneTools) 
+			and: [{ (rowanKernel at: #Rowan) class . rowanKernel at: #RwGsPlatform . } includes: theBehavior ]])
+		ifTrue: [
+			"these two methods should be packaged when the base is packaged (part of GemStone-Rowan.gs)" 
+		 	tracer trace: theBehavior printString, '>>', 
+				ex selector printString, 
+				' is an expected audit failure (Missing loaded method) at this juncture -- IGNORED'.
+			ex resume: false	"no audit error" ]
+				ifFalse: [ 
+					"issue audit error"
+					ex resume: true ] 
+%
+method
+adoptAndReloadGemstoneBaseImage: projectName
+	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
+		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
+	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
+	| loadedProjects audits rowanAssoc rowanKernel rowan rowanMetadata |
+	"Create loaded project, traverse the package definitions and create loaded packages"
+	rowanMetadata := self metadataFor: projectName.
+	[ 
+		rowanKernel := GsCurrentSession currentSession objectNamed: #RowanKernel.
+		rowan := rowanKernel at: #Rowan.
+		rowan projectTools adopt
+      adoptProjectFromUrl: 'file:' , (rowanMetadata at: 'repositoryRoot'), '/rowan/specs/', (rowanMetadata at: 'specName'), '.ston'
+			readonlyDiskUrl: 'file:' , (rowanMetadata at: 'repositoryRoot')
+      projectsHome: (rowanMetadata at: 'projectsHome').
+    System commit.
+    "Reload Rowan and required projects to make sure that we're using the latest code from repository
+       audit the loaded projects after loading"
+    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: projectName) loadProjectSet.
+    audits := loadedProjects collect: [:project | (project name) -> (project audit) ] ]
+			on: (GsCurrentSession currentSession objectNamed: #RwAuditMethodErrorNotification)
+			do: [ :ex | self handleAuditException: ex rowanKernel: rowanKernel ].
+	audits do: [:assoc |
+		assoc value isEmpty 
+			ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
+	System commit.
+%
+method
 adoptAndReloadProject: projectName
 	"THIS METHOD IS RUN USING THE ROWAN API FOR v3.0 ... DO NOT USE COMPILED IN REFERENCES TO ANY CLASSES, 
 		SINCE THE COMPILATION IS DONE ON OLD VERSION OR ROWAN"
 	"copied from fileinrowan.topz ... probably should be moved to a tool ... in future versions of GemStone"
-	| loadedProjects audits rowanAssoc tracer rowanKernel rowan rowanMetadata |
+	| loadedProjects audits rowanAssoc rowanKernel rowan rowanMetadata |
 	"Create loaded project, traverse the package definitions and create loaded packages"
 	rowanMetadata := self metadataFor: projectName.
 	[ 
@@ -255,30 +301,13 @@ adoptAndReloadProject: projectName
     System commit.
     "Reload Rowan and required projects to make sure that we're using the latest code from repository
        audit the loaded projects after loading"
-    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: 'Rowan') loadProjectSet.
+    loadedProjects := ((rowanKernel at: #Rowan) projectNamed: projectName) loadProjectSet.
     audits := loadedProjects collect: [:project | (project name) -> (project audit) ] ]
 			on: (GsCurrentSession currentSession objectNamed: #RwAuditMethodErrorNotification)
-			do: [ :ex | 
-					| theBehavior |
-					tracer := (rowanKernel at: #Rowan) projectTools trace.
-					theBehavior := (rowanKernel at: #Rowan) globalNamed: ex className.
-					ex isMetaclass
-						ifTrue: [ theBehavior := theBehavior class ].
-					(ex description = 'Missing loaded method' 
-						and: [ (ex selector = #gemstoneTools) 
-							and: [{ (rowanKernel at: #Rowan) class . rowanKernel at: #RwGsPlatform . } includes: theBehavior ]])
-					ifTrue: [
-						"these two methods should be packaged when the base is packaged (part of GemStone-Rowan.gs)" 
-					 	tracer trace: theBehavior printString, '>>', 
-							ex selector printString, 
-							' is an expected audit failure (Missing loaded method) at this juncture -- IGNORED'.
-						ex resume: false	"no audit error" ]
-					ifFalse: [ 
-						"issue audit error"
-						ex resume: true ] ].
+			do: [ :ex | self handleAuditException: ex rowanKernel: rowanKernel ].
 	audits do: [:assoc |
-	assoc value isEmpty 
-		ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
+		assoc value isEmpty 
+			ifFalse: [ self error: 'The post load audit for ', assoc key printString, ' failed.' ] ].
 	System commit.
 %
 method
@@ -291,6 +320,8 @@ adoptAndReloadRowan
 	rowanAssoc := rowanKernel associationAt: #Rowan.
 	Published add: rowanAssoc. 
 	System commit.
+	self adoptAndReloadGemstoneBaseImage: 'gemstoneBaseImage'.
+	System commit
 %
 method
 upgradeFromV200
@@ -310,14 +341,25 @@ upgradeFromV200
 			ifTrue: [ 
 				self log tab; nextPutAll: 'SKIPPING superDoit ... assumed to be installed in transient symbol list'; lf]
 			ifFalse: [
-				originalProjectInfo 
-					at: project name 
-					put: 
-						(Dictionary new
-							at: 'repositoryRoot' put: project repositoryRootPath;
-							at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
-							at: 'specName' put: project _loadedProject resolvedProject _loadSpecification specName; "avoiding a bug in v2.0.0"
-							yourself) ].
+				project name = 'gemstoneBaseImage'
+					ifTrue: [  
+						originalProjectInfo 
+							at: project name 
+							put: 
+								(Dictionary new
+									at: 'repositoryRoot' put: '$GEMSTONE/upgrade/projects/gemstoneBaseImage';
+									at: 'projectsHome' put: '$GEMSTONE/upgrade/projects/gemstoneBaseImage'; 
+									at: 'specName' put: 'gemstoneBaseImage';
+									yourself)  ]
+					ifFalse: [ 
+						originalProjectInfo 
+							at: project name 
+							put: 
+								(Dictionary new
+									at: 'repositoryRoot' put: project repositoryRootPath;
+									at: 'projectsHome' put: project _loadedProject resolvedProject projectsHome; "avoiding a bug in v2.0.0"
+									at: 'specName' put: project _loadedProject resolvedProject _loadSpecification specName; "avoiding a bug in v2.0.0"
+									yourself) ] ].
 		disownTool disownProjectNamed: project name ].
 	System commit.
 	"get some business out of the way while FileSystemGs is still functional"
@@ -375,7 +417,9 @@ doit
 	(self optionsDict at: 'projectsHome') wasSet
 		ifTrue: [
 			Rowan projects do: [:project |
-				project _loadedProject handle projectsHome: self projectsHome ] ]. 
+				project name = 'gemstoneBaseImage'
+					ifTrue: [ "GemStone project is NOT in same projects home as other projects" ] 
+					ifFalse: [ project _loadedProject handle projectsHome: self projectsHome  ] ] ]. 
 	rowanProject gitRepositoryRoot: self rowanRoot.
 	self log.	"trigger desired Rowan logging"
 	rowanVersion = '2.0.0' asRwSemanticVersionNumber
