@@ -49052,6 +49052,12 @@ unpackagedProjectName
 	^ 'UnPackaged'
 %
 
+category: 'public'
+classmethod: Rowan
+version
+	^ '2.2.0' asRwSemanticVersionNumber
+%
+
 ! Class implementation for 'RowanCommandResult'
 
 !		Class methods for 'RowanCommandResult'
