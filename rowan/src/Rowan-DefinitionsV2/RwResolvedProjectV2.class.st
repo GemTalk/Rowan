@@ -1049,6 +1049,16 @@ RwResolvedProjectV2 >> projectUrl [
 	^ self _loadSpecification projectUrl
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectVersion [
+	^ self _projectSpecification projectVersion
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> projectVersion: aStringOrVersion [
+	^ self _projectSpecification projectVersion: aStringOrVersion
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"

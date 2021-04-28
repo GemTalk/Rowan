@@ -79,6 +79,16 @@ RwAbstractProject >> projectsHome [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> projectVersion [
+	^ self _concreteProject projectVersion
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> projectVersion: aStringOrVersion [
+	^ self _concreteProject projectVersion: aStringOrVersion
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> remote [
 
 	^ self _concreteProject remote

@@ -359,6 +359,16 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectUrl [
 	^ self resolvedProject projectUrl
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectVersion [
+	^ self resolvedProject projectVersion
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectVersion: aStringOrVersion [
+	^ self resolvedProject projectVersion: aStringOrVersion
+]
+
 { #category : 'comparing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForCompare [
 	| props|

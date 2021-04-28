@@ -56,6 +56,13 @@ RwSpecification >> currentVersion [
 	^ '0.3.0'
 ]
 
+{ #category : 'ston' }
+RwSpecification >> excludedInstVars [
+	"restore full #instVarNamesInOrderForSton - no exclusions"
+
+	^ #(  )
+]
+
 { #category : 'initialization' }
 RwSpecification >> initialize [
   
@@ -75,6 +82,12 @@ RwSpecification >> initializeForImport [
 
 ]
 
+{ #category : 'ston' }
+RwSpecification >> instVarNamesInOrderForSton [
+
+	^ self class allInstVarNames
+]
+
 { #category : 'copying' }
 RwSpecification >> postCopy [
   "don't forget to copy any compound state objects"
@@ -85,6 +98,24 @@ RwSpecification >> postCopy [
 { #category : 'accessing' }
 RwSpecification >> projectUrl: ignored [
   
+]
+
+{ #category : 'ston' }
+RwSpecification >> stonOn: stonWriter [
+	| instanceVariableNames allInstanceVariableNames |
+	instanceVariableNames := self instVarNamesInOrderForSton
+		reject: [ :iv | self excludedInstVars includes: iv ].
+	allInstanceVariableNames := self class allInstVarNames.
+	stonWriter
+		writeObject: self
+		streamMap: [ :dictionary | 
+			instanceVariableNames
+				do: [ :each | 
+					(self instVarAt: (allInstanceVariableNames indexOf: each asSymbol))
+						ifNotNil: [ :value | dictionary at: each asSymbol put: value ]
+						ifNil: [ 
+							self stonShouldWriteNilInstVars
+								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
 ]
 
 { #category : 'accessing' }

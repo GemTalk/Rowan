@@ -9483,6 +9483,24 @@ removeallmethods RwProjectSpecificationV2
 removeallclassmethods RwProjectSpecificationV2
 
 doit
+(RwProjectSpecificationV2
+	subclass: 'RwProjectSpecificationV3'
+	instVarNames: #( projectVersion )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #()
+)
+		category: 'Rowan-SpecificationsV2';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwProjectSpecificationV3
+removeallclassmethods RwProjectSpecificationV3
+
+doit
 (Object
 	subclass: 'RwTonelParser'
 	instVarNames: #( packageReader stream lastSelectorParsed )
@@ -49286,7 +49304,7 @@ unpackagedProjectName
 category: 'public'
 classmethod: Rowan
 version
-	^ '2.2.0' asRwSemanticVersionNumber
+	^ (self projectNamed: 'Rowan') projectVersion
 %
 
 ! Class implementation for 'RowanCommandResult'
@@ -49637,6 +49655,18 @@ projectsHome
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
 	^ self _concreteProject projectsHome
+%
+
+category: 'accessing'
+method: RwAbstractProject
+projectVersion
+	^ self _concreteProject projectVersion
+%
+
+category: 'accessing'
+method: RwAbstractProject
+projectVersion: aStringOrVersion
+	^ self _concreteProject projectVersion: aStringOrVersion
 %
 
 category: 'accessing'
@@ -65226,6 +65256,18 @@ category: 'project definition'
 method: RwResolvedProjectV2
 projectUrl
 	^ self _loadSpecification projectUrl
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+projectVersion
+	^ self _projectSpecification projectVersion
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+projectVersion: aStringOrVersion
+	^ self _projectSpecification projectVersion: aStringOrVersion
 %
 
 category: 'actions'
@@ -83369,6 +83411,18 @@ projectUrl
 	^ self resolvedProject projectUrl
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectVersion
+	^ self resolvedProject projectVersion
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectVersion: aStringOrVersion
+	^ self resolvedProject projectVersion: aStringOrVersion
+%
+
 category: 'comparing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 propertiesForCompare
@@ -86473,6 +86527,14 @@ currentVersion
 	^ '0.3.0'
 %
 
+category: 'ston'
+method: RwSpecification
+excludedInstVars
+	"restore full #instVarNamesInOrderForSton - no exclusions"
+
+	^ #(  )
+%
+
 category: 'initialization'
 method: RwSpecification
 initialize
@@ -86493,6 +86555,13 @@ initializeForImport
   
 %
 
+category: 'ston'
+method: RwSpecification
+instVarNamesInOrderForSton
+
+	^ self class allInstVarNames
+%
+
 category: 'copying'
 method: RwSpecification
 postCopy
@@ -86505,6 +86574,25 @@ category: 'accessing'
 method: RwSpecification
 projectUrl: ignored
   
+%
+
+category: 'ston'
+method: RwSpecification
+stonOn: stonWriter
+	| instanceVariableNames allInstanceVariableNames |
+	instanceVariableNames := self instVarNamesInOrderForSton
+		reject: [ :iv | self excludedInstVars includes: iv ].
+	allInstanceVariableNames := self class allInstVarNames.
+	stonWriter
+		writeObject: self
+		streamMap: [ :dictionary | 
+			instanceVariableNames
+				do: [ :each | 
+					(self instVarAt: (allInstanceVariableNames indexOf: each asSymbol))
+						ifNotNil: [ :value | dictionary at: each asSymbol put: value ]
+						ifNil: [ 
+							self stonShouldWriteNilInstVars
+								ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ]
 %
 
 category: 'accessing'
@@ -87430,6 +87518,18 @@ projectSpecPath: aString
 
 category: 'accessing'
 method: RwProjectSpecificationV2
+projectVersion
+	^ nil
+%
+
+category: 'accessing'
+method: RwProjectSpecificationV2
+projectVersion: aStringOrVersion
+	"noop for now"
+%
+
+category: 'accessing'
+method: RwProjectSpecificationV2
 repoType
 	^ repoType ifNil: [ repoType := #disk ]
 %
@@ -87492,6 +87592,38 @@ _validate
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	^ true
+%
+
+! Class implementation for 'RwProjectSpecificationV3'
+
+!		Instance methods for 'RwProjectSpecificationV3'
+
+category: 'initialization'
+method: RwProjectSpecificationV3
+initialize
+	super initialize.
+	projectVersion := '0.0.0'
+%
+
+category: 'ston'
+method: RwProjectSpecificationV3
+instVarNamesInOrderForSton
+	^ #(#'specName' #'projectName' #'projectVersion' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId')
+%
+
+category: 'accessing'
+method: RwProjectSpecificationV3
+projectVersion
+	^ projectVersion
+		ifNotNil: [ :str | str asRwSemanticVersionNumber ]
+		ifNil: [ '0.0.0' asRwSemanticVersionNumber ]
+%
+
+category: 'accessing'
+method: RwProjectSpecificationV3
+projectVersion: aStringOrVersion
+	aStringOrVersion asRwSemanticVersionNumber.	"expect an error if aStringOrVersion is not a valid semantic version number"
+	projectVersion := aStringOrVersion asString
 %
 
 ! Class implementation for 'RwTonelParser'

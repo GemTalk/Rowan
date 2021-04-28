@@ -238,6 +238,16 @@ RwProjectSpecificationV2 >> projectSpecPath: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecificationV2 >> projectVersion [
+	^ nil
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> projectVersion: aStringOrVersion [
+	"noop for now"
+]
+
+{ #category : 'accessing' }
 RwProjectSpecificationV2 >> repoType [
 	^ repoType ifNil: [ repoType := #disk ]
 ]
