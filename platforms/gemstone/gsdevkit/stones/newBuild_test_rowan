@@ -3,11 +3,13 @@
 set -e
 . defStone.env
 
-vers=`awk 'NR==2{print $1; exit}' product/version.txt`
+theVers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
-if [ "$vers" = "3.6.1" ] ; then
-	# 3.6.0 and 3.6.1 share same scripts
+if [ "$theVers" = "3.6.1" ] || [ "$theVers" = "3.6.2" ] ; then
+	# 3.6.0, 3.6.1, and 3.6.2 share same scripts
 	vers=3.6.0
+else
+	vers=$theVers
 fi
 
 rm -rf *.log *.out
@@ -30,7 +32,7 @@ $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  
 branch=`git --git-dir=$ROWAN_PROJECTS_HOME/Rowan/.git rev-parse --abbrev-ref HEAD`
 # branch=masterV2.1
 
-branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --gsVersion=$vers`
+branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --gsVersion=$theVers`
 
 if [ "$branchQuery" = "[ ]" ] ; then
 	# this is a branch for which we have no samples with which to compare, so use issue_308 
@@ -39,5 +41,5 @@ if [ "$branchQuery" = "[ ]" ] ; then
 	echo "USING DEFAULT BRANCH -- $branch"
 	echo
 fi
-./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=$branch --compare=$vers
+./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=$branch --compare=$theVers
 
