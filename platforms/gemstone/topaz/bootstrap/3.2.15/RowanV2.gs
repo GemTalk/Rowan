@@ -9431,7 +9431,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile versionPrefix componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile versionPrefix componentNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -85977,7 +85977,14 @@ _conditionalComponentsStartingWith: aComponent platformConditionalAttributes: pl
 category: 'private'
 method: RwResolvedProjectComponentsV2
 _gemstoneAllUsersName
-	^ RwLoadSpecificationV2 _gemstoneAllUsersName
+	"duplicate of  RwLoadSpecificationV2 class >> _gemstoneAllUsersName BECAUSE
+		the LOADER sends this message in the middle of a load (to a previously 
+		created INSTANCE of the receiver) and the loader chokes sending the 
+		message to RwLoadSpecificationV2 if a NEW version of RwLoadSpecificationV2 is being 
+		created ... sending message to instance is safe, because the instance
+		will not be redefined during LOAD (see https://github.com/GemTalk/Rowan/issues/611)"
+
+	^ 'allusers'
 %
 
 category: 'enumerating'
