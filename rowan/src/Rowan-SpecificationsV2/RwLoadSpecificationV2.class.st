@@ -12,6 +12,7 @@ Class {
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
+		'versionPrefix',
 		'componentNames',
 		'groupNames',
 		'customConditionalAttributes',

@@ -9328,7 +9328,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile versionPrefix componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -85792,6 +85792,25 @@ excludedInstVars
 	"restore full #instVarNamesInOrderForSton - no exclusions"
 
 	^ #(  )
+%
+
+category: 'ston'
+method: RwSpecification
+fromSton: stonReader
+	"Decode non-variable classes from a map of their instance variables and values."
+
+	self class isVariable
+		ifTrue: [ self subclassResponsibility ]
+		ifFalse: [ 
+			| instanceVariableNames |
+			"ignore any incoming instance variables that aren't included in instVarNamesInOrderForSton"
+			instanceVariableNames := self instVarNamesInOrderForSton.
+			stonReader
+				parseMapDo: [ :instVarName :value | 
+					| index |
+					index := instanceVariableNames indexOf: instVarName asSymbol.
+					index > 0
+						ifTrue: [ self instVarAt: index put: value ] ] ]
 %
 
 category: 'initialization'
