@@ -179,17 +179,6 @@ RwGemStoneVersionNumberTestCase >> testVersion10 [
 ]
 
 { #category : 'tests' }
-RwGemStoneVersionNumberTestCase >> testVersion11 [
-
-	| v1 v2 |
-	v1 := self versionClass fromString: '1.0.1b'.
-	v2 := self versionClass fromString: '1.0.1a'.
-	self assert: (v1 >= v2).
-	self assert: (v2 <= v1)
-
-]
-
-{ #category : 'tests' }
 RwGemStoneVersionNumberTestCase >> testVersion12 [
 
 	self deny: ((self versionClass fromString: '1.0') <= (self versionClass fromString: '0.7'))
@@ -217,8 +206,6 @@ RwGemStoneVersionNumberTestCase >> testVersion17 [
 RwGemStoneVersionNumberTestCase >> testVersion18 [
 
 	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1')).
-	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1-0')).
-
 ]
 
 { #category : 'tests' }
