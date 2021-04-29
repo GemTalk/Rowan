@@ -10607,14 +10607,21 @@ name
 category: 'instance creation'
 classmethod: RwGemStoneVersionNumber
 fromString: aString
-
 	| new components |
 	components := OrderedCollection new.
-	(aString substrings: '.') do: [:subString | 
-		components add: subString asInteger].
+	(aString substrings: '.')
+		do: [ :subString | 
+			subString
+				do: [ :each | 
+					each isDigit
+						ifFalse: [ 
+							self
+								error:
+									'Encountered a non-digit character ', each printString, ' in a numeric version number field' ] ].
+			components add: subString asInteger ].
 	new := self new: components size.
-	1 to: components size do: [:i | new at: i put: (components at: i) ].
-	^new
+	1 to: components size do: [ :i | new at: i put: (components at: i) ].
+	^ new
 %
 
 !		Instance methods for 'RwGemStoneVersionNumber'
@@ -85929,18 +85936,20 @@ method: RwLoadSpecificationV2
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
-																			self readonlyDiskUrl = anObject readonlyDiskUrl
-																				and: [ 
-																					self mercurialUrl = anObject mercurialUrl
+																					self readonlyDiskUrl = anObject readonlyDiskUrl
 																						and: [ 
-																							self svnUrl = anObject svnUrl
+																							self mercurialUrl = anObject mercurialUrl
 																								and: [ 
-																									self revision = anObject revision
+																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self comment = anObject comment
+																											self revision = anObject revision
 																												and: [ 
-																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self comment = anObject comment
+																														and: [ 
+																															self versionPrefix = anObject versionPrefix
+																																and: [ 
+																																	self _platformProperties = anObject _platformProperties
+																																		or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -86170,6 +86179,7 @@ hash
 	hashValue := hashValue bitXor: self componentNames hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
+	hashValue := hashValue bitXor: self versionPrefix hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
 %
@@ -86446,6 +86456,18 @@ method: RwLoadSpecificationV2
 svnUrl: anUrlString
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+versionPrefix
+	^ versionPrefix
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+versionPrefix: aStringOrNil
+	versionPrefix := aStringOrNil
 %
 
 category: 'gemstone-support'
@@ -86883,6 +86905,31 @@ _validate
 
 !		Instance methods for 'RwProjectSpecificationV3'
 
+category: 'comparing'
+method: RwProjectSpecificationV3
+= anObject
+	^ super = anObject and: [ self projectVersion = anObject projectVersion ]
+%
+
+category: 'comparing'
+method: RwProjectSpecificationV3
+hash
+	| hashValue |
+	hashValue := self specName hash.
+	hashValue := hashValue bitXor: self projectName hash.
+	hashValue := hashValue bitXor: projectVersion hash.
+	hashValue := hashValue bitXor: self componentsPath hash.
+	hashValue := hashValue bitXor: self packagesPath hash.
+	hashValue := hashValue bitXor: self projectsPath hash.
+	hashValue := hashValue bitXor: self specsPath hash.
+	hashValue := hashValue bitXor: self _repoType hash.
+	hashValue := hashValue bitXor: self comment hash.
+	hashValue := hashValue bitXor: self packageFormat hash.
+	hashValue := hashValue bitXor: self packageConvention hash.
+	hashValue := hashValue bitXor: self loadedCommitId hash.
+	^ hashValue
+%
+
 category: 'initialization'
 method: RwProjectSpecificationV3
 initialize
@@ -86906,9 +86953,12 @@ projectVersion
 
 category: 'accessing'
 method: RwProjectSpecificationV3
-projectVersion: aStringOrVersion
-	aStringOrVersion asRwSemanticVersionNumber.	"expect an error if aStringOrVersion is not a valid semantic version number"
-	projectVersion := aStringOrVersion asString
+projectVersion: aStringOrVersionOrNil
+	aStringOrVersionOrNil
+		ifNil: [ projectVersion := nil ]
+		ifNotNil: [ 
+			aStringOrVersionOrNil asRwSemanticVersionNumber.	"expect an error if aStringOrVersion is not a valid semantic version number"
+			projectVersion := aStringOrVersionOrNil asString ]
 %
 
 ! Class implementation for 'RwUrl'

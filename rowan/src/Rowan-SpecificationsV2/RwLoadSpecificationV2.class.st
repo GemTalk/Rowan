@@ -163,18 +163,20 @@ RwLoadSpecificationV2 >> = anObject [
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
-																			self readonlyDiskUrl = anObject readonlyDiskUrl
-																				and: [ 
-																					self mercurialUrl = anObject mercurialUrl
+																					self readonlyDiskUrl = anObject readonlyDiskUrl
 																						and: [ 
-																							self svnUrl = anObject svnUrl
+																							self mercurialUrl = anObject mercurialUrl
 																								and: [ 
-																									self revision = anObject revision
+																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self comment = anObject comment
+																											self revision = anObject revision
 																												and: [ 
-																													self _platformProperties = anObject _platformProperties
-																														or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																													self comment = anObject comment
+																														and: [ 
+																															self versionPrefix = anObject versionPrefix
+																																and: [ 
+																																	self _platformProperties = anObject _platformProperties
+																																		or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -378,6 +380,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self componentNames hash.
 	hashValue := hashValue bitXor: self projectsHome hash.
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
+	hashValue := hashValue bitXor: self versionPrefix hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
 	^ hashValue
 ]
@@ -623,4 +626,14 @@ RwLoadSpecificationV2 >> svnUrl [
 RwLoadSpecificationV2 >> svnUrl: anUrlString [
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> versionPrefix [
+	^ versionPrefix
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> versionPrefix: aStringOrNil [
+	versionPrefix := aStringOrNil
 ]
