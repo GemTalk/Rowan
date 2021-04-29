@@ -14,7 +14,6 @@ Class {
 		'projectSpecFile',
 		'versionPrefix',
 		'componentNames',
-		'groupNames',
 		'customConditionalAttributes',
 		'platformProperties',
 		'comment',
