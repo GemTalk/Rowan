@@ -114,7 +114,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 			self
 				assert: ex description
 				equals:
-					'UserDefinedError: Poorly formed GemStone version range pattern ''[2-6'' in ''gs3.[2-6'''.
+					'UserDefinedError: Encountered a non-digit character $[ in a numeric version number field'.
 			hitExpectedError := true ].
 	self assert: hitExpectedError.
 
@@ -135,7 +135,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
 		do: [ :ex | 
-			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStream but either the format is incorrect or the contents of aReadStream are incomplete.'.
+			self assert: ex description equals: 'UserDefinedError: Encountered a non-digit character $x in a numeric version number field'.
 			hitExpectedError := true ].
 	self assert: hitExpectedError.
 
@@ -144,7 +144,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
 		do: [ :ex | 
-			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStream but either the format is incorrect or the contents of aReadStream are incomplete.'.
+			self assert: ex description equals: 'UserDefinedError: Encountered a non-digit character $- in a numeric version number field'.
 			hitExpectedError := true ].
 	self assert: hitExpectedError
 ]
