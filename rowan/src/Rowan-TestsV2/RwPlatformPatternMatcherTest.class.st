@@ -107,6 +107,18 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	self assert: hitExpectedError.
 
 	hitExpectedError := false.
+	pattern := 'gs3[2-6'.
+	[ matcher := self _patternMatcherFor: pattern ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert: ex description
+				equals:
+					'UserDefinedError: Poorly formed GemStone version range pattern ''[2-6'' in ''gs3.[2-6'''.
+			hitExpectedError := true ].
+	self assert: hitExpectedError.
+
+	hitExpectedError := false.
 	pattern := 'gs3.[26]'.
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
