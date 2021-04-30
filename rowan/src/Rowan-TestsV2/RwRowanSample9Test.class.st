@@ -3530,12 +3530,16 @@ RwRowanSample9Test >> testIssue653 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue700_0 [
 	"
+		Reproduce original issue
+		---------------------------
 		load  spec_0060, 
 		create a git clone for RowanSample10 in different disk location, 
 		use gitRepositoryRoot: to point to new disk location,
 		confirm that RowanSample10 repositoryRoot points at new disk location
+			and RowanSample10 tests loaded
 		reload RowanSample9
 		confirm that RowanSample10 repositoryRoot points at new disk location
+			and RowanSample10 tests loaded
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/700"
@@ -3568,6 +3572,7 @@ RwRowanSample9Test >> testIssue700_0 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+	self deny: requiredProject testSuite tests isEmpty.
 
 "clone RowanSample10 in alternate location"
 	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
@@ -3593,18 +3598,74 @@ RwRowanSample9Test >> testIssue700_0 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+	self deny: requiredProject testSuite tests isEmpty
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue700_1 [
 	"
+		Confirm that a change to required project spec on disk prior to initial load is honored
+		---------------------------
+		resolve  spec_0060, 
+		change the load spec for RowanSample10 in RowanSample0/rowan/projects on disk
+		load RowanSample9
+		confirm that change is honored (no requiredProject tests loaded)
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/700"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProjectName
+		loadSpecFor10From9 requiredProject |
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"change the load spec for RowanSample10 in RowanSample0/rowan/projects"
+	loadSpecFor10From9 := RwSpecification fromUrl: 'file:', (resolvedProject projectsRoot / requiredProjectName, 'ston') pathString.
+	loadSpecFor10From9 customConditionalAttributes: {}. "clear custom attributes"
+	loadSpecFor10From9 exportTo: resolvedProject projectsRoot.
+
+"resolve project (again) to pick up the changes on disk"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+	requiredProject := loadedProjects at: 2.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: requiredProject testSuite tests isEmpty
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue700_2 [
+	"
+		Confirm that a change to required project spec on disk prior to reload is honored
+		---------------------------
 		load  spec_0060, 
 		create a git clone for RowanSample10 in different disk location, 
 		use gitRepositoryRoot: to point to new disk location,
+		load
 		confirm that RowanSample10 repositoryRoot points at new disk location
+			and that RowanSample10 tests are loaded
 		--> change the load spec for RowanSample10 in RowanSample0/rowan/projects
 		reload RowanSample9
-		confirm that RowanSample10 repositoryRoot points at new disk location
+		confirm that RowanSample10 tests are not loaded
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/700"
@@ -3638,6 +3699,7 @@ RwRowanSample9Test >> testIssue700_1 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+	self deny: requiredProject testSuite tests isEmpty.
 
 "clone RowanSample10 in alternate location"
 	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
