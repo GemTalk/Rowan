@@ -73,7 +73,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 						ifNotNil: [ :project | 
 							"project is already present in image ... so use it"
 							theLoadSpec := project _loadSpecification.
-							theResolvedProject := theLoadSpec resolveWithParentProject: project	"give embedded projects a chance" ]
+							theResolvedProject := project asDefinition resolve ]
 						ifNil: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
@@ -127,6 +127,7 @@ RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 	^ selected
 
 ]
+
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
@@ -161,6 +162,7 @@ RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ign
 					RwSpecification fromUrl: url ] ]
 
 ]
+
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes [
 	| theComponentNames  |
