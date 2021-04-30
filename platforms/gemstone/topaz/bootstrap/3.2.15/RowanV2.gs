@@ -98292,7 +98292,7 @@ doMoveMethodsBetweenPackages
 			registry := (Rowan image
 				symbolDictNamed:
 					(aMethodMove projectAfter
-						symbolDictNameForPackageNamed: aMethodMove packageAfter name))
+						gemstoneSymbolDictNameForPackageNamed: aMethodMove packageAfter name))
 				rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage
 				classOrExtensionForClassNamed: classOrExtensionDef name

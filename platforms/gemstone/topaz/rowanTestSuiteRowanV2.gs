@@ -26,7 +26,7 @@ run
 				"make sure test group is loaded ... include deprecated packages"
 				Rowan projectTools loadV2
 					loadProjectNamed: projectName
-					customConditionalAttributes: #('tests' 'deprecated') ]
+					customConditionalAttributes: #('tests' 'testsV2' 'deprecated') ]
 			ifFalse: [
 				"make sure test group is loaded ... do NOT include deprecated packages"
 				Rowan projectTools loadV2
