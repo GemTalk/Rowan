@@ -3527,6 +3527,68 @@ RwRowanSample9Test >> testIssue653 [
 		equals: #() .
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue700 [
+	"
+		load  spec_0060, 
+		create a git clone for RowanSample10 in different disk location, 
+		use gitRepositoryRoot: to point to new disk location,
+		confirm that RowanSample10 repositoryRoot points at new disk location
+		reload RowanSample9
+		confirm that RowanSample10 repositoryRoot points at new disk location
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/700"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
+		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome |
+	loadSpec := self _loadSpecNamed: 'spec_0060'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName := 'RowanSample10'.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+	requiredProject := loadedProjects at: 2.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"clone RowanSample10 in alternate location"
+	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
+	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0001'.
+	requiredLoadSpec projectsHome: requiredProjectsHome.
+	requiredLoadSpec resolveStrict.
+	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
+	self assert: requiredRepositoryRoot exists.
+
+"update gitRepositoryRoot"
+	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString.
+
+"validate"
+	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
+
+	project reload.
+
+"validate"
+	self assert: requiredProject repositoryRoot equals: requiredRepositoryRoot.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"

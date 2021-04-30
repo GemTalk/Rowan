@@ -613,11 +613,6 @@ RwDefinedProject >> renamePackageNamed: packageName to: newPackageName [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> repositoryRoot [
-	^ self _concreteProject repositoryRoot
-]
-
-{ #category : 'accessing' }
 RwDefinedProject >> repoType: aSymbol [
 	"#disk, #git or #none"
 
