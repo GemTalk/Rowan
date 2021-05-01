@@ -121,20 +121,6 @@ RwAbstractV2Test >> _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProje
 ]
 
 { #category : 'private' }
-RwAbstractV2Test >> _canonicalRowanSample9ProjectFor: projectName [
-	| loadSpecification projectDefinition |
-	loadSpecification := RwProjectSpecificationV2 new
-		projectName: projectName;
-		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: false;
-		gemstoneSetDefaultMethodEnvTo: 0;
-		yourself.
-	projectDefinition := (loadSpecification resolve: self _testRowanProjectsSandbox)
-		projectNamed: projectName.
-	^ self _addCanonicalRowanSample9ProjectDefinitionsTo: projectDefinition
-]
-
-{ #category : 'private' }
 RwAbstractV2Test >> _deleteProjectRepositoryDir [
 	^ true
 ]
