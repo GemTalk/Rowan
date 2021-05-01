@@ -75,6 +75,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0062: commitComment;
 	genSpec_0063: commitComment;
 	genSpec_0064: commitComment;
+	genSpec_0065: commitComment;
 	yourself
 "
 Class {
@@ -3648,6 +3649,32 @@ componentName := 'Core'.
 	(resolvedProject componentNamed: componentName)
 		removeProjectNamed: requiredProjectName;
 		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0065: resolvedProject [
+	"Start with spec_0060; replace external project RowanSample10 spec_0001 with spec_0002"
+
+	| requiredProjectName requiredLoadSpec componentName |
+	requiredProjectName := 'RowanSample10'.
+	componentName := 'Core'.
+	
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		revision: 'spec_0002';
+		gitUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		componentNames: {componentName};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: { 'mytests' }
+		yourself.
+
+	resolvedProject customConditionalAttributes: #('tests' 'mytests').
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot.
 
 	^ resolvedProject
 ]
@@ -7442,6 +7469,51 @@ RwTestProjectLibraryGenerator >> genSpec_0064: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0064: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0065: commitMessage [
+	"Start with spec_0060; replace external project RowanSample10 spec_0001 with spec_0002"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0065'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0060'.
+	title := 'Start with spec_0060; replace external project RowanSample10 spec_0001 with spec_0002'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 60
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(700);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0065: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
