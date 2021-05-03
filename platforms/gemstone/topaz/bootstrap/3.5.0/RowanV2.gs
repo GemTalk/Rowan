@@ -50262,12 +50262,6 @@ renamePackageNamed: packageName to: newPackageName
 
 category: 'accessing'
 method: RwDefinedProject
-repositoryRoot
-	^ self _concreteProject repositoryRoot
-%
-
-category: 'accessing'
-method: RwDefinedProject
 repoType: aSymbol
 	"#disk, #git or #none"
 
@@ -85970,7 +85964,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 						ifNotNil: [ :project | 
 							"project is already present in image ... so use it"
 							theLoadSpec := project _loadSpecification.
-							theResolvedProject := theLoadSpec resolveWithParentProject: project	"give embedded projects a chance" ]
+							theResolvedProject := project asDefinition resolve ]
 						ifNil: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
