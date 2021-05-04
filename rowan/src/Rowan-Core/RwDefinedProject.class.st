@@ -521,17 +521,6 @@ RwDefinedProject >> readProjectComponentNames: componentNames [
 ]
 
 { #category : 'transitions' }
-RwDefinedProject >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-]
-
-{ #category : 'transitions' }
 RwDefinedProject >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 

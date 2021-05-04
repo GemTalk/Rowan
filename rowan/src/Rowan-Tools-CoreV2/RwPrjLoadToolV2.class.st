@@ -184,28 +184,28 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 	^ res
 ]
 
-{ #category : 'load project by name' }
+{ #category : 'to be removed' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
-	| platformConditionalAttributes project |
-	project := RwProject newNamed: projectName.
-	platformConditionalAttributes := project platformConditionalAttributes copy
-		asSet.
-	platformConditionalAttributes addAll: customConditionalAttributes.
-	^ self
-		loadProjectNamed: projectName
-		platformConditionalAttributes: platformConditionalAttributes
+       | platformConditionalAttributes project |
+       project := RwProject newNamed: projectName.
+       platformConditionalAttributes := project platformConditionalAttributes copy
+               asSet.
+       platformConditionalAttributes addAll: customConditionalAttributes.
+       ^ self
+               loadProjectNamed: projectName
+               platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'load project by name' }
+{ #category : 'to be removed' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
-	| projectSet res |
-	projectSet := Rowan projectTools readV2
-		readProjectSetForProjectNamed: projectName
-		platformConditionalAttributes: platformConditionalAttributes.
-	res := self loadProjectSetDefinition: projectSet.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSet.
-	^ res
+       | projectSet res |
+       projectSet := Rowan projectTools readV2
+               readProjectSetForProjectNamed: projectName
+               platformConditionalAttributes: platformConditionalAttributes.
+       res := self loadProjectSetDefinition: projectSet.
+       "loaded project and loaded packages read from disk - mark them not dirty"
+      self markProjectSetNotDirty: projectSet.
+       ^ res
 ]
 
 { #category : 'load project definitions' }
