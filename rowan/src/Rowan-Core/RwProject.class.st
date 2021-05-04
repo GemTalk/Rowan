@@ -41,6 +41,13 @@ RwProject >> _projectDefinitionPlatformConditionalAttributes [
 	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes
 ]
 
+{ #category : 'accessing' }
+RwProject >> _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'private' }
 RwProject >> _projectRepository [
 	^ self _loadedProject handle _projectRepository

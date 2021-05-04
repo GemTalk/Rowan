@@ -29,6 +29,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAt
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes [
+
+	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |

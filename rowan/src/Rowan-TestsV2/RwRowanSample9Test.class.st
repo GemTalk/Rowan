@@ -3546,9 +3546,7 @@ RwRowanSample9Test >> testIssue700_0 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
 		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome |
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
-
-	projectName := loadSpec projectName.
+	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
 
@@ -3556,10 +3554,12 @@ RwRowanSample9Test >> testIssue700_0 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
 
 "resolve project"
+	loadSpec := self _loadSpecNamed: 'spec_0065'.
 	resolvedProject := loadSpec resolve.
 
 "load project"
@@ -3572,11 +3572,12 @@ RwRowanSample9Test >> testIssue700_0 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+	self deny: project testSuite tests isEmpty.
 	self deny: requiredProject testSuite tests isEmpty.
 
 "clone RowanSample10 in alternate location"
 	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
-	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0001'.
+	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0002'.
 	requiredLoadSpec projectsHome: requiredProjectsHome.
 	requiredLoadSpec resolveStrict.
 	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
@@ -3605,59 +3606,7 @@ RwRowanSample9Test >> testIssue700_0 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue700_1 [
 	"
-		Confirm that a change to required project spec on disk prior to initial load is honored
-		---------------------------
-		resolve  spec_0065, 
-		change the load spec for RowanSample10 in RowanSample0/rowan/projects on disk
-		load RowanSample9
-		confirm that change is honored (no requiredProject tests loaded)
-	"
-
-	"https://github.com/GemTalk/Rowan/issues/700"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProjectName
-		loadSpecFor10From9 requiredProject |
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
-	projectNames := {projectName . requiredProjectName}.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
-
-"resolve project"
-	resolvedProject := loadSpec resolve.
-
-"change the load spec for RowanSample10 in RowanSample0/rowan/projects"
-false ifTrue: [	loadSpecFor10From9 := RwSpecification fromUrl: 'file:', (resolvedProject projectsRoot / requiredProjectName, 'ston') pathString.
-	loadSpecFor10From9 customConditionalAttributes: {}. "clear custom attributes"
-	loadSpecFor10From9 exportTo: resolvedProject projectsRoot].
-
-"resolve project (again) to pick up the changes on disk"
-	resolvedProject := loadSpec resolve: Rowan platformConditionalAttributes, {'tests'}.
-
-"load project"
-	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
-	requiredProject := loadedProjects at: 2.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self assert: requiredProject testSuite tests isEmpty.
-	self deny: project testSuite tests isEmpty.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue700_2 [
-	"
-		Confirm that a change to required project spec on disk prior to reload is honored
+		Confirm that a change to loaded required project spec prior to reload is honored
 		---------------------------
 		load  spec_0065, 
 		create a git clone for RowanSample10 in different disk location, 
@@ -3665,7 +3614,7 @@ RwRowanSample9Test >> testIssue700_2 [
 		load
 		confirm that RowanSample10 repositoryRoot points at new disk location
 			and that RowanSample10 tests are loaded
-		--> change the load spec for RowanSample10 in RowanSample0/rowan/projects
+		--> change the conditionalProjectAttributes for loaded RowanSample10
 		reload RowanSample9
 		confirm that RowanSample10 tests are not loaded
 	"
@@ -3673,11 +3622,8 @@ RwRowanSample9Test >> testIssue700_2 [
 	"https://github.com/GemTalk/Rowan/issues/700"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
-		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome
-		loadSpecFor10From9 |
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
-
-	projectName := loadSpec projectName.
+		requiredProjectName requiredRepositoryRoot requiredProjectsHome requiredLoadSpec attributes |
+	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
 
@@ -3685,10 +3631,12 @@ RwRowanSample9Test >> testIssue700_2 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
 
 "resolve project"
+	loadSpec := self _loadSpecNamed: 'spec_0065'.
 	resolvedProject := loadSpec resolve.
 
 "load project"
@@ -3701,11 +3649,12 @@ RwRowanSample9Test >> testIssue700_2 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
+	self deny: project testSuite tests isEmpty.
 	self deny: requiredProject testSuite tests isEmpty.
 
 "clone RowanSample10 in alternate location"
 	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
-	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0001'.
+	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0002'.
 	requiredLoadSpec projectsHome: requiredProjectsHome.
 	requiredLoadSpec resolveStrict.
 	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
@@ -3717,10 +3666,10 @@ RwRowanSample9Test >> testIssue700_2 [
 "validate"
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
 
-"--> change the load spec for RowanSample10 in RowanSample0/rowan/projects"
-	loadSpecFor10From9 := RwSpecification fromUrl: 'file:', (project projectsRoot / requiredProject name, 'ston') pathString.
-	loadSpecFor10From9 customConditionalAttributes: {}. "clear custom attributes"
-	loadSpecFor10From9 exportTo: project projectsRoot.
+"change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
+	attributes := requiredProject _projectDefinitionPlatformConditionalAttributes copy. 
+	attributes remove: 'mytests'.
+	requiredProject _projectDefinitionPlatformConditionalAttributes: attributes.
 
 "load"
 	loadedProjects := project reload.
