@@ -51508,6 +51508,14 @@ _projectDefinitionPlatformConditionalAttributes
 	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes
 %
 
+category: 'accessing'
+method: RwProject
+_projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+%
+
 category: 'private'
 method: RwProject
 _projectRepository
@@ -83598,6 +83606,13 @@ _projectDefinitionPlatformConditionalAttributes
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+_projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+
+	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+%
+
 ! Class implementation for 'RwMethodAdditionOrRemoval'
 
 !		Class methods for 'RwMethodAdditionOrRemoval'
@@ -86131,18 +86146,20 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead}}.
+	componentNamesToRead.
+	platformConditionalAttributes}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn |
+			| nextDefArray rp cn pca |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
+			pca := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				platformConditionalAttributes: platformConditionalAttributes.
+				platformConditionalAttributes: pca.
 
 			projectVisitedQueue
 				addLast:
@@ -86164,7 +86181,8 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(theLoadSpec componentNames)} ] ].
+							(theLoadSpec componentNames).
+							(theResolvedProject platformConditionalAttributes)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
