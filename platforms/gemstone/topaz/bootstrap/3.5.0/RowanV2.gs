@@ -65380,6 +65380,7 @@ readProjectSetComponentNames: componentNames
 
 	^ self
 		readProjectSetComponentNames: componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
