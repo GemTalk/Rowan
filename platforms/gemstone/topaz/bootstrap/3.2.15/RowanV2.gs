@@ -4119,27 +4119,6 @@ removeallclassmethods MemoryFileWriteStream
 
 doit
 (Object
-	subclass: 'Message'
-	instVarNames: #( selector args lookupClass )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'FileSystem-Core-32x';
-		comment: 'I represent a selector and its argument values.
-	
-Generally, the system does not use instances of Message for efficiency reasons. However, when a message is not understood by its receiver, the interpreter will make up an instance of me in order to capture the information involved in an actual message transmission. This instance is sent it as an argument with the message doesNotUnderstand: to the receiver.';
-		immediateInvariant.
-true.
-%
-
-removeallmethods Message
-removeallclassmethods Message
-
-doit
-(Object
 	indexableSubclass: 'Path'
 	instVarNames: #()
 	classVars: #()
@@ -37484,177 +37463,6 @@ stream
 	^ stream ifNil: [ stream := WriteStreamPortable on: file bytes from: 1 to: file size ]
 %
 
-! Class implementation for 'Message'
-
-!		Class methods for 'Message'
-
-category: 'instance creation'
-classmethod: Message
-selector: aSymbol
-	"Answer an instance of me with unary selector, aSymbol."
-
-	^self new setSelector: aSymbol arguments: (Array new: 0)
-%
-
-category: 'instance creation'
-classmethod: Message
-selector: aSymbol argument: anObject 
-	"Answer an instance of me whose selector is aSymbol and single 
-	argument is anObject."
-
-	^self new setSelector: aSymbol arguments: { anObject }
-%
-
-category: 'instance creation'
-classmethod: Message
-selector: aSymbol arguments: anArray 
-	"Answer an instance of me with selector, aSymbol, and arguments, 
-	anArray."
-
-	^self new setSelector: aSymbol arguments: anArray
-%
-
-!		Instance methods for 'Message'
-
-category: 'comparing'
-method: Message
-analogousCodeTo: anObject
-	"For MethodPropertires comparison."
-	^self class == anObject class
-	  and: [selector == anObject selector
-	  and: [args = anObject arguments
-	  and: [lookupClass == anObject lookupClass]]]
-%
-
-category: 'accessing'
-method: Message
-argument
-	"Answer the first (presumably sole) argument"
-
-	^args at: 1
-%
-
-category: 'accessing'
-method: Message
-argument: newValue
-	"Change the first argument to newValue and answer self"
-
-	args at: 1 put: newValue
-%
-
-category: 'accessing'
-method: Message
-arguments
-	"Answer the arguments of the receiver."
-
-	^args
-%
-
-category: 'testing'
-method: Message
-hasArguments
-	^args notEmpty
-%
-
-category: 'accessing'
-method: Message
-lookupClass
-
-	^ lookupClass
-%
-
-category: 'private'
-method: Message
-lookupClass: aClass
-
-	lookupClass := aClass
-%
-
-category: 'accessing'
-method: Message
-numArgs
-	"Answer the number of arguments in this message"
-
-	^args size
-%
-
-category: 'printing'
-method: Message
-printOn: stream
-
-	args isEmpty ifTrue: [^ stream nextPutAll: selector].
-	args with: selector keywords do: [:arg :word |
-		stream nextPutAll: word.
-		stream space.
-		arg printOn: stream.
-		stream space.
-	].
-	stream skip: -1.
-%
-
-category: 'accessing'
-method: Message
-selector
-	"Answer the selector of the receiver."
-
-	^selector
-%
-
-category: 'accessing'
-method: Message
-sends: aSelector
-	"answer whether this message's selector is aSelector"
-
-	^selector == aSelector
-%
-
-category: 'sending'
-method: Message
-sendTo: receiver
-	"answer the result of sending this message to receiver"
-
-	^ receiver perform: selector withArguments: args
-%
-
-category: 'sending'
-method: Message
-sentTo: receiver
-	"answer the result of sending this message to receiver"
-
-	^ lookupClass
-		ifNil: [ receiver perform: selector withArguments: args]
-		ifNotNil: [ receiver perform: selector withArguments: args inSuperclass: lookupClass]
-%
-
-category: 'private'
-method: Message
-setSelector: aSymbol
-
-	selector := aSymbol.
-%
-
-category: 'private'
-method: Message
-setSelector: aSymbol arguments: anArray
-
-	selector := aSymbol.
-	args := anArray
-%
-
-category: 'printing'
-method: Message
-storeOn: aStream 
-	"Refer to the comment in Object|storeOn:."
-
-	aStream nextPut: $(;
-	 nextPutAll: self class name;
-	 nextPutAll: ' selector: ';
-	 store: selector;
-	 nextPutAll: ' arguments: ';
-	 store: args;
-	 nextPut: $)
-%
-
 ! Class implementation for 'Path'
 
 !		Class methods for 'Path'
@@ -65120,7 +64928,6 @@ loadProjectSet
 		loadProjectSetDefinition:
 			(self
 				readProjectSet: self customConditionalAttributes
-				customConditionalAttributes: self customConditionalAttributes
 				platformConditionalAttributes: self platformConditionalAttributes)
 %
 
@@ -96888,6 +96695,13 @@ isMemoryFileSystem
 
 !		Class methods for 'GsFile'
 
+category: '*filesystem-gemstone-kernel-35x'
+classmethod: GsFile
+_contentsOfServerDirectory: aPathName expandPath: aBoolean
+
+	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
+%
+
 category: '*rowan-gemstone-kernel-32x'
 classmethod: GsFile
 _stat: aName  isLstat: aBoolean 
@@ -97523,31 +97337,9 @@ relativeToReference: aReference
 	^ self relativeToPath: aReference path
 %
 
-! Class extensions for 'PositionableStream'
-
-!		Instance methods for 'PositionableStream'
-
-category: '*ston-gemstone-kernel32x'
-method: PositionableStream
-beforeEnd
-"Returns true if the receiver can access more objects, false if not .
- GemStone extension. "
-
-^position < readLimit
-%
-
 ! Class extensions for 'PositionableStreamPortable'
 
 !		Instance methods for 'PositionableStreamPortable'
-
-category: '*ston-gemstone-kernel32x'
-method: PositionableStreamPortable
-beforeEnd
-"Returns true if the receiver can access more objects, false if not .
- GemStone extension. "
-
-^position < readLimit
-%
 
 category: '*filesystem-gemstone-kernel'
 method: PositionableStreamPortable
@@ -97804,16 +97596,16 @@ _gemstonePlatformSpec
 
 !		Instance methods for 'RowanMethodService'
 
-category: '*rowan-services-core-32x'
+category: '*rowan-services-core-37x'
 method: RowanMethodService
 _initializeBreakPointsFor: theMethod
-  "Answers an Array stepPoints"
+  "Answers an Array stepPoints - _allBreakpoints array size changed in 3.7.0"
   | list |
   list := OrderedCollection new.
   theMethod _allBreakpoints
     ifNil: [ ^ OrderedCollection new ]
     ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
+      1 to: anArray size by: 4 do: [ :i | 
         list
           add:
             (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
@@ -101515,6 +101307,42 @@ _keysAndValuesDo: aBlock
   dict keysAndValuesDo:[ :each :aVal | aBlock value: each value: 1 ]
 %
 
+! Class extensions for 'SmallDate'
+
+!		Class methods for 'SmallDate'
+
+category: '*ston-gemstone-kernel36x'
+classmethod: SmallDate
+stonName
+	"Need to use a well-known class name. Instances of Date converted to SmallDate if in range"
+	
+	^ 'Date'
+%
+
+! Class extensions for 'SmallDateAndTime'
+
+!		Class methods for 'SmallDateAndTime'
+
+category: '*ston-gemstone-kernel36x'
+classmethod: SmallDateAndTime
+stonName
+	"Need to use a well-known class name. Instances of DateAndTime converted to SmallDateAndTime if in range"
+	
+	^ 'DateAndTime'
+%
+
+! Class extensions for 'SmallTime'
+
+!		Class methods for 'SmallTime'
+
+category: '*ston-gemstone-kernel36x'
+classmethod: SmallTime
+stonName
+	"Need to use a well-known class name. Instances of Time converted to SmallTime if in range"
+	
+	^ 'Time'
+%
+
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -101929,13 +101757,6 @@ asByteArray
 			stream nextPut: each ] ]
 %
 
-category: '*filesystem-gemstone-kernel-32x'
-method: Utf8
-asString
-  "override the *filesystem  ByteArray >> asString"
-  ^ self decodeToString   "or maybe  decodeToUnicode ??"
-%
-
 ! Class extensions for 'Warning'
 
 !		Instance methods for 'Warning'
@@ -101973,12 +101794,10 @@ buffer
 	^ buffer
 %
 
-category: '*zinc-character-encoding-core-32x'
+category: '*zinc-character-encoding-core-35x'
 method: ZnBufferedReadStream
 sizeBufferPatch9: size
   "noop for 3.5.0 and beyond - still needed for 3.2.15"
-
-	self sizeBuffer: size .
 %
 
 ! Class Initialization

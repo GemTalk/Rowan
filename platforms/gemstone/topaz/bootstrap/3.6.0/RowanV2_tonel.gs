@@ -3235,31 +3235,9 @@ stonShouldWriteNilInstVars
 	^ false
 %
 
-! Class extensions for 'PositionableStream'
-
-!		Instance methods for 'PositionableStream'
-
-category: '*ston-gemstone-kernel32x'
-method: PositionableStream
-beforeEnd
-"Returns true if the receiver can access more objects, false if not .
- GemStone extension. "
-
-^position < readLimit
-%
-
 ! Class extensions for 'PositionableStreamPortable'
 
 !		Instance methods for 'PositionableStreamPortable'
-
-category: '*ston-gemstone-kernel32x'
-method: PositionableStreamPortable
-beforeEnd
-"Returns true if the receiver can access more objects, false if not .
- GemStone extension. "
-
-^position < readLimit
-%
 
 category: '*rowan-tonel-gemstone-kernel'
 method: PositionableStreamPortable

@@ -64389,7 +64389,6 @@ loadProjectSet
 		loadProjectSetDefinition:
 			(self
 				readProjectSet: self customConditionalAttributes
-				customConditionalAttributes: self customConditionalAttributes
 				platformConditionalAttributes: self platformConditionalAttributes)
 %
 
@@ -94107,16 +94106,16 @@ _gemstonePlatformSpec
 
 !		Instance methods for 'RowanMethodService'
 
-category: '*rowan-services-core-32x'
+category: '*rowan-services-core-37x'
 method: RowanMethodService
 _initializeBreakPointsFor: theMethod
-  "Answers an Array stepPoints"
+  "Answers an Array stepPoints - _allBreakpoints array size changed in 3.7.0"
   | list |
   list := OrderedCollection new.
   theMethod _allBreakpoints
     ifNil: [ ^ OrderedCollection new ]
     ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
+      1 to: anArray size by: 4 do: [ :i | 
         list
           add:
             (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].

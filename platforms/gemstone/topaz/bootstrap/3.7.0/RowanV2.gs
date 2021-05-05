@@ -64389,7 +64389,6 @@ loadProjectSet
 		loadProjectSetDefinition:
 			(self
 				readProjectSet: self customConditionalAttributes
-				customConditionalAttributes: self customConditionalAttributes
 				platformConditionalAttributes: self platformConditionalAttributes)
 %
 
