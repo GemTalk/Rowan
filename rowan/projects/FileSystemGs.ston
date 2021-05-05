@@ -13,9 +13,7 @@ RwEmbeddedLoadSpecificationV2 {
 		'Tests'
 
 	],
-	#customConditionalAttributes : [
-		'tests'
-	],
+	#customConditionalAttributes : [ ],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {

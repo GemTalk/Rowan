@@ -9,9 +9,7 @@ RwEmbeddedLoadSpecificationV2 {
 		'Core',
 		'Tests'
 	],
-	#customConditionalAttributes : [
-		'tests'
-	],
+	#customConditionalAttributes : [ ],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
