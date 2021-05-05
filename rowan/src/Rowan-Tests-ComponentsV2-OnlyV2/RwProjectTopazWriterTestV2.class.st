@@ -1471,9 +1471,9 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 				repositoryRootPath: repositoryRootPath;
 				topazFilenameComponentMap: (Dictionary new
-						at: 'rowan_bootstrap_app' put: {{'Kernel'}. {}};
-						at: 'rowan_bootstrap_globals' put: {{'Globals'}. {}};
-						at: 'rowan_bootstrap_user_globals' put: {{'UserGlobals'}. {}};
+						at: 'rowan_bootstrap_app' put: {{'Kernel'}};
+						at: 'rowan_bootstrap_globals' put: {{'Globals'}};
+						at: 'rowan_bootstrap_user_globals' put: {{'UserGlobals'}};
 						yourself);
 				yourself.
 	self should: [ visitor visit: projectSetModification ] raise: Error

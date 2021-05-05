@@ -278,7 +278,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
 	"execute without errors"
 
 	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
-		projectHome rowanProject projectAlias writerVisitorClass |
+		projectHome rowanProject projectAlias writerVisitorClass customConditionalAttributes |
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := self _testRowanProjectsSandbox.
@@ -291,13 +291,13 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
 
 "Read project and packages from disk for Pharo"
 	platformConfigurationAttributes := {
-		'common'.
-		'pharo'.	"want to read pharo packages"
-	}.
+		'common' }.
+	customConditionalAttributes := {'pharo' }.	"want to read pharo packages"
+
 	projectDefinition := (Rowan globalNamed: 'RwComponentProjectDefinition') 
 		newForUrl: 'file:', rowanProject repositoryRootPath, '/platforms/pharo/rowan/specs/Rowan_component.ston'.
 	projectDefinition projectHome: rowanProject repositoryRootPath asFileReference parent.
-	projectDefinition read: platformConfigurationAttributes.
+	projectDefinition read: customConditionalAttributes platformConditionalAttributes: platformConfigurationAttributes.
 
 "Write project and packages to disk in filetree format, for bootstrapping Pharo"
 	projectDefinition

@@ -20,6 +20,12 @@ RwAbstractProject >> comment [
 	^ self _concreteProject comment
 ]
 
+{ #category : 'accessing' }
+RwAbstractProject >> customConditionalAttributes [
+	"Answer the customConditionalAttributes that would be used to load the project"
+	^ self _concreteProject customConditionalAttributes
+]
+
 { #category : 'transitions' }
 RwAbstractProject >> defined [
 	self subclassResponsibility: #'defined'

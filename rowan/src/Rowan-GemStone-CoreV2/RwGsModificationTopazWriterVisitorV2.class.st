@@ -509,17 +509,19 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 			readTool := Rowan projectTools readV2.
 			self topazFilenameComponentMap
 				keysAndValuesDo: [ :filename :componentAndPlatformConditionalAttributesMap | 
-					| componentNames platformConditionalAttributes visitor packageNames componentAndPlatformConditionalAttributes |
+					| componentNames customConditionalAttributes platformConditionalAttributes visitor packageNames componentAndPlatformConditionalAttributes |
 					componentAndPlatformConditionalAttributes := componentAndPlatformConditionalAttributesMap
 						at: currentProjectDefinition name
-						ifAbsent: [ 
-							{{}.
-							{}} ].
+						ifAbsent: [ {{}} ].
 					componentAndPlatformConditionalAttributes
 						ifNotNil: [ 
 							componentNames := componentAndPlatformConditionalAttributes at: 1.
+							customConditionalAttributes := componentAndPlatformConditionalAttributes
+								at: 2
+								ifAbsent: [ {} ].
 							platformConditionalAttributes := componentAndPlatformConditionalAttributes
-								at: 2.
+								at: 3
+								ifAbsent: [ {} ].
 							componentNames isEmpty
 								ifFalse: [ 
 									currentProjectDefinition componentsRoot exists
@@ -528,6 +530,7 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 											visitor := readTool
 												readProjectForResolvedProject: currentProjectDefinition
 												withComponentNames: componentNames
+												customConditionalAttributes: customConditionalAttributes
 												platformConditionalAttributes: platformConditionalAttributes ] ].
 							packageNames := visitor
 								ifNil: [ 

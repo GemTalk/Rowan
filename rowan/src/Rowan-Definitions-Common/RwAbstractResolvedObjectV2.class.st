@@ -122,6 +122,12 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 	^ self repositoryRoot / self _projectSpecification componentsPath
 ]
 
+{ #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> customConditionalAttributes [
+
+	^ self _loadSpecification customConditionalAttributes
+]
+
 { #category : 'exporting' }
 RwAbstractResolvedObjectV2 >> exportLoadSpecification [
 	self _loadSpecification exportTo: self specsRoot
@@ -168,7 +174,7 @@ RwAbstractResolvedObjectV2 >> packagesRoot [
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> platformConditionalAttributes [
 
-	^ self _loadSpecification customConditionalAttributes
+	^ Rowan platformConditionalAttributes
 ]
 
 { #category : 'copying' }

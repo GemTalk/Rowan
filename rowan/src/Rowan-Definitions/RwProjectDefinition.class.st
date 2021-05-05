@@ -28,6 +28,26 @@ RwProjectDefinition >> _projectDefinition [
 	^ self
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> _projectDefinitionCustomConditionalAttributes [
+	^ properties
+		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
+		ifAbsent: [  ]
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> _projectDefinitionCustomConditionalAttributes: customConditionalAtttributesOrNil [
+	customConditionalAtttributesOrNil
+		ifNil: [ 
+			^ properties
+				removeKey:
+					RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
+				ifAbsent: [  ] ].
+	^ properties
+		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
+		put: customConditionalAtttributesOrNil
+]
+
 { #category : 'comparing' }
 RwProjectDefinition >> _projectDefinitionForCompare [
 	^ self _projectDefinition

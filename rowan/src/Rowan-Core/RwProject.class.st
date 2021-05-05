@@ -35,6 +35,20 @@ RwProject >> _loadSpecification [
 ]
 
 { #category : 'accessing' }
+RwProject >> _projectDefinitionCustomConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionCustomConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwProject >> _projectDefinitionCustomConditionalAttributes:customConditionalAttributes [
+	"Answer the projectDefinitionCustomConditionalAttributes used to load the project"
+
+	^ self _loadedProject _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwProject >> _projectDefinitionPlatformConditionalAttributes [
 	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
 
@@ -210,11 +224,6 @@ RwProject >> currentBranchName [
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
 
-]
-
-{ #category : 'accessing' }
-RwProject >> customConditionalAttributes [
-	^ self _loadSpecification customConditionalAttributes
 ]
 
 { #category : 'accessing' }

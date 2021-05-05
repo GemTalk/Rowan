@@ -102,7 +102,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'to be removed' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
@@ -128,7 +128,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'to be removed' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
@@ -151,6 +151,13 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolve;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> _projectDefinitionCustomConditionalAttributes [
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
 ]
 
 { #category : 'accessing' }

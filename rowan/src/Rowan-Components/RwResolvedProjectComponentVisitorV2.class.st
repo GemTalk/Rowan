@@ -7,6 +7,7 @@ Class {
 		'readProjects',
 		'visitedComponents',
 		'visitedComponentNames',
+		'customConditionalAttributes',
 		'platformConditionalAttributes',
 		'definedGroupNames',
 		'projectNames',
@@ -25,6 +26,27 @@ RwResolvedProjectComponentVisitorV2 class >> new [
 ]
 
 { #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				customConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
+	^ visitor
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
@@ -43,6 +65,64 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 ]
 
 { #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {{resolvedProject.
+	componentNamesToRead.
+	platformConditionalAttributes.
+customConditionalAttributes}}.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| nextDefArray rp cn pca cca |
+			nextDefArray := projectVisitorQueue removeFirst.
+			rp := nextDefArray at: 1.
+			cn := nextDefArray at: 2.
+			pca := nextDefArray at: 3.
+			cca := nextDefArray at: 4.
+
+			visitor := self
+				readProjectForResolvedProject: rp
+				withComponentNames: cn
+				customConditionalAttributes: cca
+				platformConditionalAttributes: pca.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					nextDefArray}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject theLoadSpec |
+					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
+						ifNotNil: [ :project | 
+							"project is already present in image ... so use it"
+							theLoadSpec := project _loadSpecification.
+							theResolvedProject := project asDefinition resolve ]
+						ifNil: [ 
+							"derive resolved project from the load spec"
+							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+							theLoadSpec := loadSpec ].
+					projectVisitorQueue
+						addLast:
+							{theResolvedProject.
+							(theLoadSpec componentNames).
+							(theResolvedProject platformConditionalAttributes).
+							(theResolvedProject customConditionalAttributes)} ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| ndf theVisitor theResolvedProject |
+			theVisitor := visitedArray at: 1.
+			ndf := visitedArray at: 2.
+			theResolvedProject := ndf at: 1.
+			theResolvedProject readPackageNames: theResolvedProject packageNames.
+			projectSetDefinition addProject: theResolvedProject ].
+	^ projectSetDefinition
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -96,10 +176,11 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 	^ projectSetDefinition
 ]
 
-{ #category : 'instance creation' }
-RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ self new
 		platformConditionalAttributes: platformConditionalAttributes;
+		customConditionalAttributes: customConditionalAttributes;
 		resolvedProject: resolvedProject;
 		yourself
 ]
@@ -134,7 +215,7 @@ RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
-	self platformConditionalAttributes do: [:anObject |
+	self platformConditionalAttributes, self customConditionalAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
 ]
@@ -167,6 +248,21 @@ RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ign
 ]
 
 { #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes [
+	| theComponentNames  |
+	resolvedProject := aResolvedProject.
+	platformConditionalAttributes := aPlatformConditionalAttributes.
+	customConditionalAttributes := aCustomConditionalAttributes.
+
+	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
+	theComponentNames := componentNamesToRead isEmpty
+		ifTrue: [ resolvedProject componentNames ]
+		ifFalse: [ componentNamesToRead ].
+	^ self _visitComponents: theComponentNames
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes [
 	| theComponentNames  |
 	resolvedProject := aResolvedProject.
@@ -232,6 +328,18 @@ RwResolvedProjectComponentVisitorV2 >> componentsPath [
 	^ self resolvedProject componentsRoot
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> customConditionalAttributes [
+
+	^ customConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> customConditionalAttributes: aColl [
+
+	customConditionalAttributes := aColl
+]
+
 { #category : 'initialization' }
 RwResolvedProjectComponentVisitorV2 >> initialize [
 	visitedComponentNames := Set new.
@@ -240,6 +348,7 @@ RwResolvedProjectComponentVisitorV2 >> initialize [
 	readComponents := Dictionary new.
 	readProjects := Dictionary new.
 	platformConditionalAttributes := #().
+	customConditionalAttributes := #().
 	projectLoadSpecs := Set new.
 	visitedComponents := Dictionary new
 ]

@@ -5,16 +5,17 @@ Class {
 }
 
 { #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNames [
-	"read packages and project metadata into projectDefinition ... return the resolvedProject"
-
-	^ self
+RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	RwResolvedProjectComponentVisitorV2
 		readProjectForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		platformConditionalAttributes: resolvedProject platformConditionalAttributes
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject readPackageNames: resolvedProject packageNames.
+	^ resolvedProject
 ]
 
-{ #category : 'read resolved projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	RwResolvedProjectComponentVisitorV2
 		readProjectForResolvedProject: resolvedProject
@@ -30,23 +31,27 @@ RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName [
 ]
 
 { #category : 'read loaded projects' }
+RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	^ (Rowan image loadedProjectNamed: projectName) asDefinition
+		readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
 	^ (Rowan image loadedProjectNamed: projectName) asDefinition
 		readProjectSet: platformConditionalAttributes
 ]
 
 { #category : 'read resolved projects' }
-RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames [ 
-	"read packages and project metadata into projectDefinition ... return a project definition
-		set that contains projectDefinition and any dependent projects"
-
-	^ self
+RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForResolvedProject: resolvedProject
 		withComponentNames: componentNames
-		platformConditionalAttributes: resolvedProject platformConditionalAttributes
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'read resolved projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForResolvedProject: resolvedProject

@@ -3386,9 +3386,9 @@ RwRowanSample9Test >> testIssue571 [
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects customConditionalAttributes  
+	| loadSpec projectName projectNames resolvedProject loadedProjects  
 		defaultPlatformAttributes expectedProjectDefinitionPlatformConditionalAttributes  
-		packageName1 theLoadSpec project thePlatformConditionalAttributes |
+		packageName1 theLoadSpec project thePlatformConditionalAttributes theCustomConditionalAttributes |
 	loadSpec := self _loadSpecNamed: 'spec_0032'.
 
 	projectName := loadSpec projectName.
@@ -3399,14 +3399,14 @@ RwRowanSample9Test >> testIssue571 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	customConditionalAttributes := loadSpec customConditionalAttributes.
-	defaultPlatformAttributes := Rowan platformConditionalAttributes.
-	expectedProjectDefinitionPlatformConditionalAttributes := customConditionalAttributes, defaultPlatformAttributes.
+	theCustomConditionalAttributes := loadSpec customConditionalAttribute scopy.
+	thePlatformConditionalAttributes := Rowan platformConditionalAttributes.
 
 "resolve project - baseline"
 	resolvedProject := loadSpec resolve.
 
-	self assert: resolvedProject platformConditionalAttributes = expectedProjectDefinitionPlatformConditionalAttributes.
+	self assert: resolvedProject customConditionalAttributes = theCustomConditionalAttributes.
+	self assert: resolvedProject platformConditionalAttributes = thePlatformConditionalAttributes.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3450,10 +3450,12 @@ RwRowanSample9Test >> testIssue571 [
 	resolvedProject := project asDefinition.
 	self assert: resolvedProject _projectDefinitionPlatformConditionalAttributes =
 		thePlatformConditionalAttributes.
+	self assert: resolvedProject _projectDefinitionCustomConditionalAttributes =
+		theCustomConditionalAttributes.
 
-	thePlatformConditionalAttributes remove: 'v1' ifAbsent: [self error: 'missing attribute'].
+	theCustomConditionalAttributes remove: 'v1' ifAbsent: [self error: 'missing attribute'].
 
-	resolvedProject read: thePlatformConditionalAttributes.
+	resolvedProject read: theCustomConditionalAttributes platformConditionalAttributes: thePlatformConditionalAttributes.
 	loadedProjects := resolvedProject load.
 "validate"
 	thePlatformConditionalAttributes := (self
@@ -3467,10 +3469,12 @@ RwRowanSample9Test >> testIssue571 [
 	resolvedProject := project asDefinition.
 	self assert: resolvedProject _projectDefinitionPlatformConditionalAttributes =
 		thePlatformConditionalAttributes.
+	self assert: resolvedProject _projectDefinitionCustomConditionalAttributes =
+		theCustomConditionalAttributes.
 
-	thePlatformConditionalAttributes add: 'v1'.
+	theCustomConditionalAttributes add: 'v1'.
 
-	loadedProjects := resolvedProject loadProjectSet: thePlatformConditionalAttributes.
+	loadedProjects := resolvedProject loadProjectSet: theCustomConditionalAttributes platformConditionalAttributes:thePlatformConditionalAttributes.
 "validate"
 	thePlatformConditionalAttributes := (self
 		_validate_571: resolvedProject

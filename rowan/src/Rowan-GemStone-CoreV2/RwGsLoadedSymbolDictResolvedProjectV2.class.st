@@ -17,6 +17,19 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectComponents [
 	^ handle _projectComponents
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionCustomConditionalAttributes [
+	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
+
+	^ self resolvedProject _projectDefinitionCustomConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionCustomConditionalAttributes: customConditionalAttributes [
+
+	^ self resolvedProject _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
+]
+
 { #category : 'comparing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionForCompare [
 	^ self
@@ -134,6 +147,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 			RwLoadedProject _projectLoadedDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				handle _projectDefinitionCustomConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				handle _projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
@@ -192,6 +207,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentNames [
 { #category : 'properties' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
 	^ self resolvedProject componentsRoot
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> customConditionalAttributes [
+	"Answer the customConditionalAttributes used to load the project"
+
+	^ self resolvedProject customConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -383,8 +405,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForCompare [
 		at: 'name' put: handle projectName;
 		at: RwLoadedProject _projectDefinitionSourceKey
 			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
+		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
+			put: handle _projectDefinitionCustomConditionalAttributes copy;
 		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-			put: handle _projectDefinitionPlatformConditionalAttributes copy.
+			put: handle _projectDefinitionPlatformConditionalAttributes copy;
+		yourself.
 	^ props
 ]
 

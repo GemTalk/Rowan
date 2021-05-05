@@ -47,6 +47,29 @@ RwResolvedProjectComponentsV2 >> _addPackageGroup: aPackageGroup [
 ]
 
 { #category : 'enumerating' }
+RwResolvedProjectComponentsV2 >> _conditionalComponentsStartingWith: aComponent customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock [
+	visitedComponentNames add: aComponent name.
+	aComponent conditionalPropertyMatchers
+		keysAndValuesDo: [ :platformMatchers :ignored | 
+			(self
+				_platformAttributeMatchIn: platformMatchers
+				using: platformConditionalAttributes, customConditionalAttributes)
+				ifTrue: [ 
+					aBlock value: aComponent.
+					aComponent componentNames
+						do: [ :cName | 
+							(visitedComponentNames includes: cName)
+								ifFalse: [ 
+									self
+										_conditionalComponentsStartingWith:
+											(self componentNamed: cName ifAbsent: [ self packageGroupNamed: cName ])
+										customConditionalAttributes: customConditionalAttributes
+										platformConditionalAttributes: platformConditionalAttributes
+										visited: visitedComponentNames
+										do: aBlock ] ] ] ]
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectComponentsV2 >> _conditionalComponentsStartingWith: aComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock [
 	visitedComponentNames add: aComponent name.
 	aComponent conditionalPropertyMatchers
@@ -81,8 +104,8 @@ RwResolvedProjectComponentsV2 >> _gemstoneAllUsersName [
 ]
 
 { #category : 'enumerating' }
-RwResolvedProjectComponentsV2 >> _matchPlatformAttributes: platformPatternMatcher using: platformConditionalAttributes [
-	platformConditionalAttributes
+RwResolvedProjectComponentsV2 >> _matchPlatformAttributes: platformPatternMatcher using: conditionalAttributes [
+	conditionalAttributes
 		do: [ :anObject | 
 			(platformPatternMatcher match: anObject)
 				ifTrue: [ ^ true ] ].
@@ -90,12 +113,12 @@ RwResolvedProjectComponentsV2 >> _matchPlatformAttributes: platformPatternMatche
 ]
 
 { #category : 'enumerating' }
-RwResolvedProjectComponentsV2 >> _platformAttributeMatchIn: platformMatchersList using: platformConditionalAttributes [
+RwResolvedProjectComponentsV2 >> _platformAttributeMatchIn: platformMatchersList using: conditionalAttributes [
 	platformMatchersList
 		do: [ :platformPatternMatcher | 
 			(self
 				_matchPlatformAttributes: platformPatternMatcher
-				using: platformConditionalAttributes)
+				using: conditionalAttributes)
 				ifTrue: [ ^ true ] ].
 	^ false
 ]
@@ -416,6 +439,23 @@ RwResolvedProjectComponentsV2 >> componentsWithDoits [
 ]
 
 { #category : 'enumerating' }
+RwResolvedProjectComponentsV2 >> conditionalComponentsStartingWith: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes do: aBlock [
+	| visited |
+	visited := Set new.
+	componentNames
+		do: [ :componentName | 
+			| theComponent |
+			theComponent := self componentNamed: componentName.
+
+			self
+				_conditionalComponentsStartingWith: theComponent
+				customConditionalAttributes: customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes
+				visited: visited
+				do: aBlock ]
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectComponentsV2 >> conditionalComponentsStartingWith: componentNames platformConditionalAttributes: platformConditionalAttributes do: aBlock [
 	| visited |
 	visited := Set new.

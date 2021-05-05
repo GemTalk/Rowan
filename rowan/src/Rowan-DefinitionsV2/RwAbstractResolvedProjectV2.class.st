@@ -165,9 +165,8 @@ RwAbstractResolvedProjectV2 >> commit: message [
 
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> customConditionalAttributes [
-	"get the custom conditional attributes"
-
-	^ self _loadSpecification customConditionalAttributes
+	^ self _projectDefinitionCustomConditionalAttributes
+		ifNil: [ super customConditionalAttributes ]
 ]
 
 { #category : 'accessing' }
@@ -213,7 +212,7 @@ RwAbstractResolvedProjectV2 >> packageConvention: aString [
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> platformConditionalAttributes [
 	^ self _projectDefinitionPlatformConditionalAttributes
-		ifNil: [ super platformConditionalAttributes , Rowan platformConditionalAttributes ]
+		ifNil: [ super platformConditionalAttributes ]
 ]
 
 { #category : 'copying' }

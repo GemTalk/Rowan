@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : 'accessing' }
+RwLoadedProject class >> _projectDefinitionCustomConditionalAttributesKey [
+	"The value of the property key preserves the custom conditional attributes used to read the project from disk"
+
+	^ #'_Project_Definition_CustomConditionalAttributes'
+]
+
+{ #category : 'accessing' }
 RwLoadedProject class >> _projectDefinitionPlatformConditionalAttributesKey [
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 

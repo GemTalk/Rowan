@@ -100,6 +100,7 @@ RwProjectComponentVisitorV2Test >> testBasicVisit_withResolvedProject [
 
 	visitor := RwResolvedProjectComponentVisitorV2
 		resolvedProject: basicProject
+		customConditionalAttributes: #()
 		platformConditionalAttributes: platformConditionalAttributes.
 	projectName := basicProject projectAlias.
 

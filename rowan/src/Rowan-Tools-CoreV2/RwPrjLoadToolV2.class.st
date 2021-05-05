@@ -97,6 +97,9 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			theLoadedProject handle
 				_projectDefinitionPlatformConditionalAttributes:
 					projectDef _projectDefinitionPlatformConditionalAttributes.
+			theLoadedProject handle
+				_projectDefinitionCustomConditionalAttributes:
+					projectDef _projectDefinitionCustomConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 
@@ -115,41 +118,36 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
+		customConditionalAttributes: projectDefinition customConditionalAttributes
 		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
-	^ self
-		loadProjectDefinition: projectDefinition
-		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
-		instanceMigrator: instanceMigrator
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
+		customConditionalAttributes: customConditionalAttributes
 		platformConfigurationAttributes: platformConfigurationAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
+		customConditionalAttributes: customConditionalAttributes
 		platformConfigurationAttributes: platformConfigurationAttributes
 		instanceMigrator: instanceMigrator
 		symbolList: Rowan image symbolList
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
@@ -157,7 +155,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 		addProject: projectDefinition;
 		yourself.
 	(requiredProjectNames := projectDefinition
-		requiredProjectNames: platformConfigurationAttributes) isEmpty
+		requiredProjectNames: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ) isEmpty
 		ifFalse: [ 
 			| absentProjectNames |
 			"if required projects are not already present in the image, then they must be loaded at this time"
@@ -166,11 +164,20 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition platformConfiguratio
 			absentProjectNames isEmpty
 				ifFalse: [ 
 					projectSetDefinition := projectDefinition
-						readProjectSet: platformConfigurationAttributes ] ].
+						readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
 		symbolList: symbolList
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
+	^ self
+		loadProjectDefinition: projectDefinition
+		customConditionalAttributes: projectDefinition customConditionalAttributes
+		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by name' }
@@ -184,28 +191,26 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 	^ res
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
-       | platformConditionalAttributes project |
-       project := RwProject newNamed: projectName.
-       platformConditionalAttributes := project platformConditionalAttributes copy
-               asSet.
-       platformConditionalAttributes addAll: customConditionalAttributes.
-       ^ self
-               loadProjectNamed: projectName
-               platformConditionalAttributes: platformConditionalAttributes
+	| project |
+	project := RwProject newNamed: projectName.
+	^ self
+		loadProjectNamed: projectName
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: project platformConditionalAttributes copy
 ]
 
-{ #category : 'to be removed' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName platformConditionalAttributes: platformConditionalAttributes [
-       | projectSet res |
-       projectSet := Rowan projectTools readV2
-               readProjectSetForProjectNamed: projectName
-               platformConditionalAttributes: platformConditionalAttributes.
-       res := self loadProjectSetDefinition: projectSet.
-       "loaded project and loaded packages read from disk - mark them not dirty"
-      self markProjectSetNotDirty: projectSet.
-       ^ res
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| projectSet res |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	res := self loadProjectSetDefinition: projectSet.
+	self markProjectSetNotDirty: projectSet.	"loaded project and loaded packages read from disk - mark them not dirty"
+	^ res
 ]
 
 { #category : 'load project definitions' }
