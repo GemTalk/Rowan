@@ -298,7 +298,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttr
 ]
 
 { #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet :customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"
 		refresh the contents of the receiver from disk and create a project set that includes project definitions of
 			required projects, also read from disk. Then load the entire project set.
