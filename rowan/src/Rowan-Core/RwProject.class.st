@@ -390,7 +390,7 @@ RwProject >> loadProjectSet [
 	^ self _loadedProject loadProjectSet
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwProject >> loadProjectSet: platformConditionalAttributes [
 	"
 		refresh the contents of the receiver from disk and create a project set that includes project definitions of
@@ -400,6 +400,18 @@ RwProject >> loadProjectSet: platformConditionalAttributes [
 	"
 
 	^ self _loadedProject loadProjectSet: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwProject >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self _loadedProject loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }

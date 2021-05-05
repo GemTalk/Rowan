@@ -51135,7 +51135,7 @@ loadProjectSet
 	^ self _loadedProject loadProjectSet
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwProject
 loadProjectSet: platformConditionalAttributes
 	"
@@ -51164,6 +51164,19 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 	^ self _loadedProject
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+%
+
+category: 'actions'
+method: RwProject
+loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self _loadedProject loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'components'
@@ -83405,7 +83418,7 @@ loadProjectSet
 	^ self asDefinition loadProjectSet
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 loadProjectSet: platformConditionalAttributes
 	"
@@ -83434,6 +83447,19 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 	^ self asDefinition
 		loadProjectSet: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
+%
+
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+loadProjectSet :customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self asDefinition loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'accessing'

@@ -285,7 +285,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	^ self asDefinition loadProjectSet
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
 	"
 		refresh the contents of the receiver from disk and create a project set that includes project definitions of
@@ -295,6 +295,18 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttr
 	"
 
 	^ self asDefinition loadProjectSet: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet :customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+
+		Use the specified platform conditional attributes when reading the receiver from disk.
+	"
+
+	^ self asDefinition loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
