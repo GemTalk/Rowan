@@ -82902,7 +82902,7 @@ loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
 
 category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-loadProjectSet :customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"
 		refresh the contents of the receiver from disk and create a project set that includes project definitions of
 			required projects, also read from disk. Then load the entire project set.
