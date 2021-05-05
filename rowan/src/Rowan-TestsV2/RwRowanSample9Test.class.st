@@ -3386,9 +3386,8 @@ RwRowanSample9Test >> testIssue571 [
 
 	"https://github.com/GemTalk/Rowan/issues/571"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects  
-		defaultPlatformAttributes expectedProjectDefinitionPlatformConditionalAttributes  
-		packageName1 theLoadSpec project thePlatformConditionalAttributes theCustomConditionalAttributes |
+	| loadSpec projectName projectNames resolvedProject loadedProjects  packageName1 theLoadSpec project 
+		thePlatformConditionalAttributes theCustomConditionalAttributes |
 	loadSpec := self _loadSpecNamed: 'spec_0032'.
 
 	projectName := loadSpec projectName.
