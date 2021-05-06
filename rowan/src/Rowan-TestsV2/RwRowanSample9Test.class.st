@@ -3398,7 +3398,7 @@ RwRowanSample9Test >> testIssue571 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	theCustomConditionalAttributes := loadSpec customConditionalAttribute scopy.
+	theCustomConditionalAttributes := loadSpec customConditionalAttributes copy.
 	thePlatformConditionalAttributes := Rowan platformConditionalAttributes.
 
 "resolve project - baseline"
@@ -3447,10 +3447,10 @@ RwRowanSample9Test >> testIssue571 [
 
 "resolve project from loaded definition - remove v1 attribute, resulting in packageName1 being unloaded"
 	resolvedProject := project asDefinition.
-	self assert: resolvedProject _projectDefinitionPlatformConditionalAttributes =
+	self assert: resolvedProject _projectDefinitionPlatformConditionalAttributes equals:
 		thePlatformConditionalAttributes.
-	self assert: resolvedProject _projectDefinitionCustomConditionalAttributes =
-		theCustomConditionalAttributes.
+	self assert: resolvedProject _projectDefinitionCustomConditionalAttributes sort equals:
+		theCustomConditionalAttributes sort.
 
 	theCustomConditionalAttributes remove: 'v1' ifAbsent: [self error: 'missing attribute'].
 
@@ -3609,7 +3609,7 @@ RwRowanSample9Test >> testIssue700_0 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue700_1 [
 	"
-		Confirm that a change to loaded required project spec prior to reload is honored
+		Confirm that a change to custom conditional attributes prior to reload is honored
 		---------------------------
 		load  spec_0065, 
 		create a git clone for RowanSample10 in different disk location, 
@@ -3617,7 +3617,7 @@ RwRowanSample9Test >> testIssue700_1 [
 		load
 		confirm that RowanSample10 repositoryRoot points at new disk location
 			and that RowanSample10 tests are loaded
-		--> change the conditionalProjectAttributes for loaded RowanSample10
+		--> change the customConditionalProjectAttributes for loaded RowanSample10
 		reload RowanSample9
 		confirm that RowanSample10 tests are not loaded
 	"
@@ -3670,9 +3670,9 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
 
 "change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
-	attributes := requiredProject _projectDefinitionPlatformConditionalAttributes copy. 
+	attributes := requiredProject _projectDefinitionCustomConditionalAttributes copy. 
 	attributes remove: 'mytests'.
-	requiredProject _projectDefinitionPlatformConditionalAttributes: attributes.
+	requiredProject _projectDefinitionCustomConditionalAttributes: attributes.
 
 "load"
 	loadedProjects := project reload.

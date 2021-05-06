@@ -193,12 +193,14 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
-	| project |
+	| project theCustomConditionalAttributes |
 	project := RwProject newNamed: projectName.
+	theCustomConditionalAttributes := project customConditionalAttributes copy asSet.
+	theCustomConditionalAttributes addAll: customConditionalAttributes.
 	^ self
 		loadProjectNamed: projectName
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: project platformConditionalAttributes copy
+		customConditionalAttributes: theCustomConditionalAttributes asArray
+		platformConditionalAttributes: project platformConditionalAttributes
 ]
 
 { #category : 'load project by name' }
