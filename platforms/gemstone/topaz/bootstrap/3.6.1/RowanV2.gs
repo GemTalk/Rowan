@@ -94482,6 +94482,14 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 					"empty or nil comments need to compare equal in GemStone"
 					^ (propertyValue == nil or: [ propertyValue isEmpty ])
 						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
+	propertyKey == #'classvars'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"order is not relevant when comparing class vars"
+					(propertyValue _isArray and: [ baseValue _isArray ])
+						ifTrue: [ ^ propertyValue sort = baseValue sort ] ] ].
 	^ super
 		_compareProperty: propertyKey
 		propertyVaue: propertyValue
