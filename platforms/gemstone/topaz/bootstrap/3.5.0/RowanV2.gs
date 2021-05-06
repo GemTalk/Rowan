@@ -65361,7 +65361,7 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -65385,7 +65385,7 @@ readProjectSet
 	^ self readProjectSetComponentNames: self componentNames
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSet: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -70341,7 +70341,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'read resolved projects'
 method: RwPrjReadToolV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
@@ -86350,7 +86350,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 	^ visitor
 %
 
-category: 'reading'
+category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
@@ -86409,27 +86409,26 @@ customConditionalAttributes}}.
 	^ projectSetDefinition
 %
 
-category: 'to be removed'
+category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	platformConditionalAttributes}}.
+	componentNamesToRead}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn pca |
+			| nextDefArray rp cn |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			pca := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				platformConditionalAttributes: pca.
+				customConditionalAttributes: rp customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
 				addLast:
@@ -86451,8 +86450,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(theLoadSpec componentNames).
-							(theResolvedProject platformConditionalAttributes)} ] ].
+							(theLoadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -97245,9 +97243,31 @@ relativeToReference: aReference
 	^ self relativeToPath: aReference path
 %
 
+! Class extensions for 'PositionableStream'
+
+!		Instance methods for 'PositionableStream'
+
+category: '*ston-gemstone-kernel32x'
+method: PositionableStream
+beforeEnd
+"Returns true if the receiver can access more objects, false if not .
+ GemStone extension. "
+
+^position < readLimit
+%
+
 ! Class extensions for 'PositionableStreamPortable'
 
 !		Instance methods for 'PositionableStreamPortable'
+
+category: '*ston-gemstone-kernel32x'
+method: PositionableStreamPortable
+beforeEnd
+"Returns true if the receiver can access more objects, false if not .
+ GemStone extension. "
+
+^position < readLimit
+%
 
 category: '*filesystem-gemstone-kernel'
 method: PositionableStreamPortable
@@ -97504,16 +97524,16 @@ _gemstonePlatformSpec
 
 !		Instance methods for 'RowanMethodService'
 
-category: '*rowan-services-core-37x'
+category: '*rowan-services-core-32x'
 method: RowanMethodService
 _initializeBreakPointsFor: theMethod
-  "Answers an Array stepPoints - _allBreakpoints array size changed in 3.7.0"
+  "Answers an Array stepPoints"
   | list |
   list := OrderedCollection new.
   theMethod _allBreakpoints
     ifNil: [ ^ OrderedCollection new ]
     ifNotNil: [ :anArray | 
-      1 to: anArray size by: 4 do: [ :i | 
+      1 to: anArray size by: 3 do: [ :i | 
         list
           add:
             (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
@@ -101169,42 +101189,6 @@ writeStreamPortable
 	^ WriteStreamPortable on: self
 %
 
-! Class extensions for 'SmallDate'
-
-!		Class methods for 'SmallDate'
-
-category: '*ston-gemstone-kernel36x'
-classmethod: SmallDate
-stonName
-	"Need to use a well-known class name. Instances of Date converted to SmallDate if in range"
-	
-	^ 'Date'
-%
-
-! Class extensions for 'SmallDateAndTime'
-
-!		Class methods for 'SmallDateAndTime'
-
-category: '*ston-gemstone-kernel36x'
-classmethod: SmallDateAndTime
-stonName
-	"Need to use a well-known class name. Instances of DateAndTime converted to SmallDateAndTime if in range"
-	
-	^ 'DateAndTime'
-%
-
-! Class extensions for 'SmallTime'
-
-!		Class methods for 'SmallTime'
-
-category: '*ston-gemstone-kernel36x'
-classmethod: SmallTime
-stonName
-	"Need to use a well-known class name. Instances of Time converted to SmallTime if in range"
-	
-	^ 'Time'
-%
-
 ! Class extensions for 'Stream'
 
 !		Instance methods for 'Stream'
@@ -101573,6 +101557,13 @@ asByteArray
 	^ ByteArray streamContents: [ :stream |
 		self do: [ :each |
 			stream nextPut: each ] ]
+%
+
+category: '*filesystem-gemstone-kernel-32x'
+method: Utf8
+asString
+  "override the *filesystem  ByteArray >> asString"
+  ^ self decodeToString   "or maybe  decodeToUnicode ??"
 %
 
 ! Class extensions for 'Warning'

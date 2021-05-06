@@ -64,7 +64,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 	^ visitor
 ]
 
-{ #category : 'reading' }
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -122,26 +122,25 @@ customConditionalAttributes}}.
 	^ projectSetDefinition
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	platformConditionalAttributes}}.
+	componentNamesToRead}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn pca |
+			| nextDefArray rp cn |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			pca := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				platformConditionalAttributes: pca.
+				customConditionalAttributes: rp customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
 				addLast:
@@ -163,8 +162,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(theLoadSpec componentNames).
-							(theResolvedProject platformConditionalAttributes)} ] ].
+							(theLoadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |

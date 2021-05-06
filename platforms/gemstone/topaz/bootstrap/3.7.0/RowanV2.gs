@@ -64822,7 +64822,7 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -64846,7 +64846,7 @@ readProjectSet
 	^ self readProjectSetComponentNames: self componentNames
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSet: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -69802,7 +69802,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'read resolved projects'
 method: RwPrjReadToolV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
@@ -85801,7 +85801,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 	^ visitor
 %
 
-category: 'reading'
+category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
@@ -85860,27 +85860,26 @@ customConditionalAttributes}}.
 	^ projectSetDefinition
 %
 
-category: 'to be removed'
+category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	platformConditionalAttributes}}.
+	componentNamesToRead}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn pca |
+			| nextDefArray rp cn |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			pca := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
-				platformConditionalAttributes: pca.
+				customConditionalAttributes: rp customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
 				addLast:
@@ -85902,8 +85901,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					projectVisitorQueue
 						addLast:
 							{theResolvedProject.
-							(theLoadSpec componentNames).
-							(theResolvedProject platformConditionalAttributes)} ] ].
+							(theLoadSpec componentNames)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |

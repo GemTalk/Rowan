@@ -174,20 +174,21 @@ false ifTrue: [
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl loadSpec projectsHome conditionalAttributes theRepositoryRoot specialCaseDict excludedPackages logCreation |
+		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl 
+			loadSpec projectsHome platformConditionalAttributes theRepositoryRoot 
+			specialCaseDict excludedPackages logCreation |
 		loadSpecUrl := ar at: 1.
 		projectsHome := ar at: 2.
-		conditionalAttributes := (ar at: 3) copy.
+		platformConditionalAttributes := (ar at: 3).
 		theRepositoryRoot := ar at: 4.
 		gsFileName := ar at: 5.
 		specialCaseDict := ar at: 6.
 		logCreation := ar at: 7.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
-		conditionalAttributes addAll: loadSpec customConditionalAttributes.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject readProjectSet: conditionalAttributes.
+		theProjectSetDefinition :=  resolvedProject readProjectSet: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
@@ -217,7 +218,7 @@ false ifTrue: [
 			thePackages removeAllPresent: excludedPackages.
 			thePackages do: [:packageName |
 				(topazFileNameMap at: gsFileName) add: packageName ] ].
-		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (conditionalAttributes at: 4) printString, ')'.
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (platformConditionalAttributes at: 4) printString, ')'.
 
 		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		visitor := RwGsModificationTopazWriterVisitorV2 new

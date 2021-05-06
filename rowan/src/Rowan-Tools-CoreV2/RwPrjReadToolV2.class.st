@@ -51,7 +51,7 @@ RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withCompone
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForResolvedProject: resolvedProject

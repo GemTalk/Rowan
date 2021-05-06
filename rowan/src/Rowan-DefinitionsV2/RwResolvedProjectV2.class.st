@@ -1258,7 +1258,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1280,7 +1280,7 @@ RwResolvedProjectV2 >> readProjectSet [
 	^ self readProjectSetComponentNames: self componentNames
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectSet: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 

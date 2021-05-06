@@ -22,8 +22,7 @@
  omit pushonly
   iferr 1 stk
   iferr 2 stack
-#  iferr 3 exit 1
-	display oops
+	display classoops
 
   set user SystemUser p swordfish
   login
