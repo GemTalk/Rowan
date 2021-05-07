@@ -188,12 +188,13 @@ false ifTrue: [
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		theProjectSetDefinition :=  resolvedProject readProjectSet: platformConditionalAttributes.
+		theProjectSetDefinition :=  resolvedProject
+			readProjectSet: loadSpec customConditionalAttributes 
+			platformConditionalAttributes: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
 				projectDefinition packageNames sort do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
-
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: gsFileName put: {}.
 		excludedPackages := Set new.

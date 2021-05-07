@@ -5447,7 +5447,7 @@ RwRowanSample9Test >> testSpec_0052_2 [
 	(Rowan projectNamed: requiredProjectName) unload.	"unload second, because it is required by project name"
 
 "resolve project using resolveProjectSet:"
-	projectSet := loadSpec resolveProjectSet: (projectSet projectNamed: projectName) platformConditionalAttributes.
+	projectSet := loadSpec resolveProjectSet: (projectSet projectNamed: projectName) customConditionalAttributes.
 
 "load project set"
 	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
@@ -5611,7 +5611,7 @@ RwRowanSample9Test >> testSpec_0054_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: #('common' 'gnu' 'tests').
+	resolvedProjectSet := loadSpec resolveProjectSet: #('gnu' 'tests') platformAttributes: #('common' ).
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5623,6 +5623,17 @@ RwRowanSample9Test >> testSpec_0054_3 [
 		expectedProjectNames: projectNames.
 
 	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  isNil.
+
+"reload required project with custom attributes"
+	loadedProjects := (loadedProjects at: 2) loadProjectSet: #('gnu' 'tests').
+
+"validate"
+	self
+		_standard_validate: (resolvedProjectSet projectNamed: requiredProjectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: {requiredProjectName}.
+
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
 ]
 
@@ -5711,7 +5722,9 @@ RwRowanSample9Test >> testSpec_0055_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: {'common' . '2.4.0' asRwGemStoneVersionNumber . 'tests'}.
+	resolvedProjectSet := loadSpec 
+		resolveProjectSet: #('tests') 
+		platformAttributes: {'common' . '2.4.0' asRwGemStoneVersionNumber}.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5819,7 +5832,9 @@ RwRowanSample9Test >> testSpec_0056_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: {'common' . '2.4.0' asRwGemStoneVersionNumber . 'tests'}.
+	resolvedProjectSet := loadSpec 
+		resolveProjectSet: #('tests') 
+		platformAttributes: {'common' . '2.4.0' asRwGemStoneVersionNumber}.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.

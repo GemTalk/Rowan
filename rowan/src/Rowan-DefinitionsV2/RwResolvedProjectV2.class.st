@@ -72,25 +72,29 @@ RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV
 ]
 
 { #category : 'instance creation' }
-RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
+RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
+		or created on disk for new projects. If the project directory already exists on disk, 
+		then read the project definition(s) from disk using the specified customConditionalAttributes
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
+		Answer  the project definition specified by the receiver and any dependent projects"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet: platformAttributes
+		resolveProjectSet: customConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 platformAttributes: platformAttributes [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
+		or created on disk for new projects. If the project directory already exists on disk, 
+		then read the project definition(s) from disk using the specified customConditionalAttributes
+		and platformAttributes.
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
+		Answer  the project definition specified by the receiver and any dependent projects"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet: platformAttributes
+		resolveProjectSet: customConditionalAttributes
+		platformConditionalAttributes: platformAttributes
 ]
 
 { #category : 'private' }
@@ -666,6 +670,11 @@ RwResolvedProjectV2 >> componentsWithDoits [
 	^ self _projectComponents componentsWithDoits
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> conditionalAttributes: conditionalAttributes [
+	^ self _projectDefinitionCustomConditionalAttributes: conditionalAttributes
+]
+
 { #category : 'copying' }
 RwResolvedProjectV2 >> copyForLoadedProject [
 	"project definition is not part of the copy for loaded projects"
@@ -682,6 +691,12 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 RwResolvedProjectV2 >> create [
 	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
 	self resolve; export
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> customConditionalAttributes [
+	^ self _projectDefinitionCustomConditionalAttributes
+		ifNil: [ super customConditionalAttributes ]
 ]
 
 { #category : '-- loader compat --' }
@@ -891,35 +906,34 @@ RwResolvedProjectV2 >> loadProjectSet [
 				platformConditionalAttributes: self platformConditionalAttributes)
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
+{ #category : 'actions' }
+RwResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
 	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
+		refresh the contents of the receiver from disk and create a project set that
+			includes project definitions of required projects, also read from disk. Then
+			load the entire project set.
 
-		Use the specified platform conditional attributes when reading the receiver from disk.
+		Use the specified conditional attributes when reading the receiver from disk.
 	"
 
-	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+		loadProjectSetDefinition: (self readProjectSet: conditionalAttributes)
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
+{ #category : 'actions' }
+RwResolvedProjectV2 >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
 	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set, using the specified 
-			instance migrator.
+		refresh the contents of the receiver from disk and create a project set 
+			that includes project definitions of required projects, also read from disk. 
+			Then load the entire project set, using the specified instance migrator.
 
-		Use the specified platform conditional attributes when reading the receiver from disk.
+		Use the specified conditional attributes when reading the receiver from disk.
 
 		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
-	self _validate: self platformConditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: (self readProjectSet: platformConditionalAttributes)
+		loadProjectSetDefinition: (self readProjectSet: conditionalAttributes)
 		instanceMigrator: instanceMigrator
 ]
 
@@ -1281,14 +1295,14 @@ RwResolvedProjectV2 >> readProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectSet: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+RwResolvedProjectV2 >> readProjectSet: conditionalAttributes [
+	"refresh the contents of the receiver ... use conditionalAttributes to determine which components will be loaded"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
-		readProjectSetComponentNames: self componentNames
-		platformConditionalAttributes: platformConditionalAttributes
+		readProjectSet: conditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -1312,24 +1326,10 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames [
 
 	^ self
 		readProjectSetComponentNames: componentNames
-		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
-		withComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1544,8 +1544,8 @@ RwResolvedProjectV2 >> resolveProjectSet [
   ^ res
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> resolveProjectSet: platformConfigurationAttributes [
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolveProjectSet: conditionalAttributes [
 	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
@@ -1555,7 +1555,7 @@ RwResolvedProjectV2 >> resolveProjectSet: platformConfigurationAttributes [
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
-					^ self readProjectSet: platformConfigurationAttributes ] ].
+					^ self readProjectSet: conditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
   ^ res

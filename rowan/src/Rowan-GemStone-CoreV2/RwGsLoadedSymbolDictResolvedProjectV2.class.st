@@ -285,32 +285,33 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	^ self asDefinition loadProjectSet
 ]
 
-{ #category : 'to be removed' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes [
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
 	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
+		refresh the contents of the receiver from disk and create a project set that
+			includes project definitions of required projects, also read from disk. Then
+			load the entire project set.
 
-		Use the specified platform conditional attributes when reading the receiver from disk.
+		Use the specified conditional attributes when reading the receiver from disk.
 	"
 
-	^ self asDefinition loadProjectSet: platformConditionalAttributes
+	^ self asDefinition loadProjectSet: conditionalAttributes
 ]
 
 { #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
 	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set, using the specified 
-			instance migrator.
+		refresh the contents of the receiver from disk and create a project set 
+			that includes project definitions of required projects, also read from disk. 
+			Then load the entire project set, using the specified instance migrator.
 
-		Use the specified platform conditional attributes when reading the receiver from disk.
+		Use the specified conditional attributes when reading the receiver from disk.
 
 		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
 	^ self asDefinition
-		loadProjectSet: platformConditionalAttributes
+		loadProjectSet: conditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 

@@ -71,22 +71,20 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
 	componentNamesToRead.
-	platformConditionalAttributes.
-customConditionalAttributes}}.
+	customConditionalAttributes}}.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| nextDefArray rp cn pca cca |
+			| nextDefArray rp cn cca |
 			nextDefArray := projectVisitorQueue removeFirst.
 			rp := nextDefArray at: 1.
 			cn := nextDefArray at: 2.
-			pca := nextDefArray at: 3.
-			cca := nextDefArray at: 4.
+			cca := nextDefArray at: 3.
 
 			visitor := self
 				readProjectForResolvedProject: rp
 				withComponentNames: cn
 				customConditionalAttributes: cca
-				platformConditionalAttributes: pca.
+				platformConditionalAttributes: platformConditionalAttributes.
 
 			projectVisitedQueue
 				addLast:
@@ -109,7 +107,6 @@ customConditionalAttributes}}.
 						addLast:
 							{theResolvedProject.
 							(theLoadSpec componentNames).
-							(theResolvedProject platformConditionalAttributes).
 							(theResolvedProject customConditionalAttributes)} ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 

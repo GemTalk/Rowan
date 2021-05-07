@@ -164,12 +164,6 @@ RwAbstractResolvedProjectV2 >> commit: message [
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedProjectV2 >> customConditionalAttributes [
-	^ self _projectDefinitionCustomConditionalAttributes
-		ifNil: [ super customConditionalAttributes ]
-]
-
-{ #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> customConditionalAttributes: anArray [
 	"set the custom conditional attributes"
 

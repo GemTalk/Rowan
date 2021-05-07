@@ -277,6 +277,27 @@ RwResolvedProject >> projectsRoot [
 	^ self _concreteProject projectsRoot
 ]
 
+{ #category : 'transitions' }
+RwResolvedProject >> read [
+	"return a RwDefinedProject with definitions read from disk"
+
+	self _concreteProject read
+]
+
+{ #category : 'to be removed' }
+RwResolvedProject >> read: platformConditionalAttributes [
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _concreteProject read: platformConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _concreteProject read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : 'actions' }
 RwResolvedProject >> readPackageNames: packageNames [
 	^ self _concreteProject readPackageNames: packageNames
@@ -285,6 +306,76 @@ RwResolvedProject >> readPackageNames: packageNames [
 { #category : 'actions' }
 RwResolvedProject >> readPackageNamesBlock: packageNamesBlock [
 	^ self _concreteProject readPackageNamesBlock: packageNamesBlock
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> readProjectComponentNames: componentNames [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject readProjectComponentNames: componentNames
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'to be removed' }
+RwResolvedProject >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject
+		readProjectComponentNames: componentNames
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> readProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _concreteProject readProjectSet
+]
+
+{ #category : 'actions' }
+RwResolvedProject >> readProjectSet: conditionalAttributes [
+	"refresh the contents of the receiver ... use conditionalAttributes to determine which components will be loaded"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _concreteProject readProjectSet: conditionalAttributes
+]
+
+{ #category : 'transitions' }
+RwResolvedProject >> readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self _concreteProject readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }

@@ -390,16 +390,34 @@ RwProject >> loadProjectSet [
 	^ self _loadedProject loadProjectSet
 ]
 
-{ #category : 'to be removed' }
-RwProject >> loadProjectSet: platformConditionalAttributes [
+{ #category : 'actions' }
+RwProject >> loadProjectSet: conditionalAttributes [
 	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
+		refresh the contents of the receiver from disk and create a project set that
+			includes project definitions of required projects, also read from disk. Then
+			load the entire project set.
 
-		Use the specified platform conditional attributes when reading the receiver from disk.
+		Use the specified conditional attributes when reading the receiver from disk.
 	"
 
-	^ self _loadedProject loadProjectSet: platformConditionalAttributes
+	^ self _loadedProject loadProjectSet: conditionalAttributes
+]
+
+{ #category : 'actions' }
+RwProject >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
+	"
+		refresh the contents of the receiver from disk and create a project set 
+			that includes project definitions of required projects, also read from disk. 
+			Then load the entire project set, using the specified instance migrator.
+
+		Use the specified conditional attributes when reading the receiver from disk.
+
+		Use the instanceMigrator to handle new versions of any classes that may result from the load.
+	"
+
+	^ self _loadedProject
+		loadProjectSet: conditionalAttributes
+		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'actions' }
@@ -412,23 +430,6 @@ RwProject >> loadProjectSet: customConditionalAttributes platformConditionalAttr
 	"
 
 	^ self _loadedProject loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwProject >> loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set, using the specified 
-			instance migrator.
-
-		Use the specified platform conditional attributes when reading the receiver from disk.
-
-		Use the instanceMigrator to handle new versions of any classes that may result from the load.
-	"
-
-	^ self _loadedProject
-		loadProjectSet: platformConditionalAttributes
-		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'components' }

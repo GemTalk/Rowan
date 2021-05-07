@@ -144,36 +144,6 @@ RwProject >> repositoryRoot: aFileReferenceOrString [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> repositoryRoot: aFileReferenceOrString platformConditionalAttributes: platformConditionalAttributes [
-	| resolvedProject originalRepositoryRoot |
-	originalRepositoryRoot := self repositoryRoot.
-	self requiredProjects
-		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _repositoryRoot: aFileReferenceOrString ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject repositoryRoot: aFileReferenceOrString.
-	^ resolvedProject loadProjectSet: platformConditionalAttributes
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> repositoryRoot: aFileReferenceOrString platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	| resolvedProject originalRepositoryRoot |
-	originalRepositoryRoot := self repositoryRoot.
-	self requiredProjects
-		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _repositoryRoot: aFileReferenceOrString ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject repositoryRoot: aFileReferenceOrString.
-	^ resolvedProject loadProjectSet: platformConditionalAttributes instanceMigrator: instanceMigrator
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> requiredProjects [
 	"return list of dependent project names"
 
