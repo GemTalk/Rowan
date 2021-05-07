@@ -233,7 +233,7 @@ RwProject >> customConditionalAttributes: anArray [
 
 { #category : 'transitions' }
 RwProject >> defined [
-	^ RwDefinedProject fromLoadedProject: self
+	^ RwDefinedFromResolvedProject fromLoadedProject: self
 ]
 
 { #category : 'accessing' }

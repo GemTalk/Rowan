@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwDefinedProject class >> fromLoadedProject: aLoadedProject [
-	^ (self newNamed: aLoadedProject name)
-		_concreteProject: aLoadedProject _concreteProject asDefinition;
-		yourself
-]
-
-{ #category : 'instance creation' }
 RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 	^ (self newNamed: aResolvedProject name)
 		_concreteProject: aResolvedProject _concreteProject;

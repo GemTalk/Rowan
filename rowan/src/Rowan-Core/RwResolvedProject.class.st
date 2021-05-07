@@ -189,7 +189,7 @@ RwResolvedProject >> componentsRoot [
 
 { #category : 'transitions' }
 RwResolvedProject >> defined [
-	^ RwDefinedProject fromResolvedProject: self
+	^ RwDefinedFromResolvedProject fromLoadedProject: self
 ]
 
 { #category : 'actions' }

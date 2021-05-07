@@ -5643,6 +5643,24 @@ removeallmethods RwDefinedProject
 removeallclassmethods RwDefinedProject
 
 doit
+(RwDefinedProject
+	subclass: 'RwDefinedFromResolvedProject'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #()
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwDefinedFromResolvedProject
+removeallclassmethods RwDefinedFromResolvedProject
+
+doit
 (RwAbstractUnloadedProject
 	subclass: 'RwResolvedProject'
 	instVarNames: #()
@@ -49617,14 +49635,6 @@ _concreteProject: aResolvedProject
 
 category: 'instance creation'
 classmethod: RwDefinedProject
-fromLoadedProject: aLoadedProject
-	^ (self newNamed: aLoadedProject name)
-		_concreteProject: aLoadedProject _concreteProject asDefinition;
-		yourself
-%
-
-category: 'instance creation'
-classmethod: RwDefinedProject
 fromResolvedProject: aResolvedProject
 	^ (self newNamed: aResolvedProject name)
 		_concreteProject: aResolvedProject _concreteProject;
@@ -50275,6 +50285,100 @@ _validate: platformConfigurationAttributes
 	^ self _concreteProject _validate: platformConfigurationAttributes
 %
 
+! Class implementation for 'RwDefinedFromResolvedProject'
+
+!		Class methods for 'RwDefinedFromResolvedProject'
+
+category: 'instance creation'
+classmethod: RwDefinedFromResolvedProject
+fromLoadedProject: aLoadedProject
+	^ (self newNamed: aLoadedProject name)
+		_concreteProject: aLoadedProject _concreteProject asDefinition;
+		yourself
+%
+
+!		Instance methods for 'RwDefinedFromResolvedProject'
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+read
+	"return a RwDefinedProject with definitions read from disk"
+
+	self _concreteProject read
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
+
+	self _concreteProject read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+readProjectComponentNames: componentNames
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject readProjectComponentNames: componentNames
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self _concreteProject
+		readProjectComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+readProjectSet
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	self _concreteProject readProjectSet
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ self _concreteProject readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwDefinedFromResolvedProject
+write
+
+	self _concreteProject
+		export;
+		exportLoadSpecification
+%
+
 ! Class implementation for 'RwResolvedProject'
 
 !		Class methods for 'RwResolvedProject'
@@ -50470,7 +50574,7 @@ componentsRoot
 category: 'transitions'
 method: RwResolvedProject
 defined
-	^ RwDefinedProject fromResolvedProject: self
+	^ RwDefinedFromResolvedProject fromLoadedProject: self
 %
 
 category: 'actions'
@@ -50944,7 +51048,7 @@ customConditionalAttributes: anArray
 category: 'transitions'
 method: RwProject
 defined
-	^ RwDefinedProject fromLoadedProject: self
+	^ RwDefinedFromResolvedProject fromLoadedProject: self
 %
 
 category: 'accessing'
