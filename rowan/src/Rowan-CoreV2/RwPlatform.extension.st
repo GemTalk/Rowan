@@ -48,15 +48,6 @@ RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNa
 ]
 
 { #category : '*rowan-corev2' }
-RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
-	^ RwResolvedProject
-		projectFromUrl: loadSpecUrl
-		projectsHome: projectsHome
-		componentNames: componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : '*rowan-corev2' }
 RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes [
 	^ RwResolvedProject
 		projectFromUrl: loadSpecUrl
@@ -65,10 +56,11 @@ RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customCondi
 ]
 
 { #category : '*rowan-corev2' }
-RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes [
+RwPlatform >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProject
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 

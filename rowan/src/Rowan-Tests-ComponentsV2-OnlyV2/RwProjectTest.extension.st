@@ -218,7 +218,8 @@ RwProjectTest >> testResolvedProjectAPI [
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		platformConditionalAttributes: #('common' 'tests').
+		customConditionalAttributes: #('tests')
+		platformConditionalAttributes: #('common').
 
 	self assert: resolvedProject2 class == RwResolvedProject.
 	self assert: (x := resolvedProject2 repositoryRoot) exists.
@@ -232,7 +233,8 @@ RwProjectTest >> testResolvedProjectAPI [
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		platformConditionalAttributes: #('tests').
+		customConditionalAttributes: #('tests')
+		platformConditionalAttributes: #().
 
 	self assert: resolvedProject2 class == RwResolvedProject.
 	self assert: (x := resolvedProject2 repositoryRoot) exists.

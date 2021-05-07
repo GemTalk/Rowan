@@ -49846,20 +49846,6 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself
 %
 
-category: 'to be removed'
-classmethod: RwResolvedProject
-projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	| loadSpec resolvedProject |
-	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
-		projectsHome: projectsHome;
-		componentNames: componentNames;
-		yourself.
-	resolvedProject := loadSpec resolve: platformConditionalAttributes.
-	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
-		yourself
-%
-
 category: 'instance creation'
 classmethod: RwResolvedProject
 projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
@@ -49874,14 +49860,14 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself
 %
 
-category: 'to be removed'
+category: 'instance creation'
 classmethod: RwResolvedProject
-projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve: platformConditionalAttributes.
+	resolvedProject := loadSpec resolve: customConditionalAttributes platformAttributes: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolve;
 		yourself
@@ -63536,19 +63522,7 @@ loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customCo
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolve: customConditionalAttributes platformAttributes: platformAttributes
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectV2
-loadSpecification: anRwLoadSpecificationV2 platformAttributes: platformAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolve: platformAttributes
+		resolve: customConditionalAttributes platformConditionalAttributes: platformAttributes
 %
 
 category: 'instance creation'
@@ -65074,21 +65048,6 @@ resolve
 					self
 						projectDefinitionSourceProperty:
 							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-resolve: platformConfigurationAttributes
-	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
-		project from disk, if project is present on disk"
-
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self read: platformConfigurationAttributes ] ]
 %
 
 category: 'actions'
@@ -86865,17 +86824,6 @@ repositoryRoot
 	^ self projectsHome / self projectAlias
 %
 
-category: 'to be removed'
-method: RwLoadSpecificationV2
-resolve: platformAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self platformAttributes: platformAttributes
-%
-
 category: 'actions'
 method: RwLoadSpecificationV2
 resolveProjectSetStrict
@@ -94067,16 +94015,6 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 
 category: '*rowan-coreV2'
 classmethod: Rowan
-projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	^ self platform
-		projectFromUrl: loadSpecUrl
-		projectsHome: projectsHome
-		componentNames: componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: '*rowan-coreV2'
-classmethod: Rowan
 projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
 	^ self platform
 		projectFromUrl: loadSpecUrl
@@ -94086,10 +94024,11 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: '*rowan-coreV2'
 classmethod: Rowan
-projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ self platform
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -96560,16 +96499,6 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 
 category: '*rowan-corev2'
 method: RwPlatform
-projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	^ RwResolvedProject
-		projectFromUrl: loadSpecUrl
-		projectsHome: projectsHome
-		componentNames: componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: '*rowan-corev2'
-method: RwPlatform
 projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes
 	^ RwResolvedProject
 		projectFromUrl: loadSpecUrl
@@ -96579,10 +96508,11 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: '*rowan-corev2'
 method: RwPlatform
-projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes
+projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProject
 		projectFromUrl: loadSpecUrl
 		projectsHome: projectsHome
+		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 

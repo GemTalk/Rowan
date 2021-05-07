@@ -5926,21 +5926,24 @@ RwRowanSample9Test >> testSpec_0059_1 [
 
 "load project using each of the alt conditions"
 	{
-		#('common' 'tests').
-		#('common' 'tests' 'alt1').
-		#('common' 'tests' 'alt2').
-		#('common' 'tests' 'alt3').
-	} do: [:conditionalAttributes |
-		resolvedProject := loadSpec resolve: conditionalAttributes.
+		{ #('common' ) . #( 'tests') }.
+		{ #('common' ) . #( 'tests' 'alt1' ) }.
+		{ #('common' ) . #( 'tests' 'alt2' ) }.
+		{ #('common' ) . #( 'tests' 'alt3' ) }.
+	} do: [:ar |
+		| platformAttributes conditionalAttributes |
+		platformAttributes := ar at: 1.
+		conditionalAttributes := ar at: 2.
+		resolvedProject := loadSpec resolve: conditionalAttributes platformAttributes: platformAttributes.
 		loadedProjects := resolvedProject load.
 		self
 			_standard_validate: resolvedProject
 			loadedProjects: loadedProjects
 			expectedProjectNames: projectNames.
-		conditionalAttributes size > 2 
+		conditionalAttributes size > 1
 			ifTrue: [
 				"sanity check in case of massive load failure"
-				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 3) asSymbol) ] ].
+				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 2) asSymbol) ] ].
 ]
 
 { #category : 'tests' }
@@ -5961,23 +5964,26 @@ RwRowanSample9Test >> testSpec_0059_2 [
 
 "load project using each of the alt conditions"
 	{
-		#('common' 'tests' 'alt1' 'platformA').
-		#('common' 'tests' 'alt1' 'platformB').
-		#('common' 'tests' 'alt1' 'platformC').
-	} do: [:conditionalAttributes |
-		resolvedProject := loadSpec resolve: conditionalAttributes.
+		{ #('common') . #('tests' 'alt1' 'platformA') }.
+		{ #('common') . #('tests' 'alt1' 'platformB') }.
+		{ #('common') . #('tests' 'alt1' 'platformC') }.
+	} do: [:ar |
+		| platformAttributes conditionalAttributes |
+		platformAttributes := ar at: 1.
+		conditionalAttributes := ar at: 2.
+		resolvedProject := loadSpec resolve: conditionalAttributes platformAttributes: platformAttributes.
 		loadedProjects := resolvedProject load.
 		self
 			_standard_validate: resolvedProject
 			loadedProjects: loadedProjects
 			expectedProjectNames: projectNames.
-		(conditionalAttributes at: 4) = 'platformC'
+		(conditionalAttributes at: 3) = 'platformC'
 			ifTrue: [
 				"sanity check in case of massive load failure"
 				self assert: ((Rowan globalNamed: 'RowanSample9TestCase') selectors includes: #testPlatformC) ]
 			ifFalse: [
 				"sanity check in case of massive load failure"
-				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 4) asSymbol) ]].
+				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 3) asSymbol) ]].
 ]
 
 { #category : 'tests' }

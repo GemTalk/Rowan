@@ -102,19 +102,6 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
-	| loadSpec resolvedProject |
-	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
-		projectsHome: projectsHome;
-		componentNames: componentNames;
-		yourself.
-	resolvedProject := loadSpec resolve: platformConditionalAttributes.
-	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
-		yourself
-]
-
 { #category : 'instance creation' }
 RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes [
 	| loadSpec resolvedProject |
@@ -128,13 +115,13 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'instance creation' }
+RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve: platformConditionalAttributes.
+	resolvedProject := loadSpec resolve: customConditionalAttributes platformAttributes: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolve;
 		yourself
