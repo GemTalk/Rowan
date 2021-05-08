@@ -218,7 +218,7 @@ RwGsModificationTopazWriterVisitorV2 >> bufferedStream [
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> buildPackageNamesMap [
 
-	"If true, topazFilenamePackageNamesMap will be built from topazFilenameConfigsMap.
+	"If true, topazFilenamePackageNamesMap will be built from topazFilenameComponentMap.
 		If false, existing topazFilenamePackageNamesMap will be used"
 
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
@@ -629,10 +629,10 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap: aDictionar
 
 	"keys are topaz file names, values are a collection of package names"
 
-	"if topazFilenameConfigsMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
+	"if topazFilenameComponentMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
 		based on the project configurations."
 
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will be ignored."
+	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameComponentMap will be ignored."
 
 	buildPackageNamesMap := false.
 	topazFilenamePackageNamesMap := aDictionary

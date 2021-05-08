@@ -210,6 +210,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> customAttributes [
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> customConditionalAttributes [
 	"Answer the customConditionalAttributes used to load the project"
 
@@ -444,7 +450,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self resolvedProject repositoryRoot
 ]
@@ -501,7 +507,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: 
 
 	^ self
 		subcomponentsOf: componentName
-		attributes: self platformConditionalAttributes, self customConditionalAttributes
+		attributes: self customAttributes
 		ifNone: noneBlock
 ]
 

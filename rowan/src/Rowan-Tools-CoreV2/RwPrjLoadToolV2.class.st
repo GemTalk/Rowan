@@ -125,7 +125,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 
 { #category : 'load project definitions' }
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
@@ -136,7 +136,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAtt
 
 { #category : 'load project definitions' }
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
@@ -148,7 +148,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAtt
 
 { #category : 'load project definitions' }
 RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
 	projectSetDefinition := RwProjectSetDefinition new
@@ -192,18 +192,6 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 ]
 
 { #category : 'load project by name' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
-	| project theCustomConditionalAttributes |
-	project := RwProject newNamed: projectName.
-	theCustomConditionalAttributes := project customConditionalAttributes copy asSet.
-	theCustomConditionalAttributes addAll: customConditionalAttributes.
-	^ self
-		loadProjectNamed: projectName
-		customConditionalAttributes: theCustomConditionalAttributes asArray
-		platformConditionalAttributes: project platformConditionalAttributes
-]
-
-{ #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| projectSet res |
 	projectSet := Rowan projectTools readV2
@@ -213,6 +201,36 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: cu
 	res := self loadProjectSetDefinition: projectSet.
 	self markProjectSetNotDirty: projectSet.	"loaded project and loaded packages read from disk - mark them not dirty"
 	^ res
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName includeCustomConditionalAttributes: customConditionalAttributes [
+	"load the given project ADDING the given customConditionalAttributes to those used to load the project"
+
+	| project theCustomConditionalAttributes |
+	project := RwProject newNamed: projectName.
+	theCustomConditionalAttributes := project customConditionalAttributes copy
+		asSet.
+	theCustomConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		customConditionalAttributes: theCustomConditionalAttributes asArray
+		platformConditionalAttributes: project platformConditionalAttributes
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName removeCustomConditionalAttributes: customConditionalAttributes [
+	"load the given project REMOVING the given customConditionalAttributes from those used to load the project"
+
+	| project theCustomConditionalAttributes |
+	project := RwProject newNamed: projectName.
+	theCustomConditionalAttributes := project customConditionalAttributes copy
+		asSet.
+	theCustomConditionalAttributes removeAllPresent: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		customConditionalAttributes: theCustomConditionalAttributes asArray
+		platformConditionalAttributes: project platformConditionalAttributes
 ]
 
 { #category : 'load project definitions' }

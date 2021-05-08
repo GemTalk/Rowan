@@ -123,6 +123,12 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> customAttributes [
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> customConditionalAttributes [
 
 	^ self _loadSpecification customConditionalAttributes

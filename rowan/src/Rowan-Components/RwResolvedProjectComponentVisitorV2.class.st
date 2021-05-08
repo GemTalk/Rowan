@@ -192,7 +192,7 @@ RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
-	self platformConditionalAttributes, self customConditionalAttributes do: [:anObject |
+	self customAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
 ]
@@ -231,7 +231,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResol
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
 
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of componentNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]
@@ -289,6 +289,12 @@ RwResolvedProjectComponentVisitorV2 >> componentNames [
 RwResolvedProjectComponentVisitorV2 >> componentsPath [
 
 	^ self resolvedProject componentsRoot
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectComponentVisitorV2 >> customAttributes [
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
 ]
 
 { #category : 'accessing' }

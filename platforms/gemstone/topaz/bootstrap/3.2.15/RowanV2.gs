@@ -58043,7 +58043,7 @@ category: 'instance creation'
 classmethod: RwAbstractComponent
 fromUrl: specNameOrUrl
 
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample9/rowan/components/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.
@@ -60175,7 +60175,7 @@ category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 buildPackageNamesMap
 
-	"If true, topazFilenamePackageNamesMap will be built from topazFilenameConfigsMap.
+	"If true, topazFilenamePackageNamesMap will be built from topazFilenameComponentMap.
 		If false, existing topazFilenamePackageNamesMap will be used"
 
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
@@ -60626,10 +60626,10 @@ topazFilenamePackageNamesMap: aDictionary
 
 	"keys are topaz file names, values are a collection of package names"
 
-	"if topazFilenameConfigsMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
+	"if topazFilenameComponentMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
 		based on the project configurations."
 
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will be ignored."
+	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameComponentMap will be ignored."
 
 	buildPackageNamesMap := false.
 	topazFilenamePackageNamesMap := aDictionary
@@ -63595,6 +63595,13 @@ componentsRoot
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
+customAttributes
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
 customConditionalAttributes
 
 	^ self _loadSpecification customConditionalAttributes
@@ -65177,7 +65184,7 @@ load
 			and send #load to the project set.
 	"
 
-	self _validate: self platformConditionalAttributes, self customConditionalAttributes.
+	self _validate: self customAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 %
 
@@ -70180,7 +70187,7 @@ loadProjectDefinition: projectDefinition
 category: 'load project definitions'
 method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
@@ -70192,7 +70199,7 @@ loadProjectDefinition: projectDefinition customConditionalAttributes: customCond
 category: 'load project definitions'
 method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
@@ -70205,7 +70212,7 @@ loadProjectDefinition: projectDefinition customConditionalAttributes: customCond
 category: 'load project definitions'
 method: RwPrjLoadToolV2
 loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
 	projectSetDefinition := RwProjectSetDefinition new
@@ -70252,19 +70259,6 @@ loadProjectNamed: projectName
 
 category: 'load project by name'
 method: RwPrjLoadToolV2
-loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes
-	| project theCustomConditionalAttributes |
-	project := RwProject newNamed: projectName.
-	theCustomConditionalAttributes := project customConditionalAttributes copy asSet.
-	theCustomConditionalAttributes addAll: customConditionalAttributes.
-	^ self
-		loadProjectNamed: projectName
-		customConditionalAttributes: theCustomConditionalAttributes asArray
-		platformConditionalAttributes: project platformConditionalAttributes
-%
-
-category: 'load project by name'
-method: RwPrjLoadToolV2
 loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| projectSet res |
 	projectSet := Rowan projectTools readV2
@@ -70274,6 +70268,38 @@ loadProjectNamed: projectName customConditionalAttributes: customConditionalAttr
 	res := self loadProjectSetDefinition: projectSet.
 	self markProjectSetNotDirty: projectSet.	"loaded project and loaded packages read from disk - mark them not dirty"
 	^ res
+%
+
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName includeCustomConditionalAttributes: customConditionalAttributes
+	"load the given project ADDING the given customConditionalAttributes to those used to load the project"
+
+	| project theCustomConditionalAttributes |
+	project := RwProject newNamed: projectName.
+	theCustomConditionalAttributes := project customConditionalAttributes copy
+		asSet.
+	theCustomConditionalAttributes addAll: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		customConditionalAttributes: theCustomConditionalAttributes asArray
+		platformConditionalAttributes: project platformConditionalAttributes
+%
+
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName removeCustomConditionalAttributes: customConditionalAttributes
+	"load the given project REMOVING the given customConditionalAttributes from those used to load the project"
+
+	| project theCustomConditionalAttributes |
+	project := RwProject newNamed: projectName.
+	theCustomConditionalAttributes := project customConditionalAttributes copy
+		asSet.
+	theCustomConditionalAttributes removeAllPresent: customConditionalAttributes.
+	^ self
+		loadProjectNamed: projectName
+		customConditionalAttributes: theCustomConditionalAttributes asArray
+		platformConditionalAttributes: project platformConditionalAttributes
 %
 
 category: 'load project definitions'
@@ -70992,7 +71018,7 @@ category: 'instance creation'
 classmethod: RwAbstractRowanProjectLoadComponentV2
 fromUrl: specNameOrUrl
 
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample9/rowan/components/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.
@@ -71854,7 +71880,7 @@ method: RwSimpleNestedProjectLoadComponentV2
 acceptVisitor: aVisitor
 	^ self
 		error:
-			'nested component cannot be used as a top-level configuration. The receiver is nested inside of top-level components'
+			'nested component cannot be used as a top-level component. The receiver is nested inside of top-level components'
 %
 
 category: 'ston'
@@ -73028,7 +73054,7 @@ readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ repositoryRoot
 		ifNil: [ 
@@ -73169,7 +73195,7 @@ repositoryExists
 category: 'accessing'
 method: RwDiskRepositoryDefinitionV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ repositoryRoot
 		ifNil: [ 
@@ -73512,7 +73538,7 @@ repositoryExists
 category: 'accessing'
 method: RwNoRepositoryDefinitionV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ nil
 %
@@ -73553,7 +73579,7 @@ readOnlyRepositoryRoot: repositoryRootPathString commitId: aString
 category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ repositoryRoot
 		ifNil: [ 
@@ -83510,6 +83536,13 @@ componentsRoot
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
+customAttributes
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
 customConditionalAttributes
 	"Answer the customConditionalAttributes used to load the project"
 
@@ -83774,7 +83807,7 @@ remote
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self resolvedProject repositoryRoot
 %
@@ -83838,7 +83871,7 @@ subcomponentsOf: componentName ifNone: noneBlock
 
 	^ self
 		subcomponentsOf: componentName
-		attributes: self platformConditionalAttributes, self customConditionalAttributes
+		attributes: self customAttributes
 		ifNone: noneBlock
 %
 
@@ -86603,6 +86636,13 @@ componentsPath
 
 category: 'accessing'
 method: RwResolvedProjectComponentVisitorV2
+customAttributes
+
+	^ self platformConditionalAttributes, self customConditionalAttributes
+%
+
+category: 'accessing'
+method: RwResolvedProjectComponentVisitorV2
 customConditionalAttributes
 
 	^ customConditionalAttributes
@@ -86798,7 +86838,7 @@ category: 'private'
 method: RwResolvedProjectComponentVisitorV2
 _matchPlatformAttributes: platformPatternMatcher
 
-	self platformConditionalAttributes, self customConditionalAttributes do: [:anObject |
+	self customAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
 %
@@ -86838,7 +86878,7 @@ _readComponentsForResolvedProject: aResolvedProject withComponentNames: componen
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
 
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
+	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of componentNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theComponentNames := componentNamesToRead isEmpty
 		ifTrue: [ resolvedProject componentNames ]
@@ -86896,7 +86936,7 @@ category: 'instance creation'
 classmethod: RwSpecification
 fromUrl: specNameOrUrl
 
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample9/rowan/components/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.
@@ -86939,17 +86979,6 @@ _supportedPlatformNames
 %
 
 !		Instance methods for 'RwSpecification'
-
-category: 'private'
-method: RwSpecification
-currentVersion
-	"
-		0.1.0 - initial version for specs
-		0.2.0 - defaultConfigurationNames and defaultGroupNames i.v. added to RwProjectSpecification
-		0.3.0 - remoteUrl i.v. added to RwGitRepositorySpecification
-	"
-	^ '0.3.0'
-%
 
 category: 'ston'
 method: RwSpecification

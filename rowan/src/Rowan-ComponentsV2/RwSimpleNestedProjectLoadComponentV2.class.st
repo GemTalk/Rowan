@@ -18,5 +18,5 @@ RwSimpleNestedProjectLoadComponentV2 >> acceptNestedVisitor: aVisitor [
 RwSimpleNestedProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 	^ self
 		error:
-			'nested component cannot be used as a top-level configuration. The receiver is nested inside of top-level components'
+			'nested component cannot be used as a top-level component. The receiver is nested inside of top-level components'
 ]

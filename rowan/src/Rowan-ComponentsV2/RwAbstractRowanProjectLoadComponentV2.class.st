@@ -131,7 +131,7 @@ RwAbstractRowanProjectLoadComponentV2 class >> fromSton: stonReader [
 { #category : 'instance creation' }
 RwAbstractRowanProjectLoadComponentV2 class >> fromUrl: specNameOrUrl [
 
-	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample9/rowan/components/Default.ston'"
 
 	| url |
 	url := specNameOrUrl asRwUrl.

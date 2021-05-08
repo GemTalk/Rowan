@@ -858,7 +858,7 @@ RwResolvedProjectV2 >> load [
 			and send #load to the project set.
 	"
 
-	self _validate: self platformConditionalAttributes, self customConditionalAttributes.
+	self _validate: self customAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
