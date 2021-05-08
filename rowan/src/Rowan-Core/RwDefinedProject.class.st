@@ -56,8 +56,8 @@ RwDefinedProject >> _projectSpecification [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> _validate: platformConfigurationAttributes [
-	^ self _concreteProject _validate: platformConfigurationAttributes
+RwDefinedProject >> _validate: platformConditionalAttributes [
+	^ self _concreteProject _validate: platformConditionalAttributes
 ]
 
 { #category : 'components' }

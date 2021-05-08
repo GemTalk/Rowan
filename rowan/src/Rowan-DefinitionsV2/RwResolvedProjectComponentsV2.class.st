@@ -164,7 +164,7 @@ RwResolvedProjectComponentsV2 >> _validate [
 ]
 
 { #category : 'private' }
-RwResolvedProjectComponentsV2 >> _validate: platformConfigurationAttributes [
+RwResolvedProjectComponentsV2 >> _validate: platformConditionalAttributes [
 	"ensure that each of the components is valid and return a list of the package names managed by all components for the given group name"
 
 	| componentPackageNames |
@@ -177,8 +177,8 @@ RwResolvedProjectComponentsV2 >> _validate: platformConfigurationAttributes [
 			componentPackageNames
 				addAll:
 					(component
-						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes) ].
+						packageNamesForPlatformConditionalAttributes:
+							platformConditionalAttributes) ].
 	^ componentPackageNames
 ]
 

@@ -1501,7 +1501,7 @@ RwResolvedProjectV2 >> resolveProjectSet: conditionalAttributes [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConfigurationAttributes [
+RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
@@ -1511,7 +1511,7 @@ RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformCo
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
-					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConfigurationAttributes ] ].
+					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
   ^ res

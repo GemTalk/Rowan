@@ -85,7 +85,7 @@ RwAbstractResolvedObjectV2 >> _validate [
 ]
 
 { #category : 'private' }
-RwAbstractResolvedObjectV2 >> _validate: platformConfigurationAttributes [
+RwAbstractResolvedObjectV2 >> _validate: platformConditionalAttributes [
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"

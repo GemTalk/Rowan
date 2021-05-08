@@ -608,13 +608,13 @@ RwAbstractRowanProjectLoadComponentV2 >> packageNames [
 ]
 
 { #category : 'accessing' }
-RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes [
+RwAbstractRowanProjectLoadComponentV2 >> packageNamesForPlatformConditionalAttributes: platformConditionalAttributes [
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
 	allDefinedPackageNames := Set new.
 	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
+	platformConditionalAttributes
 		do: [ :anObject | 
 			matchers
 				keysAndValuesDo: [ :ar :ignored | 

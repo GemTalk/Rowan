@@ -134,13 +134,13 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 ]
 
 { #category : 'private' }
-RwAbstractResolvedProjectV2 >> _validate: platformConfigurationAttributes [
+RwAbstractResolvedProjectV2 >> _validate: platformConditionalAttributes [
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	super _validate: platformConfigurationAttributes.
-	self _projectDefinition _validate: platformConfigurationAttributes componentPackageNames: (self _projectComponents _validate: platformConfigurationAttributes).
+	super _validate: platformConditionalAttributes.
+	self _projectDefinition _validate: platformConditionalAttributes componentPackageNames: (self _projectComponents _validate: platformConditionalAttributes).
 	^ true
 ]
 

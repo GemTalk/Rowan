@@ -50281,8 +50281,8 @@ _projectSpecification
 
 category: 'accessing'
 method: RwDefinedProject
-_validate: platformConfigurationAttributes
-	^ self _concreteProject _validate: platformConfigurationAttributes
+_validate: platformConditionalAttributes
+	^ self _concreteProject _validate: platformConditionalAttributes
 %
 
 ! Class implementation for 'RwDefinedFromResolvedProject'
@@ -58503,13 +58503,13 @@ instVarNamesInOrderForSton
 
 category: 'accessing'
 method: RwAbstractActiveComponent
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
+packageNamesForPlatformConditionalAttributes: platformConditionalAttributes
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
 	allDefinedPackageNames := Set new.
 	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
+	platformConditionalAttributes
 		do: [ :anObject | 
 			matchers
 				keysAndValuesDo: [ :ar :ignored | 
@@ -63669,7 +63669,7 @@ _validate
 
 category: 'private'
 method: RwAbstractResolvedObjectV2
-_validate: platformConfigurationAttributes
+_validate: platformConditionalAttributes
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
@@ -63943,13 +63943,13 @@ _projectRepository
 
 category: 'private'
 method: RwAbstractResolvedProjectV2
-_validate: platformConfigurationAttributes
+_validate: platformConditionalAttributes
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	super _validate: platformConfigurationAttributes.
-	self _projectDefinition _validate: platformConfigurationAttributes componentPackageNames: (self _projectComponents _validate: platformConfigurationAttributes).
+	super _validate: platformConditionalAttributes.
+	self _projectDefinition _validate: platformConditionalAttributes componentPackageNames: (self _projectComponents _validate: platformConditionalAttributes).
 	^ true
 %
 
@@ -65690,7 +65690,7 @@ resolveProjectSet: conditionalAttributes
 
 category: 'actions'
 method: RwResolvedProjectV2
-resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConfigurationAttributes
+resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
@@ -65700,7 +65700,7 @@ resolveProjectSet: customConditionalAttributes platformConditionalAttributes: pl
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"update project definition from disk"
-					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConfigurationAttributes ] ].
+					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
   ^ res
@@ -69981,38 +69981,38 @@ loadProjectDefinition: projectDefinition
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
+		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
 category: 'load project definitions'
 method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes
+loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: customConditionalAttributes
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 %
 
 category: 'load project definitions'
 method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator
+loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: customConditionalAttributes
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 		symbolList: Rowan image symbolList
 %
 
 category: 'load project definitions'
 method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList
+loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
@@ -70042,7 +70042,7 @@ loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
+		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 %
 
@@ -71282,13 +71282,13 @@ packageNames
 
 category: 'accessing'
 method: RwAbstractRowanProjectLoadComponentV2
-packageNamesForPlatformConfigurationAttributes: platformConfigurationAttributes
+packageNamesForPlatformConditionalAttributes: platformConditionalAttributes
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
 	allDefinedPackageNames := Set new.
 	matchers := self conditionalPropertyMatchers.
-	platformConfigurationAttributes
+	platformConditionalAttributes
 		do: [ :anObject | 
 			matchers
 				keysAndValuesDo: [ :ar :ignored | 
@@ -74337,7 +74337,7 @@ _projectDefinitionPlatformConditionalAttributes: platformConditionalAtttributesO
 
 category: 'private'
 method: RwProjectDefinition
-_validate: platformConfigurationAttributes componentPackageNames: componentPackageNames
+_validate: platformConditionalAttributes componentPackageNames: componentPackageNames
 	"ensure that the data structures within the receiver contain valid information"
 
 	"make sure that list of packages is consistent between components and project definition
@@ -86223,7 +86223,7 @@ _validate
 
 category: 'private'
 method: RwResolvedProjectComponentsV2
-_validate: platformConfigurationAttributes
+_validate: platformConditionalAttributes
 	"ensure that each of the components is valid and return a list of the package names managed by all components for the given group name"
 
 	| componentPackageNames |
@@ -86236,8 +86236,8 @@ _validate: platformConfigurationAttributes
 			componentPackageNames
 				addAll:
 					(component
-						packageNamesForPlatformConfigurationAttributes:
-							platformConfigurationAttributes) ].
+						packageNamesForPlatformConditionalAttributes:
+							platformConditionalAttributes) ].
 	^ componentPackageNames
 %
 

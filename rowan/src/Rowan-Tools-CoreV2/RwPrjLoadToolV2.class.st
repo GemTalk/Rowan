@@ -119,35 +119,35 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
+		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: customConditionalAttributes
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConfigurationAttributes instanceMigrator: instanceMigrator [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: customConditionalAttributes
-		platformConfigurationAttributes: platformConfigurationAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 		symbolList: Rowan image symbolList
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConfigurationAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
@@ -176,7 +176,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: in
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConfigurationAttributes: projectDefinition platformConditionalAttributes
+		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 
