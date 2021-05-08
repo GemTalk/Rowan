@@ -26,7 +26,7 @@ RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName customConditionalA
 		readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'read resolved projects' }
 RwPrjReadToolV2 >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForResolvedProject: resolvedProject

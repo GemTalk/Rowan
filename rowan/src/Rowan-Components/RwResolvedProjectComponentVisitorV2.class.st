@@ -46,7 +46,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 	^ visitor
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -230,20 +230,6 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResol
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
-
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
-	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	theComponentNames := componentNamesToRead isEmpty
-		ifTrue: [ resolvedProject componentNames ]
-		ifFalse: [ componentNamesToRead ].
-	^ self _visitComponents: theComponentNames
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes [
-	| theComponentNames  |
-	resolvedProject := aResolvedProject.
-	platformConditionalAttributes := aPlatformConditionalAttributes.
 
 	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"

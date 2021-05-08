@@ -70505,7 +70505,7 @@ readProjectSetForProjectNamed: projectName customConditionalAttributes: customCo
 		readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'read resolved projects'
 method: RwPrjReadToolV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
@@ -86466,7 +86466,7 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 	^ visitor
 %
 
-category: 'to be removed'
+category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
@@ -86837,21 +86837,6 @@ _readComponentsForResolvedProject: aResolvedProject withComponentNames: componen
 	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
-
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
-	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	theComponentNames := componentNamesToRead isEmpty
-		ifTrue: [ resolvedProject componentNames ]
-		ifFalse: [ componentNamesToRead ].
-	^ self _visitComponents: theComponentNames
-%
-
-category: 'to be removed'
-method: RwResolvedProjectComponentVisitorV2
-_readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  platformConditionalAttributes: aPlatformConditionalAttributes
-	| theComponentNames  |
-	resolvedProject := aResolvedProject.
-	platformConditionalAttributes := aPlatformConditionalAttributes.
 
 	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of configNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
