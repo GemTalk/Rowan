@@ -15,16 +15,6 @@ RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentN
 	^ resolvedProject
 ]
 
-{ #category : 'to be removed' }
-RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
-	RwResolvedProjectComponentVisitorV2
-		readProjectForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject readPackageNames: resolvedProject packageNames.
-	^ resolvedProject
-]
-
 { #category : 'read loaded projects' }
 RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName [
 	^ (Rowan image loadedProjectNamed: projectName) asDefinition readProjectSet

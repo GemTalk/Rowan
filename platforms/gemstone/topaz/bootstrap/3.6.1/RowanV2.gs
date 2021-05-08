@@ -50130,14 +50130,6 @@ read
 	self _concreteProject read
 %
 
-category: 'to be removed'
-method: RwResolvedProject
-read: platformConditionalAttributes
-	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
-
-	self _concreteProject read: platformConditionalAttributes
-%
-
 category: 'transitions'
 method: RwResolvedProject
 read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
@@ -50190,18 +50182,6 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 	self _concreteProject
 		readProjectComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'to be removed'
-method: RwResolvedProject
-readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -64785,18 +64765,6 @@ read
 		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
 %
 
-category: 'to be removed'
-method: RwResolvedProjectV2
-read: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	^ self
-		readProjectComponentNames: self componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
 category: 'actions'
 method: RwResolvedProjectV2
 read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
@@ -64907,20 +64875,6 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
-readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
-	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
-		withComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -65109,18 +65063,6 @@ requiredProjectNames
 	^ self
 		requiredProjectNames: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-requiredProjectNames: platformConditionalAttributes
-	| requiredProjectNames |
-	requiredProjectNames := Set new.
-	self _projectComponents
-		conditionalComponentsStartingWith: self componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
-	^ requiredProjectNames
 %
 
 category: 'accessing'
@@ -69814,17 +69756,6 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 		readProjectForResolvedProject: resolvedProject
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject readPackageNames: resolvedProject packageNames.
-	^ resolvedProject
-%
-
-category: 'to be removed'
-method: RwPrjReadToolV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	RwResolvedProjectComponentVisitorV2
-		readProjectForResolvedProject: resolvedProject
-		withComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes.
 	resolvedProject readPackageNames: resolvedProject packageNames.
 	^ resolvedProject
@@ -85350,23 +85281,6 @@ conditionalComponentsStartingWith: componentNames customConditionalAttributes: c
 				do: aBlock ]
 %
 
-category: 'to be removed'
-method: RwResolvedProjectComponentsV2
-conditionalComponentsStartingWith: componentNames platformConditionalAttributes: platformConditionalAttributes do: aBlock
-	| visited |
-	visited := Set new.
-	componentNames
-		do: [ :componentName | 
-			| theComponent |
-			theComponent := self componentNamed: componentName.
-
-			self
-				_conditionalComponentsStartingWith: theComponent
-				platformConditionalAttributes: platformConditionalAttributes
-				visited: visited
-				do: aBlock ]
-%
-
 category: 'enumerating'
 method: RwResolvedProjectComponentsV2
 do: aBlock
@@ -85659,29 +85573,6 @@ _conditionalComponentsStartingWith: aComponent customConditionalAttributes: cust
 										do: aBlock ] ] ] ]
 %
 
-category: 'to be removed'
-method: RwResolvedProjectComponentsV2
-_conditionalComponentsStartingWith: aComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock
-	visitedComponentNames add: aComponent name.
-	aComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self
-				_platformAttributeMatchIn: platformMatchers
-				using: platformConditionalAttributes)
-				ifTrue: [ 
-					aBlock value: aComponent.
-					aComponent componentNames
-						do: [ :cName | 
-							(visitedComponentNames includes: cName)
-								ifFalse: [ 
-									self
-										_conditionalComponentsStartingWith:
-											(self componentNamed: cName ifAbsent: [ self packageGroupNamed: cName ])
-										platformConditionalAttributes: platformConditionalAttributes
-										visited: visitedComponentNames
-										do: aBlock ] ] ] ]
-%
-
 category: 'private'
 method: RwResolvedProjectComponentsV2
 _gemstoneAllUsersName
@@ -85826,25 +85717,6 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 				RwLoadedProject _projectDiskDefinitionSourceValue;
 		_projectDefinitionCustomConditionalAttributes:
 				customConditionalAttributes copy;
-		_projectDefinitionPlatformConditionalAttributes:
-				platformConditionalAttributes copy;
-		yourself.
-	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
-	^ visitor
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
-	| visitor |
-	visitor := self new
-		_readComponentsForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject
-		projectDefinitionSourceProperty:
-				RwLoadedProject _projectDiskDefinitionSourceValue;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -96957,6 +96829,7 @@ requiredProjects
 	requiredProjectNames := Set new.
 	theComponents
 		conditionalComponentsStartingWith: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
 	^ requiredProjectNames asArray

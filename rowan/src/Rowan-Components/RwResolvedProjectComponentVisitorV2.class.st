@@ -47,24 +47,6 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 ]
 
 { #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
-	| visitor |
-	visitor := self new
-		_readComponentsForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject
-		projectDefinitionSourceProperty:
-				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionPlatformConditionalAttributes:
-				platformConditionalAttributes copy;
-		yourself.
-	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
-	^ visitor
-]
-
-{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.

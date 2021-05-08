@@ -154,6 +154,7 @@ RwProject >> requiredProjects [
 	requiredProjectNames := Set new.
 	theComponents
 		conditionalComponentsStartingWith: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
 	^ requiredProjectNames asArray

@@ -69,28 +69,6 @@ RwResolvedProjectComponentsV2 >> _conditionalComponentsStartingWith: aComponent 
 										do: aBlock ] ] ] ]
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentsV2 >> _conditionalComponentsStartingWith: aComponent platformConditionalAttributes: platformConditionalAttributes visited: visitedComponentNames do: aBlock [
-	visitedComponentNames add: aComponent name.
-	aComponent conditionalPropertyMatchers
-		keysAndValuesDo: [ :platformMatchers :ignored | 
-			(self
-				_platformAttributeMatchIn: platformMatchers
-				using: platformConditionalAttributes)
-				ifTrue: [ 
-					aBlock value: aComponent.
-					aComponent componentNames
-						do: [ :cName | 
-							(visitedComponentNames includes: cName)
-								ifFalse: [ 
-									self
-										_conditionalComponentsStartingWith:
-											(self componentNamed: cName ifAbsent: [ self packageGroupNamed: cName ])
-										platformConditionalAttributes: platformConditionalAttributes
-										visited: visitedComponentNames
-										do: aBlock ] ] ] ]
-]
-
 { #category : 'private' }
 RwResolvedProjectComponentsV2 >> _gemstoneAllUsersName [
 	"duplicate of  RwLoadSpecificationV2 class >> _gemstoneAllUsersName BECAUSE
@@ -450,22 +428,6 @@ RwResolvedProjectComponentsV2 >> conditionalComponentsStartingWith: componentNam
 			self
 				_conditionalComponentsStartingWith: theComponent
 				customConditionalAttributes: customConditionalAttributes
-				platformConditionalAttributes: platformConditionalAttributes
-				visited: visited
-				do: aBlock ]
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectComponentsV2 >> conditionalComponentsStartingWith: componentNames platformConditionalAttributes: platformConditionalAttributes do: aBlock [
-	| visited |
-	visited := Set new.
-	componentNames
-		do: [ :componentName | 
-			| theComponent |
-			theComponent := self componentNamed: componentName.
-
-			self
-				_conditionalComponentsStartingWith: theComponent
 				platformConditionalAttributes: platformConditionalAttributes
 				visited: visited
 				do: aBlock ]

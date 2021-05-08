@@ -1144,17 +1144,6 @@ RwResolvedProjectV2 >> read [
 		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> read: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	^ self
-		readProjectComponentNames: self componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
 { #category : 'actions' }
 RwResolvedProjectV2 >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -1258,19 +1247,6 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
-	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
-		withComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -1443,17 +1419,6 @@ RwResolvedProjectV2 >> requiredProjectNames [
 	^ self
 		requiredProjectNames: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> requiredProjectNames: platformConditionalAttributes [
-	| requiredProjectNames |
-	requiredProjectNames := Set new.
-	self _projectComponents
-		conditionalComponentsStartingWith: self componentNames
-		platformConditionalAttributes: platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
-	^ requiredProjectNames
 ]
 
 { #category : 'accessing' }

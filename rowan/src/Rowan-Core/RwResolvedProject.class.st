@@ -271,13 +271,6 @@ RwResolvedProject >> read [
 	self _concreteProject read
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProject >> read: platformConditionalAttributes [
-	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
-
-	self _concreteProject read: platformConditionalAttributes
-]
-
 { #category : 'transitions' }
 RwResolvedProject >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
@@ -324,17 +317,6 @@ RwResolvedProject >> readProjectComponentNames: componentNames customConditional
 	self _concreteProject
 		readProjectComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProject >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
