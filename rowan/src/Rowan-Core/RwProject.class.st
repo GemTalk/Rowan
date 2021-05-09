@@ -475,6 +475,30 @@ RwProject >> reload [
 	^ Rowan projectTools load loadProjectNamed: self name
 ]
 
+{ #category : 'actions' }
+RwProject >> reloadAndIncludeCustomConditionalAttributes: addedCustomConditionalAttributes [
+	"
+		load the receiver AND required projects adding the custom conditonal attribures to 
+			the receiver's list of conditional attributes.
+	"
+
+	^ Rowan projectTools load
+		loadProjectNamed: self name
+		includeCustomConditionalAttributes: addedCustomConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwProject >> reloadAndRemoveCustomConditionalAttributes: removedCustomConditionalAttributes [
+	"
+		load the receiver AND required projects removing the custom conditonal attribures from 
+			the receiver's list of conditional attributes.
+	"
+
+	^ Rowan projectTools load
+		loadProjectNamed: self name
+		removeCustomConditionalAttributes: removedCustomConditionalAttributes
+]
+
 { #category : 'properties' }
 RwProject >> repositoryRootPath [
 

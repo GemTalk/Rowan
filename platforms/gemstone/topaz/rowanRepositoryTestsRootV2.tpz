@@ -20,8 +20,7 @@
 	
 	"load Rowan test classes"
 	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel') 
-			platformConditionalAttributes: Rowan platformConditionalAttributes.
+		reloadAndIncludeCustomConditionalAttributes: #('tests' 'testsV2').
 %
 	commit
 
