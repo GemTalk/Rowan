@@ -314,13 +314,13 @@ RwAbstractActiveComponent >> instVarNamesInOrderForSton [
 ]
 
 { #category : 'accessing' }
-RwAbstractActiveComponent >> packageNamesForPlatformConditionalAttributes: platformConditionalAttributes [
+RwAbstractActiveComponent >> packageNamesForConditionalAttributes: conditionalAttributes [
 	"Answer the collection of package names defined in the receiver."
 
 	| allDefinedPackageNames matchers |
 	allDefinedPackageNames := Set new.
 	matchers := self conditionalPropertyMatchers.
-	platformConditionalAttributes
+	conditionalAttributes
 		do: [ :anObject | 
 			matchers
 				keysAndValuesDo: [ :ar :ignored | 

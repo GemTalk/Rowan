@@ -192,7 +192,7 @@ RwResolvedProjectComponentVisitorV2 >> _components: componentDirPath forProject:
 { #category : 'private' }
 RwResolvedProjectComponentVisitorV2 >> _matchPlatformAttributes: platformPatternMatcher [
 
-	self customAttributes do: [:anObject |
+	self conditionalAttributes do: [:anObject |
 		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
 	^false
 ]
@@ -292,7 +292,7 @@ RwResolvedProjectComponentVisitorV2 >> componentsPath [
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectComponentVisitorV2 >> customAttributes [
+RwResolvedProjectComponentVisitorV2 >> conditionalAttributes [
 
 	^ self platformConditionalAttributes, self customConditionalAttributes
 ]

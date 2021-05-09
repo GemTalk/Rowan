@@ -32,3 +32,13 @@ RwResolvedFromDefinedProject >> loadFromSpec [
 
 	^ self _concreteProject _loadSpecification resolve load
 ]
+
+{ #category : 'transitions' }
+RwResolvedFromDefinedProject >> loadProjectSet [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self _concreteProject loadProjectSet
+]

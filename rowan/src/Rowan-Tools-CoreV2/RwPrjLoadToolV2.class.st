@@ -119,35 +119,23 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: Rowan platform instanceMigrator
+		symbolList: Rowan image symbolList
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator [
 	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		instanceMigrator: Rowan platform instanceMigrator
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	"read the components for <projectDefinition> to develop the list of dependent projects"
-
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 		symbolList: Rowan image symbolList
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
+RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
 	"read the components for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition requiredProjectNames |
@@ -155,7 +143,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAtt
 		addProject: projectDefinition;
 		yourself.
 	(requiredProjectNames := projectDefinition
-		requiredProjectNames: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ) isEmpty
+		requiredProjectNames: customConditionalAttributes) isEmpty
 		ifFalse: [ 
 			| absentProjectNames |
 			"if required projects are not already present in the image, then they must be loaded at this time"
@@ -164,7 +152,7 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAtt
 			absentProjectNames isEmpty
 				ifFalse: [ 
 					projectSetDefinition := projectDefinition
-						readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
+						readProjectSet: customConditionalAttributes ] ].
 	^ self
 		loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
@@ -176,7 +164,6 @@ RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: in
 	^ self
 		loadProjectDefinition: projectDefinition
 		customConditionalAttributes: projectDefinition customConditionalAttributes
-		platformConditionalAttributes: projectDefinition platformConditionalAttributes
 		instanceMigrator: instanceMigrator
 ]
 
@@ -192,12 +179,11 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 ]
 
 { #category : 'load project by name' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
 	| projectSet res |
 	projectSet := Rowan projectTools readV2
 		readProjectSetForProjectNamed: projectName
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes.
+		customConditionalAttributes: customConditionalAttributes.
 	res := self loadProjectSetDefinition: projectSet.
 	self markProjectSetNotDirty: projectSet.	"loaded project and loaded packages read from disk - mark them not dirty"
 	^ res
@@ -215,7 +201,6 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName includeCustomConditionalAttribu
 	^ self
 		loadProjectNamed: projectName
 		customConditionalAttributes: theCustomConditionalAttributes asArray
-		platformConditionalAttributes: project platformConditionalAttributes
 ]
 
 { #category : 'load project by name' }
@@ -230,10 +215,9 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName removeCustomConditionalAttribut
 	^ self
 		loadProjectNamed: projectName
 		customConditionalAttributes: theCustomConditionalAttributes asArray
-		platformConditionalAttributes: project platformConditionalAttributes
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'load project set' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
 	^ self
@@ -241,7 +225,7 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'load project set' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator [
 	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
 		project and a definition can have come from anywhere"
@@ -252,7 +236,7 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrat
 		symbolList: Rowan image symbolList
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'load project set' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList [
 	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
 		project and a definition can have come from anywhere"
@@ -265,7 +249,7 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrat
 		processedClassNames: Set new
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'load project set' }
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList [
 	^ self
 		loadProjectSetDefinition: projectSetDefinitionToLoad

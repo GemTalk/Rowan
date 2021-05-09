@@ -56,8 +56,8 @@ RwDefinedProject >> _projectSpecification [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> _validate: platformConditionalAttributes [
-	^ self _concreteProject _validate: platformConditionalAttributes
+RwDefinedProject >> _validate: conditionalAttributes [
+	^ self _concreteProject _validate: conditionalAttributes
 ]
 
 { #category : 'components' }
@@ -386,16 +386,6 @@ RwDefinedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: p
 { #category : 'testing' }
 RwDefinedProject >> isStrict [
 	^ self _concreteProject isStrict
-]
-
-{ #category : 'transitions' }
-RwDefinedProject >> loadProjectSet [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
-	"
-
-	^ self _concreteProject loadProjectSet
 ]
 
 { #category : 'accessing' }

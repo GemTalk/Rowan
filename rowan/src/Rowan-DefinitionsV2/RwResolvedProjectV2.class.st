@@ -127,6 +127,18 @@ RwResolvedProjectV2 >> _projectDefinitionPlatformConditionalAttributes: platform
 	self _projectDefinition _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'private' }
+RwResolvedProjectV2 >> _requiredProjectNames: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| requiredProjectNames |
+	requiredProjectNames := Set new.
+	self _projectComponents
+		conditionalComponentsStartingWith: self componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+	^ requiredProjectNames
+]
+
 { #category : 'visiting' }
 RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
@@ -550,10 +562,9 @@ RwResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: 
 
 { #category : 'components' }
 RwResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock [
-	| packageNames visited theBlock attributes componentNames |
+	| packageNames visited theBlock componentNames |
 	visited := IdentitySet new.
 	packageNames := Set new.
-	attributes := self platformConditionalAttributes.
 	theBlock := [ :component | 
 	(visited includes: component)
 		ifFalse: [ 
@@ -858,7 +869,7 @@ RwResolvedProjectV2 >> load [
 			and send #load to the project set.
 	"
 
-	self _validate: self customAttributes.
+	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
 ]
 
@@ -869,7 +880,7 @@ RwResolvedProjectV2 >> load: instanceMigrator [
 			loaded if they are not already present in the image.
 	"
 
-	self _validate: self platformConditionalAttributes.
+	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectDefinition: self
 		instanceMigrator: instanceMigrator
@@ -887,7 +898,7 @@ RwResolvedProjectV2 >> loadProjectSet [
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	self _validate: self platformConditionalAttributes.
+	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(self
@@ -923,44 +934,6 @@ RwResolvedProjectV2 >> loadProjectSet: conditionalAttributes instanceMigrator: i
 
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition: (self readProjectSet: conditionalAttributes)
-		instanceMigrator: instanceMigrator
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
-
-		Use the specified platform conditional attributes when reading the receiver from disk.
-	"
-
-	self _validate: self platformConditionalAttributes.
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition:
-			(self
-				readProjectSet: customConditionalAttributes
-				platformConditionalAttributes: platformConditionalAttributes)
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes instanceMigrator: instanceMigrator [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set, using the specified 
-			instance migrator.
-
-		Use the specified platform conditional attributes when reading the receiver from disk.
-
-		Use the instanceMigrator to handle new versions of any classes that may result from the load.
-	"
-
-	self _validate: self platformConditionalAttributes.
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition:
-			(self
-				readProjectSet: customConditionalAttributes
-				platformConditionalAttributes: platformConditionalAttributes)
 		instanceMigrator: instanceMigrator
 ]
 
@@ -1417,20 +1390,15 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 { #category : 'accessing' }
 RwResolvedProjectV2 >> requiredProjectNames [
 	^ self
-		requiredProjectNames: self customConditionalAttributes
+		_requiredProjectNames: self customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
-RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	| requiredProjectNames |
-	requiredProjectNames := Set new.
-	self _projectComponents
-		conditionalComponentsStartingWith: self componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
-	^ requiredProjectNames
+RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes [
+	^ self
+		_requiredProjectNames: customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : 'actions' }

@@ -12,6 +12,16 @@ RwDefinedFromResolvedProject class >> fromLoadedProject: aLoadedProject [
 ]
 
 { #category : 'transitions' }
+RwDefinedFromResolvedProject >> loadProjectSet [
+	"
+		refresh the contents of the receiver from disk and create a project set that includes project definitions of
+			required projects, also read from disk. Then load the entire project set.
+	"
+
+	^ self _concreteProject loadProjectSet
+]
+
+{ #category : 'transitions' }
 RwDefinedFromResolvedProject >> read [
 	"return a RwDefinedProject with definitions read from disk"
 

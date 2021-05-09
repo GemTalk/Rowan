@@ -79,7 +79,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArray
 	| packageNames visited theBlock attributes componentNames components |
 	visited := IdentitySet new.
 	packageNames := Set new.
-	attributes := self platformConditionalAttributes.
+	attributes := self conditionalAttributes.
 	theBlock := [ :component | 
 	(visited includes: component)
 		ifFalse: [ 
@@ -105,7 +105,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArray
 	| packageNames visited theBlock attributes componentNames |
 	visited := IdentitySet new.
 	packageNames := Set new.
-	attributes := self platformConditionalAttributes.
+	attributes := self conditionalAttributes.
 	theBlock := [ :component | 
 	(visited includes: component)
 		ifFalse: [ 
@@ -210,7 +210,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> customAttributes [
+RwGsLoadedSymbolDictResolvedProjectV2 >> conditionalAttributes [
 
 	^ self platformConditionalAttributes, self customConditionalAttributes
 ]
@@ -319,18 +319,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes i
 	^ self asDefinition
 		loadProjectSet: conditionalAttributes
 		instanceMigrator: instanceMigrator
-]
-
-{ #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
-
-		Use the specified platform conditional attributes when reading the receiver from disk.
-	"
-
-	^ self asDefinition loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -507,7 +495,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName ifNone: 
 
 	^ self
 		subcomponentsOf: componentName
-		attributes: self customAttributes
+		attributes: self conditionalAttributes
 		ifNone: noneBlock
 ]
 

@@ -81,11 +81,11 @@ RwAbstractResolvedObjectV2 >> _validate [
 		the specs must be able to stand on their own, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
 
-	^ self _validate: self platformConditionalAttributes
+	^ self _validate: self conditionalAttributes
 ]
 
 { #category : 'private' }
-RwAbstractResolvedObjectV2 >> _validate: platformConditionalAttributes [
+RwAbstractResolvedObjectV2 >> _validate: conditionalAttributes [
 	"ensure that the receiver's specifications contain valid information ... 
 		the specs must be able to stand on their, when they are written to disk, so there is a 
 		responsiblity for them to have valid data"
@@ -123,7 +123,7 @@ RwAbstractResolvedObjectV2 >> componentsRoot [
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> customAttributes [
+RwAbstractResolvedObjectV2 >> conditionalAttributes [
 
 	^ self platformConditionalAttributes, self customConditionalAttributes
 ]

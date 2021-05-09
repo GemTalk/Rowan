@@ -21,9 +21,19 @@ RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName [
 ]
 
 { #category : 'read loaded projects' }
+RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
+	| project |
+	project := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	^ project
+		readProjectSet: customConditionalAttributes
+		platformConditionalAttributes: project platformConditionalAttributes
+]
+
+{ #category : 'read loaded projects' }
 RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ (Rowan image loadedProjectNamed: projectName) asDefinition
-		readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+		readProjectSet: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'read resolved projects' }

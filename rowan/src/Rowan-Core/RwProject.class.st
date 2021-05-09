@@ -420,18 +420,6 @@ RwProject >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMig
 		instanceMigrator: instanceMigrator
 ]
 
-{ #category : 'actions' }
-RwProject >> loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that includes project definitions of
-			required projects, also read from disk. Then load the entire project set.
-
-		Use the specified platform conditional attributes when reading the receiver from disk.
-	"
-
-	^ self _loadedProject loadProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-]
-
 { #category : 'components' }
 RwProject >> packageGroupNamed: componentName [
 	^ self _loadedComponents packageGroupNamed: componentName
@@ -508,9 +496,9 @@ RwProject >> revert [
 ]
 
 { #category : 'actions' }
-RwProject >> revert: platformConditionalAttributes [
+RwProject >> revert: customConditionalAttributes [
 	"
-		read the reciever using the platformConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
+		read the reciever using the customConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
 			loaded if they are not already present in the image.
 	"
 
@@ -520,9 +508,9 @@ RwProject >> revert: platformConditionalAttributes [
 ]
 
 { #category : 'actions' }
-RwProject >> revert: platformConditionalAttributes  instanceMigrator: instanceMigrator [
+RwProject >> revert: customConditionalAttributes  instanceMigrator: instanceMigrator [
 	"
-		read the reciever using the platformConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+		read the reciever using the customConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
 			receiver are only loaded if they are not already present in the image.
 	"
 

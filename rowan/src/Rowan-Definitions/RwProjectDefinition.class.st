@@ -74,7 +74,7 @@ RwProjectDefinition >> _projectDefinitionPlatformConditionalAttributes: platform
 ]
 
 { #category : 'private' }
-RwProjectDefinition >> _validate: platformConditionalAttributes componentPackageNames: componentPackageNames [
+RwProjectDefinition >> _validate: conditionalAttributes componentPackageNames: componentPackageNames [
 	"ensure that the data structures within the receiver contain valid information"
 
 	"make sure that list of packages is consistent between components and project definition
