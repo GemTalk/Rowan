@@ -3484,6 +3484,48 @@ RwRowanSample9Test >> testIssue571 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue594 [
+	"tests for RwProject>>reloadAndIncludeCustomConditionalAttributes: and RwProject>>reloadAndRemoveCustomConditionalAttributes:"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	| loadSpec projectName resolvedProject loadedProjects project audit |
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self deny: project testSuite tests isEmpty.
+
+"reload without 'tests' attribute"
+	loadedProjects := project reloadAndRemoveCustomConditionalAttributes: #('tests').
+	project := loadedProjects at: 1.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: project testSuite tests isEmpty.
+
+"reload with 'tests' attribute"
+	loadedProjects := project reloadAndIncludeCustomConditionalAttributes: #('tests').
+	project := loadedProjects at: 1.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self deny: project testSuite tests isEmpty.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue653 [
 	"use spec_0061 to test compoent API "
 

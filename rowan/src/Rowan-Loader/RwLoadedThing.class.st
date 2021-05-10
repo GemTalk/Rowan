@@ -177,7 +177,6 @@ RwLoadedThing >> removeProperty: propertyName [
 
 { #category : 'accessing' }
 RwLoadedThing >> setPropertiesTo: aDictionary [
-
-  aDictionary _validateClass: SymbolDictionary .
+	aDictionary _validateClass: SymbolDictionary.
 	properties := aDictionary copy
 ]

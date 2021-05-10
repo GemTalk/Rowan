@@ -1129,6 +1129,19 @@ RwResolvedProjectV2 >> read: customConditionalAttributes platformConditionalAttr
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readLoadedProjectSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
 	projectRepository := self _projectRepository

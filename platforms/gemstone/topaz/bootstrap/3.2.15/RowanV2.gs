@@ -65502,6 +65502,20 @@ read: customConditionalAttributes platformConditionalAttributes: platformConditi
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readLoadedProjectSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
@@ -70485,6 +70499,17 @@ classExtensionsForProjectNamed: projectName
 
 category: 'read resolved projects'
 method: RwPrjReadToolV2
+readLoadedProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	^ RwResolvedProjectComponentVisitorV2
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		useLoadedProjects: true
+%
+
+category: 'read resolved projects'
+method: RwPrjReadToolV2
 readProjectForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	RwResolvedProjectComponentVisitorV2
 		readProjectForResolvedProject: resolvedProject
@@ -70507,7 +70532,7 @@ readProjectSetForProjectNamed: projectName customConditionalAttributes: customCo
 	| project |
 	project := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	^ project
-		readProjectSet: customConditionalAttributes
+		readLoadedProjectSet: customConditionalAttributes
 		platformConditionalAttributes: project platformConditionalAttributes
 %
 
@@ -70515,7 +70540,7 @@ category: 'read loaded projects'
 method: RwPrjReadToolV2
 readProjectSetForProjectNamed: projectName customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ (Rowan image loadedProjectNamed: projectName) asDefinition
-		readProjectSet: customConditionalAttributes
+		readLoadedProjectSet: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -80577,9 +80602,29 @@ updateProjectProperties
 category: 'applying'
 method: RwGsProjectAdditionPatchV2
 createLoadedProject
-
 	| projectName existingLoadedProject newLoadedProject |
 	projectName := self projectName.
+	projectDefinition _projectDefinitionPlatformConditionalAttributes
+		ifNotNil: [ :attributes | 
+			| projectAttributes systemAttributes |
+			projectAttributes := (attributes asArray
+				collect: [ :each | 
+					"convert version objects to strings"
+					each asString ]) sort.
+			systemAttributes := (Rowan platformConditionalAttributes asArray
+				collect: [ :each | 
+					"convert version objects to strings"
+					each asString ]) sort.
+			projectAttributes = systemAttributes
+				ifFalse: [ 
+					"https://github.com/GemTalk/Rowan/issues/594"
+					self
+						error:
+							'Attempt to load a project that was created with platform conditional attributes ('
+								, projectAttributes printString
+								, '), that do not match the system platform conditional attributes ('
+								, systemAttributes printString , ').' ] ].
+
 	existingLoadedProject := Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ nil ].
@@ -81502,8 +81547,7 @@ removeProperty: propertyName
 category: 'accessing'
 method: RwLoadedThing
 setPropertiesTo: aDictionary
-
-  aDictionary _validateClass: SymbolDictionary .
+	aDictionary _validateClass: SymbolDictionary.
 	properties := aDictionary copy
 %
 
@@ -83450,11 +83494,11 @@ asDefinition
 	resolvedProject _projectSpecification: handle _projectSpecification copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectLoadedDefinitionSourceValue;
+				RwLoadedProject _projectLoadedDefinitionSourceValue;
 		_projectDefinitionCustomConditionalAttributes:
 				handle _projectDefinitionCustomConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
-				handle _projectDefinitionPlatformConditionalAttributes copy;
+				Rowan platformConditionalAttributes;
 		yourself.
 	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
@@ -83612,7 +83656,14 @@ loadProjectSet
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	^ self asDefinition loadProjectSet
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: projectDef conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: projectDef customConditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 %
 
 category: 'actions'
@@ -83626,7 +83677,14 @@ loadProjectSet: conditionalAttributes
 		Use the specified conditional attributes when reading the receiver from disk.
 	"
 
-	^ self asDefinition loadProjectSet: conditionalAttributes
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: conditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 %
 
 category: 'actions'
@@ -83642,8 +83700,14 @@ loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator
 		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
-	^ self asDefinition
-		loadProjectSet: conditionalAttributes
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: conditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 		instanceMigrator: instanceMigrator
 %
 
@@ -83805,6 +83869,18 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 revision
 	^ self resolvedProject revision
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+setPropertiesTo: aDictionary
+	"do not store the platform conditionals ... guarantee that loaded projects always 
+		reflect the current system platform conditionals (Rowan platformConditionalAttributes)"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	super setPropertiesTo: aDictionary.
+	self _projectDefinitionPlatformConditionalAttributes: nil
 %
 
 category: 'accessing'
@@ -86477,6 +86553,17 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	^ self
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		useLoadedProjects: false
+%
+
+category: 'reading'
+classmethod: RwResolvedProjectComponentVisitorV2
+readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -86504,13 +86591,14 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec |
-					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
-						ifNotNil: [ :project | 
+					| theResolvedProject theLoadSpec theLoadedProject |
+					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
+					(theLoadedProject notNil and: [ useLoadedProjects ])
+						ifTrue: [
 							"project is already present in image ... so use it"
-							theLoadSpec := project _loadSpecification.
-							theResolvedProject := project asDefinition resolve ]
-						ifNil: [ 
+							theLoadSpec := theLoadedProject _loadSpecification.
+							theResolvedProject := theLoadedProject asDefinition resolve ]
+						ifFalse: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
 							theLoadSpec := loadSpec ].
@@ -86533,54 +86621,12 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead}}.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| nextDefArray rp cn |
-			nextDefArray := projectVisitorQueue removeFirst.
-			rp := nextDefArray at: 1.
-			cn := nextDefArray at: 2.
-
-			visitor := self
-				readProjectForResolvedProject: rp
-				withComponentNames: cn
-				customConditionalAttributes: rp customConditionalAttributes
-				platformConditionalAttributes: platformConditionalAttributes.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					nextDefArray}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec |
-					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
-						ifNotNil: [ :project | 
-							"project is already present in image ... so use it"
-							theLoadSpec := project _loadSpecification.
-							theResolvedProject := project asDefinition resolve ]
-						ifNil: [ 
-							"derive resolved project from the load spec"
-							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
-							theLoadSpec := loadSpec ].
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(theLoadSpec componentNames)} ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
-			theVisitor := visitedArray at: 1.
-			ndf := visitedArray at: 2.
-			theResolvedProject := ndf at: 1.
-			theResolvedProject readPackageNames: theResolvedProject packageNames.
-			projectSetDefinition addProject: theResolvedProject ].
-	^ projectSetDefinition
+	^ self
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: resolvedProject customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		useLoadedProjects: false
 %
 
 category: 'reading'

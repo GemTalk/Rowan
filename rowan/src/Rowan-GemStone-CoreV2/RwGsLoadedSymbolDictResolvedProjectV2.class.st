@@ -146,11 +146,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	resolvedProject _projectSpecification: handle _projectSpecification copy.
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
-			RwLoadedProject _projectLoadedDefinitionSourceValue;
+				RwLoadedProject _projectLoadedDefinitionSourceValue;
 		_projectDefinitionCustomConditionalAttributes:
 				handle _projectDefinitionCustomConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
-				handle _projectDefinitionPlatformConditionalAttributes copy;
+				Rowan platformConditionalAttributes;
 		yourself.
 	resolvedProject _projectComponents: handle _projectComponents copy.
 	^ resolvedProject
@@ -288,7 +288,14 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	^ self asDefinition loadProjectSet
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: projectDef conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: projectDef customConditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 ]
 
 { #category : 'actions' }
@@ -301,7 +308,14 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
 		Use the specified conditional attributes when reading the receiver from disk.
 	"
 
-	^ self asDefinition loadProjectSet: conditionalAttributes
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: conditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 ]
 
 { #category : 'actions' }
@@ -316,8 +330,14 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes i
 		Use the instanceMigrator to handle new versions of any classes that may result from the load.
 	"
 
-	^ self asDefinition
-		loadProjectSet: conditionalAttributes
+	| projectDef |
+	projectDef := self asDefinition.
+	projectDef _validate: conditionalAttributes.
+	^ Rowan projectTools loadV2
+		loadProjectSetDefinition:
+			(projectDef
+				readLoadedProjectSet: conditionalAttributes
+				platformConditionalAttributes: projectDef platformConditionalAttributes)
 		instanceMigrator: instanceMigrator
 ]
 
@@ -458,6 +478,17 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> resolvedProject [
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> revision [
 	^ self resolvedProject revision
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> setPropertiesTo: aDictionary [
+	"do not store the platform conditionals ... guarantee that loaded projects always 
+		reflect the current system platform conditionals (Rowan platformConditionalAttributes)"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+
+	super setPropertiesTo: aDictionary.
+	self _projectDefinitionPlatformConditionalAttributes: nil
 ]
 
 { #category : 'accessing' }

@@ -6,9 +6,29 @@ Class {
 
 { #category : 'applying' }
 RwGsProjectAdditionPatchV2 >> createLoadedProject [
-
 	| projectName existingLoadedProject newLoadedProject |
 	projectName := self projectName.
+	projectDefinition _projectDefinitionPlatformConditionalAttributes
+		ifNotNil: [ :attributes | 
+			| projectAttributes systemAttributes |
+			projectAttributes := (attributes asArray
+				collect: [ :each | 
+					"convert version objects to strings"
+					each asString ]) sort.
+			systemAttributes := (Rowan platformConditionalAttributes asArray
+				collect: [ :each | 
+					"convert version objects to strings"
+					each asString ]) sort.
+			projectAttributes = systemAttributes
+				ifFalse: [ 
+					"https://github.com/GemTalk/Rowan/issues/594"
+					self
+						error:
+							'Attempt to load a project that was created with platform conditional attributes ('
+								, projectAttributes printString
+								, '), that do not match the system platform conditional attributes ('
+								, systemAttributes printString , ').' ] ].
+
 	existingLoadedProject := Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ nil ].

@@ -48,6 +48,16 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 
 { #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	^ self
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		useLoadedProjects: false
+]
+
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -75,13 +85,14 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec |
-					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
-						ifNotNil: [ :project | 
+					| theResolvedProject theLoadSpec theLoadedProject |
+					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
+					(theLoadedProject notNil and: [ useLoadedProjects ])
+						ifTrue: [
 							"project is already present in image ... so use it"
-							theLoadSpec := project _loadSpecification.
-							theResolvedProject := project asDefinition resolve ]
-						ifNil: [ 
+							theLoadSpec := theLoadedProject _loadSpecification.
+							theResolvedProject := theLoadedProject asDefinition resolve ]
+						ifFalse: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
 							theLoadSpec := loadSpec ].
@@ -103,54 +114,12 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 
 { #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead}}.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| nextDefArray rp cn |
-			nextDefArray := projectVisitorQueue removeFirst.
-			rp := nextDefArray at: 1.
-			cn := nextDefArray at: 2.
-
-			visitor := self
-				readProjectForResolvedProject: rp
-				withComponentNames: cn
-				customConditionalAttributes: rp customConditionalAttributes
-				platformConditionalAttributes: platformConditionalAttributes.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					nextDefArray}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec |
-					(Rowan projectNamed: loadSpec projectName ifAbsent: [  ])
-						ifNotNil: [ :project | 
-							"project is already present in image ... so use it"
-							theLoadSpec := project _loadSpecification.
-							theResolvedProject := project asDefinition resolve ]
-						ifNil: [ 
-							"derive resolved project from the load spec"
-							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
-							theLoadSpec := loadSpec ].
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(theLoadSpec componentNames)} ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
-			theVisitor := visitedArray at: 1.
-			ndf := visitedArray at: 2.
-			theResolvedProject := ndf at: 1.
-			theResolvedProject readPackageNames: theResolvedProject packageNames.
-			projectSetDefinition addProject: theResolvedProject ].
-	^ projectSetDefinition
+	^ self
+		readProjectSetForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: resolvedProject customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+		useLoadedProjects: false
 ]
 
 { #category : 'reading' }
