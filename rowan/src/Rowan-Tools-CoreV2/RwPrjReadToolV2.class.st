@@ -27,7 +27,9 @@ RwPrjReadToolV2 >> readProjectForResolvedProject: resolvedProject withComponentN
 
 { #category : 'read loaded projects' }
 RwPrjReadToolV2 >> readProjectSetForProjectNamed: projectName [
-	^ (Rowan image loadedProjectNamed: projectName) asDefinition readProjectSet
+	| project |
+	project := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	^ project readLoadedProjectSet
 ]
 
 { #category : 'read loaded projects' }

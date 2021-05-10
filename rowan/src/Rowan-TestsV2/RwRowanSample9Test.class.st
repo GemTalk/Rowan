@@ -5640,6 +5640,7 @@ RwRowanSample9Test >> testSpec_0054_3 [
 	"spec_0054 should load cleanly ... with the new gnu classes and tests"
 
 	"https://github.com/GemTalk/Rowan/issues/594"
+	"https://github.com/GemTalk/Rowan/issues/701"
 
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
@@ -5653,7 +5654,7 @@ RwRowanSample9Test >> testSpec_0054_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: #('gnu' 'tests') platformAttributes: #('common' ).
+	resolvedProjectSet := loadSpec resolveProjectSet: #('gnu' 'tests').
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5751,6 +5752,7 @@ RwRowanSample9Test >> testSpec_0055_3 [
 	"spec_0055 should load cleanly ... with the new GemStone24x classes and tests"
 
 	"https://github.com/GemTalk/Rowan/issues/594"
+	"https://github.com/GemTalk/Rowan/issues/701"
 
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0055'.
@@ -5765,8 +5767,7 @@ RwRowanSample9Test >> testSpec_0055_3 [
 
 "resolve project"
 	resolvedProjectSet := loadSpec 
-		resolveProjectSet: #('tests') 
-		platformAttributes: {'common' . '2.4.0' asRwGemStoneVersionNumber}.
+		resolveProjectSet: { 'tests'. '2.4.0' asRwGemStoneVersionNumber}.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5861,6 +5862,7 @@ RwRowanSample9Test >> testSpec_0056_3 [
 	"This is the closest test case to the reported bug for Issue #594, however the actual bug is not reproduced"
 
 	"https://github.com/GemTalk/Rowan/issues/594"
+	"https://github.com/GemTalk/Rowan/issues/701"
 
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0056'.
@@ -5875,8 +5877,7 @@ RwRowanSample9Test >> testSpec_0056_3 [
 
 "resolve project"
 	resolvedProjectSet := loadSpec 
-		resolveProjectSet: #('tests') 
-		platformAttributes: {'common' . '2.4.0' asRwGemStoneVersionNumber}.
+		resolveProjectSet: {'tests' . '2.4.0' asRwGemStoneVersionNumber}.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5887,10 +5888,10 @@ RwRowanSample9Test >> testSpec_0056_3 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self deny: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
 
-	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
 ]
 
@@ -5968,10 +5969,10 @@ RwRowanSample9Test >> testSpec_0059_1 [
 
 "load project using each of the alt conditions"
 	{
-		{ #('common' ) . #( 'tests') }.
-		{ #('common' ) . #( 'tests' 'alt1' ) }.
-		{ #('common' ) . #( 'tests' 'alt2' ) }.
-		{ #('common' ) . #( 'tests' 'alt3' ) }.
+		{  Rowan platformConditionalAttributes . #( 'tests') }.
+		{ Rowan platformConditionalAttributes . #( 'tests' 'alt1' ) }.
+		{ Rowan platformConditionalAttributes . #( 'tests' 'alt2' ) }.
+		{ Rowan platformConditionalAttributes . #( 'tests' 'alt3' ) }.
 	} do: [:ar |
 		| platformAttributes conditionalAttributes |
 		platformAttributes := ar at: 1.
@@ -6006,9 +6007,9 @@ RwRowanSample9Test >> testSpec_0059_2 [
 
 "load project using each of the alt conditions"
 	{
-		{ #('common') . #('tests' 'alt1' 'platformA') }.
-		{ #('common') . #('tests' 'alt1' 'platformB') }.
-		{ #('common') . #('tests' 'alt1' 'platformC') }.
+		{ Rowan platformConditionalAttributes . #('tests' 'alt1' 'platformA') }.
+		{ Rowan platformConditionalAttributes . #('tests' 'alt1' 'platformB') }.
+		{ Rowan platformConditionalAttributes . #('tests' 'alt1' 'platformC') }.
 	} do: [:ar |
 		| platformAttributes conditionalAttributes |
 		platformAttributes := ar at: 1.

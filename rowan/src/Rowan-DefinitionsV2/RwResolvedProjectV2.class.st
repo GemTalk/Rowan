@@ -907,17 +907,17 @@ RwResolvedProjectV2 >> loadProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
+RwResolvedProjectV2 >> loadProjectSet: customConditionalAttributes [
 	"
 		refresh the contents of the receiver from disk and create a project set that
 			includes project definitions of required projects, also read from disk. Then
 			load the entire project set.
 
-		Use the specified conditional attributes when reading the receiver from disk.
+		Use the specified customConditionalAttributes when reading the receiver from disk.
 	"
 
 	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: (self readProjectSet: conditionalAttributes)
+		loadProjectSetDefinition: (self readProjectSet: customConditionalAttributes)
 ]
 
 { #category : 'actions' }
@@ -1130,6 +1130,32 @@ RwResolvedProjectV2 >> read: customConditionalAttributes platformConditionalAttr
 ]
 
 { #category : 'actions' }
+RwResolvedProjectV2 >> readLoadedProjectSet [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readLoadedProjectSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readLoadedProjectSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
 
@@ -1246,13 +1272,13 @@ RwResolvedProjectV2 >> readProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> readProjectSet: conditionalAttributes [
-	"refresh the contents of the receiver ... use conditionalAttributes to determine which components will be loaded"
+RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes [
+	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
-		readProjectSet: conditionalAttributes
+		readProjectSet: customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 

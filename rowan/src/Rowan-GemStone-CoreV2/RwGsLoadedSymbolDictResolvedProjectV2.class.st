@@ -299,7 +299,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 ]
 
 { #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
+RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: customConditionalAttributes [
 	"
 		refresh the contents of the receiver from disk and create a project set that
 			includes project definitions of required projects, also read from disk. Then
@@ -310,11 +310,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes [
 
 	| projectDef |
 	projectDef := self asDefinition.
-	projectDef _validate: conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(projectDef
-				readLoadedProjectSet: conditionalAttributes
+				readLoadedProjectSet: customConditionalAttributes
 				platformConditionalAttributes: projectDef platformConditionalAttributes)
 ]
 

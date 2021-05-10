@@ -330,12 +330,12 @@ RwResolvedProject >> readProjectSet [
 ]
 
 { #category : 'actions' }
-RwResolvedProject >> readProjectSet: conditionalAttributes [
-	"refresh the contents of the receiver ... use conditionalAttributes to determine which components will be loaded"
+RwResolvedProject >> readProjectSet: customConditionalAttributes [
+	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	self _concreteProject readProjectSet: conditionalAttributes
+	self _concreteProject readProjectSet: customConditionalAttributes
 ]
 
 { #category : 'transitions' }
