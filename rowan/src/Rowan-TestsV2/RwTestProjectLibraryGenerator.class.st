@@ -77,6 +77,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0064: commitComment;
 	genSpec_0065: commitComment;
 	genSpec_0066: commitComment;
+	genSpec_0067: commitComment;
 	yourself
 "
 Class {
@@ -3715,7 +3716,55 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0066: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0067: resolvedProject [
+	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+
+	self
+		_addDefinitionsFor_0067: resolvedProject
+		requiredProjectName: 'RowanSample10'
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0067: resolvedProject requiredProjectName: requiredProjectName [
+	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+
+	| requiredLoadSpec componentName superclassName packageName className  |
+	resolvedProject projectsRoot ensureCreateDirectory.
+	packageName := projectName , '-Core'.
+	componentName := 'Core'.
+	className := projectName, 'Class1'.
+	superclassName := requiredProjectName , 'Class1'.
+	packageName := projectName , '-Core'.
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		revision: 'spec_0003';
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+		componentNames: {componentName};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: {'tests'};
+		yourself.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+	(resolvedProject componentNamed: componentName)
+		addProjectNamed: requiredProjectName;
+		yourself.
+	((resolvedProject packageNamed: packageName) classDefinitionNamed: className)
+		superclassName: superclassName;
+		instVarNames: #();
+		yourself
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
+	^ self
+		_addDefinitionsFor: resolvedProject
+		projectName: aProjectName
+		superclassName: 'Object'
+		instvars: #('ivar1')
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName superclassName: superclassName instvars: instvars [
 	| className packageName |
 	resolvedProject
 		addPackagesNamed: {(aProjectName , '-Core')}
@@ -3727,8 +3776,8 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName
 	className := aProjectName , 'Class1'.
 	((resolvedProject packageNamed: packageName)
 		addClassNamed: className
-		super: 'Object'
-		instvars: #('ivar1')
+		super:superclassName
+		instvars: instvars
 		category: packageName
 		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
@@ -7596,6 +7645,53 @@ RwTestProjectLibraryGenerator >> genSpec_0066: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0066: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0067: commitMessage [
+	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+
+	"https://github.com/GemTalk/Rowan/issues/701"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0067'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 67
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(701);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0067: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

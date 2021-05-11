@@ -91,6 +91,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0064: commitComment;
 		genSpec_0065: commitComment;
 		genSpec_0066: commitComment;
+		genSpec_0067: commitComment;
 		yourself
 ]
 
@@ -115,6 +116,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		genSpec_0000: commitComment;
 		genSpec_0001: commitComment;
 		genSpec_0002: commitComment;
+		genSpec_0003: commitComment;
 		yourself
 ]
 
@@ -139,6 +141,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 		genSpec_0000: commitComment;
 		genSpec_0001: commitComment;
 		genSpec_0002: commitComment;
+		genSpec_0003: commitComment;
 		yourself
 ]
 
@@ -163,5 +166,6 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
 		genSpec_0000: commitComment;
 		genSpec_0001: commitComment;
 		genSpec_0002: commitComment;
+		genSpec_0003: commitComment;
 		yourself
 ]
