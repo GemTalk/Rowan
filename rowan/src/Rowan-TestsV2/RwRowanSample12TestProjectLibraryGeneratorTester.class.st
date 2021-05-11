@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwRowanSample12TestProjectLibraryGeneratorTester',
-	#superclass : 'RwRowanSample11TestProjectLibraryGenerator',
+	#superclass : 'RwRowanSample12TestProjectLibraryGenerator',
 	#instVars : [
 		'testCase'
 	],

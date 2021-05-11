@@ -85,6 +85,12 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0058: commitComment;
 		genSpec_0059: commitComment;
 		genSpec_0060: commitComment;
+		genSpec_0061: commitComment;
+		genSpec_0062: commitComment;
+		genSpec_0063: commitComment;
+		genSpec_0064: commitComment;
+		genSpec_0065: commitComment;
+		genSpec_0066: commitComment;
 		yourself
 ]
 
@@ -94,13 +100,11 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		1. hitting errors
 		2. changing any of the disk content"
 
-	"skip spec_004, because it makes two changes in a row, so always commits"
-
 	| commitComment |
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
 
-	commitComment := 'running RowanSample10 testLibraryGenerator tests ... no changes expected, thus no commits exprected'.
+	commitComment := 'running RowanSample10 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
 	RwRowanSample10TestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample10';
@@ -110,5 +114,54 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		preserveChangesOnGithub: false;
 		genSpec_0000: commitComment;
 		genSpec_0001: commitComment;
+		genSpec_0002: commitComment;
+		yourself
+]
+
+{ #category : 'tests' }
+RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
+	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
+		1. hitting errors
+		2. changing any of the disk content"
+
+	| commitComment |
+	RwRowanSample9Test _clearLoadSpecSessionCache.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample11') ensureDeleteAll.
+
+	commitComment := 'running RowanSample11 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
+	RwRowanSample11TestProjectLibraryGeneratorTester new
+		testCase: self;
+		projectName: 'RowanSample11';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample11.git';
+		preserveRowanSHA: true;
+		primeIndexCardMap;
+		preserveChangesOnGithub: false;
+		genSpec_0000: commitComment;
+		genSpec_0001: commitComment;
+		genSpec_0002: commitComment;
+		yourself
+]
+
+{ #category : 'tests' }
+RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
+	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
+		1. hitting errors
+		2. changing any of the disk content"
+
+	| commitComment |
+	RwRowanSample9Test _clearLoadSpecSessionCache.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample12') ensureDeleteAll.
+
+	commitComment := 'running RowanSample12 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
+	RwRowanSample12TestProjectLibraryGeneratorTester new
+		testCase: self;
+		projectName: 'RowanSample12';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample12.git';
+		preserveRowanSHA: true;
+		primeIndexCardMap;
+		preserveChangesOnGithub: false;
+		genSpec_0000: commitComment;
+		genSpec_0001: commitComment;
+		genSpec_0002: commitComment;
 		yourself
 ]
