@@ -104,3 +104,8 @@ RwAbstractProject >> remote [
 RwAbstractProject >> repositoryRoot [
 	^ self _concreteProject repositoryRoot
 ]
+
+{ #category : 'querying' }
+RwAbstractProject >> requiredProjectNames [
+	^ self _concreteProject requiredProjectNames
+]

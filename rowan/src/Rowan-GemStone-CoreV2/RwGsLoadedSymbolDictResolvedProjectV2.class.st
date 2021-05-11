@@ -468,6 +468,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryRootPath [
 	^ self repositoryRoot pathString
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> requiredProjectNames [
+
+	^ self resolvedProject requiredProjectNames
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> resolvedProject [
 

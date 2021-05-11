@@ -67,7 +67,8 @@ run
 						"debug selectors that only fail during full test run"
 						res := TestResult new.
 						suite tests do: [:each | 
-							each selector == #'testIssue295_rename_package_move_newClassVersion_newProject_3'
+							each class rowanProjectName = 'RowanClientServices'
+"							each selector == #'testIssue295_rename_package_move_newClassVersion_newProject_3'"
 								ifTrue: [ each debug ]
 								ifFalse: [ 
 									[ each run: res ] 

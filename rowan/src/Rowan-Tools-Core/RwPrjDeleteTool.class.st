@@ -39,29 +39,6 @@ RwPrjDeleteTool >> deleteProjectNamed: projectName [
 ]
 
 { #category : 'delete project definitions' }
-RwPrjDeleteTool >> deleteProjectSetDefinition: projectSetDefinitionToDelete [
-	"Remove the classes and methods managed by the listed project definitions."
-
-	"The classes and methods are removed from the system"
-
-	"If there are subclasses of classes in other projects not in the set, the delete will fail ... 
-		add projects containing  subclasses to the <projectSetDefinitionToDelete> ."
-
-	| loadedProjectSet loadTool |
-	loadedProjectSet := projectSetDefinitionToDelete deriveLoadedThings.
-
-	projectSetDefinitionToDelete definitions
-		do: [ :projectDef | 
-			loadTool := Rowan projectTools loadV2.
-			projectDef packageNames
-				do: [ :packageName | projectDef removePackageNamed: packageName ] ].
-	loadTool loadProjectSetDefinition: projectSetDefinitionToDelete.
-
-	loadedProjectSet
-		do: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ifAbsent: [  ] ]
-]
-
-{ #category : 'delete project definitions' }
 RwPrjDeleteTool >> forceDeleteProjectDefinition: projectDefinition [
 
 	"Remove the classes and methods managed by the project definition."

@@ -1,0 +1,28 @@
+Class {
+	#name : 'RwRowanSample12TestProjectLibraryGeneratorTester',
+	#superclass : 'RwRowanSample11TestProjectLibraryGenerator',
+	#instVars : [
+		'testCase'
+	],
+	#category : 'Rowan-TestsV2'
+}
+
+{ #category : 'private' }
+RwRowanSample12TestProjectLibraryGeneratorTester >> _doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchName: branchName [
+	self testCase
+		deny:
+			(super
+				_doCommitAndPush: commitMessage
+				resolvedRepository: resolvedRepository
+				branchName: branchName)
+]
+
+{ #category : 'accessing' }
+RwRowanSample12TestProjectLibraryGeneratorTester >> testCase [
+	^testCase
+]
+
+{ #category : 'accessing' }
+RwRowanSample12TestProjectLibraryGeneratorTester >> testCase: object [
+	testCase := object
+]
