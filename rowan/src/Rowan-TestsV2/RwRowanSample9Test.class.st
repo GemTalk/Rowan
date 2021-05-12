@@ -6637,12 +6637,51 @@ RwRowanSample9Test >> testSpec_0066 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0067 [
-	"spec_0067 should load cleanly, including RowanSample10, RowanSample11, and RowanSample12"
+	"spec_0067 should load cleanly, including RowanSample10, RowanSample11, and RowanSample12 --  linear required project chain"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames |
 	loadSpec := self _loadSpecNamed: 'spec_0067'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
+	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
+	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
+	self deny: (loadedProjects at: 4) testSuite tests isEmpty
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0068 [
+	"spec_0068 should load cleanly, including RowanSample10, RowanSample11, and RowanSample12 --  recursive required project chain"
+
+	"https://github.com/GemTalk/Rowan/issues/701"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
 	requiredProjectName1 := 'RowanSample10'.
