@@ -203,28 +203,6 @@ RwRowanSample9Test >> _specListProjectNames [
 			'RowanSample9_testbed'}
 ]
 
-{ #category : 'private' }
-RwRowanSample9Test >> _standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
-	| testResult loadedProjectDefinition x |
-	"validate"
-	self assert: loadedProjects size = expectedProjectNames size.
-	self
-		assert: (loadedProjects collect: [ :each | each name ]) sort
-		equals: expectedProjectNames sort.
-	loadedProjects
-		do: [ :project | 
-			self assert: (x := project audit) isEmpty.
-			testResult := project testSuite run.
-			self deny: testResult hasErrors.
-			self deny: testResult hasFailures.
-
-			loadedProjectDefinition := project asDefinition.
-			self
-				assert:
-					loadedProjectDefinition class = resolvedProject projectDefinition class ]
-
-]
-
 { #category : 'migration tests' }
 RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrator [
 
@@ -6710,7 +6688,10 @@ RwRowanSample9Test >> testSpec_0068 [
 	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
 	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
 	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 4) testSuite tests isEmpty
+	self deny: (loadedProjects at: 4) testSuite tests isEmpty.
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 ]
 
 { #category : 'tests' }

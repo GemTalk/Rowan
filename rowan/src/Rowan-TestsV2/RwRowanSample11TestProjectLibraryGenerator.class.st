@@ -1,6 +1,6 @@
 "
 | commitComment |
-RwRowanSample9Test _clearLoadSpecSessionCache.
+RwRowanSample11Test _clearLoadSpecSessionCache.
 (RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample11') ensureDeleteAll.
 
 commitComment := ''.
@@ -216,6 +216,7 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		customConditionalAttributes: {'tests'};
 		packageConvention: 'Rowan';
 		comment: title;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		yourself.
 
 	resolvedRepository := self

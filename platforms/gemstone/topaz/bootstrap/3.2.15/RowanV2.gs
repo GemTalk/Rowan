@@ -87465,6 +87465,8 @@ method: RwLoadSpecificationV2
 loadConflictsWith: anObject
 	"need to be able to report the fields that are in conflict"
 
+	"https://github.com/GemTalk/Rowan/issues/702"
+
 	^ (self customConditionalAttributes asArray sort
 		= anObject customConditionalAttributes asArray sort
 		and: [ 
