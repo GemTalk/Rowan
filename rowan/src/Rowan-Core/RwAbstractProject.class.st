@@ -78,6 +78,11 @@ RwAbstractProject >> project [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> projectName [
+	^ self name
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> projectsHome [
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 

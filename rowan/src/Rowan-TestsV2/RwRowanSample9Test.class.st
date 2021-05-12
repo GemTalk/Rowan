@@ -6681,7 +6681,6 @@ RwRowanSample9Test >> testSpec_0068 [
 	"https://github.com/GemTalk/Rowan/issues/701"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames |
-self assert: false. "early failed exit, so avoid infinite loop"
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.

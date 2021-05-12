@@ -410,6 +410,24 @@ RwLoadSpecificationV2 >> isStrict [
 	^ self repositoryResolutionPolicy == #strict
 ]
 
+{ #category : 'comparing' }
+RwLoadSpecificationV2 >> loadConflictsWith: anObject [
+	"need to be able to report the fields that are in conflict"
+
+	^ (self customConditionalAttributes asArray sort
+		= anObject customConditionalAttributes asArray sort
+		and: [ 
+			self componentNames asArray sort = anObject componentNames asArray sort
+				and: [ 
+					self revision = anObject revision
+						and: [ 
+							self versionPrefix = anObject versionPrefix
+								and: [ 
+									self _platformProperties = anObject _platformProperties
+										or: [ self platformProperties = anObject platformProperties ] ] ] ] ])
+		not
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> mercurialUrl [
 	^ mercurialUrl

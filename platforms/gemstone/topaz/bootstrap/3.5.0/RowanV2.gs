@@ -49491,6 +49491,12 @@ project
 
 category: 'accessing'
 method: RwAbstractProject
+projectName
+	^ self name
+%
+
+category: 'accessing'
+method: RwAbstractProject
 projectsHome
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
@@ -86390,12 +86396,13 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
 	componentNamesToRead.
 	customConditionalAttributes}}.
+	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
 			| nextDefArray rp cn cca |
@@ -86410,6 +86417,8 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
 
+			processedProjects at: rp projectName put: rp.
+
 			projectVisitedQueue
 				addLast:
 					{visitor.
@@ -86420,19 +86429,39 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					| theResolvedProject theLoadSpec theLoadedProject |
 					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
 					(theLoadedProject notNil and: [ useLoadedProjects ])
-						ifTrue: [
+						ifTrue: [ 
 							"project is already present in image ... so use it"
 							theLoadSpec := theLoadedProject _loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolve ]
+							theResolvedProject := theLoadedProject asDefinition resolve.
+							(loadSpec loadConflictsWith: theLoadSpec)
+								ifTrue: [ 
+									"the load spec for the loaded project is incompatible with the required load sped ... this is an error"
+									self
+										error:
+											'load conflicts between the load spec for the loaded project and the load spec for the required project '
+												, theLoadedProject projectName ] ]
 						ifFalse: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
 							theLoadSpec := loadSpec ].
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(theLoadSpec componentNames).
-							(theResolvedProject customConditionalAttributes)} ] ].
+					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
+						ifNil: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue
+								addLast:
+									{theResolvedProject.
+									(theLoadSpec componentNames).
+									(theResolvedProject customConditionalAttributes)} ]
+						ifNotNil: [ :processedProject | 
+							"recursive required project structure"
+							(processedProject _loadSpecification
+								loadConflictsWith: theResolvedProject _loadSpecification)
+								ifTrue: [ 
+									"the required load spec is incompatible with the incoming load spec ... this is an error"
+									self
+										error:
+											'load conflicts between the load specs for the required project '
+												, theResolvedProject projectName ] ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
@@ -87237,6 +87266,25 @@ category: 'testing'
 method: RwLoadSpecificationV2
 isStrict
 	^ self repositoryResolutionPolicy == #strict
+%
+
+category: 'comparing'
+method: RwLoadSpecificationV2
+loadConflictsWith: anObject
+	"need to be able to report the fields that are in conflict"
+
+	^ (self customConditionalAttributes asArray sort
+		= anObject customConditionalAttributes asArray sort
+		and: [ 
+			self componentNames asArray sort = anObject componentNames asArray sort
+				and: [ 
+					self revision = anObject revision
+						and: [ 
+							self versionPrefix = anObject versionPrefix
+								and: [ 
+									self _platformProperties = anObject _platformProperties
+										or: [ self platformProperties = anObject platformProperties ] ] ] ] ])
+		not
 %
 
 category: 'accessing'

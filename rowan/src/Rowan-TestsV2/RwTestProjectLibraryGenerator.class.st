@@ -7797,6 +7797,7 @@ RwTestProjectLibraryGenerator >> genSpec_0068: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		comment: title;
 		yourself.
 

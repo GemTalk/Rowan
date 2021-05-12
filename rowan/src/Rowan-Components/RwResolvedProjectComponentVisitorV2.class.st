@@ -58,12 +58,13 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 
 { #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {{resolvedProject.
 	componentNamesToRead.
 	customConditionalAttributes}}.
+	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
 			| nextDefArray rp cn cca |
@@ -78,6 +79,8 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
 
+			processedProjects at: rp projectName put: rp.
+
 			projectVisitedQueue
 				addLast:
 					{visitor.
@@ -88,19 +91,39 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 					| theResolvedProject theLoadSpec theLoadedProject |
 					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
 					(theLoadedProject notNil and: [ useLoadedProjects ])
-						ifTrue: [
+						ifTrue: [ 
 							"project is already present in image ... so use it"
 							theLoadSpec := theLoadedProject _loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolve ]
+							theResolvedProject := theLoadedProject asDefinition resolve.
+							(loadSpec loadConflictsWith: theLoadSpec)
+								ifTrue: [ 
+									"the load spec for the loaded project is incompatible with the required load sped ... this is an error"
+									self
+										error:
+											'load conflicts between the load spec for the loaded project and the load spec for the required project '
+												, theLoadedProject projectName ] ]
 						ifFalse: [ 
 							"derive resolved project from the load spec"
 							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
 							theLoadSpec := loadSpec ].
-					projectVisitorQueue
-						addLast:
-							{theResolvedProject.
-							(theLoadSpec componentNames).
-							(theResolvedProject customConditionalAttributes)} ] ].
+					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
+						ifNil: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue
+								addLast:
+									{theResolvedProject.
+									(theLoadSpec componentNames).
+									(theResolvedProject customConditionalAttributes)} ]
+						ifNotNil: [ :processedProject | 
+							"recursive required project structure"
+							(processedProject _loadSpecification
+								loadConflictsWith: theResolvedProject _loadSpecification)
+								ifTrue: [ 
+									"the required load spec is incompatible with the incoming load spec ... this is an error"
+									self
+										error:
+											'load conflicts between the load specs for the required project '
+												, theResolvedProject projectName ] ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| ndf theVisitor theResolvedProject |
