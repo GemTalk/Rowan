@@ -3710,7 +3710,7 @@ RwRowanSample9Test >> testIssue700_1 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue701_requiredProjectSet [
-	"Create a project set, based upon the receiver and it's required projects"
+	"Create a project set, based upon a project and it's required projects"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
 
@@ -5676,12 +5676,12 @@ RwRowanSample9Test >> testSpec_0054_2 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0054_3 [
-	"spec_0054 should load cleanly ... with the new gnu classes and tests"
+	"spec_0054 should load cleanly ... only primary project with gnu classes"
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 	"https://github.com/GemTalk/Rowan/issues/701"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects projectDefinitionSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -5693,7 +5693,43 @@ RwRowanSample9Test >> testSpec_0054_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet: #('gnu' 'tests').
+	projectDefinitionSet := loadSpec resolveProjectSet: #('gnu' ).
+
+"load project"
+	loadedProjects := projectDefinitionSet load.
+
+"validate"
+	self
+		_standard_validate: (projectDefinitionSet projectNamed: projectName)
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  isNil. "BECAUSE gnu attribute not propogated to required projects"
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0054_4 [
+	"spec_0054 should load cleanly ... both projects with gnu classes"
+
+	"https://github.com/GemTalk/Rowan/issues/594"
+	"https://github.com/GemTalk/Rowan/issues/701"
+
+	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName resolvedProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0054'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5703,20 +5739,8 @@ RwRowanSample9Test >> testSpec_0054_3 [
 		_standard_validate: (resolvedProjectSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-
 	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  isNil.
-
-"reload required project with custom attributes"
-	loadedProjects := (loadedProjects at: 2) loadProjectSet: #('gnu' 'tests').
-
-"validate"
-	self
-		_standard_validate: (resolvedProjectSet projectNamed: requiredProjectName)
-		loadedProjects: loadedProjects
-		expectedProjectNames: {requiredProjectName}.
-
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil. "BECAUSE we added gnu attribute to required projects"
 ]
 
 { #category : 'tests' }

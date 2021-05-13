@@ -13,10 +13,15 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwEntitySet class >> withAll: someEntities [
-
-	^(self new)
+RwEntitySet class >> new [
+	^ self basicNew
 		initialize;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwEntitySet class >> withAll: someEntities [
+	^ self new
 		addAll: someEntities;
 		yourself
 ]

@@ -6,10 +6,10 @@ Class {
 
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
+	"
+		Create a new instance of the receiver based on anRwLoadSpecificationV2.
+		Return an instance of the receiver that is ready to be resolved (cloned to disk)
+	"
 
 	| loadSpecification projectDefinition pDict |
 	loadSpecification := anRwLoadSpecificationV2 copy.
@@ -84,6 +84,14 @@ RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
 		resolveProjectSet: customConditionalAttributes
 		platformConditionalAttributes: platformAttributes
+]
+
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> requiredLoadSpecSet: anRwLoadSpecificationV2 [
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure)"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveRequiredLoadSpecSet
 ]
 
 { #category : 'private' }
@@ -1168,6 +1176,15 @@ RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platfor
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readLoadSpecSetComponentNames: componentNames [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ self
+		readLoadSpecSetComponentNames: componentNames
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
 	projectRepository := self _projectRepository
@@ -1318,6 +1335,17 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readResolvedLoadSpecSet [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
 { #category : 'components' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectComponents removeComponentNamed: aComponentName
@@ -1459,7 +1487,7 @@ RwResolvedProjectV2 >> resolve [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
 	self _projectRepository resolve
@@ -1475,7 +1503,7 @@ RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalA
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolveProjectSet [
-	"resolve the loadSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (project set will include required projects)"
   | res |
 	self _projectRepository resolve
@@ -1492,7 +1520,7 @@ RwResolvedProjectV2 >> resolveProjectSet [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolveProjectSet: conditionalAttributes [
-	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
 	self _projectRepository resolve
@@ -1509,7 +1537,7 @@ RwResolvedProjectV2 >> resolveProjectSet: conditionalAttributes [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
 	self _projectRepository resolve
@@ -1521,6 +1549,22 @@ RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformCo
 					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
+  ^ res
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolveRequiredLoadSpecSet [
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
+  | res |
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"read required loadSpecs from disk"
+					^ self readResolvedLoadSpecSet ] ].
+	(res := RwLoadSpecSet new)
+		addLoadSpec: self _loadSpecification.
   ^ res
 ]
 

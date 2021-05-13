@@ -147,6 +147,13 @@ RwAbstractResolvedProjectV2 >> _validate: conditionalAttributes [
 	^ true
 ]
 
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> addCustomConditionalAttributes: anArray [
+	"add to the existing custom conditional attributes"
+
+	^ self _loadSpecification addCustomConditionalAttributes: anArray
+]
+
 { #category : 'testing' }
 RwAbstractResolvedProjectV2 >> canCommit [
 	^ self _projectRepository canCommit
@@ -244,6 +251,13 @@ RwAbstractResolvedProjectV2 >> projectSpecification [
 { #category : 'testing' }
 RwAbstractResolvedProjectV2 >> remote [
 	^ self _projectRepository remote
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> removeCustomConditionalAttributes: anArray [
+	"remove from the existing custom conditional attributes"
+
+	^ self _loadSpecification removeCustomConditionalAttributes: anArray
 ]
 
 { #category : 'accessing' }

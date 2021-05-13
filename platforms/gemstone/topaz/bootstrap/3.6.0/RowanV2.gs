@@ -7922,6 +7922,24 @@ removeallmethods RwEntitySet
 removeallclassmethods RwEntitySet
 
 doit
+(RwEntitySet
+	subclass: 'RwLoadSpecSet'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Definitions';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwLoadSpecSet
+removeallclassmethods RwLoadSpecSet
+
+doit
 (Object
 	subclass: 'RwGsImage'
 	instVarNames: #()
@@ -63187,6 +63205,14 @@ _validate: conditionalAttributes
 
 !		Instance methods for 'RwAbstractResolvedProjectV2'
 
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+addCustomConditionalAttributes: anArray
+	"add to the existing custom conditional attributes"
+
+	^ self _loadSpecification addCustomConditionalAttributes: anArray
+%
+
 category: 'testing'
 method: RwAbstractResolvedProjectV2
 canCommit
@@ -63295,6 +63321,14 @@ category: 'testing'
 method: RwAbstractResolvedProjectV2
 remote
 	^ self _projectRepository remote
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+removeCustomConditionalAttributes: anArray
+	"remove from the existing custom conditional attributes"
+
+	^ self _loadSpecification removeCustomConditionalAttributes: anArray
 %
 
 category: 'accessing'
@@ -63610,10 +63644,10 @@ specsPath: aString
 category: 'instance creation'
 classmethod: RwResolvedProjectV2
 basicLoadSpecification: anRwLoadSpecificationV2
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
+	"
+		Create a new instance of the receiver based on anRwLoadSpecificationV2.
+		Return an instance of the receiver that is ready to be resolved (cloned to disk)
+	"
 
 	| loadSpecification projectDefinition pDict |
 	loadSpecification := anRwLoadSpecificationV2 copy.
@@ -63693,6 +63727,15 @@ loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
 		resolveProjectSet: customConditionalAttributes
 		platformConditionalAttributes: platformAttributes
+%
+
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+requiredLoadSpecSet: anRwLoadSpecificationV2
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure)"
+
+	^(self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolveRequiredLoadSpecSet
 %
 
 !		Instance methods for 'RwResolvedProjectV2'
@@ -64825,6 +64868,16 @@ readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes:
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+readLoadSpecSetComponentNames: componentNames
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ self
+		readLoadSpecSetComponentNames: componentNames
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
@@ -64986,6 +65039,18 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+readResolvedLoadSpecSet
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
 category: 'components'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
@@ -65141,7 +65206,7 @@ resolve
 category: 'actions'
 method: RwResolvedProjectV2
 resolve: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
 	self _projectRepository resolve
@@ -65158,7 +65223,7 @@ resolve: customConditionalAttributes platformConditionalAttributes: platformCond
 category: 'actions'
 method: RwResolvedProjectV2
 resolveProjectSet
-	"resolve the loadSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (project set will include required projects)"
   | res |
 	self _projectRepository resolve
@@ -65176,7 +65241,7 @@ resolveProjectSet
 category: 'actions'
 method: RwResolvedProjectV2
 resolveProjectSet: conditionalAttributes
-	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
 	self _projectRepository resolve
@@ -65194,7 +65259,7 @@ resolveProjectSet: conditionalAttributes
 category: 'actions'
 method: RwResolvedProjectV2
 resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	"resolve the loadsSpecation (clone remote repo or connect to existing repo on disk) and read 
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
 	self _projectRepository resolve
@@ -65206,6 +65271,23 @@ resolveProjectSet: customConditionalAttributes platformConditionalAttributes: pl
 					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
+  ^ res
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+resolveRequiredLoadSpecSet
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
+  | res |
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"read required loadSpecs from disk"
+					^ self readResolvedLoadSpecSet ] ].
+	(res := RwLoadSpecSet new)
+		addLoadSpec: self _loadSpecification.
   ^ res
 %
 
@@ -74937,10 +75019,16 @@ acceptVisitor: aVisitor
 
 category: 'instance creation'
 classmethod: RwEntitySet
-withAll: someEntities
-
-	^(self new)
+new
+	^ self basicNew
 		initialize;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwEntitySet
+withAll: someEntities
+	^ self new
 		addAll: someEntities;
 		yourself
 %
@@ -75011,6 +75099,40 @@ method: RwEntitySet
 size
 
 	^ entities size
+%
+
+! Class implementation for 'RwLoadSpecSet'
+
+!		Instance methods for 'RwLoadSpecSet'
+
+category: 'accessing'
+method: RwLoadSpecSet
+addAll: aRwLoadSpecCollection
+	aRwLoadSpecCollection do: [ :loadSpec | self addLoadSpec: loadSpec ].
+	^ aRwLoadSpecCollection
+%
+
+category: 'accessing'
+method: RwLoadSpecSet
+addLoadSpec: aRwLoadSpec
+	entities at: aRwLoadSpec projectName put: aRwLoadSpec.
+	^ aRwLoadSpec
+%
+
+category: 'actions'
+method: RwLoadSpecSet
+resolve
+	"Each of the projects associated with a load spec has been cloned
+		so all that needs to be done is to read each of the projects from disk"
+
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	self
+		do: [ :loadSpec | 
+			| project |
+			project := RwResolvedProjectV2 loadSpecification: loadSpec.
+			projectSetDefinition addProject: project ].
+	^ projectSetDefinition
 %
 
 ! Class implementation for 'RwGsImage'
@@ -85817,6 +85939,83 @@ new
 	^super new initialize
 %
 
+category: 'read load specs'
+classmethod: RwResolvedProjectComponentVisitorV2
+readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				customConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
+	^ visitor
+%
+
+category: 'read load specs'
+classmethod: RwResolvedProjectComponentVisitorV2
+readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	loadSpecSet := RwLoadSpecSet new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {{resolvedProject.
+	componentNamesToRead.
+	customConditionalAttributes}}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| nextDefArray rp cn cca |
+			nextDefArray := projectVisitorQueue removeFirst.
+			rp := nextDefArray at: 1.
+			cn := nextDefArray at: 2.
+			cca := nextDefArray at: 3.
+
+			visitor := self
+				readLoadSpecForResolvedProject: rp
+				withComponentNames: cn
+				customConditionalAttributes: cca
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: rp projectName put: rp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					nextDefArray}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject |
+					"derive resolved project from the load spec"
+					theResolvedProject := loadSpec resolveWithParentProject: rp.
+					processedProjects
+						at: theResolvedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue
+								addLast:
+									{theResolvedProject.
+									(loadSpec componentNames).
+									(theResolvedProject customConditionalAttributes)} ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| ndf theVisitor theResolvedProject |
+			theVisitor := visitedArray at: 1.
+			ndf := visitedArray at: 2.
+			theResolvedProject := ndf at: 1.
+			loadSpecSet addLoadSpec: theResolvedProject _loadSpecification ].
+	^ loadSpecSet
+%
+
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
@@ -86480,6 +86679,16 @@ addComponentNamed: componentName
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+addCustomConditionalAttributes: anArray
+	"add to the existing custom conditional attributes"
+
+	customConditionalAttributes
+		ifNil: [ customConditionalAttributes := anArray ]
+		ifNotNil: [ :ar | customConditionalAttributes := (ar asSet addAll: anArray) asArray ]
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 comment
 	^ comment ifNil: [ ^ '' ]
 %
@@ -86885,6 +87094,15 @@ method: RwLoadSpecificationV2
 readonlyDiskUrl: anUrlString
 	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+removeCustomConditionalAttributes: anArray
+	"remove from the existing custom conditional attributes"
+
+	customConditionalAttributes
+		ifNotNil: [ customConditionalAttributes removeAllPresent: anArray ]
 %
 
 category: 'accessing'
@@ -96146,6 +96364,15 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 ! Class extensions for 'RwLoadSpecificationV2'
 
 !		Instance methods for 'RwLoadSpecificationV2'
+
+category: '*rowan-definitionsv2'
+method: RwLoadSpecificationV2
+requiredLoadSpecSet
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be resolved (i.e. cloned to the local disk)"
+
+	^ RwResolvedProjectV2 requiredLoadSpecSet: self
+%
 
 category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2

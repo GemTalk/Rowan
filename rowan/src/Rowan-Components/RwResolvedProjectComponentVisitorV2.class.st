@@ -25,6 +25,81 @@ RwResolvedProjectComponentVisitorV2 class >> new [
 
 ]
 
+{ #category : 'read load specs' }
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				customConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
+	^ visitor
+]
+
+{ #category : 'read load specs' }
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	loadSpecSet := RwLoadSpecSet new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {{resolvedProject.
+	componentNamesToRead.
+	customConditionalAttributes}}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| nextDefArray rp cn cca |
+			nextDefArray := projectVisitorQueue removeFirst.
+			rp := nextDefArray at: 1.
+			cn := nextDefArray at: 2.
+			cca := nextDefArray at: 3.
+
+			visitor := self
+				readLoadSpecForResolvedProject: rp
+				withComponentNames: cn
+				customConditionalAttributes: cca
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: rp projectName put: rp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					nextDefArray}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject |
+					"derive resolved project from the load spec"
+					theResolvedProject := loadSpec resolveWithParentProject: rp.
+					processedProjects
+						at: theResolvedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue
+								addLast:
+									{theResolvedProject.
+									(loadSpec componentNames).
+									(theResolvedProject customConditionalAttributes)} ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| ndf theVisitor theResolvedProject |
+			theVisitor := visitedArray at: 1.
+			ndf := visitedArray at: 2.
+			theResolvedProject := ndf at: 1.
+			loadSpecSet addLoadSpec: theResolvedProject _loadSpecification ].
+	^ loadSpecSet
+]
+
 { #category : 'reading' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
