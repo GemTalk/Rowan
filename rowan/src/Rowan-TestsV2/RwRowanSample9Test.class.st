@@ -3708,6 +3708,64 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredProject testSuite tests isEmpty.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue701_requiredProjectSet [
+	"Create a project set, based upon the receiver and it's required projects"
+
+	"https://github.com/GemTalk/Rowan/issues/701"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames requiredProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"create required project set from loaded projects"
+	requiredProjectSet := (Rowan projectNamed: projectName) requiredProjectSet.
+
+"load projects"
+	loadedProjects := requiredProjectSet load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"unload projects"
+	requiredProjectSet unload.
+
+"validate"
+	requiredProjectSet projectNames do: [:pn | 
+		"all projects in requiredProjectSet are expected to be unloced"
+		Rowan 
+			projectNamed: pn 
+			ifPresent: [:p | 
+				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"

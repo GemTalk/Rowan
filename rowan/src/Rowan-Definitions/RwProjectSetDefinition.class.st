@@ -90,3 +90,8 @@ RwProjectSetDefinition >> projects [
 
 	^ self definitions
 ]
+
+{ #category : 'actions' }
+RwProjectSetDefinition >> unload [
+	Rowan projectTools delete deleteProjectSetDefinition: self
+]

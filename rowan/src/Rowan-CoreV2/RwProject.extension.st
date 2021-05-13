@@ -160,3 +160,27 @@ RwProject >> requiredProjects [
 	^ requiredProjectNames asArray
 		collect: [ :projectName | Rowan projectNamed: projectName ]
 ]
+
+{ #category : '*rowan-corev2' }
+RwProject >> requiredProjectSet [
+	"return a project definition set containing the receiver and the closure of required projects"
+
+	| requiredProjectNames requiredProjectSet |
+	requiredProjectSet := RwProjectSetDefinition new.
+	requiredProjectNames := self requiredProjectNames asSet.
+	[ requiredProjectNames isEmpty ]
+		whileFalse: [ 
+			| trp |
+			trp := requiredProjectNames copy.
+			requiredProjectNames := Set new.
+			trp
+				do: [ :pn | 
+					requiredProjectSet
+						projectNamed: pn
+						ifAbsent: [ 
+							| project |
+							project := Rowan projectNamed: pn.
+							requiredProjectSet addProject: project asDefinition.
+							requiredProjectNames addAll: project requiredProjectNames ] ] ].
+	^ requiredProjectSet
+]
