@@ -5645,7 +5645,7 @@ RwRowanSample9Test >> testSpec_0054_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -5657,8 +5657,10 @@ RwRowanSample9Test >> testSpec_0054_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	loadSpec customConditionalAttributes: (loadSpec customConditionalAttributes, #('gnu')).
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5671,7 +5673,6 @@ RwRowanSample9Test >> testSpec_0054_2 [
 
 	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
-
 ]
 
 { #category : 'tests' }
@@ -5875,7 +5876,7 @@ RwRowanSample9Test >> testSpec_0055_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0055'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -5887,8 +5888,10 @@ RwRowanSample9Test >> testSpec_0055_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	loadSpec customConditionalAttributes: ({ '2.4.0' asRwGemStoneVersionNumber }, loadSpec customConditionalAttributes).
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5910,7 +5913,7 @@ RwRowanSample9Test >> testSpec_0055_3 [
 	"https://github.com/GemTalk/Rowan/issues/594"
 	"https://github.com/GemTalk/Rowan/issues/701"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0055'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -5922,8 +5925,10 @@ RwRowanSample9Test >> testSpec_0055_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec 
-		resolveProjectSet: { 'tests'. '2.4.0' asRwGemStoneVersionNumber}.
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes: {  'tests'. '2.4.0' asRwGemStoneVersionNumber } ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5935,7 +5940,11 @@ RwRowanSample9Test >> testSpec_0055_3 [
 		expectedProjectNames: projectNames.
 
 	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase')  notNil.
+	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone24xClass1).
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase')  notNil.
+	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone24xClass1).
 ]
 
 { #category : 'tests' }
@@ -5980,7 +5989,7 @@ RwRowanSample9Test >> testSpec_0056_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0056'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -5992,8 +6001,10 @@ RwRowanSample9Test >> testSpec_0056_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	loadSpec customConditionalAttributes: ({ '2.4.0' asRwGemStoneVersionNumber }, loadSpec customConditionalAttributes).
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6020,7 +6031,7 @@ RwRowanSample9Test >> testSpec_0056_3 [
 	"https://github.com/GemTalk/Rowan/issues/594"
 	"https://github.com/GemTalk/Rowan/issues/701"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0056'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -6032,8 +6043,10 @@ RwRowanSample9Test >> testSpec_0056_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec 
-		resolveProjectSet: {'tests' . '2.4.0' asRwGemStoneVersionNumber}.
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:projectLoadSpec | 
+		projectLoadSpec addCustomConditionalAttributes: {'tests' . '2.4.0' asRwGemStoneVersionNumber } ].
+	resolvedProjectSet := requiredLoadSpecSet resolve.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6046,9 +6059,14 @@ RwRowanSample9Test >> testSpec_0056_3 [
 
 	self assert: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
-
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase')  notNil.
+	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone24xClass1).
+	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone3xClass1).
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase')  notNil.
+	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone24xClass1).
+	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone3xClass1).
 ]
 
 { #category : 'tests' }
