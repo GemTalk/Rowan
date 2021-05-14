@@ -11,9 +11,30 @@ RwLoadSpecSet >> addAll: aRwLoadSpecCollection [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecSet >> addCustomConditionalAttributes: anArray [
+	"add to the existing custom conditional attributes fro each of the load specs"
+
+	self do: [ :ls | ls addCustomConditionalAttributes: anArray ]
+]
+
+{ #category : 'accessing' }
 RwLoadSpecSet >> addLoadSpec: aRwLoadSpec [
 	entities at: aRwLoadSpec projectName put: aRwLoadSpec.
 	^ aRwLoadSpec
+]
+
+{ #category : 'actions' }
+RwLoadSpecSet >> load [
+	"resolve and load each of the load specs in the receiver"
+
+	^ self resolve load
+]
+
+{ #category : 'accessing' }
+RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
+	"remove from the existing custom conditional attributes fro each of the load specs"
+
+	self do: [ :ls | ls removeCustomConditionalAttributes: anArray ]
 ]
 
 { #category : 'actions' }

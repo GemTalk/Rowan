@@ -3766,6 +3766,148 @@ RwRowanSample9Test >> testIssue701_requiredProjectSet [
 				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue704_1 [
+	"use load to RwProject>>#requiredLoadSpecSet and RwLoadSpecSet>>#load to load/unload test packages"
+
+	"https://github.com/GemTalk/Rowan/issues/704"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecSet |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"load project and required projects WITHOUT tests for every project except requiredProjectName1"
+	project := Rowan projectNamed: projectName.
+	requiredLoadSpecSet := project requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:ls |
+		ls projectName = requiredProjectName1 
+			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
+
+"load project"
+	loadedProjects := requiredLoadSpecSet load.
+
+"validate"
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+
+"load project and required projects WITH tests  for every project except requiredProjectName1"
+	requiredLoadSpecSet := project requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:ls | 
+		ls projectName = requiredProjectName1 
+			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
+			ifFalse: [ ls addCustomConditionalAttributes: #('tests') ] ].	
+
+"load project"
+	loadedProjects := requiredLoadSpecSet load.
+
+"validate"
+	loadedProjects do: [:lp | lp projectName = requiredProjectName1 
+			ifTrue: [ self assert: lp testSuite tests isEmpty]
+			ifFalse: [ self deny: lp testSuite tests isEmpty] ].
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue704_2 [
+	"use load to RwProject>>#requiredLoadSpecSet and RwLoadSpecSet>>#load to load/unload test packages"
+
+	"https://github.com/GemTalk/Rowan/issues/704"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecSet |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"load project and required projects WITHOUT tests"
+	project := Rowan projectNamed: projectName.
+	requiredLoadSpecSet := project requiredLoadSpecSet.
+	requiredLoadSpecSet removeCustomConditionalAttributes: #('tests').	
+
+"load project"
+	loadedProjects := requiredLoadSpecSet load.
+
+"validate"
+	loadedProjects do: [:lp | self assert: lp testSuite tests isEmpty].
+
+"load project and required projects WITH tests"
+	requiredLoadSpecSet := project requiredLoadSpecSet.
+	requiredLoadSpecSet addCustomConditionalAttributes: #('tests').	
+
+"load project"
+	loadedProjects := requiredLoadSpecSet load.
+
+"validate"
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"

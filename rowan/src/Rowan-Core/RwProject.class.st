@@ -506,6 +506,11 @@ RwProject >> repositoryRootPath [
 ]
 
 { #category : 'actions' }
+RwProject >> requiredLoadSpecSet [
+	^ self _loadSpecification requiredLoadSpecSet
+]
+
+{ #category : 'actions' }
 RwProject >> revert [
 	"
 		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 

@@ -50838,6 +50838,12 @@ repositoryRootPath
 
 category: 'actions'
 method: RwProject
+requiredLoadSpecSet
+	^ self _loadSpecification requiredLoadSpecSet
+%
+
+category: 'actions'
+method: RwProject
 revert
 	"
 		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
@@ -75114,9 +75120,33 @@ addAll: aRwLoadSpecCollection
 
 category: 'accessing'
 method: RwLoadSpecSet
+addCustomConditionalAttributes: anArray
+	"add to the existing custom conditional attributes fro each of the load specs"
+
+	self do: [ :ls | ls addCustomConditionalAttributes: anArray ]
+%
+
+category: 'accessing'
+method: RwLoadSpecSet
 addLoadSpec: aRwLoadSpec
 	entities at: aRwLoadSpec projectName put: aRwLoadSpec.
 	^ aRwLoadSpec
+%
+
+category: 'actions'
+method: RwLoadSpecSet
+load
+	"resolve and load each of the load specs in the receiver"
+
+	^ self resolve load
+%
+
+category: 'accessing'
+method: RwLoadSpecSet
+removeCustomConditionalAttributes: anArray
+	"remove from the existing custom conditional attributes fro each of the load specs"
+
+	self do: [ :ls | ls removeCustomConditionalAttributes: anArray ]
 %
 
 category: 'actions'
