@@ -49705,6 +49705,14 @@ addComponentNamed: componentName toComponentNamed: toComponentName
 		toComponentNamed: toComponentName
 %
 
+category: 'accessing'
+method: RwDefinedProject
+addComponentNames: anArray
+	"add to the existing component names"
+
+	^ self _concreteProject addComponentNames: anArray
+%
+
 category: 'components'
 method: RwDefinedProject
 addComponentOrPackageGroup: aComponentOrPackageGroup toComponentNamed: toComponentName
@@ -49765,6 +49773,14 @@ addComponentStructureFor: componentBasename startingAtComponentNamed: toComponen
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
 		comment: aString
+%
+
+category: 'accessing'
+method: RwDefinedProject
+addCustomConditionalAttributes: anArray
+	"add to the existing custom conditional attributes"
+
+	^ self _concreteProject addCustomConditionalAttributes: anArray
 %
 
 category: 'components'
@@ -50164,6 +50180,22 @@ category: 'accessing'
 method: RwDefinedProject
 removeComponentNamed: aComponentName
 	^ self _concreteProject removeComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+removeComponentNames: anArray
+	"remove from the existing component names"
+
+	^ self _concreteProject removeComponentNames: anArray
+%
+
+category: 'accessing'
+method: RwDefinedProject
+removeCustomConditionalAttributes: anArray
+	"remove from the existing custom conditional attributes"
+
+	^ self _concreteProject removeCustomConditionalAttributes: anArray
 %
 
 category: 'accessing'
@@ -51442,6 +51474,14 @@ unload
 	^ self
 		_loadedProjectIfPresent: [ :loadedProject | loadedProject unload ]
 		ifAbsent: [  ]
+%
+
+category: 'accessing'
+method: RwProject
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self _loadedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
 %
 
 category: 'testing'
@@ -63752,6 +63792,14 @@ _validate: conditionalAttributes
 
 category: 'accessing'
 method: RwAbstractResolvedProjectV2
+addComponentNames: anArray
+	"add to the existing component names"
+
+	^ self _loadSpecification addComponentNames: anArray
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
 addCustomConditionalAttributes: anArray
 	"add to the existing custom conditional attributes"
 
@@ -63866,6 +63914,14 @@ category: 'testing'
 method: RwAbstractResolvedProjectV2
 remote
 	^ self _projectRepository remote
+%
+
+category: 'accessing'
+method: RwAbstractResolvedProjectV2
+removeComponentNames: anArray
+	"remove from the existing component names"
+
+	^ self _loadSpecification removeComponentNames: anArray
 %
 
 category: 'accessing'
@@ -65879,6 +65935,15 @@ category: 'project definition'
 method: RwResolvedProjectV2
 updateLoadedCommitId
 	self _projectSpecification loadedCommitId: self _projectRepository commitId
+%
+
+category: 'accessing'
+method: RwResolvedProjectV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self _projectRepository updateLoadSpecWithRepositoryRoot: aLoadSpec.
+	aLoadSpec projectsHome: self projectsHome
 %
 
 category: 'testing'
@@ -73025,6 +73090,14 @@ revision
 	^ ''
 %
 
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self subclassResponsibility: #'updateLoadSpecWithRepositoryRoot:'
+%
+
 category: 'testing'
 method: RwAbstractRepositoryDefinitionV2
 useGit
@@ -73151,6 +73224,14 @@ resolve
 	self repositoryRoot exists
 		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
 	^ true
+%
+
+category: 'actions'
+method: RwDiskRepositoryDefinitionV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec diskUrl: self repositoryUrl
 %
 
 ! Class implementation for 'RwGitRepositoryDefinitionV2'
@@ -73446,6 +73527,14 @@ revision
 			'' ]
 %
 
+category: 'actions'
+method: RwGitRepositoryDefinitionV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec gitUrl: self repositoryUrl
+%
+
 category: 'testing'
 method: RwGitRepositoryDefinitionV2
 useGit
@@ -73476,6 +73565,14 @@ resolve
 	"nothing on disk"
 
 	^ false
+%
+
+category: 'actions'
+method: RwNoRepositoryDefinitionV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self error: 'No repository is associated with this project'
 %
 
 ! Class implementation for 'RwReadOnlyDiskRepositoryDefinitionV2'
@@ -73535,6 +73632,14 @@ method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryUrl: urlString
 	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
 	super repositoryUrl: urlString
+%
+
+category: 'actions'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec readonlyDiskUrl: self repositoryUrl
 %
 
 category: 'private'
@@ -83960,6 +84065,14 @@ updateLoadedCommitId
 	self resolvedProject updateLoadedCommitId
 %
 
+category: 'queries'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+updateLoadSpecWithRepositoryRoot: aLoadSpec
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self resolvedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 useGit
@@ -86587,11 +86700,18 @@ readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: component
 									(theResolvedProject customConditionalAttributes)} ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
+			| ndf theVisitor theResolvedProject theLoadSpec theLoadedProject |
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
 			theResolvedProject := ndf at: 1.
-			loadSpecSet addLoadSpec: theResolvedProject _loadSpecification ].
+			theLoadSpec := theResolvedProject _loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 %
 
@@ -87258,6 +87378,17 @@ addComponentNamed: componentName
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+addComponentNames: anArray
+	"add to the existing component names"
+
+	| set |
+	set := self componentNames asSet.
+	set addAll: anArray.
+	componentNames := set asArray
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 addCustomConditionalAttributes: anArray
 	"add to the existing custom conditional attributes"
 
@@ -87677,6 +87808,14 @@ method: RwLoadSpecificationV2
 readonlyDiskUrl: anUrlString
 	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+removeComponentNames: anArray
+	"remove from the existing component names"
+
+	self componentNames removeAllPresent: anArray
 %
 
 category: 'accessing'

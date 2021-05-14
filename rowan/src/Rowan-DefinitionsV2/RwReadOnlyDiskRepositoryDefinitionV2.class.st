@@ -62,3 +62,10 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryUrl: urlString [
 	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
 	super repositoryUrl: urlString
 ]
+
+{ #category : 'actions' }
+RwReadOnlyDiskRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec readonlyDiskUrl: self repositoryUrl
+]

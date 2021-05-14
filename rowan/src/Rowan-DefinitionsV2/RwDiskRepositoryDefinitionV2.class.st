@@ -105,3 +105,10 @@ RwDiskRepositoryDefinitionV2 >> resolve [
 		ifFalse: [ self repositoryRoot ensureCreateDirectory ].
 	^ true
 ]
+
+{ #category : 'actions' }
+RwDiskRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec diskUrl: self repositoryUrl
+]

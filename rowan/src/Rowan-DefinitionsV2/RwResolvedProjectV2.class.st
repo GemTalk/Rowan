@@ -1609,6 +1609,14 @@ RwResolvedProjectV2 >> updateLoadedCommitId [
 	self _projectSpecification loadedCommitId: self _projectRepository commitId
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self _projectRepository updateLoadSpecWithRepositoryRoot: aLoadSpec.
+	aLoadSpec projectsHome: self projectsHome
+]
+
 { #category : 'testing' }
 RwResolvedProjectV2 >> useGit [
 	^ self _projectRepository useGit

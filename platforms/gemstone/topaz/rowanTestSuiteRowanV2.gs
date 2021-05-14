@@ -1,5 +1,5 @@
 run
-	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases deprecationErrors |
+	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings resultsDict resultCases deprecationErrors requiredLoadSpecSet  |
 
 	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
 		ifTrue: [
@@ -19,23 +19,21 @@ run
 			| audit |
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
-		projectNames do: [:projectName |
-			[			
-			includeDeprecatedPackages
-			ifTrue: [
-				"make sure test group is loaded ... include deprecated packages"
-				Rowan projectTools loadV2
-					loadProjectNamed: projectName
-					includeCustomConditionalAttributes: #('tests' 'testsV2' 'deprecated') ]
-			ifFalse: [
-				"make sure test group is loaded ... do NOT include deprecated packages"
-				Rowan projectTools loadV2
-					loadProjectNamed: projectName
-					includeCustomConditionalAttributes: #('tests' 'testsV2') ] ]
-					on: CompileWarning do: [:ex |
-						(ex description includesString: 'not optimized')
-							ifFalse: [ warnings add: ex asString printString ].
-						ex resume ] ].
+
+		requiredLoadSpecSet := (Rowan projectNamed: 'Rowan') requiredLoadSpecSet.
+		requiredLoadSpecSet 
+			do: [:loadSpec |
+				"ensure that tests are loaded for all projects"
+				| attributes | 
+				attributes := includeDeprecatedPackages 
+					ifTrue: [ #('tests' 'testsV2' 'deprecated') ]
+					ifFalse: [ #('tests' 'testsV2') ].
+				loadSpec addCustomConditionalAttributes: attributes ].
+		[ requiredLoadSpecSet load ]
+			on: CompileWarning do: [:ex |
+				(ex description includesString: 'not optimized')
+						ifFalse: [ warnings add: ex asString printString ].
+				ex resume ].
 
  		warnings isEmpty ifFalse: [
 			GsFile gciLogServer: 'COMPILE WARNINGS: '.

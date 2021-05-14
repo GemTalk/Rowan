@@ -567,6 +567,13 @@ RwProject >> unload [
 		ifAbsent: [  ]
 ]
 
+{ #category : 'accessing' }
+RwProject >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self _loadedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
+]
+
 { #category : 'testing' }
 RwProject >> useGit [
 

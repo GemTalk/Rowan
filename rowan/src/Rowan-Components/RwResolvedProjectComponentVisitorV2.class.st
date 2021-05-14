@@ -92,11 +92,18 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForResolvedProject: 
 									(theResolvedProject customConditionalAttributes)} ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject |
+			| ndf theVisitor theResolvedProject theLoadSpec theLoadedProject |
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
 			theResolvedProject := ndf at: 1.
-			loadSpecSet addLoadSpec: theResolvedProject _loadSpecification ].
+			theLoadSpec := theResolvedProject _loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 ]
 

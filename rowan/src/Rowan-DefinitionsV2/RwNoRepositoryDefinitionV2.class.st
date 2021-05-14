@@ -22,3 +22,10 @@ RwNoRepositoryDefinitionV2 >> resolve [
 
 	^ false
 ]
+
+{ #category : 'actions' }
+RwNoRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self error: 'No repository is associated with this project'
+]

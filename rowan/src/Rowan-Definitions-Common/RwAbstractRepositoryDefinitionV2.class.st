@@ -140,6 +140,13 @@ RwAbstractRepositoryDefinitionV2 >> revision [
 	^ ''
 ]
 
+{ #category : 'actions' }
+RwAbstractRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self subclassResponsibility: #'updateLoadSpecWithRepositoryRoot:'
+]
+
 { #category : 'testing' }
 RwAbstractRepositoryDefinitionV2 >> useGit [
 	^ false

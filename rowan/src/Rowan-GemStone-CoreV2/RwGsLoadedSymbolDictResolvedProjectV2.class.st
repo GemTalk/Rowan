@@ -576,6 +576,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> updateLoadedCommitId [
 	self resolvedProject updateLoadedCommitId
 ]
 
+{ #category : 'queries' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	self resolvedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> useGit [
 

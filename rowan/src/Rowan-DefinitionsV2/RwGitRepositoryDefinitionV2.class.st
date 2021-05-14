@@ -270,6 +270,13 @@ RwGitRepositoryDefinitionV2 >> revision [
 			'' ]
 ]
 
+{ #category : 'actions' }
+RwGitRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
+	"preserve the current repositoryRoot in the loadSpec"
+
+	aLoadSpec gitUrl: self repositoryUrl
+]
+
 { #category : 'testing' }
 RwGitRepositoryDefinitionV2 >> useGit [
 	^ true
