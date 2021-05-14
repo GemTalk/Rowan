@@ -69,6 +69,13 @@ RwDefinedProject >> addComponentNamed: componentName toComponentNamed: toCompone
 		toComponentNamed: toComponentName
 ]
 
+{ #category : 'accessing' }
+RwDefinedProject >> addComponentNames: anArray [
+	"add to the existing component names"
+
+	^ self _concreteProject addComponentNames: anArray
+]
+
 { #category : 'components' }
 RwDefinedProject >> addComponentOrPackageGroup: aComponentOrPackageGroup toComponentNamed: toComponentName [
 	"add existing component to component named toComponentName"
@@ -126,6 +133,13 @@ RwDefinedProject >> addComponentStructureFor: componentBasename startingAtCompon
 		pathNameArray: pathNameArray
 		conditionPathArray: conditionPathArray
 		comment: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> addCustomConditionalAttributes: anArray [
+	"add to the existing custom conditional attributes"
+
+	^ self _concreteProject addCustomConditionalAttributes: anArray
 ]
 
 { #category : 'components' }
@@ -478,6 +492,20 @@ RwDefinedProject >> projectsRoot [
 { #category : 'accessing' }
 RwDefinedProject >> removeComponentNamed: aComponentName [
 	^ self _concreteProject removeComponentNamed: aComponentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removeComponentNames: anArray [
+	"remove from the existing component names"
+
+	^ self _concreteProject removeComponentNames: anArray
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> removeCustomConditionalAttributes: anArray [
+	"remove from the existing custom conditional attributes"
+
+	^ self _concreteProject removeCustomConditionalAttributes: anArray
 ]
 
 { #category : 'accessing' }

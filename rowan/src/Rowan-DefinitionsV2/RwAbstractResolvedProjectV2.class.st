@@ -148,6 +148,13 @@ RwAbstractResolvedProjectV2 >> _validate: conditionalAttributes [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> addComponentNames: anArray [
+	"add to the existing component names"
+
+	^ self _loadSpecification addComponentNames: anArray
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> addCustomConditionalAttributes: anArray [
 	"add to the existing custom conditional attributes"
 
@@ -251,6 +258,13 @@ RwAbstractResolvedProjectV2 >> projectSpecification [
 { #category : 'testing' }
 RwAbstractResolvedProjectV2 >> remote [
 	^ self _projectRepository remote
+]
+
+{ #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> removeComponentNames: anArray [
+	"remove from the existing component names"
+
+	^ self _loadSpecification removeComponentNames: anArray
 ]
 
 { #category : 'accessing' }

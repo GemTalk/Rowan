@@ -191,6 +191,16 @@ RwLoadSpecificationV2 >> addComponentNamed: componentName [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> addComponentNames: anArray [
+	"add to the existing component names"
+
+	| set |
+	set := self componentNames asSet.
+	set addAll: anArray.
+	componentNames := set asArray
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> addCustomConditionalAttributes: anArray [
 	"add to the existing custom conditional attributes"
 
@@ -566,6 +576,13 @@ RwLoadSpecificationV2 >> readonlyDiskUrl [
 RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
 	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> removeComponentNames: anArray [
+	"remove from the existing component names"
+
+	self componentNames removeAllPresent: anArray
 ]
 
 { #category : 'accessing' }
