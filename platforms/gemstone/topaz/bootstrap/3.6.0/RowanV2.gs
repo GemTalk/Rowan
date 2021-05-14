@@ -86684,7 +86684,11 @@ addCustomConditionalAttributes: anArray
 
 	customConditionalAttributes
 		ifNil: [ customConditionalAttributes := anArray ]
-		ifNotNil: [ :ar | customConditionalAttributes := (ar asSet addAll: anArray) asArray ]
+		ifNotNil: [ :ar | 
+			| set |
+			set := ar asSet.
+			set addAll: anArray.
+			customConditionalAttributes := set asArray ]
 %
 
 category: 'accessing'
