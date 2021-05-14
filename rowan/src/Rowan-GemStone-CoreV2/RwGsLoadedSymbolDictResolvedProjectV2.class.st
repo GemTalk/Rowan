@@ -401,6 +401,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectsHome [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> projectsHome: aProjectHomeReferenceOrString [
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	self resolvedProject projectsHome: aProjectHomeReferenceOrString
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> projectsRoot [
 	^ self resolvedProject projectsRoot
 ]

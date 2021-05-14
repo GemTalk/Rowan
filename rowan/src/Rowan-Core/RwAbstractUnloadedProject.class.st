@@ -53,11 +53,6 @@ RwAbstractUnloadedProject >> packages: aPackageDictionary [
 ]
 
 { #category : 'accessing' }
-RwAbstractUnloadedProject >> projectsHome: aProjectHomeReferenceOrString [
-	self _concreteProject projectsHome: aProjectHomeReferenceOrString
-]
-
-{ #category : 'accessing' }
 RwAbstractUnloadedProject >> repositoryResolutionPolicy [
 	^ self _loadSpecification repositoryResolutionPolicy
 ]

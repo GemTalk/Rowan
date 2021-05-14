@@ -90,6 +90,11 @@ RwAbstractProject >> projectsHome [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> projectsHome: aProjectHomeReferenceOrString [
+	self _concreteProject projectsHome: aProjectHomeReferenceOrString
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> projectVersion [
 	^ self _concreteProject projectVersion
 ]

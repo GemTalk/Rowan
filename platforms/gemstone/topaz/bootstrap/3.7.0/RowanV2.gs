@@ -48984,6 +48984,12 @@ projectsHome
 
 category: 'accessing'
 method: RwAbstractProject
+projectsHome: aProjectHomeReferenceOrString
+	self _concreteProject projectsHome: aProjectHomeReferenceOrString
+%
+
+category: 'accessing'
+method: RwAbstractProject
 projectVersion
 	^ self _concreteProject projectVersion
 %
@@ -49069,12 +49075,6 @@ category: 'actions'
 method: RwAbstractUnloadedProject
 packages: aPackageDictionary
 	self _concreteProject packages: aPackageDictionary
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-projectsHome: aProjectHomeReferenceOrString
-	self _concreteProject projectsHome: aProjectHomeReferenceOrString
 %
 
 category: 'accessing'
@@ -83318,6 +83318,14 @@ projectsHome
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
 	^ self resolvedProject projectsHome
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+projectsHome: aProjectHomeReferenceOrString
+	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
+
+	self resolvedProject projectsHome: aProjectHomeReferenceOrString
 %
 
 category: 'accessing'
