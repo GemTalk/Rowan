@@ -10,9 +10,12 @@
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanRepositoryRootV2.tpz
 
 	run
-	"load Rowan test classes"
-	(Rowan projectNamed: 'Rowan')
-		reloadAndIncludeCustomConditionalAttributes: #('tests' 'testsV2').
+	| requiredLoadSpecSet |
+	"load tests for Rowan and all of it's required projects"
+	requiredLoadSpecSet := (Rowan projectNamed: 'Rowan') requiredLoadSpecSet.
+	requiredLoadSpecSet do: [:loadSpec |
+		loadSpec addCustomConditionalAttributes: #('tests' 'testsV2') ].
+	requiredLoadSpecSet load.
 %
 	commit
 
