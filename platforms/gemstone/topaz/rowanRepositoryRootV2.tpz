@@ -12,15 +12,14 @@
 
 	run
 	(Rowan projectNamed: 'Rowan') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
-	Rowan 
-		projectNamed: 'RowanClientServices' 
-			ifPresent: [:project | 
-				project gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices' ].
-	(System gemEnvironmentVariable: 'ARCHBASE') 
-		ifNotNil: [
-			(Rowan projectNamed: 'gemstoneBaseImage') 
-				gitRepositoryRoot: '$ARCHBASE/image' ].
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan';
+		projectsHome: '$ROWAN_PROJECTS_HOME'.
+	(Rowan projectNamed: 'RowanClientServices')
+			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
+	(Rowan projectNamed: 'Rowan') requiredProjects do: [:rp |
+		rp projectsHome: '$ROWAN_PROJECTS_HOME' ].
+	(Rowan projectNamed: 'gemstoneBaseImage') 
+		gitRepositoryRoot: '$ARCHBASE/image'.
 %
 	commit
 

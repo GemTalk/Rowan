@@ -7,22 +7,9 @@
 	iferr 2 stack
 #	iferr 3 exit 1
 
-	set user SystemUser p swordfish
-  login
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanRepositoryRootV2.tpz
 
 	run
-	(Rowan projectNamed: 'Rowan') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.";
-		projectsHome: '$ROWAN_PROJECTS_HOME'."
-	(Rowan projectNamed: 'RowanClientServices')
-			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
-"
-	(Rowan projectNamed: 'Rowan') requiredProjects do: [:rp |
-		rp projectsHome: '$ROWAN_PROJECTS_HOME' ].
-"
-	(Rowan projectNamed: 'gemstoneBaseImage') 
-		gitRepositoryRoot: '$ARCHBASE/image'.
-	
 	"load Rowan test classes"
 	(Rowan projectNamed: 'Rowan')
 		reloadAndIncludeCustomConditionalAttributes: #('tests' 'testsV2').
