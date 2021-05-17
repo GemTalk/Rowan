@@ -1564,7 +1564,7 @@ RwResolvedProjectV2 >> resolveRequiredLoadSpecSet [
 					"read required loadSpecs from disk"
 					^ self readResolvedLoadSpecSet ] ].
 	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification.
+		addLoadSpec: self _loadSpecification copy.
   ^ res
 ]
 

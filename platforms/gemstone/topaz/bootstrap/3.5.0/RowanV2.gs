@@ -65888,7 +65888,7 @@ resolveRequiredLoadSpecSet
 					"read required loadSpecs from disk"
 					^ self readResolvedLoadSpecSet ] ].
 	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification.
+		addLoadSpec: self _loadSpecification copy.
   ^ res
 %
 
@@ -87663,18 +87663,12 @@ loadConflictsWith: anObject
 
 	"https://github.com/GemTalk/Rowan/issues/702"
 
-	^ (self customConditionalAttributes asArray sort
-		= anObject customConditionalAttributes asArray sort
+	^ (self revision = anObject revision
 		and: [ 
-			self componentNames asArray sort = anObject componentNames asArray sort
+			self versionPrefix = anObject versionPrefix
 				and: [ 
-					self revision = anObject revision
-						and: [ 
-							self versionPrefix = anObject versionPrefix
-								and: [ 
-									self _platformProperties = anObject _platformProperties
-										or: [ self platformProperties = anObject platformProperties ] ] ] ] ])
-		not
+					self _platformProperties = anObject _platformProperties
+						or: [ self platformProperties = anObject platformProperties ] ] ]) not
 %
 
 category: 'accessing'
