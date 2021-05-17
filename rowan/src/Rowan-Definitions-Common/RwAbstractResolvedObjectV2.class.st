@@ -231,7 +231,10 @@ RwAbstractResolvedObjectV2 >> projectsHome [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectsHome: aProjectHomeReferenceOrString [
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString
+	"keep load spec and project repository in sync with respect to projects home"
+
+	self _loadSpecification projectsHome: aProjectHomeReferenceOrString.
+	self _projectRepository projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : 'accessing' }
@@ -274,6 +277,9 @@ RwAbstractResolvedObjectV2 >> repositoryRoot [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> repositoryRoot: aFileReferenceOrString [
+	self
+		deprecated:
+			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
 	^ self _projectRepository repositoryRoot: aFileReferenceOrString
 ]
 

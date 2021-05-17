@@ -19,6 +19,9 @@ RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitI
 
 { #category : '*rowan-corev2' }
 RwProject >> _repositoryRoot: aFileReference [
+	self
+		deprecated:
+			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
 	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
 
@@ -70,8 +73,26 @@ RwProject >> diskRepositoryRoot: repositoryRootPathString [
 			project repositoryRoot = originalRepositoryRoot
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
+					project _diskRepositoryRoot: repositoryRootPathString.
+					project projectsHome: nil ] ].
+	self _diskRepositoryRoot: repositoryRootPathString.
+	self projectsHome: nil
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
 					project _diskRepositoryRoot: repositoryRootPathString ] ].
-	self _diskRepositoryRoot: repositoryRootPathString
+	self _diskRepositoryRoot: repositoryRootPathString.
+	self projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : '*rowan-corev2' }
@@ -90,8 +111,27 @@ RwProject >> gitRepositoryRoot: repositoryRootPathString [
 			project repositoryRoot = originalRepositoryRoot
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
-					project _gitRepositoryRoot: repositoryRootPathString ] ].
-	self _gitRepositoryRoot: repositoryRootPathString
+					project _gitRepositoryRoot: repositoryRootPathString.
+					project projectsHome: nil ] ].
+	self _gitRepositoryRoot: repositoryRootPathString.
+	self projectsHome: nil
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project _gitRepositoryRoot: repositoryRootPathString.
+					project projectsHome: aProjectHomeReferenceOrString ] ].
+	self _gitRepositoryRoot: repositoryRootPathString.
+	self projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : '*rowan-corev2' }
@@ -107,10 +147,31 @@ RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 					"only embedded required projects should have their repository root swapped out"
 					project
 						_readOnlyRepositoryRoot: repositoryRootPathString
-						commitId: commitId ] ].
+						commitId: commitId.
+					project projectsHome: nil ] ].
 	self
 		_readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId
+		commitId: commitId.
+	self projectsHome: nil
+]
+
+{ #category : '*rowan-corev2' }
+RwProject >> readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId [
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project
+						_readOnlyRepositoryRoot: repositoryRootPathString
+						commitId: commitId.
+					project projectsHome: aProjectHomeReferenceOrString ] ].
+	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
+	self projectsHome: aProjectHomeReferenceOrString
 ]
 
 { #category : '*rowan-corev2' }
@@ -131,6 +192,9 @@ RwProject >> removePackageNamed: packageName [
 { #category : '*rowan-corev2' }
 RwProject >> repositoryRoot: aFileReferenceOrString [
 	| resolvedProject originalRepositoryRoot |
+	self
+		deprecated:
+			'Use [git,disk,readOnly]RepositoryRoot: message and separate load expression instead'.
 	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 

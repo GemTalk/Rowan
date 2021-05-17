@@ -3607,7 +3607,7 @@ RwRowanSample9Test >> testIssue700_0 [
 	self assert: requiredRepositoryRoot exists.
 
 "update gitRepositoryRoot"
-	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString.
+	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString projectsHome: requiredProjectsHome.
 
 "validate"
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
@@ -3684,7 +3684,7 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredRepositoryRoot exists.
 
 "update gitRepositoryRoot"
-	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString.
+	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString projectsHome: requiredProjectsHome.
 
 "validate"
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
@@ -7065,7 +7065,7 @@ RwRowanSample9Test >> testSwitchRepository [
 
 "load project1 from spec_0003 checkout: changing repository root of loaded project
 	results in a load "
-	loadedProjects := project1 repositoryRoot: resolvedProject2 repositoryRoot.
+	loadedProjects := project1 gitRepositoryRoot: resolvedProject2 repositoryRoot.
 
 "Validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
@@ -7126,7 +7126,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 
 "load project1 from spec_0053 checkout: changing repository root of loaded project
 	results in a load "
-	loadedProjects := project1 repositoryRoot: resolvedProject2 repositoryRoot.
+	loadedProjects := project1 gitRepositoryRoot: resolvedProject2 repositoryRoot.
 
 "Validate"
 	self 

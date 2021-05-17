@@ -538,7 +538,9 @@ RwLoadSpecificationV2 >> projectsHome [
 RwLoadSpecificationV2 >> projectsHome: aStringOrFileReference [
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
-	projectsHome := aStringOrFileReference asFileReference
+	projectsHome := aStringOrFileReference
+		ifNil: [ FileLocator rowanProjectsHome ]
+		ifNotNil: [ aStringOrFileReference asFileReference ]
 ]
 
 { #category : 'accessing' }

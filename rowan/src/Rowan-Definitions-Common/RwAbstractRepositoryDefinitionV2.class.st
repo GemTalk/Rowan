@@ -80,6 +80,7 @@ RwAbstractRepositoryDefinitionV2 >> name: aString [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> projectsHome [
 	^ projectsHome
+		ifNil: [ projectsHome := FileLocator rowanProjectsHome ]
 ]
 
 { #category : 'accessing' }
