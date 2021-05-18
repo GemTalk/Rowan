@@ -234,7 +234,8 @@ RwAbstractResolvedObjectV2 >> projectsHome: aProjectHomeReferenceOrString [
 	"keep load spec and project repository in sync with respect to projects home"
 
 	self _loadSpecification projectsHome: aProjectHomeReferenceOrString.
-	self _projectRepository projectsHome: aProjectHomeReferenceOrString
+	projectRepository
+		ifNotNil: [ self _projectRepository projectsHome: aProjectHomeReferenceOrString ]
 ]
 
 { #category : 'accessing' }

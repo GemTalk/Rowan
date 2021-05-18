@@ -523,7 +523,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_C [
 	oldRepositoryRoot := writtenProjectDefinition repositoryRoot.
 	newRepositoryRoot := oldRepositoryRoot parent / (copyProjectDefinition name, '_COPY').
 	newRepositoryRoot ensureDeleteAll.
-	copyProjectDefinition diskRepositoryRoot: newRepositoryRoot.
+	copyProjectDefinition diskRepositoryRoot: newRepositoryRoot pathString.
 
 	copyProjectDefinition export.
 
@@ -682,7 +682,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_E [
 	oldRepositoryRoot := writtenProjectDefinition repositoryRoot.
 	newRepositoryRoot := oldRepositoryRoot parent / (copyProjectDefinition name, '_COPY').
 	newRepositoryRoot ensureDeleteAll.
-	copyProjectDefinition diskRepositoryRoot: newRepositoryRoot.
+	copyProjectDefinition diskRepositoryRoot: newRepositoryRoot pathString.
 
 	copyProjectDefinition export.
 
