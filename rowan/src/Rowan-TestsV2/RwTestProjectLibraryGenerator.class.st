@@ -2906,16 +2906,11 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject embeddedProject: embeddedProject [
 	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project"
 
-	| requiredProjectName componentName requiredClassName1 className1 packageName1 className2 packageName2
-		embeddedProjectReference |
-	requiredProjectName := projectName , '_embedded_1'.
-	embeddedProjectReference := Path * 'embededProjects' / requiredProjectName
-		/ 'rowan'.
+	| componentName className1 packageName1 className2 packageName2 resolvedEmbeddedProject |
 	componentName := 'Core'.
-	requiredClassName1 :=  requiredProjectName , 'Class1'.
 	className1 :=  projectName , 'Class1'.
 	className2 :=  projectName , 'TestCase'.
 	packageName1 := projectName , '-Core'.
@@ -2936,9 +2931,14 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
 			protocol: 'tests';
 		yourself.
 
+	(resolvedEmbeddedProject := embeddedProject resolve)
+		projectsHome: self projectsHome;
+		export;
+		exportLoadSpecification.	"write the embedded project directory structure - REQUIRED"
+
 	resolvedProject projectsRoot ensureCreateDirectory.
-	(RwEmbeddedLoadSpecificationV2 fromFile: self projectsHome / projectName / embeddedProjectReference pathString / 'specs' / 'RowanSample9_embedded_1', 'ston')
-		exportTo: resolvedProject projectsRoot.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
@@ -7012,7 +7012,7 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embeddedProjectDefinition requiredProjectName embeddedProjectReference embededProjectDirName |
 	postfix := '0053'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
@@ -7032,18 +7032,34 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
-		customConditionalAttributes:  { 'tests' };
+		customConditionalAttributes: {'tests'};
 		comment: title;
 		yourself.
+
+	requiredProjectName := projectName , '_embedded_1'.
+	embededProjectDirName := 'embededProjects'.
+	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
+		/ 'rowan'.
+	embeddedProjectDefinition := (Rowan
+		newEmbeddedProjectNamed: requiredProjectName)
+		specName: requiredProjectName;
+		projectAlias: projectName;
+		projectSpecFile: (embeddedProjectReference / 'project' , 'ston') pathString;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: {'tests'} yourself.
 
 	resolvedRepository := self
 		_genSpecFor: specName
 		definedProject: definedProject
-		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0053: resolvedProject ].	"WARNING should be using loadSpecification:requiredLoadSpecification:addDefinitions:; follow the genSpec_0054 model"
+		embeddedProjectDefinition: embeddedProjectDefinition
+		addDefinitions: [ :resolvedProject :embeddedProject | self _addDefinitionsFor_0053: resolvedProject embeddedProject: embeddedProject ].
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification:  resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
