@@ -58565,8 +58565,9 @@ projectName
 category: 'initialization'
 method: RwAbstractComponent
 projectName: anObject
+	"The name of the load spec in the projects directory that is used to resolve/load the project"
 
-   projectName := anObject
+	projectName := anObject
 %
 
 category: 'accessing'
@@ -66338,7 +66339,18 @@ _requiredProjectNames: customConditionalAttributes platformConditionalAttributes
 		conditionalComponentsStartingWith: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+		do: [ :aComponent | 
+			| theProjectNames |
+			theProjectNames := Set new.
+			aComponent projectNames
+				do: [ :pn | 
+					| loadSpec |
+					"the project name in the component is the name of the loadSpec in the 
+						projects directory to use, whereas the actual project name that will 
+						be used when the loadSpec is loaded is in the load spec"
+					loadSpec := RwSpecification fromFile: self projectsRoot / pn , 'ston'.
+					theProjectNames add: loadSpec projectName ].
+			requiredProjectNames addAll: theProjectNames ].
 	^ requiredProjectNames
 %
 
@@ -88093,6 +88105,8 @@ projectName
 category: 'accessing'
 method: RwLoadSpecificationV2
 projectName: aString
+	"The name of the project when it is loaded into an image"
+
 	projectName := aString
 %
 

@@ -90,6 +90,7 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedP
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
 		componentNames: {requiredComponentName};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: RwRowanSample12Test _sampleSymbolDictionaryName1;
 		yourself.
 	requiredLoadSpec exportTo: resolvedProject projectsRoot.
 

@@ -143,7 +143,18 @@ RwResolvedProjectV2 >> _requiredProjectNames: customConditionalAttributes platfo
 		conditionalComponentsStartingWith: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
+		do: [ :aComponent | 
+			| theProjectNames |
+			theProjectNames := Set new.
+			aComponent projectNames
+				do: [ :pn | 
+					| loadSpec |
+					"the project name in the component is the name of the loadSpec in the 
+						projects directory to use, whereas the actual project name that will 
+						be used when the loadSpec is loaded is in the load spec"
+					loadSpec := RwSpecification fromFile: self projectsRoot / pn , 'ston'.
+					theProjectNames add: loadSpec projectName ].
+			requiredProjectNames addAll: theProjectNames ].
 	^ requiredProjectNames
 ]
 

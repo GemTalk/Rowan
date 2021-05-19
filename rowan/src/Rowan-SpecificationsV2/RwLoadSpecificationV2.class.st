@@ -524,6 +524,8 @@ RwLoadSpecificationV2 >> projectName [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectName: aString [
+	"The name of the project when it is loaded into an image"
+
 	projectName := aString
 ]
 

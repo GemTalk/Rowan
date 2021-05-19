@@ -374,9 +374,9 @@ RwAbstractComponent >> projectName [
 
 { #category : 'initialization' }
 RwAbstractComponent >> projectName: anObject [
+	"The name of the load spec in the projects directory that is used to resolve/load the project"
 
-   projectName := anObject
-
+	projectName := anObject
 ]
 
 { #category : 'accessing' }
