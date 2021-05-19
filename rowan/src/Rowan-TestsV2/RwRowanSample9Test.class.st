@@ -7070,8 +7070,60 @@ RwRowanSample9Test >> testSpec_0068 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0069_Child [
+	"spec_0069 load Child spec, which needs to be plucked from disk... verify load and unload"
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectNames childLoadSpec requiredProjectSet project |
+	loadSpec := self _loadSpecNamed: 'spec_0069'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectNames :=  { requiredProjectName1}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"resolve project based on Child load spec"
+	childLoadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Child', 'ston'.
+	childLoadSpec projectsHome:  self _testRowanProjectsSandbox.
+
+	resolvedProject := childLoadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"unload projects"
+	requiredProjectSet := project requiredProjectSet.
+	requiredProjectSet unload.
+
+"validate"
+	requiredProjectSet projectNames do: [:pn | 
+		"all projects in requiredProjectSet are expected to be unloaded"
+		Rowan 
+			projectNamed: pn 
+			ifPresent: [:p | 
+				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0069_Parent [
-	"spec_0069 load Parent spec, which needs to be plucked from disk"
+	"spec_0069 load Parent spec, which needs to be plucked from disk ... verify load and unload"
 
 	"https://github.com/GemTalk/Rowan/issues/705"
 

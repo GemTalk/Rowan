@@ -101066,6 +101066,7 @@ requiredProjectSet
 	| requiredProjectNames requiredProjectSet |
 	requiredProjectSet := RwProjectSetDefinition new.
 	requiredProjectNames := self requiredProjectNames asSet.
+	requiredProjectNames add: self projectName.
 	[ requiredProjectNames isEmpty ]
 		whileFalse: [ 
 			| trp |
