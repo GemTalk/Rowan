@@ -3867,7 +3867,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	componentName2 := 'tests/' , componentName1.
 	packageName2 := projectName , '-' , componentName1 , '-Tests'.
 	className2 := projectName , 'Tests'.
-	superclassName1 := 'TestCase'.
+	superclassName2 := 'TestCase'.
 
 	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
 	resolvedProject
@@ -3915,51 +3915,59 @@ The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subcl
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
-	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec revision requiredProjectName |
+	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec1 requiredRevision1 requiredProjectName1 requiredSpecName1 |
+	componentName1 := 'Child'.
 
-true ifTrue: [ ^ self ].
-	componentName1 := 'Parent'.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredSpecName1 := requiredProjectName1 , '_' , componentName1.
+	requiredRevision1 := 'spec_0001'.
 
 	packageName1 := projectName , '-' , componentName1.
-	className1 := 'Abstract' , projectName , 'Class1'.
-	superclassName1 := 'Object'.
-	(resolvedProject addLoadComponentNamed: componentName1)
-		addPackageNamed: packageName1;
-		yourself.
-	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		superclassName: superclassName1;
-		addInstanceMethod: 'foo self subclassResponsibility: #foo'
-			protocol: 'accessing';
-		yourself.
+
+	className1 := projectName , componentName1 , 'Class1'.
+	superclassName1 := 'RowanSample10Class1'.
+
+	resolvedProject specName: componentName1.
+
+	(resolvedProject addLoadComponentNamed: componentName1 comment: '')
+		addProjectNamed: requiredSpecName1.
+	resolvedProject
+		removeComponentNames:
+			{'Bridge'.
+			'Parent'}.	"this is dependent upon the order that this method is called"
+	resolvedProject addPackageNamed: packageName1 toComponentNamed: componentName1.
+	(resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: superclassName1
+		category: packageName1.
 
 	componentName2 := 'tests/' , componentName1.
 	packageName2 := projectName , '-' , componentName1 , '-Tests'.
 	className2 := projectName , 'Tests'.
-	superclassName1 := 'TestCase'.
+	superclassName2 := 'TestCase'.
 
-	(resolvedProject addSubcomponentNamed: componentName2 condition: 'tests')
-		addPackageNamed: packageName2;
-		yourself.
+	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
 	resolvedProject
 		addComponentNamed: componentName2
 		toComponentNamed: componentName1.
-	((resolvedProject packageNamed: packageName2) classDefinitionNamed: className2)
-		superclassName: superclassName2;
-		addInstanceMethod: 'testClass1 self assert: RowanSample12ConcreteClass1 new foo = 1'
+	resolvedProject addPackageNamed: packageName2 toComponentNamed: componentName2.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: superclassName2
+		category: packageName2)
+		addInstanceMethod: 'testClass1 self assert: ' , className1 , ' new foo = 1'
 			protocol: 'tests';
 		yourself.
 
-	requiredProjectName := 'RowanSample12'.
-	revision := 'spec_0005'.
-	requiredLoadSpec := RwLoadSpecificationV2 new
-		specName: requiredProjectName;
-		projectName: requiredProjectName;
-		revision: revision;
-		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+	requiredLoadSpec1 := RwLoadSpecificationV2 new
+		specName: requiredSpecName1;
+		projectName: requiredProjectName1;
+		revision: requiredRevision1;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName1 , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
 		yourself.
-	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+	requiredLoadSpec1 exportTo: resolvedProject projectsRoot
 ]
 
 { #category : 'private' }
@@ -4007,7 +4015,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	componentName2 := 'tests/' , componentName1.
 	packageName2 := projectName , '-' , componentName1 , '-Tests'.
 	className2 := projectName , 'Tests'.
-	superclassName1 := 'TestCase'.
+	superclassName2 := 'TestCase'.
 
 	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
 	resolvedProject
