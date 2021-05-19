@@ -51,3 +51,8 @@ RwLoadSpecSet >> resolve [
 			projectSetDefinition addProject: project ].
 	^ projectSetDefinition
 ]
+
+{ #category : 'accessing' }
+RwLoadSpecSet >> specForProjectNamed: projectName [
+	^ entities at: projectName
+]

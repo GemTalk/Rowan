@@ -75408,6 +75408,12 @@ resolve
 	^ projectSetDefinition
 %
 
+category: 'accessing'
+method: RwLoadSpecSet
+specForProjectNamed: projectName
+	^ entities at: projectName
+%
+
 ! Class implementation for 'RwGsImage'
 
 !		Class methods for 'RwGsImage'

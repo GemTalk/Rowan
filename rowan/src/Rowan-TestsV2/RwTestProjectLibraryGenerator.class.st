@@ -8136,6 +8136,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		packageConvention: 'Rowan';
 		comment: title;
 		yourself.
 

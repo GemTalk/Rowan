@@ -4165,6 +4165,46 @@ RwRowanSample9Test >> testSpec_0001_B [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0001_C [
+	"load with empty component names in load spec ... should end up with no packages"
+
+	| loadSpec projectName resolvedProject loadedProjects requiredLoadSpecSet project |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase') notNil.
+	self 
+		assert: project packageNames asArray sort 
+		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
+
+"remove Core component and reload"
+	requiredLoadSpecSet := (loadedProjects at: 1) requiredLoadSpecSet.
+	(requiredLoadSpecSet specForProjectNamed: projectName) removeComponentNames: {'Core'}.
+
+"load"
+	requiredLoadSpecSet load.
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') isNil.
+	self assert: (Rowan globalNamed: 'RowanSample9TestCase') isNil.
+	self assert: project packageNames isEmpty.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0002 [
 	"spec_0002 should load cleanly"
 

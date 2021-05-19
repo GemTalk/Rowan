@@ -15,6 +15,7 @@ RwRowanSample12TestProjectLibraryGenerator new
 	genSpec_0002: commitComment;
 	genSpec_0003: commitComment;
 	genSpec_0004: commitComment;
+	genSpec_0005: commitComment;
 	yourself
 "
 Class {
@@ -50,6 +51,49 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0003: resolvedP
 		superclassName: superclassName;
 		instVarNames: #();
 		yourself
+]
+
+{ #category : 'private' }
+RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
+	"Start with spec_0000. The class RowanSample12ConcreteClass1 subclasses AbstractRowanSample9ParentClass1 in RowanSample9:spec_0069, component Parent. RowanSample9. RowanSample9:spec_0069 componant Parent has the test. This spec requires RowanSample9:spec_0069."
+
+	| className packageName requiredLoadSpec requiredSpecName requiredProjectName componentName requiredRevision requiredComponentName |
+	componentName := 'Core'.
+	packageName := projectName , '-' , componentName.
+	className := projectName , 'ConcreteClass1'.
+	requiredProjectName := 'RowanSample9'.
+	requiredComponentName := 'Parent'.
+	requiredSpecName := requiredProjectName , '_' , requiredComponentName.
+	requiredRevision := 'spec_0069'.
+
+	resolvedProject
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
+		removeComponentNames: {'Tests'};
+		removeComponentNamed: 'tests/Tests';
+		yourself.
+	(resolvedProject componentNamed: componentName)
+		addProjectNamed: requiredSpecName.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'AbstractRowanSample9ParentClass1'
+		instvars: #()
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredSpecName;
+		projectName: requiredProjectName;
+		revision: requiredRevision;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+		componentNames: {requiredComponentName};
+		customConditionalAttributes: {'tests'};
+		yourself.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+
+	^ resolvedProject
 ]
 
 { #category : 'generators' }
@@ -243,6 +287,54 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 				specName: 'spec_0068'
 				requiredProjectName: 'RowanSample9'
 				superClassBaseName: 'Class2' ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwRowanSample12TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
+	"Start with spec_0000. The class RowanSample12ConcreteClass1 subclasses AbstractRowanSample9ParentClass1 in RowanSample9:spec_0069, component Parent. RowanSample9. RowanSample9:spec_0069 componant Parent has the test. This spec requires RowanSample9:spec_0069."
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0005'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+	title := 'Start with spec_0000. The class RowanSample12ConcreteClass1 subclasses AbstractRowanSample9ParentClass1 in RowanSample9:spec_0069, component Parent. RowanSample9. RowanSample9:spec_0069 componant Parent has the test. This spec requires RowanSample9:spec_0069.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 5
+		derivedFrom: derivedFrom
+		comment: 'jigsaw puzzle class relationships')
+		rowanIssues: #(705);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {};
+		packageConvention: 'Rowan';
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
