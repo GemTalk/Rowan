@@ -3832,22 +3832,36 @@ The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subcl
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
-	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec revision requiredProjectName |
+	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec1 requiredRevision1 requiredProjectName1 requiredLoadSpec2 requiredRevision2 requiredProjectName2 requiredSpecName1 requiredSpecName2 |
+	componentName1 := 'Bridge'.
 
-true ifTrue: [ ^ self ].
-	resolvedProject projectsRoot ensureCreateDirectory.
+	requiredProjectName1 := 'RowanSample11'.
+	requiredSpecName1 := requiredProjectName1 , '_' , componentName1.
+	requiredRevision1 := 'spec_0005'.
+	requiredProjectName2 := 'RowanSample12'.
+	requiredSpecName2 := requiredProjectName2 , '_' , componentName1.
+	requiredRevision2 := 'spec_0006'.
 
-	componentName1 := 'Parent'.
 	packageName1 := projectName , '-' , componentName1.
-	className1 := 'Abstract' , projectName , 'Class1'.
-	superclassName1 := 'Object'.
-	(resolvedProject addLoadComponentNamed: componentName1)
-		addPackageNamed: packageName1;
-		yourself.
-	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		superclassName: superclassName1;
-		addInstanceMethod: 'foo self subclassResponsibility: #foo'
-			protocol: 'accessing';
+
+	className1 := 'Abstract' , projectName , componentName1 , 'Class1'.
+	superclassName1 := 'AbstractRowanSample11ParentClass1'.
+
+	resolvedProject specName: componentName1.
+
+	(resolvedProject addLoadComponentNamed: componentName1 comment: '')
+		addProjectNamed: requiredSpecName1;
+		addProjectNamed: requiredSpecName2.
+	resolvedProject
+		removeComponentNames:
+			{'Child'.
+			'Parent'}.	"this is dependent upon the order that this method is called"
+	resolvedProject addPackageNamed: packageName1 toComponentNamed: componentName1.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: superclassName1
+		category: packageName1)
+		addInstanceMethod: 'foo ^ 1' protocol: 'accessing';
 		yourself.
 
 	componentName2 := 'tests/' , componentName1.
@@ -3855,29 +3869,38 @@ true ifTrue: [ ^ self ].
 	className2 := projectName , 'Tests'.
 	superclassName1 := 'TestCase'.
 
-	(resolvedProject addSubcomponentNamed: componentName2 condition: 'tests')
-		addPackageNamed: packageName2;
-		yourself.
+	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
 	resolvedProject
 		addComponentNamed: componentName2
 		toComponentNamed: componentName1.
-	((resolvedProject packageNamed: packageName2) classDefinitionNamed: className2)
-		superclassName: superclassName2;
-		addInstanceMethod: 'testClass1 self assert: RowanSample12ConcreteClass1 new foo = 1'
+	resolvedProject addPackageNamed: packageName2 toComponentNamed: componentName2.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: superclassName2
+		category: packageName2)
+		addInstanceMethod: 'testClass1 self assert: ' , className1 , ' new foo = 1'
 			protocol: 'tests';
 		yourself.
 
-	requiredProjectName := 'RowanSample12'.
-	revision := 'spec_0005'.
-	requiredLoadSpec := RwLoadSpecificationV2 new
-		specName: requiredProjectName;
-		projectName: requiredProjectName;
-		revision: revision;
-		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+	requiredLoadSpec1 := RwLoadSpecificationV2 new
+		specName: requiredSpecName1;
+		projectName: requiredProjectName1;
+		revision: requiredRevision1;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName1 , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
 		yourself.
-	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+	requiredLoadSpec1 exportTo: resolvedProject projectsRoot.
+
+	requiredLoadSpec2 := RwLoadSpecificationV2 new
+		specName: requiredSpecName2;
+		projectName: requiredProjectName2;
+		revision: requiredRevision2;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName2 , '.git';
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		yourself.
+	requiredLoadSpec2 exportTo: resolvedProject projectsRoot
 ]
 
 { #category : 'private' }
@@ -3895,9 +3918,8 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec revision requiredProjectName |
 
 true ifTrue: [ ^ self ].
-	resolvedProject projectsRoot ensureCreateDirectory.
-
 	componentName1 := 'Parent'.
+
 	packageName1 := projectName , '-' , componentName1.
 	className1 := 'Abstract' , projectName , 'Class1'.
 	superclassName1 := 'Object'.
@@ -3952,22 +3974,27 @@ The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subcl
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
-	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec requiredRevision requiredProjectName |
-	resolvedProject projectsRoot ensureCreateDirectory.
-
-	requiredProjectName := 'RowanSample12'.
-	requiredRevision := 'spec_0005'.
+	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec requiredRevision requiredProjectName requiredSpecName |
 
 	componentName1 := 'Parent'.
+
+	requiredProjectName := 'RowanSample12'.
+	requiredSpecName := requiredProjectName, '_', componentName1.
+	requiredRevision := 'spec_0005'.
+
 	packageName1 := projectName , '-' , componentName1.
 
-	className1 := 'Abstract' , projectName , 'Class1'.
+	className1 := 'Abstract' , projectName , componentName1, 'Class1'.
 	superclassName1 := 'Object'.
 
 	resolvedProject specName: componentName1.
 
-	(resolvedProject addLoadComponentNamed: componentName1)
-		addProjectNamed: requiredProjectName.
+	(resolvedProject addLoadComponentNamed: componentName1 comment: '')
+		addProjectNamed: requiredSpecName.
+	resolvedProject
+		removeComponentNames:
+			{'Child'.
+			'Bridge'}.	"make sure that only Parent component is listed in component names"
 	resolvedProject addPackageNamed: packageName1 toComponentNamed: componentName1.
 	((resolvedProject packageNamed: packageName1)
 		addClassNamed: className1
@@ -3997,7 +4024,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		yourself.
 
 	requiredLoadSpec := RwLoadSpecificationV2 new
-		specName: requiredProjectName;
+		specName: requiredSpecName;
 		projectName: requiredProjectName;
 		revision: requiredRevision;
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
@@ -4022,15 +4049,23 @@ The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subcl
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
 	| canonicalLoadSpec |
+	resolvedProject projectsRoot ensureCreateDirectory.
+	resolvedProject specsRoot ensureCreateDirectory.
 	resolvedProject
 		removeComponentNames: {'Core'};
 		removeComponentNamed: 'Core';
 		removeComponentNamed: 'tests/Tests'.
 	canonicalLoadSpec := self _addDefinitionsFor_0069_Parent: resolvedProject.
+	resolvedProject
+		exportLoadSpecification.
 	canonicalLoadSpec specName: 'spec_0069'.
+
+	self _addDefinitionsFor_0069_Child: resolvedProject.
+	resolvedProject
+		exportLoadSpecification.
+
 	self
-		_addDefinitionsFor_0069_Child: resolvedProject;
-		_addDefinitionsFor_0069_Bridge: resolvedProject.
+		_addDefinitionsFor_0069_Bridge: resolvedProject.	"load spec will be exported by caller"
 	^ canonicalLoadSpec
 ]
 

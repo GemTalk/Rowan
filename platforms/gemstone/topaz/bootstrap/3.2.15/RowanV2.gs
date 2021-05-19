@@ -50542,6 +50542,78 @@ fromLoadedProject: aLoadedProject
 
 !		Instance methods for 'RwDefinedFromResolvedProject'
 
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+componentsRoot
+	^ self _concreteProject componentsRoot
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+export
+	^ self _concreteProject export
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportComponents
+	^ self _concreteProject exportComponents
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportLoadSpecification
+	^ self _concreteProject exportLoadSpecification
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportPackages
+	^ self _concreteProject exportPackages
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
+	^ self _concreteProject
+		exportPackages: diskProjectSetDefinition
+		packagesRoot: packagesRoot
+		packageFormat: packageFormat
+		packageConvention: packageConvention
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportProjects
+	^ self _concreteProject exportProjects
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportProjectSpecification
+	^ self _concreteProject exportProjectSpecification
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportTopazFormatTo: filePath
+	^ self
+		exportTopazFormatTo: filePath
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
+%
+
+category: 'actions'
+method: RwDefinedFromResolvedProject
+exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods
+	^ self _concreteProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+%
+
 category: 'transitions'
 method: RwDefinedFromResolvedProject
 loadProjectSet
@@ -50551,6 +50623,24 @@ loadProjectSet
 	"
 
 	^ self _concreteProject loadProjectSet
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+packagesRoot
+	^ self _concreteProject packagesRoot
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+projectRoots
+	^ self _concreteProject projectRoots
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+projectsRoot
+	^ self _concreteProject projectsRoot
 %
 
 category: 'transitions'
@@ -50624,6 +50714,30 @@ readProjectSet: customConditionalAttributes platformConditionalAttributes: platf
 	^ self _concreteProject readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+repository
+	^ self _concreteProject repository
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+revision
+	^ self _concreteProject revision
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+revision: aString
+	self _concreteProject revision: aString
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+specsRoot
+	^ self _concreteProject specsRoot
+%
+
 category: 'transitions'
 method: RwDefinedFromResolvedProject
 write
@@ -50631,6 +50745,22 @@ write
 	self _concreteProject
 		export;
 		exportLoadSpecification
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+_projectDefinitionCustomConditionalAttributes
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+_projectDefinitionPlatformConditionalAttributes
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
 %
 
 ! Class implementation for 'RwResolvedProject'

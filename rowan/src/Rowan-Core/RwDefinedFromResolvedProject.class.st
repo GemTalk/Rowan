@@ -11,6 +11,82 @@ RwDefinedFromResolvedProject class >> fromLoadedProject: aLoadedProject [
 		yourself
 ]
 
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> _projectDefinitionCustomConditionalAttributes [
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
+	"Answer theplatformConditionalAttributes that will be used to load the project"
+
+	^ self _concreteProject _projectDefinitionPlatformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> componentsRoot [
+	^ self _concreteProject componentsRoot
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> export [
+	^ self _concreteProject export
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportComponents [
+	^ self _concreteProject exportComponents
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportLoadSpecification [
+	^ self _concreteProject exportLoadSpecification
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportPackages [
+	^ self _concreteProject exportPackages
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	^ self _concreteProject
+		exportPackages: diskProjectSetDefinition
+		packagesRoot: packagesRoot
+		packageFormat: packageFormat
+		packageConvention: packageConvention
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportProjects [
+	^ self _concreteProject exportProjects
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportProjectSpecification [
+	^ self _concreteProject exportProjectSpecification
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath [
+	^ self
+		exportTopazFormatTo: filePath
+		logClassCreation: false
+		excludeClassInitializers: false
+		excludeRemoveAllMethods: false
+]
+
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods [
+	^ self _concreteProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+]
+
 { #category : 'transitions' }
 RwDefinedFromResolvedProject >> loadProjectSet [
 	"
@@ -19,6 +95,21 @@ RwDefinedFromResolvedProject >> loadProjectSet [
 	"
 
 	^ self _concreteProject loadProjectSet
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> packagesRoot [
+	^ self _concreteProject packagesRoot
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> projectRoots [
+	^ self _concreteProject projectRoots
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> projectsRoot [
+	^ self _concreteProject projectsRoot
 ]
 
 { #category : 'transitions' }
@@ -83,6 +174,26 @@ RwDefinedFromResolvedProject >> readProjectSet: customConditionalAttributes plat
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self _concreteProject readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> repository [
+	^ self _concreteProject repository
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> revision [
+	^ self _concreteProject revision
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> revision: aString [
+	self _concreteProject revision: aString
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> specsRoot [
+	^ self _concreteProject specsRoot
 ]
 
 { #category : 'transitions' }
