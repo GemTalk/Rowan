@@ -7108,7 +7108,7 @@ RwRowanSample9Test >> testSpec_0069_Bridge [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-self halt.
+
 "unload projects"
 	requiredProjectSet := project requiredProjectSet.
 	requiredProjectSet unload.
