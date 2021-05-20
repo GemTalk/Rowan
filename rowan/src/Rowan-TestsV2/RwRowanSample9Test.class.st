@@ -7070,6 +7070,59 @@ RwRowanSample9Test >> testSpec_0068 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0069_Bridge [
+	"spec_0069 load Bridge spec, which needs to be plucked from disk... verify load and unload"
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectNames bridgeLoadSpec requiredProjectSet project requiredProjectName2 |
+	loadSpec := self _loadSpecNamed: 'spec_0069'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample11'.
+	requiredProjectName2 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"resolve project based on Bridge load spec"
+	bridgeLoadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Bridge', 'ston'.
+	bridgeLoadSpec projectsHome:  self _testRowanProjectsSandbox.
+
+	resolvedProject := bridgeLoadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+self halt.
+"unload projects"
+	requiredProjectSet := project requiredProjectSet.
+	requiredProjectSet unload.
+
+"validate"
+	requiredProjectSet projectNames do: [:pn | 
+		"all projects in requiredProjectSet are expected to be unloaded"
+		Rowan 
+			projectNamed: pn 
+			ifPresent: [:p | 
+				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0069_Child [
 	"spec_0069 load Child spec, which needs to be plucked from disk... verify load and unload"
 

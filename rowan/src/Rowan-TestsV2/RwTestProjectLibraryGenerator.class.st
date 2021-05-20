@@ -3828,7 +3828,7 @@ The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
@@ -3845,7 +3845,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	packageName1 := projectName , '-' , componentName1.
 
 	className1 := 'Abstract' , projectName , componentName1 , 'Class1'.
-	superclassName1 := 'AbstractRowanSample11ParentClass1'.
+	superclassName1 := 'AbstractRowanSample11', componentName1, 'Class1'.
 
 	resolvedProject specName: componentName1.
 
@@ -3878,7 +3878,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		addClassNamed: className2
 		super: superclassName2
 		category: packageName2)
-		addInstanceMethod: 'testClass1 self assert: ' , className1 , ' new foo = 1'
+		addInstanceMethod: 'testClass1 self assert: RowanSample12ConcreteClass1 new foo = 1'
 			protocol: 'tests';
 		yourself.
 
@@ -3889,6 +3889,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName1 , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	requiredLoadSpec1 exportTo: resolvedProject projectsRoot.
 
@@ -3899,6 +3900,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName2 , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	requiredLoadSpec2 exportTo: resolvedProject projectsRoot
 ]
@@ -3911,7 +3913,7 @@ The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
@@ -3966,6 +3968,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName1 , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	requiredLoadSpec1 exportTo: resolvedProject projectsRoot
 ]
@@ -3978,7 +3981,7 @@ The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
@@ -4038,6 +4041,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
 		componentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself.
 	requiredLoadSpec exportTo: resolvedProject projectsRoot.
 
@@ -4046,13 +4050,13 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0069: resolvedProject [
-	"Start with spec_0001 (RowanSample9) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
+	"Start with spec_0000 (RowanSample9) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
 
 The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:spec_0005 requires RowanSample9:spec_0069 and has a RowanSample12ConcreteClass1 class that suclasses AbstractRowanSample9ParentClass1. 
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
@@ -8096,7 +8100,7 @@ The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
 
@@ -8117,7 +8121,7 @@ The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:
 
 The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
 
-The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 in RowanSample11:spec_0005 that requires RowanSample9:spec_0069. The class RowanSample12:spec_0006 requires RowanSample9:spec_0069 and has a class RowanSample12ConcreteClass1 that subclasses AbstractRowanSample9BridgeClass1. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility. #foo is defined in RowanSample12ConcreteClass1.
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0006 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
 
 Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure.'.
 

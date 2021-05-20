@@ -15,6 +15,7 @@ RwRowanSample11TestProjectLibraryGenerator new
 	genSpec_0002: commitComment;
 	genSpec_0003: commitComment;
 	genSpec_0004: commitComment;
+	genSpec_0005: commitComment;
 	yourself
 "
 Class {
@@ -34,6 +35,30 @@ RwRowanSample11TestProjectLibraryGenerator >> _addDefinitionsFor_0002: resolvedP
 		movePackageNamed:  projectName , '-Tests' toComponentNamed: 'mytests/Tests';
 		removeComponentNamed: 'tests/Tests';
 		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwRowanSample11TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
+	"Start with spec_0000. Add the class AbstractRowanSample11ParentClass1 with no methods. It is subclassed as part of the Bridge component in RowanSample9:spec_0069"
+
+	| className packageName componentName  |
+	componentName := 'Core'.
+	packageName := projectName , '-' , componentName.
+	className :=  'Abstract', projectName , 'BridgeClass1'.
+
+	resolvedProject
+		addPackagesNamed: {packageName} toComponentNamed: componentName;
+		removeComponentNames: {'Tests'};
+		removeComponentNamed: 'tests/Tests';
+		yourself.
+	(resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #()
+		category: packageName
+		comment: 'I am an example class'.
+
 	^ resolvedProject
 ]
 
@@ -226,6 +251,55 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 			self
 				_addDefinitionsFor_0068: resolvedProject
 				requiredProjectName: 'RowanSample12' ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwRowanSample11TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
+	"Start with spec_0000. Add the class AbstractRowanSample11ParentClass1 with no methods. It is subclassed as part of the Bridge component in RowanSample9:spec_0069"
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0005'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+	title := 'Start with spec_0000. Add the class AbstractRowanSample11ParentClass1 with no methods. It is subclassed as part of the Bridge component in RowanSample9:spec_0069'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 5
+		derivedFrom: derivedFrom
+		comment: 'jigsaw puzzle class relationships')
+		rowanIssues: #(705);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {};
+		packageConvention: 'Rowan';
+		comment: title;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
