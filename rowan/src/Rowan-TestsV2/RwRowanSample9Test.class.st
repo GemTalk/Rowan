@@ -83,6 +83,45 @@ RwRowanSample9Test >> _migrationLoadSpecNamed: specName projectName: projectName
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _processIssue705: resolvedProject componentNamed: componentName previousRequiredProjectNames: loadedComponentRequiredProjectNames projectNamesMap: projectNamesMap [
+	| loadSpec requiredLoadSpecSet loadSpecSet loadedProjects |
+"prepare to load component"
+	loadSpec := RwSpecification fromFile: resolvedProject specsRoot / componentName, 'ston'.
+	loadSpec projectsHome:  self _testRowanProjectsSandbox.
+
+"collect set of specs that will be required by the component component"
+	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+
+"arrange for the projects required by currently loaded component to be unloaded"
+	loadSpecSet := (Rowan projectNamed: resolvedProject name) requiredLoadSpecSet.
+	loadedComponentRequiredProjectNames do: [:projectName |
+		"packages for project will be unloaded"
+		(loadSpecSet specForProjectNamed: projectName) componentNames: {} ].
+
+	requiredLoadSpecSet do: [:aLoadSpec |
+		 "Add the specs required by the component (overrides are on purpose) and make sure 
+				that when the required spec is resolved, that the correct revision is checked out"
+		aLoadSpec repositoryResolutionPolicy: #strict.
+		loadSpecSet addLoadSpec: aLoadSpec ].
+
+"load component"
+	loadedProjects := loadSpecSet load.
+	loadedProjects do: [:proj | 
+		"unload projects whose packageNames are empty ... should correspond to projects with empty componentNames"
+		proj packageNames isEmpty
+			ifTrue: [ proj unload ] ].
+	loadedProjects := loadedProjects select: [:proj | 
+		"select loaded projects"
+		proj isLoaded ].
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames:  (projectNamesMap at: componentName).
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _rowanSample1LoadSpecificationUrl_515 [
 	"https://github.com/GemTalk/Rowan/issues/515"
 
@@ -3908,6 +3947,105 @@ RwRowanSample9Test >> testIssue704_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue705 [
+	"load Bridge, Child, Parent, Bridge, Parent, Child, Bridge sequentially"
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectNames requiredProjectSet project  projectNamesMap |
+	loadSpec := self _loadSpecNamed: 'spec_0069'.
+
+	projectName := loadSpec projectName.
+	requiredProjectNames :=  { 'RowanSample10' . 'RowanSample11' . 'RowanSample12'}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+	projectNamesMap := Dictionary new
+		at: 'Bridge' put: {projectName . 'RowanSample11' . 'RowanSample12' };
+		at: 'Child' put:  {projectName . 'RowanSample10' };
+		at: 'Parent' put:  {projectName . 'RowanSample12' };
+		yourself.
+
+"resolve project from default load spec - prime the pump"
+	resolvedProject := loadSpec resolve.
+
+"resolve project based on Bridge load spec"
+	loadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Bridge', 'ston'.
+	loadSpec projectsHome:  self _testRowanProjectsSandbox.
+
+	resolvedProject := loadSpec resolve.
+
+"load Bridge component"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: (projectNamesMap at: 'Bridge').
+
+"load and validate Child component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Child' 
+		previousRequiredProjectNames: {'RowanSample11' . 'RowanSample12'} 
+		projectNamesMap: projectNamesMap.
+
+"load and validate Parent component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Parent' 
+		previousRequiredProjectNames: {'RowanSample10'} 
+		projectNamesMap: projectNamesMap.
+
+"load and validate Bridge component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Bridge' 
+		previousRequiredProjectNames: {'RowanSample12'} 
+		projectNamesMap: projectNamesMap.
+
+"load and validate Parent component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Parent' 
+		previousRequiredProjectNames: {'RowanSample11' . 'RowanSample12'} 
+		projectNamesMap: projectNamesMap.
+
+"load and validate Child component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Child' 
+		previousRequiredProjectNames: {'RowanSample12'} 
+		projectNamesMap: projectNamesMap.
+
+"load and validate Bridge component"
+	self 
+		_processIssue705: resolvedProject 
+		componentNamed: 'Bridge' 
+		previousRequiredProjectNames: {'RowanSample10'} 
+		projectNamesMap: projectNamesMap.
+
+"unload projects"
+	requiredProjectSet := project requiredProjectSet.
+	requiredProjectSet unload.
+
+"validate"
+	projectNames do: [:pn | 
+		"all projects involved are expected to be unloaded"
+		Rowan 
+			projectNamed: pn 
+			ifPresent: [:p | 
+				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
@@ -5842,7 +5980,7 @@ RwRowanSample9Test >> testSpec_0054_2 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -5919,7 +6057,7 @@ RwRowanSample9Test >> testSpec_0054_4 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6001,7 +6139,7 @@ RwRowanSample9Test >> testSpec_0054_6 [
 		projectLoadSpec 
 			addCustomConditionalAttributes:  #('gnu');
 			removeCustomConditionalAttributes: #('tests')].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6073,7 +6211,7 @@ RwRowanSample9Test >> testSpec_0055_2 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6110,7 +6248,7 @@ RwRowanSample9Test >> testSpec_0055_3 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {  'tests'. '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6186,7 +6324,7 @@ RwRowanSample9Test >> testSpec_0056_2 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6228,7 +6366,7 @@ RwRowanSample9Test >> testSpec_0056_3 [
 	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {'tests' . '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolve.
+	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.

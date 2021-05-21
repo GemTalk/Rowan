@@ -75393,7 +75393,7 @@ method: RwLoadSpecSet
 load
 	"resolve and load each of the load specs in the receiver"
 
-	^ self resolve load
+	^ self resolveProjectSet load
 %
 
 category: 'accessing'
@@ -75406,7 +75406,7 @@ removeCustomConditionalAttributes: anArray
 
 category: 'actions'
 method: RwLoadSpecSet
-resolve
+resolveProjectSet
 	"Each of the projects associated with a load spec has been cloned
 		so all that needs to be done is to read each of the projects from disk"
 
@@ -96713,7 +96713,7 @@ category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
 resolve
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
+		answer  the project definition specified by the receiver ignoring any required projects"
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 

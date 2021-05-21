@@ -27,7 +27,7 @@ RwLoadSpecSet >> addLoadSpec: aRwLoadSpec [
 RwLoadSpecSet >> load [
 	"resolve and load each of the load specs in the receiver"
 
-	^ self resolve load
+	^ self resolveProjectSet load
 ]
 
 { #category : 'accessing' }
@@ -38,7 +38,7 @@ RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
 ]
 
 { #category : 'actions' }
-RwLoadSpecSet >> resolve [
+RwLoadSpecSet >> resolveProjectSet [
 	"Each of the projects associated with a load spec has been cloned
 		so all that needs to be done is to read each of the projects from disk"
 
