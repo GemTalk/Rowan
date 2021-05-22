@@ -501,6 +501,27 @@ RwLoadSpecificationV2 >> printOn: aStream [
 		nextPutAll: (self specName ifNil: ['nil'])
 ]
 
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> produce [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver ignoring any required projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (RwResolvedProjectV2 basicLoadSpecification: self) produce
+
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
+	"give embedded projects a chance to resolve cleanly. Return a resolved project that has been attached to the disk representation of project and read from disk"
+
+	| aSpec |
+	self projectsHome: aResolvedProject projectsHome.
+	aSpec := self produce.
+	^aSpec resolve
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
@@ -611,6 +632,40 @@ RwLoadSpecificationV2 >> repositoryRoot [
 ]
 
 { #category : 'actions' }
+RwLoadSpecificationV2 >> requiredLoadSpecs [
+	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk)"
+
+	^ RwResolvedProjectV2 requiredLoadSpecs: self
+]
+
+{ #category : 'to be removed' }
+RwLoadSpecificationV2 >> requiredLoadSpecSet [
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be resolved (i.e. cloned to the local disk)"
+
+	^ RwResolvedProjectV2 requiredLoadSpecSet: self
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> requiredSpecs [
+	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk)"
+
+	^ RwResolvedProjectV2 requiredLoadSpecSet: self
+]
+
+{ #category : 'to be removed' }
+RwLoadSpecificationV2 >> resolve [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver ignoring any required projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> resolveProjectSetStrict [
 	"resolve using #strict repositoryResolutionpolicy"
 
@@ -640,7 +695,7 @@ RwLoadSpecificationV2 >> resolveStrict [
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
 

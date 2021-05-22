@@ -4046,6 +4046,29 @@ RwRowanSample9Test >> testIssue705 [
 				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_produce [
+	"take produce for a spin"
+
+	| loadSpec repoDir producedSpec requiredLoadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"produce"
+	producedSpec := loadSpec produce.
+
+"validate"
+	self assert: producedSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: producedSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: producedSpec gitUrl equals: 'file://', repoDir pathString.
+
+	requiredLoadSpecs := producedSpec requiredLoadSpecs.
+	self assert: requiredLoadSpecs projectNames asArray equals: { producedSpec projectName}
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
@@ -4261,7 +4284,7 @@ RwRowanSample9Test >> testSpec_0001_A [
 
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	resolvedProject := loadSpecification resolve. "project is not being loaded from disk on resolve"
+	resolvedProject := loadSpecification resolve. "project is read from disk on resolve"
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'.

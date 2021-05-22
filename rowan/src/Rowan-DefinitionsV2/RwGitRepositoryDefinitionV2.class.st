@@ -274,7 +274,7 @@ RwGitRepositoryDefinitionV2 >> revision [
 RwGitRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec gitUrl: self repositoryUrl
+	aLoadSpec gitUrl: 'file://', self repositoryRoot pathString
 ]
 
 { #category : 'testing' }

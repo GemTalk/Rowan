@@ -31,13 +31,33 @@ RwLoadSpecSet >> load [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecSet >> projectNames [
+	^ entities keys
+]
+
+{ #category : 'actions' }
+RwLoadSpecSet >> readProjectSet [
+	"Each of the projects associated with a load spec has been cloned
+		so all that needs to be done is to read each of the projects from disk"
+
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	self
+		do: [ :loadSpec | 
+			| project |
+			project := RwResolvedProjectV2 loadSpecification: loadSpec.
+			projectSetDefinition addProject: project ].
+	^ projectSetDefinition
+]
+
+{ #category : 'accessing' }
 RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
 	"remove from the existing custom conditional attributes fro each of the load specs"
 
 	self do: [ :ls | ls removeCustomConditionalAttributes: anArray ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecSet >> resolveProjectSet [
 	"Each of the projects associated with a load spec has been cloned
 		so all that needs to be done is to read each of the projects from disk"
