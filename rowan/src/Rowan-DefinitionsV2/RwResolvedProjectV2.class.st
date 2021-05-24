@@ -88,7 +88,8 @@ RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV
 
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
-	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure). All specs will be produced"
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
+		required projects (closure). All specs will be produced"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 ]
@@ -104,6 +105,20 @@ RwResolvedProjectV2 class >> requiredLoadSpecSet: anRwLoadSpecificationV2 [
 { #category : 'private' }
 RwResolvedProjectV2 >> _addPackageNames: somePackageNames for: aComponent [
 	self addPackages: somePackageNames forComponent: aComponent
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> _basicProduce [
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), answer true if the project already exists on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					self updateLoadSpecWithRepositoryRoot: self _loadSpecification.
+					^ true ] ].
+	^ false
 ]
 
 { #category : 'private' }
@@ -1096,40 +1111,15 @@ RwResolvedProjectV2 >> printOn: aStream [
 ]
 
 { #category : 'actions' }
-RwResolvedProjectV2 >> produce [
-	"Clone remote repo or connect to existing repo on disk."
-
-	"Return a copy of the load specification that is attached to the location on disk"
-
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					| spec |
-					spec := self _loadSpecification copy.
-					self updateLoadSpecWithRepositoryRoot: spec.
-					^ spec ]
-				ifFalse: [ 
-					self
-						error:
-							'the project ' , self projectName printString , ' did not exist on disk' ] ]
-]
-
-{ #category : 'actions' }
 RwResolvedProjectV2 >> produceRequiredLoadSpecs [
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read required loadSpecs from disk"
-					^ self readProducedLoadSpecSet ] ].
-	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification copy.
-  ^ res
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readProducedLoadSpecSet ].
+	(res := RwLoadSpecSet new) addLoadSpec: self _loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
 ]
 
 { #category : 'project definition' }
@@ -1397,6 +1387,17 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'to be removed' }
+RwResolvedProjectV2 >> readResolvedLoadSpecSet [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
 { #category : 'components' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectComponents removeComponentNamed: aComponentName
@@ -1613,7 +1614,7 @@ RwResolvedProjectV2 >> resolveRequiredLoadSpecSet [
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"read required loadSpecs from disk"
-					^ self readProducedLoadSpecSet ] ].
+					^ self readResolvedLoadSpecSet ] ].
 	(res := RwLoadSpecSet new)
 		addLoadSpec: self _loadSpecification copy.
   ^ res

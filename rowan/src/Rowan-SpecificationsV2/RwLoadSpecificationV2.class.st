@@ -503,23 +503,22 @@ RwLoadSpecificationV2 >> printOn: aStream [
 
 { #category : 'actions' }
 RwLoadSpecificationV2 >> produce [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver ignoring any required projects"
+	"produce ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure). All specs will 
+		be produced"
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ (RwResolvedProjectV2 basicLoadSpecification: self) produce
-
+	^ RwResolvedProjectV2 requiredLoadSpecs: self
 ]
 
 { #category : 'actions' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
-	"give embedded projects a chance to resolve cleanly. Return a resolved project that has been attached to the disk representation of project and read from disk"
+	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
-	| aSpec |
-	self projectsHome: aResolvedProject projectsHome.
-	aSpec := self produce.
-	^aSpec resolve
+	aResolvedProject _basicProduce
+		ifFalse: [ self error: 'Expected the project ', self projectName printString, ' to be ready to read' ].
+	^ aResolvedProject
 ]
 
 { #category : 'accessing' }

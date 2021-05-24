@@ -11,15 +11,10 @@ RwEmbeddedLoadSpecificationV2 class >> label [
 
 { #category : 'actions' }
 RwEmbeddedLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project and read from disk"
+	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
-	| basicProject |
 	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	basicProject _projectRepository resolve.
-	^ basicProject
+	^ super produceWithParentProject: aResolvedProject
 ]
 
 { #category : 'to be removed' }

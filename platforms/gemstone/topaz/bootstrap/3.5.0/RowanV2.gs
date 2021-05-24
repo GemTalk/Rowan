@@ -50148,18 +50148,6 @@ packagesPath: aString
 
 category: 'accessing'
 method: RwDefinedProject
-produceWithParentProject: aResolvedRwProject
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project and read from disk"
-
-	^ (RwResolvedFromDefinedProject newNamed: self name)
-		_concreteProject:
-				(self _loadSpecification
-						produceWithParentProject: aResolvedRwProject _concreteProject);
-		yourself
-%
-
-category: 'accessing'
-method: RwDefinedProject
 projectAlias: aString
 	^ self _concreteProject projectAlias: aString
 %
@@ -64483,7 +64471,8 @@ loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes
 category: 'instance creation'
 classmethod: RwResolvedProjectV2
 requiredLoadSpecs: anRwLoadSpecificationV2
-	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure). All specs will be produced"
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
+		required projects (closure). All specs will be produced"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 %
@@ -65518,41 +65507,15 @@ printOn: aStream
 
 category: 'actions'
 method: RwResolvedProjectV2
-produce
-	"Clone remote repo or connect to existing repo on disk."
-
-	"Return a copy of the load specification that is attached to the location on disk"
-
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					| spec |
-					spec := self _loadSpecification copy.
-					self updateLoadSpecWithRepositoryRoot: spec.
-					^ spec ]
-				ifFalse: [ 
-					self
-						error:
-							'the project ' , self projectName printString , ' did not exist on disk' ] ]
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
 produceRequiredLoadSpecs
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read required loadSpecs from disk"
-					^ self readProducedLoadSpecSet ] ].
-	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification copy.
-  ^ res
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readProducedLoadSpecSet ].
+	(res := RwLoadSpecSet new) addLoadSpec: self _loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
 %
 
 category: 'project definition'
@@ -65845,6 +65808,18 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'to be removed'
+method: RwResolvedProjectV2
+readResolvedLoadSpecSet
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForResolvedProject: self
+		withComponentNames: self componentNames
+		customConditionalAttributes: self customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
 category: 'components'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
@@ -66079,7 +66054,7 @@ resolveRequiredLoadSpecSet
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
 					"read required loadSpecs from disk"
-					^ self readProducedLoadSpecSet ] ].
+					^ self readResolvedLoadSpecSet ] ].
 	(res := RwLoadSpecSet new)
 		addLoadSpec: self _loadSpecification copy.
   ^ res
@@ -66149,6 +66124,21 @@ category: 'private'
 method: RwResolvedProjectV2
 _addPackageNames: somePackageNames for: aComponent
 	self addPackages: somePackageNames forComponent: aComponent
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+_basicProduce
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), answer true if the project already exists on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					self updateLoadSpecWithRepositoryRoot: self _loadSpecification.
+					^ true ] ].
+	^ false
 %
 
 category: 'private'
@@ -86891,6 +86881,28 @@ readLoadSpecForProducedProject: producedProject
 	^ visitor
 %
 
+category: 'to be removed'
+classmethod: RwResolvedProjectComponentVisitorV2
+readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes 
+	| visitor |
+	visitor := self new
+		_readComponentsForResolvedProject: resolvedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	resolvedProject
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				customConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
+	^ visitor
+%
+
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecSetForProducedProject: producedProject
@@ -86932,6 +86944,68 @@ readLoadSpecSetForProducedProject: producedProject
 			pp := visitedArray at: 2.
 			theproducedProject := pp.
 			theLoadSpec := theproducedProject _loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			loadSpecSet addLoadSpec: theLoadSpec ].
+	^ loadSpecSet
+%
+
+category: 'to be removed'
+classmethod: RwResolvedProjectComponentVisitorV2
+readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes 
+	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	loadSpecSet := RwLoadSpecSet new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {{resolvedProject.
+	componentNamesToRead.
+	customConditionalAttributes}}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| nextDefArray rp cn cca |
+			nextDefArray := projectVisitorQueue removeFirst.
+			rp := nextDefArray at: 1.
+			cn := nextDefArray at: 2.
+			cca := nextDefArray at: 3.
+
+			visitor := self
+				readLoadSpecForResolvedProject: rp
+				withComponentNames: cn
+				customConditionalAttributes: cca
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: rp projectName put: rp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					nextDefArray}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject |
+					"derive resolved project from the load spec"
+					theResolvedProject := loadSpec resolveWithParentProject: rp.
+					processedProjects
+						at: theResolvedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue
+								addLast:
+									{theResolvedProject.
+									(loadSpec componentNames).
+									(theResolvedProject customConditionalAttributes)} ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| ndf theVisitor theResolvedProject theLoadSpec theLoadedProject |
+			theVisitor := visitedArray at: 1.
+			ndf := visitedArray at: 2.
+			theResolvedProject := ndf at: 1.
+			theLoadSpec := theResolvedProject _loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -87964,23 +88038,23 @@ printOn: aStream
 category: 'actions'
 method: RwLoadSpecificationV2
 produce
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver ignoring any required projects"
+	"produce ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure). All specs will 
+		be produced"
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ (RwResolvedProjectV2 basicLoadSpecification: self) produce
+	^ RwResolvedProjectV2 requiredLoadSpecs: self
 %
 
 category: 'actions'
 method: RwLoadSpecificationV2
 produceWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly. Return a resolved project that has been attached to the disk representation of project and read from disk"
+	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
-	| aSpec |
-	self projectsHome: aResolvedProject projectsHome.
-	aSpec := self produce.
-	^aSpec resolve
+	aResolvedProject _basicProduce
+		ifFalse: [ self error: 'Expected the project ', self projectName printString, ' to be ready to read' ].
+	^ aResolvedProject
 %
 
 category: 'accessing'
@@ -88370,15 +88444,10 @@ label
 category: 'actions'
 method: RwEmbeddedLoadSpecificationV2
 produceWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project and read from disk"
+	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
-	| basicProject |
 	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	basicProject _projectRepository resolve.
-	^ basicProject
+	^ super produceWithParentProject: aResolvedProject
 %
 
 category: 'to be removed'

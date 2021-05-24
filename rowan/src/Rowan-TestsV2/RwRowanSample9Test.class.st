@@ -4047,26 +4047,149 @@ RwRowanSample9Test >> testIssue705 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce [
-	"take produce for a spin"
+RwRowanSample9Test >> testLoadSpec_produce_01 [
+	"RowanSample9:spec_0001 ... self contained project" 
 
-	| loadSpec repoDir producedSpec requiredLoadSpecs |
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	projectName := loadSpec projectName.
 
 	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
 	repoDir ensureDeleteAll.
 
 "produce"
-	producedSpec := loadSpec produce.
+	loadSpecs := loadSpec produce.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
-	self assert: producedSpec ~~ loadSpec.
+	self assert: theSpec ~~ loadSpec.
 	self assert: repoDir exists.
-	self assert: producedSpec projectUrl equals: 'file://', repoDir pathString.
-	self assert: producedSpec gitUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
 
-	requiredLoadSpecs := producedSpec requiredLoadSpecs.
-	self assert: requiredLoadSpecs projectNames asArray equals: { producedSpec projectName}
+	self assert: loadSpecs projectNames asArray equals: { projectName}
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_produce_02 [
+	"RowanSample9:spec_0025 ... project with 3 required (embedded) projects" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+	projectName := loadSpec projectName.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"produce"
+	loadSpecs := loadSpec produce.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+
+"validate"
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+
+	self assert: loadSpecs projectNames asArray equals: { projectName}
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_produce_03 [
+	"RowanSample9:spec_0066 ... project with 3 required (external) projects" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0066'.
+	projectName := loadSpec projectName.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"produce"
+	loadSpecs := loadSpec produce.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+
+"validate"
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+
+	self assert: loadSpecs projectNames asArray equals: { projectName}
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_produce_04 [
+	"RowanSample9:spec_0067 ... project with 3 required (external) projects - linear chain of required projects"
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0066'.
+	projectName := loadSpec projectName.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"produce"
+	loadSpecs := loadSpec produce.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+
+"validate"
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+
+	self assert: loadSpecs projectNames asArray equals: { projectName}
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_produce_05 [
+	"RowanSample9:spec_0068 ... project with 3 required (external) projects - recursive chain of required projects"
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName |
+	loadSpec := self _loadSpecNamed: 'spec_0066'.
+	projectName := loadSpec projectName.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"produce"
+	loadSpecs := loadSpec produce.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+
+"validate"
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+
+	self assert: loadSpecs projectNames asArray equals: { projectName}
 ]
 
 { #category : 'issue 493' }

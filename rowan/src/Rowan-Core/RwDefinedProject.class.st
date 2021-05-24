@@ -465,17 +465,6 @@ RwDefinedProject >> packagesPath: aString [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> produceWithParentProject: aResolvedRwProject [
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project and read from disk"
-
-	^ (RwResolvedFromDefinedProject newNamed: self name)
-		_concreteProject:
-				(self _loadSpecification
-						produceWithParentProject: aResolvedRwProject _concreteProject);
-		yourself
-]
-
-{ #category : 'accessing' }
 RwDefinedProject >> projectAlias: aString [
 	^ self _concreteProject projectAlias: aString
 ]
