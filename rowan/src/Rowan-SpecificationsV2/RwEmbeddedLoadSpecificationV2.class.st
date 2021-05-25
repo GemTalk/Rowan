@@ -9,14 +9,6 @@ RwEmbeddedLoadSpecificationV2 class >> label [
 	^ 'embedded load specification '
 ]
 
-{ #category : 'actions' }
-RwEmbeddedLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
-
-	self projectsHome: aResolvedProject projectsHome.
-	^ super produceWithParentProject: aResolvedProject
-]
-
 { #category : 'to be removed' }
 RwEmbeddedLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"

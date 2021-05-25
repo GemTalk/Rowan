@@ -87503,9 +87503,12 @@ method: RwLoadSpecificationV2
 produceWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
-	aResolvedProject _basicProduce
-		ifFalse: [ self error: 'Expected the project ', self projectName printString, ' to be ready to read' ].
-	^ aResolvedProject
+	| producedProject |
+	self projectsHome: aResolvedProject projectsHome.
+	producedProject := RwResolvedProjectV2
+		basicLoadSpecification: self.
+	producedProject _basicProduce.
+	^ producedProject
 %
 
 category: 'accessing'
@@ -87891,15 +87894,6 @@ label
 %
 
 !		Instance methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'actions'
-method: RwEmbeddedLoadSpecificationV2
-produceWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
-
-	self projectsHome: aResolvedProject projectsHome.
-	^ super produceWithParentProject: aResolvedProject
-%
 
 category: 'to be removed'
 method: RwEmbeddedLoadSpecificationV2
