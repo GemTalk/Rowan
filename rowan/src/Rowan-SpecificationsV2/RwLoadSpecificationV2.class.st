@@ -588,6 +588,13 @@ RwLoadSpecificationV2 >> projectUrl [
 				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
 ]
 
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> read [
+	"The receiver should already be produced. Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> readonlyDiskUrl [
 	^ readonlyDiskUrl

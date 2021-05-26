@@ -4052,24 +4052,40 @@ RwRowanSample9Test >> testLoadSpec_produce_01 [
 
 	"https://github.com/GemTalk/Rowan/issues/707"
 
-	| loadSpec repoDir theSpec loadSpecs projectName |
+	| loadSpec repoDir theSpec loadSpecs projectName readProjectSet theProject |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 	projectName := loadSpec projectName.
 
 	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
 	repoDir ensureDeleteAll.
 
+	{ projectName } do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
 "produce"
 	loadSpecs := loadSpec produce.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
+	self assert: loadSpecs projectNames asArray equals: { projectName}.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: repoDir exists.
 	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
 	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
 
-	self assert: loadSpecs projectNames asArray equals: { projectName}
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray equals: { projectName}.
+	theProject := readProjectSet projectNamed: projectName.
+	self 
+		assert: theProject packageNames asArray sort 
+		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
+	self assert: ((theProject packageNamed: 'RowanSample9-Core') classDefinitionNamed: 'RowanSample9Class1' ifAbsent: []) notNil.
+	self assert: ((theProject packageNamed: 'RowanSample9-Tests') classDefinitionNamed: 'RowanSample9TestCase' ifAbsent: []) notNil.
 ]
 
 { #category : 'tests' }
@@ -4078,7 +4094,7 @@ RwRowanSample9Test >> testLoadSpec_produce_02 [
 
 	"https://github.com/GemTalk/Rowan/issues/707"
 
-	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames |
+	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0025'.
 	projectName := loadSpec projectName.
 	requiredProjectNames := { 'RowanSample9_3' . 'RowanSample9_1' . 'RowanSample9_2' }.
@@ -4086,21 +4102,37 @@ RwRowanSample9Test >> testLoadSpec_produce_02 [
 	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
 	repoDir ensureDeleteAll.
 
+	({ projectName}, requiredProjectNames) do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
 "produce"
 	loadSpecs := loadSpec produce.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
+	self assert: loadSpecs projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: repoDir exists.
 	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
 	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
-
 	loadSpecs do: [:aSpec |
 		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
 		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
 
-	self assert: loadSpecs projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
 ]
 
 { #category : 'tests' }
@@ -4109,7 +4141,7 @@ RwRowanSample9Test >> testLoadSpec_produce_03 [
 
 	"https://github.com/GemTalk/Rowan/issues/707"
 
-	| loadSpec theSpec loadSpecs projectName projectNames |
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0066'.
 	projectName := loadSpec projectName.
 	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
@@ -4117,20 +4149,37 @@ RwRowanSample9Test >> testLoadSpec_produce_03 [
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
 "produce"
 	loadSpecs := loadSpec produce.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-
 	loadSpecs do: [:aSpec |
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
 		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
 		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
 ]
 
 { #category : 'tests' }
@@ -4139,7 +4188,7 @@ RwRowanSample9Test >> testLoadSpec_produce_04 [
 
 	"https://github.com/GemTalk/Rowan/issues/707"
 
-	| loadSpec theSpec loadSpecs projectName projectNames |
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0067'.
 	projectName := loadSpec projectName.
 	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
@@ -4147,20 +4196,36 @@ RwRowanSample9Test >> testLoadSpec_produce_04 [
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
 "produce"
 	loadSpecs := loadSpec produce.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-
 	loadSpecs do: [:aSpec |
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
 		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
 		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
 ]
 
 { #category : 'tests' }
@@ -4169,7 +4234,7 @@ RwRowanSample9Test >> testLoadSpec_produce_05 [
 
 	"https://github.com/GemTalk/Rowan/issues/707"
 
-	| loadSpec theSpec loadSpecs projectName projectNames |
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 	projectName := loadSpec projectName.
 	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
@@ -4177,20 +4242,37 @@ RwRowanSample9Test >> testLoadSpec_produce_05 [
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
 "produce"
 	loadSpecs := loadSpec produce.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 
 "validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-
 	loadSpecs do: [:aSpec |
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
 		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
 		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
 ]
 
 { #category : 'issue 493' }

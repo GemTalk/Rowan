@@ -75449,6 +75449,21 @@ projectNames
 
 category: 'actions'
 method: RwLoadSpecSet
+read
+	"Return a projectSetDefinition that contains project definitions corresponding to each of the load specs in the reciever"
+
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	self
+		do: [ :loadSpec | 
+			| project |
+			project := loadSpec read.
+			projectSetDefinition addProject: project ].
+	^ projectSetDefinition
+%
+
+category: 'actions'
+method: RwLoadSpecSet
 readProjectSet
 	"Each of the projects associated with a load spec has been cloned
 		so all that needs to be done is to read each of the projects from disk"
@@ -87582,6 +87597,14 @@ projectUrl
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
 				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
+read
+	"The receiver should already be produced. Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 %
 
 category: 'accessing'
