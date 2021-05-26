@@ -1553,7 +1553,7 @@ RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalA
 						platformConditionalAttributes: platformConditionalAttributes ] ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> resolveProjectSet [
 	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (project set will include required projects)"

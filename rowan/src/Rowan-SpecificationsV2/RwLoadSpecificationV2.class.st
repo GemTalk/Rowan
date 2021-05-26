@@ -433,6 +433,13 @@ RwLoadSpecificationV2 >> isStrict [
 	^ self repositoryResolutionPolicy == #strict
 ]
 
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> load [
+	"Return an Array of RwProjects that represent the loaded project for the reciever and all required projects"
+
+	^ self read load
+]
+
 { #category : 'comparing' }
 RwLoadSpecificationV2 >> loadConflictsWith: anObject [
 	"need to be able to report the fields that are in conflict"
@@ -590,8 +597,9 @@ RwLoadSpecificationV2 >> projectUrl [
 
 { #category : 'actions' }
 RwLoadSpecificationV2 >> read [
-	"The receiver should already be produced. Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
+	self produce.
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
@@ -604,6 +612,13 @@ RwLoadSpecificationV2 >> readonlyDiskUrl [
 RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
 	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> readProjectSet [
+	"Return a project definition set that includes the project definition for the receiver and all required projects"
+
+	^ self produce read
 ]
 
 { #category : 'accessing' }
@@ -640,7 +655,7 @@ RwLoadSpecificationV2 >> repositoryRoot [
 	^ self projectsHome / self projectAlias
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> requiredLoadSpecs [
 	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
 		WILL be produced (i.e. cloned to the local disk)"
@@ -672,6 +687,16 @@ RwLoadSpecificationV2 >> resolve [
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'to be removed' }
+RwLoadSpecificationV2 >> resolveProjectSet [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecificationProjectSet: self
 ]
 
 { #category : 'actions' }

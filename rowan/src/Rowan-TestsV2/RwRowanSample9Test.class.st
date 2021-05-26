@@ -6143,7 +6143,7 @@ RwRowanSample9Test >> testSpec_0053 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	resolvedProjectSet := loadSpec readProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6161,7 +6161,7 @@ RwRowanSample9Test >> testSpec_0054_1 [
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
+	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -6173,14 +6173,14 @@ RwRowanSample9Test >> testSpec_0054_1 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	requiredLoadSpecSet := loadSpec readProjectSet.
 
 "load project"
-	loadedProjects := resolvedProjectSet load.
+	loadedProjects := requiredLoadSpecSet load.
 
 "validate"
 	self
-		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		_standard_validate: (requiredLoadSpecSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
@@ -6194,7 +6194,7 @@ RwRowanSample9Test >> testSpec_0054_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/594"
 
-	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
+	| loadSpec projectName projectNames loadedProjects requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -6206,17 +6206,19 @@ RwRowanSample9Test >> testSpec_0054_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+
+"read project "
+	requiredLoadSpecSet := requiredLoadSpecSet read.
 
 "load project"
-	loadedProjects := resolvedProjectSet load.
+	loadedProjects := requiredLoadSpecSet load.
 
 "validate"
 	self
-		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		_standard_validate: (requiredLoadSpecSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
@@ -6271,7 +6273,7 @@ RwRowanSample9Test >> testSpec_0054_4 [
 	"https://github.com/GemTalk/Rowan/issues/594"
 	"https://github.com/GemTalk/Rowan/issues/701"
 
-	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName resolvedProjectSet |
+	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -6283,17 +6285,19 @@ RwRowanSample9Test >> testSpec_0054_4 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+
+"read project "
+	requiredLoadSpecSet := requiredLoadSpecSet read.
 
 "load project"
-	loadedProjects := resolvedProjectSet load.
+	loadedProjects := requiredLoadSpecSet load.
 
 "validate"
 	self
-		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		_standard_validate: (requiredLoadSpecSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 "tests attribute still present by default"
@@ -6351,7 +6355,7 @@ RwRowanSample9Test >> testSpec_0054_6 [
 	"https://github.com/GemTalk/Rowan/issues/594"
 	"https://github.com/GemTalk/Rowan/issues/701"
 
-	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName resolvedProjectSet |
+	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0054'.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
@@ -6363,19 +6367,20 @@ RwRowanSample9Test >> testSpec_0054_6 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec 
 			addCustomConditionalAttributes:  #('gnu');
 			removeCustomConditionalAttributes: #('tests')].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+"read project"
+	requiredLoadSpecSet := requiredLoadSpecSet read.
 
 "load project"
-	loadedProjects := resolvedProjectSet load.
+	loadedProjects := requiredLoadSpecSet load.
 
 "validate"
 	self
-		_standard_validate: (resolvedProjectSet projectNamed: projectName)
+		_standard_validate: (requiredLoadSpecSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 "tests attributes not present in either project"
@@ -6404,7 +6409,7 @@ RwRowanSample9Test >> testSpec_0055_1 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	resolvedProjectSet := loadSpec readProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6437,10 +6442,10 @@ RwRowanSample9Test >> testSpec_0055_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+	resolvedProjectSet := requiredLoadSpecSet read.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6474,10 +6479,10 @@ RwRowanSample9Test >> testSpec_0055_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {  'tests'. '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+	resolvedProjectSet := requiredLoadSpecSet read.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6514,7 +6519,7 @@ RwRowanSample9Test >> testSpec_0056_1 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProjectSet := loadSpec resolveProjectSet.
+	resolvedProjectSet := loadSpec readProjectSet.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6550,10 +6555,10 @@ RwRowanSample9Test >> testSpec_0056_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+	resolvedProjectSet := requiredLoadSpecSet read.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -6592,10 +6597,10 @@ RwRowanSample9Test >> testSpec_0056_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec requiredLoadSpecSet.
+	requiredLoadSpecSet := loadSpec produce.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {'tests' . '2.4.0' asRwGemStoneVersionNumber } ].
-	resolvedProjectSet := requiredLoadSpecSet resolveProjectSet.
+	resolvedProjectSet := requiredLoadSpecSet read.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -7689,7 +7694,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		expectedProjectNames: projectNames.
 
 "load project1 from spec_0053 checkout: changing repository root of loaded project
-	results in a load "
+	results in a load ... failing the load spec conflict test (revision) ... this seems to be legit operation so either conflict is too strict, or we need to be able to override error"
 	loadedProjects := (project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString) loadProjectSet.
 
 "Validate"

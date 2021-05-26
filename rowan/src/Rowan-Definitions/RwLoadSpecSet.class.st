@@ -25,9 +25,9 @@ RwLoadSpecSet >> addLoadSpec: aRwLoadSpec [
 
 { #category : 'actions' }
 RwLoadSpecSet >> load [
-	"resolve and load each of the load specs in the receiver"
+	"read and load each of the load specs in the receiver"
 
-	^ self resolveProjectSet load
+	^ self read load
 ]
 
 { #category : 'accessing' }
@@ -45,21 +45,6 @@ RwLoadSpecSet >> read [
 		do: [ :loadSpec | 
 			| project |
 			project := loadSpec read.
-			projectSetDefinition addProject: project ].
-	^ projectSetDefinition
-]
-
-{ #category : 'actions' }
-RwLoadSpecSet >> readProjectSet [
-	"Each of the projects associated with a load spec has been cloned
-		so all that needs to be done is to read each of the projects from disk"
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	self
-		do: [ :loadSpec | 
-			| project |
-			project := RwResolvedProjectV2 loadSpecification: loadSpec.
 			projectSetDefinition addProject: project ].
 	^ projectSetDefinition
 ]
