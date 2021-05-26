@@ -56,21 +56,6 @@ RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
 	self do: [ :ls | ls removeCustomConditionalAttributes: anArray ]
 ]
 
-{ #category : 'to be removed' }
-RwLoadSpecSet >> resolveProjectSet [
-	"Each of the projects associated with a load spec has been cloned
-		so all that needs to be done is to read each of the projects from disk"
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	self
-		do: [ :loadSpec | 
-			| project |
-			project := RwResolvedProjectV2 loadSpecification: loadSpec.
-			projectSetDefinition addProject: project ].
-	^ projectSetDefinition
-]
-
 { #category : 'accessing' }
 RwLoadSpecSet >> specForProjectNamed: projectName [
 	^ entities at: projectName

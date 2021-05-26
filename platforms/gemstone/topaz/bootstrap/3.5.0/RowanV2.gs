@@ -64430,31 +64430,6 @@ loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customCo
 
 category: 'instance creation'
 classmethod: RwResolvedProjectV2
-loadSpecificationProjectSet: anRwLoadSpecificationV2
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^(self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet
-%
-
-category: 'instance creation'
-classmethod: RwResolvedProjectV2
-loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
-		or created on disk for new projects. If the project directory already exists on disk, 
-		then read the project definition(s) from disk using the specified customConditionalAttributes
-
-		Answer  the project definition specified by the receiver and any dependent projects"
-
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet: customConditionalAttributes
-%
-
-category: 'instance creation'
-classmethod: RwResolvedProjectV2
 loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
 		or created on disk for new projects. If the project directory already exists on disk, 
@@ -65987,42 +65962,6 @@ resolve: customConditionalAttributes platformConditionalAttributes: platformCond
 					self
 						read: customConditionalAttributes
 						platformConditionalAttributes: platformConditionalAttributes ] ]
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-resolveProjectSet
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
-		project set from disk, if project is present on disk (project set will include required projects)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read project and required projects from disk"
-					^ self readProjectSet ] ].
-	(res := RwProjectSetDefinition new)
-		addProject: self .
-  ^ res
-%
-
-category: 'actions'
-method: RwResolvedProjectV2
-resolveProjectSet: conditionalAttributes
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
-		project set from disk, if project is present on disk (includes required projects)t"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					^ self readProjectSet: conditionalAttributes ] ].
-	(res := RwProjectSetDefinition new)
-		addProject: self .
-  ^ res
 %
 
 category: 'actions'
@@ -76007,22 +75946,6 @@ removeCustomConditionalAttributes: anArray
 	"remove from the existing custom conditional attributes fro each of the load specs"
 
 	self do: [ :ls | ls removeCustomConditionalAttributes: anArray ]
-%
-
-category: 'to be removed'
-method: RwLoadSpecSet
-resolveProjectSet
-	"Each of the projects associated with a load spec has been cloned
-		so all that needs to be done is to read each of the projects from disk"
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	self
-		do: [ :loadSpec | 
-			| project |
-			project := RwResolvedProjectV2 loadSpecification: loadSpec.
-			projectSetDefinition addProject: project ].
-	^ projectSetDefinition
 %
 
 category: 'accessing'
@@ -88247,33 +88170,6 @@ resolve
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 
-category: 'to be removed'
-method: RwLoadSpecificationV2
-resolveProjectSet
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecificationProjectSet: self
-%
-
-category: 'actions'
-method: RwLoadSpecificationV2
-resolveProjectSetStrict
-	"resolve using #strict repositoryResolutionpolicy"
-
-	| oldPolicy |
-	self isStrict
-		ifTrue: [ ^ self resolve ].
-	oldPolicy := self repositoryResolutionPolicy.
-	[ 
-	"force #strict policy to ensure that the revision is checked out out in the repository"
-	self repositoryResolutionPolicy: #'strict'.
-	^ self resolveProjectSet ]
-		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
-%
-
 category: 'actions'
 method: RwLoadSpecificationV2
 resolveStrict
@@ -100380,17 +100276,6 @@ resolve: customAttributes platformAttributes: platformAttributes
 
 category: '*rowan-definitionsv2'
 method: RwLoadSpecificationV2
-resolveProjectSet: conditionalAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: conditionalAttributes
-%
-
-category: '*rowan-definitionsv2'
-method: RwLoadSpecificationV2
 resolveProjectSet: customAttributes platformAttributes: platformAttributes
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -100820,7 +100705,7 @@ adoptProjectFromUrl: specUrl diskUrl: diskUrl projectsHome: projectsHome
 	projectSetDefinition := loadSpec
 		diskUrl: diskUrl;
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	Rowan projectTools adopt
 		_adoptProjectProjectsInProjectSet: projectSetDefinition
@@ -100836,7 +100721,7 @@ adoptProjectFromUrl: specUrl projectsHome: projectsHome
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	self _adoptProjectProjectsInProjectSet: projectSetDefinition
 %
@@ -100852,7 +100737,7 @@ adoptProjectFromUrl: specUrl readonlyDiskUrl: diskUrl projectsHome: projectsHome
 	projectSetDefinition := loadSpec
 		readonlyDiskUrl: diskUrl;
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	Rowan projectTools adopt
 		_adoptProjectProjectsInProjectSet: projectSetDefinition

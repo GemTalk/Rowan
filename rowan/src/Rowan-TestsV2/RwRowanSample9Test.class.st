@@ -6058,7 +6058,8 @@ RwRowanSample9Test >> testSpec_0052_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	projectSet := loadSpec resolveProjectSetStrict.
+	loadSpec repositoryResolutionPolicy: #strict.
+	projectSet := loadSpec readProjectSet.
 
 "load project set"
 	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
@@ -6074,7 +6075,8 @@ RwRowanSample9Test >> testSpec_0052_2 [
 	(Rowan projectNamed: requiredProjectName) unload.	"unload second, because it is required by project name"
 
 "resolve project using resolveProjectSet:"
-	projectSet := loadSpec resolveProjectSet: (projectSet projectNamed: projectName) customConditionalAttributes.
+	loadSpec addCustomConditionalAttributes: (projectSet projectNamed: projectName) customConditionalAttributes.
+	projectSet := loadSpec readProjectSet.
 
 "load project set"
 	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
@@ -6104,7 +6106,8 @@ RwRowanSample9Test >> testSpec_0052_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	projectSet := loadSpec resolveProjectSetStrict.
+	loadSpec repositoryResolutionPolicy: #strict.
+	projectSet := loadSpec readProjectSet.
 
 "load project set"
 	loadedProjects := Rowan projectTools loadV2 loadProjectSetDefinition: projectSet.
@@ -6245,7 +6248,8 @@ RwRowanSample9Test >> testSpec_0054_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	projectDefinitionSet := loadSpec resolveProjectSet: #('gnu' 'tests').
+	loadSpec customConditionalAttributes: #('gnu' 'tests').
+	projectDefinitionSet := loadSpec readProjectSet.
 
 "load project"
 	loadedProjects := projectDefinitionSet load.
@@ -6328,7 +6332,8 @@ RwRowanSample9Test >> testSpec_0054_5 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	projectDefinitionSet := loadSpec resolveProjectSet: #('gnu').
+	loadSpec customConditionalAttributes: #('gnu').
+	projectDefinitionSet := loadSpec readProjectSet.
 
 "load project"
 	loadedProjects := projectDefinitionSet load.
@@ -7674,10 +7679,10 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve projects"
-	resolvedProjectSet1 := loadSpec1 resolveProjectSet.
+	resolvedProjectSet1 := loadSpec1 readProjectSet.
 	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName1.
 
-	resolvedProjectSet2 := loadSpec2 resolveProjectSet.	"only used to extract target repositoryRoot ... load of spec_0053 will happen via using spec_0053 repositoryRoot"
+	resolvedProjectSet2 := loadSpec2 readProjectSet.	"only used to extract target repositoryRoot ... load of spec_0053 will happen via using spec_0053 repositoryRoot"
 	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName2.
 
 "validate"

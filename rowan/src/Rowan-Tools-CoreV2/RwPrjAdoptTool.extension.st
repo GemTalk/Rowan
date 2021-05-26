@@ -105,7 +105,7 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl diskUrl: diskUrl projectsHome: pr
 	projectSetDefinition := loadSpec
 		diskUrl: diskUrl;
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	Rowan projectTools adopt
 		_adoptProjectProjectsInProjectSet: projectSetDefinition
@@ -120,7 +120,7 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectsHome: projectsHome [
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	self _adoptProjectProjectsInProjectSet: projectSetDefinition
 ]
@@ -135,7 +135,7 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl readonlyDiskUrl: diskUrl projects
 	projectSetDefinition := loadSpec
 		readonlyDiskUrl: diskUrl;
 		projectsHome: projectsHome;
-		resolveProjectSet.
+		readProjectSet.
 
 	Rowan projectTools adopt
 		_adoptProjectProjectsInProjectSet: projectSetDefinition

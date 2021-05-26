@@ -689,31 +689,6 @@ RwLoadSpecificationV2 >> resolve [
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
-{ #category : 'to be removed' }
-RwLoadSpecificationV2 >> resolveProjectSet [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecificationProjectSet: self
-]
-
-{ #category : 'actions' }
-RwLoadSpecificationV2 >> resolveProjectSetStrict [
-	"resolve using #strict repositoryResolutionpolicy"
-
-	| oldPolicy |
-	self isStrict
-		ifTrue: [ ^ self resolve ].
-	oldPolicy := self repositoryResolutionPolicy.
-	[ 
-	"force #strict policy to ensure that the revision is checked out out in the repository"
-	self repositoryResolutionPolicy: #'strict'.
-	^ self resolveProjectSet ]
-		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
-]
-
 { #category : 'actions' }
 RwLoadSpecificationV2 >> resolveStrict [
 	"resolve using #strict repositoryResolutionpolicy"

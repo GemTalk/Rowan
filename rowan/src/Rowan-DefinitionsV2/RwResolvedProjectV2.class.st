@@ -50,29 +50,6 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customCo
 ]
 
 { #category : 'instance creation' }
-RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^(self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet
-]
-
-{ #category : 'instance creation' }
-RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
-		or created on disk for new projects. If the project directory already exists on disk, 
-		then read the project definition(s) from disk using the specified customConditionalAttributes
-
-		Answer  the project definition specified by the receiver and any dependent projects"
-
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet: customConditionalAttributes
-]
-
-{ #category : 'instance creation' }
 RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
 		or created on disk for new projects. If the project directory already exists on disk, 
@@ -1551,40 +1528,6 @@ RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalA
 					self
 						read: customConditionalAttributes
 						platformConditionalAttributes: platformConditionalAttributes ] ]
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> resolveProjectSet [
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
-		project set from disk, if project is present on disk (project set will include required projects)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read project and required projects from disk"
-					^ self readProjectSet ] ].
-	(res := RwProjectSetDefinition new)
-		addProject: self .
-  ^ res
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> resolveProjectSet: conditionalAttributes [
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
-		project set from disk, if project is present on disk (includes required projects)t"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					^ self readProjectSet: conditionalAttributes ] ].
-	(res := RwProjectSetDefinition new)
-		addProject: self .
-  ^ res
 ]
 
 { #category : 'actions' }
