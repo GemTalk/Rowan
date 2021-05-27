@@ -50260,13 +50260,13 @@ repoType: aSymbol
 	self _concreteProject repoType: aSymbol
 %
 
-category: 'transitions'
+category: 'to be removed'
 method: RwDefinedProject
 resolve
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 %
 
-category: 'transitions'
+category: 'to be removed'
 method: RwDefinedProject
 resolveStrict
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
@@ -83895,9 +83895,8 @@ loadProjectSet
 	projectDef _validate: projectDef conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(projectDef
-				readLoadedProjectSet: projectDef customConditionalAttributes
-				platformConditionalAttributes: projectDef platformConditionalAttributes)
+			(RwResolvedProjectComponentVisitorV2
+				readProjectSpecSetForProducedProject: projectDef)
 %
 
 category: 'actions'
@@ -87060,6 +87059,57 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		customConditionalAttributes: resolvedProject customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 		useLoadedProjects: false
+%
+
+category: 'read load specs'
+classmethod: RwResolvedProjectComponentVisitorV2
+readProjectSpecSetForProducedProject: producedProject
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {producedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp cn cca |
+			pp := projectVisitorQueue removeFirst.
+			cn := pp componentNames.
+			cca := pp customConditionalAttributes.
+
+			visitor := self readLoadSpecForProducedProject: pp.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theProducedProject |
+					"derive resolved project from the load spec"
+					theProducedProject := loadSpec produceWithParentProject: pp.
+					processedProjects
+						at: theProducedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theProducedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
+			theVisitor := visitedArray at: 1.
+			pp := visitedArray at: 2.
+			theproducedProject := pp.
+			theLoadSpec := theproducedProject _loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			projectSetDefinition addProject: theLoadSpec read ].
+	^ projectSetDefinition
 %
 
 category: 'to be removed'

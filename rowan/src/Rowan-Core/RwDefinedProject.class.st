@@ -562,12 +562,12 @@ RwDefinedProject >> repoType: aSymbol [
 	self _concreteProject repoType: aSymbol
 ]
 
-{ #category : 'transitions' }
+{ #category : 'to be removed' }
 RwDefinedProject >> resolve [
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 ]
 
-{ #category : 'transitions' }
+{ #category : 'to be removed' }
 RwDefinedProject >> resolveStrict [
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 ]

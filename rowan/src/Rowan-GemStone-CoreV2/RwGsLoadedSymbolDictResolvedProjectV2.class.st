@@ -293,9 +293,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	projectDef _validate: projectDef conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(projectDef
-				readLoadedProjectSet: projectDef customConditionalAttributes
-				platformConditionalAttributes: projectDef platformConditionalAttributes)
+			(RwResolvedProjectComponentVisitorV2
+				readProjectSpecSetForProducedProject: projectDef)
 ]
 
 { #category : 'actions' }
