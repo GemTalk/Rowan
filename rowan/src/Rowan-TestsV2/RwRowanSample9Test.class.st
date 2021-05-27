@@ -3487,10 +3487,11 @@ RwRowanSample9Test >> testIssue571 [
 		thePlatformConditionalAttributes.
 	self assert: resolvedProject _projectDefinitionCustomConditionalAttributes =
 		theCustomConditionalAttributes.
+	resolvedProject addCustomConditionalAttributes: {'v1'}.
 
-	theCustomConditionalAttributes add: 'v1'.
+"load"
+	loadedProjects := resolvedProject loadProjectSet.
 
-	loadedProjects := resolvedProject loadProjectSet: theCustomConditionalAttributes.
 "validate"
 	thePlatformConditionalAttributes := (self
 		_validate_571: resolvedProject

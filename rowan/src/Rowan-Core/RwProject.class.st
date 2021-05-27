@@ -390,36 +390,6 @@ RwProject >> loadProjectSet [
 	^ self _loadedProject loadProjectSet
 ]
 
-{ #category : 'actions' }
-RwProject >> loadProjectSet: customConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that
-			includes project definitions of required projects, also read from disk. Then
-			load the entire project set.
-
-		Use the specified customConditionalAttributes when reading the receiver from disk.
-	"
-
-	^ self _loadedProject loadProjectSet: customConditionalAttributes
-]
-
-{ #category : 'actions' }
-RwProject >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
-	"
-		refresh the contents of the receiver from disk and create a project set 
-			that includes project definitions of required projects, also read from disk. 
-			Then load the entire project set, using the specified instance migrator.
-
-		Use the specified conditional attributes when reading the receiver from disk.
-
-		Use the instanceMigrator to handle new versions of any classes that may result from the load.
-	"
-
-	^ self _loadedProject
-		loadProjectSet: conditionalAttributes
-		instanceMigrator: instanceMigrator
-]
-
 { #category : 'components' }
 RwProject >> packageGroupNamed: componentName [
 	^ self _loadedComponents packageGroupNamed: componentName

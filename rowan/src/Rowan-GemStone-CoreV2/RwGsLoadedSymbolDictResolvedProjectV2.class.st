@@ -293,50 +293,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	projectDef _validate: projectDef conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(RwResolvedProjectComponentVisitorV2
-				readProjectSpecSetForProducedProject: projectDef)
-]
-
-{ #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: customConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that
-			includes project definitions of required projects, also read from disk. Then
-			load the entire project set.
-
-		Use the specified conditional attributes when reading the receiver from disk.
-	"
-
-	| projectDef |
-	projectDef := self asDefinition.
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition:
-			(projectDef
-				readLoadedProjectSet: customConditionalAttributes
-				platformConditionalAttributes: projectDef platformConditionalAttributes)
-]
-
-{ #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
-	"
-		refresh the contents of the receiver from disk and create a project set 
-			that includes project definitions of required projects, also read from disk. 
-			Then load the entire project set, using the specified instance migrator.
-
-		Use the specified conditional attributes when reading the receiver from disk.
-
-		Use the instanceMigrator to handle new versions of any classes that may result from the load.
-	"
-
-	| projectDef |
-	projectDef := self asDefinition.
-	projectDef _validate: conditionalAttributes.
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition:
-			(projectDef
-				readLoadedProjectSet: conditionalAttributes
-				platformConditionalAttributes: projectDef platformConditionalAttributes)
-		instanceMigrator: instanceMigrator
+			(Rowan projectTools readV2
+				readProjectSetForProducedProject: projectDef)
 ]
 
 { #category : 'accessing' }

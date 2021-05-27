@@ -919,40 +919,7 @@ RwResolvedProjectV2 >> loadProjectSet [
 	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(self
-				readProjectSet: self customConditionalAttributes
-				platformConditionalAttributes: self platformConditionalAttributes)
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: customConditionalAttributes [
-	"
-		refresh the contents of the receiver from disk and create a project set that
-			includes project definitions of required projects, also read from disk. Then
-			load the entire project set.
-
-		Use the specified customConditionalAttributes when reading the receiver from disk.
-	"
-
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: (self readProjectSet: customConditionalAttributes)
-]
-
-{ #category : 'actions' }
-RwResolvedProjectV2 >> loadProjectSet: conditionalAttributes instanceMigrator: instanceMigrator [
-	"
-		refresh the contents of the receiver from disk and create a project set 
-			that includes project definitions of required projects, also read from disk. 
-			Then load the entire project set, using the specified instance migrator.
-
-		Use the specified conditional attributes when reading the receiver from disk.
-
-		Use the instanceMigrator to handle new versions of any classes that may result from the load.
-	"
-
-	^ Rowan projectTools loadV2
-		loadProjectSetDefinition: (self readProjectSet: conditionalAttributes)
-		instanceMigrator: instanceMigrator
+			(Rowan projectTools readV2 readProjectSetForProducedProject: self)
 ]
 
 { #category : 'project definition' }
@@ -1147,7 +1114,7 @@ RwResolvedProjectV2 >> read [
 		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1172,7 +1139,7 @@ RwResolvedProjectV2 >> readLoadedProjectSet [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
 
@@ -1185,7 +1152,7 @@ RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
 
@@ -1198,7 +1165,7 @@ RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platfor
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readLoadSpecSetComponentNames: componentNames [
 	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
 
@@ -1268,7 +1235,7 @@ RwResolvedProjectV2 >> readProducedLoadSpecSet [
 	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProducedProject: self
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1280,7 +1247,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1294,7 +1261,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1317,7 +1284,7 @@ RwResolvedProjectV2 >> readProjectSet [
 	^ self readProjectSetComponentNames: self componentNames
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes [
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
 
@@ -1328,7 +1295,7 @@ RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1341,7 +1308,7 @@ RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes platformCondi
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1352,7 +1319,7 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1497,7 +1464,7 @@ RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> resolve [
 	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
@@ -1514,7 +1481,7 @@ RwResolvedProjectV2 >> resolve [
 							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
@@ -1530,7 +1497,7 @@ RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalA
 						platformConditionalAttributes: platformConditionalAttributes ] ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
