@@ -50935,6 +50935,16 @@ reload
 
 category: 'actions'
 method: RwProject
+reload: instanceMigrator
+	"
+		load the receiver AND required projects.
+	"
+
+	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
+%
+
+category: 'actions'
+method: RwProject
 reloadAndIncludeCustomConditionalAttributes: addedCustomConditionalAttributes
 	"
 		load the receiver AND required projects adding the custom conditonal attribures to 
@@ -50968,49 +50978,38 @@ repositoryRootPath
 
 category: 'actions'
 method: RwProject
-requiredLoadSpecSet
-	^ self _loadSpecification requiredLoadSpecSet
+requiredLoadSpecs
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk)"
+
+	^ self _loadSpecification requiredLoadSpecs
 %
 
 category: 'actions'
 method: RwProject
 revert
 	"
-		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+		read and reload just the receiver from disk. Required projects for the receiver are only loaded if they are not already 
 			present in the image.
 
-		To explicitly revert the receiver AND required projects, <TBD>.
+		To revert the receiver AND required projects, use reload.
 	"
 
-	"should replace places where a projectSet was created for the receiver"
 
-	^ self error: 'Not yet implmented'
+	^ self _loadedProject read load
 %
 
 category: 'actions'
 method: RwProject
-revert: customConditionalAttributes
+revert: instanceMigrator
 	"
-		read the reciever using the customConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
-			loaded if they are not already present in the image.
-	"
-
-	"should replace places where a projectSet was created for the receiver"
-
-	^ self error: 'Not yet implmented'
-%
-
-category: 'actions'
-method: RwProject
-revert: customConditionalAttributes  instanceMigrator: instanceMigrator
-	"
-		read the reciever using the customConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+		read the reciever and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
 			receiver are only loaded if they are not already present in the image.
 	"
 
 	"should replace places where a projectSet was created for the receiver"
 
-	^ self error: 'Not yet implmented'
+	^ self _loadedProject load: instanceMigrator
 %
 
 category: 'properties'
@@ -63881,15 +63880,6 @@ requiredLoadSpecs: anRwLoadSpecificationV2
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 %
 
-category: 'to be removed'
-classmethod: RwResolvedProjectV2
-requiredLoadSpecSet: anRwLoadSpecificationV2
-	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure)"
-
-	^(self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveRequiredLoadSpecSet
-%
-
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -65177,18 +65167,6 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
-method: RwResolvedProjectV2
-readResolvedLoadSpecSet
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ RwResolvedProjectComponentVisitorV2
-		readLoadSpecSetForResolvedProject: self
-		withComponentNames: self componentNames
-		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-%
-
 category: 'components'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
@@ -65373,23 +65351,6 @@ resolveProjectSet: customConditionalAttributes platformConditionalAttributes: pl
 					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
-  ^ res
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-resolveRequiredLoadSpecSet
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read required loadSpecs from disk"
-					^ self readResolvedLoadSpecSet ] ].
-	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification copy.
   ^ res
 %
 
@@ -69780,6 +69741,19 @@ loadProjectNamed: projectName includeCustomConditionalAttributes: customConditio
 	^ self
 		loadProjectNamed: projectName
 		customConditionalAttributes: theCustomConditionalAttributes asArray
+%
+
+category: 'load project by name'
+method: RwPrjLoadToolV2
+loadProjectNamed: projectName instanceMigrator: instanceMigrator
+	| projectSet res |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName.
+	res := self
+		loadProjectSetDefinition: projectSet
+		instanceMigrator: instanceMigrator.	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
 %
 
 category: 'load project by name'
@@ -83432,6 +83406,16 @@ self halt. "do not checkin ??"
 	^ props
 %
 
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+read
+	"
+		read receiver's project definition from disk and return the new project definition
+	"
+
+	^ self asDefinition read
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 remote
@@ -87577,24 +87561,6 @@ requiredLoadSpecs
 		WILL be produced (i.e. cloned to the local disk)"
 
 	^ RwResolvedProjectV2 requiredLoadSpecs: self
-%
-
-category: 'to be removed'
-method: RwLoadSpecificationV2
-requiredLoadSpecSet
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be resolved (i.e. cloned to the local disk)"
-
-	^ RwResolvedProjectV2 requiredLoadSpecSet: self
-%
-
-category: 'actions'
-method: RwLoadSpecificationV2
-requiredSpecs
-	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ RwResolvedProjectV2 requiredLoadSpecSet: self
 %
 
 category: 'to be removed'

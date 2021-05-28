@@ -664,22 +664,6 @@ RwLoadSpecificationV2 >> requiredLoadSpecs [
 ]
 
 { #category : 'to be removed' }
-RwLoadSpecificationV2 >> requiredLoadSpecSet [
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be resolved (i.e. cloned to the local disk)"
-
-	^ RwResolvedProjectV2 requiredLoadSpecSet: self
-]
-
-{ #category : 'actions' }
-RwLoadSpecificationV2 >> requiredSpecs [
-	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ RwResolvedProjectV2 requiredLoadSpecSet: self
-]
-
-{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> resolve [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver ignoring any required projects"

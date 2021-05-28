@@ -446,6 +446,15 @@ RwProject >> reload [
 ]
 
 { #category : 'actions' }
+RwProject >> reload: instanceMigrator [
+	"
+		load the receiver AND required projects.
+	"
+
+	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
+]
+
+{ #category : 'actions' }
 RwProject >> reloadAndIncludeCustomConditionalAttributes: addedCustomConditionalAttributes [
 	"
 		load the receiver AND required projects adding the custom conditonal attribures to 
@@ -476,46 +485,36 @@ RwProject >> repositoryRootPath [
 ]
 
 { #category : 'actions' }
-RwProject >> requiredLoadSpecSet [
-	^ self _loadSpecification requiredLoadSpecSet
+RwProject >> requiredLoadSpecs [
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk)"
+
+	^ self _loadSpecification requiredLoadSpecs
 ]
 
 { #category : 'actions' }
 RwProject >> revert [
 	"
-		read and reload only the receiver into the image. Required projects for the receiver are only loaded if they are not already 
+		read and reload just the receiver from disk. Required projects for the receiver are only loaded if they are not already 
 			present in the image.
 
-		To explicitly revert the receiver AND required projects, <TBD>.
+		To revert the receiver AND required projects, use reload.
 	"
 
-	"should replace places where a projectSet was created for the receiver"
 
-	^ self error: 'Not yet implmented'
+	^ self _loadedProject read load
 ]
 
 { #category : 'actions' }
-RwProject >> revert: customConditionalAttributes [
+RwProject >> revert: instanceMigrator [
 	"
-		read the reciever using the customConditionalAttributes and reload only the receiver into the image. Required projects for the receiver are only 
-			loaded if they are not already present in the image.
-	"
-
-	"should replace places where a projectSet was created for the receiver"
-
-	^ self error: 'Not yet implmented'
-]
-
-{ #category : 'actions' }
-RwProject >> revert: customConditionalAttributes  instanceMigrator: instanceMigrator [
-	"
-		read the reciever using the customConditionalAttributes and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
+		read the reciever and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
 			receiver are only loaded if they are not already present in the image.
 	"
 
 	"should replace places where a projectSet was created for the receiver"
 
-	^ self error: 'Not yet implmented'
+	^ self _loadedProject load: instanceMigrator
 ]
 
 { #category : 'properties' }

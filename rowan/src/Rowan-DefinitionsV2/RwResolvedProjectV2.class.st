@@ -71,14 +71,6 @@ RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 class >> requiredLoadSpecSet: anRwLoadSpecificationV2 [
-	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for required projects (closure)"
-
-	^(self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveRequiredLoadSpecSet
-]
-
 { #category : 'private' }
 RwResolvedProjectV2 >> _addPackageNames: somePackageNames for: aComponent [
 	self addPackages: somePackageNames forComponent: aComponent
@@ -1331,17 +1323,6 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readResolvedLoadSpecSet [
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ RwResolvedProjectComponentVisitorV2
-		readLoadSpecSetForResolvedProject: self
-		withComponentNames: self componentNames
-		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
 { #category : 'components' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
 	^ self _projectComponents removeComponentNamed: aComponentName
@@ -1511,22 +1492,6 @@ RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformCo
 					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
 	(res := RwProjectSetDefinition new)
 		addProject: self .
-  ^ res
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> resolveRequiredLoadSpecSet [
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), if project is present on disk (project set will include required load specs)"
-  | res |
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"read required loadSpecs from disk"
-					^ self readResolvedLoadSpecSet ] ].
-	(res := RwLoadSpecSet new)
-		addLoadSpec: self _loadSpecification copy.
   ^ res
 ]
 

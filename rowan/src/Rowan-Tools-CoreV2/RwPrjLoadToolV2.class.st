@@ -204,6 +204,18 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName includeCustomConditionalAttribu
 ]
 
 { #category : 'load project by name' }
+RwPrjLoadToolV2 >> loadProjectNamed: projectName instanceMigrator: instanceMigrator [
+	| projectSet res |
+	projectSet := Rowan projectTools readV2
+		readProjectSetForProjectNamed: projectName.
+	res := self
+		loadProjectSetDefinition: projectSet
+		instanceMigrator: instanceMigrator.	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSet.
+	^ res
+]
+
+{ #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName removeCustomConditionalAttributes: customConditionalAttributes [
 	"load the given project REMOVING the given customConditionalAttributes from those used to load the project"
 

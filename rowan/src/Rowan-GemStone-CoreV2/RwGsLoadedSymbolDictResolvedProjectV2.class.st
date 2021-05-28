@@ -413,6 +413,15 @@ self halt. "do not checkin ??"
 	^ props
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> read [
+	"
+		read receiver's project definition from disk and return the new project definition
+	"
+
+	^ self asDefinition read
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 
