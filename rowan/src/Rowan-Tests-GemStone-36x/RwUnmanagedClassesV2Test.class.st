@@ -11,7 +11,7 @@ RwUnmanagedClassesV2Test >> _createLoadedProject: projectName packageName: packa
 		_createProject: projectName
 		packageName: packageName
 		symbolDictionaryName: symbolDictionaryName.
-	^ project load at: 1
+	^ project load projectNamed: projectName
 ]
 
 { #category : 'private' }
@@ -21,7 +21,7 @@ RwUnmanagedClassesV2Test >> _createLoadedProject: projectName packageNames: pack
 		_createProject: projectName
 		packageNames: packageNames
 		symbolDictionaryName: symbolDictionaryName.
-	^ project load at: 1
+	^ project load projectNamed: projectName
 ]
 
 { #category : 'private' }

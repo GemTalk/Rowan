@@ -97,7 +97,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	className := 'RowanSample9Class1'.
 
 "validate"
@@ -162,7 +162,7 @@ UserGlobals at: #ConditionalHalt put: false.
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	className := 'RowanSample9Class1'.
 
 "validate"
@@ -235,7 +235,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	className := 'RowanSample9Class1'.
 
 "validate"

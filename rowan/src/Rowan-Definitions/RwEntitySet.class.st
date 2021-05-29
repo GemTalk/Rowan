@@ -61,6 +61,11 @@ RwEntitySet >> asProjectDefinitionSet [
 ]
 
 { #category : 'enumeration' }
+RwEntitySet >> collect: aBlock [
+	^ entities collect: aBlock
+]
+
+{ #category : 'enumeration' }
 RwEntitySet >> do: aBlock [
 
 	^ entities do: aBlock
@@ -76,6 +81,11 @@ RwEntitySet >> entities [
 RwEntitySet >> initialize [
 
 	entities := Dictionary new
+]
+
+{ #category : 'enumeration' }
+RwEntitySet >> select: aBlock [
+	^ entities select: aBlock
 ]
 
 { #category : 'accessing' }

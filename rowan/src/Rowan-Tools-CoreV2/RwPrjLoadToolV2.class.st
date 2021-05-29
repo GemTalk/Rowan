@@ -82,11 +82,11 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList.
 			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
-	loadedProjects := Array new.
+	loadedProjects := RwLoadedProjectSet new.
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			| theLoadedProject |
-			loadedProjects add: (RwProject newNamed: projectDef name).
+			loadedProjects addProject: (RwProject newNamed: projectDef name).
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle
 				_projectComponents: projectDef _projectComponents copy.
@@ -179,31 +179,6 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 ]
 
 { #category : 'load project by name' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName customConditionalAttributes: customConditionalAttributes [
-	| projectSet res |
-	projectSet := Rowan projectTools readV2
-		readProjectSetForProjectNamed: projectName
-		customConditionalAttributes: customConditionalAttributes.
-	res := self loadProjectSetDefinition: projectSet.
-	self markProjectSetNotDirty: projectSet.	"loaded project and loaded packages read from disk - mark them not dirty"
-	^ res
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName includeCustomConditionalAttributes: customConditionalAttributes [
-	"load the given project ADDING the given customConditionalAttributes to those used to load the project"
-
-	| project theCustomConditionalAttributes |
-	project := RwProject newNamed: projectName.
-	theCustomConditionalAttributes := project customConditionalAttributes copy
-		asSet.
-	theCustomConditionalAttributes addAll: customConditionalAttributes.
-	^ self
-		loadProjectNamed: projectName
-		customConditionalAttributes: theCustomConditionalAttributes asArray
-]
-
-{ #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName instanceMigrator: instanceMigrator [
 	| projectSet res |
 	projectSet := Rowan projectTools readV2
@@ -213,20 +188,6 @@ RwPrjLoadToolV2 >> loadProjectNamed: projectName instanceMigrator: instanceMigra
 		instanceMigrator: instanceMigrator.	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSet.
 	^ res
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadToolV2 >> loadProjectNamed: projectName removeCustomConditionalAttributes: customConditionalAttributes [
-	"load the given project REMOVING the given customConditionalAttributes from those used to load the project"
-
-	| project theCustomConditionalAttributes |
-	project := RwProject newNamed: projectName.
-	theCustomConditionalAttributes := project customConditionalAttributes copy
-		asSet.
-	theCustomConditionalAttributes removeAllPresent: customConditionalAttributes.
-	^ self
-		loadProjectNamed: projectName
-		customConditionalAttributes: theCustomConditionalAttributes asArray
 ]
 
 { #category : 'load project set' }

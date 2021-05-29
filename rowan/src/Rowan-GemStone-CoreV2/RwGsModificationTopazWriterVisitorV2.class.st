@@ -528,7 +528,7 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 										ifTrue: [ 
 											"read the project from disk, if it is present on disk"
 											visitor := readTool
-												readProjectForResolvedProject: currentProjectDefinition
+												readProjectForProducedProject: currentProjectDefinition
 												withComponentNames: componentNames
 												customConditionalAttributes: customConditionalAttributes
 												platformConditionalAttributes: platformConditionalAttributes ] ].

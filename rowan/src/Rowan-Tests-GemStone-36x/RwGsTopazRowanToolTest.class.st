@@ -244,7 +244,7 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: project gitShortStatus isEmpty.
@@ -280,7 +280,7 @@ RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: project gitShortStatus isEmpty.
@@ -369,7 +369,7 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	class := Rowan globalNamed: className.
@@ -461,7 +461,7 @@ RwGsTopazRowanToolTest >> testTopazMoveClassToPackage [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: (audit := project audit)  isEmpty.
@@ -497,7 +497,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: project gitShortStatus isEmpty.
@@ -545,7 +545,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: project gitShortStatus isEmpty.
@@ -587,7 +587,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self assert: project gitShortStatus isEmpty.
@@ -642,7 +642,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	class := Rowan globalNamed: className.
@@ -682,7 +682,7 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	class := Rowan globalNamed: className.
@@ -724,7 +724,7 @@ RwGsTopazRowanToolTest >> testTopazUnloadProject [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	class := Rowan globalNamed: className.

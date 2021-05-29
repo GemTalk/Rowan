@@ -142,10 +142,10 @@ RwRowanSample11Test >> testSpec_0004 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 4) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName1) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName2) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName3) testSuite tests isEmpty.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])

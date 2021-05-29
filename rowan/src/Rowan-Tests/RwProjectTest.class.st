@@ -57,7 +57,7 @@ RwProjectTest >> testDiskProjectApi [
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadFromSpec first.
+	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
@@ -149,7 +149,7 @@ RwProjectTest >> testGitProjectApi [
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadFromSpec first.
+	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
 	loadedProject checkout: 'master'.
 	self assert: commitId equals: loadedProject commitId.
 	self assert: ((loadedProject commitLog: 1) includesString: 'initial commit').

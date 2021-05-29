@@ -56,6 +56,12 @@ RwAbstractProject >> load [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> loadSpec [
+
+	^ self _loadSpecification
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> packageConvention [
 	^ self _concreteProject packageConvention
 ]

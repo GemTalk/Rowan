@@ -194,6 +194,27 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForResolvedProject: 
 	^ loadSpecSet
 ]
 
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectForProducedProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+	| visitor |
+	visitor := self new
+		_readComponentsForProducedProject: aProducedProject
+		withComponentNames: componentNamesToRead
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+	aProducedProject
+		projectDefinitionSourceProperty:
+				RwLoadedProject _projectDiskDefinitionSourceValue;
+		_projectDefinitionCustomConditionalAttributes:
+				customConditionalAttributes copy;
+		_projectDefinitionPlatformConditionalAttributes:
+				platformConditionalAttributes copy;
+		yourself.
+	visitor visitedComponents
+		keysAndValuesDo: [ :cName :cmp | aProducedProject _projectComponents _addComponent: cmp ].
+	^ visitor
+]
+
 { #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
@@ -436,25 +457,36 @@ RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ign
 ]
 
 { #category : 'private' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aResolvedProject [
-	resolvedProject := aResolvedProject.
-	platformConditionalAttributes := aResolvedProject platformConditionalAttributes.
-	customConditionalAttributes := aResolvedProject customConditionalAttributes.
-
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of componentNames"
-	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	^ self _visitComponents: resolvedProject componentNames
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject [
+	^ self
+		_readComponentsForProducedProject: aProducedProject
+		withComponentNames: aProducedProject componentNames
+		customConditionalAttributes: aProducedProject platformConditionalAttributes
+		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 ]
 
 { #category : 'private' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aResolvedProject platformConditionalAttributes: aPlatformConditionalAttributes [
-	resolvedProject := aResolvedProject.
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes [
+	^ self
+		_readComponentsForProducedProject: aProducedProject
+		withComponentNames: aProducedProject componentNames
+		customConditionalAttributes: aProducedProject platformConditionalAttributes
+		platformConditionalAttributes: aPlatformConditionalAttributes
+]
+
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes [
+	| theComponentNames  |
+	resolvedProject := aProducedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
-	customConditionalAttributes := aResolvedProject customConditionalAttributes.
+	customConditionalAttributes := aCustomConditionalAttributes.
 
 	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of componentNames"
 	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	^ self _visitComponents: resolvedProject componentNames
+	theComponentNames := componentNamesToRead isEmpty
+		ifTrue: [ resolvedProject componentNames ]
+		ifFalse: [ componentNamesToRead ].
+	^ self _visitComponents: theComponentNames
 ]
 
 { #category : 'to be removed' }

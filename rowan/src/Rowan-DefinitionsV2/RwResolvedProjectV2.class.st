@@ -1124,37 +1124,7 @@ RwResolvedProjectV2 >> readLoadedProjectSet [
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ Rowan projectTools readV2
-		readLoadedProjectSetForResolvedProject: self
-		withComponentNames: self componentNames
-		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readLoadedProjectSetForResolvedProject: self
-		withComponentNames: self componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readLoadedProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current LOADED load specification"
-
-	"return a project definition set that will contain the project definition along with any dependent project definitions"
-
-	^ Rowan projectTools readV2
-		readLoadedProjectSetForResolvedProject: self
-		withComponentNames: self componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
+	^ Rowan projectTools readV2 readProjectSetForProducedProject: self
 ]
 
 { #category : 'to be removed' }

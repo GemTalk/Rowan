@@ -47,7 +47,7 @@ RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: c
 
 	self assert: (symDict at: className asSymbol ifAbsent: [  ]) notNil.
 
-	(loadedProjects at: 1) unload.
+	(loadedProjects projectNamed: projectSpec projectName) unload.
 
 	self deny: (symDict at: className asSymbol ifAbsent: [  ]) notNil
 ]
@@ -268,7 +268,7 @@ RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrato
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
 "checkout migration_step_1 branch; read and load"
@@ -358,7 +358,7 @@ RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProje
 { #category : 'private' }
 RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames packageName: packageName present: isPresent [
 	| project x y |
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: resolvedProject projectName.
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
@@ -382,6 +382,7 @@ RwRowanSample9Test >> _validate_571: resolvedProject loadedProjects: loadedProje
 		ifFalse: [ self deny: (project packageNames includes: packageName) ].
 
 	^ project _projectDefinitionPlatformConditionalAttributes
+
 ]
 
 { #category : 'private' }
@@ -630,7 +631,7 @@ RwRowanSample9Test >> testIssue_254 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: project audit isEmpty.
 	self _runTestSuiteForProject: project.
 
@@ -642,7 +643,7 @@ RwRowanSample9Test >> testIssue_254 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: project audit isEmpty.
 	self _runTestSuiteForProject: project.
 ]
@@ -1118,7 +1119,7 @@ RwRowanSample9Test >> testIssue_549 [
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
 
 "remove package RowanSample9-Extensions"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	resolvedProject2 := project asDefinition.
 	resolvedProject2 removePackageNamed: 'RowanSample9-Extensions'.
 
@@ -1310,7 +1311,7 @@ RwRowanSample9Test >> testIssue_587 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
 "checkout and load - migration_step_2 -- Issue #487: switch symbol dicts and use _symbolDictionaryName_1 for second load"
@@ -1401,7 +1402,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict [
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 forPackageNamed: packageName4;
 		yourself.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -1487,7 +1488,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_1 [
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	className := 'RowanSample9Class1'.
 
 "validate"
@@ -1544,7 +1545,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_2 [
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects  projectNamed: projectName.
 	className := 'RowanSample9Class1'.
 
 "validate"
@@ -2382,7 +2383,7 @@ RwRowanSample9Test >> testIssue284 [
 		expectedProjectNames: projectNames.
 
 "get project and record load commit id"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	loadedCommitId := project loadedCommitId.
 
 "benign load sequence - loaded commit id should change"
@@ -2405,7 +2406,6 @@ RwRowanSample9Test >> testIssue284 [
 		expectedProjectNames: projectNames.
 
 	self deny: loadedCommitId = (x := project loadedCommitId). "loaded commit id SHOULD change"
-
 ]
 
 { #category : 'tests' }
@@ -2475,7 +2475,7 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 		expectedProjectNames: projectNames.
 
 "unload"
-	(loadedProjects at: 1) unload.
+	(loadedProjects projectNamed: projectName) unload.
 ]
 
 { #category : 'tests' }
@@ -2520,7 +2520,7 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 		expectedProjectNames: projectNames.
 
 "get project"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	
 "resolve project"
 	resolvedProject := project asDefinition.
@@ -2643,7 +2643,7 @@ RwRowanSample9Test >> testIssue304 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -2717,7 +2717,7 @@ RwRowanSample9Test >> testIssue305 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -2905,7 +2905,7 @@ RwRowanSample9Test >> testIssue460_1 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -3041,7 +3041,7 @@ RwRowanSample9Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 		expectedProjectNames: projectNames.
 
 "get project"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	
 "resolve project"
 	loadSpec := self _loadSpecNamed: 'spec_0046'.
@@ -3148,7 +3148,7 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
 "checkout and load - migration_step_2 -- Issue #493: switch symbol dicts and use _symbolDictionaryName_1 for second load"
@@ -3359,7 +3359,7 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
 "checkout and load - migration_step_2"
@@ -3426,7 +3426,7 @@ RwRowanSample9Test >> testIssue571 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -3520,23 +3520,25 @@ RwRowanSample9Test >> testIssue594 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self deny: project testSuite tests isEmpty.
 
 "reload without 'tests' attribute"
-	loadedProjects := project reloadAndRemoveCustomConditionalAttributes: #('tests').
-	project := loadedProjects at: 1.
+	loadSpec := project loadSpec.
+	loadSpec removeCustomConditionalAttributes: #('tests').
+	loadedProjects := loadSpec load.
 
 "validate"
 	self assert: (audit := project audit) isEmpty.
 	self assert: project testSuite tests isEmpty.
 
 "reload with 'tests' attribute"
-	loadedProjects := project reloadAndIncludeCustomConditionalAttributes: #('tests').
-	project := loadedProjects at: 1.
+	loadSpec := project loadSpec.
+	loadSpec addCustomConditionalAttributes: #('tests').
+	loadedProjects := loadSpec load.
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
@@ -3565,7 +3567,7 @@ RwRowanSample9Test >> testIssue653 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "component API"
 	self 
@@ -3627,7 +3629,7 @@ RwRowanSample9Test >> testIssue700_0 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	requiredProject := loadedProjects at: 2.
 
 "validate"
@@ -3704,7 +3706,7 @@ RwRowanSample9Test >> testIssue700_1 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	requiredProject := loadedProjects at: 2.
 
 "validate"
@@ -4500,7 +4502,7 @@ RwRowanSample9Test >> testRemoveSubclassOfClassWithNewVersion [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
 "checkout and load - migration_step_0"
@@ -4642,7 +4644,7 @@ RwRowanSample9Test >> testSpec_0001_C [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
@@ -4653,7 +4655,7 @@ RwRowanSample9Test >> testSpec_0001_C [
 		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
 
 "remove Core component and reload"
-	requiredLoadSpecs := (loadedProjects at: 1) requiredLoadSpecs.
+	requiredLoadSpecs := (loadedProjects projectNamed: projectName) requiredLoadSpecs.
 	(requiredLoadSpecs specForProjectNamed: projectName) removeComponentNames: {'Core'}.
 
 "load"
@@ -4716,7 +4718,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: project audit isEmpty.
 	self _runTestSuiteForProject: project.
 
@@ -4736,7 +4738,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self _runTestSuiteForProject: project.
 ]
 
@@ -5576,7 +5578,7 @@ RwRowanSample9Test >> testSpec_0034 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects  projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 ]
 
@@ -5604,7 +5606,7 @@ RwRowanSample9Test >> testSpec_0035 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 ]
 
@@ -5632,7 +5634,7 @@ RwRowanSample9Test >> testSpec_0036 [
 
 "validate"
 	self assert: loadedProjects size = 1.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 ]
 
@@ -6000,7 +6002,7 @@ RwRowanSample9Test >> testSpec_0049 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -6914,7 +6916,7 @@ RwRowanSample9Test >> testSpec_0060_2 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -6957,7 +6959,7 @@ RwRowanSample9Test >> testSpec_0061 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -6990,7 +6992,7 @@ RwRowanSample9Test >> testSpec_0062 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -7023,7 +7025,7 @@ RwRowanSample9Test >> testSpec_0063 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	self
@@ -7155,7 +7157,7 @@ RwRowanSample9Test >> testSpec_0064_3 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := (loadedProjects at: 1) defined.
+	project := (loadedProjects projectNamed: projectName) defined.
 
 "validate"
 	self
@@ -7246,7 +7248,7 @@ RwRowanSample9Test >> testSpec_0064_4 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := (loadedProjects at: 1) defined.
+	project := (loadedProjects projectNamed: projectName) defined.
 
 "validate"
 	self
@@ -7331,7 +7333,7 @@ RwRowanSample9Test >> testSpec_0064_5 [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := (loadedProjects at: 1) defined.
+	project := (loadedProjects projectNamed: projectName) defined.
 
 "validate"
 	self
@@ -7416,8 +7418,8 @@ RwRowanSample9Test >> testSpec_0065 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 ]
 
 { #category : 'tests' }
@@ -7453,10 +7455,10 @@ RwRowanSample9Test >> testSpec_0066 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 4) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName1) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName2) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName3) testSuite tests isEmpty.
 ]
 
 { #category : 'tests' }
@@ -7492,10 +7494,10 @@ RwRowanSample9Test >> testSpec_0067 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 4) testSuite tests isEmpty
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName1) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName2) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName3) testSuite tests isEmpty
 ]
 
 { #category : 'tests' }
@@ -7531,10 +7533,10 @@ RwRowanSample9Test >> testSpec_0068 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (loadedProjects at: 1) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 2) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 3) testSuite tests isEmpty.
-	self deny: (loadedProjects at: 4) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName1) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName2) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName3) testSuite tests isEmpty.
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
@@ -7826,7 +7828,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 		className2: className2.
 
 "validate"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: 'RowanSample9'.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
 
@@ -7881,7 +7883,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 		className2: className2.
 
 "validate"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: 'RowanSample9'.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
 

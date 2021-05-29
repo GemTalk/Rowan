@@ -23,6 +23,25 @@ RwLoadSpecSet >> addLoadSpec: aRwLoadSpec [
 	^ aRwLoadSpec
 ]
 
+{ #category : 'definitions' }
+RwLoadSpecSet >> asDefinitionSet [
+	"might make sense"
+
+	self shouldNotImplement: #'asDefinitionSet'
+]
+
+{ #category : 'definitions' }
+RwLoadSpecSet >> asPackageDefinitionSet [
+	self shouldNotImplement: #'asPackageDefinitionSet'
+]
+
+{ #category : 'definitions' }
+RwLoadSpecSet >> asProjectDefinitionSet [
+	"might make sense"
+
+	self shouldNotImplement: #'asProjectDefinitionSet'
+]
+
 { #category : 'actions' }
 RwLoadSpecSet >> load [
 	"read and load each of the load specs in the receiver"
