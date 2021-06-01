@@ -3630,7 +3630,7 @@ RwRowanSample9Test >> testIssue700_0 [
 "load project"
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	requiredProject := loadedProjects at: 2.
+	requiredProject := loadedProjects projectNamed: requiredProjectName.
 
 "validate"
 	self
@@ -3687,7 +3687,7 @@ RwRowanSample9Test >> testIssue700_1 [
 	"https://github.com/GemTalk/Rowan/issues/700"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
-		requiredProjectName requiredRepositoryRoot requiredProjectsHome requiredLoadSpec attributes |
+		requiredProjectName requiredRepositoryRoot requiredProjectsHome requiredLoadSpec loadSpecs |
 	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
@@ -3707,7 +3707,7 @@ RwRowanSample9Test >> testIssue700_1 [
 "load project"
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	requiredProject := loadedProjects at: 2.
+	requiredProject := loadedProjects projectNamed: requiredProjectName.
 
 "validate"
 	self
@@ -3732,12 +3732,12 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
 
 "change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
-	attributes := requiredProject _projectDefinitionCustomConditionalAttributes copy. 
-	attributes remove: 'mytests'.
-	requiredProject _projectDefinitionCustomConditionalAttributes: attributes.
+	loadSpecs := project requiredLoadSpecs.
+	(loadSpecs specForProjectNamed: requiredProjectName)
+		removeCustomConditionalAttributes: #('mytests').
 
 "load"
-	loadedProjects := project reload.
+	loadedProjects := loadSpecs load.
 
 "validate"
 	self assert: requiredProject repositoryRoot equals: requiredRepositoryRoot.
