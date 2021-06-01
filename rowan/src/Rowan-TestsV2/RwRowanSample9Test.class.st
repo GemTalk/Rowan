@@ -4145,14 +4145,22 @@ RwRowanSample9Test >> testIssue707_01 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue711 [
 	"
-		test reload of loaded project after using readProjectComponentNames:customConditionalAttributes: 
-		to read/load a loaded project ... will fall back to default conditional attributs ... reproduce the bug,
-		and replace with an officially supported solution
+		In fileinrowan.topaz we read the Kernel component using a set of custom 
+		attributes that are not part of the load spec. In the current implementation, 
+		the conditional attributes are stored in the 
+		_Project_Definition_CustomConditionalAttributes property of the loaded project
+		(not in the load spec), but when the loaded project is reloaded, we revert
+		to using the attributes in the load spec ...
+
+		This test is expected to validate the new api that will be used in fileinrowan.topaz
+		to replace the use of RwResolvedProjectV2 >> 	
+		readProjectComponentNames:customConditionalAttributes: (which is slated to
+		be removed).
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/711"
 
-	| loadSpec projectName projectNames loadSpecs loadedProjects project definedProject |
+	| loadSpec projectName projectNames loadSpecs loadedProjects project |
 	loadSpec := self _loadSpecNamed: 'spec_0070'.
 
 	projectName := loadSpec projectName.
@@ -4176,13 +4184,14 @@ RwRowanSample9Test >> testIssue711 [
 	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
 	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
 
-"add attr1 and attr2 to resolved project"
-	definedProject := project asDefinition
-		readProjectComponentNames: #( 'Core')
-			customConditionalAttributes: #('attr1' 'attr2' 'tests').
+"read the project using tests, attr1 and attr2"
+	loadSpecs := project requiredLoadSpecs.
+	(loadSpecs specForProjectNamed: projectName)
+		componentNames: #( 'Core');
+		addCustomConditionalAttributes: #('attr1' 'attr2' 'tests').
 
 "and load"
-	definedProject load.
+	loadSpecs load.
 
 "validate"
 	self
