@@ -10,12 +10,12 @@
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanRepositoryRootV2.tpz
 
 	run
-	| requiredLoadSpecSet |
+	| loadSpecs |
 	"load tests for Rowan and all of it's required projects"
-	requiredLoadSpecSet := (Rowan projectNamed: 'Rowan') requiredLoadSpecSet.
-	requiredLoadSpecSet do: [:loadSpec |
+	loadSpecs := (Rowan projectNamed: 'Rowan') requiredLoadSpecs.
+	loadSpecs do: [:loadSpec |
 		loadSpec addCustomConditionalAttributes: #('tests' 'testsV2') ].
-	requiredLoadSpecSet load.
+	loadSpecs load.
 %
 	commit
 

@@ -80,6 +80,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0067: commitComment;
 	genSpec_0068: commitComment;
 	genSpec_0069: commitComment;
+	genSpec_0070: commitComment;
 	yourself
 "
 Class {
@@ -4079,6 +4080,71 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	self
 		_addDefinitionsFor_0069_Bridge: resolvedProject.	"load spec will be exported by caller"
 	^ canonicalLoadSpec
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0070: resolvedProject [
+	"Start with spec_0001 (RowanSample9) add 2 more components: attr1/Core1 that adds the class RowanSample9Class2 as a subclass of RowanSample9Class1 and attr2/Core2 that adds the class RowanSample9Class3 as a subclass of RowanSampleClass1. Tests are included by attr1/tests/Core1 and attr2/tests/Core2 The custom conditional attributes attr1 and attr2 are used to control  whether or not the classes are loaded. By default the attribute list includes only tests."
+
+	"https://github.com/GemTalk/Rowan/issues/711"
+
+	| packageName1 packageName2 packageName3 packageName4 componentName componentName1 componentName2 componentName3 componentName4 |
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Core2'.
+	packageName3 := projectName , '-Core1-Tests'.
+	packageName4 := projectName , '-Core2-Tests'.
+	componentName := 'Core'.
+	componentName1 := 'attr1/Core'.
+	componentName2 := 'attr2/Core'.
+	componentName3 := 'attr1/tests/Core'.
+	componentName4 := 'attr2/tests/Core'.
+
+	resolvedProject
+		packageConvention: 'Rowan';
+		addSubcomponentNamed: componentName1
+			condition: 'attr1';
+		addSubcomponentNamed: componentName2
+			condition: 'attr2';
+		addSubcomponentStructureFor: componentName
+			startingAtComponentNamed: componentName
+			conditionPathArray: #('attr1' 'tests');
+		addSubcomponentStructureFor: componentName
+			startingAtComponentNamed: componentName
+			conditionPathArray: #('attr2' 'tests');
+		addPackageNamed: packageName1
+			toComponentNamed: componentName1;
+		addPackageNamed: packageName2
+			toComponentNamed: componentName2;
+		addPackageNamed: packageName3
+			toComponentNamed: componentName3;
+		addPackageNamed: packageName4
+			toComponentNamed: componentName4;
+		addComponentNamed: componentName1
+			toComponentNamed: componentName;
+		addComponentNamed: componentName2
+			toComponentNamed: componentName;
+		yourself.
+
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed:  projectName , 'Class2' super: projectName , 'Class1' category: 'attribute 1')
+		addInstanceMethod: 'attr1 ^''attr1''' protocol: 'attribute 1';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed:  projectName , 'Class3' super: projectName , 'Class1' category: 'attribute 2')
+		addInstanceMethod: 'attr2 ^''attr2''' protocol: 'attribute 2';
+		yourself.
+	((resolvedProject packageNamed: packageName3)
+		addClassExtensionNamed: projectName , 'TestCase')
+		addInstanceMethod:
+				'testAttr1 self assert: ' , projectName , 'Class2 new attr1 = ''attr1'''
+			protocol: 'tests'.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: projectName , 'TestCase')
+		addInstanceMethod:
+				'testAttr2 self assert: ' , projectName , 'Class3 new attr2 = ''attr2'''
+			protocol: 'tests'.
+
+	^ resolvedProject
 ]
 
 { #category : 'private' }
@@ -8152,6 +8218,56 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	self
 		_finishCommitAndPush: specName
 		loadSpecification: canonicalLoadSpec
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage ]
+		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0070: commitMessage [
+	"Start with spec_0001 (RowanSample9) add 2 more components: attr1/Core1 that adds the class RowanSample9Class2 as a subclass of RowanSample9Class1 and attr2/Core2 that adds the class RowanSample9Class3 as a subclass of RowanSampleClass1. Tests are included by attr1/tests/Core1 and attr2/tests/Core2 The custom conditional attributes attr1 and attr2 are used to control  whether or not the classes are loaded. By default the attribute list includes only tests."
+
+	"https://github.com/GemTalk/Rowan/issues/711"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	[ 
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
+	postfix := '0070'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001 (RowanSample9) add 2 more components: attr1/Core1 that adds the class RowanSample9Class2 as a subclass of RowanSample9Class1 and attr2/Core2 that adds the class RowanSample9Class3 as a subclass of RowanSampleClass1. Tests are included by attr1/tests/Core1 and attr2/tests/Core2 The custom conditional attributes attr1 and attr2 are used to control  whether or not the classes are loaded. By default the attribute list includes only tests.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 70
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(711);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0070: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository

@@ -4143,6 +4143,66 @@ RwRowanSample9Test >> testIssue707_01 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue711 [
+	"
+		test reload of loaded project after using readProjectComponentNames:customConditionalAttributes: 
+		to read/load a loaded project ... will fall back to default conditional attributs ... reproduce the bug,
+		and replace with an officially supported solution
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/711"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects project definedProject |
+	loadSpec := self _loadSpecNamed: 'spec_0070'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce project"
+	loadSpecs := loadSpec produce.
+
+"initial load"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
+	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+
+"add attr1 and attr2 to resolved project"
+	definedProject := project asDefinition
+		readProjectComponentNames: #( 'Core')
+			customConditionalAttributes: #('attr1' 'attr2' 'tests').
+
+"and load"
+	definedProject load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
+	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+
+"reload ... should be exactly the same as load"
+	project reload.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
+	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_produce_01 [
 	"RowanSample9:spec_0001 ... self contained project" 
 
@@ -7697,6 +7757,49 @@ RwRowanSample9Test >> testSpec_0069_Parent [
 			projectNamed: pn 
 			ifPresent: [:p | 
 				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0070 [
+	"spec_0070 should load cleanly ... without attr1 and attr2 classes (RowanSample9Class2 and RowanSample9Class3)"
+
+	"https://github.com/GemTalk/Rowan/issues/711"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects  |
+	loadSpec := self _loadSpecNamed: 'spec_0070'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce project"
+	loadSpecs := loadSpec produce.
+
+"load project"
+	loadedProjects := loadSpecs load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
+	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+
+"add attr1 and attr2"
+	(loadSpecs specForProjectNamed: projectName) addCustomConditionalAttributes: #('attr1' 'attr2').
+
+"reload"
+	loadSpecs load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
+	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
 ]
 
 { #category : 'tests' }
