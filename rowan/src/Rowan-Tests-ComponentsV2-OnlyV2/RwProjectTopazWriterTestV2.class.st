@@ -1352,7 +1352,8 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 
 	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition 
 		className1 className2 className3 classExtensionDefinition projectSetDefinition 
-		projectSetModification visitor repositoryRootPath packageName3 componentName projectsHome |
+		projectSetModification visitor repositoryRootPath packageName3 componentName projectsHome 
+		hitError |
 
 	projectName := 'Issue361'.
 	packageName1 := 'Issue361-Core'.
@@ -1471,12 +1472,22 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_error [
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 				repositoryRootPath: repositoryRootPath;
 				topazFilenameComponentMap: (Dictionary new
-						at: 'rowan_bootstrap_app' put: {{'Kernel'}};
-						at: 'rowan_bootstrap_globals' put: {{'Globals'}};
-						at: 'rowan_bootstrap_user_globals' put: {{'UserGlobals'}};
+						at: 'rowan_bootstrap_app' put: 
+							(Dictionary new at: projectName put: {{'Kernel'}}; yourself);
+						at: 'rowan_bootstrap_globals' put: 
+							(Dictionary new at: projectName put: {{'Globals'}}; yourself);
+						at: 'rowan_bootstrap_user_globals' put: 
+							(Dictionary new at: projectName put: {{'UserGlobals'}}; yourself);
 						yourself);
 				yourself.
-	self should: [ visitor visit: projectSetModification ] raise: Error
+	hitError := false.
+	[ visitor visit: projectSetModification ] 
+		on: Error do: [:ex |
+			hitError := true.
+			self 
+				assert: ex messageText 
+				equals: 'unable to read project components for project ''Issue361''. Multiple output files likely to have the same contents.' ].
+	self assert: hitError description: 'Did not hit expected error'
 ]
 
 { #category : 'tests' }

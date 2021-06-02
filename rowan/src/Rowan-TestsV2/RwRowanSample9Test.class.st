@@ -26,6 +26,106 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _expectedTopazWriter_spec_0001_core [
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Object
+	subclass: ''RowanSample9Class1''
+	instVarNames: #( ivar1 )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #()
+)
+		category: ''RowanSample9-Core'';
+		comment: ''I am an example class'';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanSample9Class1
+removeallclassmethods RowanSample9Class1
+
+! Class implementation for ''RowanSample9Class1''
+
+!		Instance methods for ''RowanSample9Class1''
+
+category: ''accessing''
+method: RowanSample9Class1
+foo ^1
+%
+
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9Test >> _expectedTopazWriter_spec_0001_tests [
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(Object
+	subclass: ''RowanSample9Class1''
+	instVarNames: #( ivar1 )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #()
+)
+		category: ''RowanSample9-Core'';
+		comment: ''I am an example class'';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanSample9Class1
+removeallclassmethods RowanSample9Class1
+
+doit
+(TestCase
+	subclass: ''RowanSample9TestCase''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #()
+)
+		category: ''RowanSample9-Tests'';
+		comment: ''I test the example class'';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanSample9TestCase
+removeallclassmethods RowanSample9TestCase
+
+! Class implementation for ''RowanSample9Class1''
+
+!		Instance methods for ''RowanSample9Class1''
+
+category: ''accessing''
+method: RowanSample9Class1
+foo ^1
+%
+
+! Class implementation for ''RowanSample9TestCase''
+
+!		Instance methods for ''RowanSample9TestCase''
+
+category: ''tests''
+method: RowanSample9TestCase
+test  self assert: RowanSample9Class1 new foo = 1
+%
+
+'
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
 	| resolvedProject loadedProjects symDictName symDict |
 	resolvedProject := projectSpec resolve.
@@ -4734,6 +4834,48 @@ RwRowanSample9Test >> testSpec_0001_C [
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') isNil.
 	self assert: (Rowan globalNamed: 'RowanSample9TestCase') isNil.
 	self assert: project packageNames isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0001_WriteTopazFiles [
+	"read from disk and write a topaz file - test coverage for RwGsModificationTopazWriterVisitorV2"
+
+	| loadSpec projectName loadSpecs projects projectSetModification repositoryRootPath  visitor
+		projectsHome platformConditionalAttributes  stream |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+
+	projectsHome := self _testRowanProjectsSandbox.
+	(projectsHome / 'WriteTopazFiles') ensureDeleteAll.
+
+"resolve project"
+	loadSpecs := loadSpec produce.
+
+"read project"
+	projects := loadSpecs read.
+
+"write topaz file"
+	repositoryRootPath := projectsHome / 'WriteTopazFiles' / 'topaz'.
+	repositoryRootPath ensureCreateDirectory.
+	platformConditionalAttributes := Rowan platformConditionalAttributes.
+
+	projectSetModification := projects compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitorV2 new
+				repositoryRootPath: repositoryRootPath;
+				topazFilenameComponentMap: (Dictionary new
+						at: 'spec_0001_core' put: 
+							(Dictionary new at: projectName put: {{'Core'} . {} . platformConditionalAttributes }; yourself);
+						at: 'spec_0001_tests' put: 
+							(Dictionary new at: projectName put: {{'Core'} . {'tests'}  . platformConditionalAttributes }; yourself);
+						yourself);
+				yourself.
+	visitor visit: projectSetModification.
+
+	stream := ZnBufferedReadStream on: (repositoryRootPath / 'spec_0001_core' , 'gs') readStream.
+	self assert: stream contents equals: self _expectedTopazWriter_spec_0001_core.
+	stream := ZnBufferedReadStream on: (repositoryRootPath / 'spec_0001_tests' , 'gs') readStream.
+	self assert: stream contents equals: self _expectedTopazWriter_spec_0001_tests.
 ]
 
 { #category : 'tests' }
