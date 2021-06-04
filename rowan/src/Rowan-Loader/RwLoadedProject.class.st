@@ -204,7 +204,7 @@ RwLoadedProject >> loadedProject [
 { #category : 'accessing' }
 RwLoadedProject >> loadSpecification [
 
-	^ handle
+	self subclassResponsibility: #loadSpecification
 ]
 
 { #category : 'private' }

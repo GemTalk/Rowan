@@ -182,7 +182,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0001: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -231,7 +231,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0002: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -282,7 +282,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -336,7 +336,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -384,7 +384,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -433,7 +433,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0006: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository

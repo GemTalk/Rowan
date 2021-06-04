@@ -39,7 +39,7 @@ RwProject >> addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDicti
 						error:
 							'The component ' , componentName printString , ' does not exist in the project'
 								, self name printString ].
-			self _loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
+			self loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
 				ifTrue: [ projectDefinition addPackageNamed: packageName toComponentNamed: componentName ]
 				ifFalse: [ 
 					projectDefinition
@@ -58,7 +58,7 @@ RwProject >> addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDicti
 RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
 	^ self
 		addNewPackageNamed: packageName
-		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
+		inSybolDictionaryNamed: self loadSpecification gemstoneDefaultSymbolDictName
 		toComponentNamed: componentName
 ]
 

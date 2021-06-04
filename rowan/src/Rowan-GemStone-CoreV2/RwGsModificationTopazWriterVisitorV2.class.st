@@ -509,7 +509,7 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 			readTool := Rowan projectTools readV2.
 			self topazFilenameComponentMap
 				keysAndValuesDo: [ :filename :componentAndPlatformConditionalAttributesMap | 
-					| componentNames customConditionalAttributes platformConditionalAttributes visitor packageNames componentAndPlatformConditionalAttributes |
+					| componentNames customConditionalAttributes platformConditionalAttributes projectDef packageNames componentAndPlatformConditionalAttributes |
 					componentAndPlatformConditionalAttributes := componentAndPlatformConditionalAttributesMap
 						at: currentProjectDefinition name
 						ifAbsent: [ {{}} ].
@@ -526,13 +526,23 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 								ifFalse: [ 
 									currentProjectDefinition componentsRoot exists
 										ifTrue: [ 
-											"read the project from disk, if it is present on disk"
-											visitor := readTool
-												readProjectForProducedProject: currentProjectDefinition
-												withComponentNames: componentNames
-												customConditionalAttributes: customConditionalAttributes
-												platformConditionalAttributes: platformConditionalAttributes ] ].
-							packageNames := visitor
+											true
+												ifTrue: [ 
+													| loadSpec |
+													"read the project from disk, if it is present on disk"
+													loadSpec := currentProjectDefinition loadSpecification.
+													loadSpec
+														componentNames: componentNames;
+														customConditionalAttributes: customConditionalAttributes.
+													projectDef := loadSpec read: platformConditionalAttributes ]
+												ifFalse: [ 
+													"bye bye"
+													projectDef := readTool
+														readProjectForProducedProject: currentProjectDefinition
+														withComponentNames: componentNames
+														customConditionalAttributes: customConditionalAttributes
+														platformConditionalAttributes: platformConditionalAttributes ] ] ].
+							packageNames := projectDef
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
 										ifTrue: [ 
@@ -542,7 +552,7 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 														, currentProjectDefinition name printString
 														, '. Multiple output files likely to have the same contents.' ].
 									currentProjectDefinition packageNames ]
-								ifNotNil: [ visitor packageNames ].
+								ifNotNil: [ projectDef packageNames ].
 							(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ])
 								addAll: packageNames ] ] ].
 	aProjectModification packagesModification acceptVisitor: self

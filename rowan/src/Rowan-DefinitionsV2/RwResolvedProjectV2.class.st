@@ -85,7 +85,7 @@ RwResolvedProjectV2 >> _basicProduce [
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
-					self updateLoadSpecWithRepositoryRoot: self _loadSpecification.
+					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
 					^ true ] ].
 	^ false
 ]
@@ -248,7 +248,7 @@ RwResolvedProjectV2 >> addLoadComponentNamed: aComponentName comment: aString [
 	"add a new instance of RwLoadComponent to the project components and add the componentName
 		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
-	self _loadSpecification addComponentNamed: aComponentName.
+	self loadSpecification addComponentNamed: aComponentName.
 	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
 		ifTrue: [ ^ self _projectComponents addLoadComponentNamed: aComponentName comment: aString ]
 		ifFalse: [ 
@@ -614,12 +614,12 @@ RwResolvedProjectV2 >> checkout: aCommittish [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
-	^ self _loadSpecification comment
+	^ self loadSpecification comment
 ]
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment: aString [
-	self _loadSpecification comment: aString
+	self loadSpecification comment: aString
 ]
 
 { #category : 'querying' }
@@ -717,12 +717,12 @@ RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl [
-	^ self _loadSpecification diskUrl
+	^ self loadSpecification diskUrl
 ]
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> diskUrl: anUrlString [
-	self _loadSpecification diskUrl: anUrlString
+	self loadSpecification diskUrl: anUrlString
 ]
 
 { #category : 'actions' }
@@ -837,17 +837,17 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
 	projectRepository := self _projectRepository
 		gitRepositoryRoot: repositoryRootPathString
-		revision: self _loadSpecification revision
+		revision: self loadSpecification revision
 ]
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> gitUrl [
-	^ self _loadSpecification gitUrl
+	^ self loadSpecification gitUrl
 ]
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> gitUrl: anUrlString [
-	self _loadSpecification gitUrl: anUrlString
+	self loadSpecification gitUrl: anUrlString
 ]
 
 { #category : 'initialization' }
@@ -1053,7 +1053,7 @@ RwResolvedProjectV2 >> produceRequiredLoadSpecs [
 	| res |
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet ].
-	(res := RwLoadSpecSet new) addLoadSpec: self _loadSpecification copy.
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
 	self halt.	"test coverage"
 	^ res
 ]
@@ -1083,7 +1083,7 @@ RwResolvedProjectV2 >> projectNames [
 
 { #category : 'project definition' }
 RwResolvedProjectV2 >> projectUrl [
-	^ self _loadSpecification projectUrl
+	^ self loadSpecification projectUrl
 ]
 
 { #category : 'accessing' }
@@ -1467,12 +1467,12 @@ RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformCo
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> revision [
-	^ self _loadSpecification revision
+	^ self loadSpecification revision
 ]
 
 { #category : 'load specification' }
 RwResolvedProjectV2 >> revision: aRevisionString [
-	^ self _loadSpecification revision: aRevisionString
+	^ self loadSpecification revision: aRevisionString
 ]
 
 { #category : 'components' }

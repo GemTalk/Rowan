@@ -2,34 +2,34 @@ Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
-	^ self _loadSpecification gemstoneDefaultSymbolDictName
+	^ self loadSpecification gemstoneDefaultSymbolDictName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
-	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
+	^ self loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
-	self _loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+	self loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
-	self _loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
-	self _loadSpecification
+	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId
 		to: aBool
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
-	self _loadSpecification
+	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 ]
 
@@ -91,13 +91,13 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUse
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
 
-	^self _loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
+	^self loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
 	| default |
-	default := self _loadSpecification
+	default := self loadSpecification
 		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
 			Rowan image currentUserId.
 	(self componentForPackageNamed: packageName)

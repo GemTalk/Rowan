@@ -17,14 +17,7 @@ RwAbstractResolvedObjectV2 class >> new [
 
 { #category : 'private' }
 RwAbstractResolvedObjectV2 >> _gemstoneAllUsersName [
-	^ self _loadSpecification _gemstoneAllUsersName
-]
-
-{ #category : 'private' }
-RwAbstractResolvedObjectV2 >> _loadSpecification [
-	"load specification should not be accessed directly -- Rowan private state"
-
-	^ loadSpecification
+	^ self loadSpecification _gemstoneAllUsersName
 ]
 
 { #category : 'private' }
@@ -91,7 +84,7 @@ RwAbstractResolvedObjectV2 >> _validate: conditionalAttributes [
 		responsiblity for them to have valid data"
 
 	self _projectSpecification _validate.
-	self _loadSpecification _validate.
+	self loadSpecification _validate.
 	^ true
 ]
 
@@ -109,12 +102,12 @@ RwAbstractResolvedObjectV2 >> comment: aString [
 RwAbstractResolvedObjectV2 >> componentNames [
 	"list of component names from the load specification used to load the project "
 
-	^ self _loadSpecification componentNames
+	^ self loadSpecification componentNames
 ]
 
 { #category : 'project specification' }
 RwAbstractResolvedObjectV2 >> componentNames: anArray [
-	self _loadSpecification componentNames: anArray
+	self loadSpecification componentNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -131,12 +124,12 @@ RwAbstractResolvedObjectV2 >> conditionalAttributes [
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> customConditionalAttributes [
 
-	^ self _loadSpecification customConditionalAttributes
+	^ self loadSpecification customConditionalAttributes
 ]
 
 { #category : 'exporting' }
 RwAbstractResolvedObjectV2 >> exportLoadSpecification [
-	self _loadSpecification exportTo: self specsRoot
+	self loadSpecification exportTo: self specsRoot
 ]
 
 { #category : 'exporting' }
@@ -156,7 +149,7 @@ RwAbstractResolvedObjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName
 
 { #category : 'project specification' }
 RwAbstractResolvedObjectV2 >> groupNames: anArray [
-	self _loadSpecification groupNames: anArray
+	self loadSpecification groupNames: anArray
 ]
 
 { #category : 'initialization' }
@@ -169,7 +162,12 @@ RwAbstractResolvedObjectV2 >> initialize [
 
 { #category : 'testing' }
 RwAbstractResolvedObjectV2 >> isStrict [
-	^ self _loadSpecification isStrict
+	^ self loadSpecification isStrict
+]
+
+{ #category : 'private' }
+RwAbstractResolvedObjectV2 >> loadSpecification [
+	^ loadSpecification
 ]
 
 { #category : 'accessing' }
@@ -193,12 +191,12 @@ RwAbstractResolvedObjectV2 >> postCopy [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectAlias [
-	^ self _loadSpecification projectAlias ifNil: [ self projectName ]
+	^ self loadSpecification projectAlias ifNil: [ self projectName ]
 ]
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectAlias: aString [
-	self _loadSpecification projectAlias: aString
+	self loadSpecification projectAlias: aString
 ]
 
 { #category : 'accessing' }
@@ -206,13 +204,13 @@ RwAbstractResolvedObjectV2 >> projectName [
 	projectSpecification
 		ifNil: [ 
 			loadSpecification ifNil: [ ^ self _projectDefinition projectName ].
-			^ self _loadSpecification projectName ].
+			^ self loadSpecification projectName ].
 	^ self _projectSpecification projectName
 ]
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectName: aString [
-	self _loadSpecification projectName: aString.
+	self loadSpecification projectName: aString.
 	self _projectSpecification projectName: aString
 ]
 
@@ -226,14 +224,14 @@ RwAbstractResolvedObjectV2 >> projectRoots [
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectsHome [
-	^ self _loadSpecification projectsHome
+	^ self loadSpecification projectsHome
 ]
 
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> projectsHome: aProjectHomeReferenceOrString [
 	"keep load spec and project repository in sync with respect to projects home"
 
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString.
+	self loadSpecification projectsHome: aProjectHomeReferenceOrString.
 	projectRepository
 		ifNotNil: [ self _projectRepository projectsHome: aProjectHomeReferenceOrString ]
 ]
@@ -242,7 +240,7 @@ RwAbstractResolvedObjectV2 >> projectsHome: aProjectHomeReferenceOrString [
 RwAbstractResolvedObjectV2 >> projectSpecFile [
 	"relative path to the project specification file - default: rowan/project.ston"
 
-	^ self _loadSpecification projectSpecFile
+	^ self loadSpecification projectSpecFile
 ]
 
 { #category : 'accessing' }
@@ -253,7 +251,7 @@ RwAbstractResolvedObjectV2 >> projectSpecFile: relativePathString [
 	path := Path from: relativePathString .
 	self _projectSpecification projectSpecPath: path parent pathString.
 	self _projectSpecification specName: path base.
-	self _loadSpecification projectSpecFile: relativePathString
+	self loadSpecification projectSpecFile: relativePathString
 ]
 
 { #category : 'accessing' }
@@ -261,7 +259,7 @@ RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
 	"full path to the project specification file - default rowan/project.ston"
 
 	self _projectSpecification projectSpecPath: aString.
-	self _loadSpecification
+	self loadSpecification
 		projectSpecFile:
 			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
 ]

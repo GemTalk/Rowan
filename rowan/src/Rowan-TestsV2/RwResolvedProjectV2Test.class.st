@@ -45,7 +45,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 		repoType: #none;
 		yourself.
 	projectSpecification := project _projectSpecification.
-	loadSpecification := project _loadSpecification.
+	loadSpecification := project loadSpecification.
 	self assert: project _validate.
 
 	project resolve.
@@ -54,7 +54,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
-	resolvedLoadSpecification := project _loadSpecification.
+	resolvedLoadSpecification := project loadSpecification.
 	self assert: project packageNames isEmpty.
 	self assert: resolvedProjectSpecification = projectSpecification.
 	self assert: resolvedProjectSpecification == projectSpecification.

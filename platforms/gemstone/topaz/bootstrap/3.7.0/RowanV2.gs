@@ -6461,24 +6461,6 @@ removeallclassmethods RwAbstractResolvedProjectV2
 
 doit
 (RwAbstractResolvedProjectV2
-	subclass: 'RwResolvedLoadSpecificationV2'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-DefinitionsV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwResolvedLoadSpecificationV2
-removeallclassmethods RwResolvedLoadSpecificationV2
-
-doit
-(RwAbstractResolvedProjectV2
 	subclass: 'RwResolvedProjectSpecificationV2'
 	instVarNames: #()
 	classVars: #()
@@ -48964,7 +48946,13 @@ category: 'accessing'
 method: RwAbstractProject
 loadSpec
 
-	^ self _loadSpecification
+	^ self loadSpecification
+%
+
+category: 'private'
+method: RwAbstractProject
+loadSpecification
+	^ self _concreteProject loadSpecification
 %
 
 category: 'accessing'
@@ -49050,12 +49038,6 @@ _concreteProject
 	self subclassResponsibility: #'_concreteProject'
 %
 
-category: 'private'
-method: RwAbstractProject
-_loadSpecification
-	^ self _concreteProject _loadSpecification
-%
-
 ! Class implementation for 'RwAbstractUnloadedProject'
 
 !		Instance methods for 'RwAbstractUnloadedProject'
@@ -49069,7 +49051,7 @@ comment: aString
 category: 'accessing'
 method: RwAbstractUnloadedProject
 diskUrl: aString
-	self _loadSpecification diskUrl: aString
+	self loadSpecification diskUrl: aString
 %
 
 category: 'accessing'
@@ -49081,7 +49063,7 @@ gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 category: 'accessing'
 method: RwAbstractUnloadedProject
 gitUrl: aString
-	self _loadSpecification gitUrl: aString
+	self loadSpecification gitUrl: aString
 %
 
 category: 'accessing'
@@ -49105,25 +49087,25 @@ packages: aPackageDictionary
 category: 'accessing'
 method: RwAbstractUnloadedProject
 repositoryResolutionPolicy
-	^ self _loadSpecification repositoryResolutionPolicy
+	^ self loadSpecification repositoryResolutionPolicy
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 repositoryResolutionPolicy: aSymbolOrNil
-	self _loadSpecification repositoryResolutionPolicy: aSymbolOrNil
+	self loadSpecification repositoryResolutionPolicy: aSymbolOrNil
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 specComponentNames: anArray
-	self _loadSpecification componentNames: anArray
+	self loadSpecification componentNames: anArray
 %
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
 specName
-	^ self _loadSpecification specName
+	^ self loadSpecification specName
 %
 
 category: 'testing'
@@ -49529,7 +49511,7 @@ componentsPath: aString
 category: 'accessing'
 method: RwDefinedProject
 customConditionalAttributes: anArray
-	self _loadSpecification customConditionalAttributes: anArray
+	self loadSpecification customConditionalAttributes: anArray
 %
 
 category: 'transitions'
@@ -49765,7 +49747,7 @@ resolveWithParentProject: aResolvedRwProject
 
 	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
-				(self _loadSpecification
+				(self loadSpecification
 						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
 		yourself
 %
@@ -49773,13 +49755,13 @@ resolveWithParentProject: aResolvedRwProject
 category: 'accessing'
 method: RwDefinedProject
 revision: aString
-	self _loadSpecification revision: aString
+	self loadSpecification revision: aString
 %
 
 category: 'accessing'
 method: RwDefinedProject
 specName: aString
-	self _loadSpecification specName: aString
+	self loadSpecification specName: aString
 %
 
 category: 'accessing'
@@ -50520,7 +50502,7 @@ loadFromSpec
 		The project is loaded as defined on disk and the in-memory project definition is ignored.
 	"
 
-	^ self _concreteProject _loadSpecification resolve load
+	^ self _concreteProject loadSpecification resolve load
 %
 
 category: 'transitions'
@@ -50711,7 +50693,7 @@ currentBranchName
 category: 'accessing'
 method: RwProject
 customConditionalAttributes: anArray
-	self _loadSpecification customConditionalAttributes: anArray
+	self loadSpecification customConditionalAttributes: anArray
 %
 
 category: 'transitions'
@@ -50894,6 +50876,12 @@ loadProjectSet
 	^ self _loadedProject loadProjectSet
 %
 
+category: 'private'
+method: RwProject
+loadSpecification
+	^ self _loadedProject loadSpecification
+%
+
 category: 'components'
 method: RwProject
 packageGroupNamed: componentName
@@ -50981,7 +50969,7 @@ requiredLoadSpecs
 	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
 		WILL be produced (i.e. cloned to the local disk)"
 
-	^ self _loadSpecification requiredLoadSpecs
+	^ self loadSpecification requiredLoadSpecs
 %
 
 category: 'actions'
@@ -51075,12 +51063,6 @@ _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock
 		loadedProjectNamed: self name
 		ifPresent: presentBlock
 		ifAbsent: absentBlock
-%
-
-category: 'private'
-method: RwProject
-_loadSpecification
-	^ self _loadedProject loadSpecification
 %
 
 category: 'accessing'
@@ -59960,7 +59942,7 @@ processProject: aProjectModification
 			readTool := Rowan projectTools readV2.
 			self topazFilenameComponentMap
 				keysAndValuesDo: [ :filename :componentAndPlatformConditionalAttributesMap | 
-					| componentNames customConditionalAttributes platformConditionalAttributes visitor packageNames componentAndPlatformConditionalAttributes |
+					| componentNames customConditionalAttributes platformConditionalAttributes projectDef packageNames componentAndPlatformConditionalAttributes |
 					componentAndPlatformConditionalAttributes := componentAndPlatformConditionalAttributesMap
 						at: currentProjectDefinition name
 						ifAbsent: [ {{}} ].
@@ -59977,13 +59959,23 @@ processProject: aProjectModification
 								ifFalse: [ 
 									currentProjectDefinition componentsRoot exists
 										ifTrue: [ 
-											"read the project from disk, if it is present on disk"
-											visitor := readTool
-												readProjectForProducedProject: currentProjectDefinition
-												withComponentNames: componentNames
-												customConditionalAttributes: customConditionalAttributes
-												platformConditionalAttributes: platformConditionalAttributes ] ].
-							packageNames := visitor
+											true
+												ifTrue: [ 
+													| loadSpec |
+													"read the project from disk, if it is present on disk"
+													loadSpec := currentProjectDefinition loadSpecification.
+													loadSpec
+														componentNames: componentNames;
+														customConditionalAttributes: customConditionalAttributes.
+													projectDef := loadSpec read: platformConditionalAttributes ]
+												ifFalse: [ 
+													"bye bye"
+													projectDef := readTool
+														readProjectForProducedProject: currentProjectDefinition
+														withComponentNames: componentNames
+														customConditionalAttributes: customConditionalAttributes
+														platformConditionalAttributes: platformConditionalAttributes ] ] ].
+							packageNames := projectDef
 								ifNil: [ 
 									self topazFilenameComponentMap size > 1
 										ifTrue: [ 
@@ -59993,7 +59985,7 @@ processProject: aProjectModification
 														, currentProjectDefinition name printString
 														, '. Multiple output files likely to have the same contents.' ].
 									currentProjectDefinition packageNames ]
-								ifNotNil: [ visitor packageNames ].
+								ifNotNil: [ projectDef packageNames ].
 							(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ])
 								addAll: packageNames ] ] ].
 	aProjectModification packagesModification acceptVisitor: self
@@ -63044,13 +63036,13 @@ method: RwAbstractResolvedObjectV2
 componentNames
 	"list of component names from the load specification used to load the project "
 
-	^ self _loadSpecification componentNames
+	^ self loadSpecification componentNames
 %
 
 category: 'project specification'
 method: RwAbstractResolvedObjectV2
 componentNames: anArray
-	self _loadSpecification componentNames: anArray
+	self loadSpecification componentNames: anArray
 %
 
 category: 'accessing'
@@ -63070,13 +63062,13 @@ category: 'accessing'
 method: RwAbstractResolvedObjectV2
 customConditionalAttributes
 
-	^ self _loadSpecification customConditionalAttributes
+	^ self loadSpecification customConditionalAttributes
 %
 
 category: 'exporting'
 method: RwAbstractResolvedObjectV2
 exportLoadSpecification
-	self _loadSpecification exportTo: self specsRoot
+	self loadSpecification exportTo: self specsRoot
 %
 
 category: 'exporting'
@@ -63100,7 +63092,7 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 category: 'project specification'
 method: RwAbstractResolvedObjectV2
 groupNames: anArray
-	self _loadSpecification groupNames: anArray
+	self loadSpecification groupNames: anArray
 %
 
 category: 'initialization'
@@ -63115,7 +63107,13 @@ initialize
 category: 'testing'
 method: RwAbstractResolvedObjectV2
 isStrict
-	^ self _loadSpecification isStrict
+	^ self loadSpecification isStrict
+%
+
+category: 'private'
+method: RwAbstractResolvedObjectV2
+loadSpecification
+	^ loadSpecification
 %
 
 category: 'accessing'
@@ -63143,13 +63141,13 @@ postCopy
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectAlias
-	^ self _loadSpecification projectAlias ifNil: [ self projectName ]
+	^ self loadSpecification projectAlias ifNil: [ self projectName ]
 %
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectAlias: aString
-	self _loadSpecification projectAlias: aString
+	self loadSpecification projectAlias: aString
 %
 
 category: 'accessing'
@@ -63158,14 +63156,14 @@ projectName
 	projectSpecification
 		ifNil: [ 
 			loadSpecification ifNil: [ ^ self _projectDefinition projectName ].
-			^ self _loadSpecification projectName ].
+			^ self loadSpecification projectName ].
 	^ self _projectSpecification projectName
 %
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectName: aString
-	self _loadSpecification projectName: aString.
+	self loadSpecification projectName: aString.
 	self _projectSpecification projectName: aString
 %
 
@@ -63181,7 +63179,7 @@ projectRoots
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
 projectsHome
-	^ self _loadSpecification projectsHome
+	^ self loadSpecification projectsHome
 %
 
 category: 'accessing'
@@ -63189,7 +63187,7 @@ method: RwAbstractResolvedObjectV2
 projectsHome: aProjectHomeReferenceOrString
 	"keep load spec and project repository in sync with respect to projects home"
 
-	self _loadSpecification projectsHome: aProjectHomeReferenceOrString.
+	self loadSpecification projectsHome: aProjectHomeReferenceOrString.
 	projectRepository
 		ifNotNil: [ self _projectRepository projectsHome: aProjectHomeReferenceOrString ]
 %
@@ -63199,7 +63197,7 @@ method: RwAbstractResolvedObjectV2
 projectSpecFile
 	"relative path to the project specification file - default: rowan/project.ston"
 
-	^ self _loadSpecification projectSpecFile
+	^ self loadSpecification projectSpecFile
 %
 
 category: 'accessing'
@@ -63211,7 +63209,7 @@ projectSpecFile: relativePathString
 	path := Path from: relativePathString .
 	self _projectSpecification projectSpecPath: path parent pathString.
 	self _projectSpecification specName: path base.
-	self _loadSpecification projectSpecFile: relativePathString
+	self loadSpecification projectSpecFile: relativePathString
 %
 
 category: 'accessing'
@@ -63220,7 +63218,7 @@ projectSpecPath: aString
 	"full path to the project specification file - default rowan/project.ston"
 
 	self _projectSpecification projectSpecPath: aString.
-	self _loadSpecification
+	self loadSpecification
 		projectSpecFile:
 			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
 %
@@ -63265,15 +63263,7 @@ specsRoot
 category: 'private'
 method: RwAbstractResolvedObjectV2
 _gemstoneAllUsersName
-	^ self _loadSpecification _gemstoneAllUsersName
-%
-
-category: 'private'
-method: RwAbstractResolvedObjectV2
-_loadSpecification
-	"load specification should not be accessed directly -- Rowan private state"
-
-	^ loadSpecification
+	^ self loadSpecification _gemstoneAllUsersName
 %
 
 category: 'private'
@@ -63347,7 +63337,7 @@ _validate: conditionalAttributes
 		responsiblity for them to have valid data"
 
 	self _projectSpecification _validate.
-	self _loadSpecification _validate.
+	self loadSpecification _validate.
 	^ true
 %
 
@@ -63360,7 +63350,7 @@ method: RwAbstractResolvedProjectV2
 addComponentNames: anArray
 	"add to the existing component names"
 
-	^ self _loadSpecification addComponentNames: anArray
+	^ self loadSpecification addComponentNames: anArray
 %
 
 category: 'accessing'
@@ -63368,7 +63358,7 @@ method: RwAbstractResolvedProjectV2
 addCustomConditionalAttributes: anArray
 	"add to the existing custom conditional attributes"
 
-	^ self _loadSpecification addCustomConditionalAttributes: anArray
+	^ self loadSpecification addCustomConditionalAttributes: anArray
 %
 
 category: 'testing'
@@ -63397,19 +63387,7 @@ method: RwAbstractResolvedProjectV2
 customConditionalAttributes: anArray
 	"set the custom conditional attributes"
 
-	^ self _loadSpecification customConditionalAttributes: anArray
-%
-
-category: 'accessing'
-method: RwAbstractResolvedProjectV2
-loadSpecification
-	^ RwResolvedLoadSpecificationV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectComponents: projectComponents;
-		yourself
+	^ self loadSpecification customConditionalAttributes: anArray
 %
 
 category: 'accessing'
@@ -63486,7 +63464,7 @@ method: RwAbstractResolvedProjectV2
 removeComponentNames: anArray
 	"remove from the existing component names"
 
-	^ self _loadSpecification removeComponentNames: anArray
+	^ self loadSpecification removeComponentNames: anArray
 %
 
 category: 'accessing'
@@ -63494,7 +63472,7 @@ method: RwAbstractResolvedProjectV2
 removeCustomConditionalAttributes: anArray
 	"remove from the existing custom conditional attributes"
 
-	^ self _loadSpecification removeCustomConditionalAttributes: anArray
+	^ self loadSpecification removeCustomConditionalAttributes: anArray
 %
 
 category: 'accessing'
@@ -63558,22 +63536,22 @@ _projectRepository
 						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
-						revision: self _loadSpecification revision ]
+						revision: self loadSpecification revision ]
 				ifNil: [ 
-					self _loadSpecification svnUrl
+					self loadSpecification svnUrl
 						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
 						ifNil: [ 
-							self _loadSpecification mercurialUrl
+							self loadSpecification mercurialUrl
 								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 								ifNil: [ 
-									self _loadSpecification diskUrl
+									self loadSpecification diskUrl
 										ifNotNil: [ :urlString | 
 											RwDiskRepositoryDefinitionV2
 												newNamed: self projectAlias
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											self _loadSpecification readonlyDiskUrl
+											self loadSpecification readonlyDiskUrl
 												ifNotNil: [ :urlString | 
 													RwReadOnlyDiskRepositoryDefinitionV2
 														newNamed: self projectAlias
@@ -63590,26 +63568,26 @@ _projectRepository
 														of being created by resolving a load specification If we were
 														created from from scratch, the project specification is 
 														initialized!"
-															self _loadSpecification repositoryRoot exists
+															self loadSpecification repositoryRoot exists
 																ifTrue: [ 
 																	| gitHome gitTool repositoryRootPath |
 																	"since the repository root does exist, we will attach as a 
 																disk project or git project, depending upon whether or git is present
 																and the git home is equal to the repositoryRoot"
 																	gitTool := Rowan projectTools git.
-																	repositoryRootPath := self _loadSpecification repositoryRoot
+																	repositoryRootPath := self loadSpecification repositoryRoot
 																		pathString.
 																	^ projectRepository := ((gitTool
 																		gitPresentIn: repositoryRootPath)
 																		and: [ 
 																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																				asFileReference = self _loadSpecification repositoryRoot ])
+																				asFileReference = self loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
 																				projectsHome: self projectsHome
 																				repositoryUrl: ''
-																				revision: self _loadSpecification revision ]
+																				revision: self loadSpecification revision ]
 																		ifFalse: [ 
 																			RwDiskRepositoryDefinitionV2
 																				newNamed: self projectAlias
@@ -63628,7 +63606,7 @@ _projectRepository
 																		newNamed: self projectAlias
 																		projectsHome: self projectsHome
 																		repositoryUrl: ''
-																		revision: self _loadSpecification revision ]
+																		revision: self loadSpecification revision ]
 																ifFalse: [ 
 																	self _projectSpecification repoType == #'disk'
 																		ifTrue: [ 
@@ -63658,80 +63636,6 @@ _validate: conditionalAttributes
 		componentPackageNames:
 			(self _projectComponents _validate: conditionalAttributes).
 	^ true
-%
-
-! Class implementation for 'RwResolvedLoadSpecificationV2'
-
-!		Instance methods for 'RwResolvedLoadSpecificationV2'
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-comment
-	^ self _loadSpecification comment
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-comment: aString
-	self _loadSpecification comment: aString
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-componentNames
-	"list of components to be loaded"
-
-	^ self _loadSpecification componentNames
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-componentNames: anArray
-	"list of components to be loaded"
-
-	self _loadSpecification componentNames: anArray
-%
-
-category: 'actions'
-method: RwResolvedLoadSpecificationV2
-export
-	self specsRoot ensureCreateDirectory.
-	self exportLoadSpecification
-%
-
-category: 'printing'
-method: RwResolvedLoadSpecificationV2
-printOn: aStream
-	super printOn: aStream.
-	loadSpecification
-		ifNotNil: [ 
-			aStream
-				nextPutAll: ' for ';
-				nextPutAll: self _loadSpecification specName ]
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-revision
-	^ self _loadSpecification revision
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-revision: aString
-	self _loadSpecification revision: aString
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-specName
-	^ self _loadSpecification specName
-%
-
-category: 'accessing'
-method: RwResolvedLoadSpecificationV2
-specName: aString
-	self _loadSpecification specName: aString
 %
 
 ! Class implementation for 'RwResolvedProjectSpecificationV2'
@@ -63987,7 +63891,7 @@ addLoadComponentNamed: aComponentName comment: aString
 	"add a new instance of RwLoadComponent to the project components and add the componentName
 		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
-	self _loadSpecification addComponentNamed: aComponentName.
+	self loadSpecification addComponentNamed: aComponentName.
 	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
 		ifTrue: [ ^ self _projectComponents addLoadComponentNamed: aComponentName comment: aString ]
 		ifFalse: [ 
@@ -64378,13 +64282,13 @@ checkout: aCommittish
 category: 'project definition'
 method: RwResolvedProjectV2
 comment
-	^ self _loadSpecification comment
+	^ self loadSpecification comment
 %
 
 category: 'project definition'
 method: RwResolvedProjectV2
 comment: aString
-	self _loadSpecification comment: aString
+	self loadSpecification comment: aString
 %
 
 category: 'querying'
@@ -64498,13 +64402,13 @@ diskRepositoryRoot: repositoryRootPathString
 category: 'load specification'
 method: RwResolvedProjectV2
 diskUrl
-	^ self _loadSpecification diskUrl
+	^ self loadSpecification diskUrl
 %
 
 category: 'load specification'
 method: RwResolvedProjectV2
 diskUrl: anUrlString
-	self _loadSpecification diskUrl: anUrlString
+	self loadSpecification diskUrl: anUrlString
 %
 
 category: 'actions'
@@ -64627,19 +64531,19 @@ method: RwResolvedProjectV2
 gitRepositoryRoot: repositoryRootPathString
 	projectRepository := self _projectRepository
 		gitRepositoryRoot: repositoryRootPathString
-		revision: self _loadSpecification revision
+		revision: self loadSpecification revision
 %
 
 category: 'load specification'
 method: RwResolvedProjectV2
 gitUrl
-	^ self _loadSpecification gitUrl
+	^ self loadSpecification gitUrl
 %
 
 category: 'load specification'
 method: RwResolvedProjectV2
 gitUrl: anUrlString
-	self _loadSpecification gitUrl: anUrlString
+	self loadSpecification gitUrl: anUrlString
 %
 
 category: 'initialization'
@@ -64871,7 +64775,7 @@ produceRequiredLoadSpecs
 	| res |
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet ].
-	(res := RwLoadSpecSet new) addLoadSpec: self _loadSpecification copy.
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
 	self halt.	"test coverage"
 	^ res
 %
@@ -64906,7 +64810,7 @@ projectNames
 category: 'project definition'
 method: RwResolvedProjectV2
 projectUrl
-	^ self _loadSpecification projectUrl
+	^ self loadSpecification projectUrl
 %
 
 category: 'accessing'
@@ -65324,13 +65228,13 @@ resolveProjectSet: customConditionalAttributes platformConditionalAttributes: pl
 category: 'load specification'
 method: RwResolvedProjectV2
 revision
-	^ self _loadSpecification revision
+	^ self loadSpecification revision
 %
 
 category: 'load specification'
 method: RwResolvedProjectV2
 revision: aRevisionString
-	^ self _loadSpecification revision: aRevisionString
+	^ self loadSpecification revision: aRevisionString
 %
 
 category: 'components'
@@ -65397,7 +65301,7 @@ _basicProduce
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
 				ifTrue: [ 
-					self updateLoadSpecWithRepositoryRoot: self _loadSpecification.
+					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
 					^ true ] ].
 	^ false
 %
@@ -69841,7 +69745,7 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			theLoadedProject handle
 				_projectComponents: projectDef _projectComponents copy.
 			theLoadedProject handle
-				_loadSpecification: projectDef _loadSpecification copy.
+				_loadSpecification: projectDef loadSpecification copy.
 			theLoadedProject handle
 				_projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle
@@ -82884,7 +82788,7 @@ category: 'accessing'
 method: RwLoadedProject
 loadSpecification
 
-	^ handle
+	self subclassResponsibility: #loadSpecification
 %
 
 category: 'private'
@@ -83088,7 +82992,7 @@ asDefinition
 
 	| resolvedProject |
 	resolvedProject := (RwResolvedProjectV2
-		basicLoadSpecification: handle _loadSpecification copy)
+		basicLoadSpecification: handle loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
 	resolvedProject _projectRepository: handle _projectRepository copy.
@@ -83270,7 +83174,7 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 loadSpecification
 
-	^ handle _loadSpecification
+	^ handle loadSpecification
 %
 
 category: 'private'
@@ -86217,7 +86121,7 @@ readLoadSpecSetForProducedProject: producedProject
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
 			theproducedProject := pp.
-			theLoadSpec := theproducedProject _loadSpecification copy.
+			theLoadSpec := theproducedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -86279,7 +86183,7 @@ readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: component
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
 			theResolvedProject := ndf at: 1.
-			theLoadSpec := theResolvedProject _loadSpecification copy.
+			theLoadSpec := theResolvedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -86374,7 +86278,7 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
 			theproducedProject := pp.
-			theLoadSpec := theproducedProject _loadSpecification copy.
+			theLoadSpec := theproducedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -86434,7 +86338,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 					(theLoadedProject notNil and: [ useLoadedProjects ])
 						ifTrue: [ 
 							"project is already present in image ... so use it"
-							theLoadSpec := theLoadedProject _loadSpecification.
+							theLoadSpec := theLoadedProject loadSpecification.
 							theResolvedProject := theLoadedProject asDefinition resolve.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
@@ -86457,8 +86361,8 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 									(theResolvedProject customConditionalAttributes)} ]
 						ifNotNil: [ :processedProject | 
 							"recursive required project structure"
-							(processedProject _loadSpecification
-								loadConflictsWith: theResolvedProject _loadSpecification)
+							(processedProject loadSpecification
+								loadConflictsWith: theResolvedProject loadSpecification)
 								ifTrue: [ 
 									"the required load spec is incompatible with the incoming load spec ... this is an error"
 									self
@@ -97505,7 +97409,7 @@ addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDictionaryName toC
 						error:
 							'The component ' , componentName printString , ' does not exist in the project'
 								, self name printString ].
-			self _loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
+			self loadSpecification gemstoneDefaultSymbolDictName = symbolDictionaryName
 				ifTrue: [ projectDefinition addPackageNamed: packageName toComponentNamed: componentName ]
 				ifFalse: [ 
 					projectDefinition
@@ -97525,7 +97429,7 @@ method: RwProject
 addNewPackageNamed: packageName toComponentNamed: componentName
 	^ self
 		addNewPackageNamed: packageName
-		inSybolDictionaryNamed: self _loadSpecification gemstoneDefaultSymbolDictName
+		inSybolDictionaryNamed: self loadSpecification gemstoneDefaultSymbolDictName
 		toComponentNamed: componentName
 %
 
@@ -98060,31 +97964,31 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneDefaultSymbolDictName
-	^ self _loadSpecification gemstoneDefaultSymbolDictName
+	^ self loadSpecification gemstoneDefaultSymbolDictName
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneDefaultSymbolDictNameForUser: userId
-	^ self _loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
+	^ self loadSpecification gemstoneDefaultSymbolDictNameForUser: userId
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-	self _loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+	self loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
-	self _loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+	self loadSpecification gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
-	self _loadSpecification
+	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId
 		to: aBool
 %
@@ -98092,7 +97996,7 @@ gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
-	self _loadSpecification
+	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 %
 
@@ -98162,14 +98066,14 @@ category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 methodEnvForPackageNamed: packageName
 
-	^self _loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
+	^self loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 %
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 useSessionMethodsForExtensionsForPackageNamed: packageName
 	| default |
-	default := self _loadSpecification
+	default := self loadSpecification
 		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
 			Rowan image currentUserId.
 	(self componentForPackageNamed: packageName)

@@ -29,11 +29,6 @@ RwProject >> _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock [
 		ifAbsent: absentBlock
 ]
 
-{ #category : 'private' }
-RwProject >> _loadSpecification [
-	^ self _loadedProject loadSpecification
-]
-
 { #category : 'accessing' }
 RwProject >> _projectDefinitionCustomConditionalAttributes [
 	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
@@ -228,7 +223,7 @@ RwProject >> currentBranchName [
 
 { #category : 'accessing' }
 RwProject >> customConditionalAttributes: anArray [
-	self _loadSpecification customConditionalAttributes: anArray
+	self loadSpecification customConditionalAttributes: anArray
 ]
 
 { #category : 'transitions' }
@@ -390,6 +385,11 @@ RwProject >> loadProjectSet [
 	^ self _loadedProject loadProjectSet
 ]
 
+{ #category : 'private' }
+RwProject >> loadSpecification [
+	^ self _loadedProject loadSpecification
+]
+
 { #category : 'components' }
 RwProject >> packageGroupNamed: componentName [
 	^ self _loadedComponents packageGroupNamed: componentName
@@ -465,7 +465,7 @@ RwProject >> requiredLoadSpecs [
 	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
 		WILL be produced (i.e. cloned to the local disk)"
 
-	^ self _loadSpecification requiredLoadSpecs
+	^ self loadSpecification requiredLoadSpecs
 ]
 
 { #category : 'actions' }

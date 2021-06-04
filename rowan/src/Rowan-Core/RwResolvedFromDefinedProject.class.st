@@ -30,7 +30,7 @@ RwResolvedFromDefinedProject >> loadFromSpec [
 		The project is loaded as defined on disk and the in-memory project definition is ignored.
 	"
 
-	^ self _concreteProject _loadSpecification resolve load
+	^ self _concreteProject loadSpecification resolve load
 ]
 
 { #category : 'transitions' }

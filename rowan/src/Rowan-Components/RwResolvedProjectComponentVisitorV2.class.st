@@ -122,7 +122,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: 
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
 			theproducedProject := pp.
-			theLoadSpec := theproducedProject _loadSpecification copy.
+			theLoadSpec := theproducedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -183,7 +183,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForResolvedProject: 
 			theVisitor := visitedArray at: 1.
 			ndf := visitedArray at: 2.
 			theResolvedProject := ndf at: 1.
-			theLoadSpec := theResolvedProject _loadSpecification copy.
+			theLoadSpec := theResolvedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -275,7 +275,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
 			theproducedProject := pp.
-			theLoadSpec := theproducedProject _loadSpecification copy.
+			theLoadSpec := theproducedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -333,7 +333,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 					(theLoadedProject notNil and: [ useLoadedProjects ])
 						ifTrue: [ 
 							"project is already present in image ... so use it"
-							theLoadSpec := theLoadedProject _loadSpecification.
+							theLoadSpec := theLoadedProject loadSpecification.
 							theResolvedProject := theLoadedProject asDefinition resolve.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
@@ -356,8 +356,8 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 									(theResolvedProject customConditionalAttributes)} ]
 						ifNotNil: [ :processedProject | 
 							"recursive required project structure"
-							(processedProject _loadSpecification
-								loadConflictsWith: theResolvedProject _loadSpecification)
+							(processedProject loadSpecification
+								loadConflictsWith: theResolvedProject loadSpecification)
 								ifTrue: [ 
 									"the required load spec is incompatible with the incoming load spec ... this is an error"
 									self

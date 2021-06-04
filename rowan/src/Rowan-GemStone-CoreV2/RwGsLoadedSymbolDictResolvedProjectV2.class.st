@@ -139,7 +139,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 
 	| resolvedProject |
 	resolvedProject := (RwResolvedProjectV2
-		basicLoadSpecification: handle _loadSpecification copy)
+		basicLoadSpecification: handle loadSpecification copy)
 		packages: self loadedPackageDefinitions;
 		yourself.
 	resolvedProject _projectRepository: handle _projectRepository copy.
@@ -300,7 +300,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> loadSpecification [
 
-	^ handle _loadSpecification
+	^ handle loadSpecification
 ]
 
 { #category : 'private' }

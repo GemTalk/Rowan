@@ -46,22 +46,22 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
-						revision: self _loadSpecification revision ]
+						revision: self loadSpecification revision ]
 				ifNil: [ 
-					self _loadSpecification svnUrl
+					self loadSpecification svnUrl
 						ifNotNil: [ :urlString | Error signal: 'Svn repositories not supported, yet' ]
 						ifNil: [ 
-							self _loadSpecification mercurialUrl
+							self loadSpecification mercurialUrl
 								ifNotNil: [ :urlString | Error signal: 'Mercurial repositories not supported, yet' ]
 								ifNil: [ 
-									self _loadSpecification diskUrl
+									self loadSpecification diskUrl
 										ifNotNil: [ :urlString | 
 											RwDiskRepositoryDefinitionV2
 												newNamed: self projectAlias
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											self _loadSpecification readonlyDiskUrl
+											self loadSpecification readonlyDiskUrl
 												ifNotNil: [ :urlString | 
 													RwReadOnlyDiskRepositoryDefinitionV2
 														newNamed: self projectAlias
@@ -78,26 +78,26 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 														of being created by resolving a load specification If we were
 														created from from scratch, the project specification is 
 														initialized!"
-															self _loadSpecification repositoryRoot exists
+															self loadSpecification repositoryRoot exists
 																ifTrue: [ 
 																	| gitHome gitTool repositoryRootPath |
 																	"since the repository root does exist, we will attach as a 
 																disk project or git project, depending upon whether or git is present
 																and the git home is equal to the repositoryRoot"
 																	gitTool := Rowan projectTools git.
-																	repositoryRootPath := self _loadSpecification repositoryRoot
+																	repositoryRootPath := self loadSpecification repositoryRoot
 																		pathString.
 																	^ projectRepository := ((gitTool
 																		gitPresentIn: repositoryRootPath)
 																		and: [ 
 																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
-																				asFileReference = self _loadSpecification repositoryRoot ])
+																				asFileReference = self loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
 																				projectsHome: self projectsHome
 																				repositoryUrl: ''
-																				revision: self _loadSpecification revision ]
+																				revision: self loadSpecification revision ]
 																		ifFalse: [ 
 																			RwDiskRepositoryDefinitionV2
 																				newNamed: self projectAlias
@@ -116,7 +116,7 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																		newNamed: self projectAlias
 																		projectsHome: self projectsHome
 																		repositoryUrl: ''
-																		revision: self _loadSpecification revision ]
+																		revision: self loadSpecification revision ]
 																ifFalse: [ 
 																	self _projectSpecification repoType == #'disk'
 																		ifTrue: [ 
@@ -151,14 +151,14 @@ RwAbstractResolvedProjectV2 >> _validate: conditionalAttributes [
 RwAbstractResolvedProjectV2 >> addComponentNames: anArray [
 	"add to the existing component names"
 
-	^ self _loadSpecification addComponentNames: anArray
+	^ self loadSpecification addComponentNames: anArray
 ]
 
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> addCustomConditionalAttributes: anArray [
 	"add to the existing custom conditional attributes"
 
-	^ self _loadSpecification addCustomConditionalAttributes: anArray
+	^ self loadSpecification addCustomConditionalAttributes: anArray
 ]
 
 { #category : 'testing' }
@@ -184,18 +184,7 @@ RwAbstractResolvedProjectV2 >> commit: message [
 RwAbstractResolvedProjectV2 >> customConditionalAttributes: anArray [
 	"set the custom conditional attributes"
 
-	^ self _loadSpecification customConditionalAttributes: anArray
-]
-
-{ #category : 'accessing' }
-RwAbstractResolvedProjectV2 >> loadSpecification [
-	^ RwResolvedLoadSpecificationV2 new
-		_projectDefinition: projectDefinition;
-		_projectRepository: projectRepository;
-		_loadSpecification: loadSpecification;
-		_projectSpecification: projectSpecification;
-		_projectComponents: projectComponents;
-		yourself
+	^ self loadSpecification customConditionalAttributes: anArray
 ]
 
 { #category : 'accessing' }
@@ -264,14 +253,14 @@ RwAbstractResolvedProjectV2 >> remote [
 RwAbstractResolvedProjectV2 >> removeComponentNames: anArray [
 	"remove from the existing component names"
 
-	^ self _loadSpecification removeComponentNames: anArray
+	^ self loadSpecification removeComponentNames: anArray
 ]
 
 { #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> removeCustomConditionalAttributes: anArray [
 	"remove from the existing custom conditional attributes"
 
-	^ self _loadSpecification removeCustomConditionalAttributes: anArray
+	^ self loadSpecification removeCustomConditionalAttributes: anArray
 ]
 
 { #category : 'accessing' }

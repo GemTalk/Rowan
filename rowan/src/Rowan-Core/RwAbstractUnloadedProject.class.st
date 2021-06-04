@@ -24,7 +24,7 @@ RwAbstractUnloadedProject >> comment: aString [
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> diskUrl: aString [
-	self _loadSpecification diskUrl: aString
+	self loadSpecification diskUrl: aString
 ]
 
 { #category : 'accessing' }
@@ -34,7 +34,7 @@ RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName 
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> gitUrl: aString [
-	self _loadSpecification gitUrl: aString
+	self loadSpecification gitUrl: aString
 ]
 
 { #category : 'accessing' }
@@ -54,22 +54,22 @@ RwAbstractUnloadedProject >> packages: aPackageDictionary [
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> repositoryResolutionPolicy [
-	^ self _loadSpecification repositoryResolutionPolicy
+	^ self loadSpecification repositoryResolutionPolicy
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> repositoryResolutionPolicy: aSymbolOrNil [
-	self _loadSpecification repositoryResolutionPolicy: aSymbolOrNil
+	self loadSpecification repositoryResolutionPolicy: aSymbolOrNil
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> specComponentNames: anArray [
-	self _loadSpecification componentNames: anArray
+	self loadSpecification componentNames: anArray
 ]
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> specName [
-	^ self _loadSpecification specName
+	^ self loadSpecification specName
 ]
 
 { #category : 'testing' }

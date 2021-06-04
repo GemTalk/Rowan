@@ -375,7 +375,7 @@ RwDefinedProject >> componentsPath: aString [
 
 { #category : 'accessing' }
 RwDefinedProject >> customConditionalAttributes: anArray [
-	self _loadSpecification customConditionalAttributes: anArray
+	self loadSpecification customConditionalAttributes: anArray
 ]
 
 { #category : 'transitions' }
@@ -578,19 +578,19 @@ RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
 
 	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
-				(self _loadSpecification
+				(self loadSpecification
 						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
 		yourself
 ]
 
 { #category : 'accessing' }
 RwDefinedProject >> revision: aString [
-	self _loadSpecification revision: aString
+	self loadSpecification revision: aString
 ]
 
 { #category : 'accessing' }
 RwDefinedProject >> specName: aString [
-	self _loadSpecification specName: aString
+	self loadSpecification specName: aString
 ]
 
 { #category : 'accessing' }

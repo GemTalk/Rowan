@@ -9,11 +9,6 @@ RwAbstractProject >> _concreteProject [
 	self subclassResponsibility: #'_concreteProject'
 ]
 
-{ #category : 'private' }
-RwAbstractProject >> _loadSpecification [
-	^ self _concreteProject _loadSpecification
-]
-
 { #category : 'properties' }
 RwAbstractProject >> comment [
 
@@ -58,7 +53,12 @@ RwAbstractProject >> load [
 { #category : 'accessing' }
 RwAbstractProject >> loadSpec [
 
-	^ self _loadSpecification
+	^ self loadSpecification
+]
+
+{ #category : 'private' }
+RwAbstractProject >> loadSpecification [
+	^ self _concreteProject loadSpecification
 ]
 
 { #category : 'accessing' }
