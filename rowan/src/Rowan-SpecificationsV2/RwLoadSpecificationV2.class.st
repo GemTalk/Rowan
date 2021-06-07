@@ -520,6 +520,19 @@ RwLoadSpecificationV2 >> produce [
 ]
 
 { #category : 'actions' }
+RwLoadSpecificationV2 >> produce: platformConditionalAttributes [
+	"produce ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure using 
+		platformConditionalAttributes). All specs will be produced"
+
+	^ RwResolvedProjectV2
+		requiredLoadSpecs: self
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -600,6 +613,14 @@ RwLoadSpecificationV2 >> read [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
 	self produce.
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> read: platformConditionalAttributes [
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk using platformConditionalAttributes"
+
+	self produce: platformConditionalAttributes.
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 

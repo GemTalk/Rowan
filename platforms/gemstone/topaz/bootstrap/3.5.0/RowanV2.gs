@@ -6322,7 +6322,7 @@ removeallclassmethods RwModificationWriterVisitor
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
 	classVars: #( Character_lf )
 	classInstVars: #()
 	poolDictionaries: #()
@@ -60161,8 +60161,7 @@ bufferedStream
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 buildPackageNamesMap
-
-	"If true, topazFilenamePackageNamesMap will be built from topazFilenameComponentMap.
+	"If true, topazFilenamePackageNamesMap will be created by using the package names for each project.
 		If false, existing topazFilenamePackageNamesMap will be used"
 
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
@@ -60476,57 +60475,10 @@ method: RwGsModificationTopazWriterVisitorV2
 processProject: aProjectModification
 	self buildPackageNamesMap
 		ifTrue: [ 
-			| readTool |
+			"topazFilenamePackageNamesMap not explicitly set, accumulate the current project package names in topaz file name"
 			topazFilenamePackageNamesMap := self topazFilenamePackageNamesMap.
-			readTool := Rowan projectTools readV2.
-			self topazFilenameComponentMap
-				keysAndValuesDo: [ :filename :componentAndPlatformConditionalAttributesMap | 
-					| componentNames customConditionalAttributes platformConditionalAttributes projectDef packageNames componentAndPlatformConditionalAttributes |
-					componentAndPlatformConditionalAttributes := componentAndPlatformConditionalAttributesMap
-						at: currentProjectDefinition name
-						ifAbsent: [ {{}} ].
-					componentAndPlatformConditionalAttributes
-						ifNotNil: [ 
-							componentNames := componentAndPlatformConditionalAttributes at: 1.
-							customConditionalAttributes := componentAndPlatformConditionalAttributes
-								at: 2
-								ifAbsent: [ {} ].
-							platformConditionalAttributes := componentAndPlatformConditionalAttributes
-								at: 3
-								ifAbsent: [ {} ].
-							componentNames isEmpty
-								ifFalse: [ 
-									currentProjectDefinition componentsRoot exists
-										ifTrue: [ 
-											true
-												ifTrue: [ 
-													| loadSpec |
-													"read the project from disk, if it is present on disk"
-													loadSpec := currentProjectDefinition loadSpecification.
-													loadSpec
-														componentNames: componentNames;
-														customConditionalAttributes: customConditionalAttributes.
-													projectDef := loadSpec read: platformConditionalAttributes ]
-												ifFalse: [ 
-													"bye bye"
-													projectDef := readTool
-														readProjectForProducedProject: currentProjectDefinition
-														withComponentNames: componentNames
-														customConditionalAttributes: customConditionalAttributes
-														platformConditionalAttributes: platformConditionalAttributes ] ] ].
-							packageNames := projectDef
-								ifNil: [ 
-									self topazFilenameComponentMap size > 1
-										ifTrue: [ 
-											self
-												error:
-													'unable to read project components for project '
-														, currentProjectDefinition name printString
-														, '. Multiple output files likely to have the same contents.' ].
-									currentProjectDefinition packageNames ]
-								ifNotNil: [ projectDef packageNames ].
-							(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ])
-								addAll: packageNames ] ] ].
+			(topazFilenamePackageNamesMap at: self topazFilename ifAbsentPut: [ Set new ])
+				addAll: currentProjectDefinition packageNames ].
 	aProjectModification packagesModification acceptVisitor: self
 %
 
@@ -60587,48 +60539,17 @@ topazFilename: aString
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
-topazFilenameComponentMap
-
-	^ topazFilenameComponentMap
-		ifNil: [ topazFilenameComponentMap := Dictionary new at: self topazFilename put: Dictionary new; yourself ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-topazFilenameComponentMap: aDictionary
-
-	"keys are topaz file names, values are a dictionary:
-		whose keys are project names and values are two slot array with component name list and customConditionalAttributes. 
-			The component names and customConditionalAttributes are resolved to a list of packages that will be written to the named file.
-
-			If the component/customConditionalAttributes list is empty, the default component and customConditionalAttributes for the project will be used.
-			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
-
-	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameComponentMap will be ignored."
-
-	buildPackageNamesMap := true.
-	topazFilenameComponentMap := aDictionary
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
 topazFilenamePackageNamesMap
-
-	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
+	^ topazFilenamePackageNamesMap
+		ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
 %
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 topazFilenamePackageNamesMap: aDictionary
-
 	"keys are topaz file names, values are a collection of package names"
 
-	"if topazFilenameComponentMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
-		based on the project configurations."
-
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameComponentMap will be ignored."
-
-	buildPackageNamesMap := false.
+	buildPackageNamesMap := false.	"prevent automatic generation of map (see processProject:)"
 	topazFilenamePackageNamesMap := aDictionary
 %
 
@@ -64322,6 +64243,16 @@ requiredLoadSpecs: anRwLoadSpecificationV2
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 %
 
+category: 'instance creation'
+classmethod: RwResolvedProjectV2
+requiredLoadSpecs: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
+		required projects (closure). All specs will be produced"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		produceRequiredLoadSpecs: platformConditionalAttributes
+%
+
 !		Instance methods for 'RwResolvedProjectV2'
 
 category: 'visiting'
@@ -65319,6 +65250,19 @@ produceRequiredLoadSpecs
 	^ res
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+produceRequiredLoadSpecs: platformConditionalAttributes
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 projectDefinitionSourceProperty
@@ -65471,6 +65415,16 @@ readProducedLoadSpecSet
 	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
 
 	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProducedProject: self
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readProducedLoadSpecSet: platformConditionalAttributes
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForProducedProject: self
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'to be removed'
@@ -86681,6 +86635,59 @@ readLoadSpecSetForProducedProject: producedProject
 	^ loadSpecSet
 %
 
+category: 'read load specs'
+classmethod: RwResolvedProjectComponentVisitorV2
+readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	loadSpecSet := RwLoadSpecSet new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {producedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp cn cca |
+			pp := projectVisitorQueue removeFirst.
+			cn := pp componentNames.
+			cca := pp customConditionalAttributes.
+
+			visitor := self
+				readLoadSpecForProducedProject: pp
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theProducedProject |
+					"derive resolved project from the load spec"
+					theProducedProject := loadSpec produceWithParentProject: pp.
+					processedProjects
+						at: theProducedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theProducedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
+			theVisitor := visitedArray at: 1.
+			pp := visitedArray at: 2.
+			theproducedProject := pp.
+			theLoadSpec := theproducedProject loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			loadSpecSet addLoadSpec: theLoadSpec ].
+	^ loadSpecSet
+%
+
 category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes 
@@ -86815,7 +86822,8 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject := loadSpec
+						produceWithParentProject: pp.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -87881,6 +87889,20 @@ produce
 
 category: 'actions'
 method: RwLoadSpecificationV2
+produce: platformConditionalAttributes
+	"produce ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure using 
+		platformConditionalAttributes). All specs will be produced"
+
+	^ RwResolvedProjectV2
+		requiredLoadSpecs: self
+		platformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
 produceWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -87971,6 +87993,15 @@ read
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
 	self produce.
+	^ RwResolvedProjectV2 loadSpecification: self
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
+read: platformConditionalAttributes
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk using platformConditionalAttributes"
+
+	self produce: platformConditionalAttributes.
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 

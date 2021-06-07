@@ -10,7 +10,6 @@ Class {
 	#name : 'RwGsModificationTopazWriterVisitorV2',
 	#superclass : 'RwModificationWriterVisitor',
 	#instVars : [
-		'topazFilenameComponentMap',
 		'topazFilename',
 		'topazFileHeader',
 		'topazFileFooter',
@@ -217,8 +216,7 @@ RwGsModificationTopazWriterVisitorV2 >> bufferedStream [
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> buildPackageNamesMap [
-
-	"If true, topazFilenamePackageNamesMap will be built from topazFilenameComponentMap.
+	"If true, topazFilenamePackageNamesMap will be created by using the package names for each project.
 		If false, existing topazFilenamePackageNamesMap will be used"
 
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
@@ -504,57 +502,10 @@ RwGsModificationTopazWriterVisitorV2 >> processClassExtension: aClassExtensionMo
 RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 	self buildPackageNamesMap
 		ifTrue: [ 
-			| readTool |
+			"topazFilenamePackageNamesMap not explicitly set, accumulate the current project package names in topaz file name"
 			topazFilenamePackageNamesMap := self topazFilenamePackageNamesMap.
-			readTool := Rowan projectTools readV2.
-			self topazFilenameComponentMap
-				keysAndValuesDo: [ :filename :componentAndPlatformConditionalAttributesMap | 
-					| componentNames customConditionalAttributes platformConditionalAttributes projectDef packageNames componentAndPlatformConditionalAttributes |
-					componentAndPlatformConditionalAttributes := componentAndPlatformConditionalAttributesMap
-						at: currentProjectDefinition name
-						ifAbsent: [ {{}} ].
-					componentAndPlatformConditionalAttributes
-						ifNotNil: [ 
-							componentNames := componentAndPlatformConditionalAttributes at: 1.
-							customConditionalAttributes := componentAndPlatformConditionalAttributes
-								at: 2
-								ifAbsent: [ {} ].
-							platformConditionalAttributes := componentAndPlatformConditionalAttributes
-								at: 3
-								ifAbsent: [ {} ].
-							componentNames isEmpty
-								ifFalse: [ 
-									currentProjectDefinition componentsRoot exists
-										ifTrue: [ 
-											true
-												ifTrue: [ 
-													| loadSpec |
-													"read the project from disk, if it is present on disk"
-													loadSpec := currentProjectDefinition loadSpecification.
-													loadSpec
-														componentNames: componentNames;
-														customConditionalAttributes: customConditionalAttributes.
-													projectDef := loadSpec read: platformConditionalAttributes ]
-												ifFalse: [ 
-													"bye bye"
-													projectDef := readTool
-														readProjectForProducedProject: currentProjectDefinition
-														withComponentNames: componentNames
-														customConditionalAttributes: customConditionalAttributes
-														platformConditionalAttributes: platformConditionalAttributes ] ] ].
-							packageNames := projectDef
-								ifNil: [ 
-									self topazFilenameComponentMap size > 1
-										ifTrue: [ 
-											self
-												error:
-													'unable to read project components for project '
-														, currentProjectDefinition name printString
-														, '. Multiple output files likely to have the same contents.' ].
-									currentProjectDefinition packageNames ]
-								ifNotNil: [ projectDef packageNames ].
-							(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ])
-								addAll: packageNames ] ] ].
+			(topazFilenamePackageNamesMap at: self topazFilename ifAbsentPut: [ Set new ])
+				addAll: currentProjectDefinition packageNames ].
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
@@ -606,45 +557,16 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilename: aString [
 ]
 
 { #category : 'accessing' }
-RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap [
-
-	^ topazFilenameComponentMap
-		ifNil: [ topazFilenameComponentMap := Dictionary new at: self topazFilename put: Dictionary new; yourself ]
-]
-
-{ #category : 'accessing' }
-RwGsModificationTopazWriterVisitorV2 >> topazFilenameComponentMap: aDictionary [
-
-	"keys are topaz file names, values are a dictionary:
-		whose keys are project names and values are two slot array with component name list and customConditionalAttributes. 
-			The component names and customConditionalAttributes are resolved to a list of packages that will be written to the named file.
-
-			If the component/customConditionalAttributes list is empty, the default component and customConditionalAttributes for the project will be used.
-			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
-
-	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameComponentMap will be ignored."
-
-	buildPackageNamesMap := true.
-	topazFilenameComponentMap := aDictionary
-]
-
-{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap [
-
-	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
+	^ topazFilenamePackageNamesMap
+		ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
 ]
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap: aDictionary [
-
 	"keys are topaz file names, values are a collection of package names"
 
-	"if topazFilenameComponentMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
-		based on the project configurations."
-
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameComponentMap will be ignored."
-
-	buildPackageNamesMap := false.
+	buildPackageNamesMap := false.	"prevent automatic generation of map (see processProject:)"
 	topazFilenamePackageNamesMap := aDictionary
 ]
 

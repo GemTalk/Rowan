@@ -71,6 +71,15 @@ RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 ]
 
+{ #category : 'instance creation' }
+RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes [
+	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
+		required projects (closure). All specs will be produced"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		produceRequiredLoadSpecs: platformConditionalAttributes
+]
+
 { #category : 'private' }
 RwResolvedProjectV2 >> _addPackageNames: somePackageNames for: aComponent [
 	self addPackages: somePackageNames forComponent: aComponent
@@ -1058,6 +1067,18 @@ RwResolvedProjectV2 >> produceRequiredLoadSpecs [
 	^ res
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> produceRequiredLoadSpecs: platformConditionalAttributes [
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty
@@ -1195,6 +1216,15 @@ RwResolvedProjectV2 >> readProducedLoadSpecSet [
 	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
 
 	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProducedProject: self
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProducedLoadSpecSet: platformConditionalAttributes [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForProducedProject: self
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'to be removed' }

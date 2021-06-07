@@ -133,6 +133,58 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: 
 	^ loadSpecSet
 ]
 
+{ #category : 'read load specs' }
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	loadSpecSet := RwLoadSpecSet new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {producedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp cn cca |
+			pp := projectVisitorQueue removeFirst.
+			cn := pp componentNames.
+			cca := pp customConditionalAttributes.
+
+			visitor := self
+				readLoadSpecForProducedProject: pp
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theProducedProject |
+					"derive resolved project from the load spec"
+					theProducedProject := loadSpec produceWithParentProject: pp.
+					processedProjects
+						at: theProducedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theProducedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
+			theVisitor := visitedArray at: 1.
+			pp := visitedArray at: 2.
+			theproducedProject := pp.
+			theLoadSpec := theproducedProject loadSpecification copy.
+			(theLoadedProject := Rowan
+				projectNamed: theLoadSpec projectName
+				ifAbsent: [  ])
+				ifNotNil: [ 
+					"project is loaded, so we need to preserve repository root"
+					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+			loadSpecSet addLoadSpec: theLoadSpec ].
+	^ loadSpecSet
+]
+
 { #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [ 
 	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
@@ -263,7 +315,8 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject := loadSpec
+						produceWithParentProject: pp.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
