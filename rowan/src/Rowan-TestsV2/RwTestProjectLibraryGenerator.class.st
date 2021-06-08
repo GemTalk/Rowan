@@ -81,6 +81,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0068: commitComment;
 	genSpec_0069: commitComment;
 	genSpec_0070: commitComment;
+	genSpec_0071: commitComment;
 	yourself
 "
 Class {
@@ -4514,6 +4515,46 @@ RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchN
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor_0071: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
+	"Special case where we will end up moving the directory structure down a directory or two"
+
+	| resolvedRepository resolvedProject |
+	resolvedProject := definedProject resolveStrict.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			resolvedRepository createBranch: specName ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+
+	(resolvedProject repositoryRoot / 'rowan') ensureDeleteAll. "delete the original project structure"
+	(resolvedProject repositoryRoot / 'offset') ensureDeleteAll. "delete the new project structure"
+
+	addDefinitionsBlock value: resolvedProject defined.
+
+	resolvedProject
+		componentsPath: 'offset/rowan/components';
+		packagesPath: 'offset/rowan/src';
+		projectsPath: 'offset/rowan/projects';
+		specsPath: 'offset/rowan/specs'.
+
+self halt. "I think I want to leave all of the paths the same, but I'm interested in defining the git root and repository root differently"
+
+	resolvedProject
+		projectSpecFile: 'offset/rowan/project.ston';
+		export;
+		exportLoadSpecification.	"write the rowan directory structure"
+
+	^ resolvedRepository
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
 	"Coming in the load spec revision is pointing at the desired starting 
 		point --- the structure to _start_ with. Since we don't know whether the 
@@ -8274,6 +8315,53 @@ RwTestProjectLibraryGenerator >> genSpec_0070: commitMessage [
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage ]
 		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
+	"Start with spec_0000 and create a directory structure that is offset by one directory deeper from git root. Enable me to play games with differences between git root and repository root."
+
+	"https://github.com/GemTalk/Rowan/issues/714"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0071'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+	title := 'Start with spec_0000 and create a directory structure that is offset by one directory deeper from git root. Enable me to play games with differences between git root and repository root.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 71
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(714);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor_0071: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0001: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
 ]
 
 { #category : 'accessing' }

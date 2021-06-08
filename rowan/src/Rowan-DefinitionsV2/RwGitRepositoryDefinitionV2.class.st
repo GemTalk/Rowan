@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'remote',
 		'remoteUrl',
-		'committish'
+		'committish',
+		'gitUrl',
+		'gitRoot'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
@@ -28,7 +30,7 @@ RwGitRepositoryDefinitionV2 >> = anObject [
 			self remote = anObject remote
 				and: [ 
 					self remoteUrl = anObject remoteUrl
-						and: [ self committish = anObject committish ] ] ]
+						and: [ self committish = anObject committish and: [ self gitRoot = anObject gitRoot ] ] ] ]
 ]
 
 { #category : 'actions' }
@@ -182,6 +184,16 @@ RwGitRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revis
 		committish: aString
 ]
 
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> gitRoot [
+	^ gitRoot ifNil: [ self repositoryRoot ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> gitRoot: object [
+	gitRoot := object
+]
+
 { #category : 'comparing' }
 RwGitRepositoryDefinitionV2 >> hash [
 	| hashValue |
@@ -189,6 +201,7 @@ RwGitRepositoryDefinitionV2 >> hash [
 	hashValue := hashValue bitXor: self remote hash.
 	hashValue := hashValue bitXor: self remoteUrl hash.
 	hashValue := hashValue bitXor: self committish hash.
+	hashValue := hashValue bitXor: self gitRoot hash.
 	^ hashValue
 ]
 

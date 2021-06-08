@@ -95,6 +95,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0068: commitComment;
 		genSpec_0069: commitComment;
 		genSpec_0070: commitComment;
+		genSpec_0071: commitComment;
 		yourself
 ]
 

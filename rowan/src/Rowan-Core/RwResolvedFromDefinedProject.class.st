@@ -4,6 +4,16 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'private' }
+RwResolvedFromDefinedProject >> _projectSpecification [
+	^ self _concreteProject _projectSpecification
+]
+
+{ #category : 'accessing' }
+RwResolvedFromDefinedProject >> componentsPath: aString [
+	self _projectSpecification componentsPath: aString
+]
+
 { #category : 'transitions' }
 RwResolvedFromDefinedProject >> load [
 	^ self
@@ -41,4 +51,19 @@ RwResolvedFromDefinedProject >> loadProjectSet [
 	"
 
 	^ self _concreteProject loadProjectSet
+]
+
+{ #category : 'accessing' }
+RwResolvedFromDefinedProject >> packagesPath: aString [
+	self _projectSpecification packagesPath: aString
+]
+
+{ #category : 'accessing' }
+RwResolvedFromDefinedProject >> projectsPath: aString [
+	self _projectSpecification projectsPath: aString
+]
+
+{ #category : 'accessing' }
+RwResolvedFromDefinedProject >> specsPath: aString [
+	self _projectSpecification specsPath: aString
 ]
