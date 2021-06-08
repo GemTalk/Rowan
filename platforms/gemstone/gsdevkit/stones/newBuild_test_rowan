@@ -18,7 +18,7 @@ newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/newRowanRepositoryTestsRootV2.tpz $GEMSTONE_NAME -lq
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  $GEMSTONE_NAME -T100000 -lq
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  $GEMSTONE_NAME -T100000 -lq
 
 #	Report
 # ./record.gs.st rowan_test_stats_350 -- --query=summary
