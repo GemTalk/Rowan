@@ -38,7 +38,7 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 		resolve
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -50,6 +50,17 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customCo
 ]
 
 { #category : 'instance creation' }
+RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
+		resolve: platformConditionalAttributes
+]
+
+{ #category : 'to be removed' }
 RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
 		or created on disk for new projects. If the project directory already exists on disk, 
@@ -1063,7 +1074,6 @@ RwResolvedProjectV2 >> produceRequiredLoadSpecs [
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self halt.	"test coverage"
 	^ res
 ]
 
@@ -1125,6 +1135,19 @@ RwResolvedProjectV2 >> read [
 
 	self repositoryExists
 		ifTrue: [ ^ self readProjectComponentNames: self componentNames ]
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> read: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+	self repositoryExists
+		ifTrue: [ 
+			^ self
+				readProjectComponentNames: self componentNames
+				platformConditionalAttributes: platformConditionalAttributes ]
 ]
 
 { #category : 'to be removed' }
@@ -1264,6 +1287,20 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 		readProjectForResolvedProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return the receiver with a new set of definitions read from disk"
+
+		self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
+	^ Rowan projectTools readV2
+		readProjectForProducedProject: self
+		withComponentNames: componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -1460,6 +1497,21 @@ RwResolvedProjectV2 >> resolve [
 					self
 						projectDefinitionSourceProperty:
 							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> resolve: platformConditionalAttributes [
+	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolve
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self
+						read: platformConditionalAttributes ] ]
 ]
 
 { #category : 'to be removed' }

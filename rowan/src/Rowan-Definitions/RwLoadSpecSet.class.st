@@ -68,6 +68,20 @@ RwLoadSpecSet >> read [
 	^ projectSetDefinition
 ]
 
+{ #category : 'actions' }
+RwLoadSpecSet >> read: platformConditionalAttributes [
+	"Return a projectSetDefinition that contains project definitions corresponding to each of the load specs in the reciever"
+
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	self
+		do: [ :loadSpec | 
+			| project |
+			project := loadSpec read: platformConditionalAttributes.
+			projectSetDefinition addProject: project ].
+	^ projectSetDefinition
+]
+
 { #category : 'accessing' }
 RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
 	"remove from the existing custom conditional attributes fro each of the load specs"

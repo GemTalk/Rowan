@@ -90,10 +90,10 @@ RwRowanSample9Test >> _processIssue705: resolvedProject componentNamed: componen
 	loadSpec projectsHome:  self _testRowanProjectsSandbox.
 
 "collect set of specs that will be required by the component component"
-	requiredLoadSpecs := loadSpec requiredLoadSpecs.
+	requiredLoadSpecs := loadSpec produce.
 
 "arrange for the projects required by currently loaded component to be unloaded"
-	loadSpecSet := (Rowan projectNamed: resolvedProject name) requiredLoadSpecs.
+	loadSpecSet := (Rowan projectNamed: resolvedProject name) produce.
 	loadedComponentRequiredProjectNames do: [:projectName |
 		"packages for project will be unloaded"
 		(loadSpecSet specForProjectNamed: projectName) componentNames: {} ].
@@ -3732,7 +3732,7 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
 
 "change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
-	loadSpecs := project requiredLoadSpecs.
+	loadSpecs := project produce.
 	(loadSpecs specForProjectNamed: requiredProjectName)
 		removeCustomConditionalAttributes: #('mytests').
 
@@ -3845,7 +3845,7 @@ RwRowanSample9Test >> testIssue704_1 [
 
 "load project and required projects WITHOUT tests for every project except requiredProjectName1"
 	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project requiredLoadSpecs.
+	requiredLoadSpecs := project produce.
 	requiredLoadSpecs do: [:ls |
 		ls projectName = requiredProjectName1 
 			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
@@ -3860,7 +3860,7 @@ RwRowanSample9Test >> testIssue704_1 [
 			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
 
 "load project and required projects WITH tests  for every project except requiredProjectName1"
-	requiredLoadSpecs := project requiredLoadSpecs.
+	requiredLoadSpecs := project produce.
 	requiredLoadSpecs do: [:ls | 
 		ls projectName = requiredProjectName1 
 			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
@@ -3921,7 +3921,7 @@ RwRowanSample9Test >> testIssue704_2 [
 
 "load project and required projects WITHOUT tests"
 	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project requiredLoadSpecs.
+	requiredLoadSpecs := project produce.
 	requiredLoadSpecs removeCustomConditionalAttributes: #('tests').	
 
 "load project"
@@ -3931,7 +3931,7 @@ RwRowanSample9Test >> testIssue704_2 [
 	loadedProjects do: [:lp | self assert: lp testSuite tests isEmpty].
 
 "load project and required projects WITH tests"
-	requiredLoadSpecs := project requiredLoadSpecs.
+	requiredLoadSpecs := project produce.
 	requiredLoadSpecs addCustomConditionalAttributes: #('tests').	
 
 "load project"
@@ -4185,7 +4185,7 @@ RwRowanSample9Test >> testIssue711 [
 	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
 
 "read the project using tests, attr1 and attr2"
-	loadSpecs := project requiredLoadSpecs.
+	loadSpecs := project produce.
 	(loadSpecs specForProjectNamed: projectName)
 		componentNames: #( 'Core');
 		addCustomConditionalAttributes: #('attr1' 'attr2' 'tests').
@@ -4438,6 +4438,51 @@ RwRowanSample9Test >> testLoadSpec_produce_05 [
 			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
 		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
 			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_read_01 [
+	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
+
+	"Also need a test where the required project is a function of a platform attribute"
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |
+	loadSpec := self _loadSpecNamed: 'spec_0056'.
+	projectName := loadSpec projectName.
+	embeddedProjectName := projectName, '_embedded_1'.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"read"
+	platformConditionalAttributes := { 'common' . 'gemstone' . '2.4.0' asRwGemStoneVersionNumber }.
+	loadSpecs := loadSpec produce: platformConditionalAttributes.
+	projectSetDefinition := loadSpecs read: platformConditionalAttributes.
+
+"validate"
+	projectDef := projectSetDefinition projectNamed: projectName.
+	self assert: 
+		(projectDef packageNamed: 'RowanSample9-GemStone3x-Core' ifAbsent: []) isNil.
+	self assert: 
+		((projectDef packageNamed: 'RowanSample9-GemStone24x-Core') 
+			classDefinitionNamed: 'RowanSample9GemStone24xClass1' ifAbsent: []) notNil.
+	classDef := (projectDef packageNamed: 'RowanSample9-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: 'RowanSample9TestCase' ifAbsent: [].
+	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9GemStone24xClass1').
+	self assert: (projectDef packageNamed: 'RowanSample9-GemStone3x-Tests' ifAbsent: []) isNil.
+
+	projectDef := projectSetDefinition projectNamed: embeddedProjectName.
+	self assert: (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
+	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Core') 
+			classDefinitionNamed: 'RowanSample9_embedded_1GemStone24xClass1' ifAbsent: [].
+	self assert: classDef notNil.
+	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: 'RowanSample9_embedded_1TestCase' ifAbsent: [].
+	self assert: classDef notNil.
+	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9_embedded_1GemStone24xClass1').
+	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
 ]
 
 { #category : 'issue 493' }
@@ -4724,7 +4769,7 @@ RwRowanSample9Test >> testSpec_0001_C [
 		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
 
 "remove Core component and reload"
-	requiredLoadSpecs := (loadedProjects projectNamed: projectName) requiredLoadSpecs.
+	requiredLoadSpecs := (loadedProjects projectNamed: projectName) produce.
 	(requiredLoadSpecs specForProjectNamed: projectName) removeComponentNames: {'Core'}.
 
 "load"

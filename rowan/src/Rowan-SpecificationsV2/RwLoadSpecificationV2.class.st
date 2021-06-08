@@ -621,7 +621,9 @@ RwLoadSpecificationV2 >> read: platformConditionalAttributes [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk using platformConditionalAttributes"
 
 	self produce: platformConditionalAttributes.
-	^ RwResolvedProjectV2 loadSpecification: self
+	^ RwResolvedProjectV2
+		loadSpecification: self
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'accessing' }
@@ -677,14 +679,6 @@ RwLoadSpecificationV2 >> repositoryRoot [
 ]
 
 { #category : 'to be removed' }
-RwLoadSpecificationV2 >> requiredLoadSpecs [
-	"Return an RwLoadSpecSet containing a copy of the receiver and all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ RwResolvedProjectV2 requiredLoadSpecs: self
-]
-
-{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> resolve [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver ignoring any required projects"
@@ -694,7 +688,7 @@ RwLoadSpecificationV2 >> resolve [
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> resolveStrict [
 	"resolve using #strict repositoryResolutionpolicy"
 

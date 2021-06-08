@@ -418,6 +418,14 @@ RwProject >> packagesRoot [
 	^ self _concreteProject packagesRoot
 ]
 
+{ #category : 'actions' }
+RwProject >> produce [
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk)"
+
+	^ self loadSpecification produce
+]
+
 { #category : 'accessing' }
 RwProject >> projectRoots [
 	^ self _concreteProject projectRoots
@@ -458,14 +466,6 @@ RwProject >> reload: instanceMigrator [
 RwProject >> repositoryRootPath [
 
 	^ self repositoryRoot pathString
-]
-
-{ #category : 'actions' }
-RwProject >> requiredLoadSpecs [
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ self loadSpecification requiredLoadSpecs
 ]
 
 { #category : 'actions' }

@@ -20,7 +20,7 @@ run
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
 
-		requiredLoadSpecs := (Rowan projectNamed: 'Rowan') requiredLoadSpecs.
+		requiredLoadSpecs := (Rowan projectNamed: 'Rowan') produce.
 		requiredLoadSpecs 
 			do: [:loadSpec |
 				"ensure that tests are loaded for all projects"
