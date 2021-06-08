@@ -102,19 +102,7 @@ RwProject >> exportLoadSpecification [
 
 { #category : '*rowan-corev2' }
 RwProject >> gitRepositoryRoot: repositoryRootPathString [
-	| originalRepositoryRoot |
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
-	self requiredProjects
-		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _gitRepositoryRoot: repositoryRootPathString.
-					project projectsHome: nil ] ].
-	self _gitRepositoryRoot: repositoryRootPathString.
-	self projectsHome: nil
+	self gitRepositoryRoot: repositoryRootPathString projectsHome: nil
 ]
 
 { #category : '*rowan-corev2' }
