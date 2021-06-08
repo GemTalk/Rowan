@@ -100,8 +100,7 @@ RwGitRepositoryDefinitionV2 >> commitId [
 	^ [ 
 	| gitHome gitTools |
 	gitTools := Rowan gitTools.
-	gitHome := (gitTools gitrevparseShowTopLevelIn: self repositoryRoot pathString)
-		trimBoth.
+	gitHome := (gitTools gitrevparseShowTopLevelIn: self repositoryRoot pathString).
 	gitTools gitcommitShaIn: gitHome ]
 		on: Error
 		do: [ :ignored | 

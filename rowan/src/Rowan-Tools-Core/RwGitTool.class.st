@@ -155,7 +155,7 @@ RwGitTool >> gitrevparseShowTopLevelIn: dirPath [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
-	^ self performOnServer: command logging: self _shouldLog
+	^ (self performOnServer: command logging: self _shouldLog) trimBoth
 ]
 
 { #category : 'smalltalk api' }
@@ -172,7 +172,7 @@ RwGitTool >> isGitHome: dirPath [
 	dirReference := dirPath asFileReference.
 	^ (self gitPresentIn: dirReference pathString)
 		and: [ 
-			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
+			(self gitrevparseShowTopLevelIn: dirReference pathString)
 				asFileReference = dirReference ]
 ]
 

@@ -90,7 +90,7 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																	^ projectRepository := ((gitTool
 																		gitPresentIn: repositoryRootPath)
 																		and: [ 
-																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath) trimBoth)
+																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath))
 																				asFileReference = self loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2

@@ -18,7 +18,7 @@ RwPrjCloneTool >> _validateForGitRepository: aRwGitRepositoryDefinition ifDone: 
 		project ... if not error out of here."
 			response := gitTool gitrevparseShowTopLevelIn: gitRepoPath pathString.
 			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
-			cdResponse := gitTool performOnServer: command.
+			cdResponse := (gitTool performOnServer: command) trimBoth.
 			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
