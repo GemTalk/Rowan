@@ -12,7 +12,7 @@
 	run
 	| loadSpecs |
 	"load tests for Rowan and all of it's required projects"
-	loadSpecs := (Rowan projectNamed: 'Rowan') requiredLoadSpecs.
+	loadSpecs := (Rowan projectNamed: 'Rowan') produce.
 	loadSpecs do: [:loadSpec |
 		loadSpec addCustomConditionalAttributes: #('tests' 'testsV2') ].
 	loadSpecs load.
