@@ -30,7 +30,9 @@ RwGitRepositoryDefinitionV2 >> = anObject [
 			self remote = anObject remote
 				and: [ 
 					self remoteUrl = anObject remoteUrl
-						and: [ self committish = anObject committish and: [ self gitRoot = anObject gitRoot ] ] ] ]
+						and: [ 
+							self committish = anObject committish
+								and: [ self gitUrl = anObject gitUrl and: [ self gitRoot = anObject gitRoot ] ] ] ] ]
 ]
 
 { #category : 'actions' }
@@ -40,7 +42,7 @@ RwGitRepositoryDefinitionV2 >> branches [
 	| str line branches remotesPrefix |
 	self fetch.
 	str := ReadStream
-		on: (Rowan gitTools gitbranchIn: self repositoryRoot pathString with: '--all').
+		on: (Rowan gitTools gitbranchIn: self gitRoot pathString with: '--all').
 	branches := {}.
 	remotesPrefix := 'remotes/origin/'.
 	[ str atEnd ]
@@ -83,7 +85,7 @@ RwGitRepositoryDefinitionV2 >> checkAndUpdateRepositoryRevision: aRwProjectLoadS
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> checkout: aCommittish [
-	Rowan gitTools gitcheckoutIn: self repositoryRoot with: aCommittish
+	Rowan gitTools gitcheckoutIn: self gitRoot with: aCommittish
 ]
 
 { #category : 'actions' }
@@ -102,7 +104,7 @@ RwGitRepositoryDefinitionV2 >> commitId [
 	^ [ 
 	| gitHome gitTools |
 	gitTools := Rowan gitTools.
-	gitHome := (gitTools gitrevparseShowTopLevelIn: self repositoryRoot pathString).
+	gitHome := (gitTools gitrevparseShowTopLevelIn: self gitRoot pathString).
 	gitTools gitcommitShaIn: gitHome ]
 		on: Error
 		do: [ :ignored | 
@@ -113,7 +115,7 @@ RwGitRepositoryDefinitionV2 >> commitId [
 { #category : 'loading' }
 RwGitRepositoryDefinitionV2 >> commitLog: logLimit [
 
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRoot pathString
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
 ]
 
 { #category : 'accessing' }
@@ -129,17 +131,17 @@ RwGitRepositoryDefinitionV2 >> committish: aString [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> createBranch: branchName [
-	Rowan gitTools gitcheckoutIn: self repositoryRoot with: '-b ' , branchName
+	Rowan gitTools gitcheckoutIn: self gitRoot with: '-b ' , branchName
 ]
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> currentBranch [
 	| result |
-	result := Rowan gitTools gitBranchNameIn: self repositoryRoot pathString.
+	result := Rowan gitTools gitBranchNameIn: self gitRoot pathString.
 	(result findString: '(HEAD' startingAt: 1) > 0
 		ifTrue: [ 
 			"if detached head, return the sha of the commit"
-			^ Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ].
+			^ Rowan gitTools gitcommitShaIn: self gitRoot pathString ].
 	^ result
 ]
 
@@ -147,7 +149,7 @@ RwGitRepositoryDefinitionV2 >> currentBranch [
 RwGitRepositoryDefinitionV2 >> doCommit: message [
 	| gitTool gitRootPath commitMessageFileName status |
 	gitTool := Rowan gitTools.
-	gitRootPath := self repositoryRoot pathString.
+	gitRootPath := self gitRoot pathString.
 	(gitTool gitstatusIn: gitRootPath with: '--short') isEmpty
 		ifTrue: [ 
 			| msg |
@@ -173,7 +175,7 @@ RwGitRepositoryDefinitionV2 >> doCommit: message [
 
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> fetch [
-	Rowan gitTools gitfetchIn: self repositoryRoot with: self remote
+	Rowan gitTools gitfetchIn: self gitRoot with: self remote
 ]
 
 { #category : 'actions' }
@@ -190,8 +192,18 @@ RwGitRepositoryDefinitionV2 >> gitRoot [
 ]
 
 { #category : 'accessing' }
-RwGitRepositoryDefinitionV2 >> gitRoot: object [
-	gitRoot := object
+RwGitRepositoryDefinitionV2 >> gitRoot: pathStringOrReference [
+	gitRoot := pathStringOrReference asFileReference
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> gitUrl [
+	^ gitUrl ifNil: [ self repositoryUrl ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> gitUrl: object [
+	gitUrl := object
 ]
 
 { #category : 'comparing' }
@@ -201,6 +213,7 @@ RwGitRepositoryDefinitionV2 >> hash [
 	hashValue := hashValue bitXor: self remote hash.
 	hashValue := hashValue bitXor: self remoteUrl hash.
 	hashValue := hashValue bitXor: self committish hash.
+	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self gitRoot hash.
 	^ hashValue
 ]
@@ -208,7 +221,7 @@ RwGitRepositoryDefinitionV2 >> hash [
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> pull: remoteName branch: branchName [
 	Rowan gitTools
-		gitpullIn: self repositoryRoot pathString
+		gitpullIn: self gitRoot pathString
 		remote: remoteName
 		branch: branchName
 ]
@@ -216,7 +229,7 @@ RwGitRepositoryDefinitionV2 >> pull: remoteName branch: branchName [
 { #category : 'actions' }
 RwGitRepositoryDefinitionV2 >> push: remoteName branch: branchName [
 	Rowan gitTools
-		gitpushIn: self repositoryRoot pathString
+		gitpushIn: self gitRoot pathString
 		remote: remoteName
 		branch: branchName
 ]
@@ -243,6 +256,38 @@ RwGitRepositoryDefinitionV2 >> remoteUrl: aRemoteUrlString [
 ]
 
 { #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> repositoryRoot [
+	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ repositoryRoot
+		ifNil: [ 
+			repositoryUrl
+				ifNotNil: [ :urlString | 
+					| url |
+					url := urlString asRwUrl.
+					url scheme = 'file'
+						ifTrue: [ 
+							self repositoryRoot: url pathString.
+							^ repositoryRoot ] ].
+			self repositoryRoot: self projectsHome / self name.
+			^ repositoryRoot ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
+	| fileRef |
+	super repositoryRoot: pathStringOrReference.
+	gitRoot
+		ifNil: [ 
+			fileRef := pathStringOrReference asFileReference.
+			fileRef exists
+				ifTrue: [ self gitRoot: (Rowan gitTools gitrevparseShowTopLevelIn: fileRef pathString) ]
+				ifFalse: [ 
+					"assume we'll create and init a git repository at this location"
+					self gitRoot: fileRef ] ]
+]
+
+{ #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
 	super repositoryUrl: aRepositoryUrlStrng.
 	self remoteUrl: aRepositoryUrlStrng
@@ -255,17 +300,17 @@ RwGitRepositoryDefinitionV2 >> resolve [
 	"answer true if attaching to an existing repository"
 
 	| url |
-	url := self repositoryUrl.
+	url := self gitUrl.
 	^ (url isEmpty or: [ url asRwUrl scheme = 'file' ])
 		ifTrue: [ 
-			| gitTool "Creatr a new git repository in repository root" |
+			| gitTool "Create a new git repository in repository root" |
 			gitTool := Rowan projectTools git.
-			self repositoryRoot ensureCreateDirectory.
-			(gitTool gitPresentIn: self repositoryRoot pathString)
+			self gitRoot ensureCreateDirectory.
+			(gitTool gitPresentIn: self gitRoot pathString)
 				ifTrue: [ true ]
 				ifFalse: [ 
 					"create a git repository"
-					gitTool gitinitIn: self repositoryRoot pathString with: ''.
+					gitTool gitinitIn: self gitRoot pathString with: ''.
 					false ] ]
 		ifFalse: [ 
 			"clone from remote"
@@ -275,7 +320,7 @@ RwGitRepositoryDefinitionV2 >> resolve [
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> revision [
-	^ [ Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+	^ [ Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"
