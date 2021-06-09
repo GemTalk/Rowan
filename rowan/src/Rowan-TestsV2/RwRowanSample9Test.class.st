@@ -4212,6 +4212,110 @@ RwRowanSample9Test >> testIssue711 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue715 [
+	"getting down to brass tacks for rules and usage of #product and friends"
+
+"WORK IN PROGESS"
+
+	"https://github.com/GemTalk/Rowan/issues/715"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"every project includes 'tests' by default"
+	project := Rowan projectNamed: projectName.
+	requiredLoadSpecs := project produce.
+	requiredLoadSpecs do: [:ls | 
+		self assert: (ls customConditionalAttributes includes: 'tests') ].
+
+"load project and required projects WITHOUT tests for every project except requiredProjectName1"
+	requiredLoadSpecs := project produce.
+	requiredLoadSpecs do: [:ls |
+		ls projectName = requiredProjectName1 
+			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
+
+"confirm that the changes have been made as expected"
+	requiredLoadSpecs do: [:ls | 
+		ls projectName = requiredProjectName1 
+			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
+			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
+
+"load project"
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+
+"confirm that the load spec for loaded projects match expectations"
+	loadedProjects do: [:p | | ls |
+		ls := p loadSpecification.
+		self assert: (requiredLoadSpecs specForProjectNamed: p name) = ls.
+		ls projectName = requiredProjectName1 
+			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
+			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
+
+"from loaded or reread from disk"
+	requiredLoadSpecs := project produce.
+	requiredLoadSpecs do: [:ls | 
+		ls projectName = requiredProjectName1 
+			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
+			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
+
+"load project and required projects WITH tests  for every project except requiredProjectName1"
+	requiredLoadSpecs := project produce.
+	requiredLoadSpecs do: [:ls | 
+		ls projectName = requiredProjectName1 
+			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
+			ifFalse: [ ls addCustomConditionalAttributes: #('tests') ] ].	
+
+"load project"
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	loadedProjects do: [:lp | lp projectName = requiredProjectName1 
+			ifTrue: [ self assert: lp testSuite tests isEmpty]
+			ifFalse: [ self deny: lp testSuite tests isEmpty] ].
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_produce_01 [
 	"RowanSample9:spec_0001 ... self contained project" 
 

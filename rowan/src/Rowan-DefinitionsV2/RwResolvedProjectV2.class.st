@@ -27,7 +27,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -49,7 +49,7 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customCo
 		resolve: customConditionalAttributes platformConditionalAttributes: platformAttributes
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -98,7 +98,10 @@ RwResolvedProjectV2 >> _addPackageNames: somePackageNames for: aComponent [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> _basicProduce [
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), answer true if the project already exists on disk"
+	"produce ensures that the project directory exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an true if there are project artifacts on disk and false if
+		the directory has not been populated. "
 
 	self _projectRepository resolve
 		ifTrue: [ 
