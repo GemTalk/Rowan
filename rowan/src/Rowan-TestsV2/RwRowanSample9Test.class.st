@@ -3509,6 +3509,7 @@ RwRowanSample9Test >> testIssue594 [
 
 	| loadSpec projectName resolvedProject loadedProjects project audit |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
+	self assert: (loadSpec customConditionalAttributes includes: 'tests').
 
 	projectName := loadSpec projectName.
 
@@ -3527,7 +3528,8 @@ RwRowanSample9Test >> testIssue594 [
 	self deny: project testSuite tests isEmpty.
 
 "reload without 'tests' attribute"
-	loadSpec := project loadSpec.
+	loadSpec := project loadSpecification.
+	self assert: (loadSpec customConditionalAttributes includes: 'tests').
 	loadSpec removeCustomConditionalAttributes: #('tests').
 	loadedProjects := loadSpec load.
 
@@ -3536,7 +3538,8 @@ RwRowanSample9Test >> testIssue594 [
 	self assert: project testSuite tests isEmpty.
 
 "reload with 'tests' attribute"
-	loadSpec := project loadSpec.
+	loadSpec := project loadSpecification.
+	self deny: (loadSpec customConditionalAttributes includes: 'tests').
 	loadSpec addCustomConditionalAttributes: #('tests').
 	loadedProjects := loadSpec load.
 

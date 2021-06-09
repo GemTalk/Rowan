@@ -387,7 +387,7 @@ RwProject >> loadProjectSet [
 
 { #category : 'private' }
 RwProject >> loadSpecification [
-	^ self _loadedProject loadSpecification
+	^ self _loadedProject loadSpecification copy
 ]
 
 { #category : 'components' }

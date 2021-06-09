@@ -50,12 +50,6 @@ RwAbstractProject >> load [
 	^ self _concreteProject load
 ]
 
-{ #category : 'accessing' }
-RwAbstractProject >> loadSpec [
-
-	^ self loadSpecification
-]
-
 { #category : 'private' }
 RwAbstractProject >> loadSpecification [
 	^ self _concreteProject loadSpecification
