@@ -464,6 +464,13 @@ RwDefinedProject >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]
 
+{ #category : 'transitions' }
+RwDefinedProject >> produce [
+	"Return a resolved project"
+
+	^ RwResolvedFromDefinedProject fromDefinedProject: self
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> projectAlias: aString [
 	^ self _concreteProject projectAlias: aString

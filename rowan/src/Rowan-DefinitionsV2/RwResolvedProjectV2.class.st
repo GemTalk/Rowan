@@ -103,13 +103,24 @@ RwResolvedProjectV2 >> _basicProduce [
 	Return an true if there are project artifacts on disk and false if
 		the directory has not been populated. "
 
+	self _basicResolve
+		ifTrue: [ 
+			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
+			^ true ].
+	^ false
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> _basicResolve [
+	"Ensures that the project directory exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an true if there are project artifacts on disk and false if
+		the directory has not been populated. "
+
 	self _projectRepository resolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
-					^ true ] ].
+			^ self _checkProjectDirectoryStructure ].
 	^ false
 ]
 

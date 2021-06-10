@@ -353,6 +353,15 @@ RwProject >> loadedComponentNames [
 	^ self _loadedComponents componentNames
 ]
 
+{ #category : 'actions' }
+RwProject >> loadedLoadSpecifications [
+	"Return an RwLoadSpecSet containing the receiver and all load specs for required projects, based on the 
+		load spec associated with the loaded project (no disk read performed)"
+
+	^ RwLoadSpecSet
+		withAll: (self requiredProjects collect: [ :each | each loadSpecification ])
+]
+
 { #category : 'querying' }
 RwProject >> loadedSubcomponentsOf: componentName [
 	"list of direct subcomponents of the given <componentName> ...includes package groups"
@@ -385,7 +394,7 @@ RwProject >> loadProjectSet [
 	^ self _loadedProject loadProjectSet
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 RwProject >> loadSpecification [
 	^ self _loadedProject loadSpecification copy
 ]
@@ -418,14 +427,6 @@ RwProject >> packagesRoot [
 	^ self _concreteProject packagesRoot
 ]
 
-{ #category : 'actions' }
-RwProject >> produce [
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ self loadSpecification produce
-]
-
 { #category : 'accessing' }
 RwProject >> projectRoots [
 	^ self _concreteProject projectRoots
@@ -442,6 +443,14 @@ RwProject >> projectUrl [
 	"Return the projectUrl used to clone the project"
 
 	^ self _loadedProject projectUrl
+]
+
+{ #category : 'actions' }
+RwProject >> readLoadSpecifications [
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk) and read from disk"
+
+	^ self loadSpecification produce
 ]
 
 { #category : 'actions' }

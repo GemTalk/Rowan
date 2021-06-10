@@ -49483,13 +49483,6 @@ load
 
 category: 'accessing'
 method: RwAbstractProject
-loadSpec
-
-	^ self loadSpecification
-%
-
-category: 'private'
-method: RwAbstractProject
 loadSpecification
 	^ self _concreteProject loadSpecification
 %
@@ -50153,6 +50146,14 @@ packagesPath: aString
 	self _projectSpecification packagesPath: aString
 %
 
+category: 'transitions'
+method: RwDefinedProject
+produce
+	"Return a resolved project"
+
+	^ RwResolvedFromDefinedProject fromDefinedProject: self
+%
+
 category: 'accessing'
 method: RwDefinedProject
 projectAlias: aString
@@ -50585,8 +50586,11 @@ _projectDefinitionPlatformConditionalAttributes
 category: 'instance creation'
 classmethod: RwResolvedProject
 fromDefinedProject: aDefinedProject
+	| theProject |
+	theProject :=  aDefinedProject _concreteProject.
+	theProject _basicResolve.
 	^ (self newNamed: aDefinedProject name)
-		_concreteProject: aDefinedProject _concreteProject resolve;
+		_concreteProject: theProject;
 		yourself
 %
 
@@ -50959,7 +50963,7 @@ repository
 	^ self _concreteProject repository
 %
 
-category: 'transitions'
+category: 'to be removed'
 method: RwResolvedProject
 resolve
 	^ self
@@ -51409,6 +51413,16 @@ loadedComponentNames
 	^ self _loadedComponents componentNames
 %
 
+category: 'actions'
+method: RwProject
+loadedLoadSpecifications
+	"Return an RwLoadSpecSet containing the receiver and all load specs for required projects, based on the 
+		load spec associated with the loaded project (no disk read performed)"
+
+	^ RwLoadSpecSet
+		withAll: (self requiredProjects collect: [ :each | each loadSpecification ])
+%
+
 category: 'querying'
 method: RwProject
 loadedSubcomponentsOf: componentName
@@ -51445,10 +51459,10 @@ loadProjectSet
 	^ self _loadedProject loadProjectSet
 %
 
-category: 'private'
+category: 'accessing'
 method: RwProject
 loadSpecification
-	^ self _loadedProject loadSpecification
+	^ self _loadedProject loadSpecification copy
 %
 
 category: 'components'
@@ -51484,15 +51498,6 @@ packagesRoot
 	^ self _concreteProject packagesRoot
 %
 
-category: 'actions'
-method: RwProject
-produce
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk)"
-
-	^ self loadSpecification produce
-%
-
 category: 'accessing'
 method: RwProject
 projectRoots
@@ -51512,6 +51517,15 @@ projectUrl
 	"Return the projectUrl used to clone the project"
 
 	^ self _loadedProject projectUrl
+%
+
+category: 'actions'
+method: RwProject
+readLoadSpecifications
+	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
+		WILL be produced (i.e. cloned to the local disk) and read from disk"
+
+	^ self loadSpecification produce
 %
 
 category: 'actions'
@@ -64225,7 +64239,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 		yourself
 %
 
-category: 'instance creation'
+category: 'to be removed'
 classmethod: RwResolvedProjectV2
 loadSpecification: anRwLoadSpecificationV2
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -64249,7 +64263,7 @@ loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customCo
 		resolve: customConditionalAttributes platformConditionalAttributes: platformAttributes
 %
 
-category: 'instance creation'
+category: 'to be removed'
 classmethod: RwResolvedProjectV2
 loadSpecification: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -65873,15 +65887,30 @@ _addPackageNames: somePackageNames for: aComponent
 category: 'actions'
 method: RwResolvedProjectV2
 _basicProduce
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), answer true if the project already exists on disk"
+	"produce ensures that the project directory exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an true if there are project artifacts on disk and false if
+		the directory has not been populated. "
+
+	self _basicResolve
+		ifTrue: [ 
+			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
+			^ true ].
+	^ false
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+_basicResolve
+	"Ensures that the project directory exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an true if there are project artifacts on disk and false if
+		the directory has not been populated. "
 
 	self _projectRepository resolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
-					^ true ] ].
+			^ self _checkProjectDirectoryStructure ].
 	^ false
 %
 

@@ -21,8 +21,6 @@ RwProjectTest >> test_issue714_gitRoot [
 				ifNotNil: [ :lp | Rowan image _removeLoadedProject: lp ] ].
 
 	(definedProject projectsHome / projectName) ensureDeleteAll.
-
-self error: 'in process of determining the semantics for #produce and a defined project ... not currently implemented ... also questioning semantics of #produce  for a loaded project'.
 	resolvedProject := definedProject produce.
 	resolvedProject write.
 

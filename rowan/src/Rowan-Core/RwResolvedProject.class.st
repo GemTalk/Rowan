@@ -6,8 +6,11 @@ Class {
 
 { #category : 'instance creation' }
 RwResolvedProject class >> fromDefinedProject: aDefinedProject [
+	| theProject |
+	theProject :=  aDefinedProject _concreteProject.
+	theProject _basicResolve.
 	^ (self newNamed: aDefinedProject name)
-		_concreteProject: aDefinedProject _concreteProject resolve;
+		_concreteProject: theProject;
 		yourself
 ]
 
@@ -352,7 +355,7 @@ RwResolvedProject >> repository [
 	^ self _concreteProject repository
 ]
 
-{ #category : 'transitions' }
+{ #category : 'to be removed' }
 RwResolvedProject >> resolve [
 	^ self
 ]

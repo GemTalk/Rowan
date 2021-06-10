@@ -93,7 +93,7 @@ RwRowanSample9Test >> _processIssue705: resolvedProject componentNamed: componen
 	requiredLoadSpecs := loadSpec produce.
 
 "arrange for the projects required by currently loaded component to be unloaded"
-	loadSpecSet := (Rowan projectNamed: resolvedProject name) produce.
+	loadSpecSet := (Rowan projectNamed: resolvedProject name) readLoadSpecifications.
 	loadedComponentRequiredProjectNames do: [:projectName |
 		"packages for project will be unloaded"
 		(loadSpecSet specForProjectNamed: projectName) componentNames: {} ].
@@ -3735,7 +3735,7 @@ RwRowanSample9Test >> testIssue700_1 [
 	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
 
 "change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
-	loadSpecs := project produce.
+	loadSpecs := project readLoadSpecifications.
 	(loadSpecs specForProjectNamed: requiredProjectName)
 		removeCustomConditionalAttributes: #('mytests').
 
@@ -3848,7 +3848,7 @@ RwRowanSample9Test >> testIssue704_1 [
 
 "load project and required projects WITHOUT tests for every project except requiredProjectName1"
 	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs do: [:ls |
 		ls projectName = requiredProjectName1 
 			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
@@ -3863,7 +3863,7 @@ RwRowanSample9Test >> testIssue704_1 [
 			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
 
 "load project and required projects WITH tests  for every project except requiredProjectName1"
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs do: [:ls | 
 		ls projectName = requiredProjectName1 
 			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
@@ -3924,7 +3924,7 @@ RwRowanSample9Test >> testIssue704_2 [
 
 "load project and required projects WITHOUT tests"
 	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs removeCustomConditionalAttributes: #('tests').	
 
 "load project"
@@ -3934,7 +3934,7 @@ RwRowanSample9Test >> testIssue704_2 [
 	loadedProjects do: [:lp | self assert: lp testSuite tests isEmpty].
 
 "load project and required projects WITH tests"
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs addCustomConditionalAttributes: #('tests').	
 
 "load project"
@@ -4188,7 +4188,7 @@ RwRowanSample9Test >> testIssue711 [
 	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
 
 "read the project using tests, attr1 and attr2"
-	loadSpecs := project produce.
+	loadSpecs := project readLoadSpecifications.
 	(loadSpecs specForProjectNamed: projectName)
 		componentNames: #( 'Core');
 		addCustomConditionalAttributes: #('attr1' 'attr2' 'tests').
@@ -4215,10 +4215,8 @@ RwRowanSample9Test >> testIssue711 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue715 [
-	"getting down to brass tacks for rules and usage of #product and friends"
-
-"WORK IN PROGESS"
+RwRowanSample9Test >> testIssue715_01 [
+	"getting down to brass tacks for rules and usage of #loadedLoadSpecifications and #readLoadSpecifications"
 
 	"https://github.com/GemTalk/Rowan/issues/715"
 
@@ -4239,7 +4237,7 @@ RwRowanSample9Test >> testIssue715 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec read.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -4253,12 +4251,12 @@ RwRowanSample9Test >> testIssue715 [
 
 "every project includes 'tests' by default"
 	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project loadedLoadSpecifications.
 	requiredLoadSpecs do: [:ls | 
 		self assert: (ls customConditionalAttributes includes: 'tests') ].
 
-"load project and required projects WITHOUT tests for every project except requiredProjectName1"
-	requiredLoadSpecs := project produce.
+"read load specs for required projects from disk and remove 'tests' attributue for every project except requiredProjectName1"
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs do: [:ls |
 		ls projectName = requiredProjectName1 
 			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
@@ -4286,15 +4284,16 @@ RwRowanSample9Test >> testIssue715 [
 			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
 			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
 
-"from loaded or reread from disk"
-	requiredLoadSpecs := project produce.
+"load specs from the loaded projects (i.e., no produce and no read from disk)"
+	requiredLoadSpecs := project loadedLoadSpecifications.
+"confirm that the load spec for loaded projects match loaded state (not disk state)"
 	requiredLoadSpecs do: [:ls | 
 		ls projectName = requiredProjectName1 
 			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
 			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
 
 "load project and required projects WITH tests  for every project except requiredProjectName1"
-	requiredLoadSpecs := project produce.
+	requiredLoadSpecs := project readLoadSpecifications.
 	requiredLoadSpecs do: [:ls | 
 		ls projectName = requiredProjectName1 
 			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
@@ -4876,7 +4875,7 @@ RwRowanSample9Test >> testSpec_0001_C [
 		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
 
 "remove Core component and reload"
-	requiredLoadSpecs := (loadedProjects projectNamed: projectName) produce.
+	requiredLoadSpecs := (loadedProjects projectNamed: projectName) readLoadSpecifications.
 	(requiredLoadSpecs specForProjectNamed: projectName) removeComponentNames: {'Core'}.
 
 "load"
