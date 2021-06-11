@@ -4109,7 +4109,9 @@ RwRowanSample9Test >> testIssue707_01 [
 		methodValidationBlock value: className ].
 
 "revert primary project - load only primary project from disk"
-	primaryProject revert.
+	loadedProjects := primaryProject revert.
+	self assert: loadedProjects size equals: 1.
+	loadedProjects projectNamed: primaryProject name. "no error"
 
 "validate"
 	projectNames do: [:pn |
@@ -4131,7 +4133,9 @@ RwRowanSample9Test >> testIssue707_01 [
 			ifFalse: [ methodValidationBlock value: className ] ].
 
 "reload primary project AND required projects from disk"
-	primaryProject reload.
+	loadedProjects := primaryProject reload.
+	self assert: loadedProjects size equals: projectNames size.
+	loadedProjects projectNamed: primaryProject name. "no error"
 
 "validate"
 	projectNames do: [:pn |
@@ -4235,7 +4239,7 @@ RwRowanSample9Test >> testIssue715_01 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 	requiredProjectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
+[
 "resolve project"
 	resolvedProject := loadSpec read.
 
@@ -4310,11 +4314,225 @@ RwRowanSample9Test >> testIssue715_01 [
 		_standard_validate: project asDefinition
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-
+] ensure: [
 "clean up"
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue715_02 [
+	"#reload should restore project state to match disk, using the loaded load specs"
+
+	"https://github.com/GemTalk/Rowan/issues/715"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+[
+"resolve project"
+	resolvedProject := loadSpec read.
+
+"load project - matches what is on disk"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"read load specs for required projects from disk and remove 'tests' attributue for every project except requiredProjectName1"
+	requiredLoadSpecs := project readLoadSpecifications.
+	requiredLoadSpecs do: [:ls |
+		ls projectName = requiredProjectName1 
+			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
+
+"load requiredLoadSpecs"
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+
+"reload project - reload packages of all projects, but expect the same set of packages to be loaded"
+	loadedProjects := project reload.
+
+"validate"
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+] ensure: [ 
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue715_03 [
+	"#revert should restore project state to match disk, using the loaded load specs"
+
+	"https://github.com/GemTalk/Rowan/issues/715"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+[
+"resolve project"
+	resolvedProject := loadSpec read.
+
+"load project - matches what is on disk"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"read load specs for required projects from disk and remove 'tests' attributue for every project except requiredProjectName1"
+	requiredLoadSpecs := project readLoadSpecifications.
+	requiredLoadSpecs do: [:ls |
+		ls projectName = requiredProjectName1 
+			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
+
+"load project"
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+
+"reload project - expect exactly same results as initial load (all tests loaded)"
+	loadedProjects := project revert.
+
+"validate"
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: {project projectName}.
+
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+] ensure: [
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue715_04 [
+	"#readLoadSpecifications should restore project state to match disk using the loaded load specs"
+
+	"https://github.com/GemTalk/Rowan/issues/715"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+
+	projectName := loadSpec projectName.
+	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName2 := 'RowanSample11'.
+	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
+	projectNames := {projectName }, requiredProjectNames.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	requiredProjectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+[
+"resolve project"
+	resolvedProject := loadSpec read.
+
+"load project - matches what is on disk"
+	loadedProjects := resolvedProject load.
+	project := Rowan projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+
+"read load specs for required projects from disk and remove 'tests' attributue for every project except requiredProjectName1"
+	requiredLoadSpecs := project readLoadSpecifications.
+	requiredLoadSpecs do: [:ls |
+		ls projectName = requiredProjectName1 
+			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
+
+"load project some tests not loaded"
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	loadedProjects do: [:lp |
+		lp projectName = requiredProjectName1 
+			ifTrue: [ self deny: lp testSuite tests isEmpty]
+			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+
+"readLoadSpecifications - expect exactly same results as initial load (all tests loaded)"
+	requiredLoadSpecs := project readLoadSpecifications.
+	loadedProjects := requiredLoadSpecs load.
+
+"validate"
+	self
+		_standard_validate: project asDefinition
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
+] ensure: [
+"clean up"
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+]
 ]
 
 { #category : 'tests' }

@@ -197,7 +197,7 @@ RwProjectTest >> testDiskProjectApi [
 
 { #category : 'tests' }
 RwProjectTest >> testGitProjectApi [
-	"focus on resolved and loaded projects ... defined project coverage is provvided by RwTestProjectLibraryGeneratorTest"
+	"focus on resolved and loaded projects ... defined project coverage is provided by RwTestProjectLibraryGeneratorTest"
 
 	"https://github.com/GemTalk/Rowan/issues/566"
 

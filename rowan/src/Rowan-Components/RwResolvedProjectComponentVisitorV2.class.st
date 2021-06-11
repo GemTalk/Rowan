@@ -92,10 +92,8 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: 
 	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| pp cn cca |
+			| pp |
 			pp := projectVisitorQueue removeFirst.
-			cn := pp componentNames.
-			cca := pp customConditionalAttributes.
 
 			visitor := self readLoadSpecForProducedProject: pp.
 
@@ -512,7 +510,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProdu
 	^ self
 		_readComponentsForProducedProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: aProducedProject platformConditionalAttributes
+		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 ]
 

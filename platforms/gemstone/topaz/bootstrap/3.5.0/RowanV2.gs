@@ -51532,17 +51532,19 @@ category: 'actions'
 method: RwProject
 reload
 	"
-		load the receiver AND required projects.
+		load the receiver AND required projects using the loaded load specs.
 	"
 
-	^ Rowan projectTools load loadProjectNamed: self name
+	^ self loadedLoadSpecifications load
 %
 
 category: 'actions'
 method: RwProject
 reload: instanceMigrator
 	"
-		load the receiver AND required projects.
+		load the receiver AND required projects using the loaded load specs.
+
+		Use the specifiied instanceMigrator
 	"
 
 	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
@@ -51559,8 +51561,8 @@ category: 'actions'
 method: RwProject
 revert
 	"
-		read and reload just the receiver from disk. Required projects for the receiver are only loaded if they are not already 
-			present in the image.
+		read and reload just the receiver from disk using the loaded load specs. Required projects for the receiver 
+			are only loaded if they are not already present in the image.
 
 		To revert the receiver AND required projects, use reload.
 	"
@@ -51573,8 +51575,12 @@ category: 'actions'
 method: RwProject
 revert: instanceMigrator
 	"
-		read the reciever and reload only the receiver into the image, using the specifiied instanceMigrator. Required projects for the 
-			receiver are only loaded if they are not already present in the image.
+		read and reload just the receiver from disk using the loaded load specs. Required projects for the receiver 
+			are only loaded if they are not already present in the image.
+
+		To revert the receiver AND required projects, use reload.
+
+		Use the specifiied instanceMigrator
 	"
 
 	"should replace places where a projectSet was created for the receiver"
@@ -86785,10 +86791,8 @@ readLoadSpecSetForProducedProject: producedProject
 	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
-			| pp cn cca |
+			| pp |
 			pp := projectVisitorQueue removeFirst.
-			cn := pp componentNames.
-			cca := pp customConditionalAttributes.
 
 			visitor := self readLoadSpecForProducedProject: pp.
 
@@ -87405,7 +87409,7 @@ _readComponentsForProducedProject: aProducedProject
 	^ self
 		_readComponentsForProducedProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: aProducedProject platformConditionalAttributes
+		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 %
 
