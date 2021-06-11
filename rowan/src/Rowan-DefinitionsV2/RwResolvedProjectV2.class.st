@@ -1484,12 +1484,11 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> requiredProjectNames [
-	^ self
-		_requiredProjectNames: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
+	^ RwResolvedProjectComponentVisitorV2
+		requiredProjectNamesForProducedProject: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes [
 	^ self
 		_requiredProjectNames: customConditionalAttributes

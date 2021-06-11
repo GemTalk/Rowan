@@ -197,19 +197,11 @@ RwProject >> repositoryRoot: aFileReferenceOrString [
 
 { #category : '*rowan-corev2' }
 RwProject >> requiredProjects [
-	"return list of dependent project names"
+	"return list of dependent projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 
-	| requiredProjectNames theComponents |
-	theComponents := self _loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
-	requiredProjectNames := Set new.
-	theComponents
-		conditionalComponentsStartingWith: self componentNames
-		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
-	^ requiredProjectNames asArray
+	^ self requiredProjectNames asArray
 		collect: [ :projectName | Rowan projectNamed: projectName ]
 ]
 

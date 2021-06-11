@@ -434,6 +434,46 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 		useLoadedProjects: false
 ]
 
+{ #category : 'required projects' }
+RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProducedProject: producedProject [
+	| requiredProjectNames visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	requiredProjectNames := Set new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {producedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp |
+			pp := projectVisitorQueue removeFirst.
+
+			visitor := self readLoadSpecForProducedProject: pp.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theProducedProject |
+					"derive resolved project from the load spec"
+					theProducedProject := loadSpec produceWithParentProject: pp.
+					processedProjects
+						at: theProducedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theProducedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| pp theVisitor |
+			theVisitor := visitedArray at: 1.
+			pp := visitedArray at: 2.
+			requiredProjectNames add: pp projectName ].
+	^ requiredProjectNames
+]
+
 { #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> resolvedProject: resolvedProject customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ self new

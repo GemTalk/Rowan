@@ -65742,12 +65742,11 @@ repoType: aSymbol
 category: 'accessing'
 method: RwResolvedProjectV2
 requiredProjectNames
-	^ self
-		_requiredProjectNames: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
+	^ RwResolvedProjectComponentVisitorV2
+		requiredProjectNamesForProducedProject: self
 %
 
-category: 'accessing'
+category: 'to be removed'
 method: RwResolvedProjectV2
 requiredProjectNames: customConditionalAttributes
 	^ self
@@ -87141,6 +87140,47 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 		useLoadedProjects: false
 %
 
+category: 'required projects'
+classmethod: RwResolvedProjectComponentVisitorV2
+requiredProjectNamesForProducedProject: producedProject
+	| requiredProjectNames visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	requiredProjectNames := Set new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {producedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp |
+			pp := projectVisitorQueue removeFirst.
+
+			visitor := self readLoadSpecForProducedProject: pp.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theProducedProject |
+					"derive resolved project from the load spec"
+					theProducedProject := loadSpec produceWithParentProject: pp.
+					processedProjects
+						at: theProducedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theProducedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| pp theVisitor |
+			theVisitor := visitedArray at: 1.
+			pp := visitedArray at: 2.
+			requiredProjectNames add: pp projectName ].
+	^ requiredProjectNames
+%
+
 category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
 resolvedProject: resolvedProject customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
@@ -101230,19 +101270,11 @@ repositoryRoot: aFileReferenceOrString
 category: '*rowan-corev2'
 method: RwProject
 requiredProjects
-	"return list of dependent project names"
+	"return list of dependent projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 
-	| requiredProjectNames theComponents |
-	theComponents := self _loadedComponents. "use loadedComponents, not _loadedProjectDefinition - loadedComponents kept up to date"
-	requiredProjectNames := Set new.
-	theComponents
-		conditionalComponentsStartingWith: self componentNames
-		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-		do: [ :aComponent | requiredProjectNames addAll: aComponent projectNames ].
-	^ requiredProjectNames asArray
+	^ self requiredProjectNames asArray
 		collect: [ :projectName | Rowan projectNamed: projectName ]
 %
 

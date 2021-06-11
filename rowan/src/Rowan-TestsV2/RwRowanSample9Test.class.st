@@ -4324,7 +4324,7 @@ RwRowanSample9Test >> testIssue715_01 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue715_02 [
-	"#reload should restore project state to match disk, using the loaded load specs"
+	"#reload should reread packages for project (and required projects) from disk, using the loaded load specs, and load into image"
 
 	"https://github.com/GemTalk/Rowan/issues/715"
 
@@ -4344,7 +4344,7 @@ RwRowanSample9Test >> testIssue715_02 [
 	requiredProjectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 [
-"resolve project"
+"resolve project" 
 	resolvedProject := loadSpec read.
 
 "load project - matches what is on disk"
@@ -4396,7 +4396,7 @@ RwRowanSample9Test >> testIssue715_02 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue715_03 [
-	"#revert should restore project state to match disk, using the loaded load specs"
+	"#revert should reread packages from disk for the specified project, using the loaded load spec, and load into image"
 
 	"https://github.com/GemTalk/Rowan/issues/715"
 
