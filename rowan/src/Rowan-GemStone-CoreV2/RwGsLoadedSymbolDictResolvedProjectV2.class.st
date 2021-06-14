@@ -240,6 +240,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolved
 	handle := aResolvedProject copyForLoadedProject
 ]
 
+{ #category : 'testing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> isEmbedded [
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self resolvedProject isEmbedded
+]
+
 { #category : 'comparing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> isEmpty [
 	"Used during definition compareAgainstBase:"

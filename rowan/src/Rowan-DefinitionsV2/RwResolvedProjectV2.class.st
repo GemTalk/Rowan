@@ -893,6 +893,13 @@ RwResolvedProjectV2 >> initialize [
 	projectComponents := RwResolvedProjectComponentsV2 new
 ]
 
+{ #category : 'testing' }
+RwResolvedProjectV2 >> isEmbedded [
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self loadSpecification isEmbedded
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> isEmpty [
 	^ self _projectDefinition isEmpty

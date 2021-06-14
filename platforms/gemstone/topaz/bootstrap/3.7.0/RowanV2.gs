@@ -48928,6 +48928,14 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
+category: 'testing'
+method: RwAbstractProject
+isEmbedded
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self _concreteProject isEmbedded
+%
+
 category: 'transitions'
 method: RwAbstractProject
 load
@@ -64548,6 +64556,14 @@ initialize
 	super initialize.
 	projectDefinition := RwProjectDefinition new.
 	projectComponents := RwResolvedProjectComponentsV2 new
+%
+
+category: 'testing'
+method: RwResolvedProjectV2
+isEmbedded
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self loadSpecification isEmbedded
 %
 
 category: 'project definition'
@@ -83266,6 +83282,14 @@ initializeForResolvedProject: aResolvedProject
 	handle := aResolvedProject copyForLoadedProject
 %
 
+category: 'testing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+isEmbedded
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self resolvedProject isEmbedded
+%
+
 category: 'comparing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 isEmpty
@@ -87441,6 +87465,14 @@ initializeForExport
 
 category: 'testing'
 method: RwLoadSpecificationV2
+isEmbedded
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ false
+%
+
+category: 'testing'
+method: RwLoadSpecificationV2
 isStrict
 	^ self repositoryResolutionPolicy == #strict
 %
@@ -87934,6 +87966,14 @@ label
 %
 
 !		Instance methods for 'RwEmbeddedLoadSpecificationV2'
+
+category: 'testing'
+method: RwEmbeddedLoadSpecificationV2
+isEmbedded
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ true
+%
 
 category: 'to be removed'
 method: RwEmbeddedLoadSpecificationV2
@@ -97661,13 +97701,11 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 category: '*rowan-corev2'
 method: RwProject
 diskRepositoryRoot: repositoryRootPathString
-	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project _diskRepositoryRoot: repositoryRootPathString.
@@ -97679,13 +97717,11 @@ diskRepositoryRoot: repositoryRootPathString
 category: '*rowan-corev2'
 method: RwProject
 diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
-	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project _diskRepositoryRoot: repositoryRootPathString ] ].
@@ -97738,13 +97774,11 @@ gitRepositoryRoot: repositoryRootPathString
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
-	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project _gitRepositoryRoot: repositoryRootPathString.
@@ -97763,35 +97797,29 @@ methodEnvForPackageNamed: packageName
 category: '*rowan-corev2'
 method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project
 						_readOnlyRepositoryRoot: repositoryRootPathString
 						commitId: commitId.
 					project projectsHome: nil ] ].
-	self
-		_readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId.
+	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
 	self projectsHome: nil
 %
 
 category: '*rowan-corev2'
 method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId
-	| originalRepositoryRoot |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project
@@ -97821,14 +97849,13 @@ removePackageNamed: packageName
 category: '*rowan-corev2'
 method: RwProject
 repositoryRoot: aFileReferenceOrString
-	| resolvedProject originalRepositoryRoot |
+	| resolvedProject |
 	self
 		deprecated:
 			'Use [git,disk,readOnly]RepositoryRoot: message and separate load expression instead'.
-	originalRepositoryRoot := self repositoryRoot.
 	self requiredProjects
 		do: [ :project | 
-			project repositoryRoot = originalRepositoryRoot
+			project isEmbedded
 				ifTrue: [ 
 					"only embedded required projects should have their repository root swapped out"
 					project _repositoryRoot: aFileReferenceOrString ] ].

@@ -37,6 +37,13 @@ RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
+{ #category : 'testing' }
+RwAbstractProject >> isEmbedded [
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ self _concreteProject isEmbedded
+]
+
 { #category : 'transitions' }
 RwAbstractProject >> load [
 	"

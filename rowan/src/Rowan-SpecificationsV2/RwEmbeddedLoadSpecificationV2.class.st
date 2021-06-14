@@ -9,6 +9,13 @@ RwEmbeddedLoadSpecificationV2 class >> label [
 	^ 'embedded load specification '
 ]
 
+{ #category : 'testing' }
+RwEmbeddedLoadSpecificationV2 >> isEmbedded [
+	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
+
+	^ true
+]
+
 { #category : 'to be removed' }
 RwEmbeddedLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
