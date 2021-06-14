@@ -197,7 +197,7 @@ RwProject >> repositoryRoot: aFileReferenceOrString [
 
 { #category : '*rowan-corev2' }
 RwProject >> requiredProjects [
-	"return list of dependent projects"
+	"return closure of dependent projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 

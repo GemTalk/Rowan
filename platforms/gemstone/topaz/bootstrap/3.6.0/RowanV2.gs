@@ -50880,8 +50880,10 @@ loadedLoadSpecifications
 	"Return an RwLoadSpecSet containing the receiver and all load specs for required projects, based on the 
 		load spec associated with the loaded project (no disk read performed)"
 
-	^ RwLoadSpecSet
-		withAll: (self requiredProjects collect: [ :each | each loadSpecification ])
+	^ (RwLoadSpecSet
+		withAll: (self requiredProjects collect: [ :each | each loadSpecification ]))
+		addLoadSpec: self loadSpecification;
+		yourself
 %
 
 category: 'querying'
@@ -50982,21 +50984,20 @@ projectUrl
 
 category: 'actions'
 method: RwProject
-readLoadSpecifications
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk) and read from disk"
-
-	^ self loadSpecification produce
-%
-
-category: 'actions'
-method: RwProject
 reload
 	"
-		load the receiver AND required projects using the loaded load specs.
+		Load the receiver AND required projects using the loaded load specs.
+		Use produce, in case there have been significant changes on disk
 	"
 
-	^ self loadedLoadSpecifications load
+	| producedSpecs loadedSpecs |
+	producedSpecs := self loadSpecification produce.
+	loadedSpecs := self loadedLoadSpecifications.
+	producedSpecs projectNames
+		do: [ :pn | 
+			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :ls | producedSpecs addLoadSpec: ls ] ].
+	^ producedSpecs load
 %
 
 category: 'actions'
@@ -65203,6 +65204,8 @@ repoType: aSymbol
 category: 'accessing'
 method: RwResolvedProjectV2
 requiredProjectNames
+	(self requiredProjectNames: self customConditionalAttributes) isEmpty
+		ifTrue: [ ^ #() ].
 	^ RwResolvedProjectComponentVisitorV2
 		requiredProjectNamesForProducedProject: self
 %
@@ -75383,6 +75386,12 @@ category: 'accessing'
 method: RwLoadSpecSet
 specForProjectNamed: projectName
 	^ entities at: projectName
+%
+
+category: 'accessing'
+method: RwLoadSpecSet
+specForProjectNamed: projectName ifAbsent: absentBlock
+	^ entities at: projectName ifAbsent: absentBlock
 %
 
 ! Class implementation for 'RwGsImage'
@@ -86234,50 +86243,9 @@ readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNam
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecSetForProducedProject: producedProject
-	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
-	loadSpecSet := RwLoadSpecSet new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {producedProject}.
-	processedProjects := Dictionary new.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| pp |
-			pp := projectVisitorQueue removeFirst.
-
-			visitor := self readLoadSpecForProducedProject: pp.
-
-			processedProjects at: pp projectName put: pp.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					pp}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theProducedProject |
-					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
-					processedProjects
-						at: theProducedProject projectName
-						ifAbsent: [ 
-							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theProducedProject ] ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theproducedProject := pp.
-			theLoadSpec := theproducedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
-			loadSpecSet addLoadSpec: theLoadSpec ].
-	^ loadSpecSet
+	^ self
+		readLoadSpecSetForProducedProject: producedProject
+		platformConditionalAttributes: producedProject platformConditionalAttributes
 %
 
 category: 'read load specs'
@@ -86910,7 +86878,7 @@ _readComponentsForProducedProject: aProducedProject platformConditionalAttribute
 	^ self
 		_readComponentsForProducedProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: customConditionalAttributes
+		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aPlatformConditionalAttributes
 %
 
@@ -97848,7 +97816,7 @@ repositoryRoot: aFileReferenceOrString
 category: '*rowan-corev2'
 method: RwProject
 requiredProjects
-	"return list of dependent projects"
+	"return closure of dependent projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571 is addressed"
 

@@ -93,3 +93,8 @@ RwLoadSpecSet >> removeCustomConditionalAttributes: anArray [
 RwLoadSpecSet >> specForProjectNamed: projectName [
 	^ entities at: projectName
 ]
+
+{ #category : 'accessing' }
+RwLoadSpecSet >> specForProjectNamed: projectName ifAbsent: absentBlock [
+	^ entities at: projectName ifAbsent: absentBlock
+]

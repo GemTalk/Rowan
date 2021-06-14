@@ -1484,6 +1484,8 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 
 { #category : 'accessing' }
 RwResolvedProjectV2 >> requiredProjectNames [
+	(self requiredProjectNames: self customConditionalAttributes) isEmpty
+		ifTrue: [ ^ #() ].
 	^ RwResolvedProjectComponentVisitorV2
 		requiredProjectNamesForProducedProject: self
 ]

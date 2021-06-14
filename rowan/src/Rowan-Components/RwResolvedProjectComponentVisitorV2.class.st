@@ -85,50 +85,9 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForResolvedProject: res
 
 { #category : 'read load specs' }
 RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: producedProject [
-	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
-	loadSpecSet := RwLoadSpecSet new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {producedProject}.
-	processedProjects := Dictionary new.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| pp |
-			pp := projectVisitorQueue removeFirst.
-
-			visitor := self readLoadSpecForProducedProject: pp.
-
-			processedProjects at: pp projectName put: pp.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					pp}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theProducedProject |
-					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
-					processedProjects
-						at: theProducedProject projectName
-						ifAbsent: [ 
-							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theProducedProject ] ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theproducedProject := pp.
-			theLoadSpec := theproducedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
-			loadSpecSet addLoadSpec: theLoadSpec ].
-	^ loadSpecSet
+	^ self
+		readLoadSpecSetForProducedProject: producedProject
+		platformConditionalAttributes: producedProject platformConditionalAttributes
 ]
 
 { #category : 'read load specs' }
@@ -559,7 +518,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProdu
 	^ self
 		_readComponentsForProducedProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: customConditionalAttributes
+		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aPlatformConditionalAttributes
 ]
 

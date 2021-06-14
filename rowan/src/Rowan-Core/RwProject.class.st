@@ -358,8 +358,10 @@ RwProject >> loadedLoadSpecifications [
 	"Return an RwLoadSpecSet containing the receiver and all load specs for required projects, based on the 
 		load spec associated with the loaded project (no disk read performed)"
 
-	^ RwLoadSpecSet
-		withAll: (self requiredProjects collect: [ :each | each loadSpecification ])
+	^ (RwLoadSpecSet
+		withAll: (self requiredProjects collect: [ :each | each loadSpecification ]))
+		addLoadSpec: self loadSpecification;
+		yourself
 ]
 
 { #category : 'querying' }
@@ -446,20 +448,20 @@ RwProject >> projectUrl [
 ]
 
 { #category : 'actions' }
-RwProject >> readLoadSpecifications [
-	"Return an RwLoadSpecSet containing the receiver all load specs for required projects. Note that each of the projects associated with the load spec
-		WILL be produced (i.e. cloned to the local disk) and read from disk"
-
-	^ self loadSpecification produce
-]
-
-{ #category : 'actions' }
 RwProject >> reload [
 	"
-		load the receiver AND required projects using the loaded load specs.
+		Load the receiver AND required projects using the loaded load specs.
+		Use produce, in case there have been significant changes on disk
 	"
 
-	^ self loadedLoadSpecifications load
+	| producedSpecs loadedSpecs |
+	producedSpecs := self loadSpecification produce.
+	loadedSpecs := self loadedLoadSpecifications.
+	producedSpecs projectNames
+		do: [ :pn | 
+			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :ls | producedSpecs addLoadSpec: ls ] ].
+	^ producedSpecs load
 ]
 
 { #category : 'actions' }
