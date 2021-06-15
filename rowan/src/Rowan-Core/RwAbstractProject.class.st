@@ -44,19 +44,6 @@ RwAbstractProject >> isEmbedded [
 	^ self _concreteProject isEmbedded
 ]
 
-{ #category : 'transitions' }
-RwAbstractProject >> load [
-	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are 
-			not already present in the image.
-
-		To explicitly load the receiver AND required projects, construct a project set containing projects to 
-			be loaded and send #load to the project set.
-	"
-
-	^ self _concreteProject load
-]
-
 { #category : 'accessing' }
 RwAbstractProject >> loadSpecification [
 	^ self _concreteProject loadSpecification

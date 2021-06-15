@@ -4106,9 +4106,6 @@ RwRowanSample9Test >> testIssue707_01 [
 			packageName: pn, '-Core'.
 		methodValidationBlock value: className ].
 
-"load primary project - basically a noop for loaded projects"
-	primaryProject load.
-
 "validate"
 	projectNames do: [:pn |
 		| className |
@@ -8152,10 +8149,9 @@ RwRowanSample9Test >> testSwitchRepository [
 "validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
 
-"load project1 from spec_0003 checkout: changing repository root of loaded project
-	results in a load "
+"reload project1 from spec_0003 checkout: changing repository root of loaded project"
 	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
-	loadedProjects := (project1 gitRepositoryRoot: gitRepositoryRoot) load.
+	loadedProjects := (project1 gitRepositoryRoot: gitRepositoryRoot) reload.
 
 "Validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.

@@ -49667,20 +49667,6 @@ isEmbedded
 	^ self _concreteProject isEmbedded
 %
 
-category: 'transitions'
-method: RwAbstractProject
-load
-	"
-		load only the receiver into the image. Required projects for the receiver are only loaded if they are 
-			not already present in the image.
-
-		To explicitly load the receiver AND required projects, construct a project set containing projects to 
-			be loaded and send #load to the project set.
-	"
-
-	^ self _concreteProject load
-%
-
 category: 'accessing'
 method: RwAbstractProject
 loadSpecification
@@ -49796,6 +49782,20 @@ category: 'accessing'
 method: RwAbstractUnloadedProject
 gitUrl: aString
 	self loadSpecification gitUrl: aString
+%
+
+category: 'transitions'
+method: RwAbstractUnloadedProject
+load
+	"
+		load only the receiver into the image. Required projects for the receiver are only loaded if they are 
+			not already present in the image.
+
+		To explicitly load the receiver AND required projects, construct a project set containing projects to 
+			be loaded and send #load to the project set.
+	"
+
+	^ self _concreteProject load
 %
 
 category: 'accessing'
