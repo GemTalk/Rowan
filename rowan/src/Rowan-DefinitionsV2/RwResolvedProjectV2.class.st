@@ -745,8 +745,11 @@ RwResolvedProjectV2 >> customConditionalAttributes [
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	| loadSpec |
+	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
-		diskRepositoryRoot: repositoryRootPathString
+		diskRepositoryRoot: repositoryRootPathString.
+	self updateLoadSpecWithRepositoryRoot: loadSpec
 ]
 
 { #category : 'load specification' }
@@ -869,9 +872,12 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	| loadSpec |
+	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
 		gitRepositoryRoot: repositoryRootPathString
-		revision: self loadSpecification revision
+		revision: loadSpec revision.
+	self updateLoadSpecWithRepositoryRoot: loadSpec
 ]
 
 { #category : 'load specification' }
@@ -1203,9 +1209,12 @@ RwResolvedProjectV2 >> readLoadSpecSetComponentNames: componentNames [
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	| loadSpec |
+	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
 		readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId.
+	self updateLoadSpecWithRepositoryRoot: loadSpec.
 
 	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
 		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]

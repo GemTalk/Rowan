@@ -8124,7 +8124,7 @@ RwRowanSample9Test >> testSwitchRepository [
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
 		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects |
+	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot |
 	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
@@ -8154,7 +8154,8 @@ RwRowanSample9Test >> testSwitchRepository [
 
 "load project1 from spec_0003 checkout: changing repository root of loaded project
 	results in a load "
-	loadedProjects := (project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString) load.
+	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
+	loadedProjects := (project1 gitRepositoryRoot: gitRepositoryRoot) load.
 
 "Validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
@@ -8163,6 +8164,7 @@ RwRowanSample9Test >> testSwitchRepository [
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar = 'bar'.	"bar method not present in spec_0001"
 	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
+	self assert: project1 loadSpecification gitUrl equals: 'file://', gitRepositoryRoot
 ]
 
 { #category : 'tests' }
