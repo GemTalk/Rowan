@@ -6,17 +6,19 @@ Class {
 		'remoteUrl',
 		'committish',
 		'gitUrl',
-		'gitRoot'
+		'gitRoot',
+		'relativeRepositoryRoot'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'instance creation' }
-RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString revision: revision [
+RwGitRepositoryDefinitionV2 class >> newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString relativeRepositoryRoot: aRelativeRepositoryRoot revision: revision [
 	^ self new
 		name: repositoryName;
 		projectsHome: aFileReference;
 		repositoryUrl: aRepositoryUrlString;
+		relativeRepositoryRoot: aRelativeRepositoryRoot;
 		committish: revision;
 		yourself
 ]
@@ -31,8 +33,10 @@ RwGitRepositoryDefinitionV2 >> = anObject [
 				and: [ 
 					self remoteUrl = anObject remoteUrl
 						and: [ 
-							self committish = anObject committish
-								and: [ self gitUrl = anObject gitUrl and: [ self gitRoot = anObject gitRoot ] ] ] ] ]
+							self relativeRepositoryRoot = anObject relativeRepositoryRoot
+								and: [ 
+									self committish = anObject committish
+										and: [ self gitUrl = anObject gitUrl and: [ self gitRoot = anObject gitRoot ] ] ] ] ] ]
 ]
 
 { #category : 'actions' }
@@ -188,7 +192,12 @@ RwGitRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revis
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> gitRoot [
-	^ gitRoot ifNil: [ self repositoryRoot ]
+	^ gitRoot
+		ifNil: [ 
+			| root |
+			root := self repositoryRoot.	"may initialize gitRoot"
+			gitRoot ifNil: [ ^ root ].
+			gitRoot ]
 ]
 
 { #category : 'accessing' }
@@ -215,6 +224,7 @@ RwGitRepositoryDefinitionV2 >> hash [
 	hashValue := hashValue bitXor: self committish hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self gitRoot hash.
+	hashValue := hashValue bitXor: self relativeRepositoryRoot hash.
 	^ hashValue
 ]
 
@@ -232,6 +242,16 @@ RwGitRepositoryDefinitionV2 >> push: remoteName branch: branchName [
 		gitpushIn: self gitRoot pathString
 		remote: remoteName
 		branch: branchName
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> relativeRepositoryRoot [
+	^ relativeRepositoryRoot ifNil: [ ^ '' ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinitionV2 >> relativeRepositoryRoot: object [
+	relativeRepositoryRoot := object
 ]
 
 { #category : 'accessing' }
@@ -267,7 +287,13 @@ RwGitRepositoryDefinitionV2 >> repositoryRoot [
 					url := urlString asRwUrl.
 					url scheme = 'file'
 						ifTrue: [ 
-							self repositoryRoot: url pathString.
+							self relativeRepositoryRoot isEmpty not
+								ifTrue: [ 
+									gitRoot ifNil: [ self gitRoot: url pathString asFileReference ].
+									self
+										repositoryRoot:
+											url pathString asFileReference / self relativeRepositoryRoot ]
+								ifFalse: [ self repositoryRoot: url pathString ].
 							^ repositoryRoot ] ].
 			self repositoryRoot: self projectsHome / self name.
 			^ repositoryRoot ]

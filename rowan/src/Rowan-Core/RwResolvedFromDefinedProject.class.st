@@ -4,11 +4,6 @@ Class {
 	#category : 'Rowan-Core'
 }
 
-{ #category : 'private' }
-RwResolvedFromDefinedProject >> _projectSpecification [
-	^ self _concreteProject _projectSpecification
-]
-
 { #category : 'accessing' }
 RwResolvedFromDefinedProject >> componentsPath: aString [
 	self _projectSpecification componentsPath: aString

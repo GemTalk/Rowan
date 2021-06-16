@@ -45,16 +45,6 @@ RwDefinedProject >> _gemstoneAllUsersName [
 	^ self _concreteProject _gemstoneAllUsersName
 ]
 
-{ #category : 'private' }
-RwDefinedProject >> _projectRepository [
-	^ self _concreteProject _projectRepository
-]
-
-{ #category : 'private' }
-RwDefinedProject >> _projectSpecification [
-	^ self _concreteProject _projectSpecification
-]
-
 { #category : 'accessing' }
 RwDefinedProject >> _validate: conditionalAttributes [
 	^ self _concreteProject _validate: conditionalAttributes

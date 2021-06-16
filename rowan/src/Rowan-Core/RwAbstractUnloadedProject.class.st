@@ -17,6 +17,16 @@ RwAbstractUnloadedProject >> _concreteProject: aResolvedProject [
 	concreteProject := aResolvedProject
 ]
 
+{ #category : 'private' }
+RwAbstractUnloadedProject >> _projectRepository [
+	^ self _concreteProject _projectRepository
+]
+
+{ #category : 'private' }
+RwAbstractUnloadedProject >> _projectSpecification [
+	^ self _concreteProject _projectSpecification
+]
+
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> comment: aString [
 	self _concreteProject comment: aString
@@ -63,6 +73,20 @@ RwAbstractUnloadedProject >> packages [
 { #category : 'actions' }
 RwAbstractUnloadedProject >> packages: aPackageDictionary [
 	self _concreteProject packages: aPackageDictionary
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> relativeRepositoryRoot [
+	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	^ self loadSpecification relativeRepositoryRoot
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> relativeRepositoryRoot: aRelativePathString [
+	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	self loadSpecification relativeRepositoryRoot: aRelativePathString
 ]
 
 { #category : 'accessing' }

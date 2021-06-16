@@ -40,13 +40,14 @@ RwAbstractRepositoryDefinitionV2 >> diskRepositoryRoot: repositoryRootPathString
 ]
 
 { #category : 'actions' }
-RwAbstractRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString revision: aString [
+RwAbstractRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString relativeRepositoryRoot: aRelativeRepositoryRoot revision: aString [
 	| urlString |
 	urlString := 'file:' , repositoryRootPathString.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
 		projectsHome: self projectsHome
 		repositoryUrl: urlString
+		relativeRepositoryRoot: aRelativeRepositoryRoot
 		revision: aString
 ]
 

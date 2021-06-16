@@ -46,6 +46,7 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
+						relativeRepositoryRoot: self loadSpecification relativeRepositoryRoot
 						revision: self loadSpecification revision ]
 				ifNil: [ 
 					self loadSpecification svnUrl
@@ -90,13 +91,15 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																	^ projectRepository := ((gitTool
 																		gitPresentIn: repositoryRootPath)
 																		and: [ 
-																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath))
+																			(gitHome := gitTool gitrevparseShowTopLevelIn: repositoryRootPath)
 																				asFileReference = self loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
 																				projectsHome: self projectsHome
 																				repositoryUrl: ''
+																				relativeRepositoryRoot:
+																					self loadSpecification relativeRepositoryRoot
 																				revision: self loadSpecification revision ]
 																		ifFalse: [ 
 																			RwDiskRepositoryDefinitionV2
@@ -116,6 +119,8 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 																		newNamed: self projectAlias
 																		projectsHome: self projectsHome
 																		repositoryUrl: ''
+																		relativeRepositoryRoot:
+																			self loadSpecification relativeRepositoryRoot
 																		revision: self loadSpecification revision ]
 																ifFalse: [ 
 																	self _projectSpecification repoType == #'disk'

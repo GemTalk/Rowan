@@ -9,6 +9,7 @@ Class {
 		'diskUrl',
 		'mercurialUrl',
 		'readonlyDiskUrl',
+		'relativeRepositoryRoot',
 		'svnUrl',
 		'revision',
 		'projectSpecFile',
@@ -169,14 +170,16 @@ RwLoadSpecificationV2 >> = anObject [
 																								and: [ 
 																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self revision = anObject revision
+																											self relativeRepositoryRoot = anObject relativeRepositoryRoot
 																												and: [ 
-																													self comment = anObject comment
+																													self revision = anObject revision
 																														and: [ 
-																															self versionPrefix = anObject versionPrefix
+																															self comment = anObject comment
 																																and: [ 
-																																	self _platformProperties = anObject _platformProperties
-																																		or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																																	self versionPrefix = anObject versionPrefix
+																																		and: [ 
+																																			self _platformProperties = anObject _platformProperties
+																																				or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
 { #category : 'visiting' }
@@ -405,6 +408,7 @@ RwLoadSpecificationV2 >> hash [
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self versionPrefix hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
+	hashValue := hashValue bitXor: self relativeRepositoryRoot hash.
 	^ hashValue
 ]
 
@@ -652,6 +656,18 @@ RwLoadSpecificationV2 >> readProjectSet [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> relativeRepositoryRoot [
+	^ relativeRepositoryRoot ifNil: [ ^ '' ]
+]
+
+{ #category : 'accessing' }
+RwLoadSpecificationV2 >> relativeRepositoryRoot: aRelativePathString [
+	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	relativeRepositoryRoot := aRelativePathString
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> removeComponentNames: anArray [
 	"remove from the existing component names"
 
@@ -682,6 +698,12 @@ RwLoadSpecificationV2 >> repositoryResolutionPolicy: aSymbolOrNil [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> repositoryRoot [
+	self projectUrl
+		ifNotNil: [ :urlString | 
+			| url |
+			url := urlString asRwUrl.
+			(url scheme = 'file' and: [ self relativeRepositoryRoot isEmpty not ])
+				ifTrue: [ ^ url pathString asFileReference / self relativeRepositoryRoot ] ].
 	^ self projectsHome / self projectAlias
 ]
 

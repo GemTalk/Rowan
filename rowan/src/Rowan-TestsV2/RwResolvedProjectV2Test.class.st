@@ -286,7 +286,7 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 		assert:
 			(x := RwGitRepositoryDefinitionV2 allInstVarNames)
 				=
-					#(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl' #'remote' #'remoteUrl' #'committish' #'gitUrl' #'gitRoot').	"If inst vars don't match, copy and hash methods have to change"
+					#(#'properties' #'projectsHome' #'repositoryRoot' #'repositoryUrl' #'remote' #'remoteUrl' #'committish' #'gitUrl' #'gitRoot' #'relativeRepositoryRoot').	"If inst vars don't match, copy and hash methods have to change"
 
 	resolvedRepository := resolvedProject _projectRepository.
 	resolvedRepositoryCopy := resolvedRepository copy.

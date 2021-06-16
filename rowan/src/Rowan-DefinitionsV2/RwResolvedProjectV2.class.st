@@ -876,6 +876,7 @@ RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
 	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
 		gitRepositoryRoot: repositoryRootPathString
+		relativeRepositoryRoot: loadSpec relativeRepositoryRoot
 		revision: loadSpec revision.
 	self updateLoadSpecWithRepositoryRoot: loadSpec
 ]

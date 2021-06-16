@@ -7565,7 +7565,7 @@ removeallclassmethods RwDiskRepositoryDefinitionV2
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwGitRepositoryDefinitionV2'
-	instVarNames: #( remote remoteUrl committish gitUrl gitRoot )
+	instVarNames: #( remote remoteUrl committish gitUrl gitRoot relativeRepositoryRoot )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9446,7 +9446,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile versionPrefix componentNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl relativeRepositoryRoot svnUrl revision projectSpecFile versionPrefix componentNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -49626,6 +49626,22 @@ packages: aPackageDictionary
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+relativeRepositoryRoot
+	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	^ self loadSpecification relativeRepositoryRoot
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+relativeRepositoryRoot: aRelativePathString
+	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	self loadSpecification relativeRepositoryRoot: aRelativePathString
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 repositoryResolutionPolicy
 	^ self loadSpecification repositoryResolutionPolicy
 %
@@ -49665,6 +49681,18 @@ category: 'private'
 method: RwAbstractUnloadedProject
 _concreteProject: aResolvedProject
 	concreteProject := aResolvedProject
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
+_projectRepository
+	^ self _concreteProject _projectRepository
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
+_projectSpecification
+	^ self _concreteProject _projectSpecification
 %
 
 ! Class implementation for 'RwDefinedProject'
@@ -50332,18 +50360,6 @@ category: 'private'
 method: RwDefinedProject
 _gemstoneAllUsersName
 	^ self _concreteProject _gemstoneAllUsersName
-%
-
-category: 'private'
-method: RwDefinedProject
-_projectRepository
-	^ self _concreteProject _projectRepository
-%
-
-category: 'private'
-method: RwDefinedProject
-_projectSpecification
-	^ self _concreteProject _projectSpecification
 %
 
 category: 'accessing'
@@ -51089,12 +51105,6 @@ category: 'accessing'
 method: RwResolvedFromDefinedProject
 specsPath: aString
 	self _projectSpecification specsPath: aString
-%
-
-category: 'private'
-method: RwResolvedFromDefinedProject
-_projectSpecification
-	^ self _concreteProject _projectSpecification
 %
 
 ! Class implementation for 'RwProject'
@@ -64055,6 +64065,7 @@ _projectRepository
 						newNamed: self projectAlias
 						projectsHome: self projectsHome
 						repositoryUrl: urlString
+						relativeRepositoryRoot: self loadSpecification relativeRepositoryRoot
 						revision: self loadSpecification revision ]
 				ifNil: [ 
 					self loadSpecification svnUrl
@@ -64099,13 +64110,15 @@ _projectRepository
 																	^ projectRepository := ((gitTool
 																		gitPresentIn: repositoryRootPath)
 																		and: [ 
-																			(gitHome := (gitTool gitrevparseShowTopLevelIn: repositoryRootPath))
+																			(gitHome := gitTool gitrevparseShowTopLevelIn: repositoryRootPath)
 																				asFileReference = self loadSpecification repositoryRoot ])
 																		ifTrue: [ 
 																			RwGitRepositoryDefinitionV2
 																				newNamed: self projectAlias
 																				projectsHome: self projectsHome
 																				repositoryUrl: ''
+																				relativeRepositoryRoot:
+																					self loadSpecification relativeRepositoryRoot
 																				revision: self loadSpecification revision ]
 																		ifFalse: [ 
 																			RwDiskRepositoryDefinitionV2
@@ -64125,6 +64138,8 @@ _projectRepository
 																		newNamed: self projectAlias
 																		projectsHome: self projectsHome
 																		repositoryUrl: ''
+																		relativeRepositoryRoot:
+																			self loadSpecification relativeRepositoryRoot
 																		revision: self loadSpecification revision ]
 																ifFalse: [ 
 																	self _projectSpecification repoType == #'disk'
@@ -65077,6 +65092,7 @@ gitRepositoryRoot: repositoryRootPathString
 	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
 		gitRepositoryRoot: repositoryRootPathString
+		relativeRepositoryRoot: loadSpec relativeRepositoryRoot
 		revision: loadSpec revision.
 	self updateLoadSpecWithRepositoryRoot: loadSpec
 %
@@ -72947,13 +72963,14 @@ diskRepositoryRoot: repositoryRootPathString
 
 category: 'actions'
 method: RwAbstractRepositoryDefinitionV2
-gitRepositoryRoot: repositoryRootPathString revision: aString
+gitRepositoryRoot: repositoryRootPathString relativeRepositoryRoot: aRelativeRepositoryRoot revision: aString
 	| urlString |
 	urlString := 'file:' , repositoryRootPathString.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
 		projectsHome: self projectsHome
 		repositoryUrl: urlString
+		relativeRepositoryRoot: aRelativeRepositoryRoot
 		revision: aString
 %
 
@@ -73211,11 +73228,12 @@ updateLoadSpecWithRepositoryRoot: aLoadSpec
 
 category: 'instance creation'
 classmethod: RwGitRepositoryDefinitionV2
-newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString revision: revision
+newNamed: repositoryName projectsHome: aFileReference repositoryUrl: aRepositoryUrlString relativeRepositoryRoot: aRelativeRepositoryRoot revision: revision
 	^ self new
 		name: repositoryName;
 		projectsHome: aFileReference;
 		repositoryUrl: aRepositoryUrlString;
+		relativeRepositoryRoot: aRelativeRepositoryRoot;
 		committish: revision;
 		yourself
 %
@@ -73233,8 +73251,10 @@ method: RwGitRepositoryDefinitionV2
 				and: [ 
 					self remoteUrl = anObject remoteUrl
 						and: [ 
-							self committish = anObject committish
-								and: [ self gitUrl = anObject gitUrl and: [ self gitRoot = anObject gitRoot ] ] ] ] ]
+							self relativeRepositoryRoot = anObject relativeRepositoryRoot
+								and: [ 
+									self committish = anObject committish
+										and: [ self gitUrl = anObject gitUrl and: [ self gitRoot = anObject gitRoot ] ] ] ] ] ]
 %
 
 category: 'actions'
@@ -73405,7 +73425,12 @@ gitRepositoryRoot: repositoryRootPathString revision: aString
 category: 'accessing'
 method: RwGitRepositoryDefinitionV2
 gitRoot
-	^ gitRoot ifNil: [ self repositoryRoot ]
+	^ gitRoot
+		ifNil: [ 
+			| root |
+			root := self repositoryRoot.	"may initialize gitRoot"
+			gitRoot ifNil: [ ^ root ].
+			gitRoot ]
 %
 
 category: 'accessing'
@@ -73436,6 +73461,7 @@ hash
 	hashValue := hashValue bitXor: self committish hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self gitRoot hash.
+	hashValue := hashValue bitXor: self relativeRepositoryRoot hash.
 	^ hashValue
 %
 
@@ -73455,6 +73481,18 @@ push: remoteName branch: branchName
 		gitpushIn: self gitRoot pathString
 		remote: remoteName
 		branch: branchName
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinitionV2
+relativeRepositoryRoot
+	^ relativeRepositoryRoot ifNil: [ ^ '' ]
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinitionV2
+relativeRepositoryRoot: object
+	relativeRepositoryRoot := object
 %
 
 category: 'accessing'
@@ -73495,7 +73533,13 @@ repositoryRoot
 					url := urlString asRwUrl.
 					url scheme = 'file'
 						ifTrue: [ 
-							self repositoryRoot: url pathString.
+							self relativeRepositoryRoot isEmpty not
+								ifTrue: [ 
+									gitRoot ifNil: [ self gitRoot: url pathString asFileReference ].
+									self
+										repositoryRoot:
+											url pathString asFileReference / self relativeRepositoryRoot ]
+								ifFalse: [ self repositoryRoot: url pathString ].
 							^ repositoryRoot ] ].
 			self repositoryRoot: self projectsHome / self name.
 			^ repositoryRoot ]
@@ -87732,14 +87776,16 @@ method: RwLoadSpecificationV2
 																								and: [ 
 																									self svnUrl = anObject svnUrl
 																										and: [ 
-																											self revision = anObject revision
+																											self relativeRepositoryRoot = anObject relativeRepositoryRoot
 																												and: [ 
-																													self comment = anObject comment
+																													self revision = anObject revision
 																														and: [ 
-																															self versionPrefix = anObject versionPrefix
+																															self comment = anObject comment
 																																and: [ 
-																																	self _platformProperties = anObject _platformProperties
-																																		or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
+																																	self versionPrefix = anObject versionPrefix
+																																		and: [ 
+																																			self _platformProperties = anObject _platformProperties
+																																				or: [ self platformProperties = anObject platformProperties ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ] ]
 %
 
 category: 'visiting'
@@ -87996,6 +88042,7 @@ hash
 	hashValue := hashValue bitXor: self repositoryResolutionPolicy hash.
 	hashValue := hashValue bitXor: self versionPrefix hash.
 	hashValue := hashValue bitXor: self _platformProperties hash.
+	hashValue := hashValue bitXor: self relativeRepositoryRoot hash.
 	^ hashValue
 %
 
@@ -88272,6 +88319,20 @@ readProjectSet
 
 category: 'accessing'
 method: RwLoadSpecificationV2
+relativeRepositoryRoot
+	^ relativeRepositoryRoot ifNil: [ ^ '' ]
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+relativeRepositoryRoot: aRelativePathString
+	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	relativeRepositoryRoot := aRelativePathString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
 removeComponentNames: anArray
 	"remove from the existing component names"
 
@@ -88306,6 +88367,12 @@ repositoryResolutionPolicy: aSymbolOrNil
 category: 'accessing'
 method: RwLoadSpecificationV2
 repositoryRoot
+	self projectUrl
+		ifNotNil: [ :urlString | 
+			| url |
+			url := urlString asRwUrl.
+			(url scheme = 'file' and: [ self relativeRepositoryRoot isEmpty not ])
+				ifTrue: [ ^ url pathString asFileReference / self relativeRepositoryRoot ] ].
 	^ self projectsHome / self projectAlias
 %
 
