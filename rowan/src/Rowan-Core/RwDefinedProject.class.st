@@ -477,8 +477,10 @@ RwDefinedProject >> projectSpecFile: relativePathString [
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> projectSpecPath: aString [
-	self _projectSpecification projectSpecPath: aString
+RwDefinedProject >> projectSpecPath: aStringOrNil [
+	"nil value indicates projectSpec file is in repository root directory"
+
+	self _projectSpecification projectSpecPath: aStringOrNil
 ]
 
 { #category : 'accessing' }

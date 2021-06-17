@@ -4541,8 +4541,13 @@ RwRowanSample9Test >> testLoadSpec_produce_02 [
 	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
 	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
 	loadSpecs do: [:aSpec |
-		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
-		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+		aSpec specName = 'spec_0025'
+			ifTrue: [
+				self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
+				self assert: aSpec gitUrl equals: 'file://', repoDir pathString ]
+			ifFalse: [ 
+				self assert: aSpec projectUrl equals: 'file://', repoDir pathString, '/', aSpec relativeRepositoryRoot.
+				self assert: aSpec gitUrl equals: 'file://', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
 
 "read"
 	readProjectSet := loadSpecs read.
@@ -5586,6 +5591,8 @@ RwRowanSample9Test >> testSpec_0025 [
 
 	"https://github.com/dalehenrich/Rowan/issues/571"
 
+	"https://github.com/dalehenrich/Rowan/issues/714"
+
 	| loadSpec projectName resolvedProject loadedProjects projectNames |
 	loadSpec := self _loadSpecNamed: 'spec_0025'.
 
@@ -5606,7 +5613,16 @@ RwRowanSample9Test >> testSpec_0025 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames
+		expectedProjectNames: projectNames.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
 ]
 
 { #category : 'tests' }

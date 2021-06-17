@@ -25,7 +25,7 @@ RwProjectTest >> test_issue714 [
 
 	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: projectsHome;
-		gitUrl: 'file://' , gitRoot pathString;
+		gitUrl: 'file://' , gitRoot pathString, '/', relativeRepositoryRoot;
 		relativeRepositoryRoot: relativeRepositoryRoot;
 		packageConvention: 'Rowan';
 		yourself.

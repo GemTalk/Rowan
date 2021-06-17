@@ -384,6 +384,8 @@ RwLoadSpecificationV2 >> gitUrl [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> gitUrl: anUrlString [
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 ]
@@ -624,7 +626,9 @@ RwLoadSpecificationV2 >> read [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
 	self produce.
-	^ RwResolvedProjectV2 loadSpecification: self
+	^ (RwResolvedProjectV2 loadSpecification: self)
+		read;
+		yourself
 ]
 
 { #category : 'actions' }

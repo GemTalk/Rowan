@@ -49671,8 +49671,10 @@ projectSpecFile: relativePathString
 
 category: 'accessing'
 method: RwDefinedProject
-projectSpecPath: aString
-	self _projectSpecification projectSpecPath: aString
+projectSpecPath: aStringOrNil
+	"nil value indicates projectSpec file is in repository root directory"
+
+	self _projectSpecification projectSpecPath: aStringOrNil
 %
 
 category: 'accessing'
@@ -63204,13 +63206,19 @@ projectSpecFile: relativePathString
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-projectSpecPath: aString
-	"full path to the project specification file - default rowan/project.ston"
+projectSpecPath: aStringOrNil
+	"relative path to the project specification file - default rowan/project.ston (relative to repository root)"
 
-	self _projectSpecification projectSpecPath: aString.
-	self loadSpecification
-		projectSpecFile:
-			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
+	"nil value indicates projectSpec file is in repository root directory"
+
+	| projectSpecFileName |
+	self _projectSpecification projectSpecPath: aStringOrNil.
+	projectSpecFileName := self _projectSpecification specName , '.ston'.
+	aStringOrNil
+		ifNotNil: [ 
+			projectSpecFileName := ((Path from: aStringOrNil) / projectSpecFileName)
+				pathString ].
+	self loadSpecification projectSpecFile: projectSpecFileName
 %
 
 category: 'accessing'
@@ -63637,13 +63645,13 @@ _validate: conditionalAttributes
 
 !		Instance methods for 'RwResolvedProjectSpecificationV2'
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 componentsPath
 	^self _projectSpecification componentsPath
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 componentsPath: aString
 	self _projectSpecification componentsPath: aString
@@ -63655,13 +63663,19 @@ export
 	self exportProjectSpecification
 %
 
-category: 'accessubg'
+category: 'accessing'
+method: RwResolvedProjectSpecificationV2
+packageFormat: aString
+	self _projectSpecification packageFormat: aString
+%
+
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 packagesPath
 	^self _projectSpecification packagesPath
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 packagesPath: aString
 	self _projectSpecification packagesPath: aString
@@ -63678,25 +63692,25 @@ printOn: aStream
 				nextPutAll: self _projectSpecification specName ]
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 projectsPath
 	^self _projectSpecification projectsPath
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 projectsPath: aString
 	self _projectSpecification projectsPath: aString
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 specsPath
 	^self _projectSpecification specsPath
 %
 
-category: 'accessubg'
+category: 'accessing'
 method: RwResolvedProjectSpecificationV2
 specsPath: aString
 	self _projectSpecification specsPath: aString
@@ -69126,7 +69140,7 @@ _validateForGitRepository: aRwGitRepositoryDefinition ifDone: doneBlock
 
 	| gitTool response command cdResponse gitRepoPath |
 	gitTool := Rowan gitTools.
-	gitRepoPath := aRwGitRepositoryDefinition repositoryRoot.
+	gitRepoPath := aRwGitRepositoryDefinition gitRoot.
 
 	gitRepoPath exists
 		ifTrue: [ 
@@ -72517,12 +72531,16 @@ repositoryRoot: pathStringOrReference
 category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 repositoryUrl
+	"repositoryUrl specifies the repository root for the project (if a file: url)"
+
 	^ repositoryUrl
 %
 
 category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 repositoryUrl: anUrlString
+	"repositoryUrl specifies the repository root for the project (if a file: url)"
+
 	repositoryUrl := anUrlString
 %
 
@@ -72903,12 +72921,16 @@ gitRoot: pathStringOrReference
 category: 'accessing'
 method: RwGitRepositoryDefinitionV2
 gitUrl
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	^ gitUrl ifNil: [ self repositoryUrl ]
 %
 
 category: 'accessing'
 method: RwGitRepositoryDefinitionV2
 gitUrl: object
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	gitUrl := object
 %
 
@@ -72988,21 +73010,36 @@ repositoryRoot
 
 	^ repositoryRoot
 		ifNil: [ 
+			| repoRoot |
 			repositoryUrl
 				ifNotNil: [ :urlString | 
 					| url |
 					url := urlString asRwUrl.
 					url scheme = 'file'
 						ifTrue: [ 
+							| urlPathString |
+							urlPathString := url pathString.
 							self relativeRepositoryRoot isEmpty not
 								ifTrue: [ 
-									gitRoot ifNil: [ self gitRoot: url pathString asFileReference ].
-									self
-										repositoryRoot:
-											url pathString asFileReference / self relativeRepositoryRoot ]
-								ifFalse: [ self repositoryRoot: url pathString ].
+									gitRoot
+										ifNil: [ 
+											| repRootArray relRepRootArray index gitRootArray |
+											"need to strip relativeRepositoryRoot off the back end of the url"
+											relRepRootArray := self relativeRepositoryRoot asFileReference asPath
+												segments.
+											repRootArray := urlPathString asFileReference asPath segments.
+											index := repRootArray indexOfSubCollection: relRepRootArray.
+											gitRootArray := repRootArray copyFrom: 1 to: index - 1.
+											self gitRoot: Path / (Path withAll: gitRootArray) pathString ].
+									self repositoryRoot: urlPathString ]
+								ifFalse: [ self repositoryRoot: urlPathString ].
 							^ repositoryRoot ] ].
-			self repositoryRoot: self projectsHome / self name.
+			repoRoot := self projectsHome / self name.
+			self relativeRepositoryRoot isEmpty not
+				ifTrue: [ 
+					gitRoot ifNil: [ self gitRoot: repoRoot ].
+					repoRoot := repoRoot / self relativeRepositoryRoot ].
+			self repositoryRoot: repoRoot.
 			^ repositoryRoot ]
 %
 
@@ -86510,8 +86547,7 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec
-						produceWithParentProject: pp.
+					theProducedProject := loadSpec produceWithParentProject: pp.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -87468,6 +87504,8 @@ gitUrl
 category: 'accessing'
 method: RwLoadSpecificationV2
 gitUrl: anUrlString
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	gitUrl := anUrlString
 %
@@ -87733,7 +87771,9 @@ read
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
 	self produce.
-	^ RwResolvedProjectV2 loadSpecification: self
+	^ (RwResolvedProjectV2 loadSpecification: self)
+		read;
+		yourself
 %
 
 category: 'actions'
@@ -88133,8 +88173,11 @@ componentsPath: aString
 category: 'exporting'
 method: RwProjectSpecificationV2
 exportTo: directoryReference
-
-	(directoryReference / self projectSpecPath / self specName, 'ston')
+	| filePath |
+	filePath := self projectSpecPath
+		ifNil: [ directoryReference / self specName , 'ston' ]
+		ifNotNil: [ :path | directoryReference / path / self specName , 'ston' ].
+	filePath
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
 %
 
@@ -88290,8 +88333,10 @@ projectSpecPath
 
 category: 'accessing'
 method: RwProjectSpecificationV2
-projectSpecPath: aString
-	projectSpecPath := aString
+projectSpecPath: aStringOrNil
+	"nil value indicates projectSpec file is in repository root directory"
+
+	projectSpecPath := aStringOrNil
 %
 
 category: 'accessing'

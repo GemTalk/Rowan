@@ -207,11 +207,15 @@ RwGitRepositoryDefinitionV2 >> gitRoot: pathStringOrReference [
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> gitUrl [
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	^ gitUrl ifNil: [ self repositoryUrl ]
 ]
 
 { #category : 'accessing' }
 RwGitRepositoryDefinitionV2 >> gitUrl: object [
+	"gitUrl specifies the repository root (!!) of an existing git repository -- if it is a file: url"
+
 	gitUrl := object
 ]
 
@@ -281,21 +285,36 @@ RwGitRepositoryDefinitionV2 >> repositoryRoot [
 
 	^ repositoryRoot
 		ifNil: [ 
+			| repoRoot |
 			repositoryUrl
 				ifNotNil: [ :urlString | 
 					| url |
 					url := urlString asRwUrl.
 					url scheme = 'file'
 						ifTrue: [ 
+							| urlPathString |
+							urlPathString := url pathString.
 							self relativeRepositoryRoot isEmpty not
 								ifTrue: [ 
-									gitRoot ifNil: [ self gitRoot: url pathString asFileReference ].
-									self
-										repositoryRoot:
-											url pathString asFileReference / self relativeRepositoryRoot ]
-								ifFalse: [ self repositoryRoot: url pathString ].
+									gitRoot
+										ifNil: [ 
+											| repRootArray relRepRootArray index gitRootArray |
+											"need to strip relativeRepositoryRoot off the back end of the url"
+											relRepRootArray := self relativeRepositoryRoot asFileReference asPath
+												segments.
+											repRootArray := urlPathString asFileReference asPath segments.
+											index := repRootArray indexOfSubCollection: relRepRootArray.
+											gitRootArray := repRootArray copyFrom: 1 to: index - 1.
+											self gitRoot: Path / (Path withAll: gitRootArray) pathString ].
+									self repositoryRoot: urlPathString ]
+								ifFalse: [ self repositoryRoot: urlPathString ].
 							^ repositoryRoot ] ].
-			self repositoryRoot: self projectsHome / self name.
+			repoRoot := self projectsHome / self name.
+			self relativeRepositoryRoot isEmpty not
+				ifTrue: [ 
+					gitRoot ifNil: [ self gitRoot: repoRoot ].
+					repoRoot := repoRoot / self relativeRepositoryRoot ].
+			self repositoryRoot: repoRoot.
 			^ repositoryRoot ]
 ]
 

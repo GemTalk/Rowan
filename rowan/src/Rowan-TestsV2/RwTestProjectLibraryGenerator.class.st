@@ -1496,9 +1496,11 @@ false ifTrue: [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
-	"Start with  spec_0001, add 3 embedded projects"
+	"Start with  spec_0001, add 3 additional projects, using relativeRepositoryRoot to distinquish between projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571"
+
+	"https://github.com/GemTalk/Rowan/issues/714"
 
 	| loadSpecification_0025 packageNames |
 	loadSpecification_0025 := resolvedProject_0025 loadSpecification.
@@ -1522,19 +1524,20 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 		suffix := '_' , index asString.
 		specName := loadSpecification_0025 specName , suffix.
 		resolvedProjectName := resolvedProject_0025 name , suffix.
+		baseName := 'rowan' , suffix.
 
-		loadSpecification := RwEmbeddedLoadSpecificationV2 new
+		loadSpecification := RwLoadSpecificationV2 new
 			projectName: resolvedProjectName;
 			projectAlias: resolvedProject_0025 name;
 			projectsHome: self projectsHome;
 			gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 			yourself.
 
-		baseName := 'rowan' , suffix.
 		loadSpecification
 			specName: resolvedProjectName;
 			revision: loadSpecification_0025 revision;
 			gitUrl: self projectUrl;
+			relativeRepositoryRoot: baseName;
 			componentNames: {};
 			customConditionalAttributes: {'tests'};
 			comment: loadSpecification_0025 comment;
@@ -1551,21 +1554,19 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0025: resolvedProject_0025 [
 			yourself.
 
 		resolvedProject projectSpecification
-			componentsPath: baseName , '/components';
-			packagesPath: baseName , '/src';
-			projectsPath: baseName , '/projects';
-			specsPath: baseName , '/specs';
-			projectSpecPath: baseName;
+			componentsPath: 'components';
+			packagesPath: 'src';
+			projectsPath: 'projects';
+			specsPath: 'specs';
+			projectSpecPath: nil;
+			packageFormat: 'tonel';
 			yourself.
 
 		self
 			_addSimpleDefinitionsFor: resolvedProject
 			projectName: resolvedProject projectName.
 
-		resolvedProject projectRoots
-			do: [ :rootDir | 
-				"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
-				rootDir ensureDeleteAll ].
+		resolvedProject repositoryRoot ensureDeleteAll.
 
 		resolvedProject
 			export;
@@ -6056,9 +6057,11 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
-	"Start with  spec_0001, add 3 embedded projects"
+	"Start with  spec_0001, add 3 additional projects, using relativeRepositoryRoot to distinquish between projects"
 
 	"https://github.com/GemTalk/Rowan/issues/571"
+
+	"https://github.com/GemTalk/Rowan/issues/714"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -6072,11 +6075,11 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		_createCard: postfix
 		specName: specName
 		title:
-			'Start with  spec_0001, add 3 embedded projects'
+			'Start with  spec_0001, add 3 additional projects, using relativeRepositoryRoot to distinquish between projects'
 		index: 25
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #(571);
+		rowanIssues: #(571 714);
 		yourself.
 
 	definedProject := (Rowan newProjectNamed: projectName)
@@ -6085,7 +6088,7 @@ RwTestProjectLibraryGenerator >> genSpec_0025: commitMessage [
 		revision: derivedFrom;
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
-		customConditionalAttributes: {'tests' };
+		customConditionalAttributes: {'tests'};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		comment: indexCard title;
 		yourself.

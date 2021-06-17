@@ -9,7 +9,7 @@ RwPrjCloneTool >> _validateForGitRepository: aRwGitRepositoryDefinition ifDone: 
 
 	| gitTool response command cdResponse gitRepoPath |
 	gitTool := Rowan gitTools.
-	gitRepoPath := aRwGitRepositoryDefinition repositoryRoot.
+	gitRepoPath := aRwGitRepositoryDefinition gitRoot.
 
 	gitRepoPath exists
 		ifTrue: [ 

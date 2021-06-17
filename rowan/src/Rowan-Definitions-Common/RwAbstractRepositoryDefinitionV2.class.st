@@ -123,11 +123,15 @@ RwAbstractRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> repositoryUrl [
+	"repositoryUrl specifies the repository root for the project (if a file: url)"
+
 	^ repositoryUrl
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> repositoryUrl: anUrlString [
+	"repositoryUrl specifies the repository root for the project (if a file: url)"
+
 	repositoryUrl := anUrlString
 ]
 

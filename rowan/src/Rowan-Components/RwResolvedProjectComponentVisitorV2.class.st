@@ -270,8 +270,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec
-						produceWithParentProject: pp.
+					theProducedProject := loadSpec produceWithParentProject: pp.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 

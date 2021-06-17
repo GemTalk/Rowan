@@ -255,13 +255,19 @@ RwAbstractResolvedObjectV2 >> projectSpecFile: relativePathString [
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> projectSpecPath: aString [
-	"full path to the project specification file - default rowan/project.ston"
+RwAbstractResolvedObjectV2 >> projectSpecPath: aStringOrNil [
+	"relative path to the project specification file - default rowan/project.ston (relative to repository root)"
 
-	self _projectSpecification projectSpecPath: aString.
-	self loadSpecification
-		projectSpecFile:
-			((Path from: aString) / self _projectSpecification specName , 'ston') pathString
+	"nil value indicates projectSpec file is in repository root directory"
+
+	| projectSpecFileName |
+	self _projectSpecification projectSpecPath: aStringOrNil.
+	projectSpecFileName := self _projectSpecification specName , '.ston'.
+	aStringOrNil
+		ifNotNil: [ 
+			projectSpecFileName := ((Path from: aStringOrNil) / projectSpecFileName)
+				pathString ].
+	self loadSpecification projectSpecFile: projectSpecFileName
 ]
 
 { #category : 'accessing' }

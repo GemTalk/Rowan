@@ -4,12 +4,12 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> componentsPath [
 	^self _projectSpecification componentsPath
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> componentsPath: aString [
 	self _projectSpecification componentsPath: aString
 ]
@@ -19,12 +19,17 @@ RwResolvedProjectSpecificationV2 >> export [
 	self exportProjectSpecification
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
+RwResolvedProjectSpecificationV2 >> packageFormat: aString [
+	self _projectSpecification packageFormat: aString
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> packagesPath [
 	^self _projectSpecification packagesPath
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]
@@ -39,22 +44,22 @@ RwResolvedProjectSpecificationV2 >> printOn: aStream [
 				nextPutAll: self _projectSpecification specName ]
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> projectsPath [
 	^self _projectSpecification projectsPath
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> projectsPath: aString [
 	self _projectSpecification projectsPath: aString
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> specsPath [
 	^self _projectSpecification specsPath
 ]
 
-{ #category : 'accessubg' }
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> specsPath: aString [
 	self _projectSpecification specsPath: aString
 ]

@@ -95,8 +95,11 @@ RwProjectSpecificationV2 >> componentsPath: aString [
 
 { #category : 'exporting' }
 RwProjectSpecificationV2 >> exportTo: directoryReference [
-
-	(directoryReference / self projectSpecPath / self specName, 'ston')
+	| filePath |
+	filePath := self projectSpecPath
+		ifNil: [ directoryReference / self specName , 'ston' ]
+		ifNotNil: [ :path | directoryReference / path / self specName , 'ston' ].
+	filePath
 		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
@@ -233,8 +236,10 @@ RwProjectSpecificationV2 >> projectSpecPath [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> projectSpecPath: aString [
-	projectSpecPath := aString
+RwProjectSpecificationV2 >> projectSpecPath: aStringOrNil [
+	"nil value indicates projectSpec file is in repository root directory"
+
+	projectSpecPath := aStringOrNil
 ]
 
 { #category : 'accessing' }
