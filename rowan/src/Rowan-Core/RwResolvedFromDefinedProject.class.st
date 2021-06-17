@@ -59,6 +59,11 @@ RwResolvedFromDefinedProject >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
+RwResolvedFromDefinedProject >> projectSpecFile: relativePathString [
+	^ self _concreteProject projectSpecFile: relativePathString
+]
+
+{ #category : 'accessing' }
 RwResolvedFromDefinedProject >> specsPath: aString [
 	self _projectSpecification specsPath: aString
 ]

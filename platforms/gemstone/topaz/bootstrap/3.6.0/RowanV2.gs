@@ -50566,6 +50566,12 @@ projectsPath: aString
 
 category: 'accessing'
 method: RwResolvedFromDefinedProject
+projectSpecFile: relativePathString
+	^ self _concreteProject projectSpecFile: relativePathString
+%
+
+category: 'accessing'
+method: RwResolvedFromDefinedProject
 specsPath: aString
 	self _projectSpecification specsPath: aString
 %
