@@ -147,6 +147,11 @@ RwAbstractResolvedObjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName
 	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
 ]
 
+{ #category : 'accessing' }
+RwAbstractResolvedObjectV2 >> gitRoot [
+	^ self _projectRepository gitRoot
+]
+
 { #category : 'project specification' }
 RwAbstractResolvedObjectV2 >> groupNames: anArray [
 	self loadSpecification groupNames: anArray

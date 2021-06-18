@@ -63818,6 +63818,12 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
 %
 
+category: 'accessing'
+method: RwAbstractResolvedObjectV2
+gitRoot
+	^ self _projectRepository gitRoot
+%
+
 category: 'project specification'
 method: RwAbstractResolvedObjectV2
 groupNames: anArray

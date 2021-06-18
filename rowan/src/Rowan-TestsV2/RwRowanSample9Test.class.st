@@ -8141,6 +8141,36 @@ RwRowanSample9Test >> testSpec_0070 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0071 [
+	"spec_0071 should load cleanly ... "
+
+	"https://github.com/GemTalk/Rowan/issues/714"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects  |
+	loadSpec := self _loadSpecNamed: 'spec_0071'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce project"
+	loadSpecs := loadSpec produce.
+
+"load project"
+	loadedProjects := loadSpecs load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (Rowan globalNamed: 'RowanSample9Class1') equals: nil.
+	self deny: (Rowan globalNamed: 'RowanSample9TestCase') equals: nil.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSwitchRepository [
 	"Clone RowanSample9 in two different directory locations, each checked out on a different branch. 
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 

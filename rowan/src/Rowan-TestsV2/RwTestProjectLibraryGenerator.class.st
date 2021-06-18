@@ -4375,19 +4375,19 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	| derivedIndexCardFile indexCardDict card |
 	derivedFrom
 		ifNil: [ 
-			(resolvedRepository repositoryRoot / 'indexCards') exists
-				ifTrue: [ (resolvedRepository repositoryRoot / 'indexCards') ensureDeleteAll ].
-			(resolvedRepository repositoryRoot / 'specs') exists
-				ifTrue: [ (resolvedRepository repositoryRoot / 'specs') ensureDeleteAll ] ]
+			(resolvedRepository gitRoot / 'indexCards') exists
+				ifTrue: [ (resolvedRepository gitRoot / 'indexCards') ensureDeleteAll ].
+			(resolvedRepository gitRoot / 'specs') exists
+				ifTrue: [ (resolvedRepository gitRoot / 'specs') ensureDeleteAll ] ]
 		ifNotNil: [ 
-			derivedIndexCardFile := resolvedRepository repositoryRoot / derivedFrom , 'ston'.
+			derivedIndexCardFile := resolvedRepository gitRoot / derivedFrom , 'ston'.
 			derivedIndexCardFile exists
 				ifTrue: [ derivedIndexCardFile delete ] ].
-	indexCard exportTo: resolvedRepository repositoryRoot.
+	indexCard exportTo: resolvedRepository gitRoot.
 
 	theLoadSpec
 		ifNotNil: [ 
-			resolvedRepository repositoryRoot / 'README.md'
+			resolvedRepository gitRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
 						nextPutAll: '# ' , projectName , ' - ' , specName;
@@ -4428,17 +4428,17 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository checkout: 'master'.	"write the index card and spec on the master branch"
 	resolvedRepository pull: resolvedRepository remote branch: 'master'.
 
-	(resolvedRepository repositoryRoot / 'indexCards') ensureCreateDirectory.
-	indexCard exportTo: resolvedRepository repositoryRoot / 'indexCards'.
-	(resolvedRepository repositoryRoot / 'specs') ensureCreateDirectory.
-	theLoadSpec exportTo: resolvedRepository repositoryRoot / 'specs'.
+	(resolvedRepository gitRoot / 'indexCards') ensureCreateDirectory.
+	indexCard exportTo: resolvedRepository gitRoot / 'indexCards'.
+	(resolvedRepository gitRoot / 'specs') ensureCreateDirectory.
+	theLoadSpec exportTo: resolvedRepository gitRoot / 'specs'.
 
 	indexCardDict := Dictionary new.
-	(resolvedRepository repositoryRoot / 'indexCards') allFiles
+	(resolvedRepository gitRoot / 'indexCards') allFiles
 		do: [ :indexFile | 
 			card := RwTestProjectLibraryIndexCard fromFile: indexFile.
 			indexCardDict at: card specName put: card ].
-	resolvedRepository repositoryRoot / 'README.md'
+	resolvedRepository gitRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
 				nextPutAll: '# ' , projectName;
@@ -4448,7 +4448,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 				nextPutAll: '## Summary of Load Specs';
 				lf;
 				yourself.
-			(((resolvedRepository repositoryRoot / 'specs') allFiles
+			(((resolvedRepository gitRoot / 'specs') allFiles
 				collect: [ :specFile | RwSpecification fromFile: specFile ]) asArray
 				sort: [ :a :b | a specName <= b specName ])
 				do: [ :loadSpec | 
@@ -4521,7 +4521,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchN
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _genSpecFor_0071: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
-	"Special case where we will end up moving the directory structure down a directory or two"
+	"Issue #714, so fiddling with directory structure"
 
 	| resolvedRepository resolvedProject |
 	resolvedProject := definedProject resolveStrict.
@@ -4538,21 +4538,11 @@ RwTestProjectLibraryGenerator >> _genSpecFor_0071: specName definedProject: defi
 
 	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
 
-	(resolvedProject repositoryRoot / 'rowan') ensureDeleteAll. "delete the original project structure"
-	(resolvedProject repositoryRoot / 'offset') ensureDeleteAll. "delete the new project structure"
+	resolvedRepository repositoryRoot ensureDeleteAll.
 
 	addDefinitionsBlock value: resolvedProject defined.
 
 	resolvedProject
-		componentsPath: 'offset/rowan/components';
-		packagesPath: 'offset/rowan/src';
-		projectsPath: 'offset/rowan/projects';
-		specsPath: 'offset/rowan/specs'.
-
-self halt. "I think I want to leave all of the paths the same, but I'm interested in defining the git root and repository root differently"
-
-	resolvedProject
-		projectSpecFile: 'offset/rowan/project.ston';
 		export;
 		exportLoadSpecification.	"write the rowan directory structure"
 
@@ -8333,6 +8323,8 @@ RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	[ 
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0071'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -8353,13 +8345,19 @@ RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
+		relativeRepositoryRoot: 'offset';
+		addLoadComponentNamed: 'Core';
+		addSubcomponentNamed: 'tests/Tests'
+			condition: 'tests'
+			toComponentNamed: 'Core';
 		comment: title;
 		yourself.
 
 	resolvedRepository := self
 		_genSpecFor_0071: specName
 		definedProject: definedProject
-		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0001: resolvedProject ].
+		addDefinitions: [ :resolvedProject | 
+			self _addDefinitionsFor_0001: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
@@ -8367,7 +8365,8 @@ RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
-		commitMessage: commitMessage
+		commitMessage: commitMessage ]
+		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
 ]
 
 { #category : 'accessing' }
