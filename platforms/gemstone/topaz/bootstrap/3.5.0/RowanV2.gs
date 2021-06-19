@@ -83926,6 +83926,12 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	^self resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+gitRepositoryRoot: repositoryRootPathString
+	self resolvedProject gitRepositoryRoot: repositoryRootPathString
+%
+
 category: 'initialization'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 initializeForResolvedProject: aResolvedProject
@@ -101299,23 +101305,18 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString
-	self gitRepositoryRoot: repositoryRootPathString projectsHome: nil
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'git repository root must be a string' ].
+	self _concreteProject gitRepositoryRoot: repositoryRootPathString.
 %
 
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
 	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _gitRepositoryRoot: repositoryRootPathString.
-					project projectsHome: aProjectHomeReferenceOrString ] ].
-	self _gitRepositoryRoot: repositoryRootPathString.
-	self projectsHome: aProjectHomeReferenceOrString
+		ifFalse: [ self error: 'git repository root must be a string' ].
+	self projectsHome: aProjectHomeReferenceOrString.
+	self gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-gemstone-core'
@@ -101444,12 +101445,6 @@ category: '*rowan-corev2'
 method: RwProject
 _diskRepositoryRoot: repositoryRootPathString
 	self _loadedProject resolvedProject diskRepositoryRoot: repositoryRootPathString
-%
-
-category: '*rowan-corev2'
-method: RwProject
-_gitRepositoryRoot: repositoryRootPathString
-	self _loadedProject resolvedProject gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'

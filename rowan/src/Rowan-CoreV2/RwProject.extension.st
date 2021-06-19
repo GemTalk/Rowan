@@ -6,11 +6,6 @@ RwProject >> _diskRepositoryRoot: repositoryRootPathString [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> _gitRepositoryRoot: repositoryRootPathString [
-	self _loadedProject resolvedProject gitRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
 	self _loadedProject resolvedProject
 		readOnlyRepositoryRoot: repositoryRootPathString
@@ -98,22 +93,17 @@ RwProject >> exportLoadSpecification [
 
 { #category : '*rowan-corev2' }
 RwProject >> gitRepositoryRoot: repositoryRootPathString [
-	self gitRepositoryRoot: repositoryRootPathString projectsHome: nil
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'git repository root must be a string' ].
+	self _concreteProject gitRepositoryRoot: repositoryRootPathString.
 ]
 
 { #category : '*rowan-corev2' }
 RwProject >> gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
 	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _gitRepositoryRoot: repositoryRootPathString.
-					project projectsHome: aProjectHomeReferenceOrString ] ].
-	self _gitRepositoryRoot: repositoryRootPathString.
-	self projectsHome: aProjectHomeReferenceOrString
+		ifFalse: [ self error: 'git repository root must be a string' ].
+	self projectsHome: aProjectHomeReferenceOrString.
+	self gitRepositoryRoot: repositoryRootPathString
 ]
 
 { #category : '*rowan-corev2' }

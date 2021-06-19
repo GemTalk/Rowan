@@ -234,6 +234,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: 
 	^self resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	self resolvedProject gitRepositoryRoot: repositoryRootPathString
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
 	self initializeForName: aResolvedProject projectName.

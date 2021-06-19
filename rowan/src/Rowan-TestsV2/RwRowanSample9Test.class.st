@@ -8190,6 +8190,10 @@ RwRowanSample9Test >> testSwitchRepository [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
+	{'RowanSample9_0002' . 'RowanSample9_0003'} 
+		do: [:repoName | 
+			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
+
 "resolve projects"
 	resolvedProject1 := loadSpec1 resolve.
 	resolvedProject2 := loadSpec2 resolve.
@@ -8224,14 +8228,16 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 
 	"spec_0052 and spec_0053 have embedded projects"
 
-	| projectName1 projectName2 loadSpec1 loadSpec2 projectNames resolvedProjectSet1 
+	| projectName  loadSpec1 loadSpec2 projectNames resolvedProjectSet1 
 		resolvedProjectSet2 project1 loadedProjects resolvedProject1 resolvedProject2 
-		requiredProjectName |
+		requiredProjectName requiredProject1 |
 	
-	projectName1 := 'RowanSample9'.
-	projectName2 :=  'RowanSample9_embedded_1'.
-
+	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample9_embedded_1'.
+
+	{'RowanSample9_0052' . 'RowanSample9_0053'} 
+		do: [:repoName | 
+			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
 	loadSpec1 := (self _loadSpecNamed: 'spec_0052')
 		projectAlias: 'RowanSample9_0052';
@@ -8240,25 +8246,26 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		projectAlias: 'RowanSample9_0053';
 		yourself.
 
-	projectNames := {projectName1 . requiredProjectName }.
+	projectNames := {projectName . requiredProjectName }.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].		
 
 "resolve projects"
 	resolvedProjectSet1 := loadSpec1 readProjectSet.
-	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName1.
+	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName.
 
 	resolvedProjectSet2 := loadSpec2 readProjectSet.	"only used to extract target repositoryRoot ... load of spec_0053 will happen via using spec_0053 repositoryRoot"
-	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName2.
+	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName.
 
 "validate"
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 
 "load project1 from spec_0052"
 	loadedProjects := resolvedProjectSet1 load.
-	project1 := Rowan projectNamed: projectName1.
+	project1 := Rowan projectNamed: projectName.
+	requiredProject1 := Rowan projectNamed: requiredProjectName.
 
 "validate"
 	self 
@@ -8266,20 +8273,19 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		loadedProjects: loadedProjects 
 		expectedProjectNames: projectNames.
 
-"load project1 from spec_0053 checkout: changing repository root of loaded project
-	results in a load ... failing the load spec conflict test (revision) ... this seems to be legit operation so either conflict is too strict, or we need to be able to override error"
-	loadedProjects := (project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString) loadProjectSet.
+"load project1 from spec_0053 checkout: changing repository root of loaded project"
+	project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString.
+	loadedProjects := project1 reload.
 
 "Validate"
 	self 
 		_standard_validate: resolvedProject1 
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0052"
-	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
 ]
 
 { #category : 'tests' }
