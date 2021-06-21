@@ -49,6 +49,11 @@ RwResolvedFromDefinedProject >> loadProjectSet [
 ]
 
 { #category : 'accessing' }
+RwResolvedFromDefinedProject >> packageNamed: aString [
+	^ self _concreteProject packageNamed: aString
+]
+
+{ #category : 'accessing' }
 RwResolvedFromDefinedProject >> packagesPath: aString [
 	self _projectSpecification packagesPath: aString
 ]

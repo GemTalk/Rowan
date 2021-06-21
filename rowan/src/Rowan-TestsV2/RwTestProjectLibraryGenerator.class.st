@@ -2915,14 +2915,19 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject embeddedProject: embeddedProject [
-	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project"
+	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project; add instance method #ivar1_embedded to class in embedded project"
 
-	| componentName className1 packageName1 className2 packageName2 resolvedEmbeddedProject |
+	| componentName className1 packageName1 className2 packageName2 resolvedEmbeddedProject embeddedProjectName className3 className4 packageName3 packageName4 |
+	embeddedProjectName := embeddedProject projectName.
 	componentName := 'Core'.
 	className1 :=  projectName , 'Class1'.
 	className2 :=  projectName , 'TestCase'.
+	className3 := embeddedProjectName, 'Class1'.
+	className4 := embeddedProjectName, 'TestCase'.
 	packageName1 := projectName , '-Core'.
 	packageName2 := projectName , '-Tests'.
+	packageName3 := embeddedProjectName , '-Core'.
+	packageName4 := embeddedProjectName , '-Tests'.
 	
 	((resolvedProject packageNamed: packageName1)
 		classDefinitionNamed: className1)
@@ -2937,9 +2942,27 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject embedd
 	self assert: (x := ', className1, ' new ivar1) isNil.
 '
 			protocol: 'tests';
+		addInstanceMethod: 'testInstVars_', className3, '
+	| x |
+	self assert: (x := ', className1, ' new ivar1_embedded) isNil.
+'
+			protocol: 'tests';
 		yourself.
 
-	(resolvedEmbeddedProject := embeddedProject resolve)
+	resolvedEmbeddedProject := embeddedProject resolve.
+	((resolvedEmbeddedProject packageNamed: packageName3)
+		classDefinitionNamed: className3)
+			addInstanceMethod: 'ivar1_embedded ^ ivar1'
+			protocol: 'accessing';
+			yourself.
+	((resolvedEmbeddedProject packageNamed: packageName4)
+		classDefinitionNamed: className4)
+			addInstanceMethod: 'testInstVars_', className3, '
+	| x |
+	self assert: (x := ', className3, ' new ivar1_embedded) isNil.'
+			protocol: 'tests';
+			yourself.
+	resolvedEmbeddedProject
 		projectsHome: self projectsHome;
 		packageFormat: 'tonel';
 		export;
@@ -7375,7 +7398,7 @@ RwTestProjectLibraryGenerator >> genSpec_0052: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
-	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project"
+	"Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project; add instance method #ivar1_embedded to class in embedded project"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -7384,7 +7407,7 @@ RwTestProjectLibraryGenerator >> genSpec_0053: commitMessage [
 	postfix := '0053'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0052'.
-	title := 'Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project'.
+	title := 'Start with spec_0052; add instance side method #ivar1 referencing inherited ivar to class in primary project; add instance method #ivar1_embedded to class in embedded project'.
 
 	indexCard := (self
 		_createCard: postfix

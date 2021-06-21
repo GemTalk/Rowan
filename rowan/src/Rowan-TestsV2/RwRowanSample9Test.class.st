@@ -6649,7 +6649,9 @@ RwRowanSample9Test >> testSpec_0053 [
 	self
 		_standard_validate: (resolvedProjectSet projectNamed: projectName)
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames
+		expectedProjectNames: projectNames.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 ]
 
 { #category : 'tests' }
@@ -8283,6 +8285,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0052"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0052"
 	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.

@@ -50554,6 +50554,12 @@ loadProjectSet
 
 category: 'accessing'
 method: RwResolvedFromDefinedProject
+packageNamed: aString
+	^ self _concreteProject packageNamed: aString
+%
+
+category: 'accessing'
+method: RwResolvedFromDefinedProject
 packagesPath: aString
 	self _projectSpecification packagesPath: aString
 %
