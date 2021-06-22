@@ -88171,6 +88171,8 @@ initializeForExport
 		ifNotNil: [ 
 			platformProperties isEmpty
 				ifTrue: [ platformProperties := nil ] ].
+	relativeRepositoryRoot = ''
+		ifTrue: [ relativeRepositoryRoot := nil ].
 	repositoryResolutionPolicy := projectsHome := nil
 %
 
