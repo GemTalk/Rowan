@@ -4223,6 +4223,130 @@ RwRowanSample9Test >> testIssue711 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue714_1 [
+	"use the non-primary load spec to clone and load an 'embedded' project"
+
+	"https://github.com/dalehenrich/Rowan/issues/714"
+
+	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 producedProject gitRoot loadedProjects |
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectName1 := projectName, '_1'.
+	projectName2 := projectName, '_2'.
+	projectName3 := projectName, '_3'.
+	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"use produceProject so we can extract the gitRoot for two reasons:
+	1. read the original load spec from one of the 'embedded' projects
+	2. delete the git repository so that we can verify that the the 
+		'embedded' project load spec will properly clone the project
+"
+	producedProject := loadSpec produceProject.
+	gitRoot := producedProject gitRoot.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+	gitRoot ensureDeleteAll.
+
+"load (produce(clone)/load) projectName1"
+	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
+	loadedProjects := loadSpec1 load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: { projectName1 }.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		self deny: theProject testSuite tests isEmpty.
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue714_2 [
+	"use the non-primary load spec to clone and load an 'embedded' project; THEN
+		use the primary load spec to load the primary project (which requires the 
+		'embedded' project"
+
+	"https://github.com/dalehenrich/Rowan/issues/714"
+
+	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 producedProject gitRoot loadedProjects |
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectName1 := projectName, '_1'.
+	projectName2 := projectName, '_2'.
+	projectName3 := projectName, '_3'.
+	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"use produceProject so we can extract the gitRoot for two reasons:
+	1. read the original load spec from one of the 'embedded' projects
+	2. delete the git repository so that we can verify that the the 
+		'embedded' project load spec will properly clone the project
+"
+	producedProject := loadSpec produceProject.
+	gitRoot := producedProject gitRoot.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+	gitRoot ensureDeleteAll.
+
+"load (produce(clone)/load) projectName1"
+	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
+	loadedProjects := loadSpec1 load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: { projectName1 }.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		self deny: theProject testSuite tests isEmpty.
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
+
+"load primary project (projectName)"
+	loadedProjects := loadSpec load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		self deny: theProject testSuite tests isEmpty.
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue715_01 [
 	"getting down to brass tacks for rules and usage of #loadedLoadSpecifications"
 

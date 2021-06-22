@@ -546,6 +546,14 @@ RwLoadSpecificationV2 >> produce: platformConditionalAttributes [
 ]
 
 { #category : 'actions' }
+RwLoadSpecificationV2 >> produceProject [
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
+
+	self produce.
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -625,10 +633,7 @@ RwLoadSpecificationV2 >> projectUrl [
 RwLoadSpecificationV2 >> read [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
-	self produce.
-	^ (RwResolvedProjectV2 loadSpecification: self)
-		read;
-		yourself
+	^ self produceProject read
 ]
 
 { #category : 'actions' }
@@ -708,7 +713,9 @@ RwLoadSpecificationV2 >> repositoryRoot [
 			url := urlString asRwUrl.
 			(url scheme = 'file' and: [ self relativeRepositoryRoot isEmpty not ])
 				ifTrue: [ ^ url pathString asFileReference / self relativeRepositoryRoot ] ].
-	^ self projectsHome / self projectAlias
+	^ self relativeRepositoryRoot isEmpty
+		ifTrue: [ self projectsHome / self projectAlias ]
+		ifFalse: [ self projectsHome / self projectAlias / self relativeRepositoryRoot ]
 ]
 
 { #category : 'to be removed' }

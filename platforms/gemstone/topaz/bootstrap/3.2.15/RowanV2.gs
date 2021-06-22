@@ -69872,14 +69872,14 @@ cloneRepository: aRwGitRepositoryDefinition
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
 	response := gitTool
-		gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString
+		gitcloneIn: aRwGitRepositoryDefinition gitRoot parent pathString
 		with:
-			cloneOption , remoteUrl , aRwGitRepositoryDefinition repositoryRoot pathString.
+			cloneOption , remoteUrl , aRwGitRepositoryDefinition gitRoot pathString.
 	checkout
 		ifNotNil: [ 
 			gitTool := Rowan gitTools.
 			gitTool
-				gitcheckoutIn: aRwGitRepositoryDefinition repositoryRoot
+				gitcheckoutIn: aRwGitRepositoryDefinition gitRoot
 				with: checkout ]
 %
 
@@ -88446,6 +88446,15 @@ produce: platformConditionalAttributes
 
 category: 'actions'
 method: RwLoadSpecificationV2
+produceProject
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
+
+	self produce.
+	^ RwResolvedProjectV2 loadSpecification: self
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
 produceWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -88535,10 +88544,7 @@ method: RwLoadSpecificationV2
 read
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
-	self produce.
-	^ (RwResolvedProjectV2 loadSpecification: self)
-		read;
-		yourself
+	^ self produceProject read
 %
 
 category: 'actions'
@@ -88629,7 +88635,9 @@ repositoryRoot
 			url := urlString asRwUrl.
 			(url scheme = 'file' and: [ self relativeRepositoryRoot isEmpty not ])
 				ifTrue: [ ^ url pathString asFileReference / self relativeRepositoryRoot ] ].
-	^ self projectsHome / self projectAlias
+	^ self relativeRepositoryRoot isEmpty
+		ifTrue: [ self projectsHome / self projectAlias ]
+		ifFalse: [ self projectsHome / self projectAlias / self relativeRepositoryRoot ]
 %
 
 category: 'to be removed'

@@ -53,13 +53,13 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
 	response := gitTool
-		gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString
+		gitcloneIn: aRwGitRepositoryDefinition gitRoot parent pathString
 		with:
-			cloneOption , remoteUrl , aRwGitRepositoryDefinition repositoryRoot pathString.
+			cloneOption , remoteUrl , aRwGitRepositoryDefinition gitRoot pathString.
 	checkout
 		ifNotNil: [ 
 			gitTool := Rowan gitTools.
 			gitTool
-				gitcheckoutIn: aRwGitRepositoryDefinition repositoryRoot
+				gitcheckoutIn: aRwGitRepositoryDefinition gitRoot
 				with: checkout ]
 ]
