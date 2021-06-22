@@ -11,9 +11,13 @@
   login
 
 	run
-	(Rowan projectNamed: 'Rowan') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'
-			projectsHome: '$ROWAN_PROJECTS_HOME'.
+	{'Rowan' . 'Cypress' . 'FileSystemGs' . 'STON'} do: [:projectName |
+		| project |
+		project := Rowan projectNamed: projectName.
+		project
+			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan/', project relativeRepositoryRoot
+				projectsHome: '$ROWAN_PROJECTS_HOME' 
+		].
 	(Rowan projectNamed: 'RowanClientServices')
 			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'
 				projectsHome: '$ROWAN_PROJECTS_HOME'.

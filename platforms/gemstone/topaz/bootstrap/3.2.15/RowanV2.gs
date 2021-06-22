@@ -49733,6 +49733,14 @@ projectVersion: aStringOrVersion
 
 category: 'accessing'
 method: RwAbstractProject
+relativeRepositoryRoot
+	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
+
+	^ self loadSpecification relativeRepositoryRoot
+%
+
+category: 'accessing'
+method: RwAbstractProject
 remote
 
 	^ self _concreteProject remote
@@ -49808,14 +49816,6 @@ category: 'actions'
 method: RwAbstractUnloadedProject
 packages: aPackageDictionary
 	self _concreteProject packages: aPackageDictionary
-%
-
-category: 'accessing'
-method: RwAbstractUnloadedProject
-relativeRepositoryRoot
-	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
-
-	^ self loadSpecification relativeRepositoryRoot
 %
 
 category: 'accessing'
@@ -57816,7 +57816,7 @@ refresh
 category: 'client commands'
 method: RowanProjectService
 reloadProject
-  [ Rowan projectTools load loadProjectNamed: name ]
+  [ self rwProject reload ]
     on: Warning
     do: [ :ex | 
       Transcript

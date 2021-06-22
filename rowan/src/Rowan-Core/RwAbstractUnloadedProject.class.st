@@ -76,13 +76,6 @@ RwAbstractUnloadedProject >> packages: aPackageDictionary [
 ]
 
 { #category : 'accessing' }
-RwAbstractUnloadedProject >> relativeRepositoryRoot [
-	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
-
-	^ self loadSpecification relativeRepositoryRoot
-]
-
-{ #category : 'accessing' }
 RwAbstractUnloadedProject >> relativeRepositoryRoot: aRelativePathString [
 	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 
