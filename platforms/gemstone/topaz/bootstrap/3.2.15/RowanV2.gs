@@ -65342,6 +65342,8 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 gitRepositoryRoot: repositoryRootPathString
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	| loadSpec |
 	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository
@@ -73218,7 +73220,11 @@ diskRepositoryRoot: repositoryRootPathString
 category: 'actions'
 method: RwAbstractRepositoryDefinitionV2
 gitRepositoryRoot: repositoryRootPathString relativeRepositoryRoot: aRelativeRepositoryRoot revision: aString
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	| urlString |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'git repository root must be a string' ].
 	urlString := 'file:' , repositoryRootPathString.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
@@ -84157,6 +84163,8 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 gitRepositoryRoot: repositoryRootPathString
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	self resolvedProject gitRepositoryRoot: repositoryRootPathString
 %
 
@@ -101703,9 +101711,9 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 category: '*rowan-corev2'
 method: RwProject
 gitRepositoryRoot: repositoryRootPathString
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'git repository root must be a string' ].
-	self _concreteProject gitRepositoryRoot: repositoryRootPathString.
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
+	self _concreteProject gitRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'

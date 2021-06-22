@@ -236,6 +236,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: 
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	self resolvedProject gitRepositoryRoot: repositoryRootPathString
 ]
 

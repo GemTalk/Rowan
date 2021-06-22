@@ -93,9 +93,9 @@ RwProject >> exportLoadSpecification [
 
 { #category : '*rowan-corev2' }
 RwProject >> gitRepositoryRoot: repositoryRootPathString [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'git repository root must be a string' ].
-	self _concreteProject gitRepositoryRoot: repositoryRootPathString.
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
+	self _concreteProject gitRepositoryRoot: repositoryRootPathString
 ]
 
 { #category : '*rowan-corev2' }

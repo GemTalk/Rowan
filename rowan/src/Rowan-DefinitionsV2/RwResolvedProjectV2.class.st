@@ -872,6 +872,8 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	| loadSpec |
 	loadSpec := self loadSpecification.
 	projectRepository := self _projectRepository

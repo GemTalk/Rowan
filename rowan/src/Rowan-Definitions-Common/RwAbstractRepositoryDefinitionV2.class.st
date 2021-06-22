@@ -41,7 +41,11 @@ RwAbstractRepositoryDefinitionV2 >> diskRepositoryRoot: repositoryRootPathString
 
 { #category : 'actions' }
 RwAbstractRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString relativeRepositoryRoot: aRelativeRepositoryRoot revision: aString [
+	"repositoryRootPathString must be string, because we want any env vars to be late bound"
+
 	| urlString |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'git repository root must be a string' ].
 	urlString := 'file:' , repositoryRootPathString.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
