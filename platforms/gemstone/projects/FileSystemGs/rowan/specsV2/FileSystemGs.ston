@@ -3,7 +3,7 @@ RwEmbeddedLoadSpecificationV2 {
 	#projectName : 'FileSystemGs',
 	#projectAlias : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
-	#revision : 'master',
+	#revision : 'masterV3.0',
 	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
 	#componentNames : [
 		'Core',

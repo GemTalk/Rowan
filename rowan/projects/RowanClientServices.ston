@@ -2,7 +2,7 @@ RwLoadSpecificationV2 {
 	#specName : 'RowanClientServices',
 	#projectName : 'RowanClientServices',
 	#gitUrl : 'git@github.com:GemTalk/RowanClientServices.git',
-	#revision : 'issue_660',
+	#revision : 'masterV3.0',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
 		'RowanClientServices'

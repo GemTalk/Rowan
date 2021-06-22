@@ -1,14 +1,16 @@
-RwEmbeddedLoadSpecificationV2 {
+RwLoadSpecificationV2 {
 	#specName : 'Cypress',
 	#projectName : 'Cypress',
 	#projectAlias : 'Rowan',
-	#gitUrl : 'https://github.com/GemTalk/Rowan',
-	#revision : 'master',
-	#projectSpecFile : 'platforms/gemstone/projects/Cypress/project.ston',
+	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/Cypress',	
+	#revision : 'masterV3.0',
+	#projectSpecFile : 'project.ston',
 	#componentNames : [
 		'Core'
 	],
 	#groupNames : [ ],
+	#customConditionalAttributes : [ ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {
