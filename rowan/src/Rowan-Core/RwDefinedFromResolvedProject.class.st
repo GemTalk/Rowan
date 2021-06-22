@@ -87,6 +87,11 @@ RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath logClassCreation: 
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> gitRoot [
+	^ self _concreteProject gitRoot
+]
+
 { #category : 'transitions' }
 RwDefinedFromResolvedProject >> loadProjectSet [
 	"
@@ -179,6 +184,11 @@ RwDefinedFromResolvedProject >> readProjectSet: customConditionalAttributes plat
 { #category : 'accessing' }
 RwDefinedFromResolvedProject >> repository [
 	^ self _concreteProject repository
+]
+
+{ #category : 'accessing' }
+RwDefinedFromResolvedProject >> repositoryRoot [
+	^ self _concreteProject repositoryRoot
 ]
 
 { #category : 'accessing' }

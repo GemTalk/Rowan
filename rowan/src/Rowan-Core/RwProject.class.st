@@ -303,6 +303,11 @@ RwProject >> gitPushRemote: remoteName branch: branchName [
 		branch: branchName
 ]
 
+{ #category : 'accessing' }
+RwProject >> gitRoot [
+	^ self _concreteProject gitRoot
+]
+
 { #category : 'git support' }
 RwProject >> gitShortStatus [
 	"`git status --short` returns an empty string if there is nothing to commit"
@@ -473,6 +478,11 @@ RwProject >> reload: instanceMigrator [
 	"
 
 	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
+]
+
+{ #category : 'accessing' }
+RwProject >> repositoryRoot [
+	^ self _concreteProject repositoryRoot
 ]
 
 { #category : 'properties' }

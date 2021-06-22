@@ -253,6 +253,11 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 ]
 
 { #category : 'accessing' }
+RwResolvedProject >> gitRoot [
+	^ self _concreteProject gitRoot
+]
+
+{ #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
 	^ self _concreteProject packagesRoot
 ]
@@ -353,6 +358,11 @@ RwResolvedProject >> readProjectSet: customConditionalAttributes platformConditi
 { #category : 'accessing' }
 RwResolvedProject >> repository [
 	^ self _concreteProject repository
+]
+
+{ #category : 'accessing' }
+RwResolvedProject >> repositoryRoot [
+	^ self _concreteProject repositoryRoot
 ]
 
 { #category : 'to be removed' }

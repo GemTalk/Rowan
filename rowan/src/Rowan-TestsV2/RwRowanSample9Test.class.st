@@ -4347,6 +4347,76 @@ RwRowanSample9Test >> testIssue714_2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue714_3 [
+	"split the 'embedded projects for spec_0025 across two git checkouts"
+
+	"https://github.com/dalehenrich/Rowan/issues/714"
+
+	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 loadSpecSet gitRoot loadedProjects |
+
+	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'RowanSample9_1') ensureDeleteAll.
+
+	loadSpec := self _loadSpecNamed: 'spec_0025'.
+
+	projectName := loadSpec projectName.
+	projectName1 := projectName, '_1'.
+	projectName2 := projectName, '_2'.
+	projectName3 := projectName, '_3'.
+	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce the loadSpec ... clone project and create a loadSpecSet"
+	loadSpecSet := loadSpec produce.
+
+"use produceProject so we can grab the gitRoot (without actually loading the project)
+	and use the gitRoot to read a loadSpec for one of the embedded projects"
+	gitRoot := loadSpec produceProject gitRoot.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+
+"prepare loadSpec1 so that when it is processed it will clone it's own project and be 
+	loaded from the new clone"
+	loadSpec1 
+		projectsHome: self _testRowanProjectsSandbox;
+		projectAlias: projectName1;
+		yourself.
+
+"load loadSpec using loadSpec1 (should clone along the way)"
+	loadedProjects := loadSpecSet 
+		addLoadSpec: loadSpec1;
+		load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		self deny: theProject testSuite tests isEmpty.
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
+
+"confirm that projectName2 is loaded from a different git repository" 
+	self 
+		deny: (Rowan projectNamed: projectName) gitRoot 
+		equals: (Rowan projectNamed: projectName1) gitRoot.
+	self 
+		assert: (Rowan projectNamed: projectName1) gitRoot 
+		equals: (self _testRowanProjectsSandbox / projectName1).
+	self 
+		assert: (Rowan projectNamed: projectName) gitRoot 
+		equals: (Rowan projectNamed: projectName2) gitRoot.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue715_01 [
 	"getting down to brass tacks for rules and usage of #loadedLoadSpecifications"
 

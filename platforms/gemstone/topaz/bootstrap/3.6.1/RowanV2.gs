@@ -49007,12 +49007,6 @@ remote
 	^ self _concreteProject remote
 %
 
-category: 'accessing'
-method: RwAbstractProject
-repositoryRoot
-	^ self _concreteProject repositoryRoot
-%
-
 category: 'querying'
 method: RwAbstractProject
 requiredProjectNames
@@ -49917,6 +49911,12 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 %
 
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+gitRoot
+	^ self _concreteProject gitRoot
+%
+
 category: 'transitions'
 method: RwDefinedFromResolvedProject
 loadProjectSet
@@ -50021,6 +50021,12 @@ category: 'accessing'
 method: RwDefinedFromResolvedProject
 repository
 	^ self _concreteProject repository
+%
+
+category: 'accessing'
+method: RwDefinedFromResolvedProject
+repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'accessing'
@@ -50335,6 +50341,12 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 
 category: 'accessing'
 method: RwResolvedProject
+gitRoot
+	^ self _concreteProject gitRoot
+%
+
+category: 'accessing'
+method: RwResolvedProject
 packagesRoot
 	^ self _concreteProject packagesRoot
 %
@@ -50448,6 +50460,12 @@ category: 'accessing'
 method: RwResolvedProject
 repository
 	^ self _concreteProject repository
+%
+
+category: 'accessing'
+method: RwResolvedProject
+repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'to be removed'
@@ -50849,6 +50867,12 @@ gitPushRemote: remoteName branch: branchName
 		branch: branchName
 %
 
+category: 'accessing'
+method: RwProject
+gitRoot
+	^ self _concreteProject gitRoot
+%
+
 category: 'git support'
 method: RwProject
 gitShortStatus
@@ -51042,6 +51066,12 @@ reload: instanceMigrator
 	"
 
 	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
+%
+
+category: 'accessing'
+method: RwProject
+repositoryRoot
+	^ self _concreteProject repositoryRoot
 %
 
 category: 'properties'
@@ -83387,6 +83417,12 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 gitRepositoryRoot: repositoryRootPathString
 	self resolvedProject gitRepositoryRoot: repositoryRootPathString
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+gitRoot
+	^ self resolvedProject gitRoot
 %
 
 category: 'initialization'
