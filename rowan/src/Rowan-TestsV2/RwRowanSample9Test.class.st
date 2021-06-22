@@ -8321,8 +8321,8 @@ RwRowanSample9Test >> testSwitchRepository [
 			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
 "resolve projects"
-	resolvedProject1 := loadSpec1 resolve.
-	resolvedProject2 := loadSpec2 resolve.
+	resolvedProject1 := loadSpec1 produceProject.
+	resolvedProject2 := loadSpec2 produceProject.
 
 "validate"
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
