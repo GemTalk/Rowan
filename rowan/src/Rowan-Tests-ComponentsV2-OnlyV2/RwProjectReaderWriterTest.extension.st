@@ -27,7 +27,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		packageFormat: repositoryFormat;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
-		diskUrl: 'file://' , (projectsHome / projectName) pathString;
+		diskUrl: 'file:' , (projectsHome / projectName) pathString;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 . packageName3 } 
 			toComponentNamed: componentName;

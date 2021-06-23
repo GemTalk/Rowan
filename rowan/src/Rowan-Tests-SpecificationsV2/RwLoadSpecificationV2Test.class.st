@@ -49,7 +49,7 @@ RwLoadSpecificationV2Test >> testBasic_2 [
 		componentNames: #('Default');
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
-		gitUrl: 'file://x/y/z';
+		gitUrl: 'file:/x/y/z';
 		yourself.
 
 	stonString := STON toStringPretty: loadSpecification.	"useful in case of error"
@@ -327,7 +327,7 @@ RwLoadSpecificationV2Test >> testIssue_530_3 [
 		customConditionalAttributes: {'mine'};
 		projectSpecFile: 'rowan/xxx.ston';
 		revision: 'master';
-		gitUrl: 'file://x/y/z';
+		gitUrl: 'file:/x/y/z';
 		yourself.
 	stonString := STON toStringPretty: loadSpecification.
 

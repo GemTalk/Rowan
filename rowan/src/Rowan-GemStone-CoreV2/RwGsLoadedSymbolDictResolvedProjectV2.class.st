@@ -228,6 +228,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> customConditionalAttributes [
 	^ self resolvedProject customConditionalAttributes
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
+	self resolvedProject diskRepositoryRoot: repositoryRootPathString
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
 

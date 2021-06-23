@@ -133,7 +133,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		diskUrl: 'file://' , projectRoot pathString;
+		diskUrl: 'file:' , projectRoot pathString;
 		yourself.
 
 	self deny: projectRoot exists.
@@ -182,7 +182,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		diskUrl: 'file://' , projectRoot pathString;
+		diskUrl: 'file:' , projectRoot pathString;
 		yourself.
 
 	self deny: projectRoot exists.
@@ -263,7 +263,7 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 		projectAlias: projectAlias;
 		projectsHome: projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		gitUrl: 'file://' , projectRoot pathString;
+		gitUrl: 'file:' , projectRoot pathString;
 		yourself.
 
 	self deny: projectRoot exists.

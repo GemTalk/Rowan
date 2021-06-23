@@ -2,7 +2,7 @@ Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
 RwProject >> _diskRepositoryRoot: repositoryRootPathString [
-	self _loadedProject resolvedProject diskRepositoryRoot: repositoryRootPathString
+	self _loadedProject diskRepositoryRoot: repositoryRootPathString
 ]
 
 { #category : '*rowan-corev2' }

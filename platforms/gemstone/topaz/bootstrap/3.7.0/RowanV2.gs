@@ -72632,14 +72632,6 @@ create
 
 category: 'actions'
 method: RwDiskRepositoryDefinitionV2
-diskRepositoryRoot: repositoryRootPathString
-	self
-		repositoryUrl: 'file:' , repositoryRootPathString;
-		repositoryRoot: repositoryRootPathString
-%
-
-category: 'actions'
-method: RwDiskRepositoryDefinitionV2
 doCommit: message
 
 	"noop by default"
@@ -73105,7 +73097,7 @@ method: RwGitRepositoryDefinitionV2
 updateLoadSpecWithRepositoryRoot: aLoadSpec
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec gitUrl: 'file://', self repositoryRoot pathString
+	aLoadSpec gitUrl: 'file:', self repositoryRoot pathString
 %
 
 category: 'testing'
@@ -83348,6 +83340,12 @@ customConditionalAttributes
 	"Answer the customConditionalAttributes used to load the project"
 
 	^ self resolvedProject customConditionalAttributes
+%
+
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+diskRepositoryRoot: repositoryRootPathString
+	self resolvedProject diskRepositoryRoot: repositoryRootPathString
 %
 
 category: 'accessing'
@@ -97955,7 +97953,7 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 category: '*rowan-corev2'
 method: RwProject
 _diskRepositoryRoot: repositoryRootPathString
-	self _loadedProject resolvedProject diskRepositoryRoot: repositoryRootPathString
+	self _loadedProject diskRepositoryRoot: repositoryRootPathString
 %
 
 category: '*rowan-corev2'

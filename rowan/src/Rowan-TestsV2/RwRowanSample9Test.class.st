@@ -4689,11 +4689,11 @@ RwRowanSample9Test >> testLoadSpec_produce_01 [
 	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
 	loadSpecs do: [:aSpec |
-		self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
-		self assert: aSpec gitUrl equals: 'file://', repoDir pathString ].
+		self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', repoDir pathString ].
 
 "read"
 	readProjectSet := loadSpecs read.
@@ -4732,16 +4732,16 @@ RwRowanSample9Test >> testLoadSpec_produce_02 [
 	theSpec :=  (loadSpecs specForProjectNamed: projectName).
 	self assert: theSpec ~~ loadSpec.
 	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file://', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file://', repoDir pathString.
+	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
 	loadSpecs do: [:aSpec |
 		aSpec specName = 'spec_0025'
 			ifTrue: [
-				self assert: aSpec projectUrl equals: 'file://', repoDir pathString.
-				self assert: aSpec gitUrl equals: 'file://', repoDir pathString ]
+				self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
+				self assert: aSpec gitUrl equals: 'file:', repoDir pathString ]
 			ifFalse: [ 
-				self assert: aSpec projectUrl equals: 'file://', repoDir pathString, '/', aSpec relativeRepositoryRoot.
-				self assert: aSpec gitUrl equals: 'file://', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
+				self assert: aSpec projectUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot.
+				self assert: aSpec gitUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
 
 "read"
 	readProjectSet := loadSpecs read.
@@ -4787,8 +4787,8 @@ RwRowanSample9Test >> testLoadSpec_produce_03 [
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
 
 "read"
 	readProjectSet := loadSpecs read.
@@ -4834,8 +4834,8 @@ RwRowanSample9Test >> testLoadSpec_produce_04 [
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
 "read"
 	readProjectSet := loadSpecs read.
 	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
@@ -4880,8 +4880,8 @@ RwRowanSample9Test >> testLoadSpec_produce_05 [
 		| projectDir |
 		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
 		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file://', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file://', projectDir pathString ].
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
 
 "read"
 	readProjectSet := loadSpecs read.
@@ -5034,7 +5034,7 @@ RwRowanSample9Test >> testReferenceRepositoryDirectory [
 	loadSpec2 := loadSpec1 copy.
 	loadSpec2 
 		gitUrl: nil;
-		diskUrl: 'file://', resolvedProject repositoryRoot pathString.
+		diskUrl: 'file:', resolvedProject repositoryRoot pathString.
 
 	loadSpec2 resolve.
 ]
@@ -8372,7 +8372,7 @@ RwRowanSample9Test >> testSwitchRepository [
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
 		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot |
+	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot commitId |
 	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
@@ -8413,9 +8413,45 @@ RwRowanSample9Test >> testSwitchRepository [
 	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar = 'bar'.	"bar method not present in spec_0001"
-	self assert: resolvedProject2 repositoryRoot = project1 repositoryRoot.
-	self assert: project1 loadSpecification gitUrl equals: 'file://', gitRepositoryRoot
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self assert: project1 loadSpecification gitUrl equals: 'file:', gitRepositoryRoot.
+
+"reload project1 from spec_0003 checkout: using readOnlyRepository:commitId: to define root of loaded project"
+	commitId := project1 commitId.
+	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
+	project1 readOnlyRepositoryRoot: gitRepositoryRoot commitId: commitId.
+	self assert: project1 commitId equals: commitId.
+
+"reload"
+	loadedProjects := project1 reload.
+
+"Validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self assert: project1 loadSpecification readonlyDiskUrl equals: 'file:', gitRepositoryRoot. 
+	self deny: project1 commitId equals: commitId.	"commitId is not expected to survive reload"
+
+"reload project1 from spec_0003 checkout: using diskRepositoryRoot: to define root of loaded project"
+	project1 diskRepositoryRoot: gitRepositoryRoot.
+	self assert: project1 commitId equals: ''.	"no commitId preservation"
+
+"reload"
+	loadedProjects := project1 reload.
+
+"Validate"
+	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self assert: project1 loadSpecification diskUrl equals: 'file:', gitRepositoryRoot. 
+	self assert: project1 commitId equals: ''.	"no commitId preservation"
 ]
 
 { #category : 'tests' }
