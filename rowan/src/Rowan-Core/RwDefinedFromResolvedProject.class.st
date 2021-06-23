@@ -12,13 +12,6 @@ RwDefinedFromResolvedProject class >> fromLoadedProject: aLoadedProject [
 ]
 
 { #category : 'accessing' }
-RwDefinedFromResolvedProject >> _projectDefinitionCustomConditionalAttributes [
-	"Answer theplatformConditionalAttributes that will be used to load the project"
-
-	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
-]
-
-{ #category : 'accessing' }
 RwDefinedFromResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
 	"Answer theplatformConditionalAttributes that will be used to load the project"
 

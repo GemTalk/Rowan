@@ -6,7 +6,6 @@ RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue
 	#'spec'.
 	(RwLoadedProject _projectDefinitionSourceKey).
 	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
-	(RwLoadedProject _projectDefinitionCustomConditionalAttributesKey).
 	#'projectRef' } includesIdentical: propertyKey)
 		ifTrue: [ 
 			"projectRef entries are considered to be equal for comparison purposes"

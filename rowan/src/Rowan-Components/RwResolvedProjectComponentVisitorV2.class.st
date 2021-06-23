@@ -33,8 +33,6 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: pro
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				producedProject customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				producedProject platformConditionalAttributes copy;
 		yourself.
@@ -52,8 +50,6 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: pro
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				producedProject customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -73,8 +69,6 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForResolvedProject: res
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -212,8 +206,6 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForProducedProject: aPro
 	aProducedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -233,8 +225,6 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForResolvedProject: reso
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.

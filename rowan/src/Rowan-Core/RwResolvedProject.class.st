@@ -146,13 +146,6 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 ]
 
 { #category : 'accessing' }
-RwResolvedProject >> _projectDefinitionCustomConditionalAttributes [
-	"Answer theplatformConditionalAttributes that will be used to load the project"
-
-	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
-]
-
-{ #category : 'accessing' }
 RwResolvedProject >> _projectDefinitionPlatformConditionalAttributes [
 	"Answer theplatformConditionalAttributes that will be used to load the project"
 

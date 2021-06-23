@@ -50008,14 +50008,6 @@ write
 
 category: 'accessing'
 method: RwDefinedFromResolvedProject
-_projectDefinitionCustomConditionalAttributes
-	"Answer theplatformConditionalAttributes that will be used to load the project"
-
-	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
-%
-
-category: 'accessing'
-method: RwDefinedFromResolvedProject
 _projectDefinitionPlatformConditionalAttributes
 	"Answer theplatformConditionalAttributes that will be used to load the project"
 
@@ -50439,14 +50431,6 @@ write
 	self _concreteProject
 		export;
 		exportLoadSpecification
-%
-
-category: 'accessing'
-method: RwResolvedProject
-_projectDefinitionCustomConditionalAttributes
-	"Answer theplatformConditionalAttributes that will be used to load the project"
-
-	^ self _concreteProject _projectDefinitionCustomConditionalAttributes
 %
 
 category: 'accessing'
@@ -51116,22 +51100,6 @@ _loadedProjectIfPresent: presentBlock ifAbsent: absentBlock
 		loadedProjectNamed: self name
 		ifPresent: presentBlock
 		ifAbsent: absentBlock
-%
-
-category: 'accessing'
-method: RwProject
-_projectDefinitionCustomConditionalAttributes
-	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
-
-	^ self _loadedProject _projectDefinitionCustomConditionalAttributes
-%
-
-category: 'accessing'
-method: RwProject
-_projectDefinitionCustomConditionalAttributes:customConditionalAttributes
-	"Answer the projectDefinitionCustomConditionalAttributes used to load the project"
-
-	^ self _loadedProject _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
 %
 
 category: 'accessing'
@@ -64369,12 +64337,6 @@ componentsWithDoits
 	^ self _projectComponents componentsWithDoits
 %
 
-category: 'accessing'
-method: RwResolvedProjectV2
-conditionalAttributes: conditionalAttributes
-	^ self _projectDefinitionCustomConditionalAttributes: conditionalAttributes
-%
-
 category: 'copying'
 method: RwResolvedProjectV2
 copyForLoadedProject
@@ -65398,18 +65360,6 @@ _checkProjectDirectoryStructure
 			fileRef exists
 				ifFalse: [ ^ false ] ].
 	^ true
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-_projectDefinitionCustomConditionalAttributes
-	^ self _projectDefinition _projectDefinitionCustomConditionalAttributes
-%
-
-category: 'project definition'
-method: RwResolvedProjectV2
-_projectDefinitionCustomConditionalAttributes: customConditionalAttributes
-	self _projectDefinition _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
 %
 
 category: 'comparing'
@@ -69833,9 +69783,6 @@ _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instance
 			theLoadedProject handle
 				_projectDefinitionPlatformConditionalAttributes:
 					projectDef _projectDefinitionPlatformConditionalAttributes.
-			theLoadedProject handle
-				_projectDefinitionCustomConditionalAttributes:
-					projectDef _projectDefinitionCustomConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 
@@ -74001,14 +73948,6 @@ postCopy
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 %
 
-category: 'properties'
-method: RwProjectDefinition
-projectDefinitionPlatformConditionalAttributes
-	^ properties
-		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
-		ifAbsent: [  ]
-%
-
 category: 'accessing'
 method: RwProjectDefinition
 projectName
@@ -74059,28 +73998,6 @@ category: 'private'
 method: RwProjectDefinition
 _projectDefinition
 	^ self
-%
-
-category: 'properties'
-method: RwProjectDefinition
-_projectDefinitionCustomConditionalAttributes
-	^ properties
-		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
-		ifAbsent: [  ]
-%
-
-category: 'properties'
-method: RwProjectDefinition
-_projectDefinitionCustomConditionalAttributes: customConditionalAtttributesOrNil
-	customConditionalAtttributesOrNil
-		ifNil: [ 
-			^ properties
-				removeKey:
-					RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
-				ifAbsent: [  ] ].
-	^ properties
-		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
-		put: customConditionalAtttributesOrNil
 %
 
 category: 'comparing'
@@ -82781,14 +82698,6 @@ updatePropertiesFromRegistryFor: aSymbolDictionaryRegistry
 
 category: 'accessing'
 classmethod: RwLoadedProject
-_projectDefinitionCustomConditionalAttributesKey
-	"The value of the property key preserves the custom conditional attributes used to read the project from disk"
-
-	^ #'_Project_Definition_CustomConditionalAttributes'
-%
-
-category: 'accessing'
-classmethod: RwLoadedProject
 _projectDefinitionPlatformConditionalAttributesKey
 	"The value of the property key preserves the platform conditional attributes used to read the project from disk"
 
@@ -83211,8 +83120,6 @@ asDefinition
 	resolvedProject _projectDefinition
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectLoadedDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				handle _projectDefinitionCustomConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				Rowan platformConditionalAttributes;
 		yourself.
@@ -83515,8 +83422,6 @@ propertiesForCompare
 		at: 'name' put: handle projectName;
 		at: RwLoadedProject _projectDefinitionSourceKey
 			put: RwLoadedProject _projectLoadedDefinitionSourceValue;
-		at: RwLoadedProject _projectDefinitionCustomConditionalAttributesKey
-			put: handle _projectDefinitionCustomConditionalAttributes copy;
 		at: RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey
 			put: handle _projectDefinitionPlatformConditionalAttributes copy;
 		yourself.
@@ -83712,21 +83617,6 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 _projectComponents
 	^ handle _projectComponents
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-_projectDefinitionCustomConditionalAttributes
-	"Answer the projectDefinitionPlatformConditionalAttributes used to load the project"
-
-	^ self resolvedProject _projectDefinitionCustomConditionalAttributes
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-_projectDefinitionCustomConditionalAttributes: customConditionalAttributes
-
-	^ self resolvedProject _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
 %
 
 category: 'comparing'
@@ -86275,8 +86165,6 @@ readLoadSpecForProducedProject: producedProject
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				producedProject customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				producedProject platformConditionalAttributes copy;
 		yourself.
@@ -86295,8 +86183,6 @@ readLoadSpecForProducedProject: producedProject platformConditionalAttributes: p
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				producedProject customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -86317,8 +86203,6 @@ readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNam
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -86460,8 +86344,6 @@ readProjectForProducedProject: aProducedProject withComponentNames: componentNam
 	aProducedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -86482,8 +86364,6 @@ readProjectForResolvedProject: resolvedProject withComponentNames: componentName
 	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionCustomConditionalAttributes:
-				customConditionalAttributes copy;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
@@ -97955,7 +97835,6 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 	#'spec'.
 	(RwLoadedProject _projectDefinitionSourceKey).
 	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
-	(RwLoadedProject _projectDefinitionCustomConditionalAttributesKey).
 	#'projectRef' } includesIdentical: propertyKey)
 		ifTrue: [ 
 			"projectRef entries are considered to be equal for comparison purposes"

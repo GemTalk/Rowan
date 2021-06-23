@@ -97,9 +97,6 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			theLoadedProject handle
 				_projectDefinitionPlatformConditionalAttributes:
 					projectDef _projectDefinitionPlatformConditionalAttributes.
-			theLoadedProject handle
-				_projectDefinitionCustomConditionalAttributes:
-					projectDef _projectDefinitionCustomConditionalAttributes.
 			(projectDef projectDefinitionSourceProperty
 				= RwLoadedProject _projectDiskDefinitionSourceValue
 				or: [ 

@@ -135,16 +135,6 @@ RwResolvedProjectV2 >> _checkProjectDirectoryStructure [
 	^ true
 ]
 
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> _projectDefinitionCustomConditionalAttributes [
-	^ self _projectDefinition _projectDefinitionCustomConditionalAttributes
-]
-
-{ #category : 'project definition' }
-RwResolvedProjectV2 >> _projectDefinitionCustomConditionalAttributes: customConditionalAttributes [
-	self _projectDefinition _projectDefinitionCustomConditionalAttributes: customConditionalAttributes
-]
-
 { #category : 'comparing' }
 RwResolvedProjectV2 >> _projectDefinitionForCompare [
 	^ self _projectDefinition
@@ -712,11 +702,6 @@ RwResolvedProjectV2 >> componentOrPackageGroupNamed: aComponentName ifAbsent: ab
 { #category : 'accessing' }
 RwResolvedProjectV2 >> componentsWithDoits [
 	^ self _projectComponents componentsWithDoits
-]
-
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> conditionalAttributes: conditionalAttributes [
-	^ self _projectDefinitionCustomConditionalAttributes: conditionalAttributes
 ]
 
 { #category : 'copying' }
