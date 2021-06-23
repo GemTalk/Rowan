@@ -83591,6 +83591,14 @@ read
 	^ self asDefinition read
 %
 
+category: 'actions'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	self resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 remote

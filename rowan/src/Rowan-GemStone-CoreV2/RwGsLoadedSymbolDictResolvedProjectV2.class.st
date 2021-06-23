@@ -440,6 +440,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> read [
 	^ self asDefinition read
 ]
 
+{ #category : 'actions' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+	self resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> remote [
 
