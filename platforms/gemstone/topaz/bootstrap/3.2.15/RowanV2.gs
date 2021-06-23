@@ -50667,18 +50667,6 @@ readProjectComponentNames: componentNames
 
 category: 'transitions'
 method: RwDefinedFromResolvedProject
-readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-%
-
-category: 'transitions'
-method: RwDefinedFromResolvedProject
 readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -50899,7 +50887,9 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve: customConditionalAttributes platformAttributes: platformConditionalAttributes.
+	loadSpec addCustomConditionalAttributes: customConditionalAttributes.
+	resolvedProject := loadSpec produceProject: platformConditionalAttributes.
+	resolvedProject read: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolve;
 		yourself
@@ -51092,18 +51082,6 @@ readProjectComponentNames: componentNames
 	"return the receiver with a new set of definitions read from disk"
 
 	self _concreteProject readProjectComponentNames: componentNames
-%
-
-category: 'transitions'
-method: RwResolvedProject
-readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
 %
 
 category: 'transitions'
@@ -65148,13 +65126,6 @@ create
 	self resolve; export
 %
 
-category: 'accessing'
-method: RwResolvedProjectV2
-customConditionalAttributes
-	^ self _projectDefinitionCustomConditionalAttributes
-		ifNil: [ super customConditionalAttributes ]
-%
-
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 diskRepositoryRoot: repositoryRootPathString
@@ -65383,7 +65354,6 @@ loadProjectSet
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(Rowan projectTools readV2 readProjectSetForProducedProject: self)
@@ -65755,21 +65725,6 @@ readProjectComponentNames: componentNames
 	^ self
 		readProjectComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
-	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
-		withComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
@@ -88438,6 +88393,15 @@ produceProject
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
 
 	self produce.
+	^ RwResolvedProjectV2 loadSpecification: self
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
+produceProject: platformConditionalAttributes
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
+
+	self produce: platformConditionalAttributes.
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 

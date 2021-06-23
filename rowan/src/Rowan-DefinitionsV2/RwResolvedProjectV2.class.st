@@ -737,12 +737,6 @@ RwResolvedProjectV2 >> create [
 	self resolve; export
 ]
 
-{ #category : 'accessing' }
-RwResolvedProjectV2 >> customConditionalAttributes [
-	^ self _projectDefinitionCustomConditionalAttributes
-		ifNil: [ super customConditionalAttributes ]
-]
-
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 	| loadSpec |
@@ -951,7 +945,6 @@ RwResolvedProjectV2 >> loadProjectSet [
 			required projects, also read from disk. Then load the entire project set.
 	"
 
-	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(Rowan projectTools readV2 readProjectSetForProducedProject: self)
@@ -1285,20 +1278,6 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 	^ self
 		readProjectComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
-	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
-		withComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 

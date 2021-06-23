@@ -124,7 +124,9 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve: customConditionalAttributes platformAttributes: platformConditionalAttributes.
+	loadSpec addCustomConditionalAttributes: customConditionalAttributes.
+	resolvedProject := loadSpec produceProject: platformConditionalAttributes.
+	resolvedProject read: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolve;
 		yourself
@@ -303,17 +305,6 @@ RwResolvedProject >> readProjectComponentNames: componentNames [
 	"return the receiver with a new set of definitions read from disk"
 
 	self _concreteProject readProjectComponentNames: componentNames
-]
-
-{ #category : 'transitions' }
-RwResolvedProject >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
-	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
-
-	"return the receiver with a new set of definitions read from disk"
-
-	self _concreteProject
-		readProjectComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
 ]
 
 { #category : 'transitions' }

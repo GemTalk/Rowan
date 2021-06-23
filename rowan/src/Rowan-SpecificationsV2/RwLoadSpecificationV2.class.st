@@ -549,6 +549,14 @@ RwLoadSpecificationV2 >> produceProject [
 ]
 
 { #category : 'actions' }
+RwLoadSpecificationV2 >> produceProject: platformConditionalAttributes [
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
+
+	self produce: platformConditionalAttributes.
+	^ RwResolvedProjectV2 loadSpecification: self
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
