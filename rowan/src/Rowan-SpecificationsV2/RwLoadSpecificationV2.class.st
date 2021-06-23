@@ -437,13 +437,6 @@ RwLoadSpecificationV2 >> initializeForExport [
 ]
 
 { #category : 'testing' }
-RwLoadSpecificationV2 >> isEmbedded [
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ false
-]
-
-{ #category : 'testing' }
 RwLoadSpecificationV2 >> isStrict [
 	^ self repositoryResolutionPolicy == #strict
 ]

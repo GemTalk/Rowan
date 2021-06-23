@@ -12,17 +12,6 @@ RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 ]
 
 { #category : 'instance creation' }
-RwDefinedProject class >> newEmbeddedProjectNamed: aName [
-	| new spec |
-	new := self new initializeForName: aName.
-	spec := RwEmbeddedLoadSpecificationV2 new
-		projectName: aName;
-		yourself.
-	new _concreteProject _loadSpecification: spec.
-	^ new
-]
-
-{ #category : 'instance creation' }
 RwDefinedProject class >> newNamed: aName [
 
 	^ self new

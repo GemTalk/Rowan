@@ -286,14 +286,6 @@ RwAbstractResolvedObjectV2 >> repositoryRoot [
 ]
 
 { #category : 'accessing' }
-RwAbstractResolvedObjectV2 >> repositoryRoot: aFileReferenceOrString [
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
-	^ self _projectRepository repositoryRoot: aFileReferenceOrString
-]
-
-{ #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> requiredProjectRoots [
 
 	^ {(self componentsRoot).

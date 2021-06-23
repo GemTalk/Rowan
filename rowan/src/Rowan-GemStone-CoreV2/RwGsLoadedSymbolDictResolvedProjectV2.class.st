@@ -48,6 +48,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAt
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
+
+	self resolvedProject _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
@@ -250,13 +256,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gitRoot [
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
 	self initializeForName: aResolvedProject projectName.
 	handle := aResolvedProject copyForLoadedProject
-]
-
-{ #category : 'testing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> isEmbedded [
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ self resolvedProject isEmbedded
 ]
 
 { #category : 'comparing' }

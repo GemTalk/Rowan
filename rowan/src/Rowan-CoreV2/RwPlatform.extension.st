@@ -1,11 +1,6 @@
 Extension { #name : 'RwPlatform' }
 
 { #category : '*rowan-corev2' }
-RwPlatform >> newEmbeddedProjectNamed: projectName [
-	^ RwDefinedProject newEmbeddedProjectNamed: projectName
-]
-
-{ #category : '*rowan-corev2' }
 RwPlatform >> newProjectNamed: projectName [
 	^ RwDefinedProject newNamed: projectName
 ]

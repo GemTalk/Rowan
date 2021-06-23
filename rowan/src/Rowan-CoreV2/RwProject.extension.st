@@ -7,17 +7,9 @@ RwProject >> _diskRepositoryRoot: repositoryRootPathString [
 
 { #category : '*rowan-corev2' }
 RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	self _loadedProject resolvedProject
+	self _loadedProject
 		readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> _repositoryRoot: aFileReference [
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
-	self _loadedProject resolvedProject repositoryRoot: aFileReference
 ]
 
 { #category : '*rowan-corev2' }
@@ -61,13 +53,6 @@ RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
 RwProject >> diskRepositoryRoot: repositoryRootPathString [
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _diskRepositoryRoot: repositoryRootPathString.
-					project projectsHome: nil ] ].
 	self _diskRepositoryRoot: repositoryRootPathString.
 	self projectsHome: nil
 ]
@@ -76,12 +61,6 @@ RwProject >> diskRepositoryRoot: repositoryRootPathString [
 RwProject >> diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _diskRepositoryRoot: repositoryRootPathString ] ].
 	self _diskRepositoryRoot: repositoryRootPathString.
 	self projectsHome: aProjectHomeReferenceOrString
 ]
@@ -110,15 +89,6 @@ RwProject >> gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectH
 RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project
-						_readOnlyRepositoryRoot: repositoryRootPathString
-						commitId: commitId.
-					project projectsHome: nil ] ].
 	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
 	self projectsHome: nil
 ]
@@ -127,15 +97,6 @@ RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 RwProject >> readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId [
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project
-						_readOnlyRepositoryRoot: repositoryRootPathString
-						commitId: commitId.
-					project projectsHome: aProjectHomeReferenceOrString ] ].
 	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
 	self projectsHome: aProjectHomeReferenceOrString
 ]
@@ -153,23 +114,6 @@ RwProject >> removePackageNamed: packageName [
 	projectDefinition := self defined.
 	projectDefinition removePackageNamed: packageName.
 	^ projectDefinition load
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> repositoryRoot: aFileReferenceOrString [
-	| resolvedProject |
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message and separate load expression instead'.
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _repositoryRoot: aFileReferenceOrString ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject repositoryRoot: aFileReferenceOrString.
-	^ resolvedProject loadProjectSet
 ]
 
 { #category : '*rowan-corev2' }

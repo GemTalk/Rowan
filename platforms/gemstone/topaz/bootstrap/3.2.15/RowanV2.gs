@@ -9483,24 +9483,6 @@ removeallmethods RwLoadSpecificationV2
 removeallclassmethods RwLoadSpecificationV2
 
 doit
-(RwLoadSpecificationV2
-	subclass: 'RwEmbeddedLoadSpecificationV2'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #()
-)
-		category: 'Rowan-SpecificationsV2';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwEmbeddedLoadSpecificationV2
-removeallclassmethods RwEmbeddedLoadSpecificationV2
-
-doit
 (RwSpecification
 	subclass: 'RwProjectSpecificationV2'
 	instVarNames: #( specName projectName projectSpecPath componentsPath packagesPath projectsPath specsPath packageFormat packageConvention comment repoType loadedCommitId )
@@ -49659,14 +49641,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
-category: 'testing'
-method: RwAbstractProject
-isEmbedded
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ self _concreteProject isEmbedded
-%
-
 category: 'accessing'
 method: RwAbstractProject
 loadSpecification
@@ -49891,18 +49865,6 @@ fromResolvedProject: aResolvedProject
 	^ (self newNamed: aResolvedProject name)
 		_concreteProject: aResolvedProject _concreteProject;
 		yourself
-%
-
-category: 'instance creation'
-classmethod: RwDefinedProject
-newEmbeddedProjectNamed: aName
-	| new spec |
-	new := self new initializeForName: aName.
-	spec := RwEmbeddedLoadSpecificationV2 new
-		projectName: aName;
-		yourself.
-	new _concreteProject _loadSpecification: spec.
-	^ new
 %
 
 category: 'instance creation'
@@ -64014,15 +63976,6 @@ repositoryRoot
 
 category: 'accessing'
 method: RwAbstractResolvedObjectV2
-repositoryRoot: aFileReferenceOrString
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
-	^ self _projectRepository repositoryRoot: aFileReferenceOrString
-%
-
-category: 'accessing'
-method: RwAbstractResolvedObjectV2
 requiredProjectRoots
 
 	^ {(self componentsRoot).
@@ -65373,14 +65326,6 @@ initialize
 	super initialize.
 	projectDefinition := RwProjectDefinition new.
 	projectComponents := RwResolvedProjectComponentsV2 new
-%
-
-category: 'testing'
-method: RwResolvedProjectV2
-isEmbedded
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ self loadSpecification isEmbedded
 %
 
 category: 'project definition'
@@ -84181,14 +84126,6 @@ initializeForResolvedProject: aResolvedProject
 	handle := aResolvedProject copyForLoadedProject
 %
 
-category: 'testing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-isEmbedded
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ self resolvedProject isEmbedded
-%
-
 category: 'comparing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 isEmpty
@@ -84591,6 +84528,13 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+_readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+
+	self resolvedProject _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
@@ -88370,14 +88314,6 @@ initializeForExport
 
 category: 'testing'
 method: RwLoadSpecificationV2
-isEmbedded
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ false
-%
-
-category: 'testing'
-method: RwLoadSpecificationV2
 isStrict
 	^ self repositoryResolutionPolicy == #strict
 %
@@ -88888,40 +88824,6 @@ _validateGemStonePlatformUserIdMap: userIdMap
 												, expectedClass name asString printString , ' not class '
 												, propertyValue class name asString printString ] ]
 						ifFalse: [ Error signal: 'Unknown platform property key ' , propertyKey printString ] ] ]
-%
-
-! Class implementation for 'RwEmbeddedLoadSpecificationV2'
-
-!		Class methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'accessing'
-classmethod: RwEmbeddedLoadSpecificationV2
-label
-	^ 'embedded load specification '
-%
-
-!		Instance methods for 'RwEmbeddedLoadSpecificationV2'
-
-category: 'testing'
-method: RwEmbeddedLoadSpecificationV2
-isEmbedded
-	"answer true if the receiver is an embedded project (i.e., in same git repository as the project that requires the reciever)"
-
-	^ true
-%
-
-category: 'to be removed'
-method: RwEmbeddedLoadSpecificationV2
-resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	| basicProject |
-	self projectsHome: aResolvedProject projectsHome.
-	basicProject := RwResolvedProjectV2 basicLoadSpecification: self.
-	basicProject _projectRepository: aResolvedProject _projectRepository copy.
-	self projectsHome: aResolvedProject repositoryRoot.
-	basicProject _projectRepository resolve.
-	^ basicProject
 %
 
 ! Class implementation for 'RwProjectSpecificationV2'
@@ -98802,12 +98704,6 @@ initialize
 
 category: '*rowan-coreV2'
 classmethod: Rowan
-newEmbeddedProjectNamed: projectName
-	^ self platform newEmbeddedProjectNamed: projectName
-%
-
-category: '*rowan-coreV2'
-classmethod: Rowan
 newProjectNamed: projectName
 	^ self platform newProjectNamed: projectName
 %
@@ -101283,12 +101179,6 @@ _userPlatformDictionaryForUser: aUserId
 
 category: '*rowan-corev2'
 method: RwPlatform
-newEmbeddedProjectNamed: projectName
-	^ RwDefinedProject newEmbeddedProjectNamed: projectName
-%
-
-category: '*rowan-corev2'
-method: RwPlatform
 newProjectNamed: projectName
 	^ RwDefinedProject newNamed: projectName
 %
@@ -101648,13 +101538,6 @@ method: RwProject
 diskRepositoryRoot: repositoryRootPathString
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _diskRepositoryRoot: repositoryRootPathString.
-					project projectsHome: nil ] ].
 	self _diskRepositoryRoot: repositoryRootPathString.
 	self projectsHome: nil
 %
@@ -101664,12 +101547,6 @@ method: RwProject
 diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _diskRepositoryRoot: repositoryRootPathString ] ].
 	self _diskRepositoryRoot: repositoryRootPathString.
 	self projectsHome: aProjectHomeReferenceOrString
 %
@@ -101739,15 +101616,6 @@ method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project
-						_readOnlyRepositoryRoot: repositoryRootPathString
-						commitId: commitId.
-					project projectsHome: nil ] ].
 	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
 	self projectsHome: nil
 %
@@ -101757,15 +101625,6 @@ method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project
-						_readOnlyRepositoryRoot: repositoryRootPathString
-						commitId: commitId.
-					project projectsHome: aProjectHomeReferenceOrString ] ].
 	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
 	self projectsHome: aProjectHomeReferenceOrString
 %
@@ -101784,24 +101643,6 @@ removePackageNamed: packageName
 	projectDefinition := self defined.
 	projectDefinition removePackageNamed: packageName.
 	^ projectDefinition load
-%
-
-category: '*rowan-corev2'
-method: RwProject
-repositoryRoot: aFileReferenceOrString
-	| resolvedProject |
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message and separate load expression instead'.
-	self requiredProjects
-		do: [ :project | 
-			project isEmbedded
-				ifTrue: [ 
-					"only embedded required projects should have their repository root swapped out"
-					project _repositoryRoot: aFileReferenceOrString ] ].
-	resolvedProject := self asDefinition.
-	resolvedProject repositoryRoot: aFileReferenceOrString.
-	^ resolvedProject loadProjectSet
 %
 
 category: '*rowan-corev2'
@@ -101858,18 +101699,9 @@ _diskRepositoryRoot: repositoryRootPathString
 category: '*rowan-corev2'
 method: RwProject
 _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	self _loadedProject resolvedProject
+	self _loadedProject
 		readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
-%
-
-category: '*rowan-corev2'
-method: RwProject
-_repositoryRoot: aFileReference
-	self
-		deprecated:
-			'Use [git,disk,readOnly]RepositoryRoot: message instead'.
-	self _loadedProject resolvedProject repositoryRoot: aFileReference
 %
 
 ! Class extensions for 'RwProjectDefinition'
