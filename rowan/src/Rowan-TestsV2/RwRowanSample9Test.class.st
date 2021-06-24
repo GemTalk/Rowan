@@ -4131,7 +4131,7 @@ RwRowanSample9Test >> testIssue707_01 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue711 [
+RwRowanSample9Test >> testIssue711_1 [
 	"
 		In fileinrowan.topaz we read the Kernel component using a set of custom 
 		attributes that are not part of the load spec. In the current implementation, 
@@ -4197,6 +4197,54 @@ RwRowanSample9Test >> testIssue711 [
 		expectedProjectNames: projectNames.
 	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
 	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue711_2 [
+	"
+		A project may be read into memory using platform conditional attributes that
+			do not match the platform conditional attributes of the current image.
+		A project that has been read into memory may be loaded into the image.
+		A project in memory whose platform conditional attributes do not match the 
+			current image should not be allowed to be loaded.
+		The  _Project_Definition_PlatformConditionalAttributes should match a subset
+			of the platform conditional attributes of the current image, to be eligible
+			to be loaded.
+
+		spec_0030 has packages that are conditional upon a pharo platform attribute,
+			so use spec_0030 for this test.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/711"
+
+	| loadSpec projectName projectNames loadSpecs pharoSpec pharoProject pharoPlatformAttributes testCustomAttributes |
+	loadSpec := self _loadSpecNamed: 'spec_0030'.
+
+	pharoPlatformAttributes := { 'common' . 'pharo' }.
+	testCustomAttributes := { 'tests' }.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce project"
+	loadSpecs := loadSpec produce.
+
+"define attributes"
+	pharoSpec := loadSpecs specForProjectNamed: projectName.
+	pharoSpec addCustomConditionalAttributes: testCustomAttributes.
+
+"initial load"
+	pharoProject := pharoSpec read: pharoPlatformAttributes.
+
+"validate"
+	self assert: pharoProject packageNames asArray sort equals: { 'RowanSample9-Core' . 'RowanSample9-Definitions' . 'RowanSample9-Definitions-Pharo' . 'RowanSample9-Definitions-Pharo-Tests' . 'RowanSample9-Definitions-Tests' . 'RowanSample9-Specs' . 'RowanSample9-Specs-Tests' . 'RowanSample9-Tests'} sort.
+
+"load"
+	pharoProject load.
 ]
 
 { #category : 'tests' }
