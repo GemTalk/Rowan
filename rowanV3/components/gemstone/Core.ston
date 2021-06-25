@@ -1,0 +1,35 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'gemstone/Core',
+	#condition : [
+		'gemstone'
+	],
+	#componentNames : [
+		'gemstone/tests/Core'
+	],
+	#packageNames : [
+		'AST-Core',
+		'AST-Kernel-Core',
+		'Rowan-Services-Extensions',
+		'Rowan-Services-Core',
+		'Rowan-GemStone-Core',
+		'Rowan-GemStone-Kernel',
+		'Rowan-GemStone-Loader',
+		'Rowan-GemStone-Loader-Extensions',
+		'Rowan-GemStone-Definitions',
+		'Rowan-GemStone-Specifications'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#comment : 'Core gemstone packages '
+}

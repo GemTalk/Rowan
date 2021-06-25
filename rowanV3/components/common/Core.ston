@@ -1,0 +1,42 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Kernel',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Kernel',
+		'Rowan-Url-Core',
+		'Rowan-Url-Extensions',
+		'Rowan-Cypress-Core',
+		'Rowan-Cypress-Kernel',
+		'Rowan-Definitions',
+		'Rowan-Core-Definitions-Extensions',
+		'Rowan-Cypress-Definitions',
+		'Rowan-Specifications',
+		'Rowan-Core-Definitions-Extensions',
+		'Rowan-Configurations',
+		'Rowan-Core',
+		'Rowan-Tools-Core',
+		'Rowan-Tools-Extensions',
+		'Rowan-Tools-Kernel'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools'},
+					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	},
+	#comment : ''
+}

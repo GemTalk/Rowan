@@ -1,0 +1,25 @@
+ RwLoadSpecificationV2 {
+	#specName : 'Rowan',
+	#projectName : 'Rowan',
+	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
+	#revision : 'issue_723',
+	#projectSpecFile : 'rowanV3/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#groupNames : [ ],
+	#customConditionalAttributes : [ 'tests', 'deprecated', 'jadeServer' ],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'UserGlobals'
+			},
+			'SystemUser' : {
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'RowanKernel'
+			}
+		}
+	},
+	#comment : 'v3.0 Load spec for reading Rowan v1.2.10'
+}
