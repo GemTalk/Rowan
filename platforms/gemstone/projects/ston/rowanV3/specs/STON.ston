@@ -1,0 +1,22 @@
+ RwLoadSpecificationV2 {
+	#specName : 'STON',
+	#projectName : 'STON',
+	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston/rowanV3',
+	#revision : 'issue_723',
+	#projectSpecFile : 'project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#groupNames : [ ],
+	#customConditionalAttributes : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (STON)'
+}

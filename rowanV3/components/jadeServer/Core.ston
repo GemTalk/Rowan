@@ -1,0 +1,19 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'jadeServer/Core',
+	#condition : 'jadeServer',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-JadeServer'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' }
+				}
+			}
+		}
+	},
+	#comment : ''
+}
