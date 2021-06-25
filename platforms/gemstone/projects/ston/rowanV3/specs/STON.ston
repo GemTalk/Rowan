@@ -1,10 +1,11 @@
  RwLoadSpecificationV2 {
 	#specName : 'STON',
 	#projectName : 'STON',
+	#projectAlias : 'Rowan',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
-	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston/rowanV3',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston',
 	#revision : 'issue_723',
-	#projectSpecFile : 'project.ston',
+	#projectSpecFile : 'rowanV3/project.ston',
 	#componentNames : [
 		'Core'
 	],

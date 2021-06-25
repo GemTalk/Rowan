@@ -1,9 +1,9 @@
  RwLoadSpecificationV2 {
-	#specName : 'STON',
-	#projectName : 'STON',
+	#specName : 'Cypress',
+	#projectName : 'Cypress',
 	#projectAlias : 'Rowan',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
-	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/cypress',
 	#revision : 'issue_723',
 	#projectSpecFile : 'rowanV3/project.ston',
 	#componentNames : [
@@ -19,5 +19,5 @@
 			}
 		}
 	},
-	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (STON)'
+	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (Cypress)'
 }

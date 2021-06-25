@@ -6,5 +6,5 @@ RwProjectSpecificationV2 {
 	#projectsPath : 'rowanV3/projects',
 	#specsPath : 'rowanV3/specs',
 	#packageFormat : 'tonel',
-	#comment : 'STON project specification'
+	#comment : 'Cypress project specification'
 }

@@ -1,0 +1,17 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Cypress-Comparison',
+		'Cypress-Definitions',
+		'Cypress-Environmental-Tools',
+		'Cypress-GemStoneFileServer',
+		'Cypress-MesssageDigest',
+		'Cypress-Network-Url',
+		'Cypress-PackageManagement',
+		'Cypress-Structure'
+ ],
+	#comment : 'top-level component for reading Cypress project.'
+}
