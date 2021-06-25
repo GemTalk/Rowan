@@ -3,7 +3,7 @@
 	#projectName : 'Tonel',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
 	#projectAlias : 'Rowan',
-	#relativeRepositoryRoot : 'platforms/gemstone/projects/tonel',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/Tonel',
 	#revision : 'issue_723',
 	#projectSpecFile : 'rowanV3/project.ston',
 	#componentNames : [

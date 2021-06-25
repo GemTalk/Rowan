@@ -3,7 +3,7 @@
 	#projectName : 'STON',
 	#projectAlias : 'Rowan',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
-	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/STON',
 	#revision : 'issue_723',
 	#projectSpecFile : 'rowanV3/project.ston',
 	#componentNames : [

@@ -1,9 +1,9 @@
  RwLoadSpecificationV2 {
-	#specName : 'STON',
-	#projectName : 'STON',
-	#projectAlias : 'Rowan',
+	#specName : 'Tonel',
+	#projectName : 'Tonel',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
-	#relativeRepositoryRoot : 'platforms/gemstone/projects/ston',
+	#projectAlias : 'Rowan',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/Tonel',
 	#revision : 'issue_723',
 	#projectSpecFile : 'rowanV3/project.ston',
 	#componentNames : [
@@ -19,5 +19,5 @@
 			}
 		}
 	},
-	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (STON)'
+	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (Tonel)'
 }
