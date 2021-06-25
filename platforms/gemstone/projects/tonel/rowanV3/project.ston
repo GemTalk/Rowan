@@ -2,9 +2,9 @@ RwProjectSpecificationV2 {
 	#specName : 'project',
 	#projectSpecPath : 'rowanV3',
 	#componentsPath : 'rowanV3/components',
-	#packagesPath : '/src',
+	#packagesPath : 'src',
 	#projectsPath : 'rowanV3/projects',
 	#specsPath : 'rowanV3/specs',
 	#packageFormat : 'tonel',
-	#comment : 'STON project specification'
+	#comment : 'Tonel project specification'
 }
