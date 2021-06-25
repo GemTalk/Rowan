@@ -57,10 +57,36 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList [
-	| loadedProjectDefinitionSet diff loadedProjects |
+	| loadedProjectDefinitionSet diff loadedProjects imagePlatformAttributesSet |
 	loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet.	"use loaded things to do the diff - convert to definition when a modification is created"
+	imagePlatformAttributesSet := Rowan platformConditionalAttributes asSet.
 	projectSetDefinitionToLoad definitions
 		keysAndValuesDo: [ :projectName :projectDefinition | 
+			projectDefinition _projectDefinitionPlatformConditionalAttributes
+				ifNil: [ 
+					"project definition constructed in memory skip Warning (caveat emptor)"
+					 ]
+				ifNotNil: [ :projectPlatformAttributes | 
+					| projectPlatformAttributesSet |
+					"project definition read from disk using platformConditionalAttributes 
+						(either default of custom). We expect the attributes to be a reasonable 
+						match to the image platform attributes when attempting a load"
+					projectPlatformAttributesSet := projectPlatformAttributes asSet.
+					projectPlatformAttributesSet remove: 'common' ifAbsent: [  ].	"common doesn't count"
+					(imagePlatformAttributesSet * projectPlatformAttributesSet) isEmpty
+						ifTrue: [ 
+							"If there are no common platform attributes between the current 
+								platform and the platformConditionalAttributes used to read the 
+								project we'll signal a Warning"
+							Warning
+								signal:
+									'the project ' , projectDefinition projectName printString
+										, ' was read from disk with platform conditional attributes ('
+										, projectPlatformAttributes printString
+										,
+											') that is not compatible with the platform conditional attributes for the current image ('
+										, Rowan platformConditionalAttributes printString
+										, ') so the project may have compile errors when loaded.' ] ].
 			projectDefinition packages
 				keysAndValuesDo: [ :packageName :packageDefinition | 
 					| symdictName |
@@ -90,8 +116,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			theLoadedProject handle
 				_projectComponents: projectDef _projectComponents copy.
-			theLoadedProject handle
-				_loadSpecification: projectDef loadSpecification copy.
+			theLoadedProject handle _loadSpecification: projectDef loadSpecification copy.
 			theLoadedProject handle
 				_projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle

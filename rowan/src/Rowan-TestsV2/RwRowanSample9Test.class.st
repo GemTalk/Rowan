@@ -4217,7 +4217,7 @@ RwRowanSample9Test >> testIssue711_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/711"
 
-	| loadSpec projectName projectNames loadSpecs pharoSpec pharoProject pharoPlatformAttributes testCustomAttributes |
+	| loadSpec projectName projectNames loadSpecs pharoSpec pharoProject pharoPlatformAttributes testCustomAttributes warningSignalled |
 	loadSpec := self _loadSpecNamed: 'spec_0030'.
 
 	pharoPlatformAttributes := { 'common' . 'pharo' }.
@@ -4243,8 +4243,14 @@ RwRowanSample9Test >> testIssue711_2 [
 "validate"
 	self assert: pharoProject packageNames asArray sort equals: { 'RowanSample9-Core' . 'RowanSample9-Definitions' . 'RowanSample9-Definitions-Pharo' . 'RowanSample9-Definitions-Pharo-Tests' . 'RowanSample9-Definitions-Tests' . 'RowanSample9-Specs' . 'RowanSample9-Specs-Tests' . 'RowanSample9-Tests'} sort.
 
-"load"
-	pharoProject load.
+"load ... and expect Warning"
+	warningSignalled := false.
+	[pharoProject load]
+		on: Warning
+		do: [:ex |
+			ex messageText = 'the project ''RowanSample9'' was read from disk with platform conditional attributes (anArray( ''common'', ''pharo'')) that is not compatible with the platform conditional attributes for the current image (anArray( ''common'', ''gemstone'', ''gemstone-kernel'', 3.7.0)) so the project may have compile errors when loaded.'
+				ifTrue: [ warningSignalled := true ] ].
+	self assert: warningSignalled description: 'Expected Warning not signalled'
 ]
 
 { #category : 'tests' }
