@@ -4454,7 +4454,8 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	(resolvedRepository gitRoot / 'indexCards') ensureCreateDirectory.
 	indexCard exportTo: resolvedRepository gitRoot / 'indexCards'.
 	(resolvedRepository gitRoot / 'specs') ensureCreateDirectory.
-	theLoadSpec exportTo: resolvedRepository gitRoot / 'specs'.
+	theLoadSpec
+		ifNotNil: [ theLoadSpec exportTo: resolvedRepository gitRoot / 'specs' ].
 
 	indexCardDict := Dictionary new.
 	(resolvedRepository gitRoot / 'indexCards') allFiles
@@ -4476,7 +4477,9 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 				sort: [ :a :b | a specName <= b specName ])
 				do: [ :loadSpec | 
 					fileStream
-						nextPutAll: '### ' , loadSpec specName;
+						nextPutAll:
+								'### [' , loadSpec specName , '](https://github.com/dalehenrich/'
+										, self primaryProjectName , '/tree/' , loadSpec specName , ')';
 						lf;
 						nextPutAll: '```';
 						lf;
@@ -8419,6 +8422,11 @@ RwTestProjectLibraryGenerator >> preserveRowanSHA [
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
 	preserveRowanSHA := aBool
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> primaryProjectName [
+	^ 'RowanSample9'
 ]
 
 { #category : 'accessing' }

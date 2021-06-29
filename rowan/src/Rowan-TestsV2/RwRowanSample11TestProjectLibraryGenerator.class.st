@@ -310,6 +310,11 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		commitMessage: commitMessage
 ]
 
+{ #category : 'private' }
+RwRowanSample11TestProjectLibraryGenerator >> primaryProjectName [
+	^ 'RowanSample11'
+]
+
 { #category : 'accessing' }
 RwRowanSample11TestProjectLibraryGenerator >> projectReadmeIntro [
 	"Intro in README"
