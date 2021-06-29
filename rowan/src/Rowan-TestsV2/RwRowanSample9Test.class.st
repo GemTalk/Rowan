@@ -4706,12 +4706,12 @@ RwRowanSample9Test >> testIssue724 [
 	"https://github.com/GemTalk/Rowan/issues/724"
 
 	| loadSpec projectsHome projectName projectNames requiredProjectName loadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0053'. "clone the repo"
+	loadSpec := self _loadSpecNamed: 'spec_0072'. "clone the repo"
 
 	projectsHome := self _testRowanProjectsSandbox.
 
 	"read load spec from disk"
-	loadSpec := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0053.ston'.
+	loadSpec := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0072.ston'.
 
 	projectsHome := self _testRowanProjectsSandbox / 'issue_724'.
 	projectsHome ensureDeleteAll.
@@ -4731,7 +4731,8 @@ RwRowanSample9Test >> testIssue724 [
 
 "boom"
 	loadSpecs read.
-self halt."DOES NOT REPRODUCE --- non-default projectSpecification"
+
+	self error: 'DOES NOT REPRODUCE !!! --- non-default projectSpecification'.
 
 "validate"
 ]
@@ -8436,6 +8437,37 @@ RwRowanSample9Test >> testSpec_0071 [
 		expectedProjectNames: projectNames.
 	self deny: (Rowan globalNamed: 'RowanSample9Class1') equals: nil.
 	self deny: (Rowan globalNamed: 'RowanSample9TestCase') equals: nil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0072 [
+	"spec_0072 should load cleanly ... "
+
+	"https://github.com/GemTalk/Rowan/issues/724"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects requiredProjectName |
+	loadSpec := self _loadSpecNamed: 'spec_0072'.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"produce project"
+	loadSpecs := loadSpec produce.
+
+"load project"
+	loadedProjects := loadSpecs load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty
 ]
 
 { #category : 'tests' }

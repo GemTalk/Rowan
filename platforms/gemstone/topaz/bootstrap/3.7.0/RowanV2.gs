@@ -50520,6 +50520,14 @@ projectSpecFile: relativePathString
 
 category: 'accessing'
 method: RwResolvedFromDefinedProject
+projectSpecPath: aStringOrNil
+	"nil value indicates projectSpec file is in repository root directory"
+
+	self _projectSpecification projectSpecPath: aStringOrNil
+%
+
+category: 'accessing'
+method: RwResolvedFromDefinedProject
 specsPath: aString
 	self _projectSpecification specsPath: aString
 %

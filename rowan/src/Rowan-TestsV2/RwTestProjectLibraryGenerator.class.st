@@ -82,6 +82,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0069: commitComment;
 	genSpec_0070: commitComment;
 	genSpec_0071: commitComment;
+	genSpec_0072: commitComment;
 	yourself
 "
 Class {
@@ -4173,6 +4174,34 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0070: resolvedProject [
 		addInstanceMethod:
 				'testAttr2 self assert: ' , projectName , 'Class3 new attr2 = ''attr2'''
 			protocol: 'tests'.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0072: resolvedProject embeddedProject: embeddedProject [
+	"Start with spec_0053; change the project spec so that none of the directories are using the default path"
+
+	| resolvedEmbeddedProject |
+	resolvedEmbeddedProject := embeddedProject resolve.
+
+	(resolvedEmbeddedProject repositoryRoot / 'rowan') ensureDeleteAll.	"old directory"
+
+	resolvedEmbeddedProject
+		projectsHome: self projectsHome;
+		packageFormat: 'tonel';
+		componentsPath: 'embed_rowan/components';
+		packagesPath: 'embed_rowan/src';
+		projectsPath: 'embed_rowan/projects';
+		specsPath: 'embed_rowan/specs';
+		projectSpecFile: 'embed_rowan/project.ston';
+		export;
+		exportLoadSpecification.	"write the embedded project directory structure - REQUIRED"
+
+	resolvedProject projectsRoot ensureCreateDirectory.
+	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
+		copyTo:
+			resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
 	^ resolvedProject
 ]
@@ -8393,6 +8422,68 @@ RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage ]
 		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0072: commitMessage [
+	"Start with spec_0053; change the project spec so that none of the directories are using the default path"
+
+	"https://github.com/GemTalk/Rowan/issues/724"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embeddedProjectDefinition requiredProjectName relativeRepositoryRoot |
+	postfix := '0072'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0053'.
+	title := 'Start with spec_0053; change the project spec so that none of the directories are using the default path'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 72
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(724);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	requiredProjectName := projectName , '_embedded_1'.
+	relativeRepositoryRoot := 'embeddedProjects/' , requiredProjectName.
+	embeddedProjectDefinition := (Rowan newProjectNamed: requiredProjectName)
+		specName: requiredProjectName;
+		projectAlias: projectName;
+		projectSpecFile: 'rowan/project.ston';
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		relativeRepositoryRoot: relativeRepositoryRoot;
+		specComponentNames: {'Core'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: {'tests'};
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		embeddedProjectDefinition: embeddedProjectDefinition
+		addDefinitions: [ :resolvedProject :embeddedProject | self _addDefinitionsFor_0072: resolvedProject embeddedProject: embeddedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
 ]
 
 { #category : 'accessing' }
