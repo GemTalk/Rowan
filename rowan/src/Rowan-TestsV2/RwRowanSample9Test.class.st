@@ -4726,13 +4726,12 @@ RwRowanSample9Test >> testIssue724 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "clone project in new projects home"
-	loadSpec projectsHome: projectsHome.
+	loadSpec projectsHome: nil.	"use default projectsHome which is not related to the location of this project on disk:w
+"
 	loadSpecs := loadSpec produce.
 
 "boom"
 	loadSpecs read.
-
-	self error: 'DOES NOT REPRODUCE !!! --- non-default projectSpecification'.
 
 "validate"
 ]
