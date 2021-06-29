@@ -4702,6 +4702,41 @@ RwRowanSample9Test >> testIssue715_03 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue724 [
+	"https://github.com/GemTalk/Rowan/issues/724"
+
+	| loadSpec projectsHome projectName projectNames requiredProjectName loadSpecs |
+	loadSpec := self _loadSpecNamed: 'spec_0053'. "clone the repo"
+
+	projectsHome := self _testRowanProjectsSandbox.
+
+	"read load spec from disk"
+	loadSpec := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0053.ston'.
+
+	projectsHome := self _testRowanProjectsSandbox / 'issue_724'.
+	projectsHome ensureDeleteAll.
+	projectsHome ensureCreateDirectory.
+
+	requiredProjectName := 'RowanSample9_embedded_1'.
+	projectName := loadSpec projectName.
+	projectNames := {projectName . requiredProjectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"clone project in new projects home"
+	loadSpec projectsHome: projectsHome.
+	loadSpecs := loadSpec produce.
+
+"boom"
+	loadSpecs read.
+self halt."DOES NOT REPRODUCE --- non-default projectSpecification"
+
+"validate"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_produce_01 [
 	"RowanSample9:spec_0001 ... self contained project" 
 
