@@ -157,7 +157,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass comment. 
+	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -992,7 +992,7 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
-  comment := self theClass thisClass comment
+  comment := self theClass thisClass rwComment
 ]
 
 { #category : 'private' }

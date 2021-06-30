@@ -16069,7 +16069,7 @@ forClass: aClass
 		classInstVarNames: aClass class instVarNames
 		classVarNames: aClass classVarNames
 		poolDictionaryNames: aClass sharedPools
-		comment: aClass comment
+		comment: aClass rwComment
 		subclassType: (self subclassTypeOf: aClass)
 %
 
@@ -44060,7 +44060,7 @@ basicRefreshFrom: theClass
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass comment. 
+	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -44955,7 +44955,7 @@ servicePerform: symbol withArguments: collection
 category: 'Accessing'
 method: RowanClassService
 setComment
-  comment := self theClass thisClass comment
+  comment := self theClass thisClass rwComment
 %
 
 category: 'private'
@@ -48936,7 +48936,7 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior comment ) 
+	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior rwComment ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
@@ -118314,6 +118314,15 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+rwComment
+
+	"Provide direct access to comment of class, bypassing default comeent string."
+  
+  ^ (self _extraDictAt: #comment) ifNil: [ '' ]
 %
 
 category: '*rowan-gemstone-kernel'
