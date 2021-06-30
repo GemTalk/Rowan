@@ -87039,14 +87039,16 @@ readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes
 				ifAbsent: [  ])
 				ifNotNil: [ 
 					"project is loaded, so we need to preserve repository root"
-					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+					self
+						_updateLoadSpecWithRepositoryRoot: theLoadSpec
+						fromLoadedProject: theLoadedProject ].
 			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 %
 
 category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes 
+readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	loadSpecSet := RwLoadSpecSet new.
 	projectVisitedQueue := {}.
@@ -87101,7 +87103,9 @@ readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: component
 				ifAbsent: [  ])
 				ifNotNil: [ 
 					"project is loaded, so we need to preserve repository root"
-					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+					self
+						_updateLoadSpecWithRepositoryRoot: theLoadSpec
+						fromLoadedProject: theLoadedProject ].
 			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 %
@@ -87192,7 +87196,9 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 				ifAbsent: [  ])
 				ifNotNil: [ 
 					"project is loaded, so we need to preserve repository root"
-					theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ].
+					self
+						_updateLoadSpecWithRepositoryRoot: theLoadSpec
+						fromLoadedProject: theLoadedProject ].
 			projectSetDefinition addProject: theLoadSpec read ].
 	^ projectSetDefinition
 %
@@ -87348,6 +87354,17 @@ resolvedProject: resolvedProject customConditionalAttributes: customConditionalA
 		customConditionalAttributes: customConditionalAttributes;
 		resolvedProject: resolvedProject;
 		yourself
+%
+
+category: 'private'
+classmethod: RwResolvedProjectComponentVisitorV2
+_updateLoadSpecWithRepositoryRoot: theLoadSpec fromLoadedProject: theLoadedProject
+	"preserve the repository root of the loaded project IFF the the load speca and loaded project share the same projectsHome"
+
+	"https://github.com/GemTalk/Rowan/issues/724"
+
+	theLoadSpec projectsHome = theLoadedProject projectsHome
+		ifTrue: [ theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ]
 %
 
 !		Instance methods for 'RwResolvedProjectComponentVisitorV2'
