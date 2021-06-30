@@ -4705,15 +4705,18 @@ RwRowanSample9Test >> testIssue715_03 [
 RwRowanSample9Test >> testIssue724 [
 	"https://github.com/GemTalk/Rowan/issues/724"
 
-	| loadSpec projectsHome projectName projectNames requiredProjectName loadSpecs |
+	| loadSpec projectsHome projectName projectNames requiredProjectName loadSpecs loadSpecCopy loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0072'. "clone the repo"
 
 	projectsHome := self _testRowanProjectsSandbox.
 
 	"read load spec from disk"
 	loadSpec := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0072.ston'.
+	loadSpecCopy := loadSpec copy.
 
-	projectsHome := self _testRowanProjectsSandbox / 'issue_724'.
+	(projectsHome / loadSpec projectName) ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'issue_724_b') ensureDeleteAll.
+	projectsHome := self _testRowanProjectsSandbox / 'issue_724_b'.
 	projectsHome ensureDeleteAll.
 	projectsHome ensureCreateDirectory.
 
@@ -4725,13 +4728,29 @@ RwRowanSample9Test >> testIssue724 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"clone project in new projects home"
-	loadSpec projectsHome: nil.	"use default projectsHome which is not related to the location of this project on disk:w
-"
+"load the original project into image"
+	(self _testRowanProjectsSandbox / 'issue_724_a') ensureCreateDirectory.
+	loadSpec projectsHome: self _testRowanProjectsSandbox / 'issue_724_a'.
+	loadSpec revision: 'spec_0053'.	"same packages, but different project directory structure"
 	loadSpecs := loadSpec produce.
+	loadedProjects := loadSpecs load.
 
-"boom"
-	loadSpecs read.
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
+
+"clone project in new projects home (issue_724_b); clone and read"
+	loadSpecCopy projectsHome: projectsHome.
+	self deny: (projectsHome / loadSpecCopy projectName) exists.
+	loadSpecs := loadSpecCopy produce.
+	self assert: (projectsHome / loadSpecCopy projectName) exists.
+	(self _testRowanProjectsSandbox / 'issue_724_a') ensureDeleteAll.
+self halt.
+	 loadSpecs read.	"boom"
+self halt.
 
 "validate"
 ]
