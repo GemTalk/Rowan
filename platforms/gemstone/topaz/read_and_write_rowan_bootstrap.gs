@@ -10,7 +10,7 @@ run
 	| platformConditionalAttributes350 platformConditionalAttributes3215 projectSetModification visitor 
 		topazFileNameMap repositoryRoot350 packageCreateTool projectLoadTool platformConditionalAttributes360 
 		platformConditionalAttributes361 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 
-		platformConditionalAttributes370 repositoryRoot370 repositoryRoot361 |
+		platformConditionalAttributes370 repositoryRoot370 repositoryRoot361 dbo_ROWAN_PROJECTS_HOME |
 
 false ifTrue: [ 
 	Rowan projectTools trace startTracing 
@@ -22,95 +22,15 @@ false ifTrue: [
 		'gemstone-kernel'.
 		'3.6.1' asRwGemStoneVersionNumber.	"want to read 3.6.1 packages"
 	}.
-	repositoryRoot361 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1' asFileReference.
+	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215'.
+	repositoryRoot361 := 'dbo_ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1' asFileReference.
 	repositoryRoot361 ensureCreateDirectory.
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes3215.
-			repositoryRoot3215.
-			'RowanV2'.
-			(Dictionary new).
-			false.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes350.
-			repositoryRoot350.
-			'RowanV2'.
-			(Dictionary new).
-      false.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes360.
-			repositoryRoot360.
-			'RowanV2'.
-			(Dictionary new 
-				at: 'Rowan' 
-					put: 
-						{
-							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
-							('tonel' -> 
-								{ 
-									'Rowan-Tonel-Core' .
-									'Rowan-Tonel-GemStone-Kernel-32-5' .
-									'Rowan-Tonel-GemStone-Kernel' .
-								}) .
-						}; 
-				at: 'STON' 
-					put: 
-						{
-							('tonel' -> 
-								{ 
-									'STON-Core' .
-									'STON-GemStone-Kernel'.
-									'STON-GemStone-Kernel32x'.
-									'STON-GemStoneBase' .
-									'STON-GemStoneCommon' .
-									'STON-GemStone-Kernel36x' .
-								}) .
-						}; 
-				yourself).
-			true.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
+			'file:dbo_ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
+			'dbo_ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes361.
 			repositoryRoot361.
-			'RowanV2'.
-			(Dictionary new 
-				at: 'Rowan' 
-					put: 
-						{
-							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
-							('tonel' -> 
-								{ 
-									'Rowan-Tonel-Core' .
-									'Rowan-Tonel-GemStone-Kernel-32-5' .
-									'Rowan-Tonel-GemStone-Kernel' .
-								}) .
-						}; 
-				at: 'STON' 
-					put: 
-						{
-							('tonel' -> 
-								{ 
-									'STON-Core' .
-									'STON-GemStone-Kernel'.
-									'STON-GemStoneBase' .
-									'STON-GemStoneCommon' .
-									'STON-GemStone-Kernel36x' .
-								}) .
-						}; 
-				yourself).
-			true.
-		}.	{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes370.
-			repositoryRoot370.
 			'RowanV2'.
 			(Dictionary new 
 				at: 'Rowan' 
