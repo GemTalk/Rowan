@@ -1,0 +1,19 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'gemstone3.6-/Core',
+	#condition : [
+		'gs3.[6-]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Kernel-Extensions-36x'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Kernel-Extensions-36x' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	},
+	#comment : 'Core gs3.[6-] packages '
+}

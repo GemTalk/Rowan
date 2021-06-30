@@ -122348,7 +122348,7 @@ rowanSymbolDictionaryRegistry
 	^ self at: #'RwSymbolDictionaryRegistry' ifAbsent: [  ]
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-extensions-36x'
 method: SymbolDictionary
 _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
@@ -122387,14 +122387,13 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 				_subclass: oldClassName asString 
 				instVarNames: oldClass instVarNames
 				format: oldClass format  
-				constraints: #() 
 				classVars: oldClass classVarNames
 				classInstVars: oldClass class instVarNames
 				poolDictionaries: #()
 				inDictionary: nil
 				inClassHistory: hist
-				description: ''
-				options: oldClass _nonInheritedOptions.
+				description: nil
+				options: oldClass _optionsArrayForDefinition .
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].
 			"compile methods in cloned class"

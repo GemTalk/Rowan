@@ -54,11 +54,25 @@
 					]
 				}
 			},
+		[ 'gs3.[2-5]' ] : {
+                        'core': {
+				#packageNames : [
+          'Rowan-GemStone-Kernel-Extensions'
+					]
+				}
+			},
 		[ 'gs3.2.[15-]' ] : {
                         'core': {
 				#packageNames : [
 					'Rowan-GemStone-3215',
 					'Rowan-Url-3215'
+					]
+				}
+			},
+		[ 'gs3.[6-]' ] : {
+                        'core': {
+				#packageNames : [
+          'Rowan-GemStone-Kernel-Extensions-36x'
 					]
 				}
 			}
@@ -71,6 +85,8 @@
 					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel-Extensions' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel-Extensions-36x' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
