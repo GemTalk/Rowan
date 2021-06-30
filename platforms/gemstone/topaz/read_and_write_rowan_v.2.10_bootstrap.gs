@@ -37,31 +37,7 @@ false ifTrue: [
 			platformConditionalAttributes361.
 			repositoryRoot361.
 			'RowanV2'.
-			(Dictionary new 
-				at: 'Rowan' 
-					put: 
-						{
-							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
-							('tonel' -> 
-								{ 
-									'Rowan-Tonel-Core' .
-									'Rowan-Tonel-GemStone-Kernel-32-5' .
-									'Rowan-Tonel-GemStone-Kernel' .
-								}) .
-						}; 
-				at: 'STON' 
-					put: 
-						{
-							('tonel' -> 
-								{ 
-									'STON-Core' .
-									'STON-GemStone-Kernel'.
-									'STON-GemStoneBase' .
-									'STON-GemStoneCommon' .
-									'STON-GemStone-Kernel36x' .
-								}) .
-						}; 
-				yourself).
+			Dictionary new.
 			true.
 		}.
 	} 
