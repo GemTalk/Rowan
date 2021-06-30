@@ -4705,54 +4705,79 @@ RwRowanSample9Test >> testIssue715_03 [
 RwRowanSample9Test >> testIssue724 [
 	"https://github.com/GemTalk/Rowan/issues/724"
 
-	| loadSpec projectsHome projectName projectNames requiredProjectName loadSpecs loadSpecCopy loadedProjects |
+	"The original bug occurred while trying to read Rowan v1.2.10 packages, using Rowan v3.0.
+		The bug occurs if you are reading a project from disk that is already loaded in the image AND
+		the directory structure of an embedded project being read is different from the directory 
+		structure of the loaded embedded project. 
+	To emulate that I am using two projects with identical package/class structure (RowantSample9 
+		spec_0053 and spec_0072) but different directory structures. The primary load specs are 
+		identical.
+	The simplest test case is to start with a standard clone spec_0072; read the load spec for spec_0072
+		from disk (load spec A) and make a copy (load spec B); delete the standard clone, because
+		we don't want the standard clone to be available (both spec A and spec B must have mutually
+		exclusive project homes)."
+
+	| loadSpec loadSpecA loadSpecB projectsHome projectsHomeA projectsHomeB projectName projectNames requiredProjectName loadSpecs loadedProjects projectDefinitionSet |
 	loadSpec := self _loadSpecNamed: 'spec_0072'. "clone the repo"
-
-	projectsHome := self _testRowanProjectsSandbox.
-
-	"read load spec from disk"
-	loadSpec := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0072.ston'.
-	loadSpecCopy := loadSpec copy.
-
-	(projectsHome / loadSpec projectName) ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'issue_724_b') ensureDeleteAll.
-	projectsHome := self _testRowanProjectsSandbox / 'issue_724_b'.
-	projectsHome ensureDeleteAll.
-	projectsHome ensureCreateDirectory.
 
 	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
 	projectNames := {projectName . requiredProjectName}.
 
+	projectsHome := self _testRowanProjectsSandbox.
+
+"read load spec A from disk and make load spec B copy"
+	loadSpecA := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0072.ston'.
+	loadSpecB := loadSpecA copy.
+
+"get rid of standard project and nuke remnants of A and B"
+	(projectsHome / loadSpec projectName) ensureDeleteAll.
+
+	(self _testRowanProjectsSandbox / 'issue_724_a') ensureDeleteAll.
+	(self _testRowanProjectsSandbox / 'issue_724_b') ensureDeleteAll.
+
+"clean up any remnants of loaded projects"
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"load the original project into image"
-	(self _testRowanProjectsSandbox / 'issue_724_a') ensureCreateDirectory.
-	loadSpec projectsHome: self _testRowanProjectsSandbox / 'issue_724_a'.
-	loadSpec revision: 'spec_0053'.	"same packages, but different project directory structure"
-	loadSpecs := loadSpec produce.
+"clone (produce) and load spec_0053 using a clone of the project and load spec A"
+	projectsHomeA := self _testRowanProjectsSandbox / 'issue_724_a'.
+	projectsHomeA ensureCreateDirectory.
+	loadSpecA projectsHome: projectsHomeA.
+	loadSpecA revision: 'spec_0053'.
+	loadSpecs := loadSpecA produce.
 	loadedProjects := loadSpecs load.
 
-"validate"
+"confirm that spec_0053 loaded cleanly"
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
 	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 
-"clone project in new projects home (issue_724_b); clone and read"
-	loadSpecCopy projectsHome: projectsHome.
-	self deny: (projectsHome / loadSpecCopy projectName) exists.
-	loadSpecs := loadSpecCopy produce.
-	self assert: (projectsHome / loadSpecCopy projectName) exists.
-	(self _testRowanProjectsSandbox / 'issue_724_a') ensureDeleteAll.
-self halt.
-	 loadSpecs read.	"boom"
-self halt.
+"clone (produce) and load spec_0072 using a clone of the project and load spec B"
 
-"validate"
+	projectsHomeB := self _testRowanProjectsSandbox / 'issue_724_b'.
+	projectsHomeB ensureCreateDirectory.
+
+	loadSpecB projectsHome: projectsHomeB.
+	self deny: (projectsHomeB / loadSpecB projectName) exists.
+	loadSpecs := loadSpecB produce.
+	self assert: (projectsHomeB / loadSpecB projectName) exists.
+
+	projectsHomeA ensureDeleteAll. "eliminate the directory that load spec A originated from"
+	projectDefinitionSet := loadSpecs read.
+
+"load"
+	loadedProjects := projectDefinitionSet load.
+
+"confirm that spec_0072 loaded cleanly"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
+	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 ]
 
 { #category : 'tests' }
