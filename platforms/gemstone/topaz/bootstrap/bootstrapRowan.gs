@@ -1,12 +1,11 @@
+#!/usr/local/bin/smalltalk/gemstone/topaz
 
-logout
-login
-display classoops
+	omit pushonly
+	display oops
 
-set inputpauseonerror on
+  set user SystemUser p swordfish
+  login
 
-input $GS_HOME/server/stones/dbo_anon_3215/git/Rowan/platforms/gemstone/topaz/bootstrap/installRowan.gs
-input $GS_HOME/server/stones/dbo_anon_3215/git/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1/RowanV2.gs
-input $GS_HOME/server/stones/dbo_anon_3215/git/Rowan/platforms/gemstone/topaz/bootstrap/adoptRowan.gs
-
-# commit
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/installRowan.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1/RowanV2.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/adoptRowan.gs
