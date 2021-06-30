@@ -5,6 +5,11 @@
 # expect to be logged in ... no state changes are made by this script
 #
 
+	display classoops
+
+  set user SystemUser p swordfish
+  login
+
 expectvalue true
 run
 	| platformConditionalAttributes350 platformConditionalAttributes3215 projectSetModification visitor 
@@ -22,13 +27,13 @@ false ifTrue: [
 		'gemstone-kernel'.
 		'3.6.1' asRwGemStoneVersionNumber.	"want to read 3.6.1 packages"
 	}.
-	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215'.
+	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git'.
 	repositoryRoot361 := 'dbo_ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1' asFileReference.
 	repositoryRoot361 ensureCreateDirectory.
 	{
 		{
-			'file:dbo_ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'dbo_ROWAN_PROJECTS_HOME'.
+			'file:',dbo_ROWAN_PROJECTS_HOME, '/Rowan/rowanV3/specs/Rowan.ston'.
+			dbo_ROWAN_PROJECTS_HOME.
 			platformConditionalAttributes361.
 			repositoryRoot361.
 			'RowanV2'.
