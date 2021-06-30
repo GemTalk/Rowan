@@ -28,7 +28,7 @@ false ifTrue: [
 		'3.6.1' asRwGemStoneVersionNumber.	"want to read 3.6.1 packages"
 	}.
 	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git'.
-	repositoryRoot361 := 'dbo_ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1' asFileReference.
+	repositoryRoot361 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1') asFileReference.
 	repositoryRoot361 ensureCreateDirectory.
 	{
 		{
@@ -112,7 +112,6 @@ false ifTrue: [
 			thePackages do: [:packageName |
 				(topazFileNameMap at: gsFileName) add: packageName ] ].
 		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (platformConditionalAttributes at: 4) printString, ')'.
-
 		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		visitor := RwGsModificationTopazWriterVisitorV2 new
 			logCreation: logCreation;
