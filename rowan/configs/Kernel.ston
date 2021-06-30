@@ -57,7 +57,8 @@
 		[ 'gs3.[2-5]' ] : {
                         'core': {
 				#packageNames : [
-          'Rowan-GemStone-Kernel-Extensions'
+          'Rowan-GemStone-Kernel-Extensions',
+					'Rowan-GemStone-Loader-32-5'
 					]
 				}
 			},
@@ -72,7 +73,8 @@
 		[ 'gs3.[6-]' ] : {
                         'core': {
 				#packageNames : [
-          'Rowan-GemStone-Kernel-Extensions-36x'
+          'Rowan-GemStone-Kernel-Extensions-36x',
+					'Rowan-GemStone-Loader-36x'
 					]
 				}
 			}
@@ -91,6 +93,8 @@
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader-32-5' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader-36x' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
