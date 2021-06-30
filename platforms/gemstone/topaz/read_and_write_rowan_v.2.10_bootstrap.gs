@@ -62,7 +62,7 @@ false ifTrue: [
 	} 
 	do: [:ar |
 		"Read project and packages from disk."
-		| configNames groupNames resolvedProject theProjectSetDefinition loadSpecUrl 
+		| configNames loadSpecs theProjectSetDefinition loadSpecUrl 
 			loadSpec projectsHome platformConditionalAttributes theRepositoryRoot 
 			specialCaseDict excludedPackages logCreation |
 		loadSpecUrl := ar at: 1.
@@ -73,12 +73,11 @@ false ifTrue: [
 		specialCaseDict := ar at: 6.
 		logCreation := ar at: 7.
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
-		resolvedProject := loadSpec
+		loadSpecs := loadSpec
 			projectsHome: projectsHome;
-			resolve.
-		theProjectSetDefinition :=  resolvedProject
-			readProjectSet: loadSpec customConditionalAttributes 
-			platformConditionalAttributes: platformConditionalAttributes.
+			produce.
+		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('tests' 'deprecated' 'jadeServer') ].
+		theProjectSetDefinition := loadSpecs read: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
 				GsFile gciLogServer: '	Project: ', projectDefinition name.
