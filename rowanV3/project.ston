@@ -5,6 +5,7 @@ RwProjectSpecificationV2 {
 	#packagesPath : 'rowan/src',
 	#projectsPath : 'rowanV3/projects',
 	#specsPath : 'rowanV3/specs',
+	#packageConvention : 'Monticello',
 	#packageFormat : 'tonel',
 	#comment : 'Rowan V3.0 project specification'
 }
