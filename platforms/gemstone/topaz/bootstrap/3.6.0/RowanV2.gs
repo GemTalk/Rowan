@@ -54052,7 +54052,7 @@ servicePerform: symbol withArguments: collection
 category: 'Accessing'
 method: RowanClassService
 setComment
-  comment := self theClass thisClass comment
+  comment := self theClass thisClass rwComment
 %
 
 category: 'private'
