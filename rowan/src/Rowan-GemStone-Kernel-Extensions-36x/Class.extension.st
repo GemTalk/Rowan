@@ -1,7 +1,7 @@
 Extension { #name : 'Class' }
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
-subclass: aString
+Class >> subclass: aString
 instVarNames: anArrayOfInstvarNames
 classVars: anArrayOfClassVars
 classInstVars: anArrayOfClassInstVars

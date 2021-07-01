@@ -1,7 +1,7 @@
 Extension { #name : 'UndefinedObject' }
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
-subclass: aString 
+UndefinedObject >> subclass: aString 
 instVarNames: anArrayOfInstvarNames 
 classVars: anArrayOfClassVars 
 classInstVars: anArrayOfClassInstVars 
@@ -49,4 +49,4 @@ options: optionsArray [
       theClass class _unsafeAt: superClassOffset put: Object class superClass].
   ^theClass
 
-] 
+]
