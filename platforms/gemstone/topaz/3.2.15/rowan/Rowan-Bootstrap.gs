@@ -647,7 +647,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader'
+    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader-32-5'
 	).		"GemStone Rowan loader classes"
 %
   commit
@@ -663,7 +663,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'Globals'
-    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Kernel-Extensions' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
       'Rowan-GemStone-3215' 'AST-Kernel-Core'
 	).		"Extension methods for GemStone kernel classes"
