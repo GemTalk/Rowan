@@ -118440,7 +118440,7 @@ stonName
 	^ self name
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-extensions-36x'
 method: Class
 subclass: aString
 instVarNames: anArrayOfInstvarNames
@@ -122645,7 +122645,7 @@ stonOn: stonWriter
 	stonWriter writeNull
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-extensions-36x'
 method: UndefinedObject
 subclass: aString 
 instVarNames: anArrayOfInstvarNames 
@@ -122675,7 +122675,7 @@ options: optionsArray
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass comment]
+      descr ifNil: [descr := oldClass commentForFileout]
   ].
   theClass := Object
         subclass: aString
