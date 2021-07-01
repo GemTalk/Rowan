@@ -1,7 +1,7 @@
 Extension { #name : 'UndefinedObject' }
 
-{ #category : '*rowan-gemstone-kernel' }
-UndefinedObject >> subclass: aString 
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
+subclass: aString 
 instVarNames: anArrayOfInstvarNames 
 classVars: anArrayOfClassVars 
 classInstVars: anArrayOfClassInstVars 
@@ -29,7 +29,7 @@ options: optionsArray [
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass comment]
+      descr ifNil: [descr := oldClass commentForFileout]
   ].
   theClass := Object
         subclass: aString
@@ -49,4 +49,4 @@ options: optionsArray [
       theClass class _unsafeAt: superClassOffset put: Object class superClass].
   ^theClass
 
-]
+] 
