@@ -28,7 +28,7 @@ options: optionsArray [
  Returns oldClass if it would be equivalent to the requested new class.
  (See Class(C)>>comment). "
 
-  | hist descr |
+  | hist descr newClass |
   descr := aDescription.
   oldClass ifNotNil:[
     (self _equivalentSubclass: oldClass superCls: self name: aString
@@ -42,10 +42,12 @@ options: optionsArray [
     hist := oldClass classHistory.
     descr ifNil: [descr := oldClass comment]
   ].
-  ^self _subclass: aString instVarNames: anArrayOfInstvarNames
-	format: format constraints: constraintsArray classVars: anArrayOfClassVars
+  newClass := self _subclass: aString instVarNames: anArrayOfInstvarNames
+	format: format classVars: anArrayOfClassVars
 	classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts
 	inDictionary: aDictionary inClassHistory: hist
-	description: descr options: optionsArray
+	description: descr options: optionsArray.
+	newClass _installConstraints: theConstraints oldClass: oldClass.
+	^ newClass
 
 ]
