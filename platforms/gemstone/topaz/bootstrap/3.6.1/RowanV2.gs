@@ -64016,51 +64016,6 @@ addNewClassVersionToAssociation: newClass instance: registryInstance
 
 category: 'private'
 classmethod: RwGsSymbolDictionaryRegistry_Implementation
-addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
-
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self 
-				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
-	methodDictionary at: selector put: compiledMethod.
-	self _clearLookupCachesFor: behavior env: 0.
-
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self
-		loadedPackageNamed: packageName
-		ifAbsent: [ 
-			registryInstance
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ]
-		instance: registryInstance.
-
-	loadedClassOrExtension := loadedPackage
-		loadedClassOrClassExtensionForClass: behavior
-		ifAbsent: [ 
-			registryInstance
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod.
-	^ registryInstance
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_Implementation
 addRecompiledMethod: newCompiledMethod instance: registryInstance
 
 	"add a recompiled compiled method to behavior and update the loaded things"
@@ -117337,6 +117292,24 @@ rwCompileMethod: sourceString category: aCategoryString packageName: packageName
 		inPackageNamed: packageName
 %
 
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+rwGuaranteePersistentMethodDictForEnv: envId
+	"in 3.5, the method persistentMethodDictForEnv: DOES NOT always return a GsMethodDictionary,
+		as classes are created without a GsMethodDictionary for envId 0."
+
+	<primitive: 2001>
+	| prot |
+	prot := System _protectedMode .
+	[ 
+		| newDict |
+		(self persistentMethodDictForEnv: envId) ifNotNil: [:oldDict | ^ oldDict ].
+		newDict := GsMethodDictionary new.
+		self persistentMethodDictForEnv: envId put: newDict.
+		^ newDict ] 
+		ensure:[ prot _leaveProtectedMode ].
+%
+
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwMoveMethod: methodSelector toCategory: categoryName
@@ -117366,6 +117339,33 @@ rwRemoveSelector: methodSelector
 		removeMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+_ivOffsetAndConstraint: aSymbol
+
+"Searches the instVarNames instance variable of the receiver for an instance
+ variable named aSymbol, and returns an Array containing the offset and the
+ constraint for that instance variable.  Returns nil if no instance variable
+ exists with the name aSymbol."
+
+| idx |
+idx := instVarNames indexOfIdentical: aSymbol .
+idx == 0 ifTrue:[ ^ nil ].
+^ { idx .  self _constraintAt: idx } 
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+_namedIvConstraintAtOffset: offset
+
+"Returns the constraint, if any, on the named instance variable at the
+ specified offset.  Returns Object if there is no such named instance variable,
+ or if the instance variable at that offset is not constrained."
+
+(offset > self instSize ) ifTrue:[ ^ Object ] .
+^ self _constraintAt: offset 
 %
 
 category: '*rowan-gemstone-kernel'
@@ -117521,6 +117521,30 @@ self _validatePrivilege ifTrue:[
   ] .
 ]
  
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+_setVaryingConstraint: aClass
+
+"Assign a new value to the constraint on unnamed variables of the receiver,
+ assuming all checks have been made."
+
+| constrs ofs |
+
+self deprecated: 'Behavior>>_setVaryingConstraint: deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifTrue:[
+  constrs := constraints .
+  ofs := self instSize + 1 .
+  constrs size == 0 ifTrue:[ 
+    aClass == Object ifTrue:[ ^ self "nothing to do"].
+    (constrs := Array new: ofs) replaceFrom: 1 to: ofs withObject: Object .
+    constraints := constrs .
+  ].
+  constrs at: ofs put: aClass .
+  (aClass == Object) ifFalse:[ self _setConstraintBit ].
+  self _refreshClassCache: false .
+]
 %
 
 ! Class extensions for 'BinaryFloat'
@@ -118488,8 +118512,88 @@ options: optionsArray
 	classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts
 	inDictionary: aDictionary inClassHistory: hist
 	description: descr options: optionsArray.
-	newClass _installConstraints: theConstraints oldClass: oldClass.
+	newClass _installConstraints: constraintsArray oldClass: oldClass.
 	^ newClass
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool
+	^ self
+		_equivalentSubclass: oldClass
+		superCls: actualSelf
+		name: aString
+		newOpts: optionsArray
+		newFormat: theFormat
+		newInstVars: anArrayOfInstvarNames
+		newClassInstVars: anArrayOfClassInstVars
+		newPools: anArrayOfPoolDicts
+		newClassVars: anArrayOfClassVars
+		inDict: aDictionary
+		isKernel: isKernelBool
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_installConstraints: theConstraints
+
+	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
+		existingConstraints myInstVarNames |
+	existingConstraintsMap := Dictionary new.
+	existingVaryingConstraint := self _varyingConstraint.
+	myInstVarNames := self allInstVarNames.
+	existingConstraints := [ self _constraints ifNil: [ {} ] ] on: Deprecated do: [:ex | ex resume ].
+	1 to: existingConstraints size do: [:index |
+		existingConstraintsMap at: (myInstVarNames at: index) put: (existingConstraints at: index ) ].
+	theConstraintsMap := Dictionary new.
+	theVaryingConstraint := Object.
+	theConstraints do: [:arrayOrVaryingConstraintClass |
+		arrayOrVaryingConstraintClass _isArray
+			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
+			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
+	keys := existingConstraintsMap keys copy.
+	keys addAll: theConstraintsMap keys.
+	keys do: [:key | 
+		| existingConstraint theConstraint |
+		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
+		theConstraint := theConstraintsMap at: key ifAbsent: [].
+		existingConstraint == theConstraint
+			ifFalse: [ 
+				| instVarString |
+				instVarString := key asString.
+				existingConstraint == nil
+					ifTrue: [ 
+						"add theConstraint" 
+						self _rwInstVar: instVarString constrainTo: theConstraint ]
+					ifFalse: [ 
+						theConstraint == nil
+							ifTrue: [ 
+								"remove the constraint" 
+								self _rwInstVar: instVarString constrainTo: Object ]
+							ifFalse: [
+								"change the value of the constraint"
+                                self _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
+	existingVaryingConstraint == theVaryingConstraint
+		ifFalse: [
+			"change the varying constraint"
+			[ self _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_installConstraints: theConstraints oldClass: oldClass
+
+	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
+	theConstraints 
+		ifNil: [ constraints := nil ]
+		ifNotNil: [ self _installConstraints: theConstraints ]
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_installOldConstraints: theConstraints
+
+	constraints := theConstraints copy
 %
 
 category: '*rowan-gemstone-kernel'
@@ -121049,6 +121153,57 @@ classmethod: RwGsSymbolDictionaryRegistry
 registry_ImplementationClass
 
 	^ RwGsSymbolDictionaryRegistry_Implementation
+%
+
+! Class extensions for 'RwGsSymbolDictionaryRegistry_Implementation'
+
+!		Class methods for 'RwGsSymbolDictionaryRegistry_Implementation'
+
+category: '*rowan-gemstone-loader-36x'
+classmethod: RwGsSymbolDictionaryRegistry_Implementation
+addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
+			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
+			self addRecompiledMethod: compiledMethod instance: registryInstance.
+			^ self
+				moveCompiledMethod: compiledMethod
+				toProtocol: protocolString
+				instance: registryInstance ].
+	methodDictionary at: selector put: compiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+
+	existing := registryInstance methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			registryInstance
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ]
+		instance: registryInstance.
+
+	loadedClassOrExtension := loadedPackage
+		loadedClassOrClassExtensionForClass: behavior
+		ifAbsent: [ 
+			registryInstance
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+	loadedClassOrExtension addLoadedMethod: loadedMethod.
+	^ registryInstance
 %
 
 ! Class extensions for 'RwMethodDefinition'
