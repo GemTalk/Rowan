@@ -49,6 +49,18 @@ self _validatePrivilege ifTrue:[
 ]
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
+Behavior >> _setConstraintBit [
+
+"Sets the constraint bit in the 'format' instance variable of the receiver."
+
+self deprecated: 'Behavior>>_setConstraintBit deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifTrue:[
+  format := format bitOr: 16#10 .
+]
+
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
 Behavior >> _setVaryingConstraint: aClass [
 
 "Assign a new value to the constraint on unnamed variables of the receiver,
