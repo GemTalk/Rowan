@@ -7,10 +7,17 @@ vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
-newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/bootstrapRowan.gs $GEMSTONE_NAME -lq
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowan.tpz $GEMSTONE_NAME -lq
+startTopaz $GEMSTONE_NAME -l << EOF
+
+	iferr 1 stk
+	iferr 2 stack
+	iferr 3 exit 1
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowan.tpz
+	exit
+EOF
 
 #	Report
 # ./record.gs.st rowan_test_stats_350 -- --query=summary
