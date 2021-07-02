@@ -28,6 +28,27 @@ Behavior >> _namedIvConstraintAtOffset: offset [
 ]
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
+Behavior >> _newConstraint: aClass atOffset: offset [
+
+"Execute the constraint change for Behavior | instvar:ConstraintTo:
+ assuming all error and variance checks have been done."
+| constrs |
+self deprecated: 'Behavior>>_newConstraint:atOffset: deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifTrue:[ 
+  (constrs := constraints) size == 0 ifTrue:[ | sz |
+    aClass == Object ifTrue:[ ^ self "do nothing"].
+    sz := self instSize .
+    (constrs := Array new: sz ) replaceFrom: 1 to: sz withObject: Object.
+    constraints := constrs .
+  ].
+  constrs at: offset put: aClass .
+  (aClass == Object) ifFalse:[ self _setConstraintBit ].
+  self _refreshClassCache: false .
+]
+
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
 Behavior >> _setVaryingConstraint: aClass [
 
 "Assign a new value to the constraint on unnamed variables of the receiver,
