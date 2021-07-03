@@ -611,7 +611,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
+    value: #('GemStone-Interactions-Core' 
       'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-GemStone-Core-32-5' 'Rowan-Cypress-Core' 
       'Rowan-Core-Definitions-Extensions' 'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
@@ -665,7 +665,7 @@ currentOrNil
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Kernel-Extensions' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
-      'Rowan-GemStone-3215' 'AST-Kernel-Core'
+      'Rowan-GemStone-3215' 'AST-Kernel-Core' 'Rowan-Url-3215'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit
