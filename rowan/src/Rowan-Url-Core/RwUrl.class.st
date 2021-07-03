@@ -92,6 +92,11 @@ RwUrl class >> schemeName [
 ]
 
 { #category : 'parsing' }
+RwUrl class >> httpFromString: aString [
+  ^CypressUrl absoluteFromText: aString
+]
+
+{ #category : 'parsing' }
 RwUrl class >> schemeNameForString: aString [
 	"Get the scheme name from a string, or return nil if it's not specified. 
 	Used in internal parsing routines - an outsider may as well use asUrl. 

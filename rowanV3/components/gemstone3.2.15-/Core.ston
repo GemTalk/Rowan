@@ -4,8 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.2.[15-]'
 	],
 	#packageNames : [
-		'Rowan-GemStone-3215',
-		'Rowan-Url-3215'
+		'Rowan-GemStone-3215'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {

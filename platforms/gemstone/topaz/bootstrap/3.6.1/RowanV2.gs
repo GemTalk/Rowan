@@ -69411,6 +69411,12 @@ fromString: aString
   ^ newUrl
 %
 
+category: 'parsing'
+classmethod: RwUrl
+httpFromString: aString
+  ^CypressUrl absoluteFromText: aString
+%
+
 category: 'constants'
 classmethod: RwUrl
 schemeName
@@ -119321,6 +119327,16 @@ entryNamesFrom: aDirectory
     collect: [ :each | self localNameFrom: each ])
     reject: [ :each | each = '.' or: [ each = '..' ] ])
     sortWithBlock: [ :a :b | a <= b ]
+%
+
+! Class extensions for 'CypressHierarchicalUrl'
+
+!		Instance methods for 'CypressHierarchicalUrl'
+
+category: '*rowan-url-3215'
+method: CypressHierarchicalUrl
+segments
+	^ path
 %
 
 ! Class extensions for 'CypressMethodDefinition'
