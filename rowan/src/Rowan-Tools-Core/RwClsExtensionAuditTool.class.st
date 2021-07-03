@@ -43,7 +43,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 										, ') not latest version of class ('
 										, aBehavior asOop printString , ') ') ].
 
-				categories := (aBehavior _baseCategorys: 0) keys.
+				categories := aBehavior rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ].
 				(categories	
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
@@ -52,7 +54,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 			].
 
 
-			categories := (aBehavior class _baseCategorys: 0) keys.
+				categories := aBehavior class rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ].
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]

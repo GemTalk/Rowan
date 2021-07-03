@@ -1,6 +1,25 @@
 Extension { #name : 'Behavior' }
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
+Behavior >> _constraintOn: aSymbol [
+
+"Returns the class kind constraint for the instance variable represented by
+ aSymbol.  If aSymbol does not represent an instance variable of objects whose
+ behavior is defined by the receiver, returns nil.
+ If the instance variable aSymbol is not constrained, returns Object ."
+
+| ivNams constrs |
+
+ivNams := instVarNames .
+constrs := constraints .
+1 to: self instSize do: [ :i |
+  aSymbol == (ivNams  at: i) ifTrue:[ ^ self _constraintAt: i ].
+].
+^ nil
+
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
 Behavior >> _ivOffsetAndConstraint: aSymbol [
 
 "Searches the instVarNames instance variable of the receiver for an instance
@@ -45,6 +64,12 @@ self _validatePrivilege ifTrue:[
   (aClass == Object) ifFalse:[ self _setConstraintBit ].
   self _refreshClassCache: false .
 ]
+
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
+Behavior >> rwMethodCategories [
+	^ self _unifiedCategorys: 0
 
 ]
 

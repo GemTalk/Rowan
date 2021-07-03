@@ -91,7 +91,9 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 				| selectors extensionCategoryName |
 				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
 
-				((aBehavior _baseCategorys: 0) keys
+				((aBehavior class rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ])
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |

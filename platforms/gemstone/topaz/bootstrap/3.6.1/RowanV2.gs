@@ -49017,7 +49017,9 @@ auditLoadedClassExtension: aLoadedClassExtension
 										, ') not latest version of class ('
 										, aBehavior asOop printString , ') ') ].
 
-				categories := (aBehavior _baseCategorys: 0) keys.
+				categories := aBehavior rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ].
 				(categories	
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
@@ -49026,7 +49028,9 @@ auditLoadedClassExtension: aLoadedClassExtension
 			].
 
 
-			categories := (aBehavior class _baseCategorys: 0) keys.
+				categories := aBehavior class rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ].
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
@@ -90718,7 +90722,9 @@ _auditLoadedClassExtensionBlock
 				| selectors extensionCategoryName |
 				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
 
-				((aBehavior _baseCategorys: 0) keys
+				((aBehavior class rwMethodCategories
+					ifNil: [ #() ]
+					ifNotNil: [ :catDict | catDict keys ])
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
@@ -117125,6 +117131,12 @@ rwGuaranteePersistentMethodDictForEnv: envId
 		ensure:[ prot _leaveProtectedMode ].
 %
 
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+rwMethodCategories
+	^ self _unifiedCategorys: 0
+%
+
 category: '*rowan-gemstone-kernel'
 method: Behavior
 rwMoveMethod: methodSelector toCategory: categoryName
@@ -117154,6 +117166,25 @@ rwRemoveSelector: methodSelector
 		removeMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Behavior
+_constraintOn: aSymbol
+
+"Returns the class kind constraint for the instance variable represented by
+ aSymbol.  If aSymbol does not represent an instance variable of objects whose
+ behavior is defined by the receiver, returns nil.
+ If the instance variable aSymbol is not constrained, returns Object ."
+
+| ivNams constrs |
+
+ivNams := instVarNames .
+constrs := constraints .
+1 to: self instSize do: [ :i |
+  aSymbol == (ivNams  at: i) ifTrue:[ ^ self _constraintAt: i ].
+].
+^ nil
 %
 
 category: '*rowan-gemstone-kernel-extensions-36x'
