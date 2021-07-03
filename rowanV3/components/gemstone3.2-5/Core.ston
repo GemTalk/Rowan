@@ -4,6 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gs3.[2-5]'
 	],
 	#packageNames : [
+		'Rowan-GemStone-Core-32-5',
 		'Rowan-GemStone-Kernel-Extensions',
 		'Rowan-GemStone-Loader-32-5'
 	],

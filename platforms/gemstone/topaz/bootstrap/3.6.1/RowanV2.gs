@@ -56645,14 +56645,6 @@ directoryEntriesFrom: aDirectory
 
 category: 'utilities'
 classmethod: RwGsFileUtilities
-directoryExists: aDirectory
-
-	"handle the case where GsFile class>>existsOnServer: returns nil"
-	^ (GsFile existsOnServer: aDirectory) == true
-%
-
-category: 'utilities'
-classmethod: RwGsFileUtilities
 directoryFromPath: directoryPath relativeTo: aDirectory
 
 	^((aDirectory endsWith: self pathNameDelimiter)
@@ -120805,6 +120797,19 @@ suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBloc
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
 	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy).
 	consBlock value: (aConstraint size = 0 or: [oldClass _constraintsEqual: aConstraint ])
+%
+
+! Class extensions for 'RwGsFileUtilities'
+
+!		Class methods for 'RwGsFileUtilities'
+
+category: '*rowan-gemstone-core-36x'
+classmethod: RwGsFileUtilities
+directoryExists: aDirectory
+
+	"handle the case where GsFile class>>existsOnServer: returns nil"
+	aDirectory ifNil: [ ^false ].
+	^ (GsFile existsOnServer: aDirectory) == true
 %
 
 ! Class extensions for 'RwGsImage'

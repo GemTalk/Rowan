@@ -612,8 +612,8 @@ currentOrNil
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
-      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
-      'Rowan-Services-Core' 'Rowan-Url-Extensions'
+      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-GemStone-Core-32-5' 'Rowan-Cypress-Core' 
+      'Rowan-Core-Definitions-Extensions' 'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
 %

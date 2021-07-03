@@ -57,6 +57,7 @@
 		[ 'gs3.[2-5]' ] : {
                         'core': {
 				#packageNames : [
+					'Rowan-GemStone-Core-32-5',
           'Rowan-GemStone-Kernel-Extensions',
 					'Rowan-GemStone-Loader-32-5'
 					]
@@ -73,6 +74,7 @@
 		[ 'gs3.[6-]' ] : {
                         'core': {
 				#packageNames : [
+					'Rowan-GemStone-Core-36x',
           'Rowan-GemStone-Kernel-Extensions-36x',
 					'Rowan-GemStone-Loader-36x'
 					]

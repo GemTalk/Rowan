@@ -86,13 +86,6 @@ RwGsFileUtilities class >> directoryEntriesFrom: aDirectory [
 ]
 
 { #category : 'utilities' }
-RwGsFileUtilities class >> directoryExists: aDirectory [
-
-	"handle the case where GsFile class>>existsOnServer: returns nil"
-	^ (GsFile existsOnServer: aDirectory) == true
-]
-
-{ #category : 'utilities' }
 RwGsFileUtilities class >> directoryFromPath: directoryPath relativeTo: aDirectory [
 
 	^((aDirectory endsWith: self pathNameDelimiter)
