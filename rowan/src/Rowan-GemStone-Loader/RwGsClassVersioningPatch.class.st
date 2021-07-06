@@ -98,7 +98,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock [
 		newClassVars: anArrayOfClassVars
 		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
-		optsBlock: [ :bool | opts := bool not ]
+		optsBlock: [ :arg | "arg is true or a String" opts := arg ~~ true  ]
 		ivsBlock: [ :bool | ivs := bool not ]
 		civsBlock: [ :bool | civs := bool not ]
 		poolsBlock: [ :bool | poolds := bool not ]

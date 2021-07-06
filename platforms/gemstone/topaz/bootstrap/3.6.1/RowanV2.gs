@@ -59103,7 +59103,7 @@ patchedClassNewVersions: patchedClassNewVersionsBlock
 		newClassVars: anArrayOfClassVars
 		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
-		optsBlock: [ :bool | opts := bool not ]
+		optsBlock: [ :arg | "arg is true or a String" opts := arg ~~ true  ]
 		ivsBlock: [ :bool | ivs := bool not ]
 		civsBlock: [ :bool | civs := bool not ]
 		poolsBlock: [ :bool | poolds := bool not ]
@@ -76224,7 +76224,7 @@ test_updateAddsCommandResult
 category: 'tests'
 method: RowanQueryServicesTest
 test_dontUseFileStream
-  | queryService results |
+  | queryService results expectedCount |
   self
     jadeiteIssueTested: #'issue611'
     withTitle: 'Use FileStreamPortable not FileStream'.
@@ -76232,7 +76232,12 @@ test_dontUseFileStream
   queryService organizer: ClassOrganizer new.
   queryService browseClassReferences: 'FileStream'.
   results := queryService queryResults.
-  self assert: results size equals: 1.
+	expectedCount := (System gemVersionAt: 'gsVersion') = '3.2.15'
+		ifTrue: [ 1 ]
+		ifFalse: [ 
+			" 3.6.1"
+			2 ].
+  self assert: results size equals: expectedCount.
   self assert: results first className equals: 'Stream'.
   self
     assert: results first selector
@@ -76268,9 +76273,12 @@ test_hierarchyImplementorsGetsAllSubclasses
 		| classService |
 		self assert: methodService selector equals: #initialize.
 		classService := RowanClassService forClassNamed: methodService className.
-		subclassesImplementing add:  methodService className.
-		classService classHierarchy. 
-		self assert: (classService classHierarchyNames includes: 'RwLoadedThing')].
+		methodService className ~= 'Object'
+			ifTrue: [
+				"Object >> initialize is implemented in 3.6.1, so ignore it"
+				subclassesImplementing add:  methodService className.
+				classService classHierarchy. 
+				self assert: (classService classHierarchyNames includes: 'RwLoadedThing') ] ].
 	self assert: (subclassesImplementing includes: 'RwLoadedThing'). 
 	self assert: (subclassesImplementing includes: 'RwLoadedProject'). 
 	self assert: (subclassesImplementing includes: 'RwGsLoadedSymbolDictPackage'). 
