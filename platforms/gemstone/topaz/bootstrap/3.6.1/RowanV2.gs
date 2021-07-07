@@ -112878,16 +112878,15 @@ category: 'tests'
 method: RwProjectConfigurationsTest
 testRowanSample4ProjectLoadConfiguration
 
-	| configurationUrl rowanSpec config visitor packageNames gemStoneVersion packageMapSpecs packagePropertiesMap|
+	| configurationUrl rowanSpec config visitor packageNames packageMapSpecs packagePropertiesMap|
 
 	rowanSpec := self _rowanProjectSpecification.
 	configurationUrl := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanSampleProject4_LoadConfiguration.ston'.
 
 	config := RwAbstractProjectConfiguration fromUrl: configurationUrl.
 
-	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
 	visitor := RwProjectLoadConfigurationVisitor new
-		platformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber};
+		platformAttributes: { 'common'. 'gemstone'. '3.2.15' asRwGemStoneVersionNumber};
 		groupNames: #('core' 'tests');
 		yourself.
 	visitor visit: config.
@@ -118359,6 +118358,45 @@ classVars: anArrayOfClassVars
 classInstVars: anArrayOfClassInstVars
 poolDictionaries: anArrayOfPoolDicts
 inDictionary: aDictionary
+constraints: aConstraint
+options: optionsArr
+
+| hist theConstraints descr oldClass |
+self deprecated: 'Obsolete in GemStone/S 64.  The preferred methods are in the Subclass Creation category (' , aString , ').'.
+theConstraints := self _checkConstraints: aConstraint instVarNames: anArrayOfInstvarNames .
+oldClass := self _classNamed: aString inDictionary: aDictionary .
+oldClass ifNotNil:[  
+  (self _equivalentSubclass: oldClass superCls: self name: aString newOpts: optionsArr 
+	newFormat: self format 
+    newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
+    newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars 
+    inDict: aDictionary constraints: aConstraint  isKernel: false ) ifTrue:[
+       ^ oldClass  "avoid creation of a new version"
+  ].
+  hist := oldClass classHistory .
+  descr := oldClass comment.
+].
+^ self _subclass: aString
+          instVarNames: anArrayOfInstvarNames
+          format: format
+          constraints: theConstraints
+          classVars: anArrayOfClassVars
+          classInstVars: anArrayOfClassInstVars
+          poolDictionaries: anArrayOfPoolDicts
+          inDictionary: aDictionary
+          inClassHistory: hist 
+          description: descr
+          options: optionsArr
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+subclass: aString
+instVarNames: anArrayOfInstvarNames
+classVars: anArrayOfClassVars
+classInstVars: anArrayOfClassInstVars
+poolDictionaries: anArrayOfPoolDicts
+inDictionary: aDictionary
 newVersionOf: oldClass
 description: aDescription
 constraints: constraintsArray
@@ -118401,6 +118439,33 @@ options: optionsArray
 	  description: descr options: optionsArray.
 	newClass _installConstraints: constraintsArray oldClass: oldClass.
 	^ newClass
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_checkConstraints: aConstraint instVarNames: anArrayOfInstvarNames
+  "Returns aConstraint or { aConstraint } "
+  | theConstraints |
+  theConstraints := aConstraint .
+  (self isPointers) ifTrue: [
+     (aConstraint _isArray) ifFalse: [ aConstraint _error: #classErrConstraintNotClass ].
+  ] ifFalse:[
+   (self isBytes) ifTrue:[
+     (self instSize ~~ 0) ifTrue: [ self _error: #classErrByteObjInstVars].
+     (anArrayOfInstvarNames size ~~ 0) ifTrue: [  self _error: #classErrByteObjInstVars].
+     (aConstraint _isArray) ifFalse: [  aConstraint _error: #classErrConstraintNotClass ].
+     (aConstraint size ~~ 0) ifTrue: [  self _error: #classErrBadConstraint ] .
+   ] ifFalse:[
+     (self isNsc) ifTrue:[
+	(aConstraint _isArray) ifFalse:[ "for compatibility with 3.0, construct an Array"
+		   "specifying inherited constraints on named instance variables" 
+		 "plus the specified constraint on unnamed instance variables."
+	   theConstraints := { aConstraint } .
+	].
+     ].
+   ].
+  ].
+  ^ theConstraints
 %
 
 category: '*rowan-gemstone-kernel-extensions-36x'
@@ -118544,6 +118609,28 @@ _installOldConstraints: theConstraints
 	constraints := theConstraints copy
 %
 
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_primSubclass: nameSym
+instVarNames: arrayOfIvNames
+format: anInteger
+constraints: aConstraint
+classVars: aSymbolDictionary
+poolDictionaries: anArrayOfPoolDicts
+classInstanceVars: arrayOfCivNames
+
+	aConstraint isEmpty ifFalse: [
+"need to add constraint creation in this method"
+"self halt"].
+	^self
+		_primSubclass: nameSym
+		instVarNames: arrayOfIvNames
+		format: anInteger
+		classVars: aSymbolDictionary
+		poolDictionaries: anArrayOfPoolDicts
+		classInstanceVars: arrayOfCivNames
+%
+
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwDefinitionOfConstraints
@@ -118657,6 +118744,158 @@ _rwSortedConstraints
   ].
 
 ^constraintArray
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+
+	"Backport of bugfix for Bug47433"
+
+	"The preferred private subclass creation method.
+ optionsArray is an Array of Symbols containing zero or more of  
+   #noInheritOptions,  #subclassesDisallowed, #disallowGciStore, #modifiable , 
+   #traverseByCallback 
+ and at most one of 
+   #dbTransient, #instancesNonPersistent, #instancesInvariant .
+ If present, #noInheritOptions must be the first element and it causes
+ none of subclassesDisallowed, disallowGciStore, traverseByCallback,
+         dbTransient, instancesNonPersistent, instancesInvariant 
+ to be inherited from the superclass, nor copied from the
+ current version of the class.
+"
+
+	| cvDict result theName ivNames classCon conEle conEleEle theHist poolDicts modifiableBool fmtArr fmt nCivs sza szb civNames |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	className _isOneByteString
+		ifFalse: [ 
+			(className _validateClass: CharacterCollection)
+				ifFalse: [ ^ nil ] ].
+	self subclassesDisallowed
+		ifTrue: [ ^ self _error: #'classErrSubclassDisallowed' ].
+	anArrayOfClassInstVars
+		ifNotNil: [ 
+			anArrayOfClassInstVars _isArray
+				ifFalse: [ 
+					(anArrayOfClassInstVars _validateClass: Array)
+						ifFalse: [ ^ nil ] ] ].
+	aDictionary
+		ifNotNil: [ 
+			(aDictionary _validateClass: SymbolDictionary)
+				ifFalse: [ ^ nil ] ].
+	fmtArr := self _validateOptions: optionsArray withFormat: theFormat newClassName: className .
+	fmt := fmtArr at: 1.
+	modifiableBool := fmtArr at: 2.
+	(self instancesInvariant and: [ (fmt bitAnd: 16r8) == 0 ])
+		ifTrue: [ ^ self _error: #'classErrInvariantSuperClass' ].
+	anArrayOfInstvarNames _isArray
+		ifFalse: [ 
+			(anArrayOfInstvarNames _validateClass: Array)
+				ifFalse: [ ^ nil ] ].
+	ivNames := {}.
+	1 to: anArrayOfInstvarNames size do: [ :j | ivNames add: (anArrayOfInstvarNames at: j) ].
+	theConstraints _isArray
+		ifFalse: [ classCon := theConstraints ]
+		ifTrue: [ 
+			classCon := theConstraints class new.
+			1 to: theConstraints size do: [ :j | 
+				conEle := theConstraints at: j.
+				conEle _isArray
+					ifFalse: [ classCon add: conEle ]
+					ifTrue: [ 
+						| temp |
+						temp := conEle class new.
+						1 to: conEle size do: [ :k | 
+							conEleEle := conEle at: k.
+							(conEleEle isKindOf: CharacterCollection)
+								ifTrue: [ temp add: conEleEle asSymbol ]
+								ifFalse: [ temp add: conEleEle ] ].
+						classCon add: temp ] ] ].
+	nCivs := anArrayOfClassInstVars size.
+	civNames := anArrayOfClassInstVars.
+	nCivs ~~ 0
+		ifTrue: [ 
+			| aSet |
+			civNames := Array new: nCivs.
+			aSet := IdentitySet new.
+			1 to: nCivs do: [ :k | 
+				| aName |
+				aName := (anArrayOfClassInstVars at: k) asSymbol.
+				self class _validateNewClassInstVar: aName.
+				civNames at: k put: aName.
+				aSet add: aName.
+				aSet size < k
+					ifTrue: [ 
+						ImproperOperation
+							signal:
+								'array of new class instanceVariables contains a duplicate ' , aName printString ] ] ].	"Gs64 v3.0 , cvDict and poolDicts maybe nil from caller,
+    and will be converted to nil if caller passed an empty Array."
+	cvDict := self _makeClassVarDict: anArrayOfClassVars.	"undo the compiler's canonicalization of empty arrays (fix bug 14103) "
+	poolDicts := anArrayOfPoolDicts.
+	(poolDicts _isArray and: [ poolDicts size == 0 ])
+		ifTrue: [ poolDicts := nil ].
+	theName := className asSymbol.
+	result := self
+		_subclass: theName
+		instVarNames: ivNames
+		format: fmt
+		constraints: classCon
+		classVars: cvDict
+		poolDictionaries: poolDicts
+		classInstanceVars: civNames.
+	modifiableBool
+		ifTrue: [ result _subclasses: IdentitySet new ].
+	subclasses ifNotNil: [ subclasses add: result ].
+	aDictionary ifNotNil: [ aDictionary at: theName put: result ].
+
+	result extraDict: SymbolDictionary new.
+	result _commentOrDescription: aDescription.
+	theHist := aClassHistory.
+	theHist ifNil: [ theHist := ClassHistory new name: className ].
+	theHist notEmpty
+		ifTrue: [ result category: theHist current _classCategory ].
+	theHist add: result.
+	result classHistory: theHist.
+	result timeStamp: DateTime now.
+	result userId: System myUserProfile userId.
+
+	sza := self class instSize + anArrayOfClassInstVars size.
+	szb := result class instSize.
+	sza == szb
+		ifFalse: [ 
+			InternalError
+				signal:
+					'prim 233: inconsistent class instance variables, superClass+args=>'
+						, sza asString , '  newClass=>' , szb asString ].
+
+	modifiableBool
+		ifFalse: [ result immediateInvariant ].
+	result copyVariables.
+	self _clearCachedOrganizer.
+	(fmtArr at: 3)
+		ifTrue: [ GsFile gciLogServer: 'created class ' , className ].
+	^ result
+%
+
+category: '*rowan-gemstone-kernel-extensions-36x'
+method: Class
+_subclass: nameSym
+instVarNames: arrayOfIvNames
+format: anInteger
+constraints: aConstraint
+classVars: aSymbolDictionary
+poolDictionaries: anArrayOfPoolDicts
+classInstanceVars: arrayOfCivNames
+
+self _validateNewClassName: nameSym .
+^ self _primSubclass: nameSym
+  instVarNames: arrayOfIvNames
+  format: anInteger
+  constraints: aConstraint
+  classVars: aSymbolDictionary
+  poolDictionaries: anArrayOfPoolDicts
+  classInstanceVars: arrayOfCivNames
 %
 
 ! Class extensions for 'Collection'
