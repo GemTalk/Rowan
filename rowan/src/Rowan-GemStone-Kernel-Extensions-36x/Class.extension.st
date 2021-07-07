@@ -286,6 +286,7 @@ Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFor
 		classVars: cvDict
 		poolDictionaries: poolDicts
 		classInstanceVars: civNames.
+	result _installConstraints: classCon.	
 	modifiableBool
 		ifTrue: [ result _subclasses: IdentitySet new ].
 	subclasses ifNotNil: [ subclasses add: result ].

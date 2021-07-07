@@ -9818,6 +9818,124 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 	constraintBlock3 value: (Rowan globalNamed: className3).
 ]
 
+{ #category : 'tests-issue 498' }
+RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_3 [
+
+	"https://github.com/dalehenrich/Rowan/issues/498 -- expanded validation over https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	"rowan variant of test ... _1 uses non-Rowan api"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 
+		className3 projectSetDefinition class constraintBlock1 constraintBlock2 constraintBlock3 x |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Subclass2'.
+	className3 := 'Issue255Subclass3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #( ivar2 ivar3 ivar4 ivar1)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar4' . 'Association' }. { 'ivar3' . 'Association' }. { 'ivar2' . 'Association' }. { 'ivar1' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: className1
+		instvars: #( ivar7 ivar6)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar7' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className2
+		instvars: #( ivar8 ivar9)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar9' . 'Association' }. { 'ivar8' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"add a constraint to a class in middle of hierchy"
+	((projectDefinition packageNamed: packageName) classDefinitions at: className2)
+		gs_constraints: { { 'ivar7' . 'Association' }. { 'ivar6' . 'Association' }. }.
+
+"load with new constraint"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+	constraintBlock1 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar1) == Association.
+		self assert: (x := theClass _constraintOn: #ivar2) == Association.
+		self assert: (x := theClass _constraintOn: #ivar3) == Association.
+		self assert: (x := theClass _constraintOn: #ivar4) == Association ].
+	constraintBlock2 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar6) == Association.
+		self assert: (x := theClass _constraintOn: #ivar7) == Association ].
+	constraintBlock3 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar8) == Association.
+		self assert: (x := theClass _constraintOn: #ivar9) == Association ].
+
+	constraintBlock1 value: (Rowan globalNamed: className1).
+
+	constraintBlock1 value: (Rowan globalNamed: className2).
+	constraintBlock2 value: (Rowan globalNamed: className2).
+
+	constraintBlock1 value: (Rowan globalNamed: className3).
+	constraintBlock2 value: (Rowan globalNamed: className3).
+	constraintBlock3 value: (Rowan globalNamed: className3).
+]
+
 { #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
