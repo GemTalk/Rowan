@@ -117,46 +117,73 @@ Class >> _installConstraints: theConstraints oldClass: oldClass [
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
 Class >>  _installConstraints: theConstraints [
 
-	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
-		existingConstraints myInstVarNames |
+	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys existingConstraints myInstVarNames superConstraints superC superInstVarNames superConstraintsMap |
+	superConstraintsMap := Dictionary new.
 	existingConstraintsMap := Dictionary new.
 	existingVaryingConstraint := self _varyingConstraint.
 	myInstVarNames := self allInstVarNames.
-	existingConstraints := [ self _constraints ifNil: [ {} ] ] on: Deprecated do: [:ex | ex resume ].
-	1 to: existingConstraints size do: [:index |
-		existingConstraintsMap at: (myInstVarNames at: index) put: (existingConstraints at: index ) ].
+	superC := self superClass.
+	superInstVarNames := superC ifNil: [ {} ] ifNotNil: [ superC allInstVarNames ].
+	[ 
+	superConstraints := superC
+		ifNil: [ {} ]
+		ifNotNil: [ :superCl | superCl _constraints ifNil: [ {} ] ].
+	existingConstraints := self _constraints ifNil: [ {} ] ]
+		on: Deprecated
+		do: [ :ex | ex resume ].
+	1 to: superConstraints size do: [ :index | 
+		superConstraintsMap
+			at: (superInstVarNames at: index)
+			put: (superConstraints at: index) ].
+	1 to: existingConstraints size do: [ :index | 
+		existingConstraintsMap
+			at: (myInstVarNames at: index)
+			put: (existingConstraints at: index) ].
 	theConstraintsMap := Dictionary new.
 	theVaryingConstraint := Object.
-	theConstraints do: [:arrayOrVaryingConstraintClass |
-		arrayOrVaryingConstraintClass _isArray
-			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
-			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
+	theConstraints
+		do: [ :arrayOrVaryingConstraintClass | 
+			arrayOrVaryingConstraintClass _isArray
+				ifTrue: [ 
+					theConstraintsMap
+						at: (arrayOrVaryingConstraintClass at: 1)
+						put: (arrayOrVaryingConstraintClass at: 2) ]
+				ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
 	keys := existingConstraintsMap keys copy.
 	keys addAll: theConstraintsMap keys.
-	keys do: [:key | 
-		| existingConstraint theConstraint |
-		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
-		theConstraint := theConstraintsMap at: key ifAbsent: [].
-		existingConstraint == theConstraint
-			ifFalse: [ 
-				| instVarString |
-				instVarString := key asString.
-				existingConstraint == nil
-					ifTrue: [ 
-						"add theConstraint" 
-						self _rwInstVar: instVarString constrainTo: theConstraint ]
-					ifFalse: [ 
-						theConstraint == nil
-							ifTrue: [ 
-								"remove the constraint" 
-								self _rwInstVar: instVarString constrainTo: Object ]
-							ifFalse: [
-								"change the value of the constraint"
-                                self _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
+	keys addAll: superConstraintsMap keys.
+	keys
+		do: [ :key | 
+			| existingConstraint theConstraint superConstraint instVarString |
+			existingConstraint := existingConstraintsMap at: key ifAbsent: [  ].
+			superConstraint := superConstraintsMap at: key ifAbsent: [  ].
+			theConstraint := theConstraintsMap at: key ifAbsent: [  ].
+			instVarString := key asString.
+			existingConstraint == theConstraint
+				ifTrue: [ 
+					(theConstraint isNil and: [ superConstraint notNil ])
+						ifTrue: [ 
+							"inherit constraint from superclass"
+							self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+				ifFalse: [ 
+					existingConstraint == nil
+						ifTrue: [ 
+							"add theConstraint"
+							self _rwInstVar: instVarString constrainTo: theConstraint ]
+						ifFalse: [ 
+							theConstraint == nil
+								ifTrue: [ 
+									"remove the constraint"
+									self _rwInstVar: instVarString constrainTo: Object ]
+								ifFalse: [ 
+									"change the value of the constraint"
+									self _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
 	existingVaryingConstraint == theVaryingConstraint
-		ifFalse: [
+		ifFalse: [ 
 			"change the varying constraint"
-			[ self _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
+			[ self _setVaryingConstraint: theVaryingConstraint ]
+				on: Deprecated
+				do: [ :ex | ex resume ] ]
 
 ]
 
