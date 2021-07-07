@@ -248,16 +248,15 @@ RwProjectConfigurationsTest >> testRowanLoadConfiguration [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
 
-	| configurationUrl rowanSpec config visitor packageNames gemStoneVersion packageMapSpecs packagePropertiesMap|
+	| configurationUrl rowanSpec config visitor packageNames packageMapSpecs packagePropertiesMap|
 
 	rowanSpec := self _rowanProjectSpecification.
 	configurationUrl := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanSampleProject4_LoadConfiguration.ston'.
 
 	config := RwAbstractProjectConfiguration fromUrl: configurationUrl.
 
-	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
 	visitor := RwProjectLoadConfigurationVisitor new
-		platformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber};
+		platformAttributes: { 'common'. 'gemstone'. '3.2.15' asRwGemStoneVersionNumber};
 		groupNames: #('core' 'tests');
 		yourself.
 	visitor visit: config.
