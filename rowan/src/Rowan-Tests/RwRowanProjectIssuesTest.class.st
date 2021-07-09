@@ -9895,6 +9895,16 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_3 [
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association } }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
 "add a constraint to a class in middle of hierchy"
 	((projectDefinition packageNamed: packageName) classDefinitions at: className2)
 		gs_constraints: { { 'ivar7' . 'Association' }. { 'ivar6' . 'Association' }. }.
