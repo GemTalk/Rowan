@@ -48,7 +48,16 @@ run
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
-		res := suite run.
+		false
+			ifTrue: [
+				res := TestResult new.
+				suite tests do: [:each | 
+					((each class name asString = 'RwRowanProjectIssuesTest')
+						and: [	#(testIssue72_addMethod testIssue72_removeMethod testIssue72_updateMethod) includes: each selector])
+							ifTrue: [ each debug ]
+							ifFalse: [ each run: res ] ]
+				]
+			ifFalse: [ res := suite run ].
 
 		resultsDict := Dictionary new.
 		resultCases := {}.
