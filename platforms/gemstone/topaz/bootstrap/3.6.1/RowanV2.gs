@@ -76404,7 +76404,7 @@ cleanup
 					index > 0
 						ifTrue: [ symListT removeAtIndex: index ] ].
  ].
-	GsPackagePolicy current refreshSessionMethodDictionary.
+	GsPackagePolicy current disable.
 	ClassOrganizer clearCachedOrganizer
 %
 
