@@ -7,12 +7,12 @@
 			#defaultSymbolDictName : 'Globals',
 			#defaultUseSessionMethodsForExtensions : false }
 	},
-	#specsPath : 'platforms/gemstone/projects/ston/specs',
-	#configsPath : 'platforms/gemstone/projects/ston/configs',
+	#specsPath : 'platforms/gemstone/projects/STON/specs',
+	#configsPath : 'platforms/gemstone/projects/STON/configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'platforms/gemstone/projects/ston/src',
+	#repoPath : 'platforms/gemstone/projects/STON/src',
 	#comment : ''
 }
