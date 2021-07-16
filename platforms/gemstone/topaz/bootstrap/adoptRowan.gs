@@ -104,6 +104,24 @@
 %
   commit
 
+run
+	"reload the projects, so that the image source matches the packaged source exactly ... 
+		defer reconciling the added lines in .gs files relative to tonel source to a later
+		date"
+	#( 'Rowan' 'STON' 'Cypress' 'Tonel' )
+		do: [:projectName |
+		"make sure test group is loaded ... include deprecated packages for now"
+		[ 
+		| groupNames |
+		groupNames := #('tests' 'deprecated' 'jadeServer').
+		Rowan projectTools load
+			loadProjectNamed: projectName
+			withGroupNames: groupNames ]
+				on: CompileWarning do: [:ex | ex resume ] ].
+%
+
+	commit
+
 # Install Rowan class in Published symbol dict, so it is availailable to all users
 # 
    run

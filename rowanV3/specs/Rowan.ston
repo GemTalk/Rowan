@@ -8,7 +8,7 @@
 		'Core'
 	],
 	#groupNames : [ ],
-	#customConditionalAttributes : [ 'tests', 'deprecated', 'jadeServer' ],
+	#customConditionalAttributes : [ 'deprecated', 'jadeServer' ],
 	#platformProperties : {
 		'gemstone' : {
 			'allusers' : {

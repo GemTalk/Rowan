@@ -57,7 +57,7 @@ false ifTrue: [
 		loadSpecs := loadSpec
 			projectsHome: projectsHome;
 			produce.
-		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('tests' 'deprecated' 'jadeServer') ].
+		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('deprecated' 'jadeServer') ].
 		theProjectSetDefinition := loadSpecs read: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
