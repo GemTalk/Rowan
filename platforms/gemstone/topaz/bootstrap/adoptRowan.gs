@@ -7,8 +7,8 @@
 	{
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Bootstrap'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
@@ -23,7 +23,9 @@
 		ar size = 1
 			ifTrue: [
 				| theProjectSetDefinition |
-				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
+				theProjectSetDefinition := readTool 
+					readProjectSetForProjectNamed: specification specName 
+					withGroupNames: #('tests' 'deprecated' 'jadeServer').
 				theProjectSetDefinition
 					do: [:projectDefinition |
 						projectSetDefinition addProject: projectDefinition ].

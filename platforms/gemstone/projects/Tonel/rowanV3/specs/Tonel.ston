@@ -10,7 +10,7 @@
 		'Core'
 	],
 	#groupNames : [ ],
-	#customConditionalAttributes : [ ],
+	#customConditionalAttributes : [ 'tests' ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {
