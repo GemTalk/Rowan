@@ -5921,6 +5921,24 @@ removeallclassmethods RwPrjUnregisterTool
 
 doit
 (RwProjectTool
+	subclass: 'RwPrjUpgradeTool'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tools-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPrjUpgradeTool
+removeallclassmethods RwPrjUpgradeTool
+
+doit
+(RwProjectTool
 	subclass: 'RwPrjWriteTool'
 	instVarNames: #()
 	classVars: #()
@@ -50215,6 +50233,13 @@ unregister
 
 category: 'commands'
 classmethod: RwProjectTool
+upgrade
+
+	^RwPrjUpgradeTool new
+%
+
+category: 'commands'
+classmethod: RwProjectTool
 write
 
 	^RwPrjWriteTool new
@@ -53694,6 +53719,114 @@ unregisterSpecUrl: aString
 	^ self unregisterSpecification: (RwSpecification fromUrl: aString)
 %
 
+! Class implementation for 'RwPrjUpgradeTool'
+
+!		Instance methods for 'RwPrjUpgradeTool'
+
+category: 'utilities'
+method: RwPrjUpgradeTool
+markProjectSetNotDirty: projectSetDefinition
+
+	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not dirty means that the loaded things match the code on disk."
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+%
+
+category: 'upgradeproject by spec url'
+method: RwPrjUpgradeTool
+upgradeProjectFromSpecUrl: fileUrlOrString
+
+	| projectDefinition projectSetDefinition res |
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	res := self
+		_doProjectSetUpgrade: projectSetDefinition
+		instanceMigrator: Rowan platform instanceMigrator 
+		originalProjectSet: projectSetDefinition 
+		processedClassNames: Set new.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSetDefinition.
+	^ res
+%
+
+category: 'private'
+method: RwPrjUpgradeTool
+_doProjectSetUpgrade: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
+	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
+	[ ^ self
+		_upgradeProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator ]
+			on: RwExistingVisitorAddingExistingClassNotification
+			do: [:ex | 
+				theClassName := ex classDefinition name.
+				(processedClassNames includes: theClassName) ifTrue: [ ex resume ].
+				theClass := Rowan globalNamed: theClassName.
+				theClass isBehavior ifFalse: [ self halt. ex pass ].
+				theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
+				theLoadedProject 
+					ifNil: [ 
+						"the loaded project should not be nil - if it is, pass the notification"
+						ex pass ].
+				(originalProjectSet projectNamed: theLoadedProject name ifAbsent: []) 
+					ifNotNil: [
+						"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+						ex resume ].
+				copiedProjectSetDef := projectSetDefinition copy.
+				"a project in the original project set is taking ownership of an already  loaded class,
+					remove the class from the original project's package and attempt a reload"
+				projectDef := copiedProjectSetDef 
+					projectNamed: theLoadedProject name
+					ifAbsent: [ 
+						projectDef := theLoadedProject asDefinition.
+						copiedProjectSetDef addProject: projectDef.
+						projectDef ].
+				loadedClass := Rowan image loadedClassNamed: theClassName.
+				packageDef := projectDef packageNamed: loadedClass loadedPackage name.
+				packageDef removeClassNamed: theClassName.
+				processedClassNames add: theClassName ].
+	"trim the stack"
+	^ self _doProjectSetUpgrade: copiedProjectSetDef instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
+%
+
+category: 'private'
+method: RwPrjUpgradeTool
+_upgradeProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator
+
+	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjectInfo| 
+	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
+	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
+	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			"install the packageMapSpecs for this load into the specification prior to the load"
+			| projectDefinition |
+			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
+			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
+	projectSetDefinitionToLoad definitions keysAndValuesDo: [:projectName :projectDefinition |
+			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
+				"set the target symbol dictionary name for each incoming package definition"
+				packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ].
+	diff := projectSetDefinitionToLoad compareAgainstBase_forUpgrade: loadedProjectDefinitionSet.
+	diff isEmpty
+		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
+	projectSetDefinitionToLoad definitions
+		do: [ :projectDef |
+			| theSpec |
+			theSpec := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef specification ]
+				ifNotNil: [:loadedProject | loadedProject specification ].
+			self specification: theSpec.
+			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+				ifTrue: [  theSpec updateLoadedCommitIdForTool: self ].
+			(loadedProjectInfo at: projectDef name ifAbsent: [])
+				ifNotNil: [:map |
+					theSpec imageSpec
+						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
+	^ diff
+%
+
 ! Class implementation for 'RwPrjWriteTool'
 
 !		Instance methods for 'RwPrjWriteTool'
@@ -54059,6 +54192,23 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 				ifFalse: [anElementsModification addElementModification: modification]]
 %
 
+category: 'comparing'
+method: RwDefinition
+compareDictionary: myDictionary againstBaseDictionary_forUpgrade: baseDictionary into: anElementsModification elementClass: elementClass
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys do: 
+			[:key |
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [elementClass new].
+			after := myDictionary at: key ifAbsent: [elementClass new].
+			modification := after compareAgainstBase_forUpgrade: before.
+			modification isEmpty
+				ifFalse: [anElementsModification addElementModification: modification]]
+%
+
 category: 'initialization'
 method: RwDefinition
 initialize
@@ -54291,6 +54441,37 @@ compareAgainstBaseForNewClassVersion: aDefinition
 
 category: 'comparing'
 method: RwAbstractClassDefinition
+compareAgainstBase_forUpgrade: aDefinition
+
+	| modification instanceMethodsModification classMethodsModification className |
+	modification := self _modificationClass before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	className := self _classNameForCompare: aDefinition.
+	instanceMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
+	classMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
+	self
+		compareDictionary: instanceMethodDefinitions
+		againstBaseDictionary_forUpgrade: aDefinition instanceMethodDefinitions
+		into: instanceMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: false.
+	self
+		compareDictionary: classMethodDefinitions
+		againstBaseDictionary_forUpgrade: aDefinition classMethodDefinitions
+		into: classMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: true.
+	modification
+		instanceMethodsModification: instanceMethodsModification;
+		classMethodsModification: classMethodsModification.
+	^ modification
+%
+
+category: 'comparing'
+method: RwAbstractClassDefinition
 compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta
 
 	| keys |
@@ -54337,6 +54518,26 @@ compareDictionary: myDictionary againstBaseDictionaryForNewClassVersion: baseDic
 								classDefinition: self.
 							modification isEmpty
 								ifFalse: [ anElementsModification addElementModification: modification ] ] ] ]
+%
+
+category: 'comparing'
+method: RwAbstractClassDefinition
+compareDictionary: myDictionary againstBaseDictionary_forUpgrade: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys do: 
+			[:key |
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [elementClass new].
+			after := myDictionary at: key ifAbsent: [elementClass new].
+			modification := after compareAgainstBase_forUpgrade: before.
+			modification 
+				isMeta: isClassMeta;
+				classDefinition: self.
+			modification isEmpty
+				ifFalse: [anElementsModification addElementModification: modification]]
 %
 
 category: 'initialization'
@@ -54579,6 +54780,26 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 			before := baseDictionary at: key ifAbsent: [ elementClass new ].
 			after := myDictionary at: key ifAbsent: [ elementClass new ].
 			modification := after compareExtensionMethodsAgainstBase: before.
+			modification
+				isMeta: isClassMeta;
+				classDefinition: self.
+			modification isEmpty
+				ifFalse: [ anElementsModification addElementModification: modification ] ]
+%
+
+category: 'comparing'
+method: RwClassExtensionDefinition
+compareDictionary: myDictionary againstBaseDictionary_forUpgrade: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys
+		do: [ :key | 
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [ elementClass new ].
+			after := myDictionary at: key ifAbsent: [ elementClass new ].
+			modification := after compareExtensionMethodsAgainstBase_forUpgrade: before.
 			modification
 				isMeta: isClassMeta;
 				classDefinition: self.
@@ -121835,6 +122056,26 @@ compareAgainstBaseForNewClassVersion: aDefinition
 
 category: '*rowan-core-definitions-extensions'
 method: RwMethodDefinition
+compareAgainstBase_forUpgrade: aDefinition 
+	"unconditionally create a method source modification.. so that all methods get recompiled, whether they have changed or not"
+
+	| modification sourceModification before after |
+	modification := RwMethodModification before: aDefinition after: self.
+	sourceModification := RwSourceModification new.
+	before := aDefinition source.
+	after := self source.
+	sourceModification addElementModification: (RwPropertyModification
+						key: 'source'
+						oldValue: before
+						newValue: after).
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: sourceModification.
+	^modification
+%
+
+category: '*rowan-core-definitions-extensions'
+method: RwMethodDefinition
 compareExtensionMethodsAgainstBase: aDefinition
 
 	| modification |
@@ -121842,6 +122083,26 @@ compareExtensionMethodsAgainstBase: aDefinition
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification: (self compareSourceAgainstBase: aDefinition).
+	^ modification
+%
+
+category: '*rowan-core-definitions-extensions'
+method: RwMethodDefinition
+compareExtensionMethodsAgainstBase_forUpgrade: aDefinition
+	"unconditionally create a method source modification.. so that all methods get recompiled, whether they have changed or not"
+
+	| modification sourceModification before after |
+	modification := RwExtensionMethodModification before: aDefinition after: self.
+	sourceModification := RwSourceModification new.
+	before := aDefinition source.
+	after := self source.
+	sourceModification addElementModification: (RwPropertyModification
+						key: 'source'
+						oldValue: before
+						newValue: after).
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: sourceModification.
 	^ modification
 %
 
@@ -121959,6 +122220,32 @@ compareAgainstBase: aDefinition
 	^modification
 %
 
+category: '*rowan-core-definitions-extensions'
+method: RwPackageDefinition
+compareAgainstBase_forUpgrade: aDefinition
+
+	| modification classesModification classExtensionsModification |
+	modification := RwPackageModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	classesModification := RwClassesModification new.
+	classExtensionsModification := RwClassExtensionsModification new.
+	self
+		compareDictionary: classDefinitions
+		againstBaseDictionary_forUpgrade: aDefinition classDefinitions
+		into: classesModification
+		elementClass: RwClassDefinition.
+	self
+		compareDictionary: classExtensions
+		againstBaseDictionary_forUpgrade: aDefinition classExtensions
+		into: classExtensionsModification
+		elementClass: RwClassExtensionDefinition.
+	modification
+		classesModification: classesModification;
+		classExtensionsModification: classExtensionsModification.
+	^modification
+%
+
 category: '*rowan-gemstone-definitions'
 method: RwPackageDefinition
 gs_symbolDictionary
@@ -121996,6 +122283,20 @@ compareAgainstBase: aDefinition
 	self
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
+		into: result
+		elementClass: RwPackageDefinition.
+	^ result
+%
+
+category: '*rowan-core-definitions-extensions'
+method: RwPackageSetDefinition
+compareAgainstBase_forUpgrade: aDefinition
+
+	| result |
+	result := RwPackageSetModification new.
+	self
+		compareDictionary: definitions
+		againstBaseDictionary_forUpgrade: aDefinition definitions
 		into: result
 		elementClass: RwPackageDefinition.
 	^ result
@@ -122285,6 +122586,24 @@ compareAgainstBase: aDefinition
 	^ modification
 %
 
+category: '*rowan-core-definitions-extensions'
+method: RwProjectDefinition
+compareAgainstBase_forUpgrade: aDefinition
+
+	| modification packagesModification |
+	modification := RwProjectModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	packagesModification := RwPackagesModification new.
+	self
+		compareDictionary: packages
+		againstBaseDictionary_forUpgrade: aDefinition packages
+		into: packagesModification
+		elementClass: RwPackageDefinition.
+	modification packagesModification: packagesModification.
+	^ modification
+%
+
 category: '*rowan-gemstone-definitions'
 method: RwProjectDefinition
 defaultSymbolDictName
@@ -122453,6 +122772,20 @@ compareAgainstBase_254: aDefinition
 	result
 		updateForClassMoves;
 		updateForMethodMoves.
+	^ result
+%
+
+category: '*rowan-core-definitions-extensions'
+method: RwProjectSetDefinition
+compareAgainstBase_forUpgrade: aDefinition
+
+	| result |
+	result := RwProjectSetModification new.
+	self
+		compareDictionary: definitions
+		againstBaseDictionary_forUpgrade: aDefinition definitions
+		into: result
+		elementClass: RwProjectDefinition.
 	^ result
 %
 

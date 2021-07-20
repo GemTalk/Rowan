@@ -72,6 +72,36 @@ RwAbstractClassDefinition >> classMethodDefinitions: dictionaryOfDefinitions [
 ]
 
 { #category : 'comparing' }
+RwAbstractClassDefinition >> compareAgainstBase_forUpgrade: aDefinition [
+
+	| modification instanceMethodsModification classMethodsModification className |
+	modification := self _modificationClass before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	className := self _classNameForCompare: aDefinition.
+	instanceMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
+	classMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
+	self
+		compareDictionary: instanceMethodDefinitions
+		againstBaseDictionary_forUpgrade: aDefinition instanceMethodDefinitions
+		into: instanceMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: false.
+	self
+		compareDictionary: classMethodDefinitions
+		againstBaseDictionary_forUpgrade: aDefinition classMethodDefinitions
+		into: classMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: true.
+	modification
+		instanceMethodsModification: instanceMethodsModification;
+		classMethodsModification: classMethodsModification.
+	^ modification
+]
+
+{ #category : 'comparing' }
 RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 
 	| modification instanceMethodsModification classMethodsModification className |
@@ -130,6 +160,25 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 		classMethodsModification: classMethodsModification.
 	^ modification
 
+]
+
+{ #category : 'comparing' }
+RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictionary_forUpgrade: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys do: 
+			[:key |
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [elementClass new].
+			after := myDictionary at: key ifAbsent: [elementClass new].
+			modification := after compareAgainstBase_forUpgrade: before.
+			modification 
+				isMeta: isClassMeta;
+				classDefinition: self.
+			modification isEmpty
+				ifFalse: [anElementsModification addElementModification: modification]]
 ]
 
 { #category : 'comparing' }
