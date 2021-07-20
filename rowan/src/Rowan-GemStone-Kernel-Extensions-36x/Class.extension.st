@@ -106,16 +106,7 @@ Class >> _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpt
 ]
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
-Class >> _installConstraints: theConstraints oldClass: oldClass [
-
-	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
-	theConstraints 
-		ifNil: [ constraints := nil ]
-		ifNotNil: [ self _installConstraints: theConstraints ]
-]
-
-{ #category : '*rowan-gemstone-kernel-extensions-36x' }
-Class >>  _installConstraints: theConstraints [
+Class >> _installConstraints: theConstraints [
 
 	| existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys existingConstraints myInstVarNames superConstraints superC superInstVarNames superConstraintsMap |
 	superConstraintsMap := Dictionary new.
@@ -185,6 +176,15 @@ Class >>  _installConstraints: theConstraints [
 				on: Deprecated
 				do: [ :ex | ex resume ] ]
 
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
+Class >> _installConstraints: theConstraints oldClass: oldClass [
+
+	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
+	theConstraints 
+		ifNil: [ constraints := nil ]
+		ifNotNil: [ self _installConstraints: theConstraints ]
 ]
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }

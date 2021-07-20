@@ -68,12 +68,6 @@ self _validatePrivilege ifTrue:[
 ]
 
 { #category : '*rowan-gemstone-kernel-extensions-36x' }
-Behavior >> rwMethodCategories [
-	^ self _unifiedCategorys: 0
-
-]
-
-{ #category : '*rowan-gemstone-kernel-extensions-36x' }
 Behavior >> _setConstraintBit [
 
 "Sets the constraint bit in the 'format' instance variable of the receiver."
@@ -124,5 +118,11 @@ Behavior >> rwGuaranteePersistentMethodDictForEnv: envId [
 		self persistentMethodDictForEnv: envId put: newDict.
 		^ newDict ] 
 		ensure:[ prot _leaveProtectedMode ].
+
+]
+
+{ #category : '*rowan-gemstone-kernel-extensions-36x' }
+Behavior >> rwMethodCategories [
+	^ self _unifiedCategorys: 0
 
 ]
