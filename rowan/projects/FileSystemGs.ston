@@ -1,27 +1,25 @@
-RwEmbeddedLoadSpecificationV2 {
+RwLoadSpecificationV2 {
 	#specName : 'FileSystemGs',
 	#projectName : 'FileSystemGs',
-	#projectAlias : 'Rowan',
-	#gitUrl : 'https://github.com/GemTalk/Rowan',
-	#revision : 'master',
-	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
+	#projectAlias : 'FileSystemGs',
+	#gitUrl : 'git@git.gemtalksystems.com:FileSystemGs.git',
+	#revision : 'kurt.IntegrateWithRowan',
+	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
-		'Core',
-		'Gemstone32x',
-		'Gemstone32-5',
-		'Gemstone35-',
-		'Tests'
+		'Core_dev'
 	],
 	#customConditionalAttributes : [
 		'tests'
 	],
-	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
+			'DataCurator' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			},
 			'SystemUser' : {
 				#defaultSymbolDictName : 'Globals'
 			}
 		}
 	},
-	#comment : 'FileSystemGs for Rowan ... eventually to be replaced by FileSystemGs project (https://github.com/GemTalk/FileSystemGs)'
+	#comment : 'Load spec for installing FileSystem into GemStone/S as DataCurator for independent development of FileSystemGs using Rowan (which has a version of FileSystemGs loaded)'
 }
