@@ -9,7 +9,7 @@ RwMethodDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 	sourceModification := RwSourceModification new.
 	before := aDefinition source.
 	after := self source.
-	sourceModification addElementModification: (RwPropertyModification
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
 						key: 'source'
 						oldValue: before
 						newValue: after).
@@ -54,7 +54,7 @@ RwMethodDefinition >> compareExtensionMethodsAgainstBase_forUpgrade: aDefinition
 	sourceModification := RwSourceModification new.
 	before := aDefinition source.
 	after := self source.
-	sourceModification addElementModification: (RwPropertyModification
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
 						key: 'source'
 						oldValue: before
 						newValue: after).

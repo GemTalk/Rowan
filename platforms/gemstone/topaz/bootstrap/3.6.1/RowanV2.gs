@@ -8147,6 +8147,26 @@ removeallclassmethods RwPropertyModification
 
 doit
 (RwPropertyModification
+	subclass: 'RwPropertyModificationForUpgrade'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Core';
+		comment: 'I am used during upgrade to force method recompilation during a load when 
+all methods must be recompiled (i.e., upgrade vrom 3.2.15 to 3.6.2)';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwPropertyModificationForUpgrade
+removeallclassmethods RwPropertyModificationForUpgrade
+
+doit
+(RwPropertyModification
 	subclass: 'RwUnconditionalPropertyModification'
 	instVarNames: #()
 	classVars: #()
@@ -68541,6 +68561,19 @@ oldValue: znewValue
 	oldValue := znewValue
 %
 
+! Class implementation for 'RwPropertyModificationForUpgrade'
+
+!		Instance methods for 'RwPropertyModificationForUpgrade'
+
+category: 'testing'
+method: RwPropertyModificationForUpgrade
+isEmpty
+"guarantee that even though the oldValue and newValue are #=, we answer false
+	which forces the modification to be applied"
+
+	^ false
+%
+
 ! Class implementation for 'RwUnconditionalPropertyModification'
 
 !		Instance methods for 'RwUnconditionalPropertyModification'
@@ -122064,7 +122097,7 @@ compareAgainstBase_forUpgrade: aDefinition
 	sourceModification := RwSourceModification new.
 	before := aDefinition source.
 	after := self source.
-	sourceModification addElementModification: (RwPropertyModification
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
 						key: 'source'
 						oldValue: before
 						newValue: after).
@@ -122096,7 +122129,7 @@ compareExtensionMethodsAgainstBase_forUpgrade: aDefinition
 	sourceModification := RwSourceModification new.
 	before := aDefinition source.
 	after := self source.
-	sourceModification addElementModification: (RwPropertyModification
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
 						key: 'source'
 						oldValue: before
 						newValue: after).
