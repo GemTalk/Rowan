@@ -9,4 +9,4 @@
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/installRowan.gs
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1/RowanV2.gs
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/adoptRowan.gs
-input /home/dhenrich/ubs/upgradeTo3.6.1/stones/reload_dbo_anon.gs
+input /home/dhenrich/ubs/upgradeTo3.6.1/stones/reload_application.gs
