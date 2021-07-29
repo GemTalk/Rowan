@@ -1,9 +1,7 @@
-#!/usr/local/bin/smalltalk/gemstone/topaz
-
 omit pushonly
 display classoops
 
-set user SystemUser p swordfish
+set user SystemUser pass swordfish
 login
 
 run

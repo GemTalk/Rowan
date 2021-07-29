@@ -1,10 +1,8 @@
-#!/usr/local/bin/smalltalk/gemstone/topaz
+omit pushonly
+display oops
 
-	omit pushonly
-	display oops
-
-  set user SystemUser p swordfish
-  login
+set user SystemUser pass swordfish
+login
 
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/installRowan.gs
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1/RowanV2.gs
