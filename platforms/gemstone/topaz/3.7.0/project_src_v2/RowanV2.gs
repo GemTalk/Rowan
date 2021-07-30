@@ -9133,7 +9133,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl relativeRepositoryRoot svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -27228,7 +27228,7 @@ temp
 category: 'accessing'
 classmethod: MacOSResolver
 platformName
-	^  'Mac OS'
+	^  'Darwin'
 %
 
 !		Instance methods for 'MacOSResolver'
