@@ -1,12 +1,19 @@
-omit pushonly
-display classoops
+output append $upgradeLogDir/upgradeRowan_32x_to_36x.out 
+iferror exit
+display alloops
 
+! Reload projects following upgrade from Rowan 1.2.10/GemStone 3.2.x to Rowan 1.2.11/GemStone 3.6.x. 
+! Edit this file to list the packages that were previously loaded, in the original repository.
+
+! Edit the login details as suitable for your system. 
+! Note that this script must login as the same GemStone UserId as had the projects loaded. 
+
+! set gemstone gs64stone
 set user SystemUser pass swordfish
 login
 
 run
    {
-   	'file:$ROWAN_PROJECTS_HOME/Example_Project_Missing/rowan/specs/Project_Missing.ston'.
    	'file:$ROWAN_PROJECTS_HOME/Example_Project_Main/rowan/specs/Project_Main.ston'.
    	'file:$ROWAN_PROJECTS_HOME/Example_Project_GemStoneExtensions/rowan/specs/Project_GemStoneExtensions.ston'.
    	'file:$ROWAN_PROJECTS_HOME/Example_Project_TestsGemStoneExtensions/rowan/specs/Project_TestsGemStoneExtensions.ston'.

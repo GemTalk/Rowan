@@ -1,3 +1,17 @@
+output push $upgradeLogDir/upgradeRowan_32x_to_36x.out
+iferror exit
+display alloops
+
+! In a Rowan 1.2.10/GemStone 3.2.x environment, prior to upgrade.
+! Detach Rowan, and also application projects that contain GemStone kernel class method extensions. 
+! These projects may not contain anything other than kernel class method extensions.
+
+! Edit this file to list all projects containg extension methods. 
+
+! Edit the login details as suitable for your system. 
+! Note that this script must login as the same GemStone UserId as had the projects loaded. 
+
+! set gemstone gs64stone
 set u SystemUser p swordfish
 login
 
@@ -14,7 +28,7 @@ run
 	"Disown extensions for kernel GemStone classes
 		the extension methods will be re-installed as part of the
 		3.6.2 upgrade process"
-	projectNames := #( '...GemStoneExtensions' '...TestsGemStoneExtensions' ).
+	projectNames := #( 'ExampleProject_GemStoneExtensions' 'ExampleProject_TestsGemStoneExtensions' ).
 	projectNames do: [:projectName |
 		(Rowan image loadedProjectNamed: projectName) 
 				loadedPackages keys do: [:packageName |
