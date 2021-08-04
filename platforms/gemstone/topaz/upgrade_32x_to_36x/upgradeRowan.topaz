@@ -1,17 +1,23 @@
-output append $upgradeLogDir/upgradeRowan_32x_to_36x.out
+!--------------------------------------------------------------------
+!  upgradeRowan.topaz - upgrade Rowan application from 3.2.x to 3.6.x
+!
+!  For a rowan 1.2.10 repository originating in v3.2.x, after successfully upgrade to 3.6.x.
+!  Reinstall rowan and reload the application.
+!--------------------------------------------------------------------
+
+output pushnew $upgradeLogDir/upgradeRowan.out only
 iferror exit
-display alloops
+! display alloops
 
-! For a rowan 1.2.10 repository originating in v3.2.x, that was successfully upgraded to 3.6.x.
-! Reinstall rowan and reload the application
-
-! Edit the login details as suitable for your system. 
-
-! set gemstone gs64stone
+set gemstone $stoneName
 set user SystemUser pass swordfish
 login
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/installRowan.gs
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/RowanV2.gs
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/adoptRowan.gs
-input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/reload_application.gs
 errorcount
+
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/reload_application.topaz
+errorcount
+
+exit

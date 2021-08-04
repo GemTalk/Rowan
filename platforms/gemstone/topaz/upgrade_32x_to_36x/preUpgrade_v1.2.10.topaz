@@ -1,17 +1,18 @@
-output push $upgradeLogDir/upgradeRowan_32x_to_36x.out
+!--------------------------------------------------------------------
+!  preUpgrade_v1.2.10.topaz - script to run in Rowan 1.2.10/GS 3.2.15 prior to upgrade
+! 
+!  Detach Rowan, and also application projects that contain GemStone kernel class method extensions. 
+!  These projects may not contain anything other than kernel class method extensions.
+!
+!  Edit this file to list all projects containing packages with kernel class extension methods. 
+!--------------------------------------------------------------------
+
+output push $upgradeLogDir/preUpgradeRowan.out
 iferror exit
-display alloops
+! display oops
+! display classoops
 
-! In a Rowan 1.2.10/GemStone 3.2.x environment, prior to upgrade.
-! Detach Rowan, and also application projects that contain GemStone kernel class method extensions. 
-! These projects may not contain anything other than kernel class method extensions.
-
-! Edit this file to list all projects containg extension methods. 
-
-! Edit the login details as suitable for your system. 
-! Note that this script must login as the same GemStone UserId as had the projects loaded. 
-
-! set gemstone gs64stone
+set gemstone $stoneName
 set u SystemUser p swordfish
 login
 
@@ -36,4 +37,6 @@ run
 System commit
 %
 
+errorcount
 logout
+exit
