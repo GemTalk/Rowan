@@ -6,16 +6,18 @@ Upgrade is tested and supported from Rowan 1.2.10 on GemStone/S 64 bit v3.2.15 t
 
 The changes between these versions of GemStone require significant processing, and cannot be done in a single upgrade; an intermediate upgrade to v3.5.7 is required. Rowan 1.2.11 provides scripts to assist with the upgrade. These scripts need to be customized with the specific application details. 
 
-There are many server changes between 3.2.x and 3.6.2. You should review the <i>Release Notes</i> for each intermediate version, most importantly for the major versions v3.3, v3.4, v3.5, and v3.6. A full set of Release Notes for previous versions can be found at <A HREF="https://gemtalksystems.com/products/gs64/history/" CLASS="URL">https://gemtalksystems.com/products/gs64/history/</A>.
+There are many server changes between 3.2.x and 3.6.2. You should review the <i>Release Notes</i> for each intermediate version, most importantly for the major versions v3.3, v3.4, v3.5, and v3.6, to determine if your application source code or GemStone kernel class extension methods require changes. The Rowan upgrade process can load application source code with code modifications needed for 3.6.2. 
 
-#### Extension Methods on Kernel Classes
-There have been many change in Kernel classes between 3.2.x and 3.6.x. Examine your Kernel class method extensions carefully, and compare these with the 3.6.2 kernel class methods, to determine if these are applicable.
+### Extension Methods on Kernel Classes
+There have been many change in Kernel classes between 3.2.x and 3.6.x, which may affect your Kernel class extension method. Examine these carefully, to determine if these are still applicable or require modification.
 
+#### Small* classes
 In particular, the introduction of Small* magnitude classes in v3.6, which are "special" classes (the value is encoded in the OOP), introduces potential issues.
 
 If application extension methods on GemStone kernel classes DateAndTime, Date, Time, or ScaledDecimal directly reference instance variables on that class, these will have issues when inherited by SmallDateAndTime, SmallDate, SmallTime, and SmallScaledDecimal, since specials by definition do not have instance variables. If you have extension methods on DateAndTime, Date, Time, or ScaledDecimal, you must review your code and ensure that any direct accesses to instance variables are changed to use accessor methods. Methods with direct instance variable references will compile correctly, but will get Error 2710/instVar access not allowed in a special object on execution. 
 
-#### Kernel Class Extension Method Packaging
+
+### Kernel Class Extension Method Packaging
 Since the GemStone server upgrade removes all methods on all GemStone kernel classes prior to filing in the new methods, the upgrade process for Rowan-packaged kernel class extension methods requires special handling.
 
 The upgrade process assumes that the application has a separate Project or Projects, that each contain only Packages containing kernel class method extensions. These Project/s should not contain application classes, nor extension methods on other application classes. If this is not the case, the <code>preUpgrade_v1.2.10.topaz</code> script will require further customization to avoid disconnecting application code. 
@@ -44,10 +46,10 @@ In your v3.2.15 repository, reset the password for SystemUser to 'swordfish'. Th
 ### 3.  Edit preUpgrade_v1.2.10.topaz 
 You will first run a script to disconnect the Rowan repositories and kernel class extensions in your 3.2.15 repository. 
 
- _Note that this script assumes that all kernel class extension methods are in one or more projects, and that these projects do not contain any code other than kernel class extension methods._
+_Note that this script assumes that all kernel class extension methods are in one or more projects, and that these projects do not contain any code other than kernel class extension methods._
 
 The topaz file:
- <PRE CLASS="Columns-Indented-Two">$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz</PRE>
+ <PRE CLASS="Code-Indented-Two">$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz</PRE>
 
 
 performs this disconnect of the Rowan repositories, and any packages contain kernel class extension methods. There is no need to disconnect your other application packages, only packages that contain methods on kernel classes, since the kernel methods will be removed during the upgrade process. 
@@ -114,10 +116,10 @@ Upgrade the repository from v3.5.7 to v3.6.2. Review the Installation Guide for 
 
 The significant steps are:
 
-  * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x.
-  * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
-  * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
-  * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
+ * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x. 
+ * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
+ * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
+ * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
 
 If any of these steps reports error, please contact GemTalk Engineering. 
 
@@ -132,7 +134,11 @@ The <b>upgradeRowan</b> script is executed on your 3.6.2 repository, and invokes
   * "adopt" these projects so they are functional in Rowan.
   * reload all the projects listed in <code>reload_application.gs</code>, ensuring that all methods are recompiled. The upgrade from 3.2.x to 3.6.x requires that all methods are recompiled, due to byte code changes in the GemStone server.
 
-You must have edited <code>reload_application.gs</code>, to include your projects, before executing this script. Note that by default, this expects to find your projects in SystemUser's symbolList; if you have loaded projects as a different user, edit the script's userId.
+You must have edited <code>reload_application.gs</code>, to include your projects, before executing this script. 
+
+If you have modified your application source code for compatibility with v3.6.2, be sure that the Rowan source code repository pointed to by $ROWAN_PROJECTS_HOME has the correct version for loading into v3.6.2.
+
+Note that <code>reload_application.gs</code>, as written, expects to find your projects in SystemUser's symbolList. If you have loaded projects as a different user, edit the script's userId.
 
 This script takes one argument, the name of the running 3.6.2 Stone.
  <PRE CLASS="Code-Indented-Two">unix> $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgradeRowan -s <i>stonename362</i></PRE>
@@ -150,5 +156,6 @@ The application has now been upgraded and is ready to use.
 Change the password for SystemUser, DataCurator and GcUser, which have ben reset to 'swordfish' for the upgrade, back to the previous versions. 
 
 ### 10.  Make a backup
-Make a backup of your system.
+Make a backup of your system. 
 
+Your application on Rowan 1.2.11 with GemStone/S v3.6.2 is now ready to use.
