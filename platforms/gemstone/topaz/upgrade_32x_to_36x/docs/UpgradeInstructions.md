@@ -1,5 +1,5 @@
 # Upgrading from 3.2.15 to 3.6.2
->
+
 
 ## Overview
 Upgrade is tested and supported from Rowan 1.2.10 on GemStone/S 64 bit v3.2.15 to Rowan 1.2.11 on GemStone/S 64 Bit v3.6.2.
@@ -52,24 +52,24 @@ The topaz file:
  <PRE CLASS="Code-Indented-Two">$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz</PRE>
 
 
-performs this disconnect of the Rowan repositories, and any packages contain kernel class extension methods. There is no need to disconnect your other application packages, only packages that contain methods on kernel classes, since the kernel methods will be removed during the upgrade process. 
+performs this disconnect of the Rowan projects, and any packages contain kernel class extension methods. There is no need to disconnect your other application packages, only packages that contain methods on kernel classes, since the kernel methods will be removed during the upgrade process. 
 
-Edit this file, replacing 'ExampleProject_GemStoneExtensions' 'ExampleProject_TestsGemStoneExtensions' with your specific package names. Be sure to include all packages that contain kernel class extension methods. 
+Edit this file, replacing 'ExampleProject_GemStoneExtensions' 'ExampleProject_TestsGemStoneExtensions' with your specific project names. Be sure to include all projects that contain packages with kernel class extension methods. 
 
 ### 4.  Edit reload_application.topaz 
-After the server upgrades and the Rowan code is loaded, the upgrade scripts will reload your application packages. 
+After the server upgrades and the Rowan code is loaded, the upgrade scripts will reload your application projects. 
 
 The topaz file:
  <PRE CLASS="Code-Indented-Two">$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/reload_application.topaz</PRE>
 
 
-includes a list of the application packages to load.
+includes a list of the application projects to load.
 
 Edit this file, replacing the lines of the form: 
  <PRE CLASS="Code-Indented-Two">'file:$ROWAN_PROJECTS_HOME/Example_Project_Main/rowan/specs/Example_Project_Main.ston'</PRE>
 
 
-With the path to the load specifications for each of the application projects that were loaded in your 3.2.15 image.
+With the path to the load specifications for each of the application projects that were loaded in your 3.2.15 image and require reload.
 
 This script should login as the GemStone userId that has loaded these projects, which may be SystemUser, DataCurator, or another user. Edit the login information if necessary.
 
@@ -97,11 +97,11 @@ See Chapter 3 of the <A HREF="https://downloads.gemtalksystems.com/docs/GemStone
 
 The significant steps are:
 
-  * Install and configure the GemStone 3.5.7 distribution, including a keyfile for 3.5.x. 
-  * Ensure the 3.2.15 stone is shutdown, and copy the 3.2.15 extent files to the GemStone 3.5.7 location.
-  * Execute <b>startstone</b> <i>stonename357</i>, using your normal <b>startstone</b> arguments.
-  * Execute <b>upgradeImage -s</b> <i>stonename357</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories. 
-  * You do not need to recompile methods; however, you should convert persistent SimpleBlocks in your application. Execute <b>postconv -s</b> <i>stonename</i>. 
+   * Install and configure the GemStone 3.5.7 distribution, including a keyfile for 3.5.x. 
+   * Ensure the 3.2.15 stone is shutdown, and copy the 3.2.15 extent files to the GemStone 3.5.7 location.
+   * Execute <b>startstone</b> <i>stonename357</i>, using your normal <b>startstone</b> arguments.
+   * Execute <b>upgradeImage -s</b> <i>stonename357</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories. 
+   * You do not need to recompile methods; however, you should convert persistent SimpleBlocks in your application. Execute <b>postconv -s</b> <i>stonename</i>. 
 
 If any of these steps reports error, please contact GemTalk Engineering. 
 
@@ -116,10 +116,10 @@ Upgrade the repository from v3.5.7 to v3.6.2. Review the Installation Guide for 
 
 The significant steps are:
 
- * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x. 
- * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
- * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
- * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
+   * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x. 
+   * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
+   * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
+   * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
 
 If any of these steps reports error, please contact GemTalk Engineering. 
 
@@ -130,9 +130,9 @@ Leave the Stone running.
 ### 8.  Execute the upgradeRowan script
 The <b>upgradeRowan</b> script is executed on your 3.6.2 repository, and invokes the edited version of <code>reload_application.topaz</code>. This script does the following:
 
-  * installs the Rowan-related classes into your repository.
-  * "adopt" these projects so they are functional in Rowan.
-  * reload all the projects listed in <code>reload_application.gs</code>, ensuring that all methods are recompiled. The upgrade from 3.2.x to 3.6.x requires that all methods are recompiled, due to byte code changes in the GemStone server.
+   * installs the Rowan-related classes into your repository.
+   * "adopt" these projects so they are functional in Rowan.
+   * reload all the projects listed in <code>reload_application.gs</code>, ensuring that all methods are recompiled. The upgrade from 3.2.x to 3.6.x requires that all methods are recompiled, due to byte code changes in the GemStone server.
 
 You must have edited <code>reload_application.gs</code>, to include your projects, before executing this script. 
 
