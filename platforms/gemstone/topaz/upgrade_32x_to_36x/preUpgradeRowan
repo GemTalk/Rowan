@@ -55,7 +55,7 @@ $GEMSTONE/bin/topaz -l -i < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/
 
 topaz_stat=$?
 if [ $topaz_stat -eq 0 ]; then
-  echo "Upgrade completed. No errors detected."
+  echo "preUpgradeRowan completed. No errors detected."
   exit 0
 else
   echo "ERROR: topaz exited with status $topaz_stat."
