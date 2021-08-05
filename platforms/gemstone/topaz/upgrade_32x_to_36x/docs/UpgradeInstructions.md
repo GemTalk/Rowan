@@ -28,9 +28,9 @@ The following instructions provide details on upgrading a repository from Rowan 
 
 The upgrade from GemStone 3.2.15 to 3.6.2 requires: 
 
-   * Detaching from rowan in your existing repository; you must customize a pre-upgrade script to assist with this.
-   * the multi-step server upgrade to 3.5.7 then to 3.6.2
-   * Reloading Rowan and recompiling your application code, which requires customizing an application reload script.
+* Detaching from rowan in your existing repository; you must customize a pre-upgrade script to assist with this.
+* the multi-step server upgrade to 3.5.7 then to 3.6.2
+* Reloading Rowan and recompiling your application code, which requires customizing an application reload script.
 
 The following instructions provide details on the Rowan upgrade specific steps, and a general overview for the server upgrade. If you are unfamiliar with the GemStone upgrade process, please review the Installation Guide for v3.5.x and for 3.6.x for detailed instructions on the server upgrade process. 
 
@@ -44,15 +44,15 @@ The Rowan login scripts, and GemStone server login scripts, require that the env
 In your v3.2.15 repository, reset the password for SystemUser to 'swordfish'. The upgrades login as SystemUser, and reset the passwords for DataCurator and GcUser.
 
 ### 3.  Edit preUpgrade_v1.2.10.topaz 
-You will first run a script to disconnect the Rowan repositories and kernel class extensions in your 3.2.15 repository. 
+You will first run a script to disconnect the Rowan projects and packages containing GemStone kernel class extension methods in your 3.2.15 repository. 
 
-_Note that this script assumes that all kernel class extension methods are in one or more projects, and that these projects do not contain any code other than kernel class extension methods._
+_Note that this script assumes that all kernel class extension methods are in packages in one or more projects, and that these projects do not contain any code other than kernel class extension methods._
 
 The topaz file:
  <PRE CLASS="Code-Indented-Two">$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz</PRE>
 
 
-performs this disconnect of the Rowan projects, and any packages contain kernel class extension methods. There is no need to disconnect your other application packages, only packages that contain methods on kernel classes, since the kernel methods will be removed during the upgrade process. 
+performs this disconnect. There is no need to disconnect your other application projects or packages; only those that contain extension methods on kernel classes. Special handling is required since all kernel class methods are removed during the server upgrade process. 
 
 Edit this file, replacing 'ExampleProject_GemStoneExtensions' 'ExampleProject_TestsGemStoneExtensions' with your specific project names. Be sure to include all projects that contain packages with kernel class extension methods. 
 
@@ -97,11 +97,11 @@ See Chapter 3 of the <A HREF="https://downloads.gemtalksystems.com/docs/GemStone
 
 The significant steps are:
 
-   * Install and configure the GemStone 3.5.7 distribution, including a keyfile for 3.5.x. 
-   * Ensure the 3.2.15 stone is shutdown, and copy the 3.2.15 extent files to the GemStone 3.5.7 location.
-   * Execute <b>startstone</b> <i>stonename357</i>, using your normal <b>startstone</b> arguments.
-   * Execute <b>upgradeImage -s</b> <i>stonename357</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories. 
-   * You do not need to recompile methods; however, you should convert persistent SimpleBlocks in your application. Execute <b>postconv -s</b> <i>stonename</i>. 
+  * Install and configure the GemStone 3.5.7 distribution, including a keyfile for 3.5.x. 
+  * Ensure the 3.2.15 stone is shutdown, and copy the 3.2.15 extent files to the GemStone 3.5.7 location.
+  * Execute <b>startstone</b> <i>stonename357</i>, using your normal <b>startstone</b> arguments.
+  * Execute <b>upgradeImage -s</b> <i>stonename357</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories. 
+  * You do not need to recompile methods; however, you should convert persistent SimpleBlocks in your application. Execute <b>postconv -s</b> <i>stonename</i>. 
 
 If any of these steps reports error, please contact GemTalk Engineering. 
 
@@ -116,10 +116,10 @@ Upgrade the repository from v3.5.7 to v3.6.2. Review the Installation Guide for 
 
 The significant steps are:
 
-   * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x. 
-   * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
-   * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
-   * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
+  * Install and configure the GemStone 3.6.2 distribution, including a keyfile for 3.6.x. 
+  * Ensure the 3.2.15 stone is shutdown, and copy the 3.5.7 extent files to the GemStone 3.6.2 location.
+  * Execute <b>startstone</b> <i>stonename362</i>, using your normal startstone arguments.
+  * Execute <b>upgradeImage -s</b> <i>stonename362</i>. You may wish to use the <b>-c</b><i> cacheSize</i> argument to improve performance on large repositories.
 
 If any of these steps reports error, please contact GemTalk Engineering. 
 
@@ -130,9 +130,9 @@ Leave the Stone running.
 ### 8.  Execute the upgradeRowan script
 The <b>upgradeRowan</b> script is executed on your 3.6.2 repository, and invokes the edited version of <code>reload_application.topaz</code>. This script does the following:
 
-   * installs the Rowan-related classes into your repository.
-   * "adopt" these projects so they are functional in Rowan.
-   * reload all the projects listed in <code>reload_application.gs</code>, ensuring that all methods are recompiled. The upgrade from 3.2.x to 3.6.x requires that all methods are recompiled, due to byte code changes in the GemStone server.
+  * installs the Rowan-related classes into your repository.
+  * "adopt" these projects so they are functional in Rowan.
+  * reload all the projects listed in <code>reload_application.gs</code>, ensuring that all methods are recompiled. The upgrade from 3.2.x to 3.6.x requires that all methods are recompiled, due to byte code changes in the GemStone server.
 
 You must have edited <code>reload_application.gs</code>, to include your projects, before executing this script. 
 
@@ -159,3 +159,9 @@ Change the password for SystemUser, DataCurator and GcUser, which have ben reset
 Make a backup of your system. 
 
 Your application on Rowan 1.2.11 with GemStone/S v3.6.2 is now ready to use.
+
+ 
+
+
+
+
