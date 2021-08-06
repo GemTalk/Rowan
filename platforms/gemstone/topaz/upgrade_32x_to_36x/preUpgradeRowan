@@ -49,7 +49,7 @@ fi
 rm $upgradeLogDir/tmp$$
 
 echo `date`
-echo 'Starting upgrade...'
+echo 'Starting preUpgradeRowan...'
 
 $GEMSTONE/bin/topaz -l -i < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz> $upgradeLogDir/topaz.out 2>&1
 
