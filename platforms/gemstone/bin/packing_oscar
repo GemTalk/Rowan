@@ -39,6 +39,8 @@ set -e
 # 1.2.7 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.7 v1.2.7 Oscar-3.0.85
 # 1.2.8 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.8 v1.2.8 Oscar-3.0.87
 # 1.2.9 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.9 v1.2.9 Oscar-3.0.89
+# 1.2.10 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.10 v1.2.10 Oscar-3.0.91
+# 1.2.11 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.11 v1.2.11 Oscar-3.0.91.1
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -51,8 +53,8 @@ if [ "$base_label"x = "x" ] ; then
 fi
 rowan_tag="$2"
 jadeite_tag="$3"
-rowanDeploymentBranch="candidateV1.2"
 rowanDeploymentBranch="masterV1.2"
+rowanDeploymentBranch="candidateV1.2.11"
 
 commit_match_tag() {
   targetTag="$1"
@@ -124,7 +126,7 @@ cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 rm -rf Rowan MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256 *.pdf
 
 # Clone Rowan include all branches (complete copy of github repo)
-clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan $rowanDeploymentBranch
+clone_entire_git_repo git@git.gemtalksystems.com:Rowan Rowan $rowanDeploymentBranch
 
 echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
