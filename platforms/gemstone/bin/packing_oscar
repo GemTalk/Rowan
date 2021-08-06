@@ -54,7 +54,18 @@ fi
 rowan_tag="$2"
 jadeite_tag="$3"
 rowanDeploymentBranch="masterV1.2"
-rowanDeploymentBranch="candidateV1.2.11"
+
+if [ "DEBUG"x != "x" ] ; then
+	### just for debugging
+	echo "!!!JUST FOR DEBUGGING"
+	echo "okay?"
+	read ok
+
+	rowanDeploymentBranch="candidateV1.2.11"
+	rowan_tag=""
+	base_label="Edelweiss-canvidateV1.2.11"
+	### just for debugging
+fi
 
 commit_match_tag() {
   targetTag="$1"
