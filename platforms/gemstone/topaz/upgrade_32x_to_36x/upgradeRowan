@@ -1,0 +1,70 @@
+#! /bin/sh
+# set -xv
+
+usage() {
+  cat <<EOF
+Usage:
+upgradeRowan [-s <stoneName>]
+Environment Requirements:
+    upgradeLogDir     set to a writable directory used in previous steps
+Parameters:
+    -s <stoneName>
+        where <stoneName> is the name of a running 3.6.x stone.
+        Default: gs64stone
+EOF
+}
+
+stoneName=gs64stone
+while getopts "s:" opt; do
+  case $opt in
+    s ) stoneName=$OPTARG ;;
+   \? ) usage; exit 1 ;;
+  esac
+done
+export stoneName
+
+echo $stoneName
+
+if [ "a$ROWAN_PROJECTS_HOME" = "a" ]; then
+  echo "ERROR: ROWAN_PROJECTS_HOME environment variable is required."
+  exit 1
+fi
+
+# make sure $upgradeLogDir has been set
+if [ a$upgradeLogDir = "a" ]; then
+  echo "ERROR: The environment variable upgradeLogDir has not been set."
+  usage
+  exit 1
+elif [ ! -d $upgradeLogDir ]; then
+  echo "ERROR: $upgradeLogDir is not a directory."
+  usage
+  exit 1
+fi
+
+# make sure $upgradeLogDir is writable
+touch $upgradeLogDir/tmp$$ 2>/dev/null 
+if [ "$?" != "0" ]; then
+  echo "ERROR: $upgradeLogDir is not writable."
+  usage
+  exit 1
+fi
+rm $upgradeLogDir/tmp$$
+
+echo `date`
+echo 'Starting upgrade...'
+
+$GEMSTONE/bin/topaz -l -i < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/upgradeRowan.topaz> $upgradeLogDir/topaz.out 2>&1
+
+topaz_stat=$?
+if [ $topaz_stat -eq 0 ]; then
+  echo "upgradeRowan completed. No errors detected."
+  exit 0
+else
+  echo "ERROR: topaz exited with status $topaz_stat."
+  echo "Please check the latest versions of the log files in $upgradeLogDir for errors:"
+  echo "  $upgradeLogDir/upgradeRowan*.out"
+  echo "  $upgradeLogDir/topaz.out"
+  echo " "
+  exit $topaz_stat
+fi
+

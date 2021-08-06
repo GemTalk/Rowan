@@ -1,0 +1,42 @@
+!--------------------------------------------------------------------
+!  preUpgrade_v1.2.10.topaz - script to run in Rowan 1.2.10/GS 3.2.15 prior to upgrade
+! 
+!  Detach Rowan, and also application projects that contain GemStone kernel class method extensions. 
+!  These projects may not contain anything other than kernel class method extensions.
+!
+!  Edit this file to list all projects containing packages with kernel class extension methods. 
+!--------------------------------------------------------------------
+
+output push $upgradeLogDir/preUpgradeRowan.out
+iferror exit
+! display oops
+! display classoops
+
+set gemstone $stoneName
+set u SystemUser p swordfish
+login
+
+run
+	"Script to be run in 3.2.15 prior to upgrade to 3.5.7 to 3.6.2"
+	"Disown Rowan projects - all Rowan classes and methods will be
+		updated as part of the 3.6.2 upgrade process"
+	| projectNames |
+	projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
+	projectNames do: [:projectName |
+		Rowan projectTools disown
+			disownProjectNamed: projectName ].
+	
+	"Disown extensions for kernel GemStone classes
+		the extension methods will be re-installed as part of the
+		3.6.2 upgrade process"
+	projectNames := #( 'ExampleProject_GemStoneExtensions' 'ExampleProject_TestsGemStoneExtensions' ).
+	projectNames do: [:projectName |
+		(Rowan image loadedProjectNamed: projectName) 
+				loadedPackages keys do: [:packageName |
+					Rowan packageTools disown disownPackageNamed: packageName ] ].
+System commit
+%
+
+errorcount
+logout
+exit

@@ -1,0 +1,31 @@
+!--------------------------------------------------------------------
+!  reload_application.topaz - reload customer application
+!  (invoked from upgradeRowan.topaz)
+!
+!  Reload projects following upgrade from Rowan 1.2.10/GemStone 3.2.x to Rowan 1.2.11/GemStone 3.6.x. 
+!  Edit this file to list the packages that were previously loaded, in the original repository.
+!
+!  Edit the login userId if necessary:  
+!    this script must login as the same GemStone UserId as had the projects loaded. 
+!--------------------------------------------------------------------
+
+iferror exit
+! display alloops
+
+set gemstone $stoneName 
+set user SystemUser pass swordfish
+login
+
+run
+   {
+	'file:$ROWAN_PROJECTS_HOME/Example_Project_Main/rowan/specs/Project_Main.ston'.
+	'file:$ROWAN_PROJECTS_HOME/Example_Project_GemStoneExtensions/rowan/specs/Project_GemStoneExtensions.ston'.
+	'file:$ROWAN_PROJECTS_HOME/Example_Project_TestsGemStoneExtensions/rowan/specs/Project_TestsGemStoneExtensions.ston'.
+	'file:$ROWAN_PROJECTS_HOME/Example_Project_TestsMain/rowan/specs/Project_TestsMain.ston'
+   } do: [:specUrl |
+   	Rowan projectTools upgrade upgradeProjectFromSpecUrl: specUrl.
+   	System commit ].
+%
+
+errorcount
+logout
