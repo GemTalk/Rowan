@@ -112,6 +112,11 @@ Rowan class >> jadeServerClassNamed: className [
 ]
 
 { #category : 'public client services' }
+Rowan class >> loadedProjectServiceClass [
+	^ self platform loadedProjectServiceClass
+]
+
+{ #category : 'public client services' }
 Rowan class >> loggingServiceClass [
 
 	^ self platform loggingServiceClass
@@ -232,10 +237,21 @@ Rowan class >> projectTools [
 ]
 
 { #category : 'public client services' }
+Rowan class >> resolvedProjectServiceClass [
+	^ self platform resolvedProjectServiceClass
+]
+
+{ #category : 'public client services' }
 Rowan class >> serviceClass [
 
 	^ self platform serviceClass
 
+]
+
+{ #category : 'public client services' }
+Rowan class >> specificationServiceClass [
+
+	^ self platform specificationServiceClass
 ]
 
 { #category : 'public' }
