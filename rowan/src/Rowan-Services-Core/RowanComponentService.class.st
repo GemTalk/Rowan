@@ -61,7 +61,7 @@ RowanComponentService >> componentServices: anArray [
 { #category : 'operations' }
 RowanComponentService >> computeSubComponentsUsingProjectService: theProjectService [
 	componentServices := (theProjectService rwProject
-		subcomponentsOf: name
+		loadedSubcomponentsOf: name
 		ifNone: [ Array new ])
 		collect: [ :subcomponent | 
 			RowanComponentService
