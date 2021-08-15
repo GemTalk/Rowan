@@ -1,0 +1,22 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'common',
+	#projectNames : [
+		'Cypress',
+		'STON',
+		'Tonel'
+	],
+	#componentNames : [
+		'common/Core',
+		'deprecated/Core',
+		'gemstone/Core',
+		'gemstone3.2.15-/Core',
+		'gemstone3.2-/Core',
+		'gemstone3.2-5/Core',
+		'gemstone3.6-/Core',
+		'jadeServer/Core',
+		'tests/Core'
+	],
+	#packageNames : [ ],
+	#comment : 'top-level component for reading entire Rowan project.'
+}

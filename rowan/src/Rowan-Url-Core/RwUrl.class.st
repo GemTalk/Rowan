@@ -83,6 +83,11 @@ RwUrl class >> fromString: aString [
   ^ newUrl
 ]
 
+{ #category : 'parsing' }
+RwUrl class >> httpFromString: aString [
+  ^CypressUrl absoluteFromText: aString
+]
+
 { #category : 'constants' }
 RwUrl class >> schemeName [
 

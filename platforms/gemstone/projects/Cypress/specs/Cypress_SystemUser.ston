@@ -1,0 +1,18 @@
+ RwSimpleProjectSpecification{
+	#specName : 'Cypress',
+	#version : '0.1.0',
+	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'Globals',
+			#defaultUseSessionMethodsForExtensions : false }
+	},
+	#specsPath : 'platforms/gemstone/projects/Cypress/specs',
+	#configsPath : 'platforms/gemstone/projects/Cypress/configs',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#repoPath : 'platforms/gemstone/projects/Cypress/src',
+	#comment : ''
+}

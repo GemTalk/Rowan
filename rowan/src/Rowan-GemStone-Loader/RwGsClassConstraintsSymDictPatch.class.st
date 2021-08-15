@@ -21,11 +21,9 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 
 { #category : 'installing' }
 RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
-
 	" update class and update loadedClass with new constraints"
 
-	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
-		existingConstraints instVarNames |
+	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys existingConstraints instVarNames superConstraints superConstraintsMap superC superInstVarNames |
 	className := classDefinition key asSymbol.
 	existingClass := aPatchSet createdClasses
 		at: className
@@ -33,44 +31,81 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
+	superConstraintsMap := Dictionary new.
 	existingConstraintsMap := Dictionary new.
 	existingVaryingConstraint := existingClass _varyingConstraint.
 	instVarNames := existingClass allInstVarNames.
-	existingConstraints := [ existingClass _constraints ] on: Deprecated do: [:ex | ex resume ].
-	1 to: existingConstraints size do: [:index |
-		existingConstraintsMap at: (instVarNames at: index) put: (existingConstraints at: index ) ].
-	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
+	superC := existingClass superClass.
+	superInstVarNames := superC ifNil: [ {} ] ifNotNil: [ superC allInstVarNames ].
+	[ 
+	superConstraints := superC
+		ifNil: [ {} ]
+		ifNotNil: [ :superCl | superCl _constraints ifNil: [ {} ] ].
+	existingConstraints := existingClass _constraints ]
+		on: Deprecated
+		do: [ :ex | ex resume ].
+	1 to: superConstraints size do: [ :index | 
+		superConstraintsMap
+			at: (superInstVarNames at: index)
+			put: (superConstraints at: index) ].
+	1 to: existingConstraints size do: [ :index | 
+		existingConstraintsMap
+			at: (instVarNames at: index)
+			put: (existingConstraints at: index) ].
+	theConstraints := self _gemStoneConstraintsFrom: classDefinition gs_constraints.
 	theConstraintsMap := Dictionary new.
 	theVaryingConstraint := Object.
-	theConstraints do: [:arrayOrVaryingConstraintClass |
-		arrayOrVaryingConstraintClass _isArray
-			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
-			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
+	theConstraints
+		do: [ :arrayOrVaryingConstraintClass | 
+			arrayOrVaryingConstraintClass _isArray
+				ifTrue: [ 
+					theConstraintsMap
+						at: (arrayOrVaryingConstraintClass at: 1)
+						put: (arrayOrVaryingConstraintClass at: 2) ]
+				ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
 	keys := existingConstraintsMap keys copy.
 	keys addAll: theConstraintsMap keys.
-	keys do: [:key | 
-		| existingConstraint theConstraint |
-		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
-		theConstraint := theConstraintsMap at: key ifAbsent: [].
-		existingConstraint == theConstraint
-			ifFalse: [ 
-				| instVarString |
-				instVarString := key asString.
-				existingConstraint == nil
-					ifTrue: [ 
-						"add theConstraint" 
-						existingClass _rwInstVar: instVarString constrainTo: theConstraint ]
-					ifFalse: [ 
-						theConstraint == nil
-							ifTrue: [ 
-								"remove the constraint" 
-								existingClass _rwInstVar: instVarString constrainTo: Object ]
-							ifFalse: [
-								"change the value of the constraint"
-                                existingClass _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
+	keys
+		do: [ :key | 
+			| existingConstraint theConstraint superConstraint instVarString |
+			existingConstraint := existingConstraintsMap at: key ifAbsent: [  ].
+			superConstraint := superConstraintsMap at: key ifAbsent: [  ].
+			theConstraint := theConstraintsMap at: key ifAbsent: [  ].
+			instVarString := key asString.
+			existingConstraint == theConstraint
+				ifTrue: [ 
+					(theConstraint isNil and: [ superConstraint notNil ])
+						ifTrue: [ 
+							"inherit constraint from superclass"
+							self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+				ifFalse: [ 
+					existingConstraint == nil
+						ifTrue: [ 
+							"add theConstraint"
+							existingClass _rwInstVar: instVarString constrainTo: theConstraint ]
+						ifFalse: [ 
+							theConstraint == nil
+								ifTrue: [ 
+									superConstraint notNil
+										ifTrue: [ 
+											existingConstraint ~= superConstraint
+												ifTrue: [ 
+													"inherit constraint from superclass"
+													self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+										ifFalse: [ 
+											"remove the constraint"
+											existingClass _rwInstVar: instVarString constrainTo: Object ] ]
+								ifFalse: [ 
+									"change the value of the constraint"
+									existingClass _rwInstVar: instVarString constrainTo: theConstraint ] ] ] ].
 	existingVaryingConstraint == theVaryingConstraint
-		ifFalse: [
+		ifFalse: [ 
 			"change the varying constraint"
-			[ existingClass _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
-	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+			[ existingClass _setVaryingConstraint: theVaryingConstraint ]
+				on: Deprecated
+				do: [ :ex | ex resume ] ].
+	aSymbolDictionaryRegistry
+		updateClassProperties: existingClass
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]

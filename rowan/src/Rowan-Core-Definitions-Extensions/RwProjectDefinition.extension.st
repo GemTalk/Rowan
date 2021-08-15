@@ -12,6 +12,23 @@ RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
+RwProjectDefinition >> compareAgainstBase_forUpgrade: aDefinition [
+
+	| modification packagesModification |
+	modification := RwProjectModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	packagesModification := RwPackagesModification new.
+	self
+		compareDictionary: packages
+		againstBaseDictionary_forUpgrade: aDefinition packages
+		into: packagesModification
+		elementClass: RwPackageDefinition.
+	modification packagesModification: packagesModification.
+	^ modification
+]
+
+{ #category : '*rowan-core-definitions-extensions' }
 RwProjectDefinition >> compareAgainstBase: aDefinition [
 
 	| modification packagesModification |

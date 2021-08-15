@@ -1,0 +1,21 @@
+#
+#	This script reads the Rowan v1.2 project source from disk (for 3.6.1) and then writes
+#		out a Rowan.gs file that can be used to bootstrap Rowan v1.2 into a 3.6.1 extent
+#
+#	see https://github.com/GemTalk/Rowan/issues/723
+#
+logout
+login
+display classoops
+
+run
+| loadSpec projectDef loadSpecs |
+loadSpec := RwLoadSpecificationV2 fromFile: '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git/Rowan/rowanV3/specs/Rowan.ston'.
+loadSpec 
+	projectsHome: '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git';
+	yourself.
+loadSpecs := loadSpec produce.
+loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('tests') ].
+loadSpecs read
+%
+

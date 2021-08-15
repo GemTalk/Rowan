@@ -1,0 +1,15 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'tests/Core',
+	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [
+		'tests/gemstone/Core'
+	],
+	#packageNames : [
+		'Rowan-Tests',
+		'Rowan-Services-Tests',
+		'AST-Tests-Core',
+		'AST-Kernel-Tests-Core'
+ ],
+	#comment : ''
+}

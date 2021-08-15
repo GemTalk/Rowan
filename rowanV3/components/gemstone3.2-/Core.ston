@@ -1,0 +1,22 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'gemstone3.2-/Core',
+	#condition : [
+		'gs3.[2-]'
+	],
+	#packageNames : [
+		'GemStone-Interactions-Core',
+		'GemStone-Interactions-Kernel',
+		'Rowan-Url-3215'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Url-3215' : { 'symbolDictName' : 'Globals' }
+				}
+			}
+		}
+	},
+	#comment : 'Core gs3.[2-] packages '
+}

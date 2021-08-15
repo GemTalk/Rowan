@@ -1,0 +1,22 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'deprecated/Core',
+	#condition : 'deprecated',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Deprecated',
+		'Rowan-Tools-Deprecated',
+		'Rowan-Definitions-Deprecated'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' }
+				}
+			}
+		}
+	},
+	#comment : ''
+}

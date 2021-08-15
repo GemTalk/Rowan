@@ -1,0 +1,18 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'tests/gemstone/Core',
+	#condition : [
+		'gemstone'
+	],
+	#componentNames : [ ],
+	#packageNames : [
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+				}
+			}
+		}
+	},
+	#comment : 'Core gemstone packages '
+}

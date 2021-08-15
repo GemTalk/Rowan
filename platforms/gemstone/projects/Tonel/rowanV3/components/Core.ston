@@ -1,0 +1,15 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'tests/Core'
+	],
+	#packageNames : [
+		'CypressTonel-Core',
+		'Tonel-Core',
+		'Tonel-GemStoneCommon-Core',
+		'Tonel-GemStone-Kernel'
+ ],
+	#comment : 'top-level component for reading STON project.'
+}

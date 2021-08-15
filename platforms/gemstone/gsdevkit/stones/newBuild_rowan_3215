@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+. defStone.env
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+	iferr 1 stk
+	iferr 2 stack
+	iferr 3 exit 1
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
+
+	exit
+EOF
+

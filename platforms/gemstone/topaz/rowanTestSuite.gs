@@ -1,5 +1,14 @@
 run
-	| deprecationAction suite strm res projectNames warnings resultsDict resultCases |
+	| deprecationAction suite strm res projectNames warnings resultsDict resultCases includeDeprecatedPackages |
+
+	includeDeprecatedPackages := (System stoneVersionReport at: 'gsVersion') = '3.2.15' 
+		ifTrue: [
+			"3.2.15 needs deprecated packages loaded to function"
+			true ]
+		ifFalse: [
+			"3.6.1 needs deprecated packages loaded to function ... for now"
+			true ].
+
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
 	[
@@ -12,9 +21,14 @@ run
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
 		projectNames do: [:projectName |
 			"make sure test group is loaded ... include deprecated packages for now"
-			[ Rowan projectTools load
+			[ 
+			| groupNames |
+			groupNames := includeDeprecatedPackages
+				ifTrue: [ #('tests' 'deprecated' 'jadeServer') ]
+				ifFalse: [ #('tests' 'jadeServer') ].
+			Rowan projectTools load
 				loadProjectNamed: projectName
-				withGroupNames: #('tests' 'deprecated' 'jadeServer') ]
+				withGroupNames: groupNames ]
 					on: CompileWarning do: [:ex |
 						warnings add: ex asString printString.
 						ex resume ] ].
@@ -34,7 +48,16 @@ run
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
-		res := suite run.
+		false
+			ifTrue: [
+				res := TestResult new.
+				suite tests do: [:each | 
+					((each class name asString = 'RwRowanProjectIssuesTest')
+						and: [	#(testIssue72_addMethod testIssue72_removeMethod testIssue72_updateMethod) includes: each selector])
+							ifTrue: [ each debug ]
+							ifFalse: [ each run: res ] ]
+				]
+			ifFalse: [ res := suite run ].
 
 		resultsDict := Dictionary new.
 		resultCases := {}.

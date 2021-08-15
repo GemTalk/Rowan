@@ -611,9 +611,9 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
-      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
-      'Rowan-Services-Core' 'Rowan-Url-Extensions'
+    value: #('GemStone-Interactions-Core' 
+      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-GemStone-Core-32-5' 'Rowan-Cypress-Core' 
+      'Rowan-Core-Definitions-Extensions' 'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
 %
@@ -647,7 +647,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader'
+    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader-32-5'
 	).		"GemStone Rowan loader classes"
 %
   commit
@@ -663,9 +663,9 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'Globals'
-    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Kernel-Extensions' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
-      'Rowan-GemStone-3215' 'AST-Kernel-Core'
+      'Rowan-GemStone-3215' 'AST-Kernel-Core' 'Rowan-Url-3215'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit
@@ -684,9 +684,9 @@ currentOrNil
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"

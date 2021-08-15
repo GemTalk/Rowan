@@ -160,6 +160,12 @@ RwProjectTool class >> unregister [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> upgrade [
+
+	^RwPrjUpgradeTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new

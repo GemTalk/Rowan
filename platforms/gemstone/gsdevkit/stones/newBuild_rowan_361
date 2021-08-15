@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+. defStone.env
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/bootstrapRowan.gs $GEMSTONE_NAME -lq

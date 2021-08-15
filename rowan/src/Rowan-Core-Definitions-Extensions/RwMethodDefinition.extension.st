@@ -1,6 +1,25 @@
 Extension { #name : 'RwMethodDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
+RwMethodDefinition >> compareAgainstBase_forUpgrade: aDefinition [ 
+	"unconditionally create a method source modification.. so that all methods get recompiled, whether they have changed or not"
+
+	| modification sourceModification before after |
+	modification := RwMethodModification before: aDefinition after: self.
+	sourceModification := RwSourceModification new.
+	before := aDefinition source.
+	after := self source.
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
+						key: 'source'
+						oldValue: before
+						newValue: after).
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: sourceModification.
+	^modification
+]
+
+{ #category : '*rowan-core-definitions-extensions' }
 RwMethodDefinition >> compareAgainstBase: aDefinition [ 
 
 	| modification |
@@ -23,6 +42,25 @@ RwMethodDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification:
 				(self compareSourceAgainstBaseForNewClassVersion: aDefinition).
+	^ modification
+]
+
+{ #category : '*rowan-core-definitions-extensions' }
+RwMethodDefinition >> compareExtensionMethodsAgainstBase_forUpgrade: aDefinition [
+	"unconditionally create a method source modification.. so that all methods get recompiled, whether they have changed or not"
+
+	| modification sourceModification before after |
+	modification := RwExtensionMethodModification before: aDefinition after: self.
+	sourceModification := RwSourceModification new.
+	before := aDefinition source.
+	after := self source.
+	sourceModification addElementModification: (RwPropertyModificationForUpgrade
+						key: 'source'
+						oldValue: before
+						newValue: after).
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: sourceModification.
 	^ modification
 ]
 

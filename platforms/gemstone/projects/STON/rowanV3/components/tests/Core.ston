@@ -1,0 +1,11 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'tests/Core',
+	#condition : 'tests',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'STON-Tests',
+		'STON-GemStone-Tests'
+ ],
+	#comment : 'STON test packages'
+}

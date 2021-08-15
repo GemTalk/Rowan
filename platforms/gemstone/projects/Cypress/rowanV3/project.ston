@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project',
+	#projectSpecPath : 'rowanV3',
+	#componentsPath : 'rowanV3/components',
+	#packagesPath : 'src',
+	#projectsPath : 'rowanV3/projects',
+	#specsPath : 'rowanV3/specs',
+	#packageFormat : 'tonel',
+	#comment : 'Cypress project specification'
+}

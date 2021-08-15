@@ -1,0 +1,23 @@
+ RwLoadSpecificationV2 {
+	#specName : 'Cypress',
+	#projectName : 'Cypress',
+	#projectAlias : 'Rowan',
+	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
+	#relativeRepositoryRoot : 'platforms/gemstone/projects/Cypress',
+	#revision : 'issue_723',
+	#projectSpecFile : 'rowanV3/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#groupNames : [ ],
+	#customConditionalAttributes : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'v3.0 Load spec for reading Rowan v1.2.10 (Cypress)'
+}
