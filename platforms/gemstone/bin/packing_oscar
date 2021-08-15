@@ -55,7 +55,7 @@ rowan_tag="$2"
 jadeite_tag="$3"
 rowanDeploymentBranch="masterV1.2"
 
-if [ "DEBUG"x != "x" ] ; then
+if [ "DEBUG" = "production" ] ; then
 	### just for debugging
 	echo "!!!JUST FOR DEBUGGING"
 	echo "okay?"
