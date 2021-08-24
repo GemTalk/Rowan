@@ -8134,7 +8134,7 @@ RwTestProjectLibraryGenerator >> genSpec_0071: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGenerator >> genSpec_0072: commitMessage [
-	"Start with spec_0053; change the project spec so that none of the directories are using the default path"
+	"Start with spec_0075; change the project spec so that none of the directories are using the default path"
 
 	"https://github.com/GemTalk/Rowan/issues/724"
 
@@ -8144,7 +8144,7 @@ RwTestProjectLibraryGenerator >> genSpec_0072: commitMessage [
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title embeddedProjectDefinition requiredProjectName relativeRepositoryRoot |
 	postfix := '0072'.
 	specName := 'spec_' , postfix.
-	derivedFrom := 'spec_0053'.
+	derivedFrom := 'spec_0075'.
 	title := 'Start with spec_0053; change the project spec so that none of the directories are using the default path'.
 
 	indexCard := (self
