@@ -5901,8 +5901,6 @@ RwRowanSample9Test >> testSpec_0025 [
 
 	"https://github.com/dalehenrich/Rowan/issues/571"
 
-	"https://github.com/dalehenrich/Rowan/issues/714"
-
 	| loadSpec projectName resolvedProject loadedProjects projectNames |
 	loadSpec := self _loadSpecNamed: 'spec_0025'.
 
@@ -5923,16 +5921,7 @@ RwRowanSample9Test >> testSpec_0025 [
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-	loadedProjects do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
-		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
+		expectedProjectNames: projectNames
 ]
 
 { #category : 'tests' }
@@ -8511,6 +8500,46 @@ RwRowanSample9Test >> testSpec_0072 [
 		expectedProjectNames: projectNames.
 	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
 	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0073 [
+	"spec_0073 should load cleanly"
+
+	"https://github.com/dalehenrich/Rowan/issues/571"
+
+	"https://github.com/dalehenrich/Rowan/issues/714"
+
+	| loadSpec projectName resolvedProject loadedProjects projectNames |
+	loadSpec := self _loadSpecNamed: 'spec_0073'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject loadProjectSet.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	loadedProjects do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
+		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
 ]
 
 { #category : 'tests' }
