@@ -180,8 +180,12 @@ RwResolvedProjectV2 >> _requiredProjectNamesForLoadedProject: visitedSet [
 			(visitedSet includes: requireProjectName)
 				ifFalse: [ 
 					visitedSet add: requireProjectName.
-					(Rowan projectNamed: requireProjectName)
-						_requiredProjectNamesForLoadedProject: visitedSet ] ].
+					Rowan
+						projectNamed: requireProjectName
+						ifPresent: [ :project | project _requiredProjectNamesForLoadedProject: visitedSet ]
+						ifAbsent: [ 
+							"project is likely not visible to this user, so we'll remove it from the visited set"
+							visitedSet remove: requireProjectName ] ] ].
 	^ visitedSet
 ]
 
