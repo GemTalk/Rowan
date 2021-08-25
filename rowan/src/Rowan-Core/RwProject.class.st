@@ -49,6 +49,11 @@ RwProject >> _projectRepository [
 ]
 
 { #category : 'private' }
+RwProject >> _requiredProjectNamesForLoadedProject: visitedSet [
+	^ self _concreteProject _requiredProjectNamesForLoadedProject: visitedSet
+]
+
+{ #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification

@@ -173,6 +173,18 @@ RwResolvedProjectV2 >> _requiredProjectNames: customConditionalAttributes platfo
 	^ requiredProjectNames
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> _requiredProjectNamesForLoadedProject: visitedSet [
+	(self requiredProjectNames: self customConditionalAttributes)
+		do: [ :requireProjectName | 
+			(visitedSet includes: requireProjectName)
+				ifFalse: [ 
+					visitedSet add: requireProjectName.
+					(Rowan projectNamed: requireProjectName)
+						_requiredProjectNamesForLoadedProject: visitedSet ] ].
+	^ visitedSet
+]
+
 { #category : 'visiting' }
 RwResolvedProjectV2 >> acceptVisitor: aVisitor [
 	^ aVisitor visitResolvedProjectV2: self
@@ -1471,6 +1483,11 @@ RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes [
 	^ self
 		_requiredProjectNames: customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> requiredProjectNamesForLoadedProject [
+	^ self _requiredProjectNamesForLoadedProject: Set new
 ]
 
 { #category : 'to be removed' }
