@@ -1,6 +1,7 @@
 #!/usr/bin/env superdoit_stone
 options
 {
+  SuperDoitOptionalOptionWithRequiredArg long: 'debugSelector'.
   SuperDoitOptionalOptionWithNoArg long: 'legacyUnicode'.
 }
 %
@@ -23,9 +24,16 @@ OPTIONS
   -D, --debug                bring up topaz debugger in the event of a script error
 
   --legacyUnicode            Install legacy implementation and unicode mode
+  --debugSelector=<test-selector>
+                             The test that matches the <test-selector> will be
+                             executed using #debug: so the debugger will come
+                             up during the test run, if the test fails or
+                             errors
 
 EXAMPLES
   $basename -- test_rowan_dev_l
+  $basename --legacyUnicode -- test_rowan_dev_l
+  $basename --debugSelector=testIssue295_rename_package_move_newClassVersion_newProject_3 -- test_rowan_dev_l
   $basename --legacyUnicode -- test_rowan_dev_l
 -----
 %
@@ -55,8 +63,124 @@ installPortableString
 		ifTrue: [ self error: 'Expected to be using Portable streams' ].
 %
 method
-inputRowanTestSuiteV2
-	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.gs'
+projectNames
+	^  #( 'Rowan' 'STON' 'Cypress' 'FileSystemGs' 'RowanClientServices' )
+%
+method
+loadTests
+		| requiredLoadSpecs warnings |
+		warnings := {}.
+		self projectNames do: [:projectName |
+			| audit |
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
+
+		requiredLoadSpecs := (Rowan projectNamed: 'Rowan') loadedLoadSpecifications.
+		requiredLoadSpecs 
+			do: [:loadSpec |
+				"ensure that tests are loaded for all projects"
+				| attributes | 
+				attributes := #('tests' 'testsV2').
+				loadSpec addCustomConditionalAttributes: attributes ].
+		[ requiredLoadSpecs load ]
+			on: CompileWarning do: [:ex |
+				(ex description includesString: 'not optimized')
+						ifFalse: [ warnings add: ex asString printString ].
+				ex resume ].
+
+ 		warnings isEmpty ifFalse: [
+			self stdout nextPutAll: 'COMPILE WARNINGS:'; lf.
+			warnings do: [:warning |self stdout nextPutAll: '	', warning ]. 
+			self error: 'Warnings during project load' ]. 
+
+		System commit. "do a commit immediately after test code is loaded, to avoid losing test classes if a test does an abort"
+
+		"audit after load"
+		self projectNames do: [:projectName |
+			| audit |
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
+%
+method
+_processTestResults: res suite: suite deprecationErrors: deprecationErrors
+		| strm resultsDict resultCases |
+		resultsDict := Dictionary new.
+		resultCases := {}.
+		resultsDict 
+			at: #suiteName put: suite name;
+			at: #timeStamp put: DateAndTime now printString;
+			at: #properties put: (Dictionary new);
+			at: #notes put: '';
+			at: #gsVersion put: (System gemVersionAt: #gsVersion);
+			at: #testCases put: resultCases;
+			at: #resultsSummary put: (Dictionary new
+				at: #summary put: res printString;
+				at: #failures put: res failureCount;
+				at: #errors put: res errorCount;
+				at: #passed put: res passedCount;
+				yourself)
+			yourself.
+
+		strm := self stdout.
+ 		strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+		res passed do: [:each |
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'passed';
+					yourself) ].
+
+		strm nextPutAll: res printString; nextPutAll: ', ', deprecationErrors printString, ' deprecationErrors'; lf.
+		strm nextPutAll: '  errors'; lf.
+		(res errors collect: [:each |  
+			resultCases add: (Dictionary new
+					at: #className put: each class asString;
+					at: #selector put: each selector asString;
+					at: #status put: 'errors';
+					yourself). 
+			each printString ]) asArray sort do: [:each |
+			strm tab; nextPutAll: each; lf].
+		res failures size > 0
+			ifTrue: [
+				strm nextPutAll: '  failures'; lf.
+				(res failures collect: [:each | 
+					resultCases add: (Dictionary new
+							at: #className put: each class asString;
+							at: #selector put: each selector asString;
+							at: #status put: 'failures';
+							yourself). 
+					each printString]) asArray sort do: [:each |
+					strm tab; nextPutAll: each; lf ] ].
+
+		(FileSystem workingDirectory / 'testResults', 'json')
+			writeStreamDo: [:fileStream | STON put: resultsDict asJsonOnStreamPretty: fileStream ].
+%
+method
+runTests
+		| suite res deprecationErrors |
+		suite := Rowan projectTools test testSuiteForProjectsNamed: self projectNames.
+		self debugSelector
+			ifNotNil: [:sel |
+				| debugSelector |
+				debugSelector := sel asSymbol.
+				"debug selectors that only fail during full test run"
+				res := TestResult new.
+				suite tests do: [:each | 
+					each selector == debugSelector
+							ifTrue: [ each debug ]
+							ifFalse: [ 
+								[ each run: res ] 
+									on: Deprecated do: [:ex |
+										ex resignalAs: (Error new messageText: ex description; yourself) ] ] ] ]
+			ifNil: [
+				deprecationErrors := 0.
+				[ 
+					res := suite run.
+				] on: Deprecated do: [:ex |
+					deprecationErrors := deprecationErrors + 1.
+					ex resignalAs: (Error new messageText: ex description; yourself)
+					] ].
+		self _processTestResults: res suite: suite deprecationErrors: deprecationErrors.
 %
 method
 rowanTestSuite
@@ -64,7 +188,8 @@ rowanTestSuite
 	self legacyUnicode
 		ifTrue: [ self installLegacyUnicode ]
 		ifFalse: [ self installPortableString ].
-	self inputRowanTestSuiteV2
+	self loadTests.
+	self runTests.
 %
 doit
 	self stdout 

@@ -1,4 +1,4 @@
-# set -e # don't exit on error ... I want the record script to run at the end ....
+set -e
 
 . defStone.env
 
@@ -17,13 +17,19 @@ newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --gemstoneBaseImage --tests -- $GEMSTONE_NAME
 
+#
+# Debug test that only fails during batch run
+#
+# $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/runRowanTestSuiteV2.stone -D --debugSelector=testUnmanagedSpec_0057_02 -- $GEMSTONE_NAME
 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/runRowanTestSuiteV2.stone -D -- $GEMSTONE_NAME
 
 #	./rowanTestStats.stone -h -- rowan_test_stats_361
 #
 branch=`git --git-dir=$ROWAN_PROJECTS_HOME/Rowan/.git rev-parse --abbrev-ref HEAD`
 
-branchQuery=`./rowanTestStats.stone lookup --branch=$branch --gsVer=$vers -- rowan_test_stats_361 2>&1`
+set +e # okay for the lookup to fail - the error message is meaningful
+branchQuery=`./rowanTestStats.stone lookup --jsonFile=ignoreMe.json --branch=$branch --gsVer=$vers -- rowan_test_stats_361 2>&1`
+set -e
 if [[ "$branchQuery" == "No sample found matching gsVer"* ]] ; then
 	# this is a branch for which we have no samples with which to compare
 	originalBranch=$branch

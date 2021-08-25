@@ -5023,7 +5023,7 @@ RwRowanSample9Test >> testLoadSpec_read_01 [
 	"https://github.com/GemTalk/Rowan/issues/707"
 
 	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |
-	loadSpec := self _loadSpecNamed: 'spec_0056'.
+	loadSpec := self _loadSpecNamed: 'spec_0078'.
 	projectName := loadSpec projectName.
 	embeddedProjectName := projectName, '_embedded_1'.
 
@@ -8605,7 +8605,7 @@ RwRowanSample9Test >> testSwitchRepository [
 RwRowanSample9Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 
-	"spec_0052 and spec_0053 have embedded projects"
+	"spec_0074 and spec_0075 have embedded projects"
 
 	| projectName  loadSpec1 loadSpec2 projectNames resolvedProjectSet1 
 		resolvedProjectSet2 project1 loadedProjects resolvedProject1 resolvedProject2 
@@ -8618,11 +8618,11 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		do: [:repoName | 
 			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
-	loadSpec1 := (self _loadSpecNamed: 'spec_0052')
-		projectAlias: 'RowanSample9_0052';
+	loadSpec1 := (self _loadSpecNamed: 'spec_0074')
+		projectAlias: 'RowanSample9_0074';
 		yourself.
-	loadSpec2 := (self _loadSpecNamed: 'spec_0053')
-		projectAlias: 'RowanSample9_0053';
+	loadSpec2 := (self _loadSpecNamed: 'spec_0075')
+		projectAlias: 'RowanSample9_0075';
 		yourself.
 
 	projectNames := {projectName . requiredProjectName }.
@@ -8635,13 +8635,13 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 	resolvedProjectSet1 := loadSpec1 readProjectSet.
 	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName.
 
-	resolvedProjectSet2 := loadSpec2 readProjectSet.	"only used to extract target repositoryRoot ... load of spec_0053 will happen via using spec_0053 repositoryRoot"
+	resolvedProjectSet2 := loadSpec2 readProjectSet.	"only used to extract target repositoryRoot ... load of spec_0075 will happen via using spec_0075 repositoryRoot"
 	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName.
 
 "validate"
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 
-"load project1 from spec_0052"
+"load project1 from spec_0074"
 	loadedProjects := resolvedProjectSet1 load.
 	project1 := Rowan projectNamed: projectName.
 	requiredProject1 := Rowan projectNamed: requiredProjectName.
@@ -8652,7 +8652,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		loadedProjects: loadedProjects 
 		expectedProjectNames: projectNames.
 
-"load project1 from spec_0053 checkout: changing repository root of loaded project"
+"load project1 from spec_0075 checkout: changing repository root of loaded project"
 	project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString.
 	loadedProjects := project1 reload.
 
@@ -8661,8 +8661,8 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		_standard_validate: resolvedProject1 
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0052"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0052"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
 	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
@@ -8727,7 +8727,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	"based on spec_0057 after loading, do a filein (withOUT removeAllMethods) and run unmanaged report and an audit"
 
-	| loadedProjects project audit packageName1 packageName2 className1 className2 reports |
+	| loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
 	packageName1 := 'RowanSample9-Tests'.
 	packageName2 := 'RowanSample9-Core'.
 	className1 := 'RowanSample9TestCase'.
@@ -8739,31 +8739,45 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 		packageName2: packageName2
 		className1: className1
 		className2: className2.
-
 "validate"
 	project := loadedProjects projectNamed: 'RowanSample9'.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
-
 "run reports"
 	reports := {(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
-				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))).
+				symbolDictNamed:
+					(project gemstoneSymbolDictNameForPackageNamed: packageName1))).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}.
+	symbolList := GsSession currentSession symbolList.
 	reports
 		do: [ :details | 
 			details
 				unmanagedMethodsDo: [ :methodDetails :classDetails | 
 					(#(#'GciErrSType' #'GciLibrary') includes: (classDetails at: 'class') name)
 						ifFalse: [ 
-							self
-								assert: false
-								description:
-									'The class ' , (classDetails at: 'class') name asString
-										, ' is unexpetedly unpackaged' ] ] ].
-	self assert: audit isEmpty description: 'Unexpected audit failure ... need category: intercept'
+							| unexpected ar |
+							ar := symbolList dictionariesAndSymbolsOf: (classDetails at: 'class').
+							ar isEmpty
+								ifTrue: [ unexpected := true ]
+								ifFalse: [ 
+									ar
+										do: [ :infoAr | 
+											"ignore superDoit classes"
+											unexpected := (infoAr at: 1) name
+												~= #'SuperDoit_trasientSymbolDictionary' ] ].
+							unexpected
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The class ' , (classDetails at: 'class') name asString
+												, ' is unexpectedly unpackaged' ] ] ] ].
+	self
+		assert: audit isEmpty
+		description: 'Unexpected audit failure ... need category: intercept'
 ]
