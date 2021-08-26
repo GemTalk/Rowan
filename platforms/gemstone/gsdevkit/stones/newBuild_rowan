@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 set -e
 . defStone.env
@@ -6,13 +6,12 @@ set -e
 vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 if [ "$vers" = "3.6.1" ] || [ "$vers" = "3.6.2" ] ; then
-	# 3.6.0, 3.6.1, and 3.6.2 share same scripts
-	vers=3.6.0
+       # 3.6.0, 3.6.1, and 3.6.2 share same scripts
+       vers=3.6.0
 fi
 
 rm -rf *.log *.out
 
 newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$vers/newRowanRepositoryTestsRootV2.tpz $GEMSTONE_NAME -lq
-
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --tests --gemstoneBaseImage -- $GEMSTONE_NAME
