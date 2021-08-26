@@ -41,6 +41,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _readOnlyRepositoryRoot: repositoryRoot
 	self resolvedProject _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 ]
 
+{ #category : 'private' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _requiredProjectNamesForLoadedProject: visitedSet [
+	^ self handle _requiredProjectNamesForLoadedProject: visitedSet
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
@@ -457,7 +462,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> repositoryRootPath [
 { #category : 'queries' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> requiredProjectNames [
 
-	^ self resolvedProject requiredProjectNames
+	^ self resolvedProject requiredProjectNamesForLoadedProject
 ]
 
 { #category : 'accessing' }

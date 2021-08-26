@@ -1,4 +1,4 @@
-# set -e # don't exit on error ... I want the record script to run at the end ....
+set -e
 
 . defStone.env
 
@@ -15,32 +15,28 @@ rm -rf *.log *.out
 
 newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/installPortableString.tpz $GEMSTONE_NAME -lq
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanRepositoryTestsRootV2.tpz $GEMSTONE_NAME -lq
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --gemstoneBaseImage --tests -- $GEMSTONE_NAME
 
-# $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowanPortableStringRowanV2.tpz $GEMSTONE_NAME -lq
+#
+# Debug test that only fails during batch run
+#
+# $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/runRowanTestSuiteV2.stone -D --debugSelector=testUnmanagedSpec_0057_02 -- $GEMSTONE_NAME
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/runRowanTestSuiteV2.stone -D -- $GEMSTONE_NAME
 
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowanV2.tpz  $GEMSTONE_NAME -T100000 -lq
-
-#	Report
-# ./record.gs.st rowan_test_stats_350 -- --query=summary
-#	Save the testResults.json in the db
-# ./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=issue_308
-# ./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=issue_308
-#	Update the record with the SHA of the commit
-# ./record.gs.st rowan_test_stats_350 -- --updateSHA=92de7b5  --branch=issue_308 --gsVersion=3.2.15
-# ./record.gs.st rowan_test_stats_350 -- --updateSHA=92de7b5  --branch=issue_308 --gsVersion=3.5.0
-
+#	./rowanTestStats.stone -h -- rowan_test_stats_361
+#
 branch=`git --git-dir=$ROWAN_PROJECTS_HOME/Rowan/.git rev-parse --abbrev-ref HEAD`
-# branch=masterV2.1
 
-branchQuery=`./record.gs.st rowan_test_stats_350 -- --query --branch=$branch --gsVersion=$theVers`
-
-if [ "$branchQuery" = "[ ]" ] ; then
-	# this is a branch for which we have no samples with which to compare, so use issue_308 
-  branch=masterV2.1
+set +e # okay for the lookup to fail - the error message is meaningful
+branchQuery=`./rowanTestStats.stone lookup --jsonFile=ignoreMe.json --branch=$branch --gsVer=$vers -- rowan_test_stats_361 2>&1`
+set -e
+if [[ "$branchQuery" == "No sample found matching gsVer"* ]] ; then
+	# this is a branch for which we have no samples with which to compare
+	originalBranch=$branch
+  branch=masterV3.0
 	echo
-	echo "USING DEFAULT BRANCH -- $branch"
+	echo "USING DEFAULT BRANCH -- $branch -- instead of $originalBranch"
 	echo
 fi
-./record.gs.st rowan_test_stats_350 -- --load=testResults.json --branch=$branch --compare=$theVers
+./rowanTestStats.stone compare --jsonFile=testResults.json --gsVer=$vers --branch=$branch -- rowan_test_stats_361
+
