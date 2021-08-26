@@ -6333,7 +6333,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	"based on spec_0057 after loading, do a filein (withOUT removeAllMethods) and run unmanaged report and an audit"
 
-	| loadedProjects project audit packageName1 packageName2 className1 className2 reports |
+	| loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
 	packageName1 := 'RowanSample9-Tests'.
 	packageName2 := 'RowanSample9-Core'.
 	className1 := 'RowanSample9TestCase'.
@@ -6360,16 +6360,29 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}.
+	symbolList := GsSession currentSession symbolList.
 	reports
 		do: [ :details | 
 			details
 				unmanagedMethodsDo: [ :methodDetails :classDetails | 
 					(#(#'GciErrSType' #'GciLibrary') includes: (classDetails at: 'class') name)
 						ifFalse: [ 
-							self
-								assert: false
-								description:
-									'The class ' , (classDetails at: 'class') name asString
-										, ' is unexpetedly unpackaged' ] ] ].
+							| unexpected ar |
+							ar := symbolList dictionariesAndSymbolsOf: (classDetails at: 'class').
+							ar isEmpty
+								ifTrue: [ unexpected := true ]
+								ifFalse: [ 
+									ar
+										do: [ :infoAr | 
+											"ignore superDoit classes"
+											unexpected := (infoAr at: 1) name
+												~= #'SuperDoit_trasientSymbolDictionary' ] ].
+							unexpected
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The class ' , (classDetails at: 'class') name asString
+												, ' is unexpectedly unpackaged' ] ] ] ].
 	self assert: audit isEmpty description: 'Unexpected audit failure ... need category: intercept'
 ]
