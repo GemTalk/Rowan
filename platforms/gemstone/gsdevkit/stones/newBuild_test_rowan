@@ -2,14 +2,7 @@ set -e
 
 . defStone.env
 
-theVers=`awk 'NR==2{print $1; exit}' product/version.txt`
-
-if [ "$theVers" = "3.6.1" ] || [ "$theVers" = "3.6.2" ] ; then
-	# 3.6.0, 3.6.1, and 3.6.2 share same scripts
-	vers=3.6.0
-else
-	vers=$theVers
-fi
+vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
