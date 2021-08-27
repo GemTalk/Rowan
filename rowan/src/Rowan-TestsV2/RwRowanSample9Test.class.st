@@ -3459,6 +3459,71 @@ RwRowanSample9Test >> testIssue571 [
 		present: true) copy.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue743_0 [
+	"implement rwCategory and rwCategory:"
+
+	"https://github.com/GemTalk/Rowan/issues/743"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class category definedProject projectModification packagesModification elementsModified packageModification classesModification classModification propertiesModification propertyModification oldCategory |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+	self assert: class category equals: class rwCategory.
+	oldCategory := class category.
+
+"change class category"
+	definedProject := project defined.
+	category := 'aaa'.
+	class rwCategory: category.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: class category equals: category.
+
+"confirm that the class category change shows up as a modification"
+	projectModification := project asDefinition compareAgainstBase: definedProject _resolvedProject.
+	self deny: projectModification isEmpty.
+	self assert: projectModification propertiesModification isEmpty.
+	packagesModification := projectModification packagesModification.
+	self deny: packagesModification isEmpty.
+	elementsModified := packagesModification elementsModified.
+	self assert: elementsModified size = 1.
+	packageModification := elementsModified at: 'RowanSample9-Core'.
+	self assert: packageModification propertiesModification isEmpty.
+	self assert: packageModification classExtensionsModification isEmpty.
+	classesModification := packageModification classesModification.
+	self deny: classesModification isEmpty.
+	elementsModified := classesModification elementsModified.
+	self assert: elementsModified size = 1.
+	classModification := elementsModified at: 'RowanSample9Class1'.
+	self assert: classModification instanceMethodsModification isEmpty.
+	self assert: classModification classMethodsModification isEmpty.
+	propertiesModification := classModification propertiesModification.
+	self deny: propertiesModification isEmpty.
+	elementsModified := propertiesModification elementsModified.
+	self assert: elementsModified size = 1.
+	propertyModification := elementsModified at: 'category'.
+	self assert: propertyModification oldValue = oldCategory.
+	self assert: propertyModification newValue = category.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
