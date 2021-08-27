@@ -67176,6 +67176,28 @@ unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
 
 category: 'class browsing'
 method: RwPrjBrowserToolV2
+updateClassCategory: aString forClassNamed: className 
+
+	"update the category of the named class"
+
+	| loadedClass projectDefinition packageDefinition classDefinition |
+	loadedClass := Rowan image 
+		loadedClassNamed: className 
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify a category for the class ', className printString, '. The modification will not be tracked by Rowan'.
+			"Notification resumed, so continue with add/modify"
+			^ (Rowan globalNamed: className) category: aString ].
+
+	projectDefinition := loadedClass loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	classDefinition category: aString.
+
+	self class load loadProjectDefinition: projectDefinition.
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
 updateClassComment: aString forClassNamed: className 
 
 	"update the comment of the named class"
@@ -92062,6 +92084,22 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+rwCategory
+	"Provide direct access to category of class."
+
+	^ self category
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+rwCategory: aString
+	^ Rowan projectTools browser
+		updateClassCategory: aString
+		forClassNamed: self thisClass name asString
 %
 
 category: '*rowan-gemstone-kernel-32x'
