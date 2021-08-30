@@ -65,7 +65,7 @@ Behavior >> _rwMoveMethod: aSelector toCategory: categoryName [
 		ifTrue: [
 			"receiver not packaged, set category in class" 
 			^ self _moveMethod: aSelector toCategory: categoryName ].
-	^ self rwMoveMethod: methodSelector toCategory: categoryName
+	^ self rwMoveMethod: aSelector toCategory: categoryName
 
 ]
 
