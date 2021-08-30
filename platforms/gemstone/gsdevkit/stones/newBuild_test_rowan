@@ -1,4 +1,4 @@
-set -xe
+set -e
 
 . defStone.env
 

@@ -75600,7 +75600,7 @@ privateCreateClassWithSuperclass: superclass
 	category := infoSource == #'Category'
 		ifTrue: [ self packageName ]
 		ifFalse: [ classProperties at: 'category' ifAbsent: [  ] ].
-	createdClass category: category.
+	createdClass _category: category.
 	^ createdClass
 %
 
