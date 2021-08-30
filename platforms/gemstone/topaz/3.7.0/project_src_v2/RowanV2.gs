@@ -89405,6 +89405,23 @@ _installOldConstraints: theConstraints
 	constraints := theConstraints copy
 %
 
+category: '*rowan-gemstone-kernel-36x'
+method: Class
+_rwCategory: newCategory
+"Sets the classCategory variable of the receiver.
+ The argument should be a kind of CharacterCollection or nil.
+
+ Preserve the Rowan packaging of the class if the class is already packaged."
+
+	| packageName |
+	packageName := self rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [
+			"receiver not packaged, set category in class" 
+			^ self _category: newCategory ].
+	^ self rwCategory: newCategory
+%
+
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwDefinitionOfConstraints
