@@ -14,23 +14,6 @@ Class >> _rwReservedOop [
 ]
 
 { #category : '*rowan-gemstone-kernel-36x' }
-Class >> _rwCategory: newCategory [
-"Sets the classCategory variable of the receiver.
- The argument should be a kind of CharacterCollection or nil.
-
- Preserve the Rowan packaging of the class if the class is already packaged."
-
-	| packageName |
-	packageName := self rowanPackageName.
-	packageName = Rowan unpackagedName
-		ifTrue: [
-			"receiver not packaged, set category in class" 
-			^ self _category: newCategory ].
-	^ self rwCategory: newCategory
-
-]
-
-{ #category : '*rowan-gemstone-kernel-36x' }
 Class >> rwClassDefinitionInSymbolDictionaryNamed: symDictName [
 	"create an RwClassDefinition for the reciever suitable for recreating the class. Ignore methods"
 
