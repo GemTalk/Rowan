@@ -54,6 +54,22 @@ Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: sy
 ]
 
 { #category : '*rowan-gemstone-kernel-stubs-36x' }
+Behavior >> _rwMoveMethod: aSelector toCategory: categoryName [
+	"Move the method into <packageName>, whether or not it has been packaged.
+
+	Preserve the Rowan packaging of the class if the class is already packaged."
+
+	| packageName |
+	packageName := self rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifTrue: [
+			"receiver not packaged, set category in class" 
+			^ self _moveMethod: aSelector toCategory: categoryName ].
+	^ self rwMoveMethod: methodSelector toCategory: categoryName
+
+]
+
+{ #category : '*rowan-gemstone-kernel-stubs-36x' }
 Behavior >> _rwRemoveAllMethods: baseMeths enironmentId: envId [
 	| unpackagedName packagedSels |
 	envId == 0
