@@ -92382,7 +92382,7 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92441,7 +92441,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92545,7 +92545,7 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92735,7 +92735,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol.
+	behavior _moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := compiledMethod _rowanPackageInfo.
 	loadedMethod
