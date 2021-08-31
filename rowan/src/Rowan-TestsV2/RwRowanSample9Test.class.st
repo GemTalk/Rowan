@@ -3593,33 +3593,36 @@ RwRowanSample9Test >> testIssue743_1 [
 	project := loadedProjects at: 1.
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: 'RowanSample9Class1'.
-	Rowan gemstoneTools topaz currentTopazPackageName: class rowanPackageName.
 
-"add a method to class in protocol 'other'"
-	definedProject := project defined.
-	category := 'other'.
-	selector := #instanceFoo.
-	class
-		compileMethod: 'instanceFoo ^true'
-			dictionaries: System myUserProfile symbolList
-			category: category.
+	[	
+		Rowan gemstoneTools topaz currentTopazPackageName: class rowanPackageName.
 
-"validate"
-	self assert: (audit := project audit) isEmpty.
-	self assert: (class categoryOfSelector: selector) asString equals: category.
-	confirmationBlock value: oldCategory value: category.
+		"add a method to class in protocol 'other'"
+			definedProject := project defined.
+			category := 'other'.
+			selector := #instanceFoo.
+			class
+				compileMethod: 'instanceFoo ^true'
+					dictionaries: System myUserProfile symbolList
+					category: category.
 
-"add new category and move method to new category"
-	definedProject := project defined.
-	oldCategory := category.
-	category := 'bar'.
-	class addCategory: category.
-	class moveMethod: selector toCategory: category.
+		"validate"
+			self assert: (audit := project audit) isEmpty.
+			self assert: (class categoryOfSelector: selector) asString equals: category.
+			confirmationBlock value: oldCategory value: category.
 
-"validate"
-	self assert: (audit := project audit) isEmpty.
-	self assert: (class categoryOfSelector: selector) asString equals: category.
-	confirmationBlock value: oldCategory value: nil. "actual value compared in block"
+		"add new category and move method to new category"
+			definedProject := project defined.
+			oldCategory := category.
+			category := 'bar'.
+			class addCategory: category.
+			class moveMethod: selector toCategory: category.
+
+		"validate"
+			self assert: (audit := project audit) isEmpty.
+			self assert: (class categoryOfSelector: selector) asString equals: category.
+			confirmationBlock value: oldCategory value: category
+	] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ]
 ]
 
 { #category : 'issue 493' }
