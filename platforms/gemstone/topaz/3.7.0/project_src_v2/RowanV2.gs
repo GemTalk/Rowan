@@ -64097,6 +64097,14 @@ performOnServer: commandLine logging: logging
 
 category: 'private'
 method: RwGitTool
+_mktempCommand
+	^ (System gemVersionReport at: 'osName') = 'Darwin'
+		ifTrue: [ '/usr/bin/mktemp -t commitMessage' ]
+		ifFalse: [ '/bin/mktemp --tmpdir commitMessage.XXXX' ]
+%
+
+category: 'private'
+method: RwGitTool
 _shouldLog
 	^ Rowan projectTools trace isTracing
 %
@@ -91747,7 +91755,7 @@ method: RwGitTool
 createTmpFileWith: fileContents
 
 	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX') trimRight.
+	filename := (self performOnServer: self _mktempCommand) trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.
