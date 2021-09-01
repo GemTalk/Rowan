@@ -91,7 +91,7 @@ RwLoadSpecificationV2Test >> testComparison_1 [
 		assert:
 			(x := RwLoadSpecificationV2 allInstVarNames)
 				=
-					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'readonlyDiskUrl' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'customConditionalAttributes' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
+					#(#'specName' #'projectName' #'projectAlias' #'gitUrl' #'diskUrl' #'mercurialUrl' #'readonlyDiskUrl' #'relativeRepositoryRoot' #'svnUrl' #'revision' #'projectSpecFile' #'componentNames' #'groupNames' #'customConditionalAttributes' #'platformProperties' #'comment' #'projectsHome' #'repositoryResolutionPolicy').	"If inst vars don't match, copy and hash methods have to change"
 
 	loadSpecification := RwLoadSpecificationV2 new
 		projectName: projectName;
