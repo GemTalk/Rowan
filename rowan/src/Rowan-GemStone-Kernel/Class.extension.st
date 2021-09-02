@@ -126,6 +126,20 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+Class >> rwCategory [
+	"Provide direct access to category of class."
+
+	^ self category
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> rwCategory: aString [
+	^ Rowan projectTools browser
+		updateClassCategory: aString
+		forClassNamed: self thisClass name asString
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwComment [
 
 	"Provide direct access to comment of class, bypassing default comeent string."

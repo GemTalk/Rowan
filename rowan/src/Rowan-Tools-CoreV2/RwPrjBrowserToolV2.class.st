@@ -1234,13 +1234,13 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 					loadedMethodToBeMoved
 						ifNil: [ 
 							"unpackaged method moved to unpackaged category"
-							^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+							^ (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName ].
 				RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString, '. The unpackaged method will not be tracked by Rowan'.
 				"Notification resumed, so continue with move"
 				"Move packaged method to unpackaged category"
 				"Disown the method, then move it to proper category" 
 				Rowan packageTools disown disownMethod: methodSelector inClassNamed: className isMeta: isMeta.
-				^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+				^ (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName ].
 			"use the loaded package for the class that contains the method"
 			srcLoadedClassPackage := lc loadedPackage ].
 
@@ -1256,7 +1256,7 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 				ifFalse: [
 					instanceSelectors := { methodSelector }.
 					classSelectors := {} ].
-			res := (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName.
+			res := (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName.
 			Rowan packageTools adopt
 				adoptClassNamed: className 
 				classExtension: true
@@ -1674,6 +1674,27 @@ RwPrjBrowserToolV2 >> unpackageMethod: methodSelector forClassNamed: className i
 		ifTrue: [ theBehavior := theBehavior class ].
 	theMethod := theBehavior compiledMethodAt: methodSelector.
 	self unpackageMethod: theMethod
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserToolV2 >> updateClassCategory: aString forClassNamed: className [ 
+
+	"update the category of the named class"
+
+	| loadedClass projectDefinition packageDefinition classDefinition |
+	loadedClass := Rowan image 
+		loadedClassNamed: className 
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify a category for the class ', className printString, '. The modification will not be tracked by Rowan'.
+			"Notification resumed, so continue with add/modify"
+			^ (Rowan globalNamed: className) category: aString ].
+
+	projectDefinition := loadedClass loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	classDefinition category: aString.
+
+	self class load loadProjectDefinition: projectDefinition.
 ]
 
 { #category : 'class browsing' }
