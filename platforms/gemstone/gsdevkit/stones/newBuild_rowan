@@ -7,4 +7,4 @@ rm -rf *.log *.out
 
 newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --gemstoneBaseImage -- $GEMSTONE_NAME
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --tests --gemstoneBaseImage -- $GEMSTONE_NAME

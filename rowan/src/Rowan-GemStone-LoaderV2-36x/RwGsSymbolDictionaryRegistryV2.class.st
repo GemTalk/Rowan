@@ -36,7 +36,7 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing

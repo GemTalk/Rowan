@@ -87,7 +87,6 @@ loadTests
 				(ex description includesString: 'not optimized')
 						ifFalse: [ warnings add: ex asString printString ].
 				ex resume ].
-
  		warnings isEmpty ifFalse: [
 			self stdout nextPutAll: 'COMPILE WARNINGS:'; lf.
 			warnings do: [:warning |self stdout nextPutAll: '	', warning ]. 

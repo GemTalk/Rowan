@@ -3486,6 +3486,172 @@ RwRowanSample9Test >> testIssue571 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue743_0 [
+	"Class>>category: hooked up to Rowan"
+
+	"https://github.com/GemTalk/Rowan/issues/743"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class category definedProject projectModification packagesModification elementsModified packageModification classesModification classModification propertiesModification propertyModification oldCategory confirmationBlock |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	confirmationBlock := [:oldCat :newCat |
+		"confirm that the class category change shows up as a modification"
+		projectModification := project asDefinition compareAgainstBase: definedProject _resolvedProject.
+		self deny: projectModification isEmpty.
+		self assert: projectModification propertiesModification isEmpty.
+		packagesModification := projectModification packagesModification.
+		self deny: packagesModification isEmpty.
+		elementsModified := packagesModification elementsModified.
+		self assert: elementsModified size = 1.
+		packageModification := elementsModified at: 'RowanSample9-Core'.
+		self assert: packageModification propertiesModification isEmpty.
+		self assert: packageModification classExtensionsModification isEmpty.
+		classesModification := packageModification classesModification.
+		self deny: classesModification isEmpty.
+		elementsModified := classesModification elementsModified.
+		self assert: elementsModified size = 1.
+		classModification := elementsModified at: 'RowanSample9Class1'.
+		self assert: classModification instanceMethodsModification isEmpty.
+		self assert: classModification classMethodsModification isEmpty.
+		propertiesModification := classModification propertiesModification.
+		self deny: propertiesModification isEmpty.
+		elementsModified := propertiesModification elementsModified.
+		self assert: elementsModified size = 1.
+		propertyModification := elementsModified at: 'category'.
+		self assert: propertyModification oldValue equals: oldCat.
+		self assert: propertyModification newValue equals: newCat.
+	].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+	self assert: class category equals: class rwCategory.
+	oldCategory := class category.
+
+"change class category"
+	definedProject := project defined.
+	category := 'aaa'.
+	class rwCategory: category.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: class category equals: category.
+	confirmationBlock value: oldCategory value: category.
+
+"change class category to nil"
+	definedProject := project defined.
+	oldCategory := category.
+	category := nil.
+	class rwCategory: category.
+	category := 'Kernel'. "default category when value of category is nil"
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self assert: class category equals: category.
+	confirmationBlock value: oldCategory value: nil. "actual value compared in block"
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue743_1 [
+	"Behavior>>moveMethod:toCategory: hooked up to Rowan"
+
+	"https://github.com/GemTalk/Rowan/issues/743"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class category definedProject projectModification packagesModification elementsModified packageModification classesModification classModification propertiesModification propertyModification oldCategory confirmationBlock methodModification selector |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	confirmationBlock := [:oldCat :newCat |
+		"confirm that the class category change shows up as a modification"
+		projectModification := project asDefinition compareAgainstBase: definedProject _resolvedProject.
+		self deny: projectModification isEmpty.
+		self assert: projectModification propertiesModification isEmpty.
+		packagesModification := projectModification packagesModification.
+		self deny: packagesModification isEmpty.
+		elementsModified := packagesModification elementsModified.
+		self assert: elementsModified size = 1.
+		packageModification := elementsModified at: 'RowanSample9-Core'.
+		self assert: packageModification propertiesModification isEmpty.
+		self assert: packageModification classExtensionsModification isEmpty.
+		classesModification := packageModification classesModification.
+		self deny: classesModification isEmpty.
+		elementsModified := classesModification elementsModified.
+		self assert: elementsModified size = 1.
+		classModification := elementsModified at: 'RowanSample9Class1'.
+		self deny: classModification instanceMethodsModification isEmpty.
+		elementsModified :=  classModification instanceMethodsModification elementsModified.
+		methodModification := elementsModified at: #instanceFoo.
+		propertiesModification := methodModification propertiesModification.
+		self deny: propertiesModification isEmpty.
+		elementsModified := propertiesModification elementsModified.
+		propertyModification := elementsModified at: 'protocol'.
+		self assert: propertyModification oldValue equals: oldCat.
+		self assert: propertyModification newValue equals: newCat.
+	].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	project := loadedProjects at: 1.
+	self assert: (audit := project audit) isEmpty.
+	class := Rowan globalNamed: 'RowanSample9Class1'.
+
+	[	
+		Rowan gemstoneTools topaz currentTopazPackageName: class rowanPackageName.
+
+		"add a method to class in protocol 'other'"
+			definedProject := project defined.
+			category := 'other'.
+			selector := #instanceFoo.
+			class
+				compileMethod: 'instanceFoo ^true'
+					dictionaries: System myUserProfile symbolList
+					category: category.
+
+		"validate"
+			self assert: (audit := project audit) isEmpty.
+			self assert: (class categoryOfSelector: selector) asString equals: category.
+			confirmationBlock value: oldCategory value: category.
+
+		"add new category and move method to new category"
+			definedProject := project defined.
+			oldCategory := category.
+			category := 'bar'.
+			class addCategory: category.
+			class moveMethod: selector toCategory: category.
+
+		"validate"
+			self assert: (audit := project audit) isEmpty.
+			self assert: (class categoryOfSelector: selector) asString equals: category.
+			confirmationBlock value: oldCategory value: category
+	] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue594 [
 	"tests for RwProject>>reloadAndIncludeCustomConditionalAttributes: and RwProject>>reloadAndRemoveCustomConditionalAttributes:"
 
