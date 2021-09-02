@@ -3651,6 +3651,7 @@ RwRowanSample9Test >> testIssue743_1 [
 	] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ]
 ]
 
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue594 [
 	"tests for RwProject>>reloadAndIncludeCustomConditionalAttributes: and RwProject>>reloadAndRemoveCustomConditionalAttributes:"
 
