@@ -5,7 +5,6 @@ all methods must be recompiled (i.e., upgrade vrom 3.2.15 to 3.6.2)
 Class {
 	#name : 'RwPropertyModificationForUpgrade',
 	#superclass : 'RwPropertyModification',
-	#instVars : [ ],
 	#category : 'Rowan-Core'
 }
 
@@ -16,4 +15,3 @@ RwPropertyModificationForUpgrade >> isEmpty [
 
 	^ false
 ]
-
