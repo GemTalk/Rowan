@@ -15,6 +15,7 @@ RwRowanSample10TestProjectLibraryGenerator new
 	genSpec_0002: commitComment;
 	genSpec_0003: commitComment;
 	genSpec_0004: commitComment;
+	genSpec_0005: commitComment;
 	yourself
 "
 Class {
@@ -34,6 +35,18 @@ RwRowanSample10TestProjectLibraryGenerator >> _addDefinitionsFor_0002: resolvedP
 		movePackageNamed:  projectName , '-Tests' toComponentNamed: 'mytests/Tests';
 		removeComponentNamed: 'tests/Tests';
 		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwRowanSample10TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
+	"Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
+
+	((resolvedProject
+		addPackageNamed: projectName , '-Extensions'
+		toComponentNamed: 'Core') addClassExtensionNamed: 'RowanSample9Class1')
+		addInstanceMethod: 'foo "I stomp on existing method" ^2'
+		protocol: 'accessing'.
 	^ resolvedProject
 ]
 
@@ -226,6 +239,55 @@ RwRowanSample10TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 			self
 				_addDefinitionsFor_0068: resolvedProject
 				requiredProjectName: 'RowanSample11' ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwRowanSample10TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
+	"Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
+
+	"https://github.com/GemTalk/Rowan/issues/545"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0005'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 5
+		derivedFrom: derivedFrom
+		comment:
+			'Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001')
+		rowanIssues: #(545);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		packageConvention: 'Rowan';
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
