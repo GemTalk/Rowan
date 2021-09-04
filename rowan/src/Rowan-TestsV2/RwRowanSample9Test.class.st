@@ -4841,7 +4841,7 @@ RwRowanSample9Test >> testIssue743_0 [
 
 	confirmationBlock := [:oldCat :newCat |
 		"confirm that the class category change shows up as a modification"
-		projectModification := project asDefinition compareAgainstBase: definedProject _resolvedProject.
+		projectModification := project asDefinition compareAgainstBase: definedProject _concreteProject.
 		self deny: projectModification isEmpty.
 		self assert: projectModification propertiesModification isEmpty.
 		packagesModification := projectModification packagesModification.
@@ -4862,7 +4862,7 @@ RwRowanSample9Test >> testIssue743_0 [
 		self deny: propertiesModification isEmpty.
 		elementsModified := propertiesModification elementsModified.
 		self assert: elementsModified size = 1.
-		propertyModification := elementsModified at: 'category'.
+		propertyModification := elementsModified at: #'category'.
 		self assert: propertyModification oldValue equals: oldCat.
 		self assert: propertyModification newValue equals: newCat.
 	].
@@ -4874,7 +4874,7 @@ RwRowanSample9Test >> testIssue743_0 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: 'RowanSample9Class1'.
 	self assert: class category equals: class rwCategory.
@@ -4921,7 +4921,7 @@ RwRowanSample9Test >> testIssue743_1 [
 
 	confirmationBlock := [:oldCat :newCat |
 		"confirm that the class category change shows up as a modification"
-		projectModification := project asDefinition compareAgainstBase: definedProject _resolvedProject.
+		projectModification := project asDefinition compareAgainstBase: definedProject _concreteProject.
 		self deny: projectModification isEmpty.
 		self assert: projectModification propertiesModification isEmpty.
 		packagesModification := projectModification packagesModification.
@@ -4942,7 +4942,7 @@ RwRowanSample9Test >> testIssue743_1 [
 		propertiesModification := methodModification propertiesModification.
 		self deny: propertiesModification isEmpty.
 		elementsModified := propertiesModification elementsModified.
-		propertyModification := elementsModified at: 'protocol'.
+		propertyModification := elementsModified at: #'protocol'.
 		self assert: propertyModification oldValue equals: oldCat.
 		self assert: propertyModification newValue equals: newCat.
 	].
@@ -4954,7 +4954,7 @@ RwRowanSample9Test >> testIssue743_1 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: 'RowanSample9Class1'.
 
