@@ -3438,6 +3438,15 @@ RwRowanSample9Test >> testIssue545 [
 	self assert: project1 audit isEmpty.
 	self assert: project2 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 2.
+
+"reload project1 - restoring original implementation"
+	projects := project1 reload.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: project1 audit isEmpty.
+	self assert: project2 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
 ]
 
 { #category : 'tests' }
