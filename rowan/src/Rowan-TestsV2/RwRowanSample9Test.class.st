@@ -4980,6 +4980,7 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: project1 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 1.
 	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
 
 "load project2"
 	projects := loadSpec2 load.
@@ -4991,6 +4992,8 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: project2 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 2.
 	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
+	self assert: project1 isDirty.
+	self deny: project2 isDirty.
 
 "reload project1 - restoring original implementation"
 	projects := project1 reload.
@@ -5001,6 +5004,8 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: project2 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 1.
 	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+	self assert: project2 isDirty.
 ]
 
 { #category : 'tests' }
