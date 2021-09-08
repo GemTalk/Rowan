@@ -40,13 +40,16 @@ RwRowanSample10TestProjectLibraryGenerator >> _addDefinitionsFor_0002: resolvedP
 
 { #category : 'private' }
 RwRowanSample10TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
-	"Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
+	"Start with spec_0001; add RowanSample9Class1>>foo and RowanSample9Class1 class>>bar extension methods ... that collide with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
 
 	((resolvedProject
 		addPackageNamed: projectName , '-Extensions'
 		toComponentNamed: 'Core') addClassExtensionNamed: 'RowanSample9Class1')
 		addInstanceMethod: 'foo "I stomp on existing method" ^2'
-		protocol: 'accessing'.
+			protocol: 'accessing';
+		addClassMethod: 'bar "I stomp on existing method" ^''bare'''
+			protocol: 'accessing';
+		yourself.
 	^ resolvedProject
 ]
 
@@ -251,9 +254,9 @@ RwRowanSample10TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 
 { #category : 'generators' }
 RwRowanSample10TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
-	"Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
+	"Start with spec_0001; add RowanSample9Class1>>foo and RowanSample9Class1 class>>bar extension methods ... that collide with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001"
 
-	"https://github.com/GemTalk/Rowan/issues/545"
+	"https://github.com/GemTalk/Rowan/issues/752"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -262,7 +265,7 @@ RwRowanSample10TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 	postfix := '0005'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
-	title := 'Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001'.
+	title := 'Start with spec_0001; add RowanSample9Class1>>foo and RowanSample9Class1 class>>bar extension methods ... that collide with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001'.
 
 	indexCard := (self
 		_createCard: postfix
@@ -270,9 +273,8 @@ RwRowanSample10TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 		title: title
 		index: 5
 		derivedFrom: derivedFrom
-		comment:
-			'Start with spec_0001 and RowanSample9Class1>>foo extension ... that collides with existing packaged method in RowanSampe1 project when loaded on top of previously loaded RowanSample1:spec_0001')
-		rowanIssues: #(545);
+		comment: '')
+		rowanIssues: #(545 752);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;

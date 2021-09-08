@@ -20,7 +20,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 				ifTrue: [ 
 					| theLoadedMethod theClasDef |
 					theLoadedMethod := ex loadedMethod.
-					theClassName := ex class name asString.
+					theClassName := ex theClass theNonMetaClass name asString.
 					(processedClassNames includes: theClassName)
 						ifTrue: [ ex resume ].
 					theLoadedProject := ex loadedProject.
@@ -38,10 +38,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 							projectDef ].
 					packageDef := projectDef packageNamed: theLoadedMethod loadedPackage name.
 					theClasDef := packageDef
-						classExtensionDefinitionNamed:
-							theLoadedMethod handle inClass name asString
-						ifAbsent: [ packageDef classDefinitionNamed: theLoadedMethod handle inClass name asString ].
-					theLoadedMethod handle inClass isMeta
+						classExtensionDefinitionNamed: theClassName
+						ifAbsent: [ packageDef classDefinitionNamed: theClassName ].
+					ex theClass isMeta
 						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
 						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
 			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
@@ -50,7 +49,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 					theClassName := ex classDefinition name.
 					(processedClassNames includes: theClassName)
 						ifTrue: [ ex resume ].
-					theClass := ex class.
+					theClass := ex theClass.
 					theClass isBehavior
 						ifFalse: [ ex pass ].
 					theProjectName := theClass rowanProjectName.

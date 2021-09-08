@@ -1038,7 +1038,7 @@ removeallclassmethods RwExistingAssociationWithSameKeyNotification
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
-	instVarNames: #( class classDefinition loadedProject )
+	instVarNames: #( theClass classDefinition loadedProject )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1055,7 +1055,7 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 
 doit
 (RwNotification
-	subclass: 'RwExistingVisitorAddingExistingMethodExtensionNotification'
+	subclass: 'RwExistingVisitorAddingExistingMethodNotification'
 	instVarNames: #( loadedMethod methodDefinition )
 	classVars: #()
 	classInstVars: #()
@@ -1068,8 +1068,8 @@ doit
 true.
 %
 
-removeallmethods RwExistingVisitorAddingExistingMethodExtensionNotification
-removeallclassmethods RwExistingVisitorAddingExistingMethodExtensionNotification
+removeallmethods RwExistingVisitorAddingExistingMethodNotification
+removeallclassmethods RwExistingVisitorAddingExistingMethodNotification
 
 doit
 (RwNotification
@@ -11912,18 +11912,6 @@ errorMessage: anObject
 
 category: 'accessing'
 method: RwExistingVisitorAddingExistingClassNotification
-class
-	^class
-%
-
-category: 'accessing'
-method: RwExistingVisitorAddingExistingClassNotification
-class: object
-	class := object
-%
-
-category: 'accessing'
-method: RwExistingVisitorAddingExistingClassNotification
 classDefinition
 
 	^ classDefinition
@@ -11963,18 +11951,24 @@ loadedProject: aLoadedProject
 	loadedProject := aLoadedProject
 %
 
-! Class implementation for 'RwExistingVisitorAddingExistingMethodExtensionNotification'
-
-!		Instance methods for 'RwExistingVisitorAddingExistingMethodExtensionNotification'
-
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
-class
-	^ self loadedMethod handle inClass
+method: RwExistingVisitorAddingExistingClassNotification
+theClass
+	^theClass
 %
 
+category: 'accessing'
+method: RwExistingVisitorAddingExistingClassNotification
+theClass: object
+	theClass := object
+%
+
+! Class implementation for 'RwExistingVisitorAddingExistingMethodNotification'
+
+!		Instance methods for 'RwExistingVisitorAddingExistingMethodNotification'
+
 category: 'handling'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 defaultAction
 
 	self error: 
@@ -11986,33 +11980,39 @@ defaultAction
 %
 
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 loadedMethod
 	^loadedMethod
 %
 
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 loadedMethod: object
 	loadedMethod := object
 %
 
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 loadedProject
 	^ loadedMethod loadedProject
 %
 
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 methodDefinition
 	^methodDefinition
 %
 
 category: 'accessing'
-method: RwExistingVisitorAddingExistingMethodExtensionNotification
+method: RwExistingVisitorAddingExistingMethodNotification
 methodDefinition: object
 	methodDefinition := object
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodNotification
+theClass
+	^ self loadedMethod handle inClass
 %
 
 ! Class implementation for 'RwInvalidCategoryProtocolConventionErrorNotification'
@@ -69845,12 +69845,15 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 		symbolList: symbolList ]
 		on:
 			RwExistingVisitorAddingExistingClassNotification
-				, RwExistingVisitorAddingExistingMethodExtensionNotification
+				, RwExistingVisitorAddingExistingMethodNotification
 		do: [ :ex | 
-			(ex isKindOf: RwExistingVisitorAddingExistingMethodExtensionNotification)
+			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
 					| theLoadedMethod theClasDef |
 					theLoadedMethod := ex loadedMethod.
+					theClassName := ex theClass theNonMetaClass name asString.
+					(processedClassNames includes: theClassName)
+						ifTrue: [ ex resume ].
 					theLoadedProject := ex loadedProject.
 					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
 						ifNotNil: [ 
@@ -69866,10 +69869,9 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 							projectDef ].
 					packageDef := projectDef packageNamed: theLoadedMethod loadedPackage name.
 					theClasDef := packageDef
-						classExtensionDefinitionNamed:
-							theLoadedMethod handle inClass name asString
-						ifAbsent: [ packageDef classDefinitionNamed: theLoadedMethod handle inClass name asString ].
-					theLoadedMethod handle inClass isMeta
+						classExtensionDefinitionNamed: theClassName
+						ifAbsent: [ packageDef classDefinitionNamed: theClassName ].
+					ex theClass isMeta
 						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
 						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
 			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
@@ -69878,7 +69880,7 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 					theClassName := ex classDefinition name.
 					(processedClassNames includes: theClassName)
 						ifTrue: [ ex resume ].
-					theClass := ex class.
+					theClass := ex theClass.
 					theClass isBehavior
 						ifFalse: [ ex pass ].
 					theProjectName := theClass rowanProjectName.
@@ -76686,7 +76688,7 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 						ifNotNil: [:aLoadedClass |
 							"if the class is packaged, then it must be in another project, signal notification"
 							(RwExistingVisitorAddingExistingClassNotification new
-								class: class;
+								theClass: class;
 								classDefinition: aRwClassModification after;
 								loadedProject: aLoadedClass loadedProject;
 								yourself) signal ] ].
@@ -84232,9 +84234,21 @@ addExtensionModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPack
 category: 'patching'
 method: RwMethodModification
 addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition
-
 	self isAddition
 		ifTrue: [ 
+			Rowan image
+				loadedMethod: self after selector
+				inClassNamed: self classDefinition name
+				isMeta: self isMeta
+				ifFound: [ :loadedMethod | 
+					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
+						it must be in another project"
+					(RwExistingVisitorAddingExistingMethodNotification new
+						loadedMethod: loadedMethod;
+						methodDefinition: self after) signal ]
+				ifAbsent: [ 
+					"noop"
+					 ].
 			self isMeta
 				ifTrue: [ 
 					aPatchSet
@@ -84411,7 +84425,7 @@ addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefi
 				ifFound: [ :loadedMethod | 
 					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
 						it must be in another project"
-					(RwExistingVisitorAddingExistingMethodExtensionNotification new
+					(RwExistingVisitorAddingExistingMethodNotification new
 						loadedMethod: loadedMethod;
 						methodDefinition: self after) signal ]
 				ifAbsent: [ 

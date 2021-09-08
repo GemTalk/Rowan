@@ -8,11 +8,6 @@ Class {
 	#category : 'Rowan-Core'
 }
 
-{ #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodNotification >> class [
-	^ self loadedMethod handle inClass
-]
-
 { #category : 'handling' }
 RwExistingVisitorAddingExistingMethodNotification >> defaultAction [
 
@@ -47,4 +42,9 @@ RwExistingVisitorAddingExistingMethodNotification >> methodDefinition [
 { #category : 'accessing' }
 RwExistingVisitorAddingExistingMethodNotification >> methodDefinition: object [
 	methodDefinition := object
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> theClass [
+	^ self loadedMethod handle inClass
 ]

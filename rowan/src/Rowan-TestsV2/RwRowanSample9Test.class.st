@@ -4949,7 +4949,7 @@ RwRowanSample9Test >> testIssue743_1 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue752_01 [
 	"
-		Load RowanSample9:spec_0001, then load RowanSample10:spec_0005 which stomps on RowanSample9Class1>>foo.
+		Load RowanSample9:spec_0001, then load RowanSample10:spec_0005 which stomps on RowanSample9Class1>>foo and RowanSample9Class1 class>>bar.
 
 		RowanSample9 should be dirty and method should be owned by RowanSample10 project. Audit should be clean.
 	"
@@ -4957,8 +4957,10 @@ RwRowanSample9Test >> testIssue752_01 [
 	"https://github.com/GemTalk/Rowan/issues/752"
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 |
-	loadSpec1 := self _loadSpecNamed: 'spec_0001'.
-	loadSpec2 := RwRowanSample10Test _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
 	projectName1 := loadSpec1 projectName.
 	projectName2 := loadSpec2 projectName.
 
@@ -4977,6 +4979,7 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: projects size equals: 1.
 	self assert: project1 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
 
 "load project2"
 	projects := loadSpec2 load.
@@ -4987,6 +4990,7 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: project1 audit isEmpty.
 	self assert: project2 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 2.
+	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
 
 "reload project1 - restoring original implementation"
 	projects := project1 reload.
@@ -4996,6 +5000,7 @@ RwRowanSample9Test >> testIssue752_01 [
 	self assert: project1 audit isEmpty.
 	self assert: project2 audit isEmpty.
 	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
 ]
 
 { #category : 'tests' }

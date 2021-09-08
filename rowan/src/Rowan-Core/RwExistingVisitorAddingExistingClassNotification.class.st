@@ -2,22 +2,12 @@ Class {
 	#name : 'RwExistingVisitorAddingExistingClassNotification',
 	#superclass : 'RwNotification',
 	#instVars : [
-		'class',
+		'theClass',
 		'classDefinition',
 		'loadedProject'
 	],
 	#category : 'Rowan-Core'
 }
-
-{ #category : 'accessing' }
-RwExistingVisitorAddingExistingClassNotification >> class [
-	^class
-]
-
-{ #category : 'accessing' }
-RwExistingVisitorAddingExistingClassNotification >> class: object [
-	class := object
-]
 
 { #category : 'accessing' }
 RwExistingVisitorAddingExistingClassNotification >> classDefinition [
@@ -58,4 +48,14 @@ RwExistingVisitorAddingExistingClassNotification >> loadedProject: aLoadedProjec
 
 	loadedProject := aLoadedProject
 
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingClassNotification >> theClass [
+	^theClass
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingClassNotification >> theClass: object [
+	theClass := object
 ]
