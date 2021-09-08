@@ -20,6 +20,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 				ifTrue: [ 
 					| theLoadedMethod theClasDef |
 					theLoadedMethod := ex loadedMethod.
+					theClassName := ex class name asString.
+					(processedClassNames includes: theClassName)
+						ifTrue: [ ex resume ].
 					theLoadedProject := ex loadedProject.
 					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
 						ifNotNil: [ 
