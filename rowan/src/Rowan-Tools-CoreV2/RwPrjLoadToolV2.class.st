@@ -14,9 +14,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		symbolList: symbolList ]
 		on:
 			RwExistingVisitorAddingExistingClassNotification
-				, RwExistingVisitorAddingExistingMethodExtensionNotification
+				, RwExistingVisitorAddingExistingMethodNotification
 		do: [ :ex | 
-			(ex isKindOf: RwExistingVisitorAddingExistingMethodExtensionNotification)
+			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
 					| theLoadedMethod theClasDef |
 					theLoadedMethod := ex loadedMethod.

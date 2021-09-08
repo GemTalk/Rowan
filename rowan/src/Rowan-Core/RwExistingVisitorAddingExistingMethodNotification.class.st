@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwExistingVisitorAddingExistingMethodExtensionNotification',
+	#name : 'RwExistingVisitorAddingExistingMethodNotification',
 	#superclass : 'RwNotification',
 	#instVars : [
 		'loadedMethod',
@@ -9,12 +9,12 @@ Class {
 }
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> class [
+RwExistingVisitorAddingExistingMethodNotification >> class [
 	^ self loadedMethod handle inClass
 ]
 
 { #category : 'handling' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> defaultAction [
+RwExistingVisitorAddingExistingMethodNotification >> defaultAction [
 
 	self error: 
 		'Visitor adding a method ', 
@@ -25,26 +25,26 @@ RwExistingVisitorAddingExistingMethodExtensionNotification >> defaultAction [
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> loadedMethod [
+RwExistingVisitorAddingExistingMethodNotification >> loadedMethod [
 	^loadedMethod
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> loadedMethod: object [
+RwExistingVisitorAddingExistingMethodNotification >> loadedMethod: object [
 	loadedMethod := object
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> loadedProject [
+RwExistingVisitorAddingExistingMethodNotification >> loadedProject [
 	^ loadedMethod loadedProject
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> methodDefinition [
+RwExistingVisitorAddingExistingMethodNotification >> methodDefinition [
 	^methodDefinition
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodExtensionNotification >> methodDefinition: object [
+RwExistingVisitorAddingExistingMethodNotification >> methodDefinition: object [
 	methodDefinition := object
 ]

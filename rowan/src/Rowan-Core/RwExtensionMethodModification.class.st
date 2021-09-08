@@ -24,7 +24,7 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 				ifFound: [ :loadedMethod | 
 					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
 						it must be in another project"
-					(RwExistingVisitorAddingExistingMethodExtensionNotification new
+					(RwExistingVisitorAddingExistingMethodNotification new
 						loadedMethod: loadedMethod;
 						methodDefinition: self after) signal ]
 				ifAbsent: [ 

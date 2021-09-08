@@ -52,9 +52,21 @@ RwMethodModification >> addExtensionModificationToPatchSetForNewClassVersion: aP
 
 { #category : 'patching' }
 RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
-
 	self isAddition
 		ifTrue: [ 
+			Rowan image
+				loadedMethod: self after selector
+				inClassNamed: self classDefinition name
+				isMeta: self isMeta
+				ifFound: [ :loadedMethod | 
+					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
+						it must be in another project"
+					(RwExistingVisitorAddingExistingMethodNotification new
+						loadedMethod: loadedMethod;
+						methodDefinition: self after) signal ]
+				ifAbsent: [ 
+					"noop"
+					 ].
 			self isMeta
 				ifTrue: [ 
 					aPatchSet
