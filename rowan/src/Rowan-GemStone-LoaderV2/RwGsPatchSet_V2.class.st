@@ -493,11 +493,12 @@ RwGsPatchSet_V2 >> addClassModification: aRwClassModification toPatchSetInPackag
 										inPackage: aPackage
 										inProject: aProjectDefinition ].
 							^ self ]
-						ifNotNil: [ 
+						ifNotNil: [:aLoadedClass |
 							"if the class is packaged, then it must be in another project, signal notification"
 							(RwExistingVisitorAddingExistingClassNotification new
 								class: class;
 								classDefinition: aRwClassModification after;
+								loadedProject: aLoadedClass loadedProject;
 								yourself) signal ] ].
 			self
 				addAddedClass: aRwClassModification after

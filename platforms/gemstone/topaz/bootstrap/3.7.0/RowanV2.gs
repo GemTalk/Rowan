@@ -1055,6 +1055,24 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 
 doit
 (RwNotification
+	subclass: 'RwExistingVisitorAddingExistingMethodExtensionNotification'
+	instVarNames: #( loadedMethod methodDefinition )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwExistingVisitorAddingExistingMethodExtensionNotification
+removeallclassmethods RwExistingVisitorAddingExistingMethodExtensionNotification
+
+doit
+(RwNotification
 	subclass: 'RwInvalidCategoryProtocolConventionErrorNotification'
 	instVarNames: #( packageName packageConvention )
 	classVars: #()
@@ -11943,6 +11961,58 @@ method: RwExistingVisitorAddingExistingClassNotification
 loadedProject: aLoadedProject
 
 	loadedProject := aLoadedProject
+%
+
+! Class implementation for 'RwExistingVisitorAddingExistingMethodExtensionNotification'
+
+!		Instance methods for 'RwExistingVisitorAddingExistingMethodExtensionNotification'
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+class
+	^ self loadedMethod handle inClass
+%
+
+category: 'handling'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+defaultAction
+
+	self error: 
+		'Visitor adding a method ', 
+		methodDefinition name printString, 
+		' that already exists in the project ', 
+		self loadedProject name printString, 
+		', but the project was not included in the load'
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+loadedMethod
+	^loadedMethod
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+loadedMethod: object
+	loadedMethod := object
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+loadedProject
+	^ loadedMethod loadedProject
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+methodDefinition
+	^methodDefinition
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodExtensionNotification
+methodDefinition: object
+	methodDefinition := object
 %
 
 ! Class implementation for 'RwInvalidCategoryProtocolConventionErrorNotification'
@@ -69773,41 +69843,70 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 		_loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
 		symbolList: symbolList ]
-		on: RwExistingVisitorAddingExistingClassNotification
+		on:
+			RwExistingVisitorAddingExistingClassNotification
+				, RwExistingVisitorAddingExistingMethodExtensionNotification
 		do: [ :ex | 
-			| theProjectName |
-			theClassName := ex classDefinition name.
-			(processedClassNames includes: theClassName)
-				ifTrue: [ ex resume ].
-			theClass := ex class.
-			theClass isBehavior
-				ifFalse: [ ex pass ].
-			theProjectName := theClass rowanProjectName.
-			theProjectName = Rowan unpackagedName
-				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
-				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
-			theLoadedProject
-				ifNil: [ 
-					"the loaded project should not be nil - if it is, pass the notification"
-					ex pass ].
-			(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-				ifNotNil: [ 
-					"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
-					ex resume ].
-			copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
+			(ex isKindOf: RwExistingVisitorAddingExistingMethodExtensionNotification)
+				ifTrue: [ 
+					| theLoadedMethod theClasDef |
+					theLoadedMethod := ex loadedMethod.
+					theLoadedProject := ex loadedProject.
+					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
+						ifNotNil: [ 
+							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+							ex resume ].
+					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded method,
+					remove the method from the original project's package and attempt a reload"
+					projectDef := copiedProjectSetDef
+						projectNamed: theLoadedProject name
+						ifAbsent: [ 
+							projectDef := theLoadedProject asDefinition.
+							copiedProjectSetDef addProject: projectDef.
+							projectDef ].
+					packageDef := projectDef packageNamed: theLoadedMethod loadedPackage name.
+					theClasDef := packageDef
+						classExtensionDefinitionNamed:
+							theLoadedMethod handle inClass name asString
+						ifAbsent: [ packageDef classDefinitionNamed: theLoadedMethod handle inClass name asString ].
+					theLoadedMethod handle inClass isMeta
+						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
+						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
+			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
+				ifTrue: [ 
+					| theProjectName |
+					theClassName := ex classDefinition name.
+					(processedClassNames includes: theClassName)
+						ifTrue: [ ex resume ].
+					theClass := ex class.
+					theClass isBehavior
+						ifFalse: [ ex pass ].
+					theProjectName := theClass rowanProjectName.
+					theProjectName = Rowan unpackagedName
+						ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+						ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
+					theLoadedProject
+						ifNil: [ 
+							"the loaded project should not be nil - if it is, pass the notification"
+							ex pass ].
+					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
+						ifNotNil: [ 
+							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+							ex resume ].
+					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
 					remove the class from the original project's package and attempt a reload"
-			projectDef := copiedProjectSetDef
-				projectNamed: theLoadedProject name
-				ifAbsent: [ 
-					projectDef := theLoadedProject asDefinition.
-					copiedProjectSetDef addProject: projectDef.
-					projectDef ].
-			loadedClass := Rowan image
-				loadedClassForClass: theClass
-				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
-			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
-			packageDef removeClassNamed: theClassName.
-			processedClassNames add: theClassName ].	"trim the stack"
+					projectDef := copiedProjectSetDef
+						projectNamed: theLoadedProject name
+						ifAbsent: [ 
+							projectDef := theLoadedProject asDefinition.
+							copiedProjectSetDef addProject: projectDef.
+							projectDef ].
+					loadedClass := Rowan image
+						loadedClassForClass: theClass
+						ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
+					packageDef := projectDef packageNamed: loadedClass loadedPackage name.
+					packageDef removeClassNamed: theClassName.
+					processedClassNames add: theClassName ] ].	"trim the stack"
 	^ self
 		_doProjectSetLoad: copiedProjectSetDef
 		instanceMigrator: instanceMigrator
@@ -76584,11 +76683,12 @@ addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProje
 										inPackage: aPackage
 										inProject: aProjectDefinition ].
 							^ self ]
-						ifNotNil: [ 
+						ifNotNil: [:aLoadedClass |
 							"if the class is packaged, then it must be in another project, signal notification"
 							(RwExistingVisitorAddingExistingClassNotification new
 								class: class;
 								classDefinition: aRwClassModification after;
+								loadedProject: aLoadedClass loadedProject;
 								yourself) signal ] ].
 			self
 				addAddedClass: aRwClassModification after
@@ -84302,9 +84402,21 @@ acceptVisitor: aVisitor
 category: 'patching'
 method: RwExtensionMethodModification
 addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition
-
 	self isAddition
 		ifTrue: [ 
+			Rowan image
+				loadedMethod: self after selector
+				inClassNamed: self classDefinition name
+				isMeta: self isMeta
+				ifFound: [ :loadedMethod | 
+					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
+						it must be in another project"
+					(RwExistingVisitorAddingExistingMethodExtensionNotification new
+						loadedMethod: loadedMethod;
+						methodDefinition: self after) signal ]
+				ifAbsent: [ 
+					"noop"
+					 ].
 			self isMeta
 				ifTrue: [ 
 					aPatchSet
@@ -95768,7 +95880,7 @@ loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBloc
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | loadedMethod ]
+		ifNotNil: [ :loadedMethod | foundBlock cull: loadedMethod ]
 		ifNil: [ absentBlock value ]
 %
 

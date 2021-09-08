@@ -12,41 +12,70 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		_loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator
 		symbolList: symbolList ]
-		on: RwExistingVisitorAddingExistingClassNotification
+		on:
+			RwExistingVisitorAddingExistingClassNotification
+				, RwExistingVisitorAddingExistingMethodExtensionNotification
 		do: [ :ex | 
-			| theProjectName |
-			theClassName := ex classDefinition name.
-			(processedClassNames includes: theClassName)
-				ifTrue: [ ex resume ].
-			theClass := ex class.
-			theClass isBehavior
-				ifFalse: [ ex pass ].
-			theProjectName := theClass rowanProjectName.
-			theProjectName = Rowan unpackagedName
-				ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
-				ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
-			theLoadedProject
-				ifNil: [ 
-					"the loaded project should not be nil - if it is, pass the notification"
-					ex pass ].
-			(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-				ifNotNil: [ 
-					"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
-					ex resume ].
-			copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
+			(ex isKindOf: RwExistingVisitorAddingExistingMethodExtensionNotification)
+				ifTrue: [ 
+					| theLoadedMethod theClasDef |
+					theLoadedMethod := ex loadedMethod.
+					theLoadedProject := ex loadedProject.
+					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
+						ifNotNil: [ 
+							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+							ex resume ].
+					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded method,
+					remove the method from the original project's package and attempt a reload"
+					projectDef := copiedProjectSetDef
+						projectNamed: theLoadedProject name
+						ifAbsent: [ 
+							projectDef := theLoadedProject asDefinition.
+							copiedProjectSetDef addProject: projectDef.
+							projectDef ].
+					packageDef := projectDef packageNamed: theLoadedMethod loadedPackage name.
+					theClasDef := packageDef
+						classExtensionDefinitionNamed:
+							theLoadedMethod handle inClass name asString
+						ifAbsent: [ packageDef classDefinitionNamed: theLoadedMethod handle inClass name asString ].
+					theLoadedMethod handle inClass isMeta
+						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
+						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
+			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
+				ifTrue: [ 
+					| theProjectName |
+					theClassName := ex classDefinition name.
+					(processedClassNames includes: theClassName)
+						ifTrue: [ ex resume ].
+					theClass := ex class.
+					theClass isBehavior
+						ifFalse: [ ex pass ].
+					theProjectName := theClass rowanProjectName.
+					theProjectName = Rowan unpackagedName
+						ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+						ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
+					theLoadedProject
+						ifNil: [ 
+							"the loaded project should not be nil - if it is, pass the notification"
+							ex pass ].
+					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
+						ifNotNil: [ 
+							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+							ex resume ].
+					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
 					remove the class from the original project's package and attempt a reload"
-			projectDef := copiedProjectSetDef
-				projectNamed: theLoadedProject name
-				ifAbsent: [ 
-					projectDef := theLoadedProject asDefinition.
-					copiedProjectSetDef addProject: projectDef.
-					projectDef ].
-			loadedClass := Rowan image
-				loadedClassForClass: theClass
-				ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
-			packageDef := projectDef packageNamed: loadedClass loadedPackage name.
-			packageDef removeClassNamed: theClassName.
-			processedClassNames add: theClassName ].	"trim the stack"
+					projectDef := copiedProjectSetDef
+						projectNamed: theLoadedProject name
+						ifAbsent: [ 
+							projectDef := theLoadedProject asDefinition.
+							copiedProjectSetDef addProject: projectDef.
+							projectDef ].
+					loadedClass := Rowan image
+						loadedClassForClass: theClass
+						ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
+					packageDef := projectDef packageNamed: loadedClass loadedPackage name.
+					packageDef removeClassNamed: theClassName.
+					processedClassNames add: theClassName ] ].	"trim the stack"
 	^ self
 		_doProjectSetLoad: copiedProjectSetDef
 		instanceMigrator: instanceMigrator
