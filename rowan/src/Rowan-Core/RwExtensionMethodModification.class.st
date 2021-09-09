@@ -22,12 +22,15 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 				inClassNamed: self classDefinition name
 				isMeta: self isMeta
 				ifFound: [ :loadedMethod | 
-					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
-						it must be in another project"
-					(RwExistingVisitorAddingExistingMethodNotification new
-						incomingProject: aProjectDefinition;
-						loadedMethod: loadedMethod;
-						methodDefinition: self after) signal ]
+					"https://github.com/GemTalk/Rowan/issues/752 - the method is 
+						packaged, if it is in another project, then we need to signal 
+						exception so we can account for the project change"
+					aProjectDefinition name ~= loadedMethod loadedProject name
+						ifTrue: [ 
+							(RwExistingVisitorAddingExistingMethodNotification new
+								incomingProject: aProjectDefinition;
+								loadedMethod: loadedMethod;
+								methodDefinition: self after) signal ] ]
 				ifAbsent: [ 
 					"noop"
 					 ].
