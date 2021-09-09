@@ -1,0 +1,57 @@
+#!/usr/bin/env superdoit_topaz
+#
+# simply execute a topaz script: 
+#		- using current $GEMSTONE and .topazini supplied on command line
+#				simple.topaz -I ./.topazini -L
+#		- using current $GS_HOME, stone name and topaz args supplied on command line
+#				simple.topaz gs_361 -L
+
+set u DataCurator p swordfish
+login
+
+iferr 1 stk
+iferr 2 exit 1
+
+run
+| projects stdout |
+stdout := GsFile stdout.
+stdout nextPutAll: '============================='; lf.
+stdout tab; nextPutAll: 'TESTING https://github.com/GemTalk/Rowan/issues/740'; lf.
+stdout tab; tab; nextPutAll: 'Load RowanSample1'; lf.
+projects := (Rowan projectFromUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1_resolved_v2.ston') load.
+stdout tab; tab; nextPutAll: 'Unload RowanSample1'; lf.
+(projects projectNamed: 'RowanSample1') unload.
+stdout nextPutAll: '============================='; lf.
+%
+
+run
+| res stdout |
+stdout := GsFile stdout.
+res := ((AllUsers
+	userWithId: 'SystemUser' ifAbsent: [])
+		symbolList objectNamed: 'RwDataCuratorTest') run.
+
+stdout nextPutAll: '============================='; lf.
+stdout tab; nextPutAll: 'DataCurator Rowan Tests for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+stdout tab; nextPutAll: res printString; lf.
+
+res errors size > 0
+	ifTrue: [ 
+		stdout nextPutAll: '  errors'; lf.
+		(res errors collect: [:each |  
+			each printString ]) asArray sort do: [:each |
+				stdout tab; nextPutAll: each; lf ] ].
+
+res failures size > 0
+	ifTrue: [
+		stdout nextPutAll: '  failures'; lf.
+		(res failures collect: [:each | 
+			each printString]) asArray sort do: [:each |
+				stdout tab; nextPutAll: each; lf ] ].
+stdout nextPutAll: '============================='; lf.
+
+(res hasErrors or: [ res hasFailures ])
+	ifTrue: [ ExitClientError signal: 'Unit test errors.' status: 1 ].
+%
+
+

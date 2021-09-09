@@ -33,3 +33,4 @@ if [[ "$branchQuery" == "No sample found matching gsVer"* ]] ; then
 fi
 ./rowanTestStats.stone compare --jsonFile=testResults.json --gsVer=$vers --branch=$branch -- rowan_test_stats_361
 
+./runDataCuratorTests.topaz test_rowan_dev_l -lq

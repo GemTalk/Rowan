@@ -11,8 +11,15 @@
 #
 #otions
 #{
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg'.
 #	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'blue'.
+#
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' default: 'default'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'default'.
+#
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required'.
 #	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
 #}
 #%

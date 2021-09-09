@@ -1,0 +1,28 @@
+#!/usr/bin/env superdoit_topaz
+#
+# simply execute a topaz script: 
+#		- using current $GEMSTONE and .topazini supplied on command line
+#				simple.topaz -I ./.topazini -L
+#		- using current $GS_HOME, stone name and topaz args supplied on command line
+#				simple.topaz gs_361 -L
+
+set u SystemUser p swordfish
+login
+
+run
+"do something"
+%
+
+commit
+
+logout
+
+set u DataCurator p swordfish
+login
+
+run
+"do something else"
+%
+
+commit
+
