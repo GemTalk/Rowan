@@ -5073,10 +5073,71 @@ RwRowanSample9Test >> testIssue752_02a [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue752_02b [
+RwRowanSample9Test >> testIssue752_02b1 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but remove 
 			RowanSample9Class1>>foo and leave RowanSample9Class1 class>>bar to be 'stolen'.
+
+		RowanSample9 should be clean and method should be owned by RowanSample10 project. Audit should be clean.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/752"
+
+	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
+		projectSetDefinition projectDef |
+	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
+	projectName1 := loadSpec1 projectName.
+	projectName2 := loadSpec2 projectName.
+
+  {projectName1 . projectName2 }
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	className := projectName1 , 'Class1'.
+
+"load project1"
+	projects := loadSpec1 load.
+	project1 := projects projectNamed: projectName1.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: project1 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+
+"load project2 and remove the methods RowanSample9Class1>>foo and RowanSample9Class1 class>>bar from project1"
+	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec2 read;
+		yourself.
+	projectDef := project1 asDefinition.
+	((projectDef packageNamed: 'RowanSample9-Core1')
+		classDefinitionNamed: className)
+			removeInstanceMethod: #foo;
+			yourself.
+	projectSetDefinition addProject: projectDef.
+	projects := projectSetDefinition load.
+	project2 := projects projectNamed: projectName2.
+
+"validate"
+	self assert: projects size equals: 2.
+	self assert: project1 audit isEmpty.
+	self assert: project2 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 2.
+	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
+	self assert: project1 isDirty.	"we changed the project so it no longer matches disk"
+	self deny: project2 isDirty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue752_02b2 [
+	"
+		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but remove 
+			RowanSample9Class1 class>>bar and leave RowanSample9Class1>>foo to be 'stolen'.
 
 		RowanSample9 should be clean and method should be owned by RowanSample10 project. Audit should be clean.
 	"

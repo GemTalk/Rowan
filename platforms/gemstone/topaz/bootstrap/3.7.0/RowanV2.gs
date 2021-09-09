@@ -69856,9 +69856,28 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 						ifTrue: [ ex resume ].
 					theLoadedProject := ex loadedProject.
 					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-						ifNotNil: [ 
-							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
-							ex resume ].
+						ifNotNil: [ :originalProject | 
+							| originalPackage originalClassDef |
+							originalPackage := originalProject
+								packageNamed: theLoadedMethod loadedPackage name.
+							originalClassDef := originalPackage
+								classDefinitionNamed: theClassName
+								ifAbsent: [ 
+									originalPackage
+										classExtensionDefinitionNamed: theClassName
+										ifAbsent: [ ex resume ] ].
+							ex theClass isMeta
+								ifTrue: [ 
+									(originalClassDef classMethodDefinitions includesKey: theLoadedMethod selector)
+										ifFalse: [ 
+											"method not present in original project, so we can continue with load"
+											ex resume ] ]
+								ifFalse: [ 
+									(originalClassDef instanceMethodDefinitions
+										includesKey: theLoadedMethod selector)
+										ifFalse: [ 
+											"method not present in original project, so we can continue with load"
+											ex resume ] ]	"original project needs to be modified, continue with surgery" ].
 					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded method,
 					remove the method from the original project's package and attempt a reload"
 					projectDef := copiedProjectSetDef
