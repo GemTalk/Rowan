@@ -5195,6 +5195,124 @@ RwRowanSample9Test >> testIssue752_02b2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue752_03 [
+	"
+		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but RowanSample9 project is in project set for unrelated reason (new method #baz).
+
+		RowanSample9 should be clean and method should be owned by RowanSample10 project. Audit should be clean.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/752"
+
+	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
+		projectSetDefinition projectDef |
+	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
+	projectName1 := loadSpec1 projectName.
+	projectName2 := loadSpec2 projectName.
+
+  {projectName1 . projectName2 }
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	className := projectName1 , 'Class1'.
+
+"load project1"
+	projects := loadSpec1 load.
+	project1 := projects projectNamed: projectName1.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: project1 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+
+"load project2 and add unrelated method RowanSample9Class1>>baz to project1"
+	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec2 read;
+		yourself.
+	projectDef := project1 asDefinition.
+	((projectDef packageNamed: 'RowanSample9-Core1')
+		classDefinitionNamed: className)
+			addInstanceMethod: 'baz ^1' protocol: 'accessing';
+			yourself.
+	projectSetDefinition addProject: projectDef.
+	projects := projectSetDefinition load.
+	project2 := projects projectNamed: projectName2.
+
+"validate"
+	self assert: projects size equals: 2.
+	self assert: project1 audit isEmpty.
+	self assert: project2 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new baz equals: 1.
+	self assert: (Rowan globalNamed: className) new foo equals: 2.
+	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
+	self assert: project1 isDirty.	"we changed the project so it no longer matches disk"
+	self deny: project2 isDirty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue752_04 [
+	"
+		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method
+			RowanSample9Class1>>foo has a competing change in RowanSample9 project.
+
+		The load should fail with an error.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/752"
+
+	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 exceptionSeen
+		projectSetDefinition projectDef |
+	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
+	projectName1 := loadSpec1 projectName.
+	projectName2 := loadSpec2 projectName.
+
+  {projectName1 . projectName2 }
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	className := projectName1 , 'Class1'.
+
+"load project1"
+	projects := loadSpec1 load.
+	project1 := projects projectNamed: projectName1.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: project1 audit isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+
+"load project2 and make competing change to the method RowanSample9Class1>>foo in project1"
+	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec2 read;
+		yourself.
+	projectDef := project1 asDefinition.
+	((projectDef packageNamed: 'RowanSample9-Core1')
+		classDefinitionNamed: className)
+			updateInstanceMethod: 'foo  "competing change" ^3' protocol: 'accessing';
+			yourself.
+	projectSetDefinition addProject: projectDef.
+	exceptionSeen := false.
+	[ projectSetDefinition load ] 
+		on: Error 
+		do: [:ex |
+			exceptionSeen := true.
+			self assert: ex description equals: 'UserDefinedError: Incompatible changes to the same method (RowanSample9Class1>>foo ) in project ''RowanSample9'' and project ''RowanSample10''' ].
+	self assert: exceptionSeen description: 'Expected an error'
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_produce_01 [
 	"RowanSample9:spec_0001 ... self contained project" 
 

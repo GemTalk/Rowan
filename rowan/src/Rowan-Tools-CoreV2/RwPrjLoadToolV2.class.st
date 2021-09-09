@@ -18,7 +18,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		do: [ :ex | 
 			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
-					| theLoadedMethod theClasDef |
+					| theLoadedMethod theClasDef originalMethodDefinition |
 					theLoadedMethod := ex loadedMethod.
 					theClassName := ex theClass theNonMetaClass name asString.
 					(processedClassNames includes: theClassName)
@@ -59,9 +59,21 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 					theClasDef := packageDef
 						classExtensionDefinitionNamed: theClassName
 						ifAbsent: [ packageDef classDefinitionNamed: theClassName ].
-					ex theClass isMeta
+					originalMethodDefinition := ex theClass isMeta
 						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
-						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
+						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ].
+					originalMethodDefinition source = theLoadedMethod handle sourceString
+						ifFalse: [ 
+							"method changed in both projects"
+							self
+								error:
+									'Incompatible changes to the same method (' , theClassName
+										,
+											(ex theClass isMeta
+												ifTrue: [ ' class>>' ]
+												ifFalse: [ '>>' ]) , originalMethodDefinition selector
+										, ' ) in project ' , theLoadedProject name printString
+										, ' and project ' , ex incomingProject name printString ] ].
 			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
 				ifTrue: [ 
 					| theProjectName |

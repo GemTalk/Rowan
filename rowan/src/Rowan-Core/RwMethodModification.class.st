@@ -62,6 +62,7 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
 						it must be in another project"
 					(RwExistingVisitorAddingExistingMethodNotification new
+						incomingProject: aProjectDefinition;
 						loadedMethod: loadedMethod;
 						methodDefinition: self after) signal ]
 				ifAbsent: [ 

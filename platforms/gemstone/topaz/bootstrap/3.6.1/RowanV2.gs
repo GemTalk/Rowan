@@ -1056,7 +1056,7 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingMethodNotification'
-	instVarNames: #( loadedMethod methodDefinition )
+	instVarNames: #( incomingProject loadedMethod methodDefinition )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -11977,6 +11977,18 @@ defaultAction
 		' that already exists in the project ', 
 		self loadedProject name printString, 
 		', but the project was not included in the load'
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodNotification
+incomingProject
+	^incomingProject
+%
+
+category: 'accessing'
+method: RwExistingVisitorAddingExistingMethodNotification
+incomingProject: object
+	incomingProject := object
 %
 
 category: 'accessing'
@@ -69849,7 +69861,7 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 		do: [ :ex | 
 			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
-					| theLoadedMethod theClasDef |
+					| theLoadedMethod theClasDef originalMethodDefinition |
 					theLoadedMethod := ex loadedMethod.
 					theClassName := ex theClass theNonMetaClass name asString.
 					(processedClassNames includes: theClassName)
@@ -69890,9 +69902,21 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 					theClasDef := packageDef
 						classExtensionDefinitionNamed: theClassName
 						ifAbsent: [ packageDef classDefinitionNamed: theClassName ].
-					ex theClass isMeta
+					originalMethodDefinition := ex theClass isMeta
 						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
-						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ] ].
+						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ].
+					originalMethodDefinition source = theLoadedMethod handle sourceString
+						ifFalse: [ 
+							"method changed in both projects"
+							self
+								error:
+									'Incompatible changes to the same method (' , theClassName
+										,
+											(ex theClass isMeta
+												ifTrue: [ ' class>>' ]
+												ifFalse: [ '>>' ]) , originalMethodDefinition selector
+										, ' ) in project ' , theLoadedProject name printString
+										, ' and project ' , ex incomingProject name printString ] ].
 			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
 				ifTrue: [ 
 					| theProjectName |
@@ -84263,6 +84287,7 @@ addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefi
 					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
 						it must be in another project"
 					(RwExistingVisitorAddingExistingMethodNotification new
+						incomingProject: aProjectDefinition;
 						loadedMethod: loadedMethod;
 						methodDefinition: self after) signal ]
 				ifAbsent: [ 
@@ -84445,6 +84470,7 @@ addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefi
 					"https://github.com/GemTalk/Rowan/issues/752 - the method is packaged, so
 						it must be in another project"
 					(RwExistingVisitorAddingExistingMethodNotification new
+						incomingProject: aProjectDefinition;
 						loadedMethod: loadedMethod;
 						methodDefinition: self after) signal ]
 				ifAbsent: [ 

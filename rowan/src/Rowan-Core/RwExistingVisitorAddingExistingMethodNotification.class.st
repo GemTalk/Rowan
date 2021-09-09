@@ -2,6 +2,7 @@ Class {
 	#name : 'RwExistingVisitorAddingExistingMethodNotification',
 	#superclass : 'RwNotification',
 	#instVars : [
+		'incomingProject',
 		'loadedMethod',
 		'methodDefinition'
 	],
@@ -17,6 +18,16 @@ RwExistingVisitorAddingExistingMethodNotification >> defaultAction [
 		' that already exists in the project ', 
 		self loadedProject name printString, 
 		', but the project was not included in the load'
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> incomingProject [
+	^incomingProject
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> incomingProject: object [
+	incomingProject := object
 ]
 
 { #category : 'accessing' }
