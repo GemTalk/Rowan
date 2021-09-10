@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 MacOSResolver class >> platformName [
-	^  'Mac OS'
+	^  'Darwin'
 ]
 
 { #category : 'origins' }

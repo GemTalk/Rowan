@@ -2845,7 +2845,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0052: resolvedProject [
 
 	| requiredProjectName requiredLoadSpec requiredProject embeddedProjectReference componentName requiredClassName1 className1 packageName1 |
 	requiredProjectName := projectName , '_embedded_1'.
-	embeddedProjectReference := Path * 'embededProjects' / requiredProjectName
+	embeddedProjectReference := Path * 'embeddedProjects' / requiredProjectName
 		/ 'rowan'.
 	componentName := 'Core'.
 	requiredClassName1 :=  requiredProjectName , 'Class1'.
@@ -2908,7 +2908,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0053: resolvedProject [
 	| requiredProjectName componentName requiredClassName1 className1 packageName1 className2 packageName2
 		embeddedProjectReference |
 	requiredProjectName := projectName , '_embedded_1'.
-	embeddedProjectReference := Path * 'embededProjects' / requiredProjectName
+	embeddedProjectReference := Path * 'embeddedProjects' / requiredProjectName
 		/ 'rowan'.
 	componentName := 'Core'.
 	requiredClassName1 :=  requiredProjectName , 'Class1'.
@@ -6470,7 +6470,7 @@ RwTestProjectLibraryGenerator >> genSpec_0054: commitMessage [
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
-	embededProjectDirName := 'embededProjects' .
+	embededProjectDirName := 'embeddedProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
 	embeddedProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
@@ -6531,7 +6531,7 @@ RwTestProjectLibraryGenerator >> genSpec_0055: commitMessage [
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
-	embededProjectDirName := 'embededProjects' .
+	embededProjectDirName := 'embeddedProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
 	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)
@@ -6592,7 +6592,7 @@ RwTestProjectLibraryGenerator >> genSpec_0056: commitMessage [
 		yourself.
 
 	requiredProjectName := projectName , '_embedded_1'.
-	embededProjectDirName := 'embededProjects' .
+	embededProjectDirName := 'embeddedProjects' .
 	embeddedProjectReference := Path * embededProjectDirName / requiredProjectName
 		/ 'rowan'.
 	embededProjectDefinition :=  (Rowan newEmbeddedProjectNamed: requiredProjectName)

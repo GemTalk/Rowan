@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'private' }
+RwGitTool >> _mktempCommand [
+	^ (System gemVersionReport at: 'osName') = 'Darwin'
+		ifTrue: [ '/usr/bin/mktemp -t commitMessage' ]
+		ifFalse: [ '/bin/mktemp --tmpdir commitMessage.XXXX' ]
+]
+
+{ #category : 'private' }
 RwGitTool >> _shouldLog [
 	^ Rowan projectTools trace isTracing
 ]

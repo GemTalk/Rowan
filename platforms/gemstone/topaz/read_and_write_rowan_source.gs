@@ -7,10 +7,7 @@
 
 expectvalue true
 run
-	| platformConditionalAttributes platformConditionalAttributes3215 projectSetModification visitor 
-		topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360
-	 auditFailures gsFileName repositoryRoot3215 repositoryRoot360 
-   platformConditionalAttributes370 repositoryRoot370 |
+	| projectSetModification visitor topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360 auditFailures gsFileName repositoryRoot360 platformConditionalAttributes370 repositoryRoot370 |
 
 false ifTrue: [ 
 	Rowan projectTools trace startTracing 
@@ -28,18 +25,6 @@ false ifTrue: [
 		'gemstone-kernel'.
 		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
 	}.
-	platformConditionalAttributes := {
-		'common'.
-		'gemstone'.
-		'gemstone-kernel'.
-		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
-	}.
-	platformConditionalAttributes3215 := {
-		'common'.
-		'gemstone'.
-		'gemstone-kernel'.
-		'3.2.15' asRwGemStoneVersionNumber.	"want to read 3.2.15 packages"
-	}.
 	repositoryRoot370 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.7.0/project_src_v2' asFileReference.
 	repositoryRoot370 ensureCreateDirectory.
 false ifTrue: [ 
@@ -50,27 +35,9 @@ false ifTrue: [
 false ifTrue: [ 
 	repositoryRoot360 deleteAllChildren.
  ].
-	repositoryRoot3215 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/project_src_v2' asFileReference.
-	repositoryRoot3215 ensureCreateDirectory.
-false ifTrue: [ 
-	repositoryRoot3215 deleteAllChildren.
- ].
-	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src_v2' asFileReference.
-	repositoryRoot ensureCreateDirectory.
-false ifTrue: [ 
-	repositoryRoot deleteAllChildren.
-].
 	{
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes.
-			repositoryRoot.
-			'RowanV2'.
-			(Dictionary new).
-      false.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
+		'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes370.
 			repositoryRoot370.
@@ -135,14 +102,6 @@ false ifTrue: [
 						}; 
 				yourself).
 			true.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes3215.
-			repositoryRoot3215.
-			'RowanV2'.
-			(Dictionary new).
-			false.
 		}.
 	} 
 	do: [:ar |

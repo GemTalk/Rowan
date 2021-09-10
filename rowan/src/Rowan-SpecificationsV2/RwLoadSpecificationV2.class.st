@@ -9,6 +9,7 @@ Class {
 		'diskUrl',
 		'mercurialUrl',
 		'readonlyDiskUrl',
+		'relativeRepositoryRoot',
 		'svnUrl',
 		'revision',
 		'projectSpecFile',

@@ -9133,7 +9133,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwLoadSpecificationV2'
-	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
+	instVarNames: #( specName projectName projectAlias gitUrl diskUrl mercurialUrl readonlyDiskUrl relativeRepositoryRoot svnUrl revision projectSpecFile componentNames groupNames customConditionalAttributes platformProperties comment projectsHome repositoryResolutionPolicy )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -27228,7 +27228,7 @@ temp
 category: 'accessing'
 classmethod: MacOSResolver
 platformName
-	^  'Mac OS'
+	^  'Darwin'
 %
 
 !		Instance methods for 'MacOSResolver'
@@ -64097,6 +64097,14 @@ performOnServer: commandLine logging: logging
 
 category: 'private'
 method: RwGitTool
+_mktempCommand
+	^ (System gemVersionReport at: 'osName') = 'Darwin'
+		ifTrue: [ '/usr/bin/mktemp -t commitMessage' ]
+		ifFalse: [ '/bin/mktemp --tmpdir commitMessage.XXXX' ]
+%
+
+category: 'private'
+method: RwGitTool
 _shouldLog
 	^ Rowan projectTools trace isTracing
 %
@@ -65990,13 +65998,13 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: h
 					loadedMethodToBeMoved
 						ifNil: [ 
 							"unpackaged method moved to unpackaged category"
-							^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+							^ (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName ].
 				RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString, '. The unpackaged method will not be tracked by Rowan'.
 				"Notification resumed, so continue with move"
 				"Move packaged method to unpackaged category"
 				"Disown the method, then move it to proper category" 
 				Rowan packageTools disown disownMethod: methodSelector inClassNamed: className isMeta: isMeta.
-				^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+				^ (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName ].
 			"use the loaded package for the class that contains the method"
 			srcLoadedClassPackage := lc loadedPackage ].
 
@@ -66012,7 +66020,7 @@ moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: h
 				ifFalse: [
 					instanceSelectors := { methodSelector }.
 					classSelectors := {} ].
-			res := (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName.
+			res := (Rowan image objectNamed: className) _moveMethod: methodSelector toCategory: hybridPackageName.
 			Rowan packageTools adopt
 				adoptClassNamed: className 
 				classExtension: true
@@ -66441,6 +66449,28 @@ unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
 		ifTrue: [ theBehavior := theBehavior class ].
 	theMethod := theBehavior compiledMethodAt: methodSelector.
 	self unpackageMethod: theMethod
+%
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+updateClassCategory: aString forClassNamed: className 
+
+	"update the category of the named class"
+
+	| loadedClass projectDefinition packageDefinition classDefinition |
+	loadedClass := Rowan image 
+		loadedClassNamed: className 
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify a category for the class ', className printString, '. The modification will not be tracked by Rowan'.
+			"Notification resumed, so continue with add/modify"
+			^ (Rowan globalNamed: className) category: aString ].
+
+	projectDefinition := loadedClass loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	classDefinition category: aString.
+
+	self class load loadProjectDefinition: projectDefinition.
 %
 
 category: 'class browsing'
@@ -75578,7 +75608,7 @@ privateCreateClassWithSuperclass: superclass
 	category := infoSource == #'Category'
 		ifTrue: [ self packageName ]
 		ifFalse: [ classProperties at: 'category' ifAbsent: [  ] ].
-	createdClass category: category.
+	createdClass _category: category.
 	^ createdClass
 %
 
@@ -88963,6 +88993,22 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		options: optionsArray
 %
 
+category: '*rowan-gemstone-kernel'
+method: Class
+rwCategory
+	"Provide direct access to category of class."
+
+	^ self category
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+rwCategory: aString
+	^ Rowan projectTools browser
+		updateClassCategory: aString
+		forClassNamed: self thisClass name asString
+%
+
 category: '*rowan-gemstone-kernel-36x'
 method: Class
 rwClassDefinitionInSymbolDictionaryNamed: symDictName
@@ -91709,7 +91755,7 @@ method: RwGitTool
 createTmpFileWith: fileContents
 
 	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX') trimRight.
+	filename := (self performOnServer: self _mktempCommand) trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.
@@ -92344,7 +92390,7 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92403,7 +92449,7 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92507,7 +92553,7 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+	behavior _moveMethod: selector toCategory: protocolSymbol.
 
 	existing := compiledMethod _rowanPackageInfo.
 	existing
@@ -92697,7 +92743,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
 	(catDict at: catSym) add: selector.
 
-	behavior moveMethod: selector toCategory: newProtocol.
+	behavior _moveMethod: selector toCategory: newProtocol.
 
 	loadedMethod := compiledMethod _rowanPackageInfo.
 	loadedMethod
