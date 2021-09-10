@@ -13,18 +13,6 @@ iferr 1 stk
 iferr 2 exit 1
 
 run
-| projects stdout loadedPackage class |
-class := Rowan.
-class := (AllUsers userWithId: 'SystemUser') objectNamed: 'RwDefinition'.
-stdout := GsFile stdout.
-stdout nextPutAll: '============================='; lf.
-stdout tab; nextPutAll: 'TESTING https://github.com/GemTalk/Rowan/issues/744'; lf.
-loadedPackage := (Rowan image loadedProjectNamed: class rowanProjectName) loadedPackages at: class rowanPackageName.
-stdout nextPutAll: 'The package for ', class printString, ' is ', loadedPackage name, ' and it isDirty: ', loadedPackage isDirty printString; lf.
-stdout nextPutAll: '============================='; lf.
-%
-
-run
 | projects stdout |
 stdout := GsFile stdout.
 stdout nextPutAll: '============================='; lf.
