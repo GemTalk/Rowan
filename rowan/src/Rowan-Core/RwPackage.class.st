@@ -1,13 +1,16 @@
 Class {
 	#name : 'RwPackage',
 	#superclass : 'RowanInterface',
+	#instVars : [
+		'projectName'
+	],
 	#category : 'Rowan-Core'
 }
 
 { #category : 'private' }
 RwPackage >> _loadedPackage [
 
-	^ Rowan image loadedPackageNamed: self name
+	^ Rowan image loadedPackageNamed: self name ifAbsent: [(Rowan image loadedProjectNamed: self projectName) loadedPackages at: self name]
 ]
 
 { #category : 'private' }
@@ -59,4 +62,14 @@ RwPackage >> isEmpty [
 { #category : 'accessing' }
 RwPackage >> project [
 	^ RwProject newNamed: self _loadedProject name
+]
+
+{ #category : 'accessing' }
+RwPackage >> projectName [
+	^projectName
+]
+
+{ #category : 'accessing' }
+RwPackage >> projectName: object [
+	projectName := object
 ]

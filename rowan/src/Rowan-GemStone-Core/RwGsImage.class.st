@@ -175,12 +175,10 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
-	self symbolList
-		do: [ :symbolDict | 
-			symbolDict rowanSymbolDictionaryRegistry
-				ifNotNil: [ :registry | 
-					(registry loadedPackageNamed: aName ifAbsent: [  ])
-						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
+	self loadedProjects
+		do: [ :loadedProject | 
+			(loadedProject loadedPackages at: aName ifAbsent: [  ])
+						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ].
 	^ absentBlock value
 ]
 
@@ -304,6 +302,20 @@ RwGsImage class >> packageNames [
 	"Return list of package names. All sytem projects are visible, but not all packages of visible projects
 		are visible."
 
+	| packageNames |
+	packageNames := Set new.
+	self loadedProjects
+		do: [ :loadedProject | 
+			packageNames addAll: loadedProject packageNames ].
+	^ packageNames asArray
+]
+
+{ #category : 'querying' }
+RwGsImage class >> packageNames_old [
+
+	"Return list of package names. All sytem projects are visible, but not all packages of visible projects
+		are visible."
+
 	| packageNames visiblePackageNames |
 	packageNames := Set new.
 	visiblePackageNames := Set new.
@@ -317,11 +329,10 @@ RwGsImage class >> packageNames [
 			loadedProject packageNames do: [:packageName |
 				(visiblePackageNames includes: packageName) ifTrue: [ packageNames add: packageName ] ] ].
 	^ packageNames asArray
-
 ]
 
 { #category : 'querying' }
-RwGsImage class >> packageNamesForLoadedProjectNamed: projectName [
+RwGsImage class >> packageNamesForLoadedProjectNamed_old: projectName [
 
 	"Return list of package names for the loaded project with the given name. All sytem projects are visible, but not all packages of visible projects
 		are visible."
@@ -337,7 +348,15 @@ RwGsImage class >> packageNamesForLoadedProjectNamed: projectName [
 	(self loadedProjectNamed: projectName) packageNames do: [:packageName |
 				(visiblePackageNames includes: packageName) ifTrue: [ packageNames add: packageName ] ].
 	^ packageNames asArray
+]
 
+{ #category : 'querying' }
+RwGsImage class >> packageNamesForLoadedProjectNamed: projectName [
+
+	"Return list of package names for the loaded project with the given name. All sytem projects are visible, but not all packages of visible projects
+		are visible."
+
+	^ (self loadedProjectNamed: projectName) packageNames  asArray
 ]
 
 { #category : 'cypress (old)' }
