@@ -4217,7 +4217,7 @@ RwRowanSample9Test >> testIssue711_2 [
 
 	"https://github.com/GemTalk/Rowan/issues/711"
 
-	| loadSpec projectName projectNames loadSpecs pharoSpec pharoProject pharoPlatformAttributes testCustomAttributes warningMessage gsVersionString |
+	| loadSpec projectName projectNames loadSpecs pharoSpec pharoProject pharoPlatformAttributes testCustomAttributes warningMessage gsVersionString errorMessage expectedMessage warningCount |
 	loadSpec := self _loadSpecNamed: 'spec_0030'.
 
 	pharoPlatformAttributes := { 'common' . 'pharo' }.
@@ -4243,20 +4243,32 @@ RwRowanSample9Test >> testIssue711_2 [
 "validate"
 	self assert: pharoProject packageNames asArray sort equals: { 'RowanSample9-Core' . 'RowanSample9-Definitions' . 'RowanSample9-Definitions-Pharo' . 'RowanSample9-Definitions-Pharo-Tests' . 'RowanSample9-Definitions-Tests' . 'RowanSample9-Specs' . 'RowanSample9-Specs-Tests' . 'RowanSample9-Tests'} sort.
 
-"load ... and expect Warning"
+"load ... and expect one Warning and an error"
+	warningCount := 0.
 	[pharoProject load]
-		on: Warning
+		on: Warning, Error
 		do: [:ex | 
-			warningMessage := ex messageText ].
+			(ex isKindOf: Warning)
+				ifTrue: [ 
+					warningCount := warningCount + 1.
+					warningMessage := ex messageText .
+					ex resume ].
+			(ex isKindOf: Error)
+				ifTrue: [ errorMessage := ex messageText ] ].
 	gsVersionString := (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber asString.
 	warningMessage 
-		ifNil: [ self error: 'Expected Warning not signalled' ]
-		ifNotNil: [ 
-			| expectedMessage |
-			expectedMessage := 'the project ''RowanSample9'' was read from disk with platform conditional attributes (anArray( ''common'', ''pharo'')) that is not compatible with the platform conditional attributes for the current image (anArray( ''common'', ''gemstone'', ''gemstone-kernel'', ', gsVersionString, ')) so the project may have compile errors when loaded.'.
-			self 
-				assert: warningMessage = expectedMessage  
-				description: 'Warning signalled, but expected message did not match' ].
+		ifNil: [ self assert: false description: 'Expected Warning not signalled' ].
+	warningCount = 1
+		ifFalse: [  self assert: false description: 'Expected only a single Warning not ', warningCount printString ].
+	expectedMessage := 'the project ''RowanSample9'' was read from disk with platform conditional attributes (anArray( ''common'', ''pharo'')) that is not compatible with the platform conditional attributes for the current image (anArray( ''common'', ''gemstone'', ''gemstone-kernel'', ', gsVersionString, ')) so the project may have compile errors when loaded.'.
+	self 
+		assert: warningMessage 
+		equals: expectedMessage. "Warning signalled, but expected message did not match'"
+	errorMessage 
+		ifNil: [ self assert: false description: 'Expected Error not signalled' ].
+	expectedMessage := ''.
+	self 
+		assert: (errorMessage beginsWith: 'a CompileError occurred (error 1001), undefined symbol  PluggableDictionary,'). "Error signalled, but expected message did not match"
 ]
 
 { #category : 'tests' }
