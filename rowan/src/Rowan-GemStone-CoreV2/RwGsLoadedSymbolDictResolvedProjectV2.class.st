@@ -531,7 +531,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 	| aComponent subcomponents |
 	subcomponents := {}.
 	aComponent := self
-		componentOrPackageGroupName: componentName
+		componentOrPackageGroupNamed: componentName
 		ifAbsent: [ 
 			"noneBlock, if it returns, should answer a component"
 			noneBlock cull: componentName ].
@@ -543,7 +543,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> subcomponentsOf: componentName matchBlo
 		do: [ :subcomponentName | 
 			| subcomponent |
 			subcomponent := self
-				componentOrPackageGroupName: subcomponentName
+				componentOrPackageGroupNamed: subcomponentName
 				ifAbsent: [ 
 					"noneBlock, if it returns, should answer a component"
 					noneBlock cull: subcomponentName ].
