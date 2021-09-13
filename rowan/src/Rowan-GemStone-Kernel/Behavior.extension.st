@@ -155,16 +155,21 @@ self _validatePrivilege ifTrue:[
 
 { #category : '*rowan-gemstone-kernel' }
 Behavior >> rowanPackageName [
+	"answer the name of the package that the receiver is a member of. 
+		Answer 'Rowan unpackagedName` if the receiver is not a member 
+		of any package"
 
-	"answer the name of the package that the receiver is a member of. Answer 'Rowan unpackagedName` if 
-		the receiver is not a member of any package"
-
-	| loadedClass |
+	| loadedClass packageName |
 	loadedClass := Rowan image
 		loadedClassForClass: self thisClass
 		ifAbsent: [ ^ Rowan unpackagedName ].
-	^ loadedClass loadedPackage name
-
+	packageName := loadedClass loadedPackage name.
+	^ (Rowan image packageNames includes: packageName)
+		ifTrue: [ packageName ]
+		ifFalse: [ 
+			"class is not in a visible package (i.e., symbol dictionary not in 
+				current symbol list), so treat as unpackaged"
+			Rowan unpackagedName ]
 ]
 
 { #category : '*rowan-gemstone-kernel' }
