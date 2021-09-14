@@ -275,10 +275,9 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 		inProject: projectDefinition.
 
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -363,9 +362,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
-
-	projectTools load loadProjectDefinition: projectDefinition
-
+	projectDefinition load
 ]
 
 { #category : 'private' }
@@ -416,8 +413,7 @@ RwBrowserToolTest >> _loadPackageMappedProjectDefinition: projectName packageNam
 		packageNameMap: packageNameMap 
 		defaultSymbolDictName: defaultSymbolDictName.
 
-	projectTools load loadProjectDefinition: projectDefinition
-
+	projectDefinition load
 ]
 
 { #category : 'private' }
@@ -436,10 +432,9 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	^ projectDefinition
-
 ]
 
 { #category : 'private' }
@@ -459,8 +454,7 @@ RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName p
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
-	projectTools load loadProjectDefinition: projectDefinition
-
+	projectDefinition load
 ]
 
 { #category : 'private' }
@@ -486,8 +480,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
-
+	projectDefinition load
 ]
 
 { #category : 'private' }
@@ -513,10 +506,9 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }

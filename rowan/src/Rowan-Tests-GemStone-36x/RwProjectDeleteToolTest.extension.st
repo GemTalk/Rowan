@@ -261,7 +261,7 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 	packageDefinition addClassDefinition: classDefinition.
 
 "load project definition"
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
@@ -457,7 +457,7 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 	packageDefinition addClassDefinition: classDefinition.
 
 "load project definition"
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.

@@ -53,10 +53,9 @@ RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: pack
 		inPackageNamed: packageName2
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -114,10 +113,9 @@ RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: pack
 		inProject: projectDefinition.
 
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -140,10 +138,9 @@ RwEditToolTest >> _loadStandardProjectDefinition: projectName packageNames: pack
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -264,7 +261,7 @@ RwEditToolTest >> testAddAndRemoveClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
@@ -281,7 +278,7 @@ RwEditToolTest >> testAddAndRemoveClass [
 		fromPackageNamed: packageName
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
@@ -327,7 +324,7 @@ RwEditToolTest >> testAddClass_blackList_A [
 	Rowan sessionAutomaticClassInitializationBlackList add: projectName.
 
 "load project - initialization should not be triggered"
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | self assert: false description: 'unexpected signal of RwExecuteClassInitializeMethodsAfterLoadNotification'  ].
 
@@ -378,7 +375,7 @@ RwEditToolTest >> testAddClass_blackList_B [
 	Rowan userAutomaticClassInitializationBlackList add: projectName.
 
 "load project - initialization should not be triggered"
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | self assert: false description: 'unexpected signal of RwExecuteClassInitializeMethodsAfterLoadNotification'  ].
 
@@ -457,7 +454,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
@@ -485,7 +482,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -499,7 +496,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 		fromPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
@@ -599,7 +596,7 @@ RwEditToolTest >> testUpdateClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.

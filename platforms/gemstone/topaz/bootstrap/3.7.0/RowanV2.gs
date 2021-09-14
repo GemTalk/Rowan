@@ -51099,13 +51099,15 @@ isLoaded
 	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwProject
 load: instanceMigrator
 	"
 		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
 			loaded if they are not already present in the image.
 	"
+
+"use reload: instead"
 
 	^ self _loadedProject load: instanceMigrator
 %
@@ -56839,7 +56841,7 @@ createPackageNamed: aString inProject: projName
 	projectService := RowanProjectService new.
 	projectDefinition := projectService createProjectNamed: projName.  
 	projectDefinition addPackageNamed: name.
-	self projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 %
 
 category: 'Updating'
@@ -65436,8 +65438,7 @@ load
 			and send #load to the project set.
 	"
 
-	self _validate: self conditionalAttributes.
-	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
+	^ self load: Rowan platform instanceMigrator
 %
 
 category: 'actions'
@@ -65450,8 +65451,10 @@ load: instanceMigrator
 
 	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectDefinition: self
+		_loadProjectDefinition: self projectDefinition
+		customConditionalAttributes: self customConditionalAttributes
 		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
 %
 
 category: 'project definition'
@@ -69044,7 +69047,7 @@ classNamed: className updateDefinition: updateBlock ifAbsent: absentBlock
 		ifAbsent: [ ^ absentBlock value ].
 
 	updateBlock value: classDefinition.
-	self class load loadProjectDefinition: projectDefinition
+	projectDefinition load
 %
 
 category: 'class browsing'
@@ -69448,7 +69451,7 @@ projectNamed: projectName updateDefinition: updateBlock
 	| projectDefinition |
 	projectDefinition := self _projectNamed: projectName.
 	updateBlock value: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
+	projectDefinition load
 %
 
 category: 'definition updating'
@@ -69557,7 +69560,7 @@ removeMethod: methodSelector forClassNamed: className isMeta: isMeta
 	isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
-	Rowan projectTools load loadProjectDefinition: projectDef
+	projectDef load
 %
 
 category: 'package browsing'
@@ -69569,7 +69572,7 @@ removePackageNamed: packageName
 	projectDef := loadedPackage loadedProject asDefinition.
 	projectDef removePackageNamed: loadedPackage name.
 
-	Rowan projectTools load loadProjectDefinition: projectDef
+	projectDef load
 %
 
 category: 'class browsing'
@@ -69803,7 +69806,7 @@ updateClassCategory: aString forClassNamed: className
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
 	classDefinition category: aString.
 
-	self class load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 %
 
 category: 'class browsing'
@@ -69825,7 +69828,7 @@ updateClassComment: aString forClassNamed: className
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
 	classDefinition comment: aString.
 
-	self class load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 %
 
 category: 'private'
@@ -70499,63 +70502,6 @@ install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome
 
 !		Instance methods for 'RwPrjLoadToolV2'
 
-category: 'load project definitions'
-method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: projectDefinition customConditionalAttributes
-		instanceMigrator: Rowan platform instanceMigrator
-		symbolList: Rowan image symbolList
-%
-
-category: 'load project definitions'
-method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator
-	"read the components for <projectDefinition> to develop the list of dependent projects"
-
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: customConditionalAttributes
-		instanceMigrator: instanceMigrator
-		symbolList: Rowan image symbolList
-%
-
-category: 'load project definitions'
-method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList
-	"read the components for <projectDefinition> to develop the list of dependent projects"
-
-	| projectSetDefinition requiredProjectNames |
-	projectSetDefinition := RwProjectSetDefinition new
-		addProject: projectDefinition;
-		yourself.
-	(requiredProjectNames := projectDefinition
-		requiredProjectNames: customConditionalAttributes) isEmpty
-		ifFalse: [ 
-			| absentProjectNames |
-			"if required projects are not already present in the image, then they must be loaded at this time"
-			absentProjectNames := requiredProjectNames
-				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
-			absentProjectNames isEmpty
-				ifFalse: [ 
-					projectSetDefinition := projectDefinition
-						readProjectSet: customConditionalAttributes ] ].
-	^ self
-		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator
-		symbolList: symbolList
-%
-
-category: 'load project definitions'
-method: RwPrjLoadToolV2
-loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: projectDefinition customConditionalAttributes
-		instanceMigrator: instanceMigrator
-%
-
 category: 'load project by name'
 method: RwPrjLoadToolV2
 loadProjectNamed: projectName
@@ -70749,6 +70695,34 @@ _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbo
 		symbolList: symbolList
 		originalProjectSet: originalProjectSet
 		processedClassNames: processedClassNames
+%
+
+category: 'private'
+method: RwPrjLoadToolV2
+_loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList
+	"read the components for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition requiredProjectNames |
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	(requiredProjectNames := projectDefinition
+		requiredProjectNames: customConditionalAttributes) isEmpty
+		ifFalse: [ 
+			| absentProjectNames |
+			"if required projects are not already present in the image, then they must be loaded at this time"
+			absentProjectNames := requiredProjectNames
+				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
+			absentProjectNames isEmpty
+				ifFalse: [ 
+					projectSetDefinition := projectDefinition
+						readProjectSet: customConditionalAttributes ] ].
+	^ self
+		_doProjectSetLoad: projectSetDefinition
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList
+		originalProjectSet: projectSetDefinition
+		processedClassNames: Set new
 %
 
 category: 'private'

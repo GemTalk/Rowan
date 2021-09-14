@@ -326,12 +326,14 @@ RwProject >> isLoaded [
 	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwProject >> load: instanceMigrator [
 	"
 		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
 			loaded if they are not already present in the image.
 	"
+
+"use reload: instead"
 
 	^ self _loadedProject load: instanceMigrator
 ]

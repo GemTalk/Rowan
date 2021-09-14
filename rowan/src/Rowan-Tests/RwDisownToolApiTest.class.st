@@ -527,7 +527,7 @@ RwDisownToolApiTest >> testDisownProject [
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
 
 	"reload original project definition --- project and packages only"
-	projectTools load loadProjectDefinition: projectDefinitionToLoad.
+	projectDefinitionToLoad load.
 
 	"adopt the complete project definition --- includes class, methods and extension methods"
 	projectTools adopt

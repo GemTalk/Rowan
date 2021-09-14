@@ -952,7 +952,7 @@ RwPrjBrowserToolV2 >> classNamed: className updateDefinition: updateBlock ifAbse
 		ifAbsent: [ ^ absentBlock value ].
 
 	updateBlock value: classDefinition.
-	self class load loadProjectDefinition: projectDefinition
+	projectDefinition load
 ]
 
 { #category : 'class browsing' }
@@ -1349,7 +1349,7 @@ RwPrjBrowserToolV2 >> projectNamed: projectName updateDefinition: updateBlock [
 	| projectDefinition |
 	projectDefinition := self _projectNamed: projectName.
 	updateBlock value: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
+	projectDefinition load
 ]
 
 { #category : 'definition updating' }
@@ -1455,7 +1455,7 @@ RwPrjBrowserToolV2 >> removeMethod: methodSelector forClassNamed: className isMe
 	isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
-	Rowan projectTools load loadProjectDefinition: projectDef
+	projectDef load
 ]
 
 { #category : 'package browsing' }
@@ -1466,8 +1466,7 @@ RwPrjBrowserToolV2 >> removePackageNamed: packageName [
 	projectDef := loadedPackage loadedProject asDefinition.
 	projectDef removePackageNamed: loadedPackage name.
 
-	Rowan projectTools load loadProjectDefinition: projectDef
-
+	projectDef load
 ]
 
 { #category : 'class browsing' }
@@ -1694,7 +1693,7 @@ RwPrjBrowserToolV2 >> updateClassCategory: aString forClassNamed: className [
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
 	classDefinition category: aString.
 
-	self class load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 ]
 
 { #category : 'class browsing' }
@@ -1715,5 +1714,5 @@ RwPrjBrowserToolV2 >> updateClassComment: aString forClassNamed: className [
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
 	classDefinition comment: aString.
 
-	self class load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 ]

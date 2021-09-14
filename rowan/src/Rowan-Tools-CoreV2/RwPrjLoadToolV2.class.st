@@ -118,6 +118,33 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 ]
 
 { #category : 'private' }
+RwPrjLoadToolV2 >> _loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
+	"read the components for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition requiredProjectNames |
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	(requiredProjectNames := projectDefinition
+		requiredProjectNames: customConditionalAttributes) isEmpty
+		ifFalse: [ 
+			| absentProjectNames |
+			"if required projects are not already present in the image, then they must be loaded at this time"
+			absentProjectNames := requiredProjectNames
+				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
+			absentProjectNames isEmpty
+				ifFalse: [ 
+					projectSetDefinition := projectDefinition
+						readProjectSet: customConditionalAttributes ] ].
+	^ self
+		_doProjectSetLoad: projectSetDefinition
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList
+		originalProjectSet: projectSetDefinition
+		processedClassNames: Set new
+]
+
+{ #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator symbolList: symbolList [
 	| loadedProjectDefinitionSet diff loadedProjects imagePlatformAttributesSet |
 	loadedProjectDefinitionSet := projectSetDefinitionToLoad deriveLoadedProjectSet.	"use loaded things to do the diff - convert to definition when a modification is created"
@@ -196,59 +223,6 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 					theLoadedProject loadedPackages
 						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition [
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: projectDefinition customConditionalAttributes
-		instanceMigrator: Rowan platform instanceMigrator
-		symbolList: Rowan image symbolList
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator [
-	"read the components for <projectDefinition> to develop the list of dependent projects"
-
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: customConditionalAttributes
-		instanceMigrator: instanceMigrator
-		symbolList: Rowan image symbolList
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
-	"read the components for <projectDefinition> to develop the list of dependent projects"
-
-	| projectSetDefinition requiredProjectNames |
-	projectSetDefinition := RwProjectSetDefinition new
-		addProject: projectDefinition;
-		yourself.
-	(requiredProjectNames := projectDefinition
-		requiredProjectNames: customConditionalAttributes) isEmpty
-		ifFalse: [ 
-			| absentProjectNames |
-			"if required projects are not already present in the image, then they must be loaded at this time"
-			absentProjectNames := requiredProjectNames
-				select: [ :projectName | Rowan projectNamed: projectName ifPresent: [ false ] ifAbsent: [ true ] ].
-			absentProjectNames isEmpty
-				ifFalse: [ 
-					projectSetDefinition := projectDefinition
-						readProjectSet: customConditionalAttributes ] ].
-	^ self
-		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator
-		symbolList: symbolList
-]
-
-{ #category : 'load project definitions' }
-RwPrjLoadToolV2 >> loadProjectDefinition: projectDefinition instanceMigrator: instanceMigrator [
-	^ self
-		loadProjectDefinition: projectDefinition
-		customConditionalAttributes: projectDefinition customConditionalAttributes
-		instanceMigrator: instanceMigrator
 ]
 
 { #category : 'load project by name' }

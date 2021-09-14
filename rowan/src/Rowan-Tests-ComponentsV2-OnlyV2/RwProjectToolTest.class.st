@@ -52,7 +52,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	packageDefinition1 := projectDefinition1 packageNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition1.
+	projectDefinition1 load.
 
 	projectDefinition2 := RwResolvedProjectV2 new
 		projectName: projectName2;
@@ -93,7 +93,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	self
 		should: [ 
 			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
-			projectTools load loadProjectDefinition: projectDefinition2 ]
+			projectDefinition2 load ]
 		raise: Error
 ]
 
@@ -151,7 +151,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	packageDefinition1 := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition1.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	testClass1 := Rowan globalNamed: className1.
 	self assert: testClass1 notNil.
@@ -199,7 +199,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	packageDefinition2 addClassDefinition: classDefinition2.
 	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 
-	[ projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
@@ -259,7 +259,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 		packageNamed: 'Simple-Globals-Extensions'.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	self assert: (Object perform: #classFoo) = 'bar'.
 	self assert: (Object new perform: #instanceFoo) = 'foo'

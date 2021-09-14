@@ -60,7 +60,7 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 						protocol: 'accessing'
 						source: 'w ^ ', (classNames at: 1)).
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition
+	projectDefinition load
 ]
 
 { #category : 'private' }
@@ -98,8 +98,7 @@ RwRowanIssue188Test >> _createNewClassAndReferenceMethodsInSingleLoad: projectNa
 						protocol: 'accessing'
 						source: 'x ^ ', (classNames at: 3)).
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition
-
+	projectDefinition load
 ]
 
 { #category : 'tests' }

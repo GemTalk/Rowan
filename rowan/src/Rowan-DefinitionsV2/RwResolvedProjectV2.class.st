@@ -917,8 +917,7 @@ RwResolvedProjectV2 >> load [
 			and send #load to the project set.
 	"
 
-	self _validate: self conditionalAttributes.
-	^ Rowan projectTools loadV2 loadProjectDefinition: self projectDefinition
+	^ self load: Rowan platform instanceMigrator
 ]
 
 { #category : 'actions' }
@@ -930,8 +929,10 @@ RwResolvedProjectV2 >> load: instanceMigrator [
 
 	self _validate: self conditionalAttributes.
 	^ Rowan projectTools loadV2
-		loadProjectDefinition: self
+		_loadProjectDefinition: self projectDefinition
+		customConditionalAttributes: self customConditionalAttributes
 		instanceMigrator: instanceMigrator
+		symbolList: Rowan image symbolList
 ]
 
 { #category : 'project definition' }

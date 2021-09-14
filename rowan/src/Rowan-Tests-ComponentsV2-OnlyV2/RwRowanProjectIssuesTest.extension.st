@@ -172,7 +172,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames:
 
 	projectDefinition resolve.
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	project := RwProject newNamed: projectName.
 
@@ -430,7 +430,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 				newForSelector: #'ivar1'
 				protocol: 'accessing'
 				source: 'ivar1 ^ivar1').
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -488,7 +488,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 	classDefinition := (projectDefinition packageNamed: packageName2)
 		classDefinitions at: 'Issue114Class_2'.
 	classDefinition comment: comment.
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -565,7 +565,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 				newForSelector: #'ivar1'
 				protocol: 'accessing'
 				source: 'ivar1 ^ivar1').
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -651,7 +651,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 						protocol: 'accessing'
 						source: 'foo ^2').
 
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -739,7 +739,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 						source: 'foo ^2');
 		comment: 'a new comment'.
 
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -801,7 +801,7 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	classDefinition := (projectDefinition packageNamed: packageName2)
 		classDefinitions at: 'Issue114Class_2'.
 
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -865,7 +865,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	classDefinition := (projectDefinition packageNamed: packageName2)
 		classDefinitions at: 'Issue114Class_2'.
 
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -927,7 +927,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	classDefinition := (projectDefinition packageNamed: packageName2)
 		classDefinitions at: 'Issue114Class_2'.
 	classDefinition comment: 'a new comment'.
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -991,7 +991,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	classDefinition := (projectDefinition packageNamed: packageName2)
 		classDefinitions at: 'Issue114Class_2'.
 	classDefinition comment: 'a new comment'.
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -1078,7 +1078,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 						newForSelector: #'foo'
 						protocol: 'accessing'
 						source: 'foo ^2').
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -1167,7 +1167,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 						protocol: 'accessing'
 						source: 'foo ^2');
 		comment: 'a new comment'.
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -1263,7 +1263,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 						protocol: 'accessing'
 						source: 'foo ^2');
 		comment: 'a new comment'.
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -1357,7 +1357,7 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 				newForSelector: #'foo'
 				protocol: 'accessing'
 				source: 'foo ^ 2').
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
@@ -2827,14 +2827,13 @@ RwRowanProjectIssuesTest >> testIssue198A [
 	packageDefinition1 classDefinitions removeKey: theSubclassDefinition key.
 	packageDefinition2 classDefinitions at: theSubclassDefinition key put: theSubclassDefinition.	"move subclass to different package"
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	self assert: (audit := project audit) isEmpty.
 
 	newSubclass := Rowan globalNamed: className2.
 	self assert: newSubclass ~~ theSubclass.
 	self assert: (x := newSubclass rowanPackageName) = packageName2.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -2911,7 +2910,7 @@ RwRowanProjectIssuesTest >> testIssue198B [
 						protocol: 'accessing'
 						source: 'boom ^ ', className2).																"add method referencing moved class"
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	projectDefinition load.
 
 	self assert: (audit := project audit) isEmpty.
 
@@ -2985,8 +2984,7 @@ RwRowanProjectIssuesTest >> testIssue198C [
 	packageDefinition1 classDefinitions removeKey: theUnrelatedMovedClassDefinition key.
 	packageDefinition2 classDefinitions at: theUnrelatedMovedClassDefinition key put: theUnrelatedMovedClassDefinition.	"move unrelated moved class to different package"
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
-
+	projectDefinition load.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3041,8 +3039,7 @@ RwRowanProjectIssuesTest >> testIssue199 [
 	theSubclassDefinition := packageDefinition1 classDefinitions at: className2.
 	theSubclassDefinition superclassName: className3.												"change className2 superclass to className3"
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
-
+	projectDefinition load.
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -7587,7 +7584,7 @@ RwRowanProjectIssuesTest >> testIssue40 [
 				newForSelector: #'initialize'
 				protocol: 'initialization'
 				source: 'initialize CVar2 := CVar1 + 1.').
-	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [ :ex | ex resume: true ].
 
