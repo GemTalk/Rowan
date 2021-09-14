@@ -51083,19 +51083,6 @@ isLoaded
 	^ self _loadedProjectIfPresent: [ true ] ifAbsent: [ false ]
 %
 
-category: 'to be removed'
-method: RwProject
-load: instanceMigrator
-	"
-		load only the receiver into the image, using the specified instance migrator. Required projects for the receiver are only 
-			loaded if they are not already present in the image.
-	"
-
-"use reload: instead"
-
-	^ self _loadedProject load: instanceMigrator
-%
-
 category: 'properties'
 method: RwProject
 loadedCommitId
@@ -87209,26 +87196,6 @@ readLoadSpecForProducedProject: producedProject platformConditionalAttributes: p
 	^ visitor
 %
 
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes 
-	| visitor |
-	visitor := self new
-		_readComponentsForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject
-		projectDefinitionSourceProperty:
-				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionPlatformConditionalAttributes:
-				platformConditionalAttributes copy;
-		yourself.
-	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
-	^ visitor
-%
-
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecSetForProducedProject: producedProject
@@ -87290,70 +87257,6 @@ readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes
 	^ loadSpecSet
 %
 
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
-	loadSpecSet := RwLoadSpecSet new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {{resolvedProject.
-	componentNamesToRead.
-	customConditionalAttributes}}.
-	processedProjects := Dictionary new.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| nextDefArray rp cn cca |
-			nextDefArray := projectVisitorQueue removeFirst.
-			rp := nextDefArray at: 1.
-			cn := nextDefArray at: 2.
-			cca := nextDefArray at: 3.
-
-			visitor := self
-				readLoadSpecForResolvedProject: rp
-				withComponentNames: cn
-				customConditionalAttributes: cca
-				platformConditionalAttributes: platformConditionalAttributes.
-
-			processedProjects at: rp projectName put: rp.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					nextDefArray}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject |
-					"derive resolved project from the load spec"
-					theResolvedProject := loadSpec resolveWithParentProject: rp.
-					processedProjects
-						at: theResolvedProject projectName
-						ifAbsent: [ 
-							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue
-								addLast:
-									{theResolvedProject.
-									(loadSpec componentNames).
-									(theResolvedProject customConditionalAttributes)} ] ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| ndf theVisitor theResolvedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			ndf := visitedArray at: 2.
-			theResolvedProject := ndf at: 1.
-			theLoadSpec := theResolvedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					self
-						_updateLoadSpecWithRepositoryRoot: theLoadSpec
-						fromLoadedProject: theLoadedProject ].
-			loadSpecSet addLoadSpec: theLoadSpec ].
-	^ loadSpecSet
-%
-
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectForProducedProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
@@ -87371,26 +87274,6 @@ readProjectForProducedProject: aProducedProject withComponentNames: componentNam
 		yourself.
 	visitor visitedComponents
 		keysAndValuesDo: [ :cName :cmp | aProducedProject _projectComponents _addComponent: cmp ].
-	^ visitor
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	| visitor |
-	visitor := self new
-		_readComponentsForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject
-		projectDefinitionSourceProperty:
-				RwLoadedProject _projectDiskDefinitionSourceValue;
-		_projectDefinitionPlatformConditionalAttributes:
-				platformConditionalAttributes copy;
-		yourself.
-	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
 	^ visitor
 %
 
@@ -87577,16 +87460,6 @@ requiredProjectNamesForProducedProject: producedProject
 			pp := visitedArray at: 2.
 			requiredProjectNames add: pp projectName ].
 	^ requiredProjectNames
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-resolvedProject: resolvedProject customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	^ self new
-		platformConditionalAttributes: platformConditionalAttributes;
-		customConditionalAttributes: customConditionalAttributes;
-		resolvedProject: resolvedProject;
-		yourself
 %
 
 category: 'private'
@@ -87877,22 +87750,6 @@ method: RwResolvedProjectComponentVisitorV2
 _readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
 	| theComponentNames  |
 	resolvedProject := aProducedProject.
-	platformConditionalAttributes := aPlatformConditionalAttributes.
-	customConditionalAttributes := aCustomConditionalAttributes.
-
-	resolvedProject _projectComponents: RwResolvedProjectComponentsV2 new.	"build new list of components based on (potentially) new list of componentNames"
-	resolvedProject _projectDefinition packages: Dictionary new.	"bulid new list of packages as well"
-	theComponentNames := componentNamesToRead isEmpty
-		ifTrue: [ resolvedProject componentNames ]
-		ifFalse: [ componentNamesToRead ].
-	^ self _visitComponents: theComponentNames
-%
-
-category: 'to be removed'
-method: RwResolvedProjectComponentVisitorV2
-_readComponentsForResolvedProject: aResolvedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
-	| theComponentNames  |
-	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
 
@@ -88769,6 +88626,28 @@ resolve
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ RwResolvedProjectV2 loadSpecification: self
+%
+
+category: 'to be removed'
+method: RwLoadSpecificationV2
+resolve: customAttributes platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
+%
+
+category: 'to be removed'
+method: RwLoadSpecificationV2
+resolveProjectSet: customAttributes platformAttributes: platformAttributes
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver and any dependent projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
 %
 
 category: 'to be removed'
@@ -98034,32 +97913,6 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 	^ registryInstance
-%
-
-! Class extensions for 'RwLoadSpecificationV2'
-
-!		Instance methods for 'RwLoadSpecificationV2'
-
-category: '*rowan-definitionsv2'
-method: RwLoadSpecificationV2
-resolve: customAttributes platformAttributes: platformAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
-%
-
-category: '*rowan-definitionsv2'
-method: RwLoadSpecificationV2
-resolveProjectSet: customAttributes platformAttributes: platformAttributes
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
 %
 
 ! Class extensions for 'RwMethodDefinition'
