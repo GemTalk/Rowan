@@ -281,13 +281,6 @@ RwResolvedProject >> read: platformConditionalAttributes [
 	self _concreteProject read: platformConditionalAttributes
 ]
 
-{ #category : 'transitions' }
-RwResolvedProject >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
-
-	self _concreteProject read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-]
-
 { #category : 'actions' }
 RwResolvedProject >> readPackageNames: packageNames [
 	^ self _concreteProject readPackageNames: packageNames

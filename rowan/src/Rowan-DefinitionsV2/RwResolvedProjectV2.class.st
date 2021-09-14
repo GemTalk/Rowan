@@ -1293,7 +1293,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames customCondition
 
 	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
+		readProjectForProducedProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1342,7 +1342,7 @@ RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes platformCondi
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
+		readProjectSetForProducedProject: self
 		withComponentNames: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1366,8 +1366,9 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
+		readProjectSetForProducedProject: self
 		withComponentNames: componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 

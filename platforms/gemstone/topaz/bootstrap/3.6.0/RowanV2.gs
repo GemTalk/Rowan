@@ -50171,14 +50171,6 @@ read: platformConditionalAttributes
 	self _concreteProject read: platformConditionalAttributes
 %
 
-category: 'to be removed'
-method: RwDefinedFromResolvedProject
-read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
-
-	self _concreteProject read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-%
-
 category: 'transitions'
 method: RwDefinedFromResolvedProject
 readProjectComponentNames: componentNames
@@ -50576,14 +50568,6 @@ read: platformConditionalAttributes
 	"return a RwDefinedProject with definitions read from disk ... the reciever will match the definitions on disk based on the current load specification"
 
 	self _concreteProject read: platformConditionalAttributes
-%
-
-category: 'transitions'
-method: RwResolvedProject
-read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
-
-	self _concreteProject read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'actions'
@@ -65856,7 +65840,7 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 
 	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForResolvedProject: self
+		readProjectForProducedProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -65909,7 +65893,7 @@ readProjectSet: customConditionalAttributes platformConditionalAttributes: platf
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
+		readProjectSetForProducedProject: self
 		withComponentNames: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -65935,8 +65919,9 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForResolvedProject: self
+		readProjectSetForProducedProject: self
 		withComponentNames: componentNames
+		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -70855,18 +70840,6 @@ readProjectForProducedProject: resolvedProject withComponentNames: componentName
 	^ resolvedProject
 %
 
-category: 'to be removed'
-method: RwPrjReadToolV2
-readProjectForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	RwResolvedProjectComponentVisitorV2
-		readProjectForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes.
-	resolvedProject readPackageNames: resolvedProject packageNames.
-	^ resolvedProject
-%
-
 category: 'read produced projects'
 method: RwPrjReadToolV2
 readProjectSetForProducedProject: producedProject
@@ -70883,31 +70856,22 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
+category: 'read produced projects'
+method: RwPrjReadToolV2
+readProjectSetForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+	^ RwResolvedProjectComponentVisitorV2
+		readProjectSetForProducedProject: resolvedProject
+		withComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: platformConditionalAttributes.
+%
+
 category: 'read loaded projects'
 method: RwPrjReadToolV2
 readProjectSetForProjectNamed: projectName
 	| project |
 	project := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	^ project readLoadedProjectSet
-%
-
-category: 'to be removed'
-method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'to be removed'
-method: RwPrjReadToolV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
-	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForResolvedProject: resolvedProject
-		withComponentNames: componentNames
-		platformConditionalAttributes: platformConditionalAttributes
 %
 
 ! Class implementation for 'RwPrjReconcileToolV2'
@@ -87483,20 +87447,20 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 	^ projectSetDefinition
 %
 
-category: 'to be removed'
+category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ self
-		readProjectSetForResolvedProject: resolvedProject
+		readProjectSetForProducedProject: resolvedProject
 		withComponentNames: componentNamesToRead
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 		useLoadedProjects: false
 %
 
-category: 'to be removed'
+category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
+readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -87513,7 +87477,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 			cca := nextDefArray at: 3.
 
 			visitor := self
-				readProjectForResolvedProject: rp
+				readProjectForProducedProject: rp
 				withComponentNames: cn
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
@@ -87572,17 +87536,6 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 			theResolvedProject readPackageNames: theResolvedProject packageNames.
 			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes
-	^ self
-		readProjectSetForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: resolvedProject customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		useLoadedProjects: false
 %
 
 category: 'required projects'

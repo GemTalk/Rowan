@@ -299,18 +299,18 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 	^ projectSetDefinition
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ self
-		readProjectSetForResolvedProject: resolvedProject
+		readProjectSetForProducedProject: resolvedProject
 		withComponentNames: componentNamesToRead
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 		useLoadedProjects: false
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
+{ #category : 'reading' }
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -327,7 +327,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 			cca := nextDefArray at: 3.
 
 			visitor := self
-				readProjectForResolvedProject: rp
+				readProjectForProducedProject: rp
 				withComponentNames: cn
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
@@ -386,16 +386,6 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 			theResolvedProject readPackageNames: theResolvedProject packageNames.
 			projectSetDefinition addProject: theResolvedProject ].
 	^ projectSetDefinition
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: resolvedProject withComponentNames: componentNamesToRead platformConditionalAttributes: platformConditionalAttributes [
-	^ self
-		readProjectSetForResolvedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: resolvedProject customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		useLoadedProjects: false
 ]
 
 { #category : 'required projects' }
