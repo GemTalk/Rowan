@@ -350,7 +350,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForResolvedProject: r
 							theResolvedProject := theLoadedProject asDefinition resolve.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
-									"the load spec for the loaded project is incompatible with the required load sped ... this is an error"
+									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"
 									self
 										error:
 											'load conflicts between the load spec for the loaded project and the load spec for the required project '

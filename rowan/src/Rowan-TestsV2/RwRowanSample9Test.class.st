@@ -5562,8 +5562,6 @@ RwRowanSample9Test >> testLoadSpec_produce_05 [
 RwRowanSample9Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 
-	"Also need a test where the required project is a function of a platform attribute"
-
 	"https://github.com/GemTalk/Rowan/issues/707"
 
 	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |

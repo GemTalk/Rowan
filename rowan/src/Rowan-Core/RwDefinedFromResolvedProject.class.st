@@ -118,6 +118,13 @@ RwDefinedFromResolvedProject >> read [
 ]
 
 { #category : 'transitions' }
+RwDefinedFromResolvedProject >> read: platformConditionalAttributes [
+	"return a RwDefinedProject with definitions read from disk ... the reciever will match the definitions on disk based on the current load specification"
+
+	self _concreteProject read: platformConditionalAttributes
+]
+
+{ #category : 'to be removed' }
 RwDefinedFromResolvedProject >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 

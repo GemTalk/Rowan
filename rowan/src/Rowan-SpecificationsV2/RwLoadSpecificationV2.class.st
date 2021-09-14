@@ -641,7 +641,12 @@ RwLoadSpecificationV2 >> read [
 
 { #category : 'actions' }
 RwLoadSpecificationV2 >> read: platformConditionalAttributes [
-	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk using platformConditionalAttributes"
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl and 
+		read the packages from disk using platformConditionalAttributes.
+
+		Do not include custom conditional attributes in platformConditionalAttributes, 
+			use customConditionalAttributes: to set cusom conditional attributes in 
+			the receiver."
 
 	self produce: platformConditionalAttributes.
 	^ RwResolvedProjectV2

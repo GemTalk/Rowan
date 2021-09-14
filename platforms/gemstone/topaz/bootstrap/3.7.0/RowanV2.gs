@@ -50165,6 +50165,14 @@ read
 
 category: 'transitions'
 method: RwDefinedFromResolvedProject
+read: platformConditionalAttributes
+	"return a RwDefinedProject with definitions read from disk ... the reciever will match the definitions on disk based on the current load specification"
+
+	self _concreteProject read: platformConditionalAttributes
+%
+
+category: 'to be removed'
+method: RwDefinedFromResolvedProject
 read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 
@@ -50564,6 +50572,14 @@ read
 
 category: 'transitions'
 method: RwResolvedProject
+read: platformConditionalAttributes
+	"return a RwDefinedProject with definitions read from disk ... the reciever will match the definitions on disk based on the current load specification"
+
+	self _concreteProject read: platformConditionalAttributes
+%
+
+category: 'transitions'
+method: RwResolvedProject
 read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"return a RwDefinedProject with definitions read from disk, using the specificied conditional attributes"
 
@@ -50615,7 +50631,7 @@ readProjectSet
 	self _concreteProject readProjectSet
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProject
 readProjectSet: customConditionalAttributes
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
@@ -65813,7 +65829,7 @@ readProducedLoadSpecSet: platformConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectComponentNames: componentNames
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -65832,6 +65848,8 @@ readProjectComponentNames: componentNames customConditionalAttributes: customCon
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
+
+"SHOULD BE PRIVATE METHOD OR REMOVED"
 
 	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
@@ -65883,6 +65901,8 @@ method: RwResolvedProjectV2
 readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
+"SHOULD BE PRIVATE METHOD OR REMOVED"
+
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
@@ -65892,7 +65912,7 @@ readProjectSet: customConditionalAttributes platformConditionalAttributes: platf
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSetComponentNames: componentNames
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -65904,7 +65924,7 @@ readProjectSetComponentNames: componentNames
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
@@ -66076,7 +66096,7 @@ resolve
 							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 resolve: platformConditionalAttributes
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
@@ -76347,7 +76367,12 @@ read
 category: 'actions'
 method: RwLoadSpecSet
 read: platformConditionalAttributes
-	"Return a projectSetDefinition that contains project definitions corresponding to each of the load specs in the reciever"
+	"Return a projectSetDefinition that contains project definitions corresponding to 
+		each of the load specs in the reciever.
+
+		Do not include custom conditional attributes in platformConditionalAttributes, 
+			use customConditionalAttributes: sent to each of the load specs in the 
+			receiver to set cusom conditional attributes."
 
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -87537,7 +87562,7 @@ readProjectSetForResolvedProject: resolvedProject withComponentNames: componentN
 							theResolvedProject := theLoadedProject asDefinition resolve.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
-									"the load spec for the loaded project is incompatible with the required load sped ... this is an error"
+									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"
 									self
 										error:
 											'load conflicts between the load spec for the loaded project and the load spec for the required project '
@@ -88713,7 +88738,12 @@ read
 category: 'actions'
 method: RwLoadSpecificationV2
 read: platformConditionalAttributes
-	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk using platformConditionalAttributes"
+	"Create an instance of RwResolvedProjectV2 attached to projectUrl and 
+		read the packages from disk using platformConditionalAttributes.
+
+		Do not include custom conditional attributes in platformConditionalAttributes, 
+			use customConditionalAttributes: to set cusom conditional attributes in 
+			the receiver."
 
 	self produce: platformConditionalAttributes.
 	^ RwResolvedProjectV2

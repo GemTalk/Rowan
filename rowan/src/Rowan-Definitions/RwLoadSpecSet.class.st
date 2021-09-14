@@ -70,7 +70,12 @@ RwLoadSpecSet >> read [
 
 { #category : 'actions' }
 RwLoadSpecSet >> read: platformConditionalAttributes [
-	"Return a projectSetDefinition that contains project definitions corresponding to each of the load specs in the reciever"
+	"Return a projectSetDefinition that contains project definitions corresponding to 
+		each of the load specs in the reciever.
+
+		Do not include custom conditional attributes in platformConditionalAttributes, 
+			use customConditionalAttributes: sent to each of the load specs in the 
+			receiver to set cusom conditional attributes."
 
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
