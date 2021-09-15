@@ -49,7 +49,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -62,7 +62,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl gitUrl: urlString [
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -87,7 +87,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -101,7 +101,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -141,7 +141,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 

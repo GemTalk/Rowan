@@ -50314,7 +50314,7 @@ projectFromUrl: loadSpecUrl diskUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50328,7 +50328,7 @@ projectFromUrl: loadSpecUrl gitUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50355,7 +50355,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50370,7 +50370,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50413,7 +50413,7 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
