@@ -85,7 +85,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		yourself.
 
 	resolvedProject
-		resolve;
+		resolveProject;
 		load.
 
 	project2 := Rowan projectNamed: projectName2.
@@ -523,7 +523,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
 		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject resolve.
+	resolvedProject resolveProject.
 
   packageDefinition := resolvedProject packageNamed: packageName1.
 
@@ -658,7 +658,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
 		addPackagesNamed: {packageName1. packageName2} toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject resolve.
+	resolvedProject resolveProject.
 
   packageDefinition := resolvedProject packageNamed: packageName1.
 
@@ -799,7 +799,7 @@ RwBrowserToolApiTest >> testRenameClass_1 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 
@@ -971,7 +971,7 @@ RwBrowserToolApiTest >> testRenameClass_2 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 
@@ -1143,7 +1143,7 @@ RwBrowserToolApiTest >> testRenameClass_3 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 
@@ -1315,7 +1315,7 @@ RwBrowserToolApiTest >> testRenameClass_4 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 
@@ -1467,7 +1467,7 @@ RwBrowserToolApiTest >> testRenameClass_5 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 

@@ -546,7 +546,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -671,7 +671,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_A_export [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -792,7 +792,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_B [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -931,7 +931,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -1076,7 +1076,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_C_export [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -1220,7 +1220,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_D [
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -1392,7 +1392,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_A [
 				forPackageNamed: packageName1, projectExt;
 			gemstoneSetSymbolDictName: self _symbolDictionaryName 
 				forPackageNamed: packageName2, projectExt;
-			resolve;
+			resolveProject;
 			yourself.
 
 		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.
@@ -1555,7 +1555,7 @@ RwProjectTopazWriterTestV2 >> testGsTopazWriter_MultiProject_B [
 				forPackageNamed: packageName1, projectExt;
 			gemstoneSetSymbolDictName: self _symbolDictionaryName 
 				forPackageNamed: packageName2, projectExt;
-			resolve;
+			resolveProject;
 			yourself.
 
 		packageDefinition := projectDefinition packageNamed: packageName1, projectExt.

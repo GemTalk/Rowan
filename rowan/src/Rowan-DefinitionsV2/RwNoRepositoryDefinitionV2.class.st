@@ -17,7 +17,7 @@ RwNoRepositoryDefinitionV2 >> repositoryRoot [
 ]
 
 { #category : 'actions' }
-RwNoRepositoryDefinitionV2 >> resolve [
+RwNoRepositoryDefinitionV2 >> resolveRepository [
 	"nothing on disk"
 
 	^ false

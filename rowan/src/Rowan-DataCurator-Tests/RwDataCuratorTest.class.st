@@ -22,7 +22,7 @@ RwDataCuratorTest >> testCreateProjects [
 		projectName: projectName;
 		addLoadComponentNamed: componentName;
 		yourself.
-	projectDef resolve.
+	projectDef resolveProject.
 
 
 	((projectDef addPackageNamed: packageName toComponentNamed: componentName)

@@ -97,7 +97,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		yourself.
 
 	resolvedProject
-		resolve;
+		resolveProject;
 		load.
 	project2 := Rowan projectNamed: projectName2.
 
@@ -342,7 +342,7 @@ RwBrowserToolApiTest >> testRenameClass_Issue_490 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2 } toComponentNamed: componentName;
 		yourself.
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
   packageDefinition := projectDefinition packageNamed: packageName1.
 

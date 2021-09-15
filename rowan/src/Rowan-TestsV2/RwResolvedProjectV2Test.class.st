@@ -20,7 +20,7 @@ RwResolvedProjectV2Test >> testBasic [
 
 	self assert: project _validate.
 
-	project resolve.
+	project resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
 	stonString := STON toStringPretty: project.	"useful to view full structure"
 ]
@@ -48,7 +48,7 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	loadSpecification := project loadSpecification.
 	self assert: project _validate.
 
-	project resolve.
+	project resolveProject.
 
 	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
@@ -85,7 +85,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 	projectSpecification := project _projectSpecification.
 	self assert: project _validate.
 
-	project resolve.
+	project resolveProject.
 
 	self deny: expectedRepositoryRoot exists.
 	stonString := STON toStringPretty: project.	"useful in case of error"
@@ -113,7 +113,7 @@ RwResolvedProjectV2Test >> testBasicResolve_git [
 		repoType: #'git';
 		yourself.
 
-	resolvedProject resolve.
+	resolvedProject resolveProject.
 	stonString := STON toStringPretty: resolvedProject.
 
 	self assert: expectedRepositoryRoot exists.
@@ -138,7 +138,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 
 	self deny: projectRoot exists.
 
-	resolvedProject := projectSpecification resolve.
+	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
@@ -187,7 +187,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 
 	self deny: projectRoot exists.
 
-	resolvedProject := projectSpecification resolve.
+	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
@@ -268,7 +268,7 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 
 	self deny: projectRoot exists.
 
-	resolvedProject := projectSpecification resolve.
+	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
 	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 

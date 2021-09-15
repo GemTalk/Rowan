@@ -49970,9 +49970,9 @@ repoType: aSymbol
 	self _concreteProject repoType: aSymbol
 %
 
-category: 'to be removed'
+category: 'transitions'
 method: RwDefinedProject
-resolve
+resolveProject
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 %
 
@@ -49990,7 +49990,7 @@ resolveWithParentProject: aResolvedRwProject
 	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
 				(self loadSpecification
-						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
+						resolveWithParentProject: aResolvedRwProject _concreteProject) resolveProject;
 		yourself
 %
 
@@ -50282,7 +50282,7 @@ fromStrictDefinedProject: aDefinedProject
 	| createBlock oldPolicy |
 	createBlock := [ 
 	(self newNamed: aDefinedProject name)
-		_concreteProject: aDefinedProject _concreteProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolveProject;
 		yourself ].
 	aDefinedProject isStrict
 		ifTrue: [ ^ createBlock value ].
@@ -50300,7 +50300,7 @@ projectFromUrl: loadSpecUrl
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50341,7 +50341,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50384,7 +50384,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50399,7 +50399,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 	resolvedProject := loadSpec produceProject: platformConditionalAttributes.
 	resolvedProject read: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 %
 
@@ -50647,9 +50647,9 @@ repositoryRoot
 	^ self _concreteProject repositoryRoot
 %
 
-category: 'to be removed'
+category: 'transitions'
 method: RwResolvedProject
-resolve
+resolveProject
 	^ self
 %
 
@@ -52683,11 +52683,13 @@ needsCommit
 
 category: 'client commands'
 method: RowanAnsweringService
-newPackageNamed: packageName
-	| packageService |
-	packageService := RowanPackageService forPackageNamed: packageName.
-	packageService update.
-	answer := packageService.
+packageOrDictionaryFor: classService 
+	| service |
+	service := classService packageName = Rowan unpackagedName
+		ifTrue: [ RowanDictionaryService new name: classService dictionaryName ]
+		ifFalse: [ RowanPackageService forPackageNamed: classService packageName ].
+	service update.
+	answer := service.
 	RowanCommandResult addResult: self
 %
 
@@ -53696,6 +53698,12 @@ method: RowanClassService
 definedPackageName: newValue
 
 	definedPackageName := newValue
+%
+
+category: 'Accessing'
+method: RowanClassService
+dictionaryName
+	^dictionaryName
 %
 
 category: 'Updating'
@@ -55083,8 +55091,9 @@ removeClass: classService
 category: 'client commands'
 method: RowanDictionaryService
 removeClassNamed: className
-
-	self browserTool removeClassNamed: className.
+	[ self browserTool removeClassNamed: className ]
+		on: RwPerformingUnpackagedEditNotification
+		do: [ :ex | ex resume ]
 %
 
 category: 'client commands'
@@ -64556,7 +64565,7 @@ loadSpecification: anRwLoadSpecificationV2
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^(self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolve
+		resolveProject
 %
 
 category: 'to be removed'
@@ -65206,11 +65215,11 @@ copyForLoadedProject
 		yourself
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 create
 	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
-	self resolve; export
+	self resolveProject; export
 %
 
 category: '-- loader compat --'
@@ -66055,29 +66064,11 @@ requiredProjectNamesForLoadedProject
 
 category: 'to be removed'
 method: RwResolvedProjectV2
-resolve
-	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
-		project from disk, if project is present on disk"
-
-	self _projectRepository resolve
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self read.
-					self
-						projectDefinitionSourceProperty:
-							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
 resolve: platformConditionalAttributes
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolve
+	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
@@ -66093,7 +66084,7 @@ resolve: customConditionalAttributes platformConditionalAttributes: platformCond
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolve
+	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
@@ -66104,13 +66095,31 @@ resolve: customConditionalAttributes platformConditionalAttributes: platformCond
 						platformConditionalAttributes: platformConditionalAttributes ] ]
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+resolveProject
+	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
+		project from disk, if project is present on disk"
+
+	self _projectRepository resolveRepository
+		ifTrue: [ 
+			self _projectRepository checkAndUpdateRepositoryRevision: self.
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					"update project definition from disk"
+					self read.
+					self
+						projectDefinitionSourceProperty:
+							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
+%
+
 category: 'to be removed'
 method: RwResolvedProjectV2
 resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project set from disk, if project is present on disk (includes required projects)t"
   | res |
-	self _projectRepository resolve
+	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			self _checkProjectDirectoryStructure
@@ -66211,7 +66220,7 @@ _basicResolve
 	Return an true if there are project artifacts on disk and false if
 		the directory has not been populated. "
 
-	self _projectRepository resolve
+	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			^ self _checkProjectDirectoryStructure ].
@@ -73408,7 +73417,7 @@ repositoryUrl: anUrlString
 
 category: 'actions'
 method: RwAbstractRepositoryDefinitionV2
-resolve
+resolveRepository
 	self subclassResponsibility: #'resolve'
 %
 
@@ -73537,7 +73546,7 @@ repositoryRoot: pathStringOrReference
 
 category: 'actions'
 method: RwDiskRepositoryDefinitionV2
-resolve
+resolveRepository
 	"attach to existing repository structure"
 
 	"answer true if attaching to an existing repository"
@@ -73921,7 +73930,7 @@ repositoryUrl: aRepositoryUrlStrng
 
 category: 'actions'
 method: RwGitRepositoryDefinitionV2
-resolve
+resolveRepository
 	"attach to existing repository structure or clone"
 
 	"answer true if attaching to an existing repository"
@@ -73989,7 +73998,7 @@ repositoryRoot
 
 category: 'actions'
 method: RwNoRepositoryDefinitionV2
-resolve
+resolveRepository
 	"nothing on disk"
 
 	^ false
@@ -87341,7 +87350,7 @@ readProjectSetForProducedProject: resolvedProject withComponentNames: componentN
 		useLoadedProjects: false
 %
 
-category: 'reading'
+category: 'to be removed'
 classmethod: RwResolvedProjectComponentVisitorV2
 readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
@@ -87380,7 +87389,7 @@ readProjectSetForProducedProject: resolvedProject withComponentNames: componentN
 						ifTrue: [ 
 							"project is already present in image ... so use it"
 							theLoadSpec := theLoadedProject loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolve.
+							theResolvedProject := theLoadedProject asDefinition resolveProject.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
 									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"

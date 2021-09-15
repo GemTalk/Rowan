@@ -32,7 +32,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: #('Simple-Core' 'Simple-Tests')
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -63,7 +63,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 			toComponentNamed: componentName;
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
-		resolve;
+		resolveProject;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
@@ -128,7 +128,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 			forPackageNamed: 'Simple-Extensions';
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		resolve;
+		resolveProject;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.

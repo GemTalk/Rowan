@@ -34,7 +34,7 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName  }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.

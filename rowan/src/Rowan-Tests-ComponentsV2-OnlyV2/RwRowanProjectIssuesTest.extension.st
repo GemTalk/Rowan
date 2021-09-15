@@ -170,7 +170,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames:
 			projectsHome: rootPath; 
 			yourself.
 
-	projectDefinition resolve.
+	projectDefinition resolveProject.
 
 	projectDefinition load.
 
@@ -1401,7 +1401,7 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -2179,7 +2179,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_class_to_package [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2244,7 +2244,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2283,7 +2283,6 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -2313,7 +2312,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2402,7 +2401,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: packageName1;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2490,7 +2489,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: packageName1;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2577,7 +2576,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: packageName1;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2703,7 +2702,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: packageName1;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -3071,7 +3070,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -3135,7 +3134,6 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 
 	"validate"
 	self assert: (class new perform: #mover) = 2. "method not installed when class extension does not have a proper class name"
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3527,7 +3525,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3597,7 +3595,6 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 	self assert: class1 category = 'new category'.
 	self assert: class1 comment = 'new comment'.
 	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } . { #'ivar2' . Number } }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3627,7 +3624,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3693,7 +3690,6 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 	self assert: (x := class1 classVarNames asSortedCollection) = #(Cvar1 Cvar2 Cvar3) asSortedCollection.
 	self assert: class1 category = 'new category'.
 	self assert: class1 comment = 'new comment'.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3722,7 +3718,7 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3750,7 +3746,6 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 "validate"
 	class1 := Rowan globalNamed: className1.
 	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } })
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3782,7 +3777,7 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3840,7 +3835,6 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 	self assert: (class1 _constraintOn: #ivar1) == Association.
 	self assert: (class2 _constraintOn: #ivar2) == Array.
 	self assert: class3 _varyingConstraint == SmallInteger
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3870,7 +3864,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3912,7 +3906,6 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
 	self assert: class2 rowanPackageName = packageName.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -3944,7 +3937,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -3999,7 +3992,6 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
 	self assert: class2 rowanPackageName = packageName.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4031,7 +4023,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_3 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4086,7 +4078,6 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_3 [
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
 	self assert: class2 rowanPackageName = packageName.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4116,7 +4107,7 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4156,7 +4147,6 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 	self assert: class1 rowanPackageName = packageName.
 	self assert: (class1 _constraintOn: #ivar1) = Association.
 	self assert: (class1 _constraintOn: #ivar2) = SmallInteger.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4180,7 +4170,7 @@ RwRowanProjectIssuesTest >> testIssue263 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -4236,7 +4226,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_keep_in_system [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4281,7 +4271,6 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_keep_in_system [
 	class1 := Rowan globalNamed: className1.
 	self assert: class1 == oldClass.
 	self assert: class1 rowanProjectName = Rowan unpackagedName.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4310,7 +4299,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4358,7 +4347,6 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 	oldClass := class1.
 	class1 := Rowan globalNamed: className1.
 	self assert: class1 isNil.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4387,7 +4375,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_remove_from_system [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4426,7 +4414,6 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_remove_from_system [
 	oldClass := class1.
 	class1 := Rowan globalNamed: className1.
 	self assert: class1 isNil.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4457,7 +4444,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -4530,7 +4517,6 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 	self assert: class2 superclass == oldClass1.
 	self assert: class2 == oldClass2.
 	self assert: class2 rowanPackageName = Rowan unpackagedName.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4562,7 +4548,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4689,7 +4675,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4790,7 +4776,6 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: oldClass3 ~~ class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4824,7 +4809,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4925,7 +4910,6 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: oldClass3 ~~ class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4959,7 +4943,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5060,7 +5044,6 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: oldClass3 ~~ class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: { { #'ivar1' . SmallInteger } . { #'ivar4' . Association }. { #'ivar3' . Association }. }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -5091,7 +5074,7 @@ RwRowanProjectIssuesTest >> testIssue293_constraint_ordering [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5179,7 +5162,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -5213,7 +5196,6 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
 
 	class := Rowan globalNamed: className.
 	self assert: class isNil.
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -5241,7 +5223,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -5332,7 +5314,7 @@ RwRowanProjectIssuesTest >> testIssue310 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
    packageDefinition := projectDefinition packageNamed: packageName.
@@ -5446,7 +5428,7 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5559,7 +5541,7 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5670,7 +5652,7 @@ RwRowanProjectIssuesTest >> testIssue313_3 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -5748,7 +5730,6 @@ RwRowanProjectIssuesTest >> testIssue313_3 [
 
 		self assert: theClass superclass == baseClass.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName ].
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -5780,7 +5761,7 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
@@ -5895,7 +5876,7 @@ RwRowanProjectIssuesTest >> testIssue313_5 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 	1 to: 10 do: [:index | 
 		projectDefinition 
@@ -5983,7 +5964,6 @@ RwRowanProjectIssuesTest >> testIssue313_5 [
 
 		self assert: theClass superclass == baseClass.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = thePackageName ].
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6016,7 +5996,7 @@ RwRowanProjectIssuesTest >> testIssue313_6 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 	projectDefinition2 := RwResolvedProjectV2 new
 		projectName: projectName2;
@@ -6025,7 +6005,7 @@ RwRowanProjectIssuesTest >> testIssue313_6 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName2}
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	1 to: 10 do: [:index | 
@@ -6118,7 +6098,6 @@ RwRowanProjectIssuesTest >> testIssue313_6 [
 		self assert: theClass superclass == baseClass.
 		self assert: theClass rowanPackageName = thePackageName.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = thePackageName ].
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6151,7 +6130,7 @@ RwRowanProjectIssuesTest >> testIssue325 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1
@@ -6228,7 +6207,6 @@ RwRowanProjectIssuesTest >> testIssue325 [
 	self assert: (Rowan globalNamed: className3) notNil.							"and class1 is visible"
 
 	self assert: (Rowan image packageNamesForLoadedProjectNamed: projectName) sort = {packageName2. packageName3} sort
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6258,7 +6236,7 @@ RwRowanProjectIssuesTest >> testIssue326_class_modification_remove_constraint [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition1 := RwClassDefinition
@@ -6304,7 +6282,6 @@ RwRowanProjectIssuesTest >> testIssue326_class_modification_remove_constraint [
 	self assert: oldClass == class1.
 	self assert: class1 instVarNames = #(ivar1 ivar2).
 	self assert: (class1 _constraintsEqual: { { #'ivar2' . Number } }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6338,7 +6315,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -6435,7 +6412,6 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 	self assert: oldClass3 == class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: { { #'ivar5' . Number } . { #'ivar4' . Association }. { #'ivar3' . Association }. }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6469,7 +6445,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -6566,7 +6542,6 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 	self assert: oldClass3 == class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: {  { #'ivar1' . Number } . { #'ivar5' . Number } . { #'ivar3' . Association }. }).
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -6598,7 +6573,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -6701,7 +6676,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -6802,7 +6777,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -6937,7 +6912,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -7073,7 +7048,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -7180,7 +7155,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -7318,7 +7293,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -7452,7 +7427,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -8217,7 +8192,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_1 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -8349,7 +8324,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_2 [
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -8481,7 +8456,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_3 [
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -8639,7 +8614,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_4 [
 			toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -8848,7 +8823,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_5 [
 			forPackageNamed: packageName2;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName3;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -9060,7 +9035,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 			forPackageNamed: packageName2;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName3;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.
@@ -9347,7 +9322,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName.

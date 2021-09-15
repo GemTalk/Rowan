@@ -550,8 +550,8 @@ RwDefinedProject >> repoType: aSymbol [
 	self _concreteProject repoType: aSymbol
 ]
 
-{ #category : 'to be removed' }
-RwDefinedProject >> resolve [
+{ #category : 'transitions' }
+RwDefinedProject >> resolveProject [
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 ]
 
@@ -567,7 +567,7 @@ RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
 	^ (RwResolvedFromDefinedProject newNamed: self name)
 		_concreteProject:
 				(self loadSpecification
-						resolveWithParentProject: aResolvedRwProject _concreteProject) resolve;
+						resolveWithParentProject: aResolvedRwProject _concreteProject) resolveProject;
 		yourself
 ]
 

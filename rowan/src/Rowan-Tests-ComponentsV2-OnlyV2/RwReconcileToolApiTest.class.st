@@ -34,7 +34,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
@@ -168,7 +168,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
@@ -311,7 +311,7 @@ RwReconcileToolApiTest >> testReconcileProjectSetMethods [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3  }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition1 := projectDefinition packageNamed: packageName1.

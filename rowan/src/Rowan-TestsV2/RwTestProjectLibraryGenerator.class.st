@@ -3910,7 +3910,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0072: resolvedProject embedd
 	"Start with spec_0053; change the project spec so that none of the directories are using the default path"
 
 	| resolvedEmbeddedProject |
-	resolvedEmbeddedProject := embeddedProject resolve.
+	resolvedEmbeddedProject := embeddedProject resolveProject.
 
 	(resolvedEmbeddedProject repositoryRoot / 'rowan') ensureDeleteAll.	"old directory"
 
@@ -4048,7 +4048,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0074: resolvedProject [
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
-	requiredProject := (requiredLoadSpec resolveWithParentProject: resolvedProject) resolve.
+	requiredProject := (requiredLoadSpec resolveWithParentProject: resolvedProject) resolveProject.
 	requiredProject projectSpecification
 		specsPath: 'rowan/specs';
 		projectsPath: 'rowan/projects';
@@ -4123,7 +4123,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0075: resolvedProject embedd
 			protocol: 'tests';
 		yourself.
 
-	resolvedEmbeddedProject := embeddedProject resolve.
+	resolvedEmbeddedProject := embeddedProject resolveProject.
 	((resolvedEmbeddedProject packageNamed: packageName3)
 		classDefinitionNamed: className3)
 			addInstanceMethod: 'ivar1_embedded ^ ivar1'
@@ -4158,7 +4158,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0076: resolvedProject embedd
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject  condition: 'gnu' packageLabel: 'Gnu'.
 	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gnu' packageLabel: 'Gnu'.
 
-	(resolvedEmbeddedProject := embeddedProject resolve)
+	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
@@ -4178,7 +4178,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0077: resolvedProject embedd
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs2.[4-]' packageLabel: 'GemStone24x'.
 	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs2.[4-]'  packageLabel: 'GemStone24x'.
 
-	(resolvedEmbeddedProject := embeddedProject resolve)
+	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
@@ -4200,7 +4200,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0078: resolvedProject embedd
 	self _addPlatformConditionalDefinitionsFor_0054Project: resolvedProject condition: 'gs3.[2-]' packageLabel: 'GemStone3x'.
 	self _addPlatformConditionalDefinitionsFor_0054Project: embeddedProject condition: 'gs3.[2-]'  packageLabel: 'GemStone3x'.
 
-	(resolvedEmbeddedProject := embeddedProject resolve)
+	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"

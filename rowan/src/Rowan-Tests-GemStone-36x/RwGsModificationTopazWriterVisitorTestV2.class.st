@@ -409,7 +409,7 @@ RwGsModificationTopazWriterVisitorTestV2 >> _standardProjectSetDefinition: proje
 			forPackageNamed: packageName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition packageNamed: packageName1.

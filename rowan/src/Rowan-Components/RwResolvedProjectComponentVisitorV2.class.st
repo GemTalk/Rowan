@@ -208,7 +208,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: r
 		useLoadedProjects: false
 ]
 
-{ #category : 'reading' }
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -246,7 +246,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: r
 						ifTrue: [ 
 							"project is already present in image ... so use it"
 							theLoadSpec := theLoadedProject loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolve.
+							theResolvedProject := theLoadedProject asDefinition resolveProject.
 							(loadSpec loadConflictsWith: theLoadSpec)
 								ifTrue: [ 
 									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"

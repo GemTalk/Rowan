@@ -56,7 +56,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -214,7 +214,6 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 	self assert: class3 == oldClass3.
 	self assert: class4 == oldClass4.
 	self assert: class5 == oldClass5.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -272,7 +271,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
@@ -433,7 +432,6 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 	self assert: class3 == oldClass3.
 	self assert: class4 == oldClass4.
 	self assert: class5 == oldClass5.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -491,7 +489,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 
 			forPackageNamed: packageName2;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.

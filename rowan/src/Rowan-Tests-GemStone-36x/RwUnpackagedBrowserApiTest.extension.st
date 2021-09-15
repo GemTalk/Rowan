@@ -29,7 +29,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject resolve.
+	resolvedProject resolveProject.
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -113,7 +113,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -207,7 +207,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1 . packageName2} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -294,7 +294,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -381,7 +381,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: {packageName1} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"

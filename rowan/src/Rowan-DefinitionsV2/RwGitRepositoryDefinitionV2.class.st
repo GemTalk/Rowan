@@ -339,7 +339,7 @@ RwGitRepositoryDefinitionV2 >> repositoryUrl: aRepositoryUrlStrng [
 ]
 
 { #category : 'actions' }
-RwGitRepositoryDefinitionV2 >> resolve [
+RwGitRepositoryDefinitionV2 >> resolveRepository [
 	"attach to existing repository structure or clone"
 
 	"answer true if attaching to an existing repository"

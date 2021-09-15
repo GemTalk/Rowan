@@ -27,7 +27,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 		addPackagesNamed: {packageName} toComponentNamed: componentName;
 		yourself.
 
-	resolvedProject resolve.
+	resolvedProject resolveProject.
 
 	self assert: (resolvedProject projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
 

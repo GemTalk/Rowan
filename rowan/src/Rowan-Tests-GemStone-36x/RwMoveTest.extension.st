@@ -29,7 +29,7 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 		yourself.
 
 	projectDefinition1
-		resolve.
+		resolveProject.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: className
@@ -122,7 +122,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -200,7 +200,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -294,7 +294,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -403,7 +403,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -524,7 +524,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 } 
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -636,7 +636,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -767,7 +767,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -857,7 +857,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -962,7 +962,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1070,7 +1070,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1193,7 +1193,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3} 
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1317,7 +1317,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1399,7 +1399,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1499,7 +1499,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 . packageName4 } 
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1621,7 +1621,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 . packageName4 } 
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1760,7 +1760,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2} toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1879,7 +1879,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2016,7 +2016,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2106,7 +2106,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2220,7 +2220,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2309,7 +2309,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2422,7 +2422,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2523,7 +2523,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2643,7 +2643,7 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -2715,7 +2715,7 @@ RwMoveTest >> testProjectSet_rename_package [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2790,7 +2790,7 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -2911,7 +2911,7 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: packageName1;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition

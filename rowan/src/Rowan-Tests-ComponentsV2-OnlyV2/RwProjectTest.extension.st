@@ -64,7 +64,7 @@ RwProjectTest >> _simpleCreateResolvedProjectForRepoType: repoType [
 	definedProject := self _simpleCreateDefinedProjectForRepoType: #'disk'.
 
 	self assert: definedProject class == RwDefinedProject.
-	^ definedProject resolve
+	^ definedProject resolveProject
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -119,7 +119,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 		addPackagesNamed: { packageName }
 			toComponentNamed: componentName;
 		repoType: #none;
-		resolve;
+		resolveProject;
 		yourself.
 
 "load"
@@ -159,7 +159,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition 
-				resolve;
+				resolveProject;
 				export;
 				exportLoadSpecification;
 				load;

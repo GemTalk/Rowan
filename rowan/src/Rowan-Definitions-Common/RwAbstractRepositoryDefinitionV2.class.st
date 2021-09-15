@@ -140,7 +140,7 @@ RwAbstractRepositoryDefinitionV2 >> repositoryUrl: anUrlString [
 ]
 
 { #category : 'actions' }
-RwAbstractRepositoryDefinitionV2 >> resolve [
+RwAbstractRepositoryDefinitionV2 >> resolveRepository [
 	self subclassResponsibility: #'resolve'
 ]
 

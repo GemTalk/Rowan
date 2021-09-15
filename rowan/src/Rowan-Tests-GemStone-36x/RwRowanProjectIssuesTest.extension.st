@@ -36,7 +36,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -83,7 +83,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 }
 			toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.

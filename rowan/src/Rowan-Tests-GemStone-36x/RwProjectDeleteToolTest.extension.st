@@ -28,7 +28,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 	projectDefinition2 := RwResolvedProjectV2 new
@@ -37,7 +37,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "create classes and methods for project1"
@@ -150,7 +150,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 . packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "create classes and methods for project1"
@@ -236,7 +236,7 @@ RwProjectDeleteToolTest >> testDeleteSimpleProject [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "create classes and methods"
@@ -317,7 +317,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName1 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 	projectDefinition2 := RwResolvedProjectV2 new
 		projectName: projectName2;
@@ -325,7 +325,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName2 } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "create classes and methods for project1"
@@ -432,7 +432,7 @@ RwProjectDeleteToolTest >> testForceDeleteSimpleProject [
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
 		addPackagesNamed: { packageName } toComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 
 "create classes and methods"

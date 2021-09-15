@@ -61,7 +61,7 @@ RwProjectTest >> testDiskProjectApi [
 				ifNotNil: [ :lp | Rowan image _removeLoadedProject: lp ] ].
 
 	(definedProject projectsHome / projectName) ensureDeleteAll.
-	resolvedProject := definedProject resolve.
+	resolvedProject := definedProject resolveProject.
 	resolvedProject write.
 
 	self deny: resolvedProject canCommit.
@@ -149,7 +149,7 @@ RwProjectTest >> testGitProjectApi [
 				ifNotNil: [ :lp | Rowan image _removeLoadedProject: lp ] ].
 
 	(definedProject projectsHome / projectName) ensureDeleteAll.
-	resolvedProject := definedProject resolve.
+	resolvedProject := definedProject resolveProject.
 	resolvedProject write.
 
 	self assert: resolvedProject canCommit.

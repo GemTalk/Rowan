@@ -89,7 +89,7 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
 ]
 
 { #category : 'actions' }
-RwDiskRepositoryDefinitionV2 >> resolve [
+RwDiskRepositoryDefinitionV2 >> resolveRepository [
 	"attach to existing repository structure"
 
 	"answer true if attaching to an existing repository"

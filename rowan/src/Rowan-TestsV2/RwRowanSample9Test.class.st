@@ -666,7 +666,7 @@ RwRowanSample9Test >> testIssue_446 [
 		repoType: #'git';
 		yourself.
 
-	resolvedProject := project1 resolve.
+	resolvedProject := project1 resolveProject.
 
 	(resolvedProject
 		addSubcomponentNamed: 'Core1'
@@ -2200,7 +2200,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 		gemstoneSetSymbolDictName: symDictName2 forPackageNamed: primerPackageName2;
 		yourself.
 
-	primerResolvedProject resolve; load.
+	primerResolvedProject resolveProject; load.
 
 	"Adopt the classes into the primer project"
 	Rowan packageTools adopt
@@ -2312,7 +2312,7 @@ RwRowanSample9Test >> testIssue230 [
 		gemstoneSetSymbolDictName: symDictName2 forPackageNamed: primerPackageName2;
 		yourself.
 
-	primerResolvedProject resolve; load.
+	primerResolvedProject resolveProject; load.
 
 	"Adopt the classes into the primer project"
 	Rowan packageTools adopt

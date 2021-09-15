@@ -21,7 +21,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 				forPackageNamed: packageName ].
 
 	resolvedProject
-		resolve;
+		resolveProject;
 		load.
 	^ resolvedProject
 ]
@@ -50,7 +50,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	(rootPath asFileReference / projectName) ensureDeleteAll.
 
 	projectDefinition
-		resolve;
+		resolveProject;
 		export;
 		exportLoadSpecification;
 		load.

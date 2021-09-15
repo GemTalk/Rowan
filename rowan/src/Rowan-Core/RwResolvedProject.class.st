@@ -19,7 +19,7 @@ RwResolvedProject class >> fromStrictDefinedProject: aDefinedProject [
 	| createBlock oldPolicy |
 	createBlock := [ 
 	(self newNamed: aDefinedProject name)
-		_concreteProject: aDefinedProject _concreteProject resolve;
+		_concreteProject: aDefinedProject _concreteProject resolveProject;
 		yourself ].
 	aDefinedProject isStrict
 		ifTrue: [ ^ createBlock value ].
@@ -36,7 +36,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl [
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -74,7 +74,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -114,7 +114,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		yourself.
 	resolvedProject := loadSpec resolve.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -128,7 +128,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 	resolvedProject := loadSpec produceProject: platformConditionalAttributes.
 	resolvedProject read: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
-		_concreteProject: resolvedProject resolve;
+		_concreteProject: resolvedProject resolveProject;
 		yourself
 ]
 
@@ -349,8 +349,8 @@ RwResolvedProject >> repositoryRoot [
 	^ self _concreteProject repositoryRoot
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProject >> resolve [
+{ #category : 'transitions' }
+RwResolvedProject >> resolveProject [
 	^ self
 ]
 

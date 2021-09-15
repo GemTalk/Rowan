@@ -170,7 +170,7 @@ RwRowanProjectIssuesTest >> testIssue582 [
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		addLoadComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition1.
 
@@ -179,7 +179,7 @@ RwRowanProjectIssuesTest >> testIssue582 [
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName2;
 		addLoadComponentNamed: componentName;
-		resolve;
+		resolveProject;
 		yourself.
 	projectSetDefinition addDefinition: projectDefinition2.
 
