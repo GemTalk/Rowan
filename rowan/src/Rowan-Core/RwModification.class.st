@@ -54,7 +54,7 @@ RwModification >> before: newValue [
 RwModification >> initialize [
 	"Dummy that understands isEmpty for printing"
 
-	propertiesModification := #()
+	propertiesModification := RwPropertiesModification new
 ]
 
 { #category : 'testing' }
