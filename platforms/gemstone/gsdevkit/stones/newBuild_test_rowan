@@ -8,6 +8,22 @@ vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 rm -rf *.log *.out
 
 newExtent -s /home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_362/snapshots/extent0_postUpgradeRowan.dbf $GEMSTONE_NAME
-unset GS_HOME
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowan.topaz -I ./.topazini -L
+$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuiteRowan.topaz $GEMSTONE_NAME -L
 
+#	./rowanTestStats.stone -h -- rowan_test_stats_361
+#
+branch=`git --git-dir=$ROWAN_PROJECTS_HOME/Rowan/.git rev-parse --abbrev-ref HEAD`
+
+set +e # okay for the lookup to fail - the error message is meaningful
+branchQuery=`./rowanTestStats.stone lookup --jsonFile=ignoreMe.json --branch=$branch --gsVer=$vers -- rowan_test_stats_361 2>&1`
+set -e
+
+if [[ "$branchQuery" == "No sample found matching gsVer"* ]] ; then
+	# this is a branch for which we have no samples with which to compare
+	originalBranch=$branch
+  branch=masterV1.2
+	echo
+	echo "USING DEFAULT BRANCH -- $branch -- instead of $originalBranch"
+	echo
+fi
+./rowanTestStats.stone compare --jsonFile=testResults.json --gsVer=$vers --branch=$branch -- rowan_test_stats_361
