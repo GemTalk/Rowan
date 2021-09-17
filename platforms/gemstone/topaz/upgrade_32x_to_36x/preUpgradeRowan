@@ -51,7 +51,7 @@ rm $upgradeLogDir/tmp$$
 echo `date`
 echo 'Starting preUpgradeRowan...'
 
-$GEMSTONE/bin/topaz -l -i < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.10.topaz> $upgradeLogDir/topaz.out 2>&1
+$GEMSTONE/bin/topaz -l -i < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/preUpgrade_v1.2.11.topaz> $upgradeLogDir/topaz.out 2>&1
 
 topaz_stat=$?
 if [ $topaz_stat -eq 0 ]; then
