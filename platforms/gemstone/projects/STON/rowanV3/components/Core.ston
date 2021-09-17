@@ -5,10 +5,6 @@ RwSimpleProjectLoadComponentV2 {
 	#componentNames : [
 		'tests/Core'
 	],
-	#packageNames : [
-		'STON-Core',
-		'STON-GemStoneBase',
-		'STON-GemStoneCommon'
- ],
+	#packageNames : [ ],
 	#comment : 'top-level component for reading STON project.'
 }

@@ -3,8 +3,7 @@ RwProjectCompoundConfiguration{
 	#version : '0.1.0',
 	#packageNames : Set [ ],
 	#configurationNames : [
-		'Gs3215',
 		'Tests'
 	],
-	#comment : 'For now we load Gs3215 and Tests by default'
+	#comment : 'For load the Tests by default, for 3.6.2, the STON classes are present in base image'
 }

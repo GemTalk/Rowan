@@ -28,7 +28,7 @@ false ifTrue: [
 		'3.6.1' asRwGemStoneVersionNumber.	"want to read 3.6.1 packages"
 	}.
 	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git'.
-	repositoryRoot361 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/bootstrap/3.6.1') asFileReference.
+	repositoryRoot361 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x') asFileReference.
 	repositoryRoot361 ensureCreateDirectory.
 	{
 		{
