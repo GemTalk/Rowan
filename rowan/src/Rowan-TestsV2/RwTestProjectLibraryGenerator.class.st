@@ -72,6 +72,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0059: commitComment;
 	genSpec_0060: commitComment;
 	genSpec_0064: commitComment;
+	genSpec_0079: commitComment;
 	yourself
 "
 Class {
@@ -3290,6 +3291,17 @@ componentName := 'Core'.
 		removeProjectNamed: requiredProjectName;
 		yourself.
 
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0079: resolvedProject [
+	"Start with spec_0002; and write in filetree format instead of tonel format."
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	resolvedProject	packageFormat: 'filetree'.
+self halt.
 	^ resolvedProject
 ]
 
@@ -6833,6 +6845,53 @@ RwTestProjectLibraryGenerator >> genSpec_0064: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0064: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0079: commitMessage [
+	"Start with spec_0002; and write in filetree format instead of tonel format."
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0079'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002; and write in filetree format instead of tonel format.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 79
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(761);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0079: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

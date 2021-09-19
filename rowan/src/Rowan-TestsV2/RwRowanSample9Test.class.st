@@ -3625,6 +3625,36 @@ RwRowanSample9Test >> testIssue743_1 [
 	] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ]
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue761 [
+	"Modify and write an extension method"
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	| loadSpec projectName projectNames resolvedProject definedProject methodDef |
+	loadSpec := self _loadSpecNamed: 'spec_0079'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"read project"
+	definedProject := resolvedProject read.
+
+	methodDef := ((definedProject packageNamed: 'RowanSample9-Extensions')
+		classExtensionDefinitionNamed: 'RowanSample9Class1') classMethodDefinitions at:#bar.
+	methodDef source: 'bar "modified method" ^''bar'''.
+
+"write project without error"
+	definedProject exportPackages.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
@@ -6326,6 +6356,29 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
 		equals: #'accessing'.
 	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0079 [
+	"spec_0079 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0079'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]
 
 { #category : 'tests' }
