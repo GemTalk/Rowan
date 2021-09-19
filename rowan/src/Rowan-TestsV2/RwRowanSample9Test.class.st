@@ -3652,7 +3652,8 @@ RwRowanSample9Test >> testIssue761 [
 	methodDef source: 'bar "modified method" ^''bar'''.
 
 "write project without error"
-	definedProject exportPackages.
+	[ definedProject exportPackages ]
+		ensure: [ (self _testRowanProjectsSandbox / projectName) ensureDeleteAll ]
 ]
 
 { #category : 'issue 493' }
