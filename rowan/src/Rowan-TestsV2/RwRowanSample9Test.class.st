@@ -3656,6 +3656,37 @@ RwRowanSample9Test >> testIssue700_0 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue761 [
+	"Modify and write an extension method"
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	| loadSpec projectName projectNames resolvedProject definedProject methodDef |
+	loadSpec := self _loadSpecNamed: 'spec_0079'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"read project"
+	definedProject := resolvedProject read.
+
+	methodDef := ((definedProject packageNamed: 'RowanSample9-Extensions')
+		classExtensionDefinitionNamed: 'RowanSample9Class1') classMethodDefinitions at:#bar.
+	methodDef source: 'bar "modified method" ^''bar'''.
+
+"write project without error"
+	[ definedProject exportPackages ]
+		ensure: [ (self _testRowanProjectsSandbox / projectName) ensureDeleteAll ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue700_1 [
 	"
 		Confirm that a change to custom conditional attributes prior to reload is honored
@@ -9053,6 +9084,29 @@ RwRowanSample9Test >> testSpec_0078_3 [
 	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase')  notNil.
 	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone24xClass1).
 	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone3xClass1).
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0079 [
+	"spec_0079 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0079'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]
 
 { #category : 'tests' }
