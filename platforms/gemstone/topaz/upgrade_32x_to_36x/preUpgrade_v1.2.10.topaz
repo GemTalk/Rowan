@@ -34,6 +34,12 @@ run
 		(Rowan image loadedProjectNamed: projectName) 
 				loadedPackages keys do: [:packageName |
 					Rowan packageTools disown disownPackageNamed: packageName ] ].
+
+	"Remove the STON* classes in Globals as they are present in 3.6.2"
+	{ STON . STONListWriter . STONMapWriter . STONReader . STONReaderError . 
+		STONReference . STONShortListWriter . STONStreamWriter . STONWriter . 
+		STONWriterError } do: [:stonClass |
+			Globals removeKey: stonClass name ].
 System commit
 %
 
