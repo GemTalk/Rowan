@@ -41,6 +41,7 @@ set -e
 # 1.2.9 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.9 v1.2.9 Oscar-3.0.89
 # 1.2.10 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.10 v1.2.10 Oscar-3.0.91
 # 1.2.11 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.11 v1.2.11 Oscar-3.0.91.1
+# 1.2.12 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.12 v1.2.12 Oscar-3.0.91.1
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -55,16 +56,23 @@ rowan_tag="$2"
 jadeite_tag="$3"
 rowanDeploymentBranch="masterV1.2"
 
-if [ "DEBUG" = "production" ] ; then
+if [ "production" != "production" ] ; then
 	### just for debugging
-	echo "!!!JUST FOR DEBUGGING"
-	echo "okay?"
-	read ok
-
 	rowanDeploymentBranch="candidateV1.2.11"
 	rowan_tag=""
 	base_label="Edelweiss-canvidateV1.2.11"
+
+	echo "!!!JUST FOR DEBUGGING using $rowanDeploymentBranch"
+	echo "okay?"
+	read ok
+
 	### just for debugging
+else
+	### production run
+	echo "PRODUCTION run using $rowanDeploymentBranch"
+	echo "okay?"
+	read ok
+	### production run
 fi
 
 commit_match_tag() {
