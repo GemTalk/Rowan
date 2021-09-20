@@ -54140,7 +54140,7 @@ servicePerform: symbol withArguments: collection
 category: 'Accessing'
 method: RowanClassService
 setComment
-  comment := self theClass thisClass rwComment
+  comment := self theClass thisClass comment
 %
 
 category: 'private'
@@ -56843,7 +56843,7 @@ createProjectNamed: projectName in: symbolDictionaryName
 	self rowanFixMe. "Dale doesn't like Rowan projectNames"
 	(Rowan projectNames includes: projectName) ifFalse:[
 		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
-				pd gemstoneSetDefaultSymbolDictNameTo: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
+				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
 %
 
 category: 'replication'
@@ -57089,7 +57089,7 @@ refresh
 category: 'client commands'
 method: RowanProjectService
 reloadProject
-  [ self rwProject reload ]
+  [ Rowan projectTools load loadProjectNamed: name ]
     on: Warning
     do: [ :ex | 
       Transcript
@@ -57120,7 +57120,7 @@ repositoryRootPath
 category: 'rowan'
 method: RowanProjectService
 repositorySha
-	^ self rwProject commitId
+	^ self rwProject repositoryCommitId
 %
 
 category: 'rowan'
@@ -61622,7 +61622,7 @@ category: 'actions'
 method: RwModificationFiletreeWriterVisitorV2
 changedMethodExtension: aMethodExtensionModification
 
-	self error: 'not yet implemented'
+	self addedMethodExtension: aMethodExtensionModification
 %
 
 category: 'accessing'

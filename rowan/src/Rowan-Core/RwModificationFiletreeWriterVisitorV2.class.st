@@ -385,7 +385,8 @@ RwModificationFiletreeWriterVisitorV2 >> changedMethod: aMethodModification [
 { #category : 'actions' }
 RwModificationFiletreeWriterVisitorV2 >> changedMethodExtension: aMethodExtensionModification [
 
-	self error: 'not yet implemented'
+	self addedMethodExtension: aMethodExtensionModification
+
 ]
 
 { #category : 'accessing' }
