@@ -67,6 +67,31 @@ projectNames
 	^  #( 'Rowan' 'STON' 'Cypress' 'FileSystemGs' 'RowanClientServices' )
 %
 method
+loadGemStone
+		| requiredLoadSpecs warnings projectName audit |
+		warnings := {}.
+		projectName := 'gemstoneBaseImage'.
+		audit := Rowan projectTools audit auditForProjectNamed: projectName.
+		audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ].
+
+		requiredLoadSpecs := (Rowan projectNamed: projectName) loadedLoadSpecifications.
+		[ requiredLoadSpecs load ]
+			on: CompileWarning do: [:ex |
+				(ex description includesString: 'not optimized')
+						ifFalse: [ warnings add: ex asString printString ].
+				ex resume ].
+ 		warnings isEmpty ifFalse: [
+			self stdout nextPutAll: 'COMPILE WARNINGS:'; lf.
+			warnings do: [:warning |self stdout nextPutAll: '	', warning ]. 
+			self error: 'Warnings during ' projectName printString, ' load' ]. 
+
+		System commit. "do a commit immediately after test code is loaded, to avoid losing base changes if a test does an abort"
+
+		"audit after load"
+		audit := Rowan projectTools audit auditForProjectNamed: projectName.
+		audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ].
+%
+method
 loadTests
 		| requiredLoadSpecs warnings |
 		warnings := {}.
@@ -90,7 +115,7 @@ loadTests
  		warnings isEmpty ifFalse: [
 			self stdout nextPutAll: 'COMPILE WARNINGS:'; lf.
 			warnings do: [:warning |self stdout nextPutAll: '	', warning ]. 
-			self error: 'Warnings during project load' ]. 
+			self error: 'Warnings during Rowan load' ]. 
 
 		System commit. "do a commit immediately after test code is loaded, to avoid losing test classes if a test does an abort"
 
@@ -187,6 +212,7 @@ rowanTestSuite
 	self legacyUnicode
 		ifTrue: [ self installLegacyUnicode ]
 		ifFalse: [ self installPortableString ].
+	self loadGemStone.
 	self loadTests.
 	self runTests.
 %
