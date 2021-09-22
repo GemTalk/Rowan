@@ -3451,16 +3451,6 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0065: resolvedProject [
 ]
 
 { #category : 'private' }
-RwTestProjectLibraryGenerator >> _addDefinitionsFor_0079: resolvedProject [
-	"Start with spec_0002; and write in filetree format instead of tonel format."
-
-	"https://github.com/GemTalk/Rowan/issues/761"
-
-	resolvedProject	packageFormat: 'filetree'.
-	^ resolvedProject
-]
-
-{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0066: resolvedProject [
 	"Start with spec_0001; add RowanSample10, RowanSampleProjects11 and RowanSample12 as required projects"
 
@@ -4220,6 +4210,16 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0078: resolvedProject embedd
 	resolvedEmbeddedProject specsRoot / resolvedEmbeddedProject specName , 'ston'
 		copyTo: resolvedProject projectsRoot / resolvedEmbeddedProject specName , 'ston'.
 
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0079: resolvedProject [
+	"Start with spec_0002; and write in filetree format instead of tonel format."
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	resolvedProject	packageFormat: 'filetree'.
 	^ resolvedProject
 ]
 
@@ -8575,7 +8575,7 @@ RwTestProjectLibraryGenerator >> genSpec_0079: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -8585,7 +8585,7 @@ RwTestProjectLibraryGenerator >> genSpec_0079: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification:  resolvedRepository _loadSpecification
+		loadSpecification:  resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
