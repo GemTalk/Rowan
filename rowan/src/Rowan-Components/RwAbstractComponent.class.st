@@ -268,6 +268,11 @@ RwAbstractComponent >> addPackageNames: aPackageNames [
 ]
 
 { #category : 'accessing' }
+RwAbstractComponent >> basename [
+	^ (self name subStrings: $/) last
+]
+
+{ #category : 'accessing' }
 RwAbstractComponent >> comment [
 
    ^comment

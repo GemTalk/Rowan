@@ -74,7 +74,10 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOf
 
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArrayOfNames [
-	| packageNames visited theBlock attributes componentNames components |
+	"filter out any packageNames that aren't loaded in the image ... assumed to be in a packageGroup, where unloaded package names are tolerated"
+
+	| packageNames visited theBlock attributes componentNames components loadedPackageNames |
+	loadedPackageNames := self loadedPackages keys asSet.
 	visited := IdentitySet new.
 	packageNames := Set new.
 	attributes := self conditionalAttributes.
@@ -95,7 +98,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> allPackageNamesIn: componentNameOrArray
 				componentNamed: componentName
 				ifAbsent: [ components packageGroupNamed: componentName ].
 			theBlock value: theComponent ].
-	^ packageNames asArray sort
+	^ (packageNames * loadedPackageNames) asArray sort
 ]
 
 { #category : 'querying' }

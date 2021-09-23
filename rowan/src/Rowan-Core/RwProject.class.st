@@ -195,6 +195,11 @@ RwProject >> componentNames [
 	^ self _loadedProject componentNames
 ]
 
+{ #category : 'components' }
+RwProject >> componentOrPackageGroupNamed: componentName [
+	^ self _loadedComponents componentOrPackageGroupNamed: componentName
+]
+
 { #category : 'accessing' }
 RwProject >> componentsRoot [
 	^ self _loadedProject componentsRoot

@@ -151,11 +151,6 @@ RwAbstractActiveComponent >> addProjectNamed: aProjectName [
 ]
 
 { #category : 'accessing' }
-RwAbstractActiveComponent >> basename [
-	^ (self name subStrings: $/) last
-]
-
-{ #category : 'accessing' }
 RwAbstractActiveComponent >> conditionalPackageMapSpecs [
 
 	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]

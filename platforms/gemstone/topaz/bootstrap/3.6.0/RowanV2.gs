@@ -49736,6 +49736,18 @@ componentNames: anArray
 
 category: 'accessing'
 method: RwDefinedProject
+componentOrPackageGroupNamed: componentName
+	^ self _concreteProject componentOrPackageGroupNamed: componentName
+%
+
+category: 'accessing'
+method: RwDefinedProject
+componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock
+	^ self _concreteProject componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock
+%
+
+category: 'accessing'
+method: RwDefinedProject
 componentsPath: aString
 	self _projectSpecification componentsPath: aString
 %
@@ -50933,6 +50945,12 @@ componentNames
 	"list of component names from the load specification used to load the project "
 
 	^ self _loadedProject componentNames
+%
+
+category: 'components'
+method: RwProject
+componentOrPackageGroupNamed: componentName
+	^ self _loadedComponents componentOrPackageGroupNamed: componentName
 %
 
 category: 'accessing'
@@ -54796,12 +54814,13 @@ category: 'instance creation'
 classmethod: RowanComponentService
 forComponentNamed: componentName projectService: theProjectService
 	| inst component |
-	component := theProjectService rwProject componentNamed: componentName.
+	component := theProjectService rwProject
+		componentOrPackageGroupNamed: componentName.
 	inst := self new
 		name: componentName;
 		basename: component basename.
 	inst computeSubComponentsUsingProjectService: theProjectService.
-	inst projectService: theProjectService. 
+	inst projectService: theProjectService.
 	^ inst
 %
 
@@ -54858,6 +54877,19 @@ computeSubComponentsUsingProjectService: theProjectService
 			RowanComponentService
 				forComponentNamed: subcomponent name
 				projectService: theProjectService ]
+%
+
+category: 'instance creation'
+method: RowanComponentService
+forComponentNamed: componentName projectService: theProjectService
+	| inst component |
+	component := theProjectService rwProject componentNamed: componentName.
+	inst := self new
+		name: componentName;
+		basename: component basename.
+	inst computeSubComponentsUsingProjectService: theProjectService.
+	inst projectService: theProjectService. 
+	^ inst
 %
 
 category: 'initialization'
@@ -58552,6 +58584,12 @@ addPackageNames: aPackageNames
 
 category: 'accessing'
 method: RwAbstractComponent
+basename
+	^ (self name subStrings: $/) last
+%
+
+category: 'accessing'
+method: RwAbstractComponent
 comment
 
    ^comment
@@ -58847,12 +58885,6 @@ addProjectNamed: aProjectName
 	pn := self projectNames.	" returns copy, so cannot add directly to result"
 	pn add: aProjectName.
 	projectNames := pn asSet asArray sort
-%
-
-category: 'accessing'
-method: RwAbstractActiveComponent
-basename
-	^ (self name subStrings: $/) last
 %
 
 category: 'accessing'
@@ -84023,7 +84055,10 @@ allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: no
 category: 'querying'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 allPackageNamesIn: componentNameOrArrayOfNames
-	| packageNames visited theBlock attributes componentNames components |
+	"filter out any packageNames that aren't loaded in the image ... assumed to be in a packageGroup, where unloaded package names are tolerated"
+
+	| packageNames visited theBlock attributes componentNames components loadedPackageNames |
+	loadedPackageNames := self loadedPackages keys asSet.
 	visited := IdentitySet new.
 	packageNames := Set new.
 	attributes := self conditionalAttributes.
@@ -84044,7 +84079,7 @@ allPackageNamesIn: componentNameOrArrayOfNames
 				componentNamed: componentName
 				ifAbsent: [ components packageGroupNamed: componentName ].
 			theBlock value: theComponent ].
-	^ packageNames asArray sort
+	^ (packageNames * loadedPackageNames) asArray sort
 %
 
 category: 'querying'

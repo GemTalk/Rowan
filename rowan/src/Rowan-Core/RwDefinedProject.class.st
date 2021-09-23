@@ -348,6 +348,16 @@ RwDefinedProject >> componentNames: anArray [
 ]
 
 { #category : 'accessing' }
+RwDefinedProject >> componentOrPackageGroupNamed: componentName [
+	^ self _concreteProject componentOrPackageGroupNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock [
+	^ self _concreteProject componentOrPackageGroupNamed: aComponentName ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwDefinedProject >> componentsPath: aString [
 	self _projectSpecification componentsPath: aString
 ]
