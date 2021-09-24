@@ -114,7 +114,7 @@ RwAbstractRowanSampleTest >> _standard_resolve_load_validate: projectSpec [
 	| resolvedProject loadedProjects |
 
 "resolve/load"
-	resolvedProject := projectSpec resolve.
+	resolvedProject := projectSpec resolveProject.
 	loadedProjects := resolvedProject load.
 
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects

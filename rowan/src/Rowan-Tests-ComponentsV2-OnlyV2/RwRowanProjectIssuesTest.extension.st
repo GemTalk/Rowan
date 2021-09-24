@@ -146,7 +146,7 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 
 	projectDefinition := (RwLoadSpecificationV2 fromUrl: projectUrlString)
 		projectsHome: gitRootPath;
-		resolve.
+		resolveProject.
 
 	projectDefinition load.
 ]

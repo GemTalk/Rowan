@@ -152,7 +152,7 @@ false ifTrue: [
 		loadSpec := RwSpecification fromUrl: loadSpecUrl.
 		resolvedProject := loadSpec
 			projectsHome: projectsHome;
-			resolve.
+			resolveProject.
 		theProjectSetDefinition :=  resolvedProject
 			readProjectSet: loadSpec customConditionalAttributes 
 			platformConditionalAttributes: platformConditionalAttributes.

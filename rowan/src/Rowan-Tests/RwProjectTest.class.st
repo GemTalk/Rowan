@@ -29,7 +29,7 @@ RwProjectTest >> test_issue714 [
 		relativeRepositoryRoot: relativeRepositoryRoot;
 		packageConvention: 'Rowan';
 		yourself.
-	resolvedProject := definedProject produce.
+	resolvedProject := definedProject resolveProject.
 
 "Export"
 	resolvedProject

@@ -60,7 +60,7 @@ RwRowanSample10Test >> testIndexCards [
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
 			projectSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: projectSpec resolve ]
+			STON toStringPretty: projectSpec resolveProject ]
 ]
 
 { #category : 'tests' }
@@ -77,7 +77,7 @@ RwRowanSample10Test >> testSpec_0001 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -100,7 +100,7 @@ RwRowanSample10Test >> testSpec_0002 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -132,7 +132,7 @@ RwRowanSample10Test >> testSpec_0004 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.

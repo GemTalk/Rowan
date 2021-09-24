@@ -18,12 +18,11 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
 "read project"
 	projectDefinitionSet := RwProjectSetDefinition new
-		addProject: loadSpec resolve;
+		addProject: loadSpec resolveProject;
 		yourself.
 
 "validation"
 	self _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: loadSpec projectName
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -47,7 +46,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMet
 
 "read project -- catch and resume the notification ... repair the protocol"
 	[ 
-		projectDefinition := loadSpec resolve.
+		projectDefinition := loadSpec resolveProject.
 		projectDefinitionSet := RwProjectSetDefinition new
 			addProject: projectDefinition;
 			yourself ]
@@ -111,12 +110,12 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 
 "read project -- hit category does not match error"
 	self 
-		should: [ projectDefinition := loadSpec resolve ]
+		should: [ projectDefinition := loadSpec resolveProject ]
 		raise: Error.
 
 "read project -- catch and resume the notification ... repair the category"
 	[ 
-		projectDefinition := loadSpec resolve.
+		projectDefinition := loadSpec resolveProject.
 		projectDefinitionSet := RwProjectSetDefinition new
 			addProject: projectDefinition;
 			yourself  ]
@@ -133,7 +132,6 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 
 "validation"
 	self _validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -157,12 +155,11 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithEmptyCl
 
 "read project -- hit protocol is invalid error"
 	projectDefinitionSet := RwProjectSetDefinition new
-		addProject: loadSpec resolve;
+		addProject: loadSpec resolveProject;
 		yourself .
 
 "validate"
 	self _validateIssue361ProjectDefinitionSet: projectDefinitionSet projectName: projectName
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -191,7 +188,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensi
 "read project -- hit protocol is invalid error"
 	self 
 		should: [ 
-			projectDefinition := loadSpec resolve.
+			projectDefinition := loadSpec resolveProject.
 			projectDefinitionSet := RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ]
@@ -199,7 +196,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensi
 
 "read project -- catch and resume the notification ... repair the protocol"
 	[ 
-		projectDefinition := loadSpec resolve.
+		projectDefinition := loadSpec resolveProject.
 		projectDefinitionSet := RwProjectSetDefinition new
 			addProject: projectDefinition;
 			yourself ]
@@ -242,7 +239,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 "read project -- hit protocol is invalid error"
 	self 
 		should: [ 
-			projectDefinition := loadSpec resolve.
+			projectDefinition := loadSpec resolveProject.
 			projectDefinitionSet := RwProjectSetDefinition new
 				addProject: projectDefinition;
 				yourself ]
@@ -250,7 +247,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 "read project -- catch and resume the notification ... repair the protocol"
 	[ 
-		projectDefinition := loadSpec resolve.
+		projectDefinition := loadSpec resolveProject.
 		projectDefinitionSet := RwProjectSetDefinition new
 			addProject: projectDefinition;
 			yourself ]
@@ -267,5 +264,4 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 "validation"
 	self _validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
-
 ]

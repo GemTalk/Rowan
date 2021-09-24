@@ -240,7 +240,7 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -276,7 +276,7 @@ RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -365,7 +365,7 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -453,7 +453,7 @@ RwGsTopazRowanToolTest >> testTopazMoveClassToPackage [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
@@ -493,7 +493,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -537,7 +537,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
@@ -579,7 +579,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
 		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
@@ -638,7 +638,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -678,7 +678,7 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -720,7 +720,7 @@ RwGsTopazRowanToolTest >> testTopazUnloadProject [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.

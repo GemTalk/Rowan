@@ -35,7 +35,7 @@ RwRowanSample9Test >> testIssue345 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName; "different than originally specified"
 		yourself.
@@ -92,7 +92,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
@@ -157,7 +157,7 @@ UserGlobals at: #ConditionalHalt put: false.
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
@@ -230,7 +230,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 	packageName := 'RowanSample9-Core'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.

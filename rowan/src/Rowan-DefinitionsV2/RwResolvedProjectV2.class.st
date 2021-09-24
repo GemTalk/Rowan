@@ -77,7 +77,7 @@ RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
-		required projects (closure). All specs will be produced"
+		required projects (closure). All specs will be resolved"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 ]
@@ -85,7 +85,7 @@ RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes [
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
-		required projects (closure). All specs will be produced"
+		required projects (closure). All specs will be resolved"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
 		produceRequiredLoadSpecs: platformConditionalAttributes
@@ -96,7 +96,7 @@ RwResolvedProjectV2 >> _addPackageNames: somePackageNames for: aComponent [
 	self addPackages: somePackageNames forComponent: aComponent
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> _basicProduce [
 	"produce ensures that the project directory exists on disk
 		(cloned for git projects) or created on disk for new projects.
@@ -1084,7 +1084,7 @@ RwResolvedProjectV2 >> printOn: aStream [
 				nextPutAll: self _projectDefinition projectName ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> produceRequiredLoadSpecs [
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
@@ -1095,7 +1095,7 @@ RwResolvedProjectV2 >> produceRequiredLoadSpecs [
 	^ res
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> produceRequiredLoadSpecs: platformConditionalAttributes [
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 

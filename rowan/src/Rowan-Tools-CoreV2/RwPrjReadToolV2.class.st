@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Tools-CoreV2'
 }
 
-{ #category : 'read produced projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	RwResolvedProjectComponentVisitorV2
 		readProjectForProducedProject: resolvedProject
@@ -15,21 +15,21 @@ RwPrjReadToolV2 >> readProjectForProducedProject: resolvedProject withComponentN
 	^ resolvedProject
 ]
 
-{ #category : 'read produced projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectSetForProducedProject: producedProject [
 	^ self
 		readProjectSetForProducedProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 ]
 
-{ #category : 'read produced projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForProducedProject: producedProject
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'read produced projects' }
+{ #category : 'to be removed' }
 RwPrjReadToolV2 >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readProjectSetForProducedProject: resolvedProject

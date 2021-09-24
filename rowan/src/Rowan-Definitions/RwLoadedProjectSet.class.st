@@ -29,7 +29,7 @@ RwLoadedProjectSet >> asPackageDefinitionSet [
 
 { #category : 'definitions' }
 RwLoadedProjectSet >> asProjectDefinitionSet [
-	"this might make sense ... produce/read the load specs?"
+	"this might make sense ... resolve/read the load specs?"
 
 	self shouldNotImplement: #'asProjectDefinitionSet'
 ]

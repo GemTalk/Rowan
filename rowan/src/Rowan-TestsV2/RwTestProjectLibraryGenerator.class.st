@@ -3983,7 +3983,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0073: resolvedProject_0073 [
 			comment: loadSpecification_0073 comment;
 			yourself.
 
-		resolvedProject := loadSpecification resolve.
+		resolvedProject := loadSpecification resolveProject.
 
 		resolvedProject
 			addLoadComponentNamed: 'Core' comment: 'the component';

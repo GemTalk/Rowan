@@ -516,18 +516,7 @@ RwLoadSpecificationV2 >> printOn: aStream [
 		nextPutAll: (self specName ifNil: ['nil'])
 ]
 
-{ #category : 'actions' }
-RwLoadSpecificationV2 >> produce [
-	"produce ensures that the project directory already exists on disk
-		(cloned for git projects) or created on disk for new projects.
-	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
-		and all load specs for required projects (closure). All specs will 
-		be produced"
-
-	^ RwResolvedProjectV2 requiredLoadSpecs: self
-]
-
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> produce: platformConditionalAttributes [
 	"produce ensures that the project directory already exists on disk
 		(cloned for git projects) or created on disk for new projects.
@@ -540,15 +529,7 @@ RwLoadSpecificationV2 >> produce: platformConditionalAttributes [
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'actions' }
-RwLoadSpecificationV2 >> produceProject [
-	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
-
-	self produce.
-	^ RwResolvedProjectV2 loadSpecification: self
-]
-
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> produceProject: platformConditionalAttributes [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
 
@@ -556,7 +537,7 @@ RwLoadSpecificationV2 >> produceProject: platformConditionalAttributes [
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -636,7 +617,7 @@ RwLoadSpecificationV2 >> projectUrl [
 RwLoadSpecificationV2 >> read [
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
-	^ self produceProject read
+	^ self resolveProject read
 ]
 
 { #category : 'actions' }
@@ -669,7 +650,7 @@ RwLoadSpecificationV2 >> readonlyDiskUrl: anUrlString [
 RwLoadSpecificationV2 >> readProjectSet [
 	"Return a project definition set that includes the project definition for the receiver and all required projects"
 
-	^ self produce read
+	^ self resolve read
 ]
 
 { #category : 'accessing' }
@@ -726,14 +707,15 @@ RwLoadSpecificationV2 >> repositoryRoot [
 		ifFalse: [ self projectsHome / self projectAlias / self relativeRepositoryRoot ]
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> resolve [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver ignoring any required projects"
+	"resolve ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure). All specs will 
+		be resolved"
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
+	^ RwResolvedProjectV2 requiredLoadSpecs: self
 ]
 
 { #category : 'to be removed' }
@@ -744,6 +726,16 @@ RwLoadSpecificationV2 >> resolve: customAttributes platformAttributes: platformA
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ RwResolvedProjectV2 loadSpecification: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
+]
+
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> resolveProject [
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver ignoring any required projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 ]
 
 { #category : 'to be removed' }
@@ -762,12 +754,12 @@ RwLoadSpecificationV2 >> resolveStrict [
 
 	| oldPolicy |
 	self isStrict
-		ifTrue: [ ^ self resolve ].
+		ifTrue: [ ^ self resolveProject ].
 	oldPolicy := self repositoryResolutionPolicy.
 	[ 
 	"force #strict policy to ensure that the revision is checked out out in the repository"
 	self repositoryResolutionPolicy: #'strict'.
-	^ self resolve ]
+	^ self resolveProject ]
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 ]
 
@@ -776,7 +768,7 @@ RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	^self  resolve
+	^self  resolveProject
 ]
 
 { #category : 'accessing' }

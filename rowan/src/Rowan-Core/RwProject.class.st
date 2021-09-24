@@ -442,17 +442,17 @@ RwProject >> projectUrl [
 RwProject >> reload [
 	"
 		Load the receiver AND required projects using the loaded load specs.
-		Use produce, in case there have been significant changes on disk
+		Use resolve, in case there have been significant changes on disk
 	"
 
-	| producedSpecs loadedSpecs |
-	producedSpecs := self loadSpecification produce.
+	| resolvedSpecs loadedSpecs |
+	resolvedSpecs := self loadSpecification resolve.
 	loadedSpecs := self loadedLoadSpecifications.
-	producedSpecs projectNames
+	resolvedSpecs projectNames
 		do: [ :pn | 
 			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :ls | producedSpecs addLoadSpec: ls ] ].
-	^ producedSpecs load
+				ifNotNil: [ :ls | resolvedSpecs addLoadSpec: ls ] ].
+	^ resolvedSpecs load
 ]
 
 { #category : 'actions' }

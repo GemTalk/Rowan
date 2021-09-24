@@ -28,7 +28,7 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 { #category : 'private' }
 RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
 	| resolvedProject loadedProjects symDictName symDict |
-	resolvedProject := projectSpec resolve.
+	resolvedProject := projectSpec resolveProject.
 	loadedProjects := resolvedProject load.
 	self assert: loadedProjects size = 1.
 	loadedProjects do: [ :project | self assert: project audit isEmpty ].
@@ -90,7 +90,7 @@ RwRowanSample9Test >> _processIssue705: resolvedProject componentNamed: componen
 	loadSpec projectsHome:  self _testRowanProjectsSandbox.
 
 "collect set of specs that will be required by the component component"
-	requiredLoadSpecs := loadSpec produce.
+	requiredLoadSpecs := loadSpec resolve.
 
 "arrange for the projects required by currently loaded component to be unloaded"
 	loadSpecSet := (Rowan projectNamed: resolvedProject name) loadedLoadSpecifications.
@@ -314,7 +314,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
@@ -589,7 +589,7 @@ RwRowanSample9Test >> testIndexCards [
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
 			projectSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: projectSpec resolve ]
+			STON toStringPretty: projectSpec resolveProject ]
 ]
 
 { #category : 'tests' }
@@ -611,7 +611,7 @@ RwRowanSample9Test >> testIssue_254 [
 	packageName2 := projectName , '-' , 'Extensions'.
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
 			forPackageNamed: packageName1;
@@ -631,7 +631,7 @@ RwRowanSample9Test >> testIssue_254 [
 	loadSpec := self _loadSpecNamed: 'spec_0002'.	"basic project (remove instancesInvariant option and move class to default symbol dictionary: self _sampleSymbolDictionaryName1)"
 
 "resolve/load"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -712,7 +712,7 @@ RwRowanSample9Test >> testIssue_493 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project soec_0008"
 	loadedProjects := resolvedProject load.
@@ -722,7 +722,7 @@ RwRowanSample9Test >> testIssue_493 [
 
 "spec_0010"
 	loadSpec := self _loadSpecNamed: 'spec_0010'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project soec_0010"
 	loadedProjects := resolvedProject load.
@@ -830,7 +830,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -841,7 +841,7 @@ RwRowanSample9Test >> testIssue_504_1 [
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 	resolvedProject
 		gemstoneSetSymbolDictName: RwRowanSample9Test _sampleSymbolDictionaryName2 
@@ -877,7 +877,7 @@ RwRowanSample9Test >> testIssue_504_2 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -888,7 +888,7 @@ RwRowanSample9Test >> testIssue_504_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0006'.
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load"
 	loadedProjects := resolvedProject load.
@@ -915,7 +915,7 @@ RwRowanSample9Test >> testIssue_504_3 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -926,7 +926,7 @@ RwRowanSample9Test >> testIssue_504_3 [
 	loadSpec := self _loadSpecNamed: 'spec_0006'.
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load"
 	loadedProjects := resolvedProject load.
@@ -952,7 +952,7 @@ RwRowanSample9Test >> testIssue_504_4 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -963,7 +963,7 @@ RwRowanSample9Test >> testIssue_504_4 [
 	loadSpec := self _loadSpecNamed: 'spec_0007'.	"primer -- spec_0005 with instance variables"
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load"
 	loadedProjects := resolvedProject load.
@@ -985,7 +985,7 @@ RwRowanSample9Test >> testIssue_504_5 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -996,7 +996,7 @@ RwRowanSample9Test >> testIssue_504_5 [
 	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load"
 	loadedProjects := resolvedProject load.
@@ -1103,7 +1103,7 @@ RwRowanSample9Test >> testIssue_549 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject1 := loadSpec resolve.
+	resolvedProject1 := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject1 load.
@@ -1135,7 +1135,7 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject1 := loadSpec resolve.
+	resolvedProject1 := loadSpec resolveProject.
 	resolvedProject1 repository checkout: 'issue_549'.	"tag pointing to inconsistent checkout"
 	resolvedProject1 read.
 
@@ -1203,7 +1203,7 @@ RwRowanSample9Test >> testIssue_568 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -1216,7 +1216,7 @@ RwRowanSample9Test >> testIssue_568 [
 	loadSpec := self _loadSpecNamed: 'spec_0022'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project should trigger preload doit"
 	loadedProjects := resolvedProject load.
@@ -1255,7 +1255,7 @@ RwRowanSample9Test >> testIssue_571_1 [
 	self deny: (self _testRowanProjectsSandbox / projectAlias) exists.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "validate"
 	self assert: (self _testRowanProjectsSandbox / projectAlias) exists.
@@ -1342,7 +1342,7 @@ RwRowanSample9Test >> testIssue14 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -1393,7 +1393,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject 
@@ -1483,7 +1483,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_1 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
@@ -1540,7 +1540,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_2 [
 	packageName := 'RowanSample9-Core'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using symbol dict  _sampleSymbolDictionaryName1"
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.
@@ -1613,7 +1613,7 @@ RwRowanSample9Test >> testIssue185_move_newClassVariable_to_symbolDict [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -1701,7 +1701,7 @@ RwRowanSample9Test >> testIssue185_move_newClassVersion_to_symbolDict [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -1792,7 +1792,7 @@ RwRowanSample9Test >> testIssue185_rename_package_move_class [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -1883,7 +1883,7 @@ RwRowanSample9Test >> testIssue185_rename_package_move_classVariable [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -1974,7 +1974,7 @@ RwRowanSample9Test >> testIssue185_rename_package_move_newClassVersion [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -2067,7 +2067,7 @@ RwRowanSample9Test >> testIssue185_simple_package_rename [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load spec_0038 which adds new package and new class in _sampleSymbolDictionaryName2"
 	resolvedProject
@@ -2367,7 +2367,7 @@ RwRowanSample9Test >> testIssue284 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone-Tests';
@@ -2390,7 +2390,7 @@ RwRowanSample9Test >> testIssue284 [
 	loadSpec := self _loadSpecNamed: 'spec_0045'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
@@ -2437,7 +2437,7 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
@@ -2458,7 +2458,7 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	loadSpec := self _loadSpecNamed: 'spec_0046'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'GemStone_295';
@@ -2502,7 +2502,7 @@ RwRowanSample9Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
@@ -2569,7 +2569,7 @@ RwRowanSample9Test >> testIssue300 [
 
 "resolve project"
 	loadSpec projectsHome: projectsHome.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
@@ -2596,7 +2596,7 @@ RwRowanSample9Test >> testIssue300 [
 		projectsHome: projectsHome_symLink / symLinkName;
 		yourself.
 
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
@@ -2636,7 +2636,7 @@ RwRowanSample9Test >> testIssue304 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		yourself.
@@ -2710,7 +2710,7 @@ RwRowanSample9Test >> testIssue305 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		yourself.
@@ -2731,7 +2731,7 @@ RwRowanSample9Test >> testIssue305 [
 "resolve project"
 	loadSpec customConditionalAttributes:  { }. "unload several packages: 'RowanSample9-GemStone-Tests_295',
 		'RowanSample9-Tests_295', 'RowanSample9-Tests-RenamedPackage' 'RowanSample9-RenamedPackage' "
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
@@ -2783,7 +2783,7 @@ RwRowanSample9Test >> testIssue460_0 [
 	projectNames := { projectName }.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
@@ -2895,7 +2895,7 @@ RwRowanSample9Test >> testIssue460_1 [
 	projectNames := { projectName }.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
@@ -3023,7 +3023,7 @@ RwRowanSample9Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
 		gemstoneSetSymbolDictName: self _symbolDictionaryName2 forPackageNamed: projectName , '-' , 'NewPackage';
@@ -3080,7 +3080,7 @@ RwRowanSample9Test >> testIssue493 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project using Core component"
 	resolvedProject readProjectComponentNames: {'Core'}.
@@ -3257,7 +3257,7 @@ RwRowanSample9Test >> testIssue514 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName; "different than originally specified"
 		yourself.
@@ -3415,7 +3415,7 @@ RwRowanSample9Test >> testIssue571 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project - baseline"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3432,7 +3432,7 @@ RwRowanSample9Test >> testIssue571 [
 "resolve project using loadSpec - remove v1 attribute, resulting in packageName1 being unloaded"
 	theLoadSpec := loadSpec copy.
 	theLoadSpec removeCustomConditionalAttributes: #('v1').
-	resolvedProject := theLoadSpec resolve.
+	resolvedProject := theLoadSpec resolveProject.
 	resolvedProject load.
 
 "validate"
@@ -3446,7 +3446,7 @@ RwRowanSample9Test >> testIssue571 [
 "resolve project using loadSpec - add v1 attribute back, resulting in packageName1 being loaded"
 	theLoadSpec := theLoadSpec copy.
 	theLoadSpec addCustomConditionalAttributes: #( 'v1' ).
-	resolvedProject := theLoadSpec produceProject.
+	resolvedProject := theLoadSpec resolveProject.
 	resolvedProject load.
 "validate"
 	self
@@ -3501,7 +3501,7 @@ RwRowanSample9Test >> testIssue594 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3550,7 +3550,7 @@ RwRowanSample9Test >> testIssue653 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3612,7 +3612,7 @@ RwRowanSample9Test >> testIssue700_0 [
 
 "resolve project"
 	loadSpec := self _loadSpecNamed: 'spec_0065'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3656,37 +3656,6 @@ RwRowanSample9Test >> testIssue700_0 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue761 [
-	"Modify and write an extension method"
-
-	"https://github.com/GemTalk/Rowan/issues/761"
-
-	| loadSpec projectName projectNames resolvedProject definedProject methodDef |
-	loadSpec := self _loadSpecNamed: 'spec_0079'.
-
-	projectName := loadSpec projectName.
-	projectNames := {projectName}.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve project"
-	resolvedProject := loadSpec resolve.
-
-"read project"
-	definedProject := resolvedProject read.
-
-	methodDef := ((definedProject packageNamed: 'RowanSample9-Extensions')
-		classExtensionDefinitionNamed: 'RowanSample9Class1') classMethodDefinitions at:#bar.
-	methodDef source: 'bar "modified method" ^''bar'''.
-
-"write project without error"
-	[ definedProject exportPackages ]
-		ensure: [ (self _testRowanProjectsSandbox / projectName) ensureDeleteAll ]
-]
-
-{ #category : 'tests' }
 RwRowanSample9Test >> testIssue700_1 [
 	"
 		Confirm that a change to custom conditional attributes prior to reload is honored
@@ -3720,7 +3689,7 @@ RwRowanSample9Test >> testIssue700_1 [
 
 "resolve project"
 	loadSpec := self _loadSpecNamed: 'spec_0065'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3791,7 +3760,7 @@ RwRowanSample9Test >> testIssue701_requiredProjectSet [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3849,7 +3818,7 @@ RwRowanSample9Test >> testIssue704_1 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3925,7 +3894,7 @@ RwRowanSample9Test >> testIssue704_2 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -3994,13 +3963,13 @@ RwRowanSample9Test >> testIssue705 [
 		yourself.
 
 "resolve project from default load spec - prime the pump"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "resolve project based on Bridge load spec"
 	loadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Bridge', 'ston'.
 	loadSpec projectsHome:  self _testRowanProjectsSandbox.
 
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load Bridge component"
 	loadedProjects := resolvedProject load.
@@ -4189,8 +4158,8 @@ RwRowanSample9Test >> testIssue711_1 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce project"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	loadSpecs := loadSpec resolve.
 
 "initial load"
 	loadedProjects := loadSpecs load.
@@ -4261,8 +4230,8 @@ RwRowanSample9Test >> testIssue711_2 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce project"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	loadSpecs := loadSpec resolve.
 
 "define attributes"
 	pharoSpec := loadSpecs specForProjectNamed: projectName.
@@ -4308,7 +4277,7 @@ RwRowanSample9Test >> testIssue714_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/714"
 
-	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 producedProject gitRoot loadedProjects |
+	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
 
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
@@ -4324,17 +4293,17 @@ RwRowanSample9Test >> testIssue714_1 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"use produceProject so we can extract the gitRoot for two reasons:
+"use resolveProject so we can extract the gitRoot for two reasons:
 	1. read the original load spec from one of the 'embedded' projects
 	2. delete the git repository so that we can verify that the the 
 		'embedded' project load spec will properly clone the project
 "
-	producedProject := loadSpec produceProject.
-	gitRoot := producedProject gitRoot.
+	resolvedProject := loadSpec resolveProject.
+	gitRoot := resolvedProject gitRoot.
 	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
 	gitRoot ensureDeleteAll.
 
-"load (produce(clone)/load) projectName1"
+"load (resolve(clone)/load) projectName1"
 	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
 	loadedProjects := loadSpec1 load.
 
@@ -4362,7 +4331,7 @@ RwRowanSample9Test >> testIssue714_2 [
 
 	"https://github.com/dalehenrich/Rowan/issues/714"
 
-	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 producedProject gitRoot loadedProjects |
+	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
 
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
@@ -4378,17 +4347,17 @@ RwRowanSample9Test >> testIssue714_2 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"use produceProject so we can extract the gitRoot for two reasons:
+"use resolveProject so we can extract the gitRoot for two reasons:
 	1. read the original load spec from one of the 'embedded' projects
 	2. delete the git repository so that we can verify that the the 
 		'embedded' project load spec will properly clone the project
 "
-	producedProject := loadSpec produceProject.
-	gitRoot := producedProject gitRoot.
+	resolvedProject := loadSpec resolveProject.
+	gitRoot := resolvedProject gitRoot.
 	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
 	gitRoot ensureDeleteAll.
 
-"load (produce(clone)/load) projectName1"
+"load (resolveProject(clone)/load) projectName1"
 	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
 	loadedProjects := loadSpec1 load.
 
@@ -4449,12 +4418,12 @@ RwRowanSample9Test >> testIssue714_3 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce the loadSpec ... clone project and create a loadSpecSet"
-	loadSpecSet := loadSpec produce.
+"resolve the loadSpec ... clone project and create a loadSpecSet"
+	loadSpecSet := loadSpec resolve.
 
-"use produceProject so we can grab the gitRoot (without actually loading the project)
+"use resolveProject so we can grab the gitRoot (without actually loading the project)
 	and use the gitRoot to read a loadSpec for one of the embedded projects"
-	gitRoot := loadSpec produceProject gitRoot.
+	gitRoot := loadSpec resolveProject gitRoot.
 	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
 
 "prepare loadSpec1 so that when it is processed it will clone it's own project and be 
@@ -4566,7 +4535,7 @@ RwRowanSample9Test >> testIssue715_01 [
 			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
 			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
 
-"load specs from the loaded projects (i.e., no produce and no read from disk)"
+"load specs from the loaded projects (i.e., no resolve and no read from disk)"
 	requiredLoadSpecs := project loadedLoadSpecifications.
 "confirm that the load spec for loaded projects match loaded state (not disk state)"
 	requiredLoadSpecs do: [:ls | 
@@ -4784,12 +4753,12 @@ RwRowanSample9Test >> testIssue724 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"clone (produce) and load spec_0053 using a clone of the project and load spec A"
+"clone (resolve) and load spec_0053 using a clone of the project and load spec A"
 	projectsHomeA := self _testRowanProjectsSandbox / 'issue_724_a'.
 	projectsHomeA ensureCreateDirectory.
 	loadSpecA projectsHome: projectsHomeA.
 	loadSpecA revision: 'spec_0075'.
-	loadSpecs := loadSpecA produce.
+	loadSpecs := loadSpecA resolve.
 	loadedProjects := loadSpecs load.
 
 "confirm that spec_0053 loaded cleanly"
@@ -4799,14 +4768,14 @@ RwRowanSample9Test >> testIssue724 [
 	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
 	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 
-"clone (produce) and load spec_0072 using a clone of the project and load spec B"
+"clone (resolve) and load spec_0072 using a clone of the project and load spec B"
 
 	projectsHomeB := self _testRowanProjectsSandbox / 'issue_724_b'.
 	projectsHomeB ensureCreateDirectory.
 
 	loadSpecB projectsHome: projectsHomeB.
 	self deny: (projectsHomeB / loadSpecB projectName) exists.
-	loadSpecs := loadSpecB produce.
+	loadSpecs := loadSpecB resolve.
 	self assert: (projectsHomeB / loadSpecB projectName) exists.
 
 	projectsHomeA ensureDeleteAll. "eliminate the directory that load spec A originated from"
@@ -4868,7 +4837,7 @@ RwRowanSample9Test >> testIssue743_0 [
 	].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -4948,7 +4917,7 @@ RwRowanSample9Test >> testIssue743_1 [
 	].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -5356,237 +5325,34 @@ RwRowanSample9Test >> testIssue752_04 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce_01 [
-	"RowanSample9:spec_0001 ... self contained project" 
+RwRowanSample9Test >> testIssue761 [
+	"Modify and write an extension method"
 
-	"https://github.com/GemTalk/Rowan/issues/707"
+	"https://github.com/GemTalk/Rowan/issues/761"
 
-	| loadSpec repoDir theSpec loadSpecs projectName readProjectSet theProject |
-	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	| loadSpec projectName projectNames resolvedProject definedProject methodDef |
+	loadSpec := self _loadSpecNamed: 'spec_0079'.
+
 	projectName := loadSpec projectName.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-	{ projectName } do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"produce"
-	loadSpecs := loadSpec produce.
-
-"validate"
-	self assert: loadSpecs projectNames asArray equals: { projectName}.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
-	loadSpecs do: [:aSpec |
-		self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', repoDir pathString ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray equals: { projectName}.
-	theProject := readProjectSet projectNamed: projectName.
-	self 
-		assert: theProject packageNames asArray sort 
-		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
-	self assert: ((theProject packageNamed: 'RowanSample9-Core') classDefinitionNamed: 'RowanSample9Class1' ifAbsent: []) notNil.
-	self assert: ((theProject packageNamed: 'RowanSample9-Tests') classDefinitionNamed: 'RowanSample9TestCase' ifAbsent: []) notNil.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce_02 [
-	"RowanSample9:spec_0073 ... project with 3 required (embedded) projects" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-	projectName := loadSpec projectName.
-	requiredProjectNames := { 'RowanSample9_3' . 'RowanSample9_1' . 'RowanSample9_2' }.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-	({ projectName}, requiredProjectNames) do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"produce"
-	loadSpecs := loadSpec produce.
-
-"validate"
-	self assert: loadSpecs projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
-	loadSpecs do: [:aSpec |
-		aSpec specName = 'spec_0073'
-			ifTrue: [
-				self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
-				self assert: aSpec gitUrl equals: 'file:', repoDir pathString ]
-			ifFalse: [ 
-				self assert: aSpec projectUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot.
-				self assert: aSpec gitUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce_03 [
-	"RowanSample9:spec_0066 ... project with 3 required (external) projects" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0066'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+	projectNames := {projectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
 
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
+"read project"
+	definedProject := resolvedProject read.
 
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
+	methodDef := ((definedProject packageNamed: 'RowanSample9-Extensions')
+		classExtensionDefinitionNamed: 'RowanSample9Class1') classMethodDefinitions at:#bar.
+	methodDef source: 'bar "modified method" ^''bar'''.
 
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce_04 [
-	"RowanSample9:spec_0067 ... project with 3 required (external) projects - linear chain of required projects"
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0067'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"produce"
-	loadSpecs := loadSpec produce.
-
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_produce_05 [
-	"RowanSample9:spec_0068 ... project with 3 required (external) projects - recursive chain of required projects"
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"produce"
-	loadSpecs := loadSpec produce.
-
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+"write project without error"
+	[ definedProject exportPackages ]
+		ensure: [ (self _testRowanProjectsSandbox / projectName) ensureDeleteAll ]
 ]
 
 { #category : 'tests' }
@@ -5632,6 +5398,240 @@ RwRowanSample9Test >> testLoadSpec_read_01 [
 	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_resolve_01 [
+	"RowanSample9:spec_0001 ... self contained project" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName readProjectSet theProject |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	projectName := loadSpec projectName.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+	{ projectName } do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve"
+	loadSpecs := loadSpec resolve.
+
+"validate"
+	self assert: loadSpecs projectNames asArray equals: { projectName}.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
+	loadSpecs do: [:aSpec |
+		self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', repoDir pathString ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray equals: { projectName}.
+	theProject := readProjectSet projectNamed: projectName.
+	self 
+		assert: theProject packageNames asArray sort 
+		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
+	self assert: ((theProject packageNamed: 'RowanSample9-Core') classDefinitionNamed: 'RowanSample9Class1' ifAbsent: []) notNil.
+	self assert: ((theProject packageNamed: 'RowanSample9-Tests') classDefinitionNamed: 'RowanSample9TestCase' ifAbsent: []) notNil.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_resolve_02 [
+	"RowanSample9:spec_0073 ... project with 3 required (embedded) projects" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames readProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0073'.
+	projectName := loadSpec projectName.
+	requiredProjectNames := { 'RowanSample9_3' . 'RowanSample9_1' . 'RowanSample9_2' }.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+	({ projectName}, requiredProjectNames) do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve"
+	loadSpecs := loadSpec resolve.
+
+"validate"
+	self assert: loadSpecs projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+	self assert: theSpec ~~ loadSpec.
+	self assert: repoDir exists.
+	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
+	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
+	loadSpecs do: [:aSpec |
+		aSpec specName = 'spec_0073'
+			ifTrue: [
+				self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
+				self assert: aSpec gitUrl equals: 'file:', repoDir pathString ]
+			ifFalse: [ 
+				self assert: aSpec projectUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot.
+				self assert: aSpec gitUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_resolve_03 [
+	"RowanSample9:spec_0066 ... project with 3 required (external) projects" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0066'.
+	projectName := loadSpec projectName.
+	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+
+	projectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve"
+	loadSpecs := loadSpec resolve.
+
+"validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+	self assert: theSpec ~~ loadSpec.
+	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
+	loadSpecs do: [:aSpec |
+		| projectDir |
+		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
+		self assert: projectDir exists.
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_resolve_04 [
+	"RowanSample9:spec_0067 ... project with 3 required (external) projects - linear chain of required projects"
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0067'.
+	projectName := loadSpec projectName.
+	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+
+	projectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve"
+	loadSpecs := loadSpec resolve.
+
+"validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+	self assert: theSpec ~~ loadSpec.
+	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
+	loadSpecs do: [:aSpec |
+		| projectDir |
+		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
+		self assert: projectDir exists.
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_resolve_05 [
+	"RowanSample9:spec_0068 ... project with 3 required (external) projects - recursive chain of required projects"
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
+	loadSpec := self _loadSpecNamed: 'spec_0068'.
+	projectName := loadSpec projectName.
+	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+
+	projectNames do: [:pn |
+		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve"
+	loadSpecs := loadSpec resolve.
+
+"validate"
+	theSpec :=  (loadSpecs specForProjectNamed: projectName).
+	self assert: theSpec ~~ loadSpec.
+	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
+	loadSpecs do: [:aSpec |
+		| projectDir |
+		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
+		self assert: projectDir exists.
+		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
+		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
+
+"read"
+	readProjectSet := loadSpecs read.
+	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
+	readProjectSet do: [:theProject |
+		| theProjectName |
+		theProjectName := theProject projectName.
+		self 
+			assert: theProject packageNames asArray sort 
+			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
+		self assert: ((theProject packageNamed: theProjectName, '-Core') 
+			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
+		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
+			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
@@ -5651,7 +5651,7 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project soec_008"
 	loadedProjects := resolvedProject load.
@@ -5661,7 +5661,7 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 
 "spec_009"
 	loadSpec := self _loadSpecNamed: 'spec_0009'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project soec_009"
 	loadedProjects := resolvedProject load.
@@ -5717,7 +5717,7 @@ RwRowanSample9Test >> testReferenceRepositoryDirectory [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project --- cloning it to disk"
-	resolvedProject := loadSpec1 resolve.
+	resolvedProject := loadSpec1 resolveProject.
 
 "now set the diskUrl for loadeSpec2 to the repository root of loadSpec1"
 	loadSpec2 := loadSpec1 copy.
@@ -5725,7 +5725,7 @@ RwRowanSample9Test >> testReferenceRepositoryDirectory [
 		gitUrl: nil;
 		diskUrl: 'file:', resolvedProject repositoryRoot pathString.
 
-	loadSpec2 resolve.
+	loadSpec2 resolveProject.
 ]
 
 { #category : 'tests' }
@@ -5788,7 +5788,7 @@ RwRowanSample9Test >> testRowanSample4_basic_504 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve/load"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	loadedProjects := resolvedProject load.
 
 	resolvedProject
@@ -5821,7 +5821,7 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 	packageName2 := projectName , '-' , 'Core2'.
 
 "resolve/load"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -5847,7 +5847,7 @@ RwRowanSample9Test >> testSpec_0001_A [
 
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	resolvedProject := loadSpecification resolve. "project is read from disk on resolve"
+	resolvedProject := loadSpecification resolveProject. "project is read from disk on resolve"
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
 		toComponentNamed: 'Core'.
@@ -5871,7 +5871,7 @@ RwRowanSample9Test >> testSpec_0001_B [
 	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
 
-	resolvedProject := loadSpecification resolve.
+	resolvedProject := loadSpecification resolveProject.
 
 	resolvedRepository := resolvedProject repository.
 	resolvedRepository checkout: 'master'.
@@ -5880,7 +5880,7 @@ RwRowanSample9Test >> testSpec_0001_B [
 	[ 
 	"force #strict policy to ensure that the revision is checkout out in the repolicy"
 	loadSpecification repositoryResolutionPolicy: #'strict'.
-	resolvedProject := loadSpecification resolve ]
+	resolvedProject := loadSpecification resolveProject ]
 		ensure: [ loadSpecification repositoryResolutionPolicy: oldPolicy ].
 
 	resolvedProject
@@ -5901,7 +5901,7 @@ RwRowanSample9Test >> testSpec_0001_C [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -5942,7 +5942,7 @@ RwRowanSample9Test >> testSpec_0002 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -5972,7 +5972,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 	packageName2 := projectName , '-' , 'Extensions'.
 
 "resolve primer project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load primer project"
 	loadedProjects := resolvedProject load.
@@ -5986,7 +5986,7 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 	loadSpec := self _loadSpecNamed: 'spec_0003'.	"primer -- spec_0001 with instancesInvariant"
 
 "resolve"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject
 		gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName2 
 			forPackageNamed: packageName1;
@@ -6017,7 +6017,7 @@ UserGlobals at: #ConditionalHalt put: false.
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 UserGlobals at: #ConditionalHalt put: false.
@@ -6040,7 +6040,7 @@ RwRowanSample9Test >> testSpec_0009 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6062,7 +6062,7 @@ RwRowanSample9Test >> testSpec_0010 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6084,7 +6084,7 @@ RwRowanSample9Test >> testSpec_0011 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6108,7 +6108,7 @@ RwRowanSample9Test >> testSpec_0012 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project -- expect error"
 	errorHit := false.
@@ -6136,7 +6136,7 @@ RwRowanSample9Test >> testSpec_0013 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project -- expect error"
 	errorHit := false.
@@ -6164,7 +6164,7 @@ RwRowanSample9Test >> testSpec_0014 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6188,7 +6188,7 @@ RwRowanSample9Test >> testSpec_0015 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6247,7 +6247,7 @@ RwRowanSample9Test >> testSpec_0016 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6304,7 +6304,7 @@ RwRowanSample9Test >> testSpec_0017 [
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
-	resolvedProject := loadSpec resolve.	"load project"
+	resolvedProject := loadSpec resolveProject.	"load project"
 	loadedProjects := resolvedProject load.	"validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self _validateSpec_0017_componentStructure: resolvedProject
@@ -6323,7 +6323,7 @@ RwRowanSample9Test >> testSpec_0019 [
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
-	resolvedProject := loadSpec resolve.	"load project"
+	resolvedProject := loadSpec resolveProject.	"load project"
 	loadedProjects := resolvedProject load.	"validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self
@@ -6354,7 +6354,7 @@ RwRowanSample9Test >> testSpec_0020 [
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].	"resolve project"
-	resolvedProject := loadSpec resolve.	"load project"
+	resolvedProject := loadSpec resolveProject.	"load project"
 	loadedProjects := resolvedProject load.	"validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 	self _validateSpec_0017_componentStructure: resolvedProject
@@ -6375,7 +6375,7 @@ RwRowanSample9Test >> testSpec_0021 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6403,7 +6403,7 @@ RwRowanSample9Test >> testSpec_0023_1 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6435,7 +6435,7 @@ RwRowanSample9Test >> testSpec_0023_2 [
 		componentNames add: componentName.
 "resolve project"
 		loadSpec componentNames: componentNames.
-		resolvedProject := loadSpec resolve.
+		resolvedProject := loadSpec resolveProject.
 
 "load project"
 		loadedProjects := resolvedProject load.
@@ -6459,7 +6459,7 @@ RwRowanSample9Test >> testSpec_0024 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6487,7 +6487,7 @@ RwRowanSample9Test >> testSpec_0026 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6518,7 +6518,7 @@ RwRowanSample9Test >> testSpec_0027 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6549,7 +6549,7 @@ RwRowanSample9Test >> testSpec_0028 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6562,7 +6562,7 @@ RwRowanSample9Test >> testSpec_0028 [
 
 "remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
 	loadSpec customConditionalAttributes: #().
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') notNil.
@@ -6599,7 +6599,7 @@ UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6612,7 +6612,7 @@ UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 
 "remove tests from the conditional attributes and resolve -- RowanSample9TestCase1 should not be loaded"
 	loadSpec customConditionalAttributes: #().
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
@@ -6649,7 +6649,7 @@ RwRowanSample9Test >> testSpec_0030 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6680,7 +6680,7 @@ RwRowanSample9Test >> testSpec_0031 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6711,7 +6711,7 @@ RwRowanSample9Test >> testSpec_0032 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6727,7 +6727,7 @@ RwRowanSample9Test >> testSpec_0032 [
 
 "remove v1 from the conditional attributes and resolve -- RowanSample9Specsv1Class5 should not be loaded"
 	loadSpec customConditionalAttributes remove: 'v1'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
@@ -6743,7 +6743,7 @@ RwRowanSample9Test >> testSpec_0032 [
 "remove v2 from the conditional attributes, add v1 back  and resolve -- RowanSample9Specsv1Class5 should not be loaded"
 	loadSpec customConditionalAttributes remove: 'v2'.
 	loadSpec customConditionalAttributes add: 'v1'.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
@@ -6774,7 +6774,7 @@ RwRowanSample9Test >> testSpec_0033 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6803,7 +6803,7 @@ RwRowanSample9Test >> testSpec_0034 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6831,7 +6831,7 @@ RwRowanSample9Test >> testSpec_0035 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6859,7 +6859,7 @@ RwRowanSample9Test >> testSpec_0036 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6887,7 +6887,7 @@ RwRowanSample9Test >> testSpec_0038 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6916,7 +6916,7 @@ RwRowanSample9Test >> testSpec_0039 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6945,7 +6945,7 @@ RwRowanSample9Test >> testSpec_0040 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -6974,7 +6974,7 @@ RwRowanSample9Test >> testSpec_0041 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7003,7 +7003,7 @@ RwRowanSample9Test >> testSpec_0042 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7032,7 +7032,7 @@ RwRowanSample9Test >> testSpec_0043 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7061,7 +7061,7 @@ RwRowanSample9Test >> testSpec_0044 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7088,7 +7088,7 @@ RwRowanSample9Test >> testSpec_0045 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7115,7 +7115,7 @@ RwRowanSample9Test >> testSpec_0046 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7142,7 +7142,7 @@ RwRowanSample9Test >> testSpec_0047 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7169,7 +7169,7 @@ RwRowanSample9Test >> testSpec_0048 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7200,7 +7200,7 @@ RwRowanSample9Test >> testSpec_0048 [
 	loadSpec customConditionalAttributes: { 'tests' }.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7267,7 +7267,7 @@ RwRowanSample9Test >> testSpec_0049 [
 		yourself.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7353,7 +7353,7 @@ RwRowanSample9Test >> testSpec_0057 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7382,7 +7382,7 @@ RwRowanSample9Test >> testSpec_0058 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7492,7 +7492,7 @@ RwRowanSample9Test >> testSpec_0060_1 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7526,7 +7526,7 @@ RwRowanSample9Test >> testSpec_0060_2 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7569,7 +7569,7 @@ RwRowanSample9Test >> testSpec_0061 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7602,7 +7602,7 @@ RwRowanSample9Test >> testSpec_0062 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7635,7 +7635,7 @@ RwRowanSample9Test >> testSpec_0063 [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7671,7 +7671,7 @@ RwRowanSample9Test >> testSpec_0064_1 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7706,7 +7706,7 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7723,7 +7723,7 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7767,7 +7767,7 @@ RwRowanSample9Test >> testSpec_0064_3 [
 	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7812,7 +7812,7 @@ RwRowanSample9Test >> testSpec_0064_3 [
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7858,7 +7858,7 @@ RwRowanSample9Test >> testSpec_0064_4 [
 	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7900,7 +7900,7 @@ RwRowanSample9Test >> testSpec_0064_4 [
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7943,7 +7943,7 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -7980,7 +7980,7 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	loadSpec := self _loadSpecNamed: 'spec_0060'.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8022,7 +8022,7 @@ RwRowanSample9Test >> testSpec_0065 [
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8059,7 +8059,7 @@ RwRowanSample9Test >> testSpec_0066 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8098,7 +8098,7 @@ RwRowanSample9Test >> testSpec_0067 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8137,7 +8137,7 @@ RwRowanSample9Test >> testSpec_0068 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8178,13 +8178,13 @@ RwRowanSample9Test >> testSpec_0069_Bridge [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "resolve project based on Bridge load spec"
 	bridgeLoadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Bridge', 'ston'.
 	bridgeLoadSpec projectsHome:  self _testRowanProjectsSandbox.
 
-	resolvedProject := bridgeLoadSpec resolve.
+	resolvedProject := bridgeLoadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8230,13 +8230,13 @@ RwRowanSample9Test >> testSpec_0069_Child [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "resolve project based on Child load spec"
 	childLoadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Child', 'ston'.
 	childLoadSpec projectsHome:  self _testRowanProjectsSandbox.
 
-	resolvedProject := childLoadSpec resolve.
+	resolvedProject := childLoadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8282,13 +8282,13 @@ RwRowanSample9Test >> testSpec_0069_Parent [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "resolve project based on Parent load spec"
 	parentLoadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Parent', 'ston'.
 	parentLoadSpec projectsHome:  self _testRowanProjectsSandbox.
 
-	resolvedProject := parentLoadSpec resolve.
+	resolvedProject := parentLoadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -8329,8 +8329,8 @@ RwRowanSample9Test >> testSpec_0070 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce project"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	loadSpecs := loadSpec resolve.
 
 "load project"
 	loadedProjects := loadSpecs load.
@@ -8372,8 +8372,8 @@ RwRowanSample9Test >> testSpec_0071 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce project"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	loadSpecs := loadSpec resolve.
 
 "load project"
 	loadedProjects := loadSpecs load.
@@ -8403,8 +8403,8 @@ RwRowanSample9Test >> testSpec_0072 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"produce project"
-	loadSpecs := loadSpec produce.
+"resolve project"
+	loadSpecs := loadSpec resolve.
 
 "load project"
 	loadedProjects := loadSpecs load.
@@ -8436,7 +8436,7 @@ RwRowanSample9Test >> testSpec_0073 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject loadProjectSet.
@@ -8667,7 +8667,7 @@ RwRowanSample9Test >> testSpec_0076_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
 
@@ -8747,7 +8747,7 @@ RwRowanSample9Test >> testSpec_0076_4 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes:  #('gnu' ) ].
 
@@ -8830,7 +8830,7 @@ RwRowanSample9Test >> testSpec_0076_6 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec 
 			addCustomConditionalAttributes:  #('gnu');
@@ -8905,7 +8905,7 @@ RwRowanSample9Test >> testSpec_0077_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
@@ -8942,7 +8942,7 @@ RwRowanSample9Test >> testSpec_0077_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {  'tests'. '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
@@ -9018,7 +9018,7 @@ RwRowanSample9Test >> testSpec_0078_2 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
@@ -9060,7 +9060,7 @@ RwRowanSample9Test >> testSpec_0078_3 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	requiredLoadSpecSet := loadSpec produce.
+	requiredLoadSpecSet := loadSpec resolve.
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {'tests' . '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
@@ -9100,7 +9100,7 @@ RwRowanSample9Test >> testSpec_0079 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -9134,8 +9134,8 @@ RwRowanSample9Test >> testSwitchRepository [
 			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
 "resolve projects"
-	resolvedProject1 := loadSpec1 produceProject.
-	resolvedProject2 := loadSpec2 produceProject.
+	resolvedProject1 := loadSpec1 resolveProject.
+	resolvedProject2 := loadSpec2 resolveProject.
 
 "validate"
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.

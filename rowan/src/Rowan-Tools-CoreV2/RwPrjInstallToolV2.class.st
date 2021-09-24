@@ -34,7 +34,7 @@ RwPrjInstallToolV2 >> install_3_RowanV2: rowanSpecPath rowanProjectsHome: rowanP
 			loadSpec := RwSpecification fromUrl: specUrl.
 			resolvedProject := loadSpec
 				projectsHome: projectsHome;
-				resolve.
+				resolveProject.
 			projectSetDefinition := resolvedProject readProjectSet ].
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
@@ -143,7 +143,7 @@ RwPrjInstallToolV2 >> install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanP
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec
 		projectsHome: projectsHome;
-		resolve.
+		resolveProject.
 	warnings := {}.
 	[ loadedProjects := resolvedProject load ]
 		on: CompileWarning

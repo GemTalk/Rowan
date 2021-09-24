@@ -34,7 +34,7 @@ RwResolvedProject class >> fromStrictDefinedProject: aDefinedProject [
 RwResolvedProject class >> projectFromUrl: loadSpecUrl [
 	| loadSpec resolvedProject |
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -47,7 +47,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl diskUrl: urlString [
 		diskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -60,7 +60,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl gitUrl: urlString [
 		gitUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -72,7 +72,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -85,7 +85,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		projectsHome: projectsHome;
 		componentNames: componentNames;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -99,7 +99,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		componentNames: componentNames;
 		customConditionalAttributes: customConditionalAttributes;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -112,7 +112,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		projectsHome: projectsHome;
 		customConditionalAttributes: customConditionalAttributes;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -139,7 +139,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		readonlyDiskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself

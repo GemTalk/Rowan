@@ -49858,14 +49858,6 @@ packagesPath: aString
 	self _projectSpecification packagesPath: aString
 %
 
-category: 'transitions'
-method: RwDefinedProject
-produce
-	"Return a resolved project"
-
-	^ RwResolvedFromDefinedProject fromDefinedProject: self
-%
-
 category: 'accessing'
 method: RwDefinedProject
 projectAlias: aString
@@ -50310,7 +50302,7 @@ classmethod: RwResolvedProject
 projectFromUrl: loadSpecUrl
 	| loadSpec resolvedProject |
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50324,7 +50316,7 @@ projectFromUrl: loadSpecUrl diskUrl: urlString
 		diskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50338,7 +50330,7 @@ projectFromUrl: loadSpecUrl gitUrl: urlString
 		gitUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50351,7 +50343,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50365,7 +50357,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		projectsHome: projectsHome;
 		componentNames: componentNames;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50380,7 +50372,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome componentNames: component
 		componentNames: componentNames;
 		customConditionalAttributes: customConditionalAttributes;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50394,7 +50386,7 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 		projectsHome: projectsHome;
 		customConditionalAttributes: customConditionalAttributes;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50423,7 +50415,7 @@ projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
 		readonlyDiskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
 		yourself
@@ -50739,7 +50731,7 @@ loadFromSpec
 		The project is loaded as defined on disk and the in-memory project definition is ignored.
 	"
 
-	^ self _concreteProject loadSpecification resolve load
+	^ self _concreteProject loadSpecification resolveProject load
 %
 
 category: 'transitions'
@@ -51229,17 +51221,17 @@ method: RwProject
 reload
 	"
 		Load the receiver AND required projects using the loaded load specs.
-		Use produce, in case there have been significant changes on disk
+		Use resolve, in case there have been significant changes on disk
 	"
 
-	| producedSpecs loadedSpecs |
-	producedSpecs := self loadSpecification produce.
+	| resolvedSpecs loadedSpecs |
+	resolvedSpecs := self loadSpecification resolve.
 	loadedSpecs := self loadedLoadSpecifications.
-	producedSpecs projectNames
+	resolvedSpecs projectNames
 		do: [ :pn | 
 			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :ls | producedSpecs addLoadSpec: ls ] ].
-	^ producedSpecs load
+				ifNotNil: [ :ls | resolvedSpecs addLoadSpec: ls ] ].
+	^ resolvedSpecs load
 %
 
 category: 'actions'
@@ -64684,7 +64676,7 @@ category: 'instance creation'
 classmethod: RwResolvedProjectV2
 requiredLoadSpecs: anRwLoadSpecificationV2
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
-		required projects (closure). All specs will be produced"
+		required projects (closure). All specs will be resolved"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
 %
@@ -64693,7 +64685,7 @@ category: 'instance creation'
 classmethod: RwResolvedProjectV2
 requiredLoadSpecs: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
-		required projects (closure). All specs will be produced"
+		required projects (closure). All specs will be resolved"
 
 	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
 		produceRequiredLoadSpecs: platformConditionalAttributes
@@ -65679,7 +65671,7 @@ printOn: aStream
 				nextPutAll: self _projectDefinition projectName ]
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 produceRequiredLoadSpecs
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
@@ -65691,7 +65683,7 @@ produceRequiredLoadSpecs
 	^ res
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 produceRequiredLoadSpecs: platformConditionalAttributes
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
@@ -66270,7 +66262,7 @@ _addPackageNames: somePackageNames for: aComponent
 	self addPackages: somePackageNames forComponent: aComponent
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 _basicProduce
 	"produce ensures that the project directory exists on disk
@@ -70412,7 +70404,7 @@ install_3_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome
 			loadSpec := RwSpecification fromUrl: specUrl.
 			resolvedProject := loadSpec
 				projectsHome: projectsHome;
-				resolve.
+				resolveProject.
 			projectSetDefinition := resolvedProject readProjectSet ].
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
@@ -70522,7 +70514,7 @@ install_4_RowanV2: rowanSpecPath rowanProjectsHome: rowanProjectsHome
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	resolvedProject := loadSpec
 		projectsHome: projectsHome;
-		resolve.
+		resolveProject.
 	warnings := {}.
 	[ loadedProjects := resolvedProject load ]
 		on: CompileWarning
@@ -70897,7 +70889,7 @@ classExtensionsForProjectNamed: projectName
 
 !		Instance methods for 'RwPrjReadToolV2'
 
-category: 'read produced projects'
+category: 'to be removed'
 method: RwPrjReadToolV2
 readProjectForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	RwResolvedProjectComponentVisitorV2
@@ -70909,7 +70901,7 @@ readProjectForProducedProject: resolvedProject withComponentNames: componentName
 	^ resolvedProject
 %
 
-category: 'read produced projects'
+category: 'to be removed'
 method: RwPrjReadToolV2
 readProjectSetForProducedProject: producedProject
 	^ self
@@ -70917,7 +70909,7 @@ readProjectSetForProducedProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 %
 
-category: 'read produced projects'
+category: 'to be removed'
 method: RwPrjReadToolV2
 readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
@@ -70925,7 +70917,7 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'read produced projects'
+category: 'to be removed'
 method: RwPrjReadToolV2
 readProjectSetForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
@@ -76309,7 +76301,7 @@ asPackageDefinitionSet
 category: 'definitions'
 method: RwLoadedProjectSet
 asProjectDefinitionSet
-	"this might make sense ... produce/read the load specs?"
+	"this might make sense ... resolve/read the load specs?"
 
 	self shouldNotImplement: #'asProjectDefinitionSet'
 %
@@ -88498,19 +88490,7 @@ printOn: aStream
 		nextPutAll: (self specName ifNil: ['nil'])
 %
 
-category: 'actions'
-method: RwLoadSpecificationV2
-produce
-	"produce ensures that the project directory already exists on disk
-		(cloned for git projects) or created on disk for new projects.
-	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
-		and all load specs for required projects (closure). All specs will 
-		be produced"
-
-	^ RwResolvedProjectV2 requiredLoadSpecs: self
-%
-
-category: 'actions'
+category: 'to be removed'
 method: RwLoadSpecificationV2
 produce: platformConditionalAttributes
 	"produce ensures that the project directory already exists on disk
@@ -88524,16 +88504,7 @@ produce: platformConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'actions'
-method: RwLoadSpecificationV2
-produceProject
-	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
-
-	self produce.
-	^ RwResolvedProjectV2 loadSpecification: self
-%
-
-category: 'actions'
+category: 'to be removed'
 method: RwLoadSpecificationV2
 produceProject: platformConditionalAttributes
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
@@ -88542,7 +88513,7 @@ produceProject: platformConditionalAttributes
 	^ RwResolvedProjectV2 loadSpecification: self
 %
 
-category: 'actions'
+category: 'to be removed'
 method: RwLoadSpecificationV2
 produceWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
@@ -88633,7 +88604,7 @@ method: RwLoadSpecificationV2
 read
 	"Create an instance of RwResolvedProjectV2 attached to projectUrl and read the packages from disk"
 
-	^ self produceProject read
+	^ self resolveProject read
 %
 
 category: 'actions'
@@ -88670,7 +88641,7 @@ method: RwLoadSpecificationV2
 readProjectSet
 	"Return a project definition set that includes the project definition for the receiver and all required projects"
 
-	^ self produce read
+	^ self resolve read
 %
 
 category: 'accessing'
@@ -88734,15 +88705,16 @@ repositoryRoot
 		ifFalse: [ self projectsHome / self projectAlias / self relativeRepositoryRoot ]
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwLoadSpecificationV2
 resolve
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver ignoring any required projects"
+	"resolve ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure). All specs will 
+		be resolved"
 
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecification: self
+	^ RwResolvedProjectV2 requiredLoadSpecs: self
 %
 
 category: 'to be removed'
@@ -88754,6 +88726,17 @@ resolve: customAttributes platformAttributes: platformAttributes
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ RwResolvedProjectV2 loadSpecification: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
+%
+
+category: 'actions'
+method: RwLoadSpecificationV2
+resolveProject
+	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
+		answer  the project definition specified by the receiver ignoring any required projects"
+
+	"if the project directory already exists on disk, then read the project definition(s) from disk"
+
+	^ RwResolvedProjectV2 loadSpecification: self
 %
 
 category: 'to be removed'
@@ -88774,12 +88757,12 @@ resolveStrict
 
 	| oldPolicy |
 	self isStrict
-		ifTrue: [ ^ self resolve ].
+		ifTrue: [ ^ self resolveProject ].
 	oldPolicy := self repositoryResolutionPolicy.
 	[ 
 	"force #strict policy to ensure that the revision is checked out out in the repository"
 	self repositoryResolutionPolicy: #'strict'.
-	^ self resolve ]
+	^ self resolveProject ]
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 %
 
@@ -88789,7 +88772,7 @@ resolveWithParentProject: aResolvedProject
 	"give embedded projects a chance to resolve cleanly"
 
 	self projectsHome: aResolvedProject projectsHome.
-	^self  resolve
+	^self  resolveProject
 %
 
 category: 'accessing'
