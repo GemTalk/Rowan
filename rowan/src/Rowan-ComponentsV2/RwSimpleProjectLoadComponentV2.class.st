@@ -68,6 +68,11 @@ RwSimpleProjectLoadComponentV2 >> instVarNamesInOrderForSton [
 ]
 
 { #category : 'accessing' }
+RwSimpleProjectLoadComponentV2 >> label [
+	^ self basename , ' [' , self condition , ']'
+]
+
+{ #category : 'accessing' }
 RwSimpleProjectLoadComponentV2 >> projectNames [
 	^projectNames
 ]

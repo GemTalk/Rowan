@@ -49,6 +49,12 @@ RwSubcomponent >> instVarNamesInOrderForSton [
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 ]
 
+{ #category : 'accessing' }
+RwSubcomponent >> label [
+
+   ^self basename, ' (', self condition, ')'
+]
+
 { #category : 'validation' }
 RwSubcomponent >> validate [
 	"ensure that the data structures within the receiver contain valid information:

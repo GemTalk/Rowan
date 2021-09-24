@@ -54818,7 +54818,7 @@ forComponentNamed: componentName projectService: theProjectService
 		componentOrPackageGroupNamed: componentName.
 	inst := self new
 		name: componentName;
-		basename: component basename.
+		basename: component label.
 	inst computeSubComponentsUsingProjectService: theProjectService.
 	inst projectService: theProjectService.
 	^ inst
@@ -54886,7 +54886,7 @@ forComponentNamed: componentName projectService: theProjectService
 	component := theProjectService rwProject componentNamed: componentName.
 	inst := self new
 		name: componentName;
-		basename: component basename.
+		basename: component label.
 	inst computeSubComponentsUsingProjectService: theProjectService.
 	inst projectService: theProjectService. 
 	^ inst
@@ -58658,6 +58658,13 @@ instVarNamesInOrderForSton
 	^ self class allInstVarNames
 %
 
+category: 'accessing'
+method: RwAbstractComponent
+label
+
+   ^self basename
+%
+
 category: 'matching'
 method: RwAbstractComponent
 matchesAttributes: attributes
@@ -59409,6 +59416,13 @@ instVarNamesInOrderForSton
 	^ #(#'name' #'projectName' #'condition' #'preloadDoitName' #'postloadDoitName' #'projectNames' #'componentNames' #'packageNames' #'conditionalPackageMapSpecs' #'comment')
 %
 
+category: 'accessing'
+method: RwSubcomponent
+label
+
+   ^self basename, ' (', self condition, ')'
+%
+
 category: 'validation'
 method: RwSubcomponent
 validate
@@ -59447,6 +59461,26 @@ conditionalPropertyMatchers
 						collect: [ :aCondition | self _platformPatternMatcherFor: aCondition ])
 			put: {};
 		yourself
+%
+
+category: 'accessing'
+method: RwPlatformSubcomponent
+label
+	| strm |
+	strm := WriteStream on: String new.
+	strm
+		nextPutAll: self basename;
+		space;
+		nextPut: ${.
+	self condition
+		do: [ :cond | 
+			strm
+				space;
+				nextPutAll: cond asString ].
+	strm
+		space;
+		nextPut: $}.
+	^ strm contents
 %
 
 ! Class implementation for 'RwPackageGroup'
@@ -59492,6 +59526,13 @@ category: 'ston'
 method: RwPackageGroup
 instVarNamesInOrderForSton
 	^ #(#'name' #'condition' #'componentNames' #'packageNames' #'comment')
+%
+
+category: 'accessing'
+method: RwPackageGroup
+label
+
+   ^'__ ', self basename, ' (', self condition, ')'
 %
 
 category: 'accessing'
@@ -72193,6 +72234,12 @@ instVarNamesInOrderForSton
 
 category: 'accessing'
 method: RwSimpleProjectLoadComponentV2
+label
+	^ self basename , ' [' , self condition , ']'
+%
+
+category: 'accessing'
+method: RwSimpleProjectLoadComponentV2
 projectNames
 	^projectNames
 %
@@ -72233,6 +72280,12 @@ acceptVisitor: aVisitor
 	^ self
 		error:
 			'nested component cannot be used as a top-level component. The receiver is nested inside of top-level components'
+%
+
+category: 'accessing'
+method: RwSimpleNestedProjectLoadComponentV2
+label
+	^ self basename , ' (' , self condition , ')'
 %
 
 category: 'ston'
@@ -72307,6 +72360,26 @@ initializeForExport
 
 	super initializeForExport.
 	projectNames := componentNames := nil
+%
+
+category: 'accessing'
+method: RwPlatformNestedProjectLoadComponentV2
+label
+	| strm |
+	strm := WriteStream on: String new.
+	strm
+		nextPutAll: self basename;
+		space;
+		nextPut: ${.
+	self condition
+		do: [ :cond | 
+			strm
+				space;
+				nextPutAll: cond asString ].
+	strm
+		space;
+		nextPut: $}.
+	^ strm contents
 %
 
 category: 'accessing'

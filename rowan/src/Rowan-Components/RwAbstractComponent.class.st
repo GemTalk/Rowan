@@ -335,6 +335,12 @@ RwAbstractComponent >> instVarNamesInOrderForSton [
 	^ self class allInstVarNames
 ]
 
+{ #category : 'accessing' }
+RwAbstractComponent >> label [
+
+   ^self basename
+]
+
 { #category : 'matching' }
 RwAbstractComponent >> matchesAttributes: attributes [
 	self conditionalPropertyMatchers

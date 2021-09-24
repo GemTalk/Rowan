@@ -25,3 +25,22 @@ RwPlatformSubcomponent >> conditionalPropertyMatchers [
 			put: {};
 		yourself
 ]
+
+{ #category : 'accessing' }
+RwPlatformSubcomponent >> label [
+	| strm |
+	strm := WriteStream on: String new.
+	strm
+		nextPutAll: self basename;
+		space;
+		nextPut: ${.
+	self condition
+		do: [ :cond | 
+			strm
+				space;
+				nextPutAll: cond asString ].
+	strm
+		space;
+		nextPut: $}.
+	^ strm contents
+]

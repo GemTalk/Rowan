@@ -67,6 +67,25 @@ RwPlatformNestedProjectLoadComponentV2 >> initializeForExport [
 ]
 
 { #category : 'accessing' }
+RwPlatformNestedProjectLoadComponentV2 >> label [
+	| strm |
+	strm := WriteStream on: String new.
+	strm
+		nextPutAll: self basename;
+		space;
+		nextPut: ${.
+	self condition
+		do: [ :cond | 
+			strm
+				space;
+				nextPutAll: cond asString ].
+	strm
+		space;
+		nextPut: $}.
+	^ strm contents
+]
+
+{ #category : 'accessing' }
 RwPlatformNestedProjectLoadComponentV2 >> projectNames [
 	"a platform nested component may only reference package names --- OR conditionals may only be used by a leaf node"
 

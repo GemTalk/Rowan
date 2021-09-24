@@ -20,3 +20,8 @@ RwSimpleNestedProjectLoadComponentV2 >> acceptVisitor: aVisitor [
 		error:
 			'nested component cannot be used as a top-level component. The receiver is nested inside of top-level components'
 ]
+
+{ #category : 'accessing' }
+RwSimpleNestedProjectLoadComponentV2 >> label [
+	^ self basename , ' (' , self condition , ')'
+]
