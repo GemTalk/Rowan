@@ -310,7 +310,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> loadProjectSet [
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(Rowan projectTools readV2
-				readProjectSetForProducedProject: projectDef)
+				readProjectSetForProject: projectDef)
 ]
 
 { #category : 'accessing' }

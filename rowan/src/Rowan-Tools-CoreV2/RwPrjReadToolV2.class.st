@@ -4,10 +4,10 @@ Class {
 	#category : 'Rowan-Tools-CoreV2'
 }
 
-{ #category : 'to be removed' }
-RwPrjReadToolV2 >> readProjectForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'reading' }
+RwPrjReadToolV2 >> readProjectForProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	RwResolvedProjectComponentVisitorV2
-		readProjectForProducedProject: resolvedProject
+		readProjectForProject: resolvedProject
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
@@ -15,24 +15,24 @@ RwPrjReadToolV2 >> readProjectForProducedProject: resolvedProject withComponentN
 	^ resolvedProject
 ]
 
-{ #category : 'to be removed' }
-RwPrjReadToolV2 >> readProjectSetForProducedProject: producedProject [
+{ #category : 'read project set' }
+RwPrjReadToolV2 >> readProjectSetForProject: producedProject [
 	^ self
-		readProjectSetForProducedProject: producedProject
+		readProjectSetForProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwPrjReadToolV2 >> readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'read project set' }
+RwPrjReadToolV2 >> readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProducedProject: producedProject
+		readProjectSetForProject: producedProject
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwPrjReadToolV2 >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+{ #category : 'read project set' }
+RwPrjReadToolV2 >> readProjectSetForProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProducedProject: resolvedProject
+		readProjectSetForProject: resolvedProject
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.

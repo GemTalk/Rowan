@@ -79,7 +79,7 @@ RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
 		required projects (closure). All specs will be resolved"
 
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2) requiredLoadSpecs
 ]
 
 { #category : 'instance creation' }
@@ -949,7 +949,7 @@ RwResolvedProjectV2 >> loadProjectSet [
 
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(Rowan projectTools readV2 readProjectSetForProducedProject: self)
+			(Rowan projectTools readV2 readProjectSetForProject: self)
 ]
 
 { #category : 'project definition' }
@@ -1085,17 +1085,6 @@ RwResolvedProjectV2 >> printOn: aStream [
 ]
 
 { #category : 'to be removed' }
-RwResolvedProjectV2 >> produceRequiredLoadSpecs [
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
-
-	| res |
-	self _basicProduce
-		ifTrue: [ ^ self readProducedLoadSpecSet ].
-	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	^ res
-]
-
-{ #category : 'to be removed' }
 RwResolvedProjectV2 >> produceRequiredLoadSpecs: platformConditionalAttributes [
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
@@ -1186,7 +1175,23 @@ RwResolvedProjectV2 >> readLoadedProjectSet [
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ Rowan projectTools readV2 readProjectSetForProducedProject: self
+	^ Rowan projectTools readV2 readProjectSetForProject: self
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readLoadSpecSet [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProject: self
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> readLoadSpecSet: platformConditionalAttributes [
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForProject: self
+		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'to be removed' }
@@ -1255,19 +1260,12 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 		visit: self
 ]
 
-{ #category : 'actions' }
-RwResolvedProjectV2 >> readProducedLoadSpecSet [
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProducedProject: self
-]
-
-{ #category : 'actions' }
+{ #category : 'to be removed' }
 RwResolvedProjectV2 >> readProducedLoadSpecSet: platformConditionalAttributes [
 	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
 
 	^ RwResolvedProjectComponentVisitorV2
-		readLoadSpecSetForProducedProject: self
+		readLoadSpecSetForProject: self
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
@@ -1283,17 +1281,15 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
 
-"SHOULD BE PRIVATE METHOD OR REMOVED"
-
 	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForProducedProject: self
+		readProjectForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1307,7 +1303,7 @@ RwResolvedProjectV2 >> readProjectComponentNames: componentNames platformConditi
 
 		self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForProducedProject: self
+		readProjectForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1333,16 +1329,16 @@ RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes [
 		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-"SHOULD BE PRIVATE METHOD OR REMOVED"
+	"NOTE: if the platformConditionalAttributes don't match those of the current image, the resulting project will not be loadable"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForProducedProject: self
+		readProjectSetForProject: self
 		withComponentNames: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1366,7 +1362,7 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForProducedProject: self
+		readProjectSetForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -1480,12 +1476,35 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 	self _projectSpecification repoType: aSymbol
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> requiredLoadSpecs [
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readLoadSpecSet ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	^ res
+]
+
+{ #category : 'actions' }
+RwResolvedProjectV2 >> requiredLoadSpecs: platformConditionalAttributes [
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
+]
+
 { #category : 'accessing' }
 RwResolvedProjectV2 >> requiredProjectNames [
 	(self requiredProjectNames: self customConditionalAttributes) isEmpty
 		ifTrue: [ ^ #() ].
 	^ RwResolvedProjectComponentVisitorV2
-		requiredProjectNamesForProducedProject: self
+		requiredProjectNamesForProject: self
 ]
 
 { #category : 'to be removed' }

@@ -36,7 +36,7 @@ RwResolvedProjectComponentVisitorV2 class >> new [
 ]
 
 { #category : 'read load specs' }
-RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: producedProject [
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProject: producedProject [
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: producedProject.
@@ -52,7 +52,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: pro
 ]
 
 { #category : 'read load specs' }
-RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: producedProject
@@ -69,14 +69,14 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProducedProject: pro
 ]
 
 { #category : 'read load specs' }
-RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: producedProject [
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: producedProject [
 	^ self
-		readLoadSpecSetForProducedProject: producedProject
+		readLoadSpecSetForProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 ]
 
 { #category : 'read load specs' }
-RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	loadSpecSet := RwLoadSpecSet new.
 	projectVisitedQueue := {}.
@@ -88,7 +88,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: 
 			pp := projectVisitorQueue removeFirst.
 
 			visitor := self
-				readLoadSpecForProducedProject: pp
+				readLoadSpecForProject: pp
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			processedProjects at: pp projectName put: pp.
@@ -128,7 +128,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProducedProject: 
 ]
 
 { #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectForProducedProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readProjectForProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: aProducedProject
@@ -147,7 +147,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForProducedProject: aPro
 ]
 
 { #category : 'read load specs' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -159,7 +159,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 			pp := projectVisitorQueue removeFirst.
 
 			visitor := self
-				readLoadSpecForProducedProject: pp
+				readLoadSpecForProject: pp
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			processedProjects at: pp projectName put: pp.
@@ -199,17 +199,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: p
 ]
 
 { #category : 'reading' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	^ self
-		readProjectSetForProducedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		useLoadedProjects: false
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects [
+RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -226,7 +216,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: r
 			cca := nextDefArray at: 3.
 
 			visitor := self
-				readProjectForProducedProject: rp
+				readProjectForProject: rp
 				withComponentNames: cn
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
@@ -240,24 +230,10 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: r
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec theLoadedProject |
-					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
-					(theLoadedProject notNil and: [ useLoadedProjects ])
-						ifTrue: [ 
-							"project is already present in image ... so use it"
-							theLoadSpec := theLoadedProject loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolveProject.
-							(loadSpec loadConflictsWith: theLoadSpec)
-								ifTrue: [ 
-									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"
-									self
-										error:
-											'load conflicts between the load spec for the loaded project and the load spec for the required project '
-												, theLoadedProject projectName ] ]
-						ifFalse: [ 
-							"derive resolved project from the load spec"
-							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
-							theLoadSpec := loadSpec ].
+					| theResolvedProject theLoadSpec |
+					"derive resolved project from the load spec"
+					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
 						ifNil: [ 
 							"required project has not been processed, add to the project visitor queue"
@@ -288,7 +264,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProducedProject: r
 ]
 
 { #category : 'required projects' }
-RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProducedProject: producedProject [
+RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProject: producedProject [
 	| requiredProjectNames visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	requiredProjectNames := Set new.
 	projectVisitedQueue := {}.
@@ -299,7 +275,7 @@ RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProducedProj
 			| pp |
 			pp := projectVisitorQueue removeFirst.
 
-			visitor := self readLoadSpecForProducedProject: pp.
+			visitor := self readLoadSpecForProject: pp.
 
 			processedProjects at: pp projectName put: pp.
 
@@ -389,7 +365,7 @@ RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ign
 
 ]
 
-{ #category : 'private' }
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject [
 	^ self
 		_readComponentsForProducedProject: aProducedProject
@@ -398,7 +374,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProdu
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 ]
 
-{ #category : 'private' }
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes [
 	^ self
 		_readComponentsForProducedProject: aProducedProject
@@ -407,7 +383,7 @@ RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProdu
 		platformConditionalAttributes: aPlatformConditionalAttributes
 ]
 
-{ #category : 'private' }
+{ #category : 'to be removed' }
 RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes [
 	| theComponentNames  |
 	resolvedProject := aProducedProject.

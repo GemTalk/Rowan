@@ -64678,7 +64678,7 @@ requiredLoadSpecs: anRwLoadSpecificationV2
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
 		required projects (closure). All specs will be resolved"
 
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2) produceRequiredLoadSpecs
+	^ (self basicLoadSpecification: anRwLoadSpecificationV2) requiredLoadSpecs
 %
 
 category: 'instance creation'
@@ -65518,7 +65518,7 @@ loadProjectSet
 
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
-			(Rowan projectTools readV2 readProjectSetForProducedProject: self)
+			(Rowan projectTools readV2 readProjectSetForProject: self)
 %
 
 category: 'project definition'
@@ -65673,18 +65673,6 @@ printOn: aStream
 
 category: 'to be removed'
 method: RwResolvedProjectV2
-produceRequiredLoadSpecs
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
-
-	| res |
-	self _basicProduce
-		ifTrue: [ ^ self readProducedLoadSpecSet ].
-	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	^ res
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
 produceRequiredLoadSpecs: platformConditionalAttributes
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
@@ -65786,7 +65774,25 @@ readLoadedProjectSet
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
-	^ Rowan projectTools readV2 readProjectSetForProducedProject: self
+	^ Rowan projectTools readV2 readProjectSetForProject: self
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readLoadSpecSet
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProject: self
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+readLoadSpecSet: platformConditionalAttributes
+	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
+
+	^ RwResolvedProjectComponentVisitorV2
+		readLoadSpecSetForProject: self
+		platformConditionalAttributes: platformConditionalAttributes
 %
 
 category: 'to be removed'
@@ -65859,21 +65865,13 @@ readPackageNamesBlock: packageNamesBlock
 		visit: self
 %
 
-category: 'actions'
-method: RwResolvedProjectV2
-readProducedLoadSpecSet
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ RwResolvedProjectComponentVisitorV2 readLoadSpecSetForProducedProject: self
-%
-
-category: 'actions'
+category: 'to be removed'
 method: RwResolvedProjectV2
 readProducedLoadSpecSet: platformConditionalAttributes
 	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
 
 	^ RwResolvedProjectComponentVisitorV2
-		readLoadSpecSetForProducedProject: self
+		readLoadSpecSetForProject: self
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -65890,18 +65888,16 @@ readProjectComponentNames: componentNames
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
 	"return the receiver with a new set of definitions read from disk"
 
-"SHOULD BE PRIVATE METHOD OR REMOVED"
-
 	self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForProducedProject: self
+		readProjectForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -65916,7 +65912,7 @@ readProjectComponentNames: componentNames platformConditionalAttributes: platfor
 
 		self componentNames: componentNames. "record the list of component names used to create this instance of the project definition"
 	^ Rowan projectTools readV2
-		readProjectForProducedProject: self
+		readProjectForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -65944,17 +65940,17 @@ readProjectSet: customConditionalAttributes
 		platformConditionalAttributes: self platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
-"SHOULD BE PRIVATE METHOD OR REMOVED"
+	"NOTE: if the platformConditionalAttributes don't match those of the current image, the resulting project will not be loadable"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForProducedProject: self
+		readProjectSetForProject: self
 		withComponentNames: self componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -65980,7 +65976,7 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ Rowan projectTools readV2
-		readProjectSetForProducedProject: self
+		readProjectSetForProject: self
 		withComponentNames: componentNames
 		customConditionalAttributes: self customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
@@ -66104,13 +66100,38 @@ repoType: aSymbol
 	self _projectSpecification repoType: aSymbol
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+requiredLoadSpecs
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readLoadSpecSet ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	^ res
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
+requiredLoadSpecs: platformConditionalAttributes
+	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+
+	| res |
+	self _basicProduce
+		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
+	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self halt.	"test coverage"
+	^ res
+%
+
 category: 'accessing'
 method: RwResolvedProjectV2
 requiredProjectNames
 	(self requiredProjectNames: self customConditionalAttributes) isEmpty
 		ifTrue: [ ^ #() ].
 	^ RwResolvedProjectComponentVisitorV2
-		requiredProjectNamesForProducedProject: self
+		requiredProjectNamesForProject: self
 %
 
 category: 'to be removed'
@@ -70889,11 +70910,11 @@ classExtensionsForProjectNamed: projectName
 
 !		Instance methods for 'RwPrjReadToolV2'
 
-category: 'to be removed'
+category: 'reading'
 method: RwPrjReadToolV2
-readProjectForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+readProjectForProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	RwResolvedProjectComponentVisitorV2
-		readProjectForProducedProject: resolvedProject
+		readProjectForProject: resolvedProject
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
@@ -70901,27 +70922,27 @@ readProjectForProducedProject: resolvedProject withComponentNames: componentName
 	^ resolvedProject
 %
 
-category: 'to be removed'
+category: 'read project set'
 method: RwPrjReadToolV2
-readProjectSetForProducedProject: producedProject
+readProjectSetForProject: producedProject
 	^ self
-		readProjectSetForProducedProject: producedProject
+		readProjectSetForProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'read project set'
 method: RwPrjReadToolV2
-readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProducedProject: producedProject
+		readProjectSetForProject: producedProject
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'read project set'
 method: RwPrjReadToolV2
-readProjectSetForProducedProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProject: resolvedProject withComponentNames: componentNames customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProducedProject: resolvedProject
+		readProjectSetForProject: resolvedProject
 		withComponentNames: componentNames
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
@@ -84381,7 +84402,7 @@ loadProjectSet
 	^ Rowan projectTools loadV2
 		loadProjectSetDefinition:
 			(Rowan projectTools readV2
-				readProjectSetForProducedProject: projectDef)
+				readProjectSetForProject: projectDef)
 %
 
 category: 'accessing'
@@ -87272,7 +87293,7 @@ new
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecForProducedProject: producedProject
+readLoadSpecForProject: producedProject
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: producedProject.
@@ -87289,7 +87310,7 @@ readLoadSpecForProducedProject: producedProject
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readLoadSpecForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: producedProject
@@ -87307,15 +87328,15 @@ readLoadSpecForProducedProject: producedProject platformConditionalAttributes: p
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForProducedProject: producedProject
+readLoadSpecSetForProject: producedProject
 	^ self
-		readLoadSpecSetForProducedProject: producedProject
+		readLoadSpecSetForProject: producedProject
 		platformConditionalAttributes: producedProject platformConditionalAttributes
 %
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readLoadSpecSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	loadSpecSet := RwLoadSpecSet new.
 	projectVisitedQueue := {}.
@@ -87327,7 +87348,7 @@ readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes
 			pp := projectVisitorQueue removeFirst.
 
 			visitor := self
-				readLoadSpecForProducedProject: pp
+				readLoadSpecForProject: pp
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			processedProjects at: pp projectName put: pp.
@@ -87368,7 +87389,7 @@ readLoadSpecSetForProducedProject: producedProject platformConditionalAttributes
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForProducedProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+readProjectForProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
 		_readComponentsForProducedProject: aProducedProject
@@ -87388,7 +87409,7 @@ readProjectForProducedProject: aProducedProject withComponentNames: componentNam
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForProducedProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -87400,7 +87421,7 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 			pp := projectVisitorQueue removeFirst.
 
 			visitor := self
-				readLoadSpecForProducedProject: pp
+				readLoadSpecForProject: pp
 				platformConditionalAttributes: platformConditionalAttributes.
 
 			processedProjects at: pp projectName put: pp.
@@ -87441,18 +87462,7 @@ readProjectSetForProducedProject: producedProject platformConditionalAttributes:
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
-	^ self
-		readProjectSetForProducedProject: resolvedProject
-		withComponentNames: componentNamesToRead
-		customConditionalAttributes: customConditionalAttributes
-		platformConditionalAttributes: platformConditionalAttributes
-		useLoadedProjects: false
-%
-
-category: 'to be removed'
-classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForProducedProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes useLoadedProjects: useLoadedProjects
+readProjectSetForProject: resolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
@@ -87469,7 +87479,7 @@ readProjectSetForProducedProject: resolvedProject withComponentNames: componentN
 			cca := nextDefArray at: 3.
 
 			visitor := self
-				readProjectForProducedProject: rp
+				readProjectForProject: rp
 				withComponentNames: cn
 				customConditionalAttributes: cca
 				platformConditionalAttributes: platformConditionalAttributes.
@@ -87483,24 +87493,10 @@ readProjectSetForProducedProject: resolvedProject withComponentNames: componentN
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec theLoadedProject |
-					theLoadedProject := Rowan projectNamed: loadSpec projectName ifAbsent: [  ].
-					(theLoadedProject notNil and: [ useLoadedProjects ])
-						ifTrue: [ 
-							"project is already present in image ... so use it"
-							theLoadSpec := theLoadedProject loadSpecification.
-							theResolvedProject := theLoadedProject asDefinition resolveProject.
-							(loadSpec loadConflictsWith: theLoadSpec)
-								ifTrue: [ 
-									"the load spec for the loaded project is incompatible with the required load spec ... this is an error"
-									self
-										error:
-											'load conflicts between the load spec for the loaded project and the load spec for the required project '
-												, theLoadedProject projectName ] ]
-						ifFalse: [ 
-							"derive resolved project from the load spec"
-							theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
-							theLoadSpec := loadSpec ].
+					| theResolvedProject theLoadSpec |
+					"derive resolved project from the load spec"
+					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
 						ifNil: [ 
 							"required project has not been processed, add to the project visitor queue"
@@ -87532,7 +87528,7 @@ readProjectSetForProducedProject: resolvedProject withComponentNames: componentN
 
 category: 'required projects'
 classmethod: RwResolvedProjectComponentVisitorV2
-requiredProjectNamesForProducedProject: producedProject
+requiredProjectNamesForProject: producedProject
 	| requiredProjectNames visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	requiredProjectNames := Set new.
 	projectVisitedQueue := {}.
@@ -87543,7 +87539,7 @@ requiredProjectNamesForProducedProject: producedProject
 			| pp |
 			pp := projectVisitorQueue removeFirst.
 
-			visitor := self readLoadSpecForProducedProject: pp.
+			visitor := self readLoadSpecForProject: pp.
 
 			processedProjects at: pp projectName put: pp.
 
@@ -87834,7 +87830,7 @@ _projects: projectDirPath forProject: ignored
 					RwSpecification fromUrl: url ] ]
 %
 
-category: 'private'
+category: 'to be removed'
 method: RwResolvedProjectComponentVisitorV2
 _readComponentsForProducedProject: aProducedProject
 	^ self
@@ -87844,7 +87840,7 @@ _readComponentsForProducedProject: aProducedProject
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 %
 
-category: 'private'
+category: 'to be removed'
 method: RwResolvedProjectComponentVisitorV2
 _readComponentsForProducedProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes
 	^ self
@@ -87854,7 +87850,7 @@ _readComponentsForProducedProject: aProducedProject platformConditionalAttribute
 		platformConditionalAttributes: aPlatformConditionalAttributes
 %
 
-category: 'private'
+category: 'to be removed'
 method: RwResolvedProjectComponentVisitorV2
 _readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
 	| theComponentNames  |
