@@ -4049,7 +4049,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0074: resolvedProject [
 		customConditionalAttributes: { 'tests' }
 		yourself.
 
-	requiredProject := (requiredLoadSpec resolveWithParentProject: resolvedProject) resolveProject.
+	requiredProject := (requiredLoadSpec projectsHome: resolvedProject projectsHome) resolveProject.
 	requiredProject projectSpecification
 		specsPath: 'rowan/specs';
 		projectsPath: 'rowan/projects';
@@ -4675,7 +4675,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedPr
 
 	| resolvedRepository resolvedProject embeddedProject |
 	resolvedProject := definedProject resolveStrict.
-	embeddedProject := embeddedProjectDefinition resolveWithParentProject: resolvedProject.
+	embeddedProject := (embeddedProjectDefinition loadSpecification projectsHome: resolvedProject projectsHome) resolveProject.
 
 	resolvedRepository := resolvedProject repository.
 	(resolvedRepository branches includes: specName)

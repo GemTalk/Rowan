@@ -49986,18 +49986,6 @@ resolveStrict
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 %
 
-category: 'to be removed'
-method: RwDefinedProject
-resolveWithParentProject: aResolvedRwProject
-	"give embedded projects a chance to resolve cleanly"
-
-	^ (RwResolvedFromDefinedProject newNamed: self name)
-		_concreteProject:
-				(self loadSpecification
-						resolveWithParentProject: aResolvedRwProject _concreteProject) resolveProject;
-		yourself
-%
-
 category: 'accessing'
 method: RwDefinedProject
 revision: aString
@@ -87494,8 +87482,8 @@ readProjectSetForProject: resolvedProject withComponentNames: componentNamesToRe
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject theLoadSpec |
-					"derive resolved project from the load spec"
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+					"derive resolved project from the load spec; using projects home of parent project"
+					theResolvedProject := (loadSpec projectsHome: rp projectsHome) resolveProject.
 					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
 						ifNil: [ 
@@ -88760,15 +88748,6 @@ resolveStrict
 	self repositoryResolutionPolicy: #'strict'.
 	^ self resolveProject ]
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
-%
-
-category: 'to be removed'
-method: RwLoadSpecificationV2
-resolveWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly"
-
-	self projectsHome: aResolvedProject projectsHome.
-	^self  resolveProject
 %
 
 category: 'accessing'

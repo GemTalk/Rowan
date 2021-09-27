@@ -763,14 +763,6 @@ RwLoadSpecificationV2 >> resolveStrict [
 		ensure: [ self repositoryResolutionPolicy: oldPolicy ]
 ]
 
-{ #category : 'to be removed' }
-RwLoadSpecificationV2 >> resolveWithParentProject: aResolvedProject [
-	"give embedded projects a chance to resolve cleanly"
-
-	self projectsHome: aResolvedProject projectsHome.
-	^self  resolveProject
-]
-
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> revision [
 	" git :: committish; svn :: revision; mercurial :: changeset; disk :: empty string"

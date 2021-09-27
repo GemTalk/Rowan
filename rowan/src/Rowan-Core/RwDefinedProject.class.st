@@ -563,17 +563,6 @@ RwDefinedProject >> resolveStrict [
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 ]
 
-{ #category : 'to be removed' }
-RwDefinedProject >> resolveWithParentProject: aResolvedRwProject [
-	"give embedded projects a chance to resolve cleanly"
-
-	^ (RwResolvedFromDefinedProject newNamed: self name)
-		_concreteProject:
-				(self loadSpecification
-						resolveWithParentProject: aResolvedRwProject _concreteProject) resolveProject;
-		yourself
-]
-
 { #category : 'accessing' }
 RwDefinedProject >> revision: aString [
 	self loadSpecification revision: aString

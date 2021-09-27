@@ -231,8 +231,8 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedP
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject theLoadSpec |
-					"derive resolved project from the load spec"
-					theResolvedProject := loadSpec resolveWithParentProject: rp.	"give embedded projects a chance"
+					"derive resolved project from the load spec; using projects home of parent project"
+					theResolvedProject := (loadSpec projectsHome: rp projectsHome) resolveProject.
 					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
 						ifNil: [ 
