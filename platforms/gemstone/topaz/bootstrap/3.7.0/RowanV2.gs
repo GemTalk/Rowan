@@ -87341,7 +87341,7 @@ readLoadSpecSetForProject: producedProject platformConditionalAttributes: platfo
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -87414,7 +87414,7 @@ readProjectSetForProject: producedProject platformConditionalAttributes: platfor
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -87531,7 +87531,7 @@ requiredProjectNamesForProject: producedProject
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -88463,19 +88463,6 @@ printOn: aStream
 	aStream
 		nextPutAll: ' for ';
 		nextPutAll: (self specName ifNil: ['nil'])
-%
-
-category: 'to be removed'
-method: RwLoadSpecificationV2
-produceWithParentProject: aResolvedProject
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
-
-	| producedProject |
-	self projectsHome: aResolvedProject projectsHome.
-	producedProject := RwResolvedProjectV2
-		basicLoadSpecification: self.
-	producedProject _basicProduce.
-	^ producedProject
 %
 
 category: 'accessing'

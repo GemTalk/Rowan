@@ -102,7 +102,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: produced
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -173,7 +173,7 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: producedP
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 
@@ -288,7 +288,7 @@ RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProject: pro
 				do: [ :loadSpec | 
 					| theProducedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := loadSpec produceWithParentProject: pp.
+					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
 						at: theProducedProject projectName
 						ifAbsent: [ 

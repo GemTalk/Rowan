@@ -516,18 +516,6 @@ RwLoadSpecificationV2 >> printOn: aStream [
 		nextPutAll: (self specName ifNil: ['nil'])
 ]
 
-{ #category : 'to be removed' }
-RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
-	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
-
-	| producedProject |
-	self projectsHome: aResolvedProject projectsHome.
-	producedProject := RwResolvedProjectV2
-		basicLoadSpecification: self.
-	producedProject _basicProduce.
-	^ producedProject
-]
-
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> projectAlias [
 	"project alias is used as the name of the root directory for the project ... necessary if the project is 
