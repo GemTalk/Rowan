@@ -5371,7 +5371,7 @@ RwRowanSample9Test >> testLoadSpec_read_01 [
 
 "read"
 	platformConditionalAttributes := { 'common' . 'gemstone' . '2.4.0' asRwGemStoneVersionNumber }.
-	loadSpecs := loadSpec produce: platformConditionalAttributes.
+	loadSpecs := loadSpec resolve: platformConditionalAttributes.
 	projectSetDefinition := loadSpecs read: platformConditionalAttributes.
 
 "validate"

@@ -60,20 +60,6 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platform
 		resolve: platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 class >> loadSpecificationProjectSet: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) 
-		or created on disk for new projects. If the project directory already exists on disk, 
-		then read the project definition(s) from disk using the specified customConditionalAttributes
-		and platformAttributes.
-
-		Answer  the project definition specified by the receiver and any dependent projects"
-
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		resolveProjectSet: customConditionalAttributes
-		platformConditionalAttributes: platformAttributes
-]
-
 { #category : 'instance creation' }
 RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 [
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
@@ -1587,23 +1573,6 @@ RwResolvedProjectV2 >> resolveProject [
 					self
 						projectDefinitionSourceProperty:
 							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> resolveProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
-	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk) and read 
-		project set from disk, if project is present on disk (includes required projects)t"
-  | res |
-	self _projectRepository resolveRepository
-		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					^ self readProjectSet: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes ] ].
-	(res := RwProjectSetDefinition new)
-		addProject: self .
-  ^ res
 ]
 
 { #category : 'load specification' }

@@ -517,27 +517,6 @@ RwLoadSpecificationV2 >> printOn: aStream [
 ]
 
 { #category : 'to be removed' }
-RwLoadSpecificationV2 >> produce: platformConditionalAttributes [
-	"produce ensures that the project directory already exists on disk
-		(cloned for git projects) or created on disk for new projects.
-	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
-		and all load specs for required projects (closure using 
-		platformConditionalAttributes). All specs will be produced"
-
-	^ RwResolvedProjectV2
-		requiredLoadSpecs: self
-		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwLoadSpecificationV2 >> produceProject: platformConditionalAttributes [
-	"Create an instance of RwResolvedProjectV2 attached to projectUrl ... packages and components have NOT been read from disk"
-
-	self produce: platformConditionalAttributes.
-	^ RwResolvedProjectV2 loadSpecification: self
-]
-
-{ #category : 'to be removed' }
 RwLoadSpecificationV2 >> produceWithParentProject: aResolvedProject [
 	"give embedded projects a chance to resolve cleanly. Return a produced project that has been attached to the disk representation of project."
 
@@ -629,7 +608,7 @@ RwLoadSpecificationV2 >> read: platformConditionalAttributes [
 			use customConditionalAttributes: to set cusom conditional attributes in 
 			the receiver."
 
-	self produce: platformConditionalAttributes.
+	self resolve.
 	^ RwResolvedProjectV2
 		loadSpecification: self
 		platformConditionalAttributes: platformConditionalAttributes
@@ -718,7 +697,20 @@ RwLoadSpecificationV2 >> resolve [
 	^ RwResolvedProjectV2 requiredLoadSpecs: self
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
+RwLoadSpecificationV2 >> resolve: platformConditionalAttributes [
+	"resolve ensures that the project directory already exists on disk
+		(cloned for git projects) or created on disk for new projects.
+	Return an RwLoadSpecSet containing anRwLoadSpecificationV2 
+		and all load specs for required projects (closure using 
+		platformConditionalAttributes). All specs will be resolved"
+
+	^ RwResolvedProjectV2
+		requiredLoadSpecs: self
+		platformConditionalAttributes: platformConditionalAttributes
+]
+
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> resolve: customAttributes platformAttributes: platformAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -736,16 +728,6 @@ RwLoadSpecificationV2 >> resolveProject [
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
 	^ RwResolvedProjectV2 loadSpecification: self
-]
-
-{ #category : 'to be removed' }
-RwLoadSpecificationV2 >> resolveProjectSet: customAttributes platformAttributes: platformAttributes [
-	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
-		answer  the project definition specified by the receiver and any dependent projects"
-
-	"if the project directory already exists on disk, then read the project definition(s) from disk"
-
-	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
 ]
 
 { #category : 'actions' }

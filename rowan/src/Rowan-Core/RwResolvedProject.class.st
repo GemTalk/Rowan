@@ -125,7 +125,7 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 		projectsHome: projectsHome;
 		yourself.
 	loadSpec addCustomConditionalAttributes: customConditionalAttributes.
-	resolvedProject := loadSpec produceProject: platformConditionalAttributes.
+	resolvedProject := loadSpec resolveProject.
 	resolvedProject read: platformConditionalAttributes.
 	^ (self newNamed: resolvedProject name)
 		_concreteProject: resolvedProject resolveProject;
