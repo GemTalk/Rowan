@@ -39,7 +39,7 @@ RwResolvedProjectComponentVisitorV2 class >> new [
 RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProject: producedProject [
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: producedProject.
+		_readComponentsForProject: producedProject.
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
@@ -55,7 +55,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProject: producedPro
 RwResolvedProjectComponentVisitorV2 class >> readLoadSpecForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: producedProject
+		_readComponentsForProject: producedProject
 		platformConditionalAttributes: platformConditionalAttributes.
 	producedProject
 		projectDefinitionSourceProperty:
@@ -131,7 +131,7 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: produced
 RwResolvedProjectComponentVisitorV2 class >> readProjectForProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: componentNamesToRead
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
@@ -365,26 +365,26 @@ RwResolvedProjectComponentVisitorV2 >> _projects: projectDirPath forProject: ign
 
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject [
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProject: aProducedProject [
 	^ self
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
 		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes [
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes [
 	^ self
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
 		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aPlatformConditionalAttributes
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectComponentVisitorV2 >> _readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes [
+{ #category : 'private' }
+RwResolvedProjectComponentVisitorV2 >> _readComponentsForProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes [
 	| theComponentNames  |
 	resolvedProject := aProducedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.

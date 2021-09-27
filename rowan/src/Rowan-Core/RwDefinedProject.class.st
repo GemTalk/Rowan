@@ -558,7 +558,7 @@ RwDefinedProject >> resolveProject [
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'transitions' }
 RwDefinedProject >> resolveStrict [
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
 ]

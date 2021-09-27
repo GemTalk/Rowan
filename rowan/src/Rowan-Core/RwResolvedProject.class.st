@@ -321,7 +321,7 @@ RwResolvedProject >> readProjectSet [
 	self _concreteProject readProjectSet
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProject >> readProjectSet: customConditionalAttributes [
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
 

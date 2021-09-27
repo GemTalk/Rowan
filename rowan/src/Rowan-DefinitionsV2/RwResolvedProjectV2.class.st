@@ -738,6 +738,13 @@ RwResolvedProjectV2 >> create [
 	self resolveProject; export
 ]
 
+{ #category : 'actions' }
+RwResolvedProjectV2 >> defined [
+	^ (RwDefinedProject newNamed: self name)
+		_concreteProject: self;
+		yourself
+]
+
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 	| loadSpec |
@@ -1318,15 +1325,15 @@ RwResolvedProjectV2 >> readProjectSet [
 	^ self readProjectSetComponentNames: self componentNames
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectSet: customConditionalAttributes [
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
-		readProjectSet: customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
+		readProjectSetComponentNames: self componentNames
+		customConditionalAttributes: customConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -1356,8 +1363,23 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames [
 ]
 
 { #category : 'actions' }
+RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames customConditionalAttributes: customConditionalAttributes [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForProject: self
+		withComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+]
+
+{ #category : 'actions' }
 RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"NOTE: if the platformConditionalAttributes don't match those of the current image, the resulting project will not be loadable"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 

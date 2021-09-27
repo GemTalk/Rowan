@@ -49980,7 +49980,7 @@ resolveProject
 	^ RwResolvedFromDefinedProject fromDefinedProject: self
 %
 
-category: 'to be removed'
+category: 'transitions'
 method: RwDefinedProject
 resolveStrict
 	^ RwResolvedFromDefinedProject fromStrictDefinedProject: self
@@ -50607,7 +50607,7 @@ readProjectSet
 	self _concreteProject readProjectSet
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProject
 readProjectSet: customConditionalAttributes
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
@@ -65275,6 +65275,14 @@ create
 	self resolveProject; export
 %
 
+category: 'actions'
+method: RwResolvedProjectV2
+defined
+	^ (RwDefinedProject newNamed: self name)
+		_concreteProject: self;
+		yourself
+%
+
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 diskRepositoryRoot: repositoryRootPathString
@@ -65916,7 +65924,7 @@ readProjectSet
 	^ self readProjectSetComponentNames: self componentNames
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 readProjectSet: customConditionalAttributes
 	"refresh the contents of the receiver ... use customConditionalAttributes to determine which components will be loaded"
@@ -65924,8 +65932,8 @@ readProjectSet: customConditionalAttributes
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
 	^ self
-		readProjectSet: customConditionalAttributes
-		platformConditionalAttributes: self platformConditionalAttributes
+		readProjectSetComponentNames: self componentNames
+		customConditionalAttributes: customConditionalAttributes
 %
 
 category: 'actions'
@@ -65958,8 +65966,24 @@ readProjectSetComponentNames: componentNames
 
 category: 'actions'
 method: RwResolvedProjectV2
+readProjectSetComponentNames: componentNames customConditionalAttributes: customConditionalAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools readV2
+		readProjectSetForProject: self
+		withComponentNames: componentNames
+		customConditionalAttributes: customConditionalAttributes
+		platformConditionalAttributes: self platformConditionalAttributes
+%
+
+category: 'actions'
+method: RwResolvedProjectV2
 readProjectSetComponentNames: componentNames platformConditionalAttributes: platformConditionalAttributes
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
+
+	"NOTE: if the platformConditionalAttributes don't match those of the current image, the resulting project will not be loadable"
 
 	"return a project definition set that will contain the project definition along with any dependent project definitions"
 
@@ -87284,7 +87308,7 @@ classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecForProject: producedProject
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: producedProject.
+		_readComponentsForProject: producedProject.
 	producedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
@@ -87301,7 +87325,7 @@ classmethod: RwResolvedProjectComponentVisitorV2
 readLoadSpecForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: producedProject
+		_readComponentsForProject: producedProject
 		platformConditionalAttributes: platformConditionalAttributes.
 	producedProject
 		projectDefinitionSourceProperty:
@@ -87380,7 +87404,7 @@ classmethod: RwResolvedProjectComponentVisitorV2
 readProjectForProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: componentNamesToRead
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
@@ -87818,29 +87842,29 @@ _projects: projectDirPath forProject: ignored
 					RwSpecification fromUrl: url ] ]
 %
 
-category: 'to be removed'
+category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProducedProject: aProducedProject
+_readComponentsForProject: aProducedProject
 	^ self
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
 		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aProducedProject platformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProducedProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes
+_readComponentsForProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes
 	^ self
-		_readComponentsForProducedProject: aProducedProject
+		_readComponentsForProject: aProducedProject
 		withComponentNames: aProducedProject componentNames
 		customConditionalAttributes: aProducedProject customConditionalAttributes
 		platformConditionalAttributes: aPlatformConditionalAttributes
 %
 
-category: 'to be removed'
+category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProducedProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
+_readComponentsForProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
 	| theComponentNames  |
 	resolvedProject := aProducedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
@@ -88734,7 +88758,7 @@ resolveProjectSet: customAttributes platformAttributes: platformAttributes
 	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwLoadSpecificationV2
 resolveStrict
 	"resolve using #strict repositoryResolutionpolicy"

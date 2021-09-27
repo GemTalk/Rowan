@@ -748,7 +748,7 @@ RwLoadSpecificationV2 >> resolveProjectSet: customAttributes platformAttributes:
 	^ RwResolvedProjectV2 loadSpecificationProjectSet: self customConditionalAttributes: customAttributes platformAttributes: platformAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwLoadSpecificationV2 >> resolveStrict [
 	"resolve using #strict repositoryResolutionpolicy"
 
