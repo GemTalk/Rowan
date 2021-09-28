@@ -65293,6 +65293,10 @@ diskUrl: anUrlString
 category: 'actions'
 method: RwResolvedProjectV2
 export
+	"export project artifacts, EXCEPT load spec as the load spec is typically modified during load.
+		The load spec should be exported shortly after being read from disk AFTER any
+		intentional changes have been made"
+
 	Rowan projectTools writeV2 writeResolvedProject: self
 %
 
@@ -66143,37 +66147,30 @@ requiredProjectNamesForLoadedProject
 	^ self _requiredProjectNamesForLoadedProject: Set new
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 resolve: platformConditionalAttributes
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolveRepository
+	self _basicResolve
 		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self
-						read: platformConditionalAttributes ] ]
+			"update project definition from disk"
+			self read: platformConditionalAttributes ]
 %
 
-category: 'to be removed'
+category: 'actions'
 method: RwResolvedProjectV2
 resolve: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolveRepository
+	self _basicResolve
 		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self
-						read: customConditionalAttributes
-						platformConditionalAttributes: platformConditionalAttributes ] ]
+			"update project definition from disk"
+			self
+				read: customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes ]
 %
 
 category: 'actions'
@@ -66268,11 +66265,7 @@ _basicProduce
 	Return an true if there are project artifacts on disk and false if
 		the directory has not been populated. "
 
-	self _basicResolve
-		ifTrue: [ 
-			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
-			^ true ].
-	^ false
+	^ self _basicResolve
 %
 
 category: 'actions'
@@ -66286,7 +66279,10 @@ _basicResolve
 	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			^ self _checkProjectDirectoryStructure ].
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
+					^ true ] ].
 	^ false
 %
 
@@ -71226,6 +71222,10 @@ writeProjectNamed: projectName
 category: 'write'
 method: RwPrjWriteToolV2
 writeResolvedProject: resolvedProject
+	"write project artifacts, EXCEPT load spec as the load spec is typically modified during load.
+		The load spec should be written shortly after being read from disk AFTER any
+		intentional changes have been made"
+
 	Rowan projectTools createV2
 		createResolvedProjectRepository: resolvedProject repository.
 	resolvedProject

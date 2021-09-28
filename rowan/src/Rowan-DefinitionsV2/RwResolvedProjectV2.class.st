@@ -89,11 +89,7 @@ RwResolvedProjectV2 >> _basicProduce [
 	Return an true if there are project artifacts on disk and false if
 		the directory has not been populated. "
 
-	self _basicResolve
-		ifTrue: [ 
-			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
-			^ true ].
-	^ false
+	^ self _basicResolve
 ]
 
 { #category : 'actions' }
@@ -106,7 +102,10 @@ RwResolvedProjectV2 >> _basicResolve [
 	self _projectRepository resolveRepository
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			^ self _checkProjectDirectoryStructure ].
+			self _checkProjectDirectoryStructure
+				ifTrue: [ 
+					self updateLoadSpecWithRepositoryRoot: self loadSpecification.
+					^ true ] ].
 	^ false
 ]
 
@@ -752,8 +751,11 @@ RwResolvedProjectV2 >> diskUrl: anUrlString [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> export [
-	Rowan projectTools writeV2 writeResolvedProject: self
+	"export project artifacts, EXCEPT load spec as the load spec is typically modified during load.
+		The load spec should be exported shortly after being read from disk AFTER any
+		intentional changes have been made"
 
+	Rowan projectTools writeV2 writeResolvedProject: self
 ]
 
 { #category : 'exporting' }
@@ -1525,35 +1527,28 @@ RwResolvedProjectV2 >> requiredProjectNamesForLoadedProject [
 	^ self _requiredProjectNamesForLoadedProject: Set new
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> resolve: platformConditionalAttributes [
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolveRepository
+	self _basicResolve
 		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self
-						read: platformConditionalAttributes ] ]
+			"update project definition from disk"
+			self read: platformConditionalAttributes ]
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> resolve: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"resolve the projectSpecification (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolveRepository
+	self _basicResolve
 		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self
-						read: customConditionalAttributes
-						platformConditionalAttributes: platformConditionalAttributes ] ]
+			"update project definition from disk"
+			self
+				read: customConditionalAttributes
+				platformConditionalAttributes: platformConditionalAttributes ]
 ]
 
 { #category : 'actions' }

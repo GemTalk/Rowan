@@ -18,6 +18,10 @@ RwPrjWriteToolV2 >> writeProjectNamed: projectName [
 
 { #category : 'write' }
 RwPrjWriteToolV2 >> writeResolvedProject: resolvedProject [
+	"write project artifacts, EXCEPT load spec as the load spec is typically modified during load.
+		The load spec should be written shortly after being read from disk AFTER any
+		intentional changes have been made"
+
 	Rowan projectTools createV2
 		createResolvedProjectRepository: resolvedProject repository.
 	resolvedProject

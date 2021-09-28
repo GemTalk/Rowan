@@ -249,9 +249,8 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 "validate"
 	self assert: project gitShortStatus isEmpty.
 
-"export"
+"export project components and packages"
 	Rowan gemstoneTools topaz
-		exportLoadSpecificationForProject: projectName;
 		exportComponentsForProject: projectName;
 		exportPackagesForProject: projectName;
 		yourself.
