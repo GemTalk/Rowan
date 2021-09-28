@@ -65662,7 +65662,7 @@ produceRequiredLoadSpecs: platformConditionalAttributes
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
-	self _basicProduce
+	self _basicResolve
 		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
 	^ res
@@ -66106,7 +66106,7 @@ requiredLoadSpecs
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
-	self _basicProduce
+	self _basicResolve
 		ifTrue: [ ^ self readLoadSpecSet ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
 	^ res
@@ -66118,7 +66118,7 @@ requiredLoadSpecs: platformConditionalAttributes
 	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
-	self _basicProduce
+	self _basicResolve
 		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
 	^ res
@@ -66179,16 +66179,13 @@ resolveProject
 	"resolve the projectSpecation (clone remote repo or connect to existing repo on disk) and read 
 		project from disk, if project is present on disk"
 
-	self _projectRepository resolveRepository
+	self _basicResolve
 		ifTrue: [ 
-			self _projectRepository checkAndUpdateRepositoryRevision: self.
-			self _checkProjectDirectoryStructure
-				ifTrue: [ 
-					"update project definition from disk"
-					self read.
-					self
-						projectDefinitionSourceProperty:
-							RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ] ]
+			"update project definition from disk"
+			self read.
+			self
+				projectDefinitionSourceProperty:
+					RwLoadedProject _projectLoadedDefinitionSourceWithDependentProjectsValue ]
 %
 
 category: 'load specification'
@@ -66255,17 +66252,6 @@ category: 'private'
 method: RwResolvedProjectV2
 _addPackageNames: somePackageNames for: aComponent
 	self addPackages: somePackageNames forComponent: aComponent
-%
-
-category: 'to be removed'
-method: RwResolvedProjectV2
-_basicProduce
-	"produce ensures that the project directory exists on disk
-		(cloned for git projects) or created on disk for new projects.
-	Return an true if there are project artifacts on disk and false if
-		the directory has not been populated. "
-
-	^ self _basicResolve
 %
 
 category: 'actions'
