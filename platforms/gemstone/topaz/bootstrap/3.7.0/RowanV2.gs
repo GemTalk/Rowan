@@ -65661,7 +65661,6 @@ produceRequiredLoadSpecs: platformConditionalAttributes
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66106,7 +66105,6 @@ requiredLoadSpecs
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66119,7 +66117,6 @@ requiredLoadSpecs: platformConditionalAttributes
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66275,7 +66272,6 @@ _basicProduce
 		ifTrue: [ 
 			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
 			^ true ].
-	self error: 'should not get here'.	"test coverage"
 	^ false
 %
 
@@ -66291,7 +66287,6 @@ _basicResolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			^ self _checkProjectDirectoryStructure ].
-	self error: 'should not get here'.	"test coverage"
 	^ false
 %
 
