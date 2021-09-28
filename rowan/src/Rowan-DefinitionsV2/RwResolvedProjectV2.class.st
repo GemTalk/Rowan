@@ -27,7 +27,7 @@ RwResolvedProjectV2 class >> basicLoadSpecification: anRwLoadSpecificationV2 [
 		yourself
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'instance creation' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -38,7 +38,7 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 [
 		resolveProject
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'instance creation' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -49,7 +49,7 @@ RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 customCo
 		resolve: customConditionalAttributes platformConditionalAttributes: platformAttributes
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'instance creation' }
 RwResolvedProjectV2 class >> loadSpecification: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes [
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
 		answer  the project definition specified by the receiver and any dependent projects"
@@ -93,6 +93,7 @@ RwResolvedProjectV2 >> _basicProduce [
 		ifTrue: [ 
 			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
 			^ true ].
+	self error: 'should not get here'.	"test coverage"
 	^ false
 ]
 
@@ -107,6 +108,7 @@ RwResolvedProjectV2 >> _basicResolve [
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			^ self _checkProjectDirectoryStructure ].
+	self error: 'should not get here'.	"test coverage"
 	^ false
 ]
 
@@ -1085,7 +1087,7 @@ RwResolvedProjectV2 >> produceRequiredLoadSpecs: platformConditionalAttributes [
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self halt.	"test coverage"
+	self error: 'should not get here'.	"test coverage"
 	^ res
 ]
 
@@ -1492,6 +1494,7 @@ RwResolvedProjectV2 >> requiredLoadSpecs [
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self error: 'should not get here'.	"test coverage"
 	^ res
 ]
 
@@ -1503,7 +1506,7 @@ RwResolvedProjectV2 >> requiredLoadSpecs: platformConditionalAttributes [
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self halt.	"test coverage"
+	self error: 'should not get here'.	"test coverage"
 	^ res
 ]
 

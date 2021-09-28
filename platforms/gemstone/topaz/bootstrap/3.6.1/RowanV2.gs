@@ -64609,7 +64609,7 @@ basicLoadSpecification: anRwLoadSpecificationV2
 		yourself
 %
 
-category: 'to be removed'
+category: 'instance creation'
 classmethod: RwResolvedProjectV2
 loadSpecification: anRwLoadSpecificationV2
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -64621,7 +64621,7 @@ loadSpecification: anRwLoadSpecificationV2
 		resolveProject
 %
 
-category: 'to be removed'
+category: 'instance creation'
 classmethod: RwResolvedProjectV2
 loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customConditionalAttributes platformAttributes: platformAttributes
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -64633,7 +64633,7 @@ loadSpecification: anRwLoadSpecificationV2 customConditionalAttributes: customCo
 		resolve: customConditionalAttributes platformConditionalAttributes: platformAttributes
 %
 
-category: 'to be removed'
+category: 'instance creation'
 classmethod: RwResolvedProjectV2
 loadSpecification: anRwLoadSpecificationV2 platformConditionalAttributes: platformConditionalAttributes
 	"resolve ensures that the project directory already exists on disk (cloned for git projects) or created on disk for new projects
@@ -65661,7 +65661,7 @@ produceRequiredLoadSpecs: platformConditionalAttributes
 	self _basicProduce
 		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self halt.	"test coverage"
+	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66106,6 +66106,7 @@ requiredLoadSpecs
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
+	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66118,7 +66119,7 @@ requiredLoadSpecs: platformConditionalAttributes
 	self _basicProduce
 		ifTrue: [ ^ self readLoadSpecSet: platformConditionalAttributes ].
 	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	self halt.	"test coverage"
+	self error: 'should not get here'.	"test coverage"
 	^ res
 %
 
@@ -66274,6 +66275,7 @@ _basicProduce
 		ifTrue: [ 
 			self updateLoadSpecWithRepositoryRoot: self loadSpecification.
 			^ true ].
+	self error: 'should not get here'.	"test coverage"
 	^ false
 %
 
@@ -66289,6 +66291,7 @@ _basicResolve
 		ifTrue: [ 
 			self _projectRepository checkAndUpdateRepositoryRevision: self.
 			^ self _checkProjectDirectoryStructure ].
+	self error: 'should not get here'.	"test coverage"
 	^ false
 %
 
