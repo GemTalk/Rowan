@@ -73,8 +73,13 @@ RwResolvedProjectV2 class >> requiredLoadSpecs: anRwLoadSpecificationV2 platform
 	"Return an RwLoadSpecSet containing anRwLoadSpecificationV2 and all load specs for 
 		required projects (closure). All specs will be resolved"
 
-	^ (self basicLoadSpecification: anRwLoadSpecificationV2)
-		produceRequiredLoadSpecs: platformConditionalAttributes
+	| project |
+	project := self basicLoadSpecification: anRwLoadSpecificationV2.
+	project _basicResolve
+		ifTrue: [ ^ project readLoadSpecSet: platformConditionalAttributes ].
+	^ RwLoadSpecSet new
+		addLoadSpec: self loadSpecification copy;
+		yourself
 ]
 
 { #category : 'private' }
@@ -707,12 +712,6 @@ RwResolvedProjectV2 >> copyForLoadedProject [
 		yourself
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> create [
-	"RwComponentProjectDefinition tests compatibility ... eventually get rid of this"
-	self resolveProject; export
-]
-
 { #category : 'actions' }
 RwResolvedProjectV2 >> defined [
 	^ (RwDefinedProject newNamed: self name)
@@ -1069,17 +1068,6 @@ RwResolvedProjectV2 >> printOn: aStream [
 				nextPutAll: self _projectDefinition projectName ]
 ]
 
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> produceRequiredLoadSpecs: platformConditionalAttributes [
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
-
-	| res |
-	self _basicResolve
-		ifTrue: [ ^ self readProducedLoadSpecSet: platformConditionalAttributes ].
-	(res := RwLoadSpecSet new) addLoadSpec: self loadSpecification copy.
-	^ res
-]
-
 { #category : 'project definition' }
 RwResolvedProjectV2 >> projectDefinitionSourceProperty [
 	^ self _projectDefinition projectDefinitionSourceProperty
@@ -1141,7 +1129,7 @@ RwResolvedProjectV2 >> read: platformConditionalAttributes [
 				platformConditionalAttributes: platformConditionalAttributes ]
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'actions' }
 RwResolvedProjectV2 >> read: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
 
@@ -1176,15 +1164,6 @@ RwResolvedProjectV2 >> readLoadSpecSet: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
 		readLoadSpecSetForProject: self
 		platformConditionalAttributes: platformConditionalAttributes
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readLoadSpecSetComponentNames: componentNames [
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ self
-		readLoadSpecSetComponentNames: componentNames
-		platformConditionalAttributes: self platformConditionalAttributes
 ]
 
 { #category : '-- loader compat --' }
@@ -1242,15 +1221,6 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 		compileWhileReading: self compileWhileReading;
 		packageNamesBlock: packageNamesBlock;
 		visit: self
-]
-
-{ #category : 'to be removed' }
-RwResolvedProjectV2 >> readProducedLoadSpecSet: platformConditionalAttributes [
-	"return a load spec set that will contain the load spec for the receiver along with load specs of required project definitions"
-
-	^ RwResolvedProjectComponentVisitorV2
-		readLoadSpecSetForProject: self
-		platformConditionalAttributes: platformConditionalAttributes
 ]
 
 { #category : 'actions' }
@@ -1505,7 +1475,7 @@ RwResolvedProjectV2 >> requiredProjectNames [
 		requiredProjectNamesForProject: self
 ]
 
-{ #category : 'to be removed' }
+{ #category : 'accessing' }
 RwResolvedProjectV2 >> requiredProjectNames: customConditionalAttributes [
 	^ self
 		_requiredProjectNames: customConditionalAttributes

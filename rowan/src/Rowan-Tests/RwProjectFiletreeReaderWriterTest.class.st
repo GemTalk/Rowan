@@ -98,7 +98,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveInstanceClassMethods
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) exists.
@@ -163,7 +163,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveLastInstanceClassMet
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _lastInstanceMethodMovedArtifactFileReference: repositoryRoot) exists.
@@ -227,7 +227,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeInstanceClassMetho
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) exists.
@@ -293,7 +293,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeLastInstanceClassM
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.

@@ -2702,6 +2702,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0049: resolvedProject [
 
 	loadSpec 
 		specName: 'Issue_304';
+		gitUrl: self projectUrl;
 		customConditionalAttributes:  { 'tests' };
 		revision: 'spec_0048';
 		comment: 'variant of load spec without renamed attribute (Issue #304)'.
@@ -3828,6 +3829,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		removeComponentNamed: 'Core';
 		removeComponentNamed: 'tests/Tests'.
 	canonicalLoadSpec := self _addDefinitionsFor_0069_Parent: resolvedProject.
+	resolvedProject loadSpecification gitUrl: self projectUrl.
 	resolvedProject
 		exportLoadSpecification.
 	canonicalLoadSpec specName: 'spec_0069'.
@@ -3917,6 +3919,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0072: resolvedProject embedd
 
 	resolvedEmbeddedProject
 		projectsHome: self projectsHome;
+		gitUrl: self projectUrl;
 		packageFormat: 'tonel';
 		componentsPath: 'embed_rowan/components';
 		packagesPath: 'embed_rowan/src';
@@ -4009,6 +4012,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0073: resolvedProject_0073 [
 		resolvedProject repositoryRoot ensureDeleteAll.
 
 		resolvedProject
+			gitUrl: self projectUrl;
 			export;
 			exportLoadSpecification.	"write the rowan directory structure"
 
@@ -4068,6 +4072,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0074: resolvedProject [
 
 	requiredProject
 		projectsHome: self projectsHome;
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
@@ -4140,6 +4145,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0075: resolvedProject embedd
 	resolvedEmbeddedProject
 		projectsHome: self projectsHome;
 		packageFormat: 'tonel';
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure - REQUIRED"
 
@@ -4161,6 +4167,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0076: resolvedProject embedd
 
 	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
@@ -4181,6 +4188,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0077: resolvedProject embedd
 
 	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
@@ -4203,6 +4211,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0078: resolvedProject embedd
 
 	(resolvedEmbeddedProject := embeddedProject resolveProject)
 		projectsHome: self projectsHome;
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the embedded project directory structure"
 
@@ -4456,6 +4465,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 
 	theLoadSpec
 		ifNotNil: [ 
+			theLoadSpec gitUrl: self projectUrl.
 			resolvedRepository gitRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
@@ -4615,6 +4625,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor_0071: specName definedProject: defi
 	addDefinitionsBlock value: resolvedProject defined.
 
 	resolvedProject
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the rowan directory structure"
 
@@ -4656,6 +4667,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedPr
 	addDefinitionsBlock value: resolvedProject defined.
 
 	resolvedProject
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the rowan directory structure"
 
@@ -4705,6 +4717,7 @@ RwTestProjectLibraryGenerator >> _genSpecFor: specName definedProject: definedPr
 	addDefinitionsBlock value: resolvedProject defined value: embeddedProject defined.
 
 	resolvedProject
+		gitUrl: self projectUrl;
 		export;
 		exportLoadSpecification.	"write the rowan directory structure"
 

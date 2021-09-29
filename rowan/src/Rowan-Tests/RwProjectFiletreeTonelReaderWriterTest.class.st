@@ -258,7 +258,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	readProjectDefinition := writtenProjectDefinition copy.
 	readProjectSetDefinition := readProjectDefinition readProjectSet.
@@ -293,7 +293,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_moveClass_518 [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
@@ -352,7 +352,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeClass [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
@@ -408,7 +408,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists.
@@ -464,7 +464,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 	repositoryRoot := writtenProjectDefinition repositoryRoot.
 	self assert: (x := self _packageRemovedArtifactFileReference: repositoryRoot) exists.
@@ -516,7 +516,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_C [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 "copy project definition and write to an alternate repository root"
 	copyProjectDefinition := writtenProjectDefinition copy.
@@ -560,7 +560,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeClass [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 "copy and make desired modifications"
 
@@ -615,7 +615,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_D_changeMethods [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 "copy and make desired modifications"
 
@@ -675,7 +675,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_E [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition resolveProject; export.
 
 "copy project definition and write to an alternate repository root"
 	copyProjectDefinition := writtenProjectDefinition copy.
