@@ -35774,19 +35774,6 @@ installTranscript
 
 category: 'category'
 method: JadeServer64bit3x
-keysForDictionary: aDictionary 
-	"RubyHash does not implement #'keys' or #'keysDo:'!"
-
-	| keys |
-	(aDictionary isKindOf: RubyHash) ifFalse: [^super keysForDictionary: aDictionary].
-	keys := Set new.
-	aDictionary keysAndValuesDo: [:eachKey :eachValue | keys add: eachKey].
-	^keys.
-
-%
-
-category: 'category'
-method: JadeServer64bit3x
 methodSignatureForSelector: aSymbol
 	"Ruby bridge methods can have some strange selectors!"
 
