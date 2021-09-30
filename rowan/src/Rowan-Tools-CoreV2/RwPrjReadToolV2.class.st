@@ -16,16 +16,16 @@ RwPrjReadToolV2 >> readProjectForProject: resolvedProject withComponentNames: co
 ]
 
 { #category : 'read project set' }
-RwPrjReadToolV2 >> readProjectSetForProject: producedProject [
+RwPrjReadToolV2 >> readProjectSetForProject: resolvedProject [
 	^ self
-		readProjectSetForProject: producedProject
-		platformConditionalAttributes: producedProject platformConditionalAttributes
+		readProjectSetForProject: resolvedProject
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 ]
 
 { #category : 'read project set' }
-RwPrjReadToolV2 >> readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes [
+RwPrjReadToolV2 >> readProjectSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes [
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProject: producedProject
+		readProjectSetForProject: resolvedProject
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 

@@ -66069,7 +66069,7 @@ repoType: aSymbol
 category: 'actions'
 method: RwResolvedProjectV2
 requiredLoadSpecs
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
 	self _basicResolve
@@ -66081,7 +66081,7 @@ requiredLoadSpecs
 category: 'actions'
 method: RwResolvedProjectV2
 requiredLoadSpecs: platformConditionalAttributes
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
 	self _basicResolve
@@ -70849,17 +70849,17 @@ readProjectForProject: resolvedProject withComponentNames: componentNames custom
 
 category: 'read project set'
 method: RwPrjReadToolV2
-readProjectSetForProject: producedProject
+readProjectSetForProject: resolvedProject
 	^ self
-		readProjectSetForProject: producedProject
-		platformConditionalAttributes: producedProject platformConditionalAttributes
+		readProjectSetForProject: resolvedProject
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read project set'
 method: RwPrjReadToolV2
-readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes
 	^ RwResolvedProjectComponentVisitorV2
-		readProjectSetForProject: producedProject
+		readProjectSetForProject: resolvedProject
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
@@ -87222,54 +87222,54 @@ new
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecForProject: producedProject
+readLoadSpecForProject: resolvedProject
 	| visitor |
 	visitor := self new
-		_readComponentsForProject: producedProject.
-	producedProject
+		_readComponentsForProject: resolvedProject.
+	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
 		_projectDefinitionPlatformConditionalAttributes:
-				producedProject platformConditionalAttributes copy;
+				resolvedProject platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | producedProject _projectComponents _addComponent: cmp ].
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
 	^ visitor
 %
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readLoadSpecForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
-		_readComponentsForProject: producedProject
+		_readComponentsForProject: resolvedProject
 		platformConditionalAttributes: platformConditionalAttributes.
-	producedProject
+	resolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | producedProject _projectComponents _addComponent: cmp ].
+		keysAndValuesDo: [ :cName :cmp | resolvedProject _projectComponents _addComponent: cmp ].
 	^ visitor
 %
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForProject: producedProject
+readLoadSpecSetForProject: resolvedProject
 	^ self
-		readLoadSpecSetForProject: producedProject
-		platformConditionalAttributes: producedProject platformConditionalAttributes
+		readLoadSpecSetForProject: resolvedProject
+		platformConditionalAttributes: resolvedProject platformConditionalAttributes
 %
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readLoadSpecSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes
 	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	loadSpecSet := RwLoadSpecSet new.
 	projectVisitedQueue := {}.
-	projectVisitorQueue := {producedProject}.
+	projectVisitorQueue := {resolvedProject}.
 	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
@@ -87289,21 +87289,21 @@ readLoadSpecSetForProject: producedProject platformConditionalAttributes: platfo
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theProducedProject |
+					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theProducedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
-						at: theProducedProject projectName
+						at: theResolvedProject projectName
 						ifAbsent: [ 
 							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theProducedProject ] ] ].
+							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
+			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
-			theproducedProject := pp.
-			theLoadSpec := theproducedProject loadSpecification copy.
+			theResolvedProject := pp.
+			theLoadSpec := theResolvedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -87318,31 +87318,31 @@ readLoadSpecSetForProject: producedProject platformConditionalAttributes: platfo
 
 category: 'reading'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectForProject: aProducedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
+readProjectForProject: aResolvedProject withComponentNames: componentNamesToRead customConditionalAttributes: customConditionalAttributes platformConditionalAttributes: platformConditionalAttributes
 	| visitor |
 	visitor := self new
-		_readComponentsForProject: aProducedProject
+		_readComponentsForProject: aResolvedProject
 		withComponentNames: componentNamesToRead
 		customConditionalAttributes: customConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes.
-	aProducedProject
+	aResolvedProject
 		projectDefinitionSourceProperty:
 				RwLoadedProject _projectDiskDefinitionSourceValue;
 		_projectDefinitionPlatformConditionalAttributes:
 				platformConditionalAttributes copy;
 		yourself.
 	visitor visitedComponents
-		keysAndValuesDo: [ :cName :cmp | aProducedProject _projectComponents _addComponent: cmp ].
+		keysAndValuesDo: [ :cName :cmp | aResolvedProject _projectComponents _addComponent: cmp ].
 	^ visitor
 %
 
 category: 'read load specs'
 classmethod: RwResolvedProjectComponentVisitorV2
-readProjectSetForProject: producedProject platformConditionalAttributes: platformConditionalAttributes
+readProjectSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
-	projectVisitorQueue := {producedProject}.
+	projectVisitorQueue := {resolvedProject}.
 	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
@@ -87362,21 +87362,21 @@ readProjectSetForProject: producedProject platformConditionalAttributes: platfor
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theProducedProject |
+					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
+					theResolvedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
-						at: theProducedProject projectName
+						at: theResolvedProject projectName
 						ifAbsent: [ 
 							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theProducedProject ] ] ].
+							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theproducedProject theLoadSpec theLoadedProject |
+			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
 			theVisitor := visitedArray at: 1.
 			pp := visitedArray at: 2.
-			theproducedProject := pp.
-			theLoadSpec := theproducedProject loadSpecification copy.
+			theResolvedProject := pp.
+			theLoadSpec := theResolvedProject loadSpecification copy.
 			(theLoadedProject := Rowan
 				projectNamed: theLoadSpec projectName
 				ifAbsent: [  ])
@@ -87457,11 +87457,11 @@ readProjectSetForProject: resolvedProject withComponentNames: componentNamesToRe
 
 category: 'required projects'
 classmethod: RwResolvedProjectComponentVisitorV2
-requiredProjectNamesForProject: producedProject
+requiredProjectNamesForProject: resolvedProject
 	| requiredProjectNames visitor projectVisitorQueue projectVisitedQueue processedProjects |
 	requiredProjectNames := Set new.
 	projectVisitedQueue := {}.
-	projectVisitorQueue := {producedProject}.
+	projectVisitorQueue := {resolvedProject}.
 	processedProjects := Dictionary new.
 	[ projectVisitorQueue isEmpty ]
 		whileFalse: [ 
@@ -87479,14 +87479,14 @@ requiredProjectNamesForProject: producedProject
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theProducedProject |
+					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theProducedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
+					theResolvedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
 					processedProjects
-						at: theProducedProject projectName
+						at: theResolvedProject projectName
 						ifAbsent: [ 
 							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theProducedProject ] ] ].
+							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
 			| pp theVisitor |
@@ -87761,29 +87761,29 @@ _projects: projectDirPath forProject: ignored
 
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProject: aProducedProject
+_readComponentsForProject: aResolvedProject
 	^ self
-		_readComponentsForProject: aProducedProject
-		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: aProducedProject customConditionalAttributes
-		platformConditionalAttributes: aProducedProject platformConditionalAttributes
+		_readComponentsForProject: aResolvedProject
+		withComponentNames: aResolvedProject componentNames
+		customConditionalAttributes: aResolvedProject customConditionalAttributes
+		platformConditionalAttributes: aResolvedProject platformConditionalAttributes
 %
 
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProject: aProducedProject platformConditionalAttributes: aPlatformConditionalAttributes
+_readComponentsForProject: aResolvedProject platformConditionalAttributes: aPlatformConditionalAttributes
 	^ self
-		_readComponentsForProject: aProducedProject
-		withComponentNames: aProducedProject componentNames
-		customConditionalAttributes: aProducedProject customConditionalAttributes
+		_readComponentsForProject: aResolvedProject
+		withComponentNames: aResolvedProject componentNames
+		customConditionalAttributes: aResolvedProject customConditionalAttributes
 		platformConditionalAttributes: aPlatformConditionalAttributes
 %
 
 category: 'private'
 method: RwResolvedProjectComponentVisitorV2
-_readComponentsForProject: aProducedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
+_readComponentsForProject: aResolvedProject withComponentNames: componentNamesToRead  customConditionalAttributes: aCustomConditionalAttributes platformConditionalAttributes: aPlatformConditionalAttributes
 	| theComponentNames  |
-	resolvedProject := aProducedProject.
+	resolvedProject := aResolvedProject.
 	platformConditionalAttributes := aPlatformConditionalAttributes.
 	customConditionalAttributes := aCustomConditionalAttributes.
 

@@ -1447,7 +1447,7 @@ RwResolvedProjectV2 >> repoType: aSymbol [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> requiredLoadSpecs [
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
 	self _basicResolve
@@ -1458,7 +1458,7 @@ RwResolvedProjectV2 >> requiredLoadSpecs [
 
 { #category : 'actions' }
 RwResolvedProjectV2 >> requiredLoadSpecs: platformConditionalAttributes [
-	"produce the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
+	"resolve the loadSpecification (clone remote repo or connect to existing repo on disk), return a load spec set for the receiver and required projects"
 
 	| res |
 	self _basicResolve

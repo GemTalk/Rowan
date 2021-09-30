@@ -127,12 +127,13 @@ loadTests
 %
 method
 _processTestResults: res suite: suite deprecationErrors: deprecationErrors
-		| strm resultsDict resultCases |
+		| strm resultsDict resultCases timestamp |
 		resultsDict := Dictionary new.
 		resultCases := {}.
+		timestamp := DateAndTime now printString.
 		resultsDict 
 			at: #suiteName put: suite name;
-			at: #timeStamp put: DateAndTime now printString;
+			at: #timeStamp put: timestamp;
 			at: #properties put: (Dictionary new);
 			at: #notes put: '';
 			at: #gsVersion put: (System gemVersionAt: #gsVersion);
@@ -146,7 +147,8 @@ _processTestResults: res suite: suite deprecationErrors: deprecationErrors
 			yourself.
 
 		strm := self stdout.
- 		strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
+ 		strm 
+			nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString, ' at ', timestamp; lf.
 		res passed do: [:each |
 			resultCases add: (Dictionary new
 					at: #className put: each class asString;
