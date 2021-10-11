@@ -48,12 +48,12 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 					tracer
 						trace:
 							'Missing loaded method ' , ex methodPrintString
-								, ' encountered during adopt ... IGNORED' ]
+								, ' encountered during adopt' ]
 				classErrorDo: [ 
 					adoptErrors := true.
 					tracer
 						trace:
-							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
+							'Missing loaded class ' , ex className , ' encountered during adopt' ].
 			ex resume: nil ].
 
 	projectSetDefinition deriveLoadedThings
