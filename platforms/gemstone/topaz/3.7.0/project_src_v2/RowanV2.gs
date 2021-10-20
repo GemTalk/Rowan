@@ -35774,19 +35774,6 @@ installTranscript
 
 category: 'category'
 method: JadeServer64bit3x
-keysForDictionary: aDictionary 
-	"RubyHash does not implement #'keys' or #'keysDo:'!"
-
-	| keys |
-	(aDictionary isKindOf: RubyHash) ifFalse: [^super keysForDictionary: aDictionary].
-	keys := Set new.
-	aDictionary keysAndValuesDo: [:eachKey :eachValue | keys add: eachKey].
-	^keys.
-
-%
-
-category: 'category'
-method: JadeServer64bit3x
 methodSignatureForSelector: aSymbol
 	"Ruby bridge methods can have some strange selectors!"
 
@@ -59832,7 +59819,7 @@ category: 'actions'
 method: RwModificationFiletreeWriterVisitorV2
 changedMethodExtension: aMethodExtensionModification
 
-	self error: 'not yet implemented'
+	self addedMethodExtension: aMethodExtensionModification
 %
 
 category: 'accessing'
@@ -93353,12 +93340,12 @@ _adoptProjectProjectsInProjectSet: projectSetDefinition
 					tracer
 						trace:
 							'Missing loaded method ' , ex methodPrintString
-								, ' encountered during adopt ... IGNORED' ]
+								, ' encountered during adopt' ]
 				classErrorDo: [ 
 					adoptErrors := true.
 					tracer
 						trace:
-							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
+							'Missing loaded class ' , ex className , ' encountered during adopt' ].
 			ex resume: nil ].
 
 	projectSetDefinition deriveLoadedThings
