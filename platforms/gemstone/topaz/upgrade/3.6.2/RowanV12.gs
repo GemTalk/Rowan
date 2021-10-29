@@ -39149,7 +39149,13 @@ unpackagedName
 category: 'public'
 classmethod: Rowan
 version
-	^ '1.2.13' asRwSemanticVersionNumber
+	^ self versionString asRwSemanticVersionNumber
+%
+
+category: 'public'
+classmethod: Rowan
+versionString
+  ^ '1.2.13'
 %
 
 ! Class implementation for 'RowanCommandResult'
