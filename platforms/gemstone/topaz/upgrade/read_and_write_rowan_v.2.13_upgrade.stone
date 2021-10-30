@@ -74,7 +74,7 @@ doit
 		loadSpecs := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('deprecated' 'jadeServer') ].
+		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('deprecated' 'jadeServer' 'tests') ].
 		theProjectSetDefinition := loadSpecs read: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
