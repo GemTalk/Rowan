@@ -12,11 +12,12 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'skip'.
 	SuperDoitOptionalOptionWithNoArg long: 'customerReload'.
 	SuperDoitOptionalOptionWithNoArg long: 'rowanReload'.
+	SuperDoitOptionalOptionWithNoArg long: 'persistIt'.
 }
 %
 usage
 -----
-USAGE 
+USAGE
   # with GS_HOME set (<stone-name> optional if run in $GS_HOME/servers/stones/<stone-name> directory)
   $basename [--help | -h] [--debug | -D] [-- [<stone-name> [<topaz-command-line-args>] ] ]
   # with GEMSTONE set
@@ -37,7 +38,7 @@ OPTIONS
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
   $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
-  $basename --help                           
+  $basename --help
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debug <script-arguments>       <topaz-arguments>
   $basename <script-arguments>               <topaz-arguments>
@@ -60,6 +61,66 @@ skipCount
 repairedByReload
 errorMessages
 auditErrors
+%
+method
+auditForProjectsNamed: theProjectNames
+	| res |
+	res := KeyValueDictionary new.
+	theProjectNames do: [:prjName | res addAll: (Rowan projectTools audit auditForProjectNamed: prjName )	].
+	^res
+%
+method
+countAuditErrors
+	auditErrors ifNil: [ auditErrors := 0 ].
+	audit keysAndValuesDo: [:packageName :classAuditErrors |
+		classAuditErrors keysAndValuesDo: [:className :auditAssocs |
+			auditErrors := auditErrors + auditAssocs size ] ].
+	self logMessage: auditErrors printString, ' audit errors'.
+%
+method
+customerRepairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
+%
+method
+customerRepairNonIdenticalInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
+%
+method
+customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
+		registryInstance newCompiledMethod |
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedClass := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
+	selector := self selectorFromMethodSpec: methodSpec.
+	loadedMethod := isMeta
+		ifTrue: [ loadedClass loadedClassMethods at: selector ]
+		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
+	loadedProject := loadedMethod loadedProject.
+	theClass := Rowan globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	newCompiledMethod := theBehavior compiledMethodAt: selector otherwise: nil.
+	oldCompiledMethod := loadedMethod handle.
+
+	newCompiledMethod == oldCompiledMethod
+		ifTrue: [
+			"confirm audit error"
+			self error: 'identical compiled methods when non-identical compiled methods expected for ', className, (isMeta ifTrue: [ ' class >> ' ] ifFalse: [' >> ']), selector printString ].
+
+	"For customer repair, we ignore the newCompiledMethod (if it exists), since the incoming
+		method will be installed using Rowan"
+
+	registryInstance := Rowan image loadedRegistryForPackageNamed: packageName.
+	(self globalNamed: 'RwGsSymbolDictionaryRegistry_Implementation')
+		_doDeleteCompiledMethodFromLoadedThings: oldCompiledMethod
+		for: theBehavior
+		instance: registryInstance.
+
+	repairedCount := self repairedCount + 1.
 %
 method
 cypressClassNames
@@ -152,103 +213,100 @@ cypressClassNames
 	}
 %
 method
-selectorFromMethodSpec: methodSpec
-	| index |
-	index := methodSpec indexOfSubCollection: ' >> ' startingAt: 1.
-	^ (methodSpec copyFrom: index + 4 to: methodSpec size) asSymbol
+errorMessages
+^ errorMessages ifNil: [ errorMessages := Bag new ].
 %
 method
-skipRepair: ignoredMethod inClassNamed: ignoredClassName inPackageNamed: ignoredPackageName
-	skipCount := self skipCount + 1
+forCustomer
+	^ self customerRepair | self customerReload
+%
+method
+moveCypressClassesToGlobals: cypressClassNames
+	cypressClassNames do: [:name |
+		(ObsoleteClasses associationAt: name asSymbol ifAbsent: [])
+			ifNotNil: [:assoc | Globals addAssociation: assoc ] ].
+%
+method
+projectNames
+	| rowanProjectNames |
+	rowanProjectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
+	^ self positionalArgs isEmpty
+		ifTrue: [
+			self forCustomer
+				ifTrue: [
+					| customerProjectNames |
+					customerProjectNames := Rowan projectNames.
+					customerProjectNames removeAllPresent: rowanProjectNames.
+					customerProjectNames ]
+				ifFalse: [
+					self audit
+						ifTrue: [ Rowan projectNames ]
+						ifFalse: [ rowanProjectNames ] ] ]
+		ifFalse: [ self positionalArgs ]
+%
+method
+reloadCustomer
+	| customerProjectNames |
+	self logMessage: 'Upgrade customer projects'.
+	customerProjectNames := self projectNames.
+	customerProjectNames do: [:projectName |
+		self logMessage: 'Loading ', projectName.
+		Rowan projectTools load loadProjectNamed: projectName ].
+	self commit
+		ifTrue: [
+			System commit.
+			self logMessage: 'customer load commit' ]
+%
+method
+reloadRowan
+	#( 'Rowan' 'Cypress' 'STON' 'Tonel' )
+		do: [:projectName |
+			"make sure test group is loaded ... include deprecated packages for now"
+			[
+			| groupNames |
+			groupNames := #('tests' 'deprecated' 'jadeServer').
+			self logMessage: 'Loading ', projectName.
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				withGroupNames: groupNames ]
+					on: CompileWarning do: [:ex | ex resume ] ].
+%
+method
+repairAuditFailures
+	audit keysAndValuesDo: [:packageName :classAuditErrors |
+		| method |
+		classAuditErrors keysAndValuesDo: [:className :auditAssocs |
+			auditAssocs do: [:assoc |
+				| error repairSelector |
+				method := assoc key.
+				error := assoc value.
+				self errorMessages add: error.
+				self audit
+					ifFalse: [
+						repairSelector := self repairMethodMap
+							at: error
+							ifAbsent: [
+								self skip
+									ifTrue: [
+										#skipRepair:inClassNamed:inPackageNamed:
+									]
+									ifFalse: [ self error: 'unrepairable audit error: ', error printString  ] ].
+						self perform: repairSelector
+							with: method
+							with: className
+							with: packageName ] ] ] ].
+%
+method
+repairedByReload
+	^ repairedByReload ifNil: [ repairedByReload := 0 ].
+%
+method
+repairedCount
+	^ repairedCount ifNil: [ repairedCount := 0 ].
 %
 method
 repairedWhenDefinitionsReloaded:ignoredMethod inClassNamed: ignoredClassName inPackageNamed: ignoredPackageName
 	repairedByReload := self repairedByReload + 1
-%
-method
-customerRepairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
-	^ self customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
-%
-method
-customerRepairNonIdenticalInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
-	^ self customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
-%
-method
-customerRepairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
-	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
-		registryInstance newCompiledMethod |
-
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	loadedClass := loadedPackage 
-		classOrExtensionForClassNamed: className 
-		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
-	selector := self selectorFromMethodSpec: methodSpec.
-	loadedMethod := isMeta
-		ifTrue: [ loadedClass loadedClassMethods at: selector ]
-		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
-	loadedProject := loadedMethod loadedProject.
-	theClass := Rowan globalNamed: className.
-	theBehavior := isMeta
-		ifTrue: [ theClass class ]
-		ifFalse: [ theClass ].
-	newCompiledMethod := theBehavior compiledMethodAt: selector otherwise: nil.
-	oldCompiledMethod := loadedMethod handle.
-
-	newCompiledMethod == oldCompiledMethod 
-		ifTrue: [ 
-			"confirm audit error"
-			self error: 'identical compiled methods when non-identical compiled methods expected for ', className, (isMeta ifTrue: [ ' class >> ' ] ifFalse: [' >> ']), selector printString ].
-
-	"For customer repair, we ignore the newCompiledMethod (if it exists), since the incoming 
-		method will be installed using Rowan"
-
-	registryInstance := Rowan image loadedRegistryForPackageNamed: packageName.
-	RwGsSymbolDictionaryRegistry_Implementation
-		_doDeleteCompiledMethodFromLoadedThings: oldCompiledMethod
-		for: theBehavior 
-		instance: registryInstance.
-
-	repairedCount := self repairedCount + 1.
-%
-method
-repairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
-	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
-%
-method
-repairNonIdenticalInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
-	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
-%
-method
-repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
-	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod 
-		newCompiledMethod registryInstance |
-
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	loadedClass := loadedPackage 
-		classOrExtensionForClassNamed: className 
-		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
-	selector := self selectorFromMethodSpec: methodSpec.
-	loadedMethod := isMeta
-		ifTrue: [ loadedClass loadedClassMethods at: selector ]
-		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
-	loadedProject := loadedMethod loadedProject.
-	theClass := Rowan globalNamed: className.
-	theBehavior := isMeta
-		ifTrue: [ theClass class ]
-		ifFalse: [ theClass ].
-	newCompiledMethod := theBehavior compiledMethodAt: selector.
-	oldCompiledMethod := loadedMethod handle.
-
-	newCompiledMethod == oldCompiledMethod 
-		ifTrue: [ 
-			"confirm audit error"
-			self error: 'identical compiled methods when non-identical compiled methods expected for ', className, (isMeta ifTrue: [ ' class >> ' ] ifFalse: [' >> ']), selector printString ].
-
-	registryInstance := Rowan image loadedRegistryForPackageNamed: packageName.
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
-	repairedCount := self repairedCount + 1.
 %
 method
 repairMethodMap
@@ -256,7 +314,7 @@ repairMethodMap
 	repairMethodMap := Dictionary new.
 	self forCustomer
 		ifTrue: [
-			"With the exception of the 'Extension...' error, the listed audit errors are expected to be seen as a result of 
+			"With the exception of the 'Extension...' error, the listed audit errors are expected to be seen as a result of
 				removing methods from kernel methods during upgradeImage"
 			repairMethodMap
 				at: 'Extension category name can not be same as class package' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
@@ -271,7 +329,7 @@ repairMethodMap
 				yourself ]
 		ifFalse: [
 			self audit
-				ifFalse: [ 
+				ifFalse: [
 					repairMethodMap
 						at: 'Compiled instance method is not identical to loaded method. ' put: #repairNonIdenticalInstanceMethodFor:inClassNamed:inPackageNamed:;
 						at: 'Compiled classmethod is not identical to loaded class method ' put: #repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:;
@@ -280,120 +338,64 @@ repairMethodMap
 	^ repairMethodMap
 %
 method
-errorMessages
-^ errorMessages ifNil: [ errorMessages := Bag new ].
+repairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
 %
 method
-repairedCount
-	^ repairedCount ifNil: [ repairedCount := 0 ].
+repairNonIdenticalInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
 %
 method
-repairedByReload
-	^ repairedByReload ifNil: [ repairedByReload := 0 ].
+repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
+		newCompiledMethod registryInstance |
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedClass := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
+	selector := self selectorFromMethodSpec: methodSpec.
+	loadedMethod := isMeta
+		ifTrue: [ loadedClass loadedClassMethods at: selector ]
+		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
+	loadedProject := loadedMethod loadedProject.
+	theClass := Rowan globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	newCompiledMethod := theBehavior compiledMethodAt: selector.
+	oldCompiledMethod := loadedMethod handle.
+
+	newCompiledMethod == oldCompiledMethod
+		ifTrue: [
+			"confirm audit error"
+			self error: 'identical compiled methods when non-identical compiled methods expected for ', className, (isMeta ifTrue: [ ' class >> ' ] ifFalse: [' >> ']), selector printString ].
+
+	registryInstance := Rowan image loadedRegistryForPackageNamed: packageName.
+	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	repairedCount := self repairedCount + 1.
+%
+method
+selectorFromMethodSpec: methodSpec
+	| index |
+	index := methodSpec indexOfSubCollection: ' >> ' startingAt: 1.
+	^ (methodSpec copyFrom: index + 4 to: methodSpec size) asSymbol
 %
 method
 skipCount
 	^ skipCount ifNil: [ skipCount := 0 ]
 %
 method
-repairAuditFailures
-	audit keysAndValuesDo: [:packageName :classAuditErrors |
-		| method |
-		classAuditErrors keysAndValuesDo: [:className :auditAssocs |
-			auditAssocs do: [:assoc |
-				| error repairSelector |
-				method := assoc key.
-				error := assoc value.
-				self errorMessages add: error.
-				self audit
-					ifFalse: [ 
-						repairSelector := self repairMethodMap 
-							at: error 
-							ifAbsent: [ 
-								self skip 
-									ifTrue: [ 
-										#skipRepair:inClassNamed:inPackageNamed: 
-									]
-									ifFalse: [ self error: 'unrepairable audit error: ', error printString  ] ].
-						self perform: repairSelector
-							with: method 
-							with: className 
-							with: packageName ] ] ] ].
-%
-method
-countAuditErrors
-	auditErrors ifNil: [ auditErrors := 0 ].
-	audit keysAndValuesDo: [:packageName :classAuditErrors |
-		classAuditErrors keysAndValuesDo: [:className :auditAssocs |
-			auditErrors := auditErrors + auditAssocs size ] ].
-	self logMessage: auditErrors printString, ' audit errors'.
-%
-method
-moveCypressClassesToGlobals: cypressClassNames
-	cypressClassNames do: [:name |
-		(ObsoleteClasses associationAt: name asSymbol ifAbsent: [])
-			ifNotNil: [:assoc | Globals addAssociation: assoc ] ].
-%
-method
-forCustomer
-	^ self customerRepair | self customerReload
-%
-method
-projectNames
-	| rowanProjectNames |
-	rowanProjectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
-	^ self positionalArgs isEmpty
-		ifTrue: [ 
-			self forCustomer 
-				ifTrue: [
-					| customerProjectNames |
-					customerProjectNames := Rowan projectNames.
-					customerProjectNames removeAllPresent: rowanProjectNames.
-					customerProjectNames ]
-				ifFalse: [ 
-					self audit
-						ifTrue: [ Rowan projectNames ]
-						ifFalse: [ rowanProjectNames ] ] ]
-		ifFalse: [ self positionalArgs ]
-%
-method
-reloadCustomer
-	| customerProjectNames |
-	self logMessage: 'Upgrade customer projects'.
-	customerProjectNames := self projectNames.
-	customerProjectNames do: [:projectName |
-		self logMessage: 'Loading ', projectName.
-		Rowan projectTools load loadProjectNamed: projectName ].
-	self commit 
-		ifTrue: [ 
-			System commit.
-			self logMessage: 'customer load commit' ]
-%
-method
-reloadRowan
-	#( 'Rowan' 'Cypress' 'STON' 'Tonel' )
-		do: [:projectName |
-			"make sure test group is loaded ... include deprecated packages for now"
-			[ 
-			| groupNames |
-			groupNames := #('tests' 'deprecated' 'jadeServer').
-			self logMessage: 'Loading ', projectName.
-			Rowan projectTools load
-				loadProjectNamed: projectName
-				withGroupNames: groupNames ]
-					on: CompileWarning do: [:ex | ex resume ] ].
-%
-method
-auditForProjectsNamed: theProjectNames
-	| res |
-	res := KeyValueDictionary new.
-	theProjectNames do: [:prjName | res addAll: (Rowan projectTools audit auditForProjectNamed: prjName )	].
-	^res
+skipRepair: ignoredMethod inClassNamed: ignoredClassName inPackageNamed: ignoredPackageName
+	skipCount := self skipCount + 1
 %
 doit
+	self persistIt ifTrue: [ self persist. self logMessage: 'PERSISTED'. ^ self noResult ].
 	self logMessage: 'Rowan v', Rowan versionString, ' currently installed in GemStone', (System stoneVersionAt: 'gsVersion') .
 	self installRowan
-		ifTrue: [ 
+		ifTrue: [
 			self logMessage: 'Moving active Cypress classes from ObsoleteClasses to Globals'.
 			self moveCypressClassesToGlobals: self cypressClassNames.
 			self logMessage: 'Installing RowanV12.gs'.
@@ -401,22 +403,22 @@ doit
 				ifFalse: [ self error: 'expected to be upgrading Rowan v1.2.13' ].
 			GsFileIn fromServerPath: self projectsHome, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
 			self logMessage: 'Installed RowanV12.gs'.
-			self commit 
-				ifTrue: [ 
+			self commit
+				ifTrue: [
 					System commit.
 					self logMessage: 'post install commit' ] ].
 	self rowanReload
-		ifTrue: [ 
+		ifTrue: [
 			self reloadRowan.
-			self commit 
-				ifTrue: [ 
+			self commit
+				ifTrue: [
 					System commit.
 					self logMessage: 'post rowan reload commit' ] ].
 	self customerReload
-		ifTrue: [ 
+		ifTrue: [
 			self reloadCustomer.
-			self commit 
-				ifTrue: [ 
+			self commit
+				ifTrue: [
 					System commit.
 					self logMessage: 'post customer reload commit' ] ].
 	(self audit or: [ self rowanRepair or: [ self customerRepair ] ])
@@ -424,30 +426,30 @@ doit
 			audit := self auditForProjectsNamed: self projectNames.
 			self countAuditErrors.
 			self rowanRepair
-				ifTrue: [ 
+				ifTrue: [
 					self logMessage: ' repair ROWAN audit failures'.
-					audit isEmpty 
-						ifFalse: [ 
+					audit isEmpty
+						ifFalse: [
 							self repairAuditFailures.
-							self commit 
-								ifTrue: [ 
+							self commit
+								ifTrue: [
 									System commit.
 									self logMessage: 'post audit/repair commit' ] ] ]
-				ifFalse: [ 
+				ifFalse: [
 					self customerRepair
-						ifTrue: [ 
+						ifTrue: [
 							self logMessage: ' repair CUSTOMER audit failures'.
-							audit isEmpty 
-								ifFalse: [ 
+							audit isEmpty
+								ifFalse: [
 									self repairAuditFailures.
-									self commit 
-										ifTrue: [ 
+									self commit
+										ifTrue: [
 											System commit.
 											self logMessage: 'post audit/repair commit' ]  ] ]
 						ifFalse: [
 							self logMessage: ' full audit'.
-							audit isEmpty 
-								ifFalse: [ 
+							audit isEmpty
+								ifFalse: [
 									"just summarize audit failures for report"
 									self repairAuditFailures ] ] ] ].
 	self logMessage: 'Audit errors encountered:'.
