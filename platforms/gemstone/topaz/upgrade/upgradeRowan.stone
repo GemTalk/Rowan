@@ -257,7 +257,7 @@ repairMethodMap
 	self forCustomer
 		ifTrue: [
 			"With the exception of the 'Extension...' error, the listed audit errors are expected to be seen as a result of 
-				removing methods from kernel methods during upgradeImage"`
+				removing methods from kernel methods during upgradeImage"
 			repairMethodMap
 				at: 'Extension category name can not be same as class package' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
 				at: 'Missing instance method extension category ' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
@@ -270,11 +270,13 @@ repairMethodMap
 				at: 'Comment has changed in compiled class v loaded class' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
 				yourself ]
 		ifFalse: [
-			repairMethodMap
-				at: 'Compiled instance method is not identical to loaded method. ' put: #repairNonIdenticalInstanceMethodFor:inClassNamed:inPackageNamed:;
-				at: 'Compiled classmethod is not identical to loaded class method ' put: #repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:;
-				at: 'Comment has changed in compiled class v loaded class' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
-		yourself ].
+			self audit
+				ifFalse: [ 
+					repairMethodMap
+						at: 'Compiled instance method is not identical to loaded method. ' put: #repairNonIdenticalInstanceMethodFor:inClassNamed:inPackageNamed:;
+						at: 'Compiled classmethod is not identical to loaded class method ' put: #repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:;
+						at: 'Comment has changed in compiled class v loaded class' put: #repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:;
+				yourself ] ].
 	^ repairMethodMap
 %
 method
@@ -303,18 +305,20 @@ repairAuditFailures
 				method := assoc key.
 				error := assoc value.
 				self errorMessages add: error.
-				repairSelector := self repairMethodMap 
-					at: error 
-					ifAbsent: [ 
-						self skip 
-							ifTrue: [ 
-								#skipRepair:inClassNamed:inPackageNamed: 
-							]
-							ifFalse: [ self error: 'unrepairable audit error: ', error printString  ] ].
-				self perform: repairSelector
-					with: method 
-					with: className 
-					with: packageName ] ] ].
+				self audit
+					ifFalse: [ 
+						repairSelector := self repairMethodMap 
+							at: error 
+							ifAbsent: [ 
+								self skip 
+									ifTrue: [ 
+										#skipRepair:inClassNamed:inPackageNamed: 
+									]
+									ifFalse: [ self error: 'unrepairable audit error: ', error printString  ] ].
+						self perform: repairSelector
+							with: method 
+							with: className 
+							with: packageName ] ] ] ].
 %
 method
 countAuditErrors
@@ -332,7 +336,7 @@ moveCypressClassesToGlobals: cypressClassNames
 %
 method
 forCustomer
-	^ self audit | self customerRepair | self customerReload
+	^ self customerRepair | self customerReload
 %
 method
 projectNames
@@ -346,19 +350,20 @@ projectNames
 					customerProjectNames := Rowan projectNames.
 					customerProjectNames removeAllPresent: rowanProjectNames.
 					customerProjectNames ]
-				ifFalse: [ rowanProjectNames ] ]
+				ifFalse: [ 
+					self audit
+						ifTrue: [ Rowan projectNames ]
+						ifFalse: [ rowanProjectNames ] ] ]
 		ifFalse: [ self positionalArgs ]
 %
 method
 reloadCustomer
-	| customerProjectNames projectSetDefinition |
+	| customerProjectNames |
 	self logMessage: 'Upgrade customer projects'.
 	customerProjectNames := self projectNames.
-	projectSetDefinition := RwProjectSetDefinition new.
 	customerProjectNames do: [:projectName |
 		self logMessage: 'Loading ', projectName.
-		projectSetDefinition addProject: (Rowan image loadedProjectNamed: projectName) asDefinition.
-		Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ].
+		Rowan projectTools load loadProjectNamed: projectName ].
 	self commit 
 		ifTrue: [ 
 			System commit.
@@ -372,6 +377,7 @@ reloadRowan
 			[ 
 			| groupNames |
 			groupNames := #('tests' 'deprecated' 'jadeServer').
+			self logMessage: 'Loading ', projectName.
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				withGroupNames: groupNames ]
@@ -400,9 +406,19 @@ doit
 					System commit.
 					self logMessage: 'post install commit' ] ].
 	self rowanReload
-		ifTrue: [ self reloadRowan ].
+		ifTrue: [ 
+			self reloadRowan.
+			self commit 
+				ifTrue: [ 
+					System commit.
+					self logMessage: 'post rowan reload commit' ] ].
 	self customerReload
-		ifTrue: [ self reloadCustomer ].
+		ifTrue: [ 
+			self reloadCustomer.
+			self commit 
+				ifTrue: [ 
+					System commit.
+					self logMessage: 'post customer reload commit' ] ].
 	(self audit or: [ self rowanRepair or: [ self customerRepair ] ])
 		ifTrue: [
 			audit := self auditForProjectsNamed: self projectNames.
@@ -416,17 +432,24 @@ doit
 							self commit 
 								ifTrue: [ 
 									System commit.
-									self logMessage: 'post audit/repair commit' ] ] ].
-			self customerRepair
-				ifTrue: [ 
-					self logMessage: ' repair CUSTOMER audit failures'.
-					audit isEmpty 
-						ifFalse: [ 
-							self repairAuditFailures.
-							self commit 
-								ifTrue: [ 
-									System commit.
-									self logMessage: 'post audit/repair commit' ]  ] ] ].
+									self logMessage: 'post audit/repair commit' ] ] ]
+				ifFalse: [ 
+					self customerRepair
+						ifTrue: [ 
+							self logMessage: ' repair CUSTOMER audit failures'.
+							audit isEmpty 
+								ifFalse: [ 
+									self repairAuditFailures.
+									self commit 
+										ifTrue: [ 
+											System commit.
+											self logMessage: 'post audit/repair commit' ]  ] ]
+						ifFalse: [
+							self logMessage: ' full audit'.
+							audit isEmpty 
+								ifFalse: [ 
+									"just summarize audit failures for report"
+									self repairAuditFailures ] ] ] ].
 	self logMessage: 'Audit errors encountered:'.
 	self errorMessages asSet asArray do: [:message |
 		self logMessage: '	', message , '(seen ', (errorMessages occurrencesOf: message) printString, ' times)'].
