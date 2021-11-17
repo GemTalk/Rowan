@@ -1,0 +1,114 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+}
+%
+usage
+-----
+  # with GS_HOME set (<stone-name> optional if run in $GS_HOME/servers/stones/<stone-name> directory)
+  $basename [--help | -h] [--debug | -D] [-- [<stone-name> [<topaz-command-line-args>] ] ]
+  # with GEMSTONE set
+  $basename [--help | -h] [--debug | -D] -- ([-r] | -l | -L) -I <path-to-.topazini> [<topaz-command-line-args>]
+
+DESCRIPTION
+  Write a set of .gs files for Rowan v1.2.13 that contains only the code that 
+  needs to be loaded into the stone after upgradeImage has completed. The 
+  bootstrap code will replace the GemStone kernel class extension methods that 
+  are removed during upgradeImage.  
+
+	The set of .gs files will be used to upgrade from 3.6.2 to 3.6.2.
+
+  This script is expected to be run in a solo extent that has Rowan V3.0 installed.
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help                           -- gs_351             # with GS_HOME set
+  $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
+  $basename --help                           <topaz-arguments>
+  $basename -D <script-arguments>            <topaz-arguments>
+  $basename --debug <script-arguments>       <topaz-arguments>
+  $basename <script-arguments>               <topaz-arguments>
+-----
+%
+doit
+	| projectSetModification visitor repositoryRoot362 topazFileNameMap packageCreateTool projectLoadTool  
+		platformConditionalAttributes362 auditFailures gsFileName  dbo_ROWAN_PROJECTS_HOME |
+
+  self stdout nextPutAll: '--- read and write project source RowanV2'; lf.
+	platformConditionalAttributes362 := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.6.2' asRwGemStoneVersionNumber.
+	}.
+	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git'.
+	repositoryRoot362 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2') asFileReference.
+	repositoryRoot362 ensureCreateDirectory.
+	{
+		{
+			'file:',dbo_ROWAN_PROJECTS_HOME, '/Rowan/rowanV3/specs/Rowan.ston'.
+			dbo_ROWAN_PROJECTS_HOME.
+			platformConditionalAttributes362.
+			repositoryRoot362.
+			'RowanV12'.
+			Dictionary new.
+			true.
+		}.
+	} 
+	do: [:ar |
+		"Read project and packages from disk."
+		| configNames loadSpecs theProjectSetDefinition loadSpecUrl 
+			loadSpec projectsHome platformConditionalAttributes theRepositoryRoot 
+			specialCaseDict excludedPackages logCreation |
+		loadSpecUrl := ar at: 1.
+		projectsHome := ar at: 2.
+		platformConditionalAttributes := (ar at: 3).
+		theRepositoryRoot := ar at: 4.
+		gsFileName := ar at: 5.
+		specialCaseDict := ar at: 6.
+		logCreation := ar at: 7.
+		loadSpec := RwSpecification fromUrl: loadSpecUrl.
+		loadSpecs := loadSpec
+			projectsHome: projectsHome;
+			resolve.
+		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('deprecated' 'jadeServer' 'tests') ].
+		theProjectSetDefinition := loadSpecs read: platformConditionalAttributes.
+		theProjectSetDefinition
+			do: [:projectDefinition |	
+				GsFile gciLogServer: '	Project: ', projectDefinition name.
+				projectDefinition packageNames sort do: [:pkgName | GsFile gciLogServer: '		', pkgName ] ].
+		topazFileNameMap := Dictionary new.
+		topazFileNameMap at: gsFileName put: {}.
+		excludedPackages := Set new.
+		theProjectSetDefinition keys do: [:projectName |
+			| projectDefinition thePackages |
+			"compute excludedPackages for all projects"
+			projectDefinition := theProjectSetDefinition projectNamed: projectName.
+			specialCaseDict 
+				at: projectName
+				ifPresent: [:packageList |
+					excludedPackages addAll: packageList.
+					GsFile gciLogServer: '	---', ' packages ', packageList printString ] ].
+		GsFile gciLogServer: '	Excluded packages: ', excludedPackages asArray printString.
+		topazFileNameMap at: gsFileName ifAbsentPut: [ Set new ].
+		theProjectSetDefinition keys do: [:projectName |
+			| projectDefinition thePackages |
+			"define contents of RowanV2.gs"
+			projectDefinition := theProjectSetDefinition projectNamed: projectName.
+			thePackages := projectDefinition packageNames.
+			thePackages removeAllPresent: excludedPackages.
+			thePackages do: [:packageName |
+				(topazFileNameMap at: gsFileName) add: packageName ] ].
+		GsFile gciLogServer: 'LoadSpec: ', gsFileName, '.gs (', (platformConditionalAttributes last) printString, ')'.
+		projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+		visitor := RwGsModificationTopazWriterVisitorV2 new
+			logCreation: logCreation;
+			repositoryRootPath: theRepositoryRoot;
+			topazFilenamePackageNamesMap: topazFileNameMap;
+			yourself.
+		visitor visit: projectSetModification ].
+	^ true
+%

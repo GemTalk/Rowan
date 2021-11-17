@@ -196,3 +196,13 @@ Rowan class >> unpackagedName [
 
 	^ '(NONE)'
 ]
+
+{ #category : 'public' }
+Rowan class >> version [
+	^ self versionString asRwSemanticVersionNumber
+]
+
+{ #category : 'public' }
+Rowan class >> versionString [
+  ^ '1.2.13'
+]
