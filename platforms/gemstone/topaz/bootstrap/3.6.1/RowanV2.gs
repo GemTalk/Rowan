@@ -11955,7 +11955,7 @@ signal: aRwProjectLoadSpecificationV2
 
 	^ self new
 		loadSpecification: aRwProjectLoadSpecificationV2;
-		_signalWith: nil
+		signal
 %
 
 !		Instance methods for 'RwAllowChangeRepositoryRevisionOnResolveNotification'
