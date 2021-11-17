@@ -11804,7 +11804,7 @@ signal: aRwProjectLoadSpecificationV2
 
 	^ self new
 		loadSpecification: aRwProjectLoadSpecificationV2;
-		_signalWith: nil
+		signal
 %
 
 !		Instance methods for 'RwAllowChangeRepositoryRevisionOnResolveNotification'
@@ -36126,19 +36126,6 @@ installTranscript
 
 	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
 	SessionTemps current at: #'TranscriptStream_SessionStream' put: self.
-%
-
-category: 'category'
-method: JadeServer64bit3x
-keysForDictionary: aDictionary 
-	"RubyHash does not implement #'keys' or #'keysDo:'!"
-
-	| keys |
-	(aDictionary isKindOf: RubyHash) ifFalse: [^super keysForDictionary: aDictionary].
-	keys := Set new.
-	aDictionary keysAndValuesDo: [:eachKey :eachValue | keys add: eachKey].
-	^keys.
-
 %
 
 category: 'category'
@@ -97775,12 +97762,12 @@ _adoptProjectProjectsInProjectSet: projectSetDefinition
 					tracer
 						trace:
 							'Missing loaded method ' , ex methodPrintString
-								, ' encountered during adopt ... IGNORED' ]
+								, ' encountered during adopt' ]
 				classErrorDo: [ 
 					adoptErrors := true.
 					tracer
 						trace:
-							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
+							'Missing loaded class ' , ex className , ' encountered during adopt' ].
 			ex resume: nil ].
 
 	projectSetDefinition deriveLoadedThings
