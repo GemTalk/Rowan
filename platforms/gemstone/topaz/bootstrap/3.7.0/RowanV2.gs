@@ -48835,6 +48835,12 @@ version
 	^ (self projectNamed: 'Rowan') projectVersion
 %
 
+category: 'public'
+classmethod: Rowan
+versionString
+	^ '3.0.0'
+%
+
 ! Class implementation for 'RowanCommandResult'
 
 !		Class methods for 'RowanCommandResult'
