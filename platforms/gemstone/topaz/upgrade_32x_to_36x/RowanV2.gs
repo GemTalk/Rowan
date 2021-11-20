@@ -24911,6 +24911,14 @@ inspect: anObject
 
 category: 'category'
 method: JadeServer
+inspect: anObject windowHandle: anInteger
+  | stream string |
+  RowanBrowserService new saveRootObject: anObject asOop windowHandle: anInteger.
+  ^ self inspect: anObject
+%
+
+category: 'category'
+method: JadeServer
 inspectDictionary: aDictionary on: aStream
 
 	| keys keyDict |
@@ -40561,6 +40569,18 @@ unpackagedName
 	"Answer the name used for unpackaged projects and packages"
 
 	^ '(NONE)'
+%
+
+category: 'public'
+classmethod: Rowan
+version
+	^ self versionString asRwSemanticVersionNumber
+%
+
+category: 'public'
+classmethod: Rowan
+versionString
+  ^ '1.2.13'
 %
 
 ! Class implementation for 'RowanCommandResult'

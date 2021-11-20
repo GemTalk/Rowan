@@ -24911,6 +24911,14 @@ inspect: anObject
 
 category: 'category'
 method: JadeServer
+inspect: anObject windowHandle: anInteger
+  | stream string |
+  RowanBrowserService new saveRootObject: anObject asOop windowHandle: anInteger.
+  ^ self inspect: anObject
+%
+
+category: 'category'
+method: JadeServer
 inspectDictionary: aDictionary on: aStream
 
 	| keys keyDict |
