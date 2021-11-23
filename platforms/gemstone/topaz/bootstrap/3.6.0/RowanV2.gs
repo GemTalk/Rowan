@@ -6388,6 +6388,24 @@ removeallmethods RwModificationTonelWriterVisitorV2
 removeallclassmethods RwModificationTonelWriterVisitorV2
 
 doit
+(RwModificationTonelWriterVisitorV2
+	subclass: 'RwModificationPharoTonelFormatV1WriterVisitorV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwModificationPharoTonelFormatV1WriterVisitorV2
+removeallclassmethods RwModificationPharoTonelFormatV1WriterVisitorV2
+
+doit
 (RwAbstractReaderWriterVisitor
 	subclass: 'RwRepositoryComponentProjectReaderVisitor'
 	instVarNames: #( packageNames packageNamesBlock currentProjectReferenceDefinition )
@@ -9949,6 +9967,24 @@ removeallmethods TonelSTONWriter
 removeallclassmethods TonelSTONWriter
 
 doit
+(TonelSTONWriter
+	subclass: 'PharoTonelV1STONWriter'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods PharoTonelV1STONWriter
+removeallclassmethods PharoTonelV1STONWriter
+
+doit
 (Stream
 	subclass: 'AbstractBinaryFileStream'
 	instVarNames: #( file handle forWrite )
@@ -11804,7 +11840,7 @@ signal: aRwProjectLoadSpecificationV2
 
 	^ self new
 		loadSpecification: aRwProjectLoadSpecificationV2;
-		_signalWith: nil
+		signal
 %
 
 !		Instance methods for 'RwAllowChangeRepositoryRevisionOnResolveNotification'
@@ -54127,7 +54163,7 @@ servicePerform: symbol withArguments: collection
 category: 'Accessing'
 method: RowanClassService
 setComment
-  comment := self theClass thisClass comment
+  comment := self theClass thisClass rwComment
 %
 
 category: 'private'
@@ -56830,7 +56866,7 @@ createProjectNamed: projectName in: symbolDictionaryName
 	self rowanFixMe. "Dale doesn't like Rowan projectNames"
 	(Rowan projectNames includes: projectName) ifFalse:[
 		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
-				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
+				pd gemstoneSetDefaultSymbolDictNameTo: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
 %
 
 category: 'replication'
@@ -57076,7 +57112,7 @@ refresh
 category: 'client commands'
 method: RowanProjectService
 reloadProject
-  [ Rowan projectTools load loadProjectNamed: name ]
+  [ self rwProject reload ]
     on: Warning
     do: [ :ex | 
       Transcript
@@ -57107,7 +57143,7 @@ repositoryRootPath
 category: 'rowan'
 method: RowanProjectService
 repositorySha
-	^ self rwProject repositoryCommitId
+	^ self rwProject commitId
 %
 
 category: 'rowan'
@@ -62434,6 +62470,106 @@ _writeMethodDefinition: aMethodDefinition  classDefinition: aClassDefinition isM
 				<< ' [' << methodBody << nl << ']' << nl ]
 %
 
+! Class implementation for 'RwModificationPharoTonelFormatV1WriterVisitorV2'
+
+!		Instance methods for 'RwModificationPharoTonelFormatV1WriterVisitorV2'
+
+category: 'actions'
+method: RwModificationPharoTonelFormatV1WriterVisitorV2
+addedPackage: aPackageModification
+	| packageProperties exportedPackageProperties |
+	currentPackageDefinition := aPackageModification after.
+
+	packageProperties := currentPackageDefinition properties.
+	exportedPackageProperties := self class orderedDictionaryClass new.
+	exportedPackageProperties at: #'name' put: (packageProperties at: 'name') asSymbol.
+	(packageProperties at: 'comment' ifAbsent: [  ])
+		ifNotNil: [ :comment | exportedPackageProperties at: #'comment' put: comment ].
+	(packageProperties keys
+		reject: [ :key | key = 'name' or: [ key = 'gs_SymbolDictionary' ] ]) asArray
+		sort
+		do: [ :key | exportedPackageProperties at: key asSymbol put: (packageProperties at: key) ].
+
+	self _packageSourceDir ensureCreateDirectory.
+	self _packageSourceDir / 'package.st'
+		writeStreamDo: [ :aStream | 
+			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
+				<< self _newLine ].
+
+	self processPackage: aPackageModification
+%
+
+category: 'class writing'
+method: RwModificationPharoTonelFormatV1WriterVisitorV2
+_methodDefinitionOf: aMethodDefinition
+	| excludedMethodProperties methodProperties exportedProperties |
+	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	exportedProperties := self class orderedDictionaryClass new
+		at: #'category' put: aMethodDefinition protocol asSymbol;
+		yourself.
+	methodProperties := aMethodDefinition properties.
+	(methodProperties keys
+		reject: [ :each | excludedMethodProperties includes: each ]) asArray sort
+		do: [ :key | exportedProperties at: key asSymbol put: (methodProperties at: key) asSymbol].
+	^ self _toSTON: exportedProperties
+%
+
+category: 'private'
+method: RwModificationPharoTonelFormatV1WriterVisitorV2
+_toSTON: anObject
+	^ (String streamContents: [ :stream | 
+		(PharoTonelV1STONWriter on: stream) nextPut: anObject ])
+		withLineEndings: self _newLine
+%
+
+category: 'class writing'
+method: RwModificationPharoTonelFormatV1WriterVisitorV2
+_typeClassDefinitionOf: aClassDefinition
+	| definition |
+	
+	definition := self class orderedDictionaryClass new 
+		at: #name put: aClassDefinition name asSymbol; 
+		at: #superclass put: aClassDefinition superclassName asSymbol;
+		yourself.
+
+	aClassDefinition classType = 'normal' ifFalse: [ 
+		definition at: #type put: aClassDefinition classType asSymbol ].
+	
+	(aClassDefinition instVarNames)
+		ifNotEmpty: [ :vars | definition at: #instVars put: (vars asArray collect: [:each | each asSymbol]) ].
+
+	(aClassDefinition classVarNames)
+		ifNotEmpty: [ :vars | definition at: #classVars put: (vars asArray collect: [:each | each asSymbol]) ].
+		
+	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])
+		ifNotEmpty: [ :vars | definition at: #pools put: vars asArray ].
+		
+	(aClassDefinition classInstVarNames)
+		ifNotEmpty: [ :vars | definition at: #classInstVars put: (vars asArray collect: [:each | each asSymbol])].
+
+	(aClassDefinition gs_constraints)
+		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
+
+	(aClassDefinition gs_options)
+		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
+	definition 		
+		at: #category put: aClassDefinition category asSymbol.
+	
+	^ self _toSTON: definition
+%
+
+category: 'class extension writing'
+method: RwModificationPharoTonelFormatV1WriterVisitorV2
+_writeClassExtension: aClassExtension on: aStream
+
+	aStream << 'Extension '
+				<< (self _toSTON: {(#'name' -> aClassExtension name)} asDictionary) << self _newLine.
+%
+
 ! Class implementation for 'RwRepositoryComponentProjectReaderVisitor'
 
 !		Instance methods for 'RwRepositoryComponentProjectReaderVisitor'
@@ -62479,7 +62615,7 @@ category: 'tonel parser'
 method: RwRepositoryComponentProjectReaderVisitor
 newClassExtensionDefinitionFrom: anArray
 	| className |
-	className := (anArray sixth) at: #name.
+	className := ((anArray sixth) at: #name) asString.
 	currentClassDefinition := nil.
 	^currentClassExtension := currentPackageDefinition
 		classExtensionDefinitionNamed: className 
@@ -70434,6 +70570,18 @@ writeResolvedProject: resolvedProject
 		exportPackages
 %
 
+category: 'write'
+method: RwPrjWriteToolV2
+writeResolvedProjectPharoTonelFormatV1: resolvedProject
+	Rowan projectTools createV2
+		createResolvedProjectRepository: resolvedProject repository.
+	resolvedProject
+		exportProjectSpecification;
+		exportProjects;
+		exportComponents;
+		exportPharoTonelFormatV1Packages
+%
+
 ! Class implementation for 'RwAuditDetail'
 
 !		Class methods for 'RwAuditDetail'
@@ -73599,7 +73747,7 @@ newForSelector: selector protocol: protocol source: source
 
 	^ self
 		withProperties:
-			( SymbolDictionary with: #'selector' -> selector with: #'protocol' -> protocol)
+			( SymbolDictionary with: #'selector' -> selector with: #'protocol' -> protocol asString)
 		source: source
 %
 
@@ -91585,6 +91733,20 @@ writeObject: anObject do: block
 			writeStream nextPutAll: stonName.
 			self prettyPrintSpace ].
 		block value ]
+%
+
+! Class implementation for 'PharoTonelV1STONWriter'
+
+!		Instance methods for 'PharoTonelV1STONWriter'
+
+category: 'private'
+method: PharoTonelV1STONWriter
+encodeKey: key value: value
+	self nextPut: key asSymbol.
+	self prettyPrintSpace.
+	writeStream nextPut: $:.
+	self prettyPrintSpace.
+	self nextPut: value asSymbol
 %
 
 ! Class implementation for 'AbstractBinaryFileStream'

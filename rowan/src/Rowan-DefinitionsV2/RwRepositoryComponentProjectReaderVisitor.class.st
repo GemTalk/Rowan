@@ -54,7 +54,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: anArray [
 	| className |
-	className := (anArray sixth) at: #name.
+	className := ((anArray sixth) at: #name) asString.
 	currentClassDefinition := nil.
 	^currentClassExtension := currentPackageDefinition
 		classExtensionDefinitionNamed: className 
