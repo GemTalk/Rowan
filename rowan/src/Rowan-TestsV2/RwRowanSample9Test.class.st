@@ -26,6 +26,140 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _expectedIssue766GsFileContents [
+	^ '! Class Declarations
+! Generated file, do not Edit
+
+doit
+(IdentityKeyValueDictionary
+	subclass: ''RowanSample9IdentityKeyValueDictionary''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #( #logCreation )
+)
+		category: ''RowanSample9-GemStone'';
+		comment: ''I am an example class'';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: ''RowanSample9Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #( #logCreation )
+)
+		category: ''RowanSample9-Core'';
+		comment: ''I am an example class'';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: ''RowanSample9GemStoneTestCase''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #( #logCreation )
+)
+		category: ''RowanSample9-GemStone-Tests'';
+		comment: ''I test the GemStone class'';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: ''RowanSample9TestCase''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanSample9_1
+	options: #( #logCreation )
+)
+		category: ''RowanSample9-Tests'';
+		comment: ''I test the Core class'';
+		immediateInvariant.
+true.
+%
+
+! Class implementation for ''RowanSample9IdentityKeyValueDictionary''
+
+!		Class methods for ''RowanSample9IdentityKeyValueDictionary''
+
+category: ''accessing''
+classmethod: RowanSample9IdentityKeyValueDictionary
+bar ^''bar''
+%
+
+!		Instance methods for ''RowanSample9IdentityKeyValueDictionary''
+
+category: ''accessing''
+method: RowanSample9IdentityKeyValueDictionary
+foo ^1
+%
+
+! Class implementation for ''RowanSample9Class1''
+
+!		Instance methods for ''RowanSample9Class1''
+
+category: ''accessing''
+method: RowanSample9Class1
+foo ^1
+%
+
+! Class implementation for ''RowanSample9GemStoneTestCase''
+
+!		Instance methods for ''RowanSample9GemStoneTestCase''
+
+category: ''tests''
+method: RowanSample9GemStoneTestCase
+test1  self assert: RowanSample9IdentityKeyValueDictionary new foo = 1
+%
+
+category: ''tests''
+method: RowanSample9GemStoneTestCase
+test2  self assert: RowanSample9IdentityKeyValueDictionary bar = ''bar''
+%
+
+! Class implementation for ''RowanSample9TestCase''
+
+!		Instance methods for ''RowanSample9TestCase''
+
+category: ''tests''
+method: RowanSample9TestCase
+test1  self assert: RowanSample9Class1 new foo = 1
+%
+
+category: ''tests''
+method: RowanSample9TestCase
+test2  self assert: RowanSample9Class1 bar = ''bar''
+%
+
+! Class extensions for ''RowanSample9Class1''
+
+!		Class methods for ''RowanSample9Class1''
+
+category: ''*rowansample9-extensions''
+classmethod: RowanSample9Class1
+bar ^''bar''
+%
+
+'
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _issue_527_resolve_load_validate: projectSpec className: className expectedSymDictName: expectedSymDictName [
 	| resolvedProject loadedProjects symDictName symDict |
 	resolvedProject := projectSpec resolve.
@@ -3654,6 +3788,46 @@ RwRowanSample9Test >> testIssue761 [
 "write project without error"
 	[ definedProject exportPackages ]
 		ensure: [ (self _testRowanProjectsSandbox / projectName) ensureDeleteAll ]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue766 [
+	"packages read from a Pharo tonel format v1 repository are not exported to .gs files correctly"
+
+	"https://github.com/GemTalk/Rowan/issues/766"
+
+	| loadSpec projectName projectsHome resolvedProject repositoryRootPath 
+		projectSetDefinition projectSetModification visitor stream |
+	loadSpec := self _loadSpecNamed: 'spec_0080'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	projectsHome := self _testRowanProjectsSandbox.
+	(projectsHome / projectName) ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"export to .gs file"
+	repositoryRootPath := projectsHome / projectName / 'topaz'.
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: resolvedProject.
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitorV2 new
+		excludeRemoveAllMethods: true;
+		logCreation: true;
+		repositoryRootPath: repositoryRootPath;
+		topazFilename: projectName;
+		yourself.
+	visitor visit: projectSetModification.
+
+	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
+	self assert: stream contents equals: self _expectedIssue766GsFileContents
 ]
 
 { #category : 'tests' }
