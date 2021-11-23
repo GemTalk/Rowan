@@ -30,3 +30,14 @@ RwPrjWriteToolV2 >> writeResolvedProject: resolvedProject [
 		exportComponents;
 		exportPackages
 ]
+
+{ #category : 'write' }
+RwPrjWriteToolV2 >> writeResolvedProjectPharoTonelFormatV1: resolvedProject [
+	Rowan projectTools createV2
+		createResolvedProjectRepository: resolvedProject repository.
+	resolvedProject
+		exportProjectSpecification;
+		exportProjects;
+		exportComponents;
+		exportPharoTonelFormatV1Packages
+]

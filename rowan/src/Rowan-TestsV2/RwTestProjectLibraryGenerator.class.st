@@ -90,6 +90,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0077: commitComment;
 	genSpec_0078: commitComment;
 	genSpec_0079: commitComment;
+	genSpec_0080: commitComment;
 	yourself
 "
 Class {
@@ -4233,12 +4234,43 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0079: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0080: resolvedProject [
+	"Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols)."
+
+	"https://github.com/GemTalk/Rowan/issues/777"
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
-	^ self
-		_addDefinitionsFor: resolvedProject
-		projectName: aProjectName
-		superclassName: 'Object'
+	| className packageName |
+	resolvedProject
+		addPackagesNamed: {(aProjectName , '-Core')}
+			toComponentNamed: 'Core';
+		addPackageNamed: aProjectName , '-Tests'
+			toComponentNamed: 'tests/Tests';
+		yourself.
+	packageName := aProjectName , '-Core'.
+	className := aProjectName , 'Class1'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
 		instvars: #('ivar1')
+		category: packageName
+		comment: 'I am an example class')
+		addInstanceMethod: 'foo ^1' protocol: 'accessing';
+		yourself.
+	packageName := aProjectName , '-Tests'.
+	((resolvedProject packageNamed: packageName)
+		addClassNamed: aProjectName , 'TestCase'
+		super: 'TestCase'
+		category: packageName
+		comment: 'I test the example class')
+		addInstanceMethod: 'test  self assert: ' , className , ' new foo = 1'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
 ]
 
 { #category : 'private' }
@@ -4627,6 +4659,40 @@ RwTestProjectLibraryGenerator >> _genSpecFor_0071: specName definedProject: defi
 	resolvedProject
 		gitUrl: self projectUrl;
 		export;
+		exportLoadSpecification.	"write the rowan directory structure"
+
+	^ resolvedRepository
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor_0080: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
+	"Export the project using Pharo tonel format v1.0: Symbol keys and values"
+
+	| resolvedRepository resolvedProject |
+	resolvedProject := definedProject resolveStrict.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			resolvedRepository createBranch: specName ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+
+	resolvedProject projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
+
+	addDefinitionsBlock value: resolvedProject defined.
+
+	resolvedProject _resolvedProject
+		exportPharoTonelFormatV1;
 		exportLoadSpecification.	"write the rowan directory structure"
 
 	^ resolvedRepository
@@ -8599,6 +8665,53 @@ RwTestProjectLibraryGenerator >> genSpec_0079: commitMessage [
 	self
 		_finishCommitAndPush: specName
 		loadSpecification:  resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0080: commitMessage [
+	"Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols)."
+
+	"https://github.com/GemTalk/Rowan/issues/777"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0080'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols).'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 80
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(777);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor_0080: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0080: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
