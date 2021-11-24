@@ -5532,6 +5532,7 @@ RwRowanSample9Test >> testLoadSpec_read_01 [
 	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
 ]
 
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue766 [
 	"packages read from a Pharo tonel format v1 repository are not exported to .gs files correctly"
 
