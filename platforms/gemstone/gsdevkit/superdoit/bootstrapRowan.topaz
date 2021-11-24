@@ -1,0 +1,45 @@
+#!/usr/bin/env superdoit_topaz
+#
+# simply execute a topaz script: 
+#		- using current $GEMSTONE and .topazini supplied on command line
+#				simple.topaz -I ./.topazini -L
+#		- using current $GS_HOME, stone name and topaz args supplied on command line
+#				simple.topaz gs_361 -L
+
+set u SystemUser p swordfish
+login
+
+run
+| session symbolList dict |
+session := GsCurrentSession currentSession.
+symbolList := session symbolList.
+#( #RowanKernel )
+  do: [:symbolName |
+    | rowanKernelSymDict size |
+    rowanKernelSymDict := Globals at: symbolName.
+    size := System myUserProfile symbolList size.
+    System myUserProfile insertDictionary: rowanKernelSymDict at: size + 1 .
+    GsFile gciLogServer:'restored ', symbolName, ' from Globals' .  ]. 
+#( #RowanLoader #RowanTools #RowanClientServices)
+  do: [:symbolName | 
+    (symbolList resolveSymbol: symbolName) ifNil: [
+      | newDict size |
+      newDict := SymbolDictionary new
+        name: symbolName;
+        objectSecurityPolicy: symbolList objectSecurityPolicy;
+        yourself.
+      size := System myUserProfile symbolList size.
+      System myUserProfile insertDictionary: newDict at: size + 1 .
+      GsFile gciLogServer:'created ', symbolName .  ] ].
+%
+commit
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.7.0/RowanV2_tonel.gs
+commit
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.7.0/RowanV2.gs
+commit
+input $ARCHBASE/image/bootstrap/GemStone-Rowan.gs
+commit
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/bootstrap/3.7.0/RowanV2_stubs.gs
+commit
+
+logout
