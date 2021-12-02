@@ -13,7 +13,7 @@ RwAllowChangeRepositoryRevisionOnResolveNotification class >> signal: aRwProject
 
 	^ self new
 		loadSpecification: aRwProjectLoadSpecificationV2;
-		_signalWith: nil
+		signal
 ]
 
 { #category : 'Handling' }

@@ -12,7 +12,7 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 
 	^ self
 		withProperties:
-			(Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+			(Dictionary with: 'selector' -> selector with: 'protocol' -> protocol asString)
 		source: source
 ]
 

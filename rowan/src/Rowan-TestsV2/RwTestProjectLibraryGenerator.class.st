@@ -73,6 +73,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0060: commitComment;
 	genSpec_0064: commitComment;
 	genSpec_0079: commitComment;
+	genSpec_0080: commitComment;
 	yourself
 "
 Class {
@@ -3306,6 +3307,15 @@ self halt.
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0080: resolvedProject [
+	"Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols)."
+
+	"https://github.com/GemTalk/Rowan/issues/777"
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -3638,6 +3648,40 @@ RwTestProjectLibraryGenerator >> _genSpecFor_004_b: specName branchName: branchN
 	resolvedProject
 		exportComponents;
 		exportLoadSpecification.	"write the component and load spec directory structure"
+
+	^ resolvedRepository
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _genSpecFor_080: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
+	"Export the project using Pharo tonel format v1.0: Symbol keys and values"
+
+	| resolvedRepository resolvedProject |
+	resolvedProject := definedProject resolveStrict.
+
+	resolvedRepository := resolvedProject repository.
+	(resolvedRepository branches includes: specName)
+		ifTrue: [ 
+			"branch exists, so we'll check it out and make the necessary mods"
+			resolvedRepository checkout: specName.
+			resolvedRepository pull: resolvedRepository remote branch: specName ]
+		ifFalse: [ 
+			"create the branch"
+			resolvedRepository createBranch: specName ].
+
+	resolvedProject revision: specName.	"update the revision to match the current branch, since we want the revision set correctly when exported"
+
+	resolvedProject projectRoots
+		do: [ :rootDir | 
+			"eliminate the rowan directory structure, so it can be created afresh ... if it already exists"
+			rootDir ensureDeleteAll ].
+	(resolvedProject repositoryRoot / 'rowan' / 'doits') ensureDeleteAll.
+
+	addDefinitionsBlock value: resolvedProject defined.
+
+	resolvedProject _resolvedProject
+		exportPharoTonelFormatV1;
+		exportLoadSpecification.	"write the rowan directory structure"
 
 	^ resolvedRepository
 ]
@@ -6892,6 +6936,53 @@ RwTestProjectLibraryGenerator >> genSpec_0079: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0079: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0080: commitMessage [
+	"Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols)."
+
+	"https://github.com/GemTalk/Rowan/issues/777"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0080'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002; read and write in Pharo tonel format v1.0 (keys and values are Symbols).'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 80
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(777);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor_080: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0080: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

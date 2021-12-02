@@ -30,8 +30,10 @@ OPTIONS
 %
 method
 attachGemstoneBaseImage
-	(Rowan projectNamed: 'gemstoneBaseImage') 
-		gitRepositoryRoot: '$ARCHBASE/image'.
+	(System gemEnvironmentVariable: 'ARCHBASE')
+		ifNotNil: [
+			(Rowan projectNamed: 'gemstoneBaseImage') 
+			gitRepositoryRoot: '$ARCHBASE/image' ].
 %
 method
 attachRowanProjects
@@ -39,6 +41,10 @@ attachRowanProjects
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
 	(Rowan projectNamed: 'RowanClientServices') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
+	(Rowan projectNamed: 'Rowan')
+		_loadedProject resolvedProject projectsHome:  '$ROWAN_PROJECTS_HOME'.
+	(Rowan projectNamed: 'RowanClientServices')
+		_loadedProject resolvedProject projectsHome:  '$ROWAN_PROJECTS_HOME'.
 %
 method
 loadTests
