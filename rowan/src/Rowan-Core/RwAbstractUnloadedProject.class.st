@@ -18,6 +18,11 @@ RwAbstractUnloadedProject >> _concreteProject: aResolvedProject [
 ]
 
 { #category : 'private' }
+RwAbstractUnloadedProject >> _projectComponents [
+	^ self _concreteProject _projectComponents
+]
+
+{ #category : 'private' }
 RwAbstractUnloadedProject >> _projectRepository [
 	^ self _concreteProject _projectRepository
 ]
@@ -100,6 +105,41 @@ RwAbstractUnloadedProject >> specComponentNames: anArray [
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> specName [
 	^ self loadSpecification specName
+]
+
+{ #category : 'querying' }
+RwAbstractUnloadedProject >> subcomponentsOf: componentName [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+]
+
+{ #category : 'querying' }
+RwAbstractUnloadedProject >> subcomponentsOf: componentName attributes: attributes ifNone: noneBlock [
+	| subcomponents |
+	subcomponents := self _projectComponents
+		subcomponentsOf: componentName
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [ ^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+]
+
+{ #category : 'querying' }
+RwAbstractUnloadedProject >> subcomponentsOf: componentName ifNone: noneBlock [
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	| subcomponents |
+	subcomponents := self _projectComponents
+		subcomponentsOf: componentName
+		matchBlock: [ :aComponent | 
+			"match all components"
+			true ]
+		ifNone: [ ^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
 ]
 
 { #category : 'testing' }
