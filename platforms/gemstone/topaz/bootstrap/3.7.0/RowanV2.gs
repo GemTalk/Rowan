@@ -49370,6 +49370,44 @@ specName
 	^ self loadSpecification specName
 %
 
+category: 'querying'
+method: RwAbstractUnloadedProject
+subcomponentsOf: componentName
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	^ self subcomponentsOf: componentName ifNone: [ ^ {} ]
+%
+
+category: 'querying'
+method: RwAbstractUnloadedProject
+subcomponentsOf: componentName attributes: attributes ifNone: noneBlock
+	| subcomponents |
+	subcomponents := self _projectComponents
+		subcomponentsOf: componentName
+		matchBlock: [ :aComponent | aComponent matchesAttributes: attributes ]
+		ifNone: [ ^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+%
+
+category: 'querying'
+method: RwAbstractUnloadedProject
+subcomponentsOf: componentName ifNone: noneBlock
+	"list of direct subcomponents of the given <componentName> ...includes package groups"
+
+	| subcomponents |
+	subcomponents := self _projectComponents
+		subcomponentsOf: componentName
+		matchBlock: [ :aComponent | 
+			"match all components"
+			true ]
+		ifNone: [ ^ noneBlock value ].
+	subcomponents isEmpty
+		ifTrue: [ ^ noneBlock value ].
+	^ subcomponents
+%
+
 category: 'testing'
 method: RwAbstractUnloadedProject
 useGit
@@ -49387,6 +49425,12 @@ category: 'private'
 method: RwAbstractUnloadedProject
 _concreteProject: aResolvedProject
 	concreteProject := aResolvedProject
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
+_projectComponents
+	^ self _concreteProject _projectComponents
 %
 
 category: 'private'
