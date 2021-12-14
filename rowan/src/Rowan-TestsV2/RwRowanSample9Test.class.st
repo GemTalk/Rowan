@@ -3711,6 +3711,26 @@ RwRowanSample9Test >> testIssue653 [
 	self
 		assert: (project loadedSubcomponentsOf: 'common/Tests' attributes: #('common') ifNone: [#()])
 		equals: #() .
+
+"package groups validation"
+	self
+		assert: (project packageGroupNamed: 'groups/Examples') packageNames sort
+		equals: #( 'RowanSample9-Examples') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Loader') packageNames sort
+		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Projects') packageNames sort
+		equals: #( 'RowanSample9-Core-Projects') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Rowan') packageNames sort
+		equals: #( 'RowanSample9-Core-Rowan') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Tests') packageNames sort
+		equals: #( 'RowanSample9-Tests') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
+		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
 ]
 
 { #category : 'tests' }
@@ -5630,6 +5650,85 @@ RwRowanSample9Test >> testIssue777_02 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue780 [
+	"use spec_0061 to test compoent API "
+
+	"https://github.com/GemTalk/Rowan/issues/780"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects definedProject
+		expectedComponentLabels |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+"component API"
+	self 
+		assert: ((definedProject subcomponentsOf: 'Core') collect: [:each | each name]) sort
+		equals: #( 'common/Core' 'common/Examples' 'common/Loader' 'common/Tests' 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+	self 
+		assert: ((definedProject subcomponentsOf: 'common/Core') collect: [:each | each name]) sort
+		equals: #() sort.
+	self 
+		assert: ((definedProject subcomponentsOf: 'common/Loader') collect: [:each | each name]) sort
+		equals: #('common/platforms/Loader') sort.
+	self 
+		assert: ((definedProject subcomponentsOf: 'common/platforms/Loader') collect: [:each | each name]) sort
+		equals: #('common/platforms/gemstone/Loader' 'common/platforms/pharo/Loader') sort.
+	self 
+		assert: (definedProject subcomponentsOf: 'common/examples/Examples' ifNone: []) isNil.
+	self
+		assert: ((definedProject subcomponentsOf: 'common/Tests' attributes: #('common' 'tests') ifNone: [])  collect: [:each | each name])
+		equals: #('common/tests/Tests') .
+	self
+		assert: (definedProject subcomponentsOf: 'common/Tests' attributes: #('common') ifNone: [#()])
+		equals: #() .
+
+"RowanClientServices component API use case"
+	expectedComponentLabels := #( 'Core (common)' 'Examples (common)' 'Loader (common)' 'Tests (common)' '__ Examples (common)' '__ Loader (common)' '__ Projects (common)' '__ Rowan (common)' '__ Tests (common)' '__ WorkGroup_dkh (dkh)') sort.
+	(definedProject subcomponentsOf: 'Core'
+			ifNone: [ Array new ])
+			collect: [ :subcomponent | 
+				| component componentName label |
+				componentName := subcomponent name.
+				component := definedProject componentOrPackageGroupNamed: componentName.
+				label := component label.
+				self assert: (expectedComponentLabels includes: label)].
+
+"package groups validation"
+	self
+		assert: (definedProject packageGroupNamed: 'groups/Examples') packageNames sort
+		equals: #( 'RowanSample9-Examples') sort.
+	self
+		assert: (definedProject packageGroupNamed: 'groups/Loader') packageNames sort
+		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+	self
+		assert: (definedProject packageGroupNamed: 'groups/Projects') packageNames sort
+		equals: #( 'RowanSample9-Core-Projects') sort.
+	self
+		assert: (definedProject packageGroupNamed: 'groups/Rowan') packageNames sort
+		equals: #( 'RowanSample9-Core-Rowan') sort.
+	self
+		assert: (definedProject packageGroupNamed: 'groups/Tests') packageNames sort
+		equals: #( 'RowanSample9-Tests') sort.
+	self
+		assert: (definedProject packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
+		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue781 [
 	"use spec_0061 to test RowanClientServices component API use cases"
 
@@ -5669,7 +5768,27 @@ RwRowanSample9Test >> testIssue781 [
 				componentName := subcomponent name.
 				component := project componentOrPackageGroupNamed: componentName.
 				label := component label.
-				self assert: (expectedComponentLabels includes: label)].
+				self assert: (expectedComponentLabels includes: label)] .
+
+"package groups validation"
+	self
+		assert: (project packageGroupNamed: 'groups/Examples') packageNames sort
+		equals: #( 'RowanSample9-Examples') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Loader') packageNames sort
+		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Projects') packageNames sort
+		equals: #( 'RowanSample9-Core-Projects') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Rowan') packageNames sort
+		equals: #( 'RowanSample9-Core-Rowan') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/Tests') packageNames sort
+		equals: #( 'RowanSample9-Tests') sort.
+	self
+		assert: (project packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
+		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
 ]
 
 { #category : 'tests' }
