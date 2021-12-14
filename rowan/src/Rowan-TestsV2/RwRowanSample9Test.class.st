@@ -5490,49 +5490,6 @@ RwRowanSample9Test >> testIssue761 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_read_01 [
-	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |
-	loadSpec := self _loadSpecNamed: 'spec_0078'.
-	projectName := loadSpec projectName.
-	embeddedProjectName := projectName, '_embedded_1'.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-"read"
-	platformConditionalAttributes := { 'common' . 'gemstone' . '2.4.0' asRwGemStoneVersionNumber }.
-	loadSpecs := loadSpec resolve: platformConditionalAttributes.
-	projectSetDefinition := loadSpecs read: platformConditionalAttributes.
-
-"validate"
-	projectDef := projectSetDefinition projectNamed: projectName.
-	self assert: 
-		(projectDef packageNamed: 'RowanSample9-GemStone3x-Core' ifAbsent: []) isNil.
-	self assert: 
-		((projectDef packageNamed: 'RowanSample9-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9GemStone24xClass1' ifAbsent: []) notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9TestCase' ifAbsent: [].
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9GemStone24xClass1').
-	self assert: (projectDef packageNamed: 'RowanSample9-GemStone3x-Tests' ifAbsent: []) isNil.
-
-	projectDef := projectSetDefinition projectNamed: embeddedProjectName.
-	self assert: (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9_embedded_1GemStone24xClass1' ifAbsent: [].
-	self assert: classDef notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9_embedded_1TestCase' ifAbsent: [].
-	self assert: classDef notNil.
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9_embedded_1GemStone24xClass1').
-	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
-]
-
-{ #category : 'tests' }
 RwRowanSample9Test >> testIssue766 [
 	"packages read from a Pharo tonel format v1 repository are not exported to .gs files correctly"
 
@@ -5670,6 +5627,92 @@ RwRowanSample9Test >> testIssue777_02 [
 				key = 'selector'
 					ifTrue: [  self assert: (value isKindOf: Symbol) ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ] ] ]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue781 [
+	"use spec_0061 to test RowanClientServices component API use cases"
+
+	"https://github.com/GemTalk/Rowan/issues/653"
+	"https://github.com/GemTalk/Rowan/issues/781"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project
+		expectedComponentNames expectedComponentLabels |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects projectNamed: projectName.
+
+"RowanComponentService>>computeSubComponentsUsingProjectService:"
+	expectedComponentNames := #( 'common/Core' 'common/Examples' 'common/Loader' 'common/Tests' 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+	expectedComponentLabels := #( 'Core (common)' 'Examples (common)' 'Loader (common)' 'Tests (common)' '__ Examples (common)' '__ Loader (common)' '__ Projects (common)' '__ Rowan (common)' '__ Tests (common)' '__ WorkGroup_dkh (dkh)') sort.
+	self 
+		assert: ((project loadedSubcomponentsOf: 'Core') collect: [:each | each name]) sort
+		equals: expectedComponentNames.
+	(project
+			loadedSubcomponentsOf: 'Core'
+			ifNone: [ Array new ])
+			collect: [ :subcomponent | 
+				| component componentName label |
+				componentName := subcomponent name.
+				component := project componentOrPackageGroupNamed: componentName.
+				label := component label.
+				self assert: (expectedComponentLabels includes: label)].
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testLoadSpec_read_01 [
+	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
+
+	"https://github.com/GemTalk/Rowan/issues/707"
+
+	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |
+	loadSpec := self _loadSpecNamed: 'spec_0078'.
+	projectName := loadSpec projectName.
+	embeddedProjectName := projectName, '_embedded_1'.
+
+	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
+	repoDir ensureDeleteAll.
+
+"read"
+	platformConditionalAttributes := { 'common' . 'gemstone' . '2.4.0' asRwGemStoneVersionNumber }.
+	loadSpecs := loadSpec resolve: platformConditionalAttributes.
+	projectSetDefinition := loadSpecs read: platformConditionalAttributes.
+
+"validate"
+	projectDef := projectSetDefinition projectNamed: projectName.
+	self assert: 
+		(projectDef packageNamed: 'RowanSample9-GemStone3x-Core' ifAbsent: []) isNil.
+	self assert: 
+		((projectDef packageNamed: 'RowanSample9-GemStone24x-Core') 
+			classDefinitionNamed: 'RowanSample9GemStone24xClass1' ifAbsent: []) notNil.
+	classDef := (projectDef packageNamed: 'RowanSample9-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: 'RowanSample9TestCase' ifAbsent: [].
+	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9GemStone24xClass1').
+	self assert: (projectDef packageNamed: 'RowanSample9-GemStone3x-Tests' ifAbsent: []) isNil.
+
+	projectDef := projectSetDefinition projectNamed: embeddedProjectName.
+	self assert: (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
+	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Core') 
+			classDefinitionNamed: 'RowanSample9_embedded_1GemStone24xClass1' ifAbsent: [].
+	self assert: classDef notNil.
+	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: 'RowanSample9_embedded_1TestCase' ifAbsent: [].
+	self assert: classDef notNil.
+	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9_embedded_1GemStone24xClass1').
+	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
 ]
 
 { #category : 'tests' }
