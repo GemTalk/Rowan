@@ -7,7 +7,7 @@ Class {
 { #category : 'class writing' }
 RwModificationPharoTonelFormatV1WriterVisitorV2 >> _methodDefinitionOf: aMethodDefinition [
 	| excludedMethodProperties methodProperties exportedProperties |
-	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	excludedMethodProperties := #(#'_gsFileOffset' #'_gsFileName' #'category' #'protocol' #'selector').
 	exportedProperties := self class orderedDictionaryClass new
 		at: #'category' put: aMethodDefinition protocol asSymbol;
 		yourself.

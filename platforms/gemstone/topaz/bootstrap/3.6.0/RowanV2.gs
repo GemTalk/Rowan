@@ -54937,7 +54937,7 @@ category: 'instance creation'
 method: RowanComponentService
 forComponentNamed: componentName projectService: theProjectService
 	| inst component |
-	component := theProjectService rwProject componentNamed: componentName.
+	component := theProjectService rwProject componentOrPackageGroupNamed: componentName.
 	inst := self new
 		name: componentName;
 		basename: component label.
@@ -54976,11 +54976,6 @@ category: 'accessing'
 method: RowanComponentService
 projectService: theProjectService
 	projectService := theProjectService
-%
-
-category: 'accessing'
-method: RowanComponentService
-subcomponentsOf: rwProject
 %
 
 category: 'updating'
@@ -63376,7 +63371,7 @@ category: 'class writing'
 method: RwModificationPharoTonelFormatV1WriterVisitorV2
 _methodDefinitionOf: aMethodDefinition
 	| excludedMethodProperties methodProperties exportedProperties |
-	excludedMethodProperties := #('_gsFileOffset' '_gsFileName' 'category' 'protocol' 'selector').
+	excludedMethodProperties := #(#'_gsFileOffset' #'_gsFileName' #'category' #'protocol' #'selector').
 	exportedProperties := self class orderedDictionaryClass new
 		at: #'category' put: aMethodDefinition protocol asSymbol;
 		yourself.
@@ -71359,18 +71354,6 @@ writeResolvedProject: resolvedProject
 		exportProjects;
 		exportComponents;
 		exportPackages
-%
-
-category: 'write'
-method: RwPrjWriteToolV2
-writeResolvedProjectPharoTonelFormatV1: resolvedProject
-	Rowan projectTools createV2
-		createResolvedProjectRepository: resolvedProject repository.
-	resolvedProject
-		exportProjectSpecification;
-		exportProjects;
-		exportComponents;
-		exportPharoTonelFormatV1Packages
 %
 
 ! Class implementation for 'RwAuditDetail'

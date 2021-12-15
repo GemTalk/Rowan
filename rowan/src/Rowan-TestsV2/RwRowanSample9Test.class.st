@@ -33,9 +33,9 @@ RwRowanSample9Test >> _expectedIssue766GsFileContents [
 doit
 (IdentityKeyValueDictionary
 	subclass: ''RowanSample9IdentityKeyValueDictionary''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -49,9 +49,9 @@ true.
 doit
 (Object
 	subclass: ''RowanSample9Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -65,9 +65,9 @@ true.
 doit
 (TestCase
 	subclass: ''RowanSample9GemStoneTestCase''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -81,9 +81,9 @@ true.
 doit
 (TestCase
 	subclass: ''RowanSample9TestCase''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -5528,7 +5528,7 @@ RwRowanSample9Test >> testIssue766 [
 	(projectsHome / projectName) ensureDeleteAll.
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "export to .gs file"
 	repositoryRootPath := projectsHome / projectName / 'topaz'.
@@ -5551,7 +5551,9 @@ RwRowanSample9Test >> testIssue766 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue777_01 [
-	"keys  and values in definitions structures should not be Symbols"
+	"values in definitions structures should not be Symbols, 
+		in v3.0, the keys in definition properties ARE Symbols
+		as an optimization"
 
 	"https://github.com/GemTalk/Rowan/issues/777"
 
@@ -5564,7 +5566,7 @@ RwRowanSample9Test >> testIssue777_01 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "validate"
 	resolvedProject packages keysAndValuesDo: [:packageName :packageDef | 
@@ -5574,7 +5576,7 @@ RwRowanSample9Test >> testIssue777_01 [
 		packageDef classDefinitions keysAndValuesDo: [:className :classDef |
 			self deny: (className isKindOf: Symbol).
 			classDef properties keysAndValuesDo: [:key :value | 
-				self deny: (key isKindOf: Symbol).
+				self assert: (key isKindOf: Symbol).
 				value _isArray
 					ifTrue: [ value do: [:each | self deny: (each isKindOf: Symbol) ] ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ].
@@ -5584,7 +5586,7 @@ RwRowanSample9Test >> testIssue777_01 [
 		packageDef classExtensions keysAndValuesDo: [:className :classDef |
 			self deny: (className isKindOf: Symbol).
 			classDef properties keysAndValuesDo: [:key :value | 
-				self deny: (key isKindOf: Symbol).
+				self assert: (key isKindOf: Symbol).
 				value _isArray
 					ifTrue: [ value do: [:each | self deny: (each isKindOf: Symbol) ] ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ].
@@ -5593,15 +5595,17 @@ RwRowanSample9Test >> testIssue777_01 [
 				addAll: (classDef classMethodDefinitions values) ] ].
 		methodDefs do: [:methodDef |
 			methodDef properties keysAndValuesDo: [:key :value |
-				self deny: (key isKindOf: Symbol).
-				key = 'selector'
+				self assert: (key isKindOf: Symbol).
+				key = #'selector'
 					ifTrue: [  self assert: (value isKindOf: Symbol) ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ] ] ]
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue777_02 [
-	"keys  and values in definitions structures should not be Symbols"
+	"values in definitions structures should not be Symbols, 
+		in v3.0, the keys in definition properties ARE Symbols
+		as an optimization"
 
 	"https://github.com/GemTalk/Rowan/issues/777"
 
@@ -5614,7 +5618,7 @@ RwRowanSample9Test >> testIssue777_02 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "validate"
 	resolvedProject packages keysAndValuesDo: [:packageName :packageDef | 
@@ -5624,7 +5628,7 @@ RwRowanSample9Test >> testIssue777_02 [
 		packageDef classDefinitions keysAndValuesDo: [:className :classDef |
 			self deny: (className isKindOf: Symbol).
 			classDef properties keysAndValuesDo: [:key :value | 
-				self deny: (key isKindOf: Symbol).
+				self assert: (key isKindOf: Symbol).
 				value _isArray
 					ifTrue: [ value do: [:each | self deny: (each isKindOf: Symbol) ] ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ].
@@ -5634,7 +5638,7 @@ RwRowanSample9Test >> testIssue777_02 [
 		packageDef classExtensions keysAndValuesDo: [:className :classDef |
 			self deny: (className isKindOf: Symbol).
 			classDef properties keysAndValuesDo: [:key :value | 
-				self deny: (key isKindOf: Symbol).
+				self assert: (key isKindOf: Symbol).
 				value _isArray
 					ifTrue: [ value do: [:each | self deny: (each isKindOf: Symbol) ] ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ].
@@ -5643,8 +5647,8 @@ RwRowanSample9Test >> testIssue777_02 [
 				addAll: (classDef classMethodDefinitions values) ] ].
 		methodDefs do: [:methodDef |
 			methodDef properties keysAndValuesDo: [:key :value |
-				self deny: (key isKindOf: Symbol).
-				key = 'selector'
+				self assert: (key isKindOf: Symbol).
+				key = #'selector'
 					ifTrue: [  self assert: (value isKindOf: Symbol) ]
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ] ] ]
 ]
@@ -9559,7 +9563,7 @@ RwRowanSample9Test >> testSpec_0080 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.

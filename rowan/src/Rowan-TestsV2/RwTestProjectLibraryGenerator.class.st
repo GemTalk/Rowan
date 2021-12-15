@@ -4691,9 +4691,11 @@ RwTestProjectLibraryGenerator >> _genSpecFor_0080: specName definedProject: defi
 
 	addDefinitionsBlock value: resolvedProject defined.
 
-	resolvedProject _resolvedProject
-		exportPharoTonelFormatV1;
-		exportLoadSpecification.	"write the rowan directory structure"
+	self exportPharoTonelFormatV1: resolvedProject _concreteProject.
+	resolvedProject 
+		gitUrl: self projectUrl;
+		exportLoadSpecification;	"write the rowan directory structure"
+		yourself.
 
 	^ resolvedRepository
 ]
@@ -4883,6 +4885,62 @@ RwTestProjectLibraryGenerator >> _spec_0029_classCreationBlock [
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _testRowanProjectsSandbox [
 	^ RwAbstractV2Test _testRowanProjectsSandbox
+]
+
+{ #category : 'pharo format support' }
+RwTestProjectLibraryGenerator >> exportPharoTonelFormatV1: aRwResolvedProjectV2 [
+	"in order to test whether or not we can read Pharo tonel format v1, we have to be able to WRITE it ..."
+
+	| projectSetDefinition |
+	Rowan projectTools createV2
+		createResolvedProjectRepository: aRwResolvedProjectV2 repository.
+	aRwResolvedProjectV2
+		exportProjectSpecification;
+		exportProjects;
+		exportComponents.
+
+	projectSetDefinition := [ 
+	RwProjectSetDefinition new
+		addProject: aRwResolvedProjectV2 copy read;
+		yourself ]
+		on: Error
+		do: [ :ignored | RwProjectSetDefinition new ].
+	self
+		exportPharoTonelFormatV1For: aRwResolvedProjectV2
+		diskProjectSet: projectSetDefinition
+		packagesRoot: aRwResolvedProjectV2 packagesRoot
+		packageFormat: aRwResolvedProjectV2 packageFormat
+		packageConvention: aRwResolvedProjectV2 packageConvention
+]
+
+{ #category : 'pharo format support' }
+RwTestProjectLibraryGenerator >> exportPharoTonelFormatV1For: aRwResolvedProjectV2 diskProjectSet: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	packagesRoot / 'properties' , 'st'
+		writeStreamDo: [ :fileStream | 
+			fileStream
+				nextPutAll: '{ ';
+				lf;
+				tab;
+				nextPutAll: '#format : ' , packageFormat printString , ',';
+				lf;
+				tab;
+				nextPutAll: '#convention : ' , packageConvention printString;
+				lf;
+				nextPutAll: '}';
+				lf ].	"write out packages"
+	writerVisitorClass := packageFormat = 'tonel'
+		ifTrue: [ RwModificationPharoTonelFormatV1WriterVisitorV2 ]
+		ifFalse: [ self error: 'should not be used for filetree format packages' ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: aRwResolvedProjectV2.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: diskProjectSetDefinition.
+	visitor := writerVisitorClass new
+		packagesRoot: packagesRoot;
+		yourself.
+
+	visitor visit: projectSetModification
 ]
 
 { #category : 'generators' }
@@ -8701,7 +8759,7 @@ RwTestProjectLibraryGenerator >> genSpec_0080: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes:  { 'tests' };
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -8711,7 +8769,7 @@ RwTestProjectLibraryGenerator >> genSpec_0080: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification:  resolvedRepository _loadSpecification
+		loadSpecification:  resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
