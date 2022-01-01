@@ -13974,12 +13974,6 @@ setFileSystem: aFilesystem path: aPath
 	path := aPath
 %
 
-category: 'accessing'
-method: FileReference
-size
-	^ filesystem sizeOf: path
-%
-
 category: 'streams'
 method: FileReference
 writeStream
