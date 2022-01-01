@@ -399,14 +399,20 @@ RwGsTopazRowanToolTest >> testTopazListPackageNames [
 RwGsTopazRowanToolTest >> testTopazListProjects [
 	"return the list of loaded projects"
 
-	| x |
+	| minimumRequiredProjectList loadedProjectList |
+	minimumRequiredProjectList := #('Cypress' 'Rowan' 'RowanClientServices' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage').
 	RwGsTestImage resetTestProjectRegistry.
-	self
-		assert:
-			(x := Rowan gemstoneTools topaz listProjects sort)
-				=
-					#('Cypress' 'Rowan' 'RowanClientServices' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage')
-						sort
+	loadedProjectList := Rowan gemstoneTools topaz listProjects sort.
+	loadedProjectList = minimumRequiredProjectList sort
+		ifFalse: [ 
+			minimumRequiredProjectList
+				do: [ :projectName | 
+					loadedProjectList
+						remove: projectName
+						ifAbsent: [ 
+							self
+								assert: false
+								description: projectName printString , ' is expected to be present.' ] ] ]
 ]
 
 { #category : 'project support' }
