@@ -743,9 +743,9 @@ AbstractFileReference >> resolveString: aString [
 
 { #category : 'accessing' }
 AbstractFileReference >> size [
-	"Return the size of the file in bytes."
-	
-	^ self resolve size
+	"Return the size of the file in bytes -- Brute force"
+
+	^ GsFile sizeOfOnServer: self pathString
 ]
 
 { #category : 'streams' }
