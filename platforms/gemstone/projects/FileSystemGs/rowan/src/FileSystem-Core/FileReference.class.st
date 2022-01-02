@@ -421,6 +421,11 @@ FileReference >> setFileSystem: aFilesystem path: aPath [
 	path := aPath
 ]
 
+{ #category : 'accessing' }
+FileReference >> size [
+	^ filesystem sizeOf: path
+]
+
 { #category : 'streams' }
 FileReference >> writeStream [
 	
