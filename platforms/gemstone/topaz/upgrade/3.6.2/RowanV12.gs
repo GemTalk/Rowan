@@ -84505,7 +84505,9 @@ testNewClassVersion_session_method_unchanged_extension_method_protocol
 				behaviorAndMethodDictDo: [ :beh :methodDict | 
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
-	self assert: sessionMethodsSeen
+	self assert: sessionMethodsSeen.
+
+	self assert: false description: 'Force failure, since this test randomly fails ... session method implementation is not stable and not expected to work'
 %
 
 category: 'tests'
