@@ -261,5 +261,10 @@ Rowan class >> unpackagedProjectName [
 
 { #category : 'public' }
 Rowan class >> version [
-	^ '2.2.0' asRwSemanticVersionNumber
+	^ RwSemanticVersionNumber fromString: self versionString
+]
+
+{ #category : 'public' }
+Rowan class >> versionString [
+	^ '2.2.0'
 ]
