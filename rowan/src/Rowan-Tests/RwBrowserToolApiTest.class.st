@@ -3048,8 +3048,9 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 				behaviorAndMethodDictDo: [ :beh :methodDict | 
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
-	self assert: sessionMethodsSeen
+	self assert: sessionMethodsSeen.
 
+	self error: 'Force error, since this test randomly fails with an error ... session method implementation is not stable and not expected to work'
 ]
 
 { #category : 'tests' }
