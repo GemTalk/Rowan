@@ -3224,7 +3224,7 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_unchanged_extension_m
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self assert: sessionMethodsSeen.
 
-	self assert: false description: 'Force failure, since this test randomly fails ... session method implementation is not stable and not expected to work'
+	self error: 'Force error, since this test randomly fails with an error ... session method implementation is not stable and not expected to work'
 ]
 
 { #category : 'tests' }
