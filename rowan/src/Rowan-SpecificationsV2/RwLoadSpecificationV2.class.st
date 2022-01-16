@@ -633,6 +633,11 @@ RwLoadSpecificationV2 >> relativeRepositoryRoot: aRelativePathString [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecificationV2 >> removeComponentNamed: aComponentName [
+	self componentNames removeAllPresent: {aComponentName}
+]
+
+{ #category : 'accessing' }
 RwLoadSpecificationV2 >> removeComponentNames: anArray [
 	"remove from the existing component names"
 

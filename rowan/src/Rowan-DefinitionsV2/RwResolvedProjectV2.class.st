@@ -1339,6 +1339,7 @@ RwResolvedProjectV2 >> readProjectSetComponentNames: componentNames platformCond
 
 { #category : 'components' }
 RwResolvedProjectV2 >> removeComponentNamed: aComponentName [
+	self loadSpecification removeComponentNamed: aComponentName.
 	^ self _projectComponents removeComponentNamed: aComponentName
 ]
 

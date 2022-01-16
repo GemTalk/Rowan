@@ -66120,6 +66120,7 @@ readProjectSetComponentNames: componentNames platformConditionalAttributes: plat
 category: 'components'
 method: RwResolvedProjectV2
 removeComponentNamed: aComponentName
+	self loadSpecification removeComponentNamed: aComponentName.
 	^ self _projectComponents removeComponentNamed: aComponentName
 %
 
@@ -88714,6 +88715,12 @@ relativeRepositoryRoot: aRelativePathString
 	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 
 	relativeRepositoryRoot := aRelativePathString
+%
+
+category: 'accessing'
+method: RwLoadSpecificationV2
+removeComponentNamed: aComponentName
+	self componentNames removeAllPresent: {aComponentName}
 %
 
 category: 'accessing'
