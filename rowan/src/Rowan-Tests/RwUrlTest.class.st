@@ -35,8 +35,7 @@ RwUrlTest >> sampleFileUrlStrings [
 	^ {
 		{ 'file:/home/dhenrich/_home/shared/repos/rowan/sample/' . '/home/dhenrich/_home/shared/repos/rowan/sample/' }.
 		{ 'file:/home/dhenrich/_home/shared/repos/rowan/sample/spec.ston' . '/home/dhenrich/_home/shared/repos/rowan/sample/spec.ston' }.
-		{ 'file:$GS_HOME/shared/repos/rowan/sample/' . '$GS_HOME/shared/repos/rowan/sample/' }.
-		{ 'file:$GS_HOME/shared/repos/rowan/sample/spec.ston' . '$GS_HOME/shared/repos/rowan/sample/spec.ston' }.
+		{ 'file:$GEMSTONE/shared/repos/rowan/sample/spec.ston' . '$GEMSTONE/shared/repos/rowan/sample/spec.ston' }.
 	}
 ]
 
