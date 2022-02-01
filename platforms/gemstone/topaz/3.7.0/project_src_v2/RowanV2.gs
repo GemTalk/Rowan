@@ -64152,15 +64152,16 @@ gitstatusIn: gitRepoPath with: args
 
 category: 'smalltalk api'
 method: RwGitTool
-isGitHome: dirPath
-	"Answer true if the given directory path is the home directory for a git repository"
+isGitHome: homeReferenceOrPath
+	"Answer true if the given homeReferenceOrPath is the home directory for a git repository"
 
-	| dirReference |
-	dirReference := dirPath asFileReference.
-	^ (self gitPresentIn: dirReference pathString)
-		and: [ 
-			(self gitrevparseShowTopLevelIn: dirReference pathString) trimBoth
-				asFileReference = dirReference ]
+	| homeFileReference expandedHomePath expandedGitRootPath |
+	homeFileReference := homeReferenceOrPath asFileReference.
+	expandedHomePath := self readlink: homeFileReference pathString.
+	expandedGitRootPath := self
+		readlink: (self gitrevparseShowTopLevelIn: homeFileReference pathString) trimBoth.
+	^ (self gitPresentIn: expandedGitRootPath)
+		and: [ expandedHomePath = expandedGitRootPath ]
 %
 
 category: 'private'
