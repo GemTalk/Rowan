@@ -192,9 +192,9 @@ RwDefinedProject >> addPackageNamed: packageName toComponentNamed: componentName
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> addPackagesNamed: packageName toComponentNamed: componentName [
+RwDefinedProject >> addPackagesNamed: packageNames toComponentNamed: componentName [
 	^ self _concreteProject
-		addPackagesNamed: packageName
+		addPackagesNamed: packageNames
 		toComponentNamed: componentName
 ]
 
