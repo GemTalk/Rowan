@@ -217,11 +217,6 @@ RwProject >> currentBranchName [
 
 ]
 
-{ #category : 'accessing' }
-RwProject >> customConditionalAttributes: anArray [
-	self loadSpecification customConditionalAttributes: anArray
-]
-
 { #category : 'transitions' }
 RwProject >> defined [
 	^ RwDefinedFromResolvedProject fromLoadedProject: self
