@@ -349,7 +349,8 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 	| metadata className meta selector source categ |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
-	[ Metaclass3 _validateNewClassName: className asSymbol ]
+  "avoid asSymbol sent to className before error checks."
+	[ Metaclass3 _validateNewClassName: className ]
 		on: Error
 		do: [ :ex | self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
