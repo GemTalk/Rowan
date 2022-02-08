@@ -846,7 +846,8 @@ newMethodDefinitionFrom: anArray
 	| metadata className meta selector source categ |
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
-	[ Metaclass3 _validateNewClassName: className asSymbol ]
+  "avoid asSymbol sent to className before error checks."
+	[ Metaclass3 _validateNewClassName: className ]
 		on: Error
 		do: [ :ex | self error: 'Invalid class name ' , className printString ].
 	meta := anArray fourth first second notNil.
@@ -1116,18 +1117,33 @@ topazReadTonelFile: filePath envId: envId
 		Definition/redefinition of the class not implemented yet.
 		For topaz TFILE command"
 
-	| gsfile stream |
-	gsfile := GsFile openReadOnServer: filePath.
-	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
-	stream := ReadStreamPortable on: gsfile contents.
-	gsfile close.
-	[ self topazReadTonelStream: stream envId: envId ]
-		on: STONReaderError , RwTonelParseError
-		do: [ :ex | 
-			ex
-				addText:
-					(self _lineNumberStringForOffset: stream position fileName: filePath).
-			ex pass ]
+  | warningsEnabled |
+  warningsEnabled := Notification signallingEnabled .
+  [ 
+	  | gsfile stream errBlk warnBlk |
+    Notification enableSignalling . "compile warnings can be logged"
+	  gsfile := GsFile openReadOnServer: filePath.
+	  gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
+	  stream := ReadStreamPortable on: gsfile contents.
+	  gsfile close.
+		errBlk := [ :ex | 
+         ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
+			   ex pass ].
+    warnBlk := [ :warn| | str | 
+       str := warn asString .
+       ((str subStrings occurrencesOf: 'WARNING:') == 1 
+         and:[ str includesString: 'not optimized']) ifFalse:[
+         GsFile gciLogServer: warn asString . 
+       ].
+       warn resume 
+    ].
+	  [
+      self topazReadTonelStream: stream envId: envId 
+    ] onException: { STONReaderError . RwTonelParseError . Warning }
+		  do: { errBlk . errBlk . warnBlk } .
+  ] ensure:[ 
+    warningsEnabled ifFalse:[ Notification disableSignalling]
+  ]
 %
 
 category: 'topaz support'
