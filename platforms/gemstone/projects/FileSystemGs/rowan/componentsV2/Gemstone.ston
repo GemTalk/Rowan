@@ -1,16 +1,10 @@
 RwSimpleProjectLoadComponentV2 {
-	#name : 'Core',
-	#condition : 'gemstone-kernel',
+	#name : 'Gemstone',
+	#condition : 'gemstone',
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [
-		'FileSystem-Core',
-		'FileSystem-Disk',
-		'FileSystem-Memory',
-		'FileSystem-Path',
-		'Zinc-Character-Encoding-Core',
-		'Files',
-		'Network-UUID'
+		'FileSystem-GemStone-Kernel'
 	],
 	#comment : 'FileSystemGs component. For now all packages are expected to be loaded into Globals by SystemUser'
 }

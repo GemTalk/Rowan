@@ -88808,14 +88808,14 @@ crlf
 
 !		Instance methods for 'CharacterCollection'
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asFileReference
 
 	^ FileSystem disk referenceTo: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPath
 	"convert myself to a path"
@@ -88827,13 +88827,13 @@ asPath
 	^ FileSystem disk resolve: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asPathWith: anObject 
 	^ anObject pathFromString: self
 %
 
-category: '*filesystem-core'
+category: '*filesystem-gemstone-kernel'
 method: CharacterCollection
 asResolvedBy: aFileSystem
 	^ aFileSystem resolveString: self

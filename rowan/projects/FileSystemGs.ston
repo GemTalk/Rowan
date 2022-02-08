@@ -1,12 +1,13 @@
 RwEmbeddedLoadSpecificationV2 {
-	#specName : 'FileSystemGs',
-	#projectName : 'FileSystemGs',
+	#specName : 'FileSystemGsUpgrade',
+	#projectName : 'FileSystemGsUpgrade',
 	#projectAlias : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
 	#componentNames : [
 		'Core',
+		'Gemstone',
 		'Gemstone32x',
 		'Gemstone32-5',
 		'Gemstone35-',

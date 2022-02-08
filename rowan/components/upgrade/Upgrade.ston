@@ -1,6 +1,9 @@
 RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'upgrade/Upgrade',
 	#condition : 'upgrade',
+	#projectNames : [
+		'FileSystemGsUpgrade'
+	],
 	#componentNames : [
 		'common/platforms/gemstone/CoreUpgrade',
 		'common/platforms/gemstone36-/CoreUpgrade',

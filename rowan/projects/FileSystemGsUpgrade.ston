@@ -1,21 +1,15 @@
 RwEmbeddedLoadSpecificationV2 {
-	#specName : 'FileSystemGs',
-	#projectName : 'FileSystemGs',
+	#specName : 'FileSystemGsUpgrade',
+	#projectName : 'FileSystemGsUpgrade',
 	#projectAlias : 'Rowan',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
 	#componentNames : [
-		'Core',
 		'Gemstone',
-		'Gemstone32x',
-		'Gemstone32-5',
-		'Gemstone35-',
-		'Tests'
+		'Gemstone35-'
 	],
-	#customConditionalAttributes : [
-		'tests'
-	],
+	#customConditionalAttributes : [ ],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
@@ -24,5 +18,5 @@ RwEmbeddedLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : 'FileSystemGs for Rowan ... eventually to be replaced by FileSystemGs project (https://github.com/GemTalk/FileSystemGs)'
+	#comment : 'project reference for generating Rowan upgrade .gs files ... required GemStone kernel class extensions'
 }
