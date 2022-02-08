@@ -15,7 +15,8 @@ RwSimpleProjectLoadComponentV2 {
 		'common/Loader',
 		'common/Specifications',
 		'common/Tests',
-		'common/Tools'
+		'common/Tools',
+		'upgrade/Upgrade'
 	],
 	#packageNames : [ ],
 	#comment : 'top-level component for loading entire Rowan project.'
