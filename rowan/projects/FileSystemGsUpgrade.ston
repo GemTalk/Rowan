@@ -5,8 +5,10 @@ RwEmbeddedLoadSpecificationV2 {
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
+	#projectNames : [
+		'FileSystemGsUpgrade'
+	],
 	#componentNames : [
-		'Gemstone',
 		'Gemstone35-'
 	],
 	#customConditionalAttributes : [ ],

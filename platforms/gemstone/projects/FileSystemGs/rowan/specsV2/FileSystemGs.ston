@@ -7,7 +7,6 @@ RwEmbeddedLoadSpecificationV2 {
 	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
 	#componentNames : [
 		'Core',
-		'Gemstone',
 		'Gemstone32x',
 		'Gemstone32-5',
 		'Gemstone35-',

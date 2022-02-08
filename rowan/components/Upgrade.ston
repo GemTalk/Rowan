@@ -1,5 +1,5 @@
 RwSimpleProjectLoadComponentV2 {
-	#name : 'Rowan',
+	#name : 'Upgrade',
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
