@@ -1,9 +1,7 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'Rowan',
 	#condition : 'common',
-	#projectNames : [
-		'FileSystemGsUpgrade'
-	],
+	#projectNames : [ ],
 	#componentNames : [
 		'upgrade/Upgrade'
 	],
