@@ -6,20 +6,44 @@ Class {
 
 { #category : 'other' }
 RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension [
-"if we have loaded methods but no compiled methods add error to result"
-| res |
-	res := super _auditCategory: anExtentionCategory selectors:  (aClassOrMeta selectorsIn: anExtentionCategory) forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension.
-	aClassOrMeta isMeta 
-		ifTrue: [
-			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [res  add: (RwAuditDetail for: aLoadedClassExtension 
-								message:  'Missing expected class methods in the category ', ' #' , anExtentionCategory asString )   ].
-	] 	ifFalse: [
-			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ res  add: (RwAuditDetail for: aLoadedClassExtension 
-								message: 'Missing expected instances methods in the category' , ' #' , anExtentionCategory asString)   ].
-	].
-	^res
+	"if we have loaded methods but no compiled methods add error to result"
+
+	| res |
+	res := super
+		_auditCategory: anExtentionCategory
+		selectors: (aClassOrMeta selectorsIn: anExtentionCategory)
+		forBehavior: aClassOrMeta
+		loadedClass: aLoadedClassExtension.
+	aClassOrMeta isMeta
+		ifTrue: [ 
+			(aLoadedClassExtension loadedClassMethods notEmpty
+				and: [ (aClassOrMeta selectorsIn: anExtentionCategory) isEmpty ])
+				ifTrue: [ 
+					res
+						add:
+							((RwAuditDetail
+								for: aLoadedClassExtension
+								message:
+									'Missing expected class methods in the category ' , ' #'
+										, anExtentionCategory asString)
+								reason: #'missingCompiledMethodsForLoadedClassExtension';
+								behavior: aClassOrMeta;
+								yourself) ] ]
+		ifFalse: [ 
+			(aLoadedClassExtension loadedInstanceMethods notEmpty
+				and: [ (aClassOrMeta selectorsIn: anExtentionCategory) isEmpty ])
+				ifTrue: [ 
+					res
+						add:
+							((RwAuditDetail
+								for: aLoadedClassExtension
+								message:
+									'Missing expected instances methods in the category' , ' #'
+										, anExtentionCategory asString)
+								reason: #'missingCompiledMethodsForLoadedClassExtension';
+								behavior: aClassOrMeta;
+								yourself) ] ].
+	^ res
 ]
 
 { #category : 'other' }
@@ -32,8 +56,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 		ifNil: [ 
 			res
 				add:
-					(RwAuditDetail
+					(RwAuditClassDetail
 						for: aLoadedClassExtension
+						reason: #'missingGemStoneClassForLoadedClassExtension'
 						message: ' Class does not exists for loaded class extension') ].
 	aBehavior := aLoadedClassExtension handle.
 
@@ -59,10 +84,14 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 						ifTrue: [ 
 							res
 								add:
-									(RwAuditDetail
+									((RwAuditMethodCategoryDetail
 										for: aLoadedClassExtension
 										message:
-											'Missing instance method extension category named ' , extensionCategoryName) ] ].
+											'Missing instance method extension category named ' , extensionCategoryName)
+										reason: #'missingExtensionCategory';
+										category: extensionCategoryName;
+										behavior: aBehavior;
+										yourself) ] ].
 			categories := aBehavior class rwMethodCategories
 				ifNil: [ #() ]
 				ifNotNil: [ :catDict | catDict keys ].
@@ -81,10 +110,14 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 						ifTrue: [ 
 							res
 								add:
-									(RwAuditDetail
+									((RwAuditMethodCategoryDetail
 										for: aLoadedClassExtension
 										message:
-											'Missing class method extension category named ' , extensionCategoryName) ] ] ]
+											'Missing class method extension category named ' , extensionCategoryName)
+										reason: #'missingExtensionCategory';
+										category: extensionCategoryName;
+										behavior: aBehavior;
+										yourself) ] ] ]
 		ifFalse: [ 
 			aLoadedClassExtension loadedProject packageConvention = 'Rowan'
 				ifTrue: [ 
@@ -94,8 +127,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 						ifTrue: [ 
 							res
 								add:
-									(RwAuditDetail
+									(RwAuditClassDetail
 										for: aLoadedClassExtension
+										reason: #'emptyLoadedClassExtension'
 										message: 'The loaded class extension is empty') ] ]
 				ifFalse: [ 
 					aLoadedClassExtension loadedProject packageConvention = 'Monticello'

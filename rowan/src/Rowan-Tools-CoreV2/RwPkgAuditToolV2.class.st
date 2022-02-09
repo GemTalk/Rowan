@@ -18,6 +18,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 				add:
 					(RwAuditDetail
 						for: loadedPackage
+						reason: #'loadedPackageNotInRegistry'
 						message:
 							'The loaded package ' , loadedPackage name printString
 								, ' is not found in a package registry') ].
@@ -30,6 +31,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 				add:
 					(RwAuditDetail
 						for: loadedPackage
+						reason: #'loadedPackageInWrongRegistry'
 						message:
 							'The loaded package ' , loadedPackage name printString
 								, ' is registered in the wrong symbol dictionary ('
@@ -44,29 +46,39 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 				ifFalse: [ 
 					packageAuditDetail
 						add:
-							(RwAuditDetail
+							((RwAuditPackageClassSymbolDictionaryDetail
 								for: loadedPackage
 								message:
 									'The loaded class symbol dictionary name ' , classSymbolDictName printString
 										, ' does not match the loaded package symbol dictionary name '
-										, packageSymbolDictionaryName printString) ].
+										, packageSymbolDictionaryName printString)
+								reason: #'differentSymbolDictionaryForClassAndPackage';
+								loadedClass: aLoadedClass;
+								classSymbolDictionaryName: classSymbolDictName;
+								packageSymbolDictionaryName: packageSymbolDictionaryName;
+								yourself) ].
 			(self auditLoadedClass: aLoadedClass)
 				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
 		loadedClassExtensionsDo: [ :aLoadedClass | 
 			| classEtensionSymbolDictionaryName |
-			classEtensionSymbolDictionaryName := loadedPackageRegistry
-				_symbolDictionary name asString.
+			classEtensionSymbolDictionaryName := loadedPackageRegistry _symbolDictionary
+				name asString.
 			classEtensionSymbolDictionaryName = packageSymbolDictionaryName
 				ifFalse: [ 
 					packageAuditDetail
 						add:
-							(RwAuditDetail
+							((RwAuditPackageClassSymbolDictionaryDetail
 								for: loadedPackage
 								message:
-									'The loaded extenstion class symbol dictionary name '
+									'The loaded extension class symbol dictionary name '
 										, classEtensionSymbolDictionaryName printString
 										, ' does not match the loaded package symbol dictionary name '
-										, packageSymbolDictionaryName printString) ].
+										, packageSymbolDictionaryName printString)
+								reason: #'differentSymbolDictionaryForClassExtensionAndPackage';
+								loadedClass: aLoadedClass;
+								classSymbolDictionaryName: classEtensionSymbolDictionaryName;
+								packageSymbolDictionaryName: packageSymbolDictionaryName;
+								yourself) ].
 			(self auditLoadedClassExtension: aLoadedClass)
 				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ].
 	packageAuditDetail

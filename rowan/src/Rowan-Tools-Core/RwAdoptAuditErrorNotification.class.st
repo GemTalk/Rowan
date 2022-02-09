@@ -5,7 +5,8 @@ Class {
 		'className',
 		'isClassExtension',
 		'packageName',
-		'description'
+		'description',
+		'reason'
 	],
 	#category : 'Rowan-Tools-Core'
 }
@@ -85,4 +86,14 @@ RwAdoptAuditErrorNotification >> packageName [
 RwAdoptAuditErrorNotification >> packageName: aString [
 
 	packageName := aString
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> reason [
+	^reason
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> reason: object [
+	reason := object
 ]

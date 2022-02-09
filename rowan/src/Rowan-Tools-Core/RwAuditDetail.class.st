@@ -1,7 +1,15 @@
+"
+Audit failure detail for a class. 
+
+Reasons:
+	#loadedPackageNotInRegistry
+	#loadedPackageInWrongRegistry
+"
 Class {
 	#name : 'RwAuditDetail',
 	#superclass : 'Object',
 	#instVars : [
+		'reason',
 		'message',
 		'owner'
 	],
@@ -17,6 +25,18 @@ RwAuditDetail class >> for: anObject message: aString [
 			notify; 
 			yourself
 
+]
+
+{ #category : 'other' }
+RwAuditDetail class >> for: anObject reason: aSymbol message: aString [
+	"add error to results. print to file"
+
+	^ self new
+		owner: anObject;
+		reason: aSymbol;
+		message: aString;
+		notify;
+		yourself
 ]
 
 { #category : 'other' }
@@ -72,4 +92,14 @@ RwAuditDetail >> printOn: aStream [
 			nextPutAll: '>>';
 			nextPutAll: self message
 
+]
+
+{ #category : 'accessing' }
+RwAuditDetail >> reason [
+	^reason
+]
+
+{ #category : 'accessing' }
+RwAuditDetail >> reason: aSymbol [
+	reason := aSymbol
 ]
