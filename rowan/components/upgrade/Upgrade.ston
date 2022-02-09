@@ -8,6 +8,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/platforms/gemstone/CoreUpgrade',
 		'common/platforms/gemstone36-/CoreUpgrade',
 		'common/platforms/gemstone_gemstoneBase/ComponentsUpgrade',
+		'common/platforms/gemstone_gemstoneBase/Core',
 		'common/v2/v2Only/platforms/gemstone36-/Loader'
 	],
 	#comment : 'This component is used to create a .gs file that restores Rowan functionality immediately after running upgradeImage. The goal is to restore enough gemstone-specific functionality for Rowan to be able to reload itself.'
