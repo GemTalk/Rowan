@@ -710,6 +710,116 @@ RwProjectAuditToolTest >> testMissingMethods [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testNonIdenticalMethods_1 [
+	"Two 'method is not identical' audit errors:
+		RwClsAuditTool>>_auditRowanCategory:forBehavior:loadedClass:
+		RwClsExtensionAuditTool>>auditLoadedClassExtension:
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/799"
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit oldMethod newMethod loadedMethod componentName definedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'Rowan';
+		yourself.
+	definedProject resolve load.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+	oldMethod := theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: 'cat' 
+		packageName: packageName2.
+	loadedMethod :=  Rowan image loadedMethodForMethod: oldMethod.
+	newMethod := theClass
+		rwCompileMethod: 'foo "" ^''foo'''
+		category: 'cat'.
+"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+	loadedMethod handle: oldMethod.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit size equals: 1
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testNonIdenticalMethods_2 [
+	"Three 'method is not identical' audit errors:
+		RwClsAuditTool>>_auditSelector:forBehavior:loadedClass:
+		RwClsAuditTool>>_auditSelector:forBehavior:loadedClass:
+		RwClsExtensionAuditTool>>auditLoadedClassExtension:
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/799"
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit oldMethod newMethod loadedMethod componentName definedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'RowanHybrid';
+		yourself.
+	definedProject resolve load.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+	oldMethod := theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*', packageName2 asLowercase.
+	loadedMethod :=  Rowan image loadedMethodForMethod: oldMethod.
+	newMethod := theClass
+		rwCompileMethod: 'foo "" ^''foo'''
+		category: '*', packageName2 asLowercase.
+"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+	loadedMethod handle: oldMethod.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit size equals: 1
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testNotification [
 
 | packageTools projectName packageNames className packageName theClass fooMethod |
