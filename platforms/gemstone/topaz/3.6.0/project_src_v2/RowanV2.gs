@@ -63827,6 +63827,20 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 
 	"we already check verifying selectors that compiled method matches loaded method"
 
+	^ self
+		_auditLoadedMethod: aLoadedMethod
+		forBehavior: aClassOrMeta
+		loadedClass: aLoadedClassOrExtension
+		compiledMethodOnly: false
+%
+
+category: 'audit'
+method: RwClsAuditTool
+_auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension compiledMethodOnly: compiledMethodOnly
+	"verify that compiled method is present for each loaded class method. return nil if no error"
+
+	"we already check verifying selectors that compiled method matches loaded method"
+
 	| res |
 	res := self _result.
 	(aClassOrMeta compiledMethodAt: aLoadedMethod name otherwise: nil)
@@ -63860,21 +63874,24 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 										reason: #'differentMethodCategory';
 										loadedMethod: aLoadedMethod;
 										method: aMethod;
-										category: actual;
+										loadedCategory: actual;
+										category: expected;
 										behavior: aClassOrMeta;
 										yourself) ] ]
 				ifFalse: [ 
-					res
-						add:
-							((RwAuditMethodDetail
-								for: aLoadedClassOrExtension
-								message:
-									'Compiled method is not identical to loaded class method>>' , aLoadedMethod name)
-								reason: #'methodsNotIdentical';
-								loadedMethod: aLoadedMethod;
-								method: aMethod;
-								behavior: aClassOrMeta;
-								yourself) ] ].
+					compiledMethodOnly not
+						ifTrue: [ 
+							res
+								add:
+									((RwAuditMethodDetail
+										for: aLoadedClassOrExtension
+										message:
+											'Compiled method is not identical to loaded class method>>' , aLoadedMethod name)
+										reason: #'methodsNotIdentical';
+										loadedMethod: aLoadedMethod;
+										method: aMethod;
+										behavior: aClassOrMeta;
+										yourself) ] ] ].
 	^ res
 %
 
@@ -63894,12 +63911,14 @@ _auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 						do: [ :aLoadedClassExtension | 
 							(aLoadedClassExtension loadedMethodAt: aSelector isMeta: aBehavior isMeta)
 								ifNotNil: [ :aLoadedMethod | 
+									"full audit of loaded method has been performed in auditLoadedClass, but we do need to audit category and compiled method"
 									res
 										addAll:
 											(self
 												_auditLoadedMethod: aLoadedMethod
 												forBehavior: aBehavior
-												loadedClass: aLoadedClassExtension).
+												loadedClass: aLoadedClassExtension
+												compiledMethodOnly: true).
 									foundExtensionClass := true ] ].
 					foundExtensionClass
 						ifFalse: [ 
@@ -63927,12 +63946,14 @@ _auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 												behavior: aBehavior;
 												yourself) ] ] ]
 				ifNotNil: [ :aLoadedMethod | 
+					"full audit of loaded method has been performed in auditLoadedClass, but we do need to audit category and compiled method"
 					res
 						addAll:
 							(self
 								_auditLoadedMethod: aLoadedMethod
 								forBehavior: aBehavior
-								loadedClass: aLoadedClass) ] ].
+								loadedClass: aLoadedClass
+								compiledMethodOnly: true) ] ].
 	^ res
 %
 
@@ -64040,10 +64061,12 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 					"don't record audit error"
 					{} ] ]
 		ifNotNil: [ :loadedMethod | 
+			"full audit of loaded method has been performed in auditLoadedClass, but we do need to audit category and compiled method"
 			self
 				_auditLoadedMethod: loadedMethod
 				forBehavior: aBehavior
-				loadedClass: aLoadedClass ]
+				loadedClass: aLoadedClass
+				compiledMethodOnly: true ]
 %
 
 category: 'audit'
