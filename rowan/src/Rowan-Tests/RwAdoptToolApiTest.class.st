@@ -957,7 +957,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: expectedFailure size = 1.
 	self assert: expectedFailure first owner name =  'AdoptedClass'.
 	self assert: expectedFailure first owner classCategory = 'Adopt-Core'.
-	self assert: (expectedFailure first message matchPattern: { 'Extension category name' . $* . 'must not match class package name.'})
+	self assert: expectedFailure first reason equals: #'rowanHybridExtensionCategoryMatchesClassPackage'
 ]
 
 { #category : 'tests' }

@@ -6815,13 +6815,13 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	classAudit := ((audit at: packageName1) at: className1)
 		collect: [ :each | each message ].
 	self assert: classAudit size = 1.
-	self assert: (classAudit includes: 'Missing loaded method>>test').
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9TestCase>>test').
 
 	classAudit := ((audit at: packageName2) at: className2)
 		collect: [ :each | each message ].
 	self assert: classAudit size = 2.
-	self assert: (classAudit includes: 'Missing loaded method>>foo').
-	self assert: (classAudit includes: 'Missing loaded method>>bar').
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1>>foo').
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1 class>>bar').
 
 "run reports"
 	{(Rowan gemstoneTools topaz

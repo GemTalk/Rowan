@@ -59,7 +59,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 					(RwAuditClassDetail
 						for: aLoadedClassExtension
 						reason: #'missingGemStoneClassForLoadedClassExtension'
-						message: ' Class does not exists for loaded class extension') ].
+						message:
+							' Class does not exists for loaded class extension: '
+								, aLoadedClassExtension name) ].
 	aBehavior := aLoadedClassExtension handle.
 
 	aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
@@ -87,7 +89,8 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 									((RwAuditMethodCategoryDetail
 										for: aLoadedClassExtension
 										message:
-											'Missing instance method extension category named ' , extensionCategoryName)
+											'Missing instance method extension category named ' , extensionCategoryName
+												, ' for: ' , aLoadedClassExtension name)
 										reason: #'missingExtensionCategory';
 										category: extensionCategoryName;
 										behavior: aBehavior;
@@ -113,7 +116,8 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 									((RwAuditMethodCategoryDetail
 										for: aLoadedClassExtension
 										message:
-											'Missing class method extension category named ' , extensionCategoryName)
+											'Missing class method extension category named ' , extensionCategoryName
+												, ' for: ' , aLoadedClassExtension name)
 										reason: #'missingExtensionCategory';
 										category: extensionCategoryName;
 										behavior: aBehavior;
@@ -130,7 +134,8 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 									(RwAuditClassDetail
 										for: aLoadedClassExtension
 										reason: #'emptyLoadedClassExtension'
-										message: 'The loaded class extension is empty') ] ]
+										message:
+											'The loaded class extension is empty for: ' , aLoadedClassExtension name) ] ]
 				ifFalse: [ 
 					aLoadedClassExtension loadedProject packageConvention = 'Monticello'
 						ifTrue: [ self error: 'Monticlello package conventions not yet supported' ].
