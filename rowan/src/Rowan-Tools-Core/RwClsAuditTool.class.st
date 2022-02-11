@@ -235,14 +235,7 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 					(Rowan image loadedClassExtensionsForClass: aBehavior)
 						do: [ :aLoadedClassExtension | 
 							(aLoadedClassExtension loadedMethodAt: aSelector isMeta: aBehavior isMeta)
-								ifNotNil: [ :aLoadedMethod | 
-									res
-										addAll:
-											(self
-												_auditLoadedMethod: aLoadedMethod
-												forBehavior: aBehavior
-												loadedClass: aLoadedClassExtension).
-									foundExtensionClass := true ] ].
+								ifNotNil: [ :aLoadedMethod | foundExtensionClass := true ] ].
 					foundExtensionClass
 						ifFalse: [ 
 							| notification |
@@ -269,12 +262,8 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 												behavior: aBehavior;
 												yourself) ] ] ]
 				ifNotNil: [ :aLoadedMethod | 
-					res
-						addAll:
-							(self
-								_auditLoadedMethod: aLoadedMethod
-								forBehavior: aBehavior
-								loadedClass: aLoadedClass) ] ].
+					"noop ... every loaded method in the receiver is audited by auditLoadedClass:"
+					 ] ].
 	^ res
 ]
 
@@ -380,10 +369,8 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 					"don't record audit error"
 					{} ] ]
 		ifNotNil: [ :loadedMethod | 
-			self
-				_auditLoadedMethod: loadedMethod
-				forBehavior: aBehavior
-				loadedClass: aLoadedClass ]
+			"noop ... every loaded method in the receiver is audited by auditLoadedClass:"
+			 ]
 ]
 
 { #category : 'audit' }
