@@ -63,9 +63,8 @@ RwAuditDetail >> message: aString [
 { #category : 'other' }
 RwAuditDetail >> notify [
 
-	GsFile gciLogServer: self message,'  ', self owner name asString.
-	Notification signal: self message asString,'  ', self owner name asString.
-
+	GsFile gciLogServer: self message.
+	Notification signal: self message.
 ]
 
 { #category : 'other' }

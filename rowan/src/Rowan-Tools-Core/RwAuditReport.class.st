@@ -19,8 +19,7 @@ RwAuditReport class >> for: anObject [
 { #category : 'other' }
 RwAuditReport >> log [
 
-	GsFile gciLogClient: '  -- Auditing ', owner prettyName.
-
+	GsFile gciLogClient: '==== Auditing ', owner prettyName.
 ]
 
 { #category : 'other' }
