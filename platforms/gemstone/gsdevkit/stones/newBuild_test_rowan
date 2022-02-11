@@ -2,6 +2,9 @@ set -e
 
 . defStone.env
 
+# make sure superdoit_solo and superdoit_stone are found in right place for rowan_tests_stats_361 scripts for now
+export PATH=$GS_HOME/shared/repos/superDoit/bin/:$PATH
+
 vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
