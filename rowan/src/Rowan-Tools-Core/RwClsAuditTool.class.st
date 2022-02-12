@@ -250,7 +250,7 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 									((RwAuditMethodDetail
 										for: aLoadedClassOrExtension
 										message:
-											'Compiled method is not identical to loaded class method: '
+											'Compiled method is not identical to loaded method: '
 												, aClassOrMeta printString , '>>' , aLoadedMethod selector)
 										reason: #'methodsNotIdentical';
 										loadedMethod: aLoadedMethod;
