@@ -753,11 +753,22 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 	theClass
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*', packageName2 asLowercase.
+	theClass class
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*', packageName2 asLowercase.
 "simulate upgradeImage on a kernel class (i.e., remove method and compile new method without touching Rowan metadata"
 "1. remove method from theClass, leaving the oldLoadedMethod intact"
 	theClass removeSelector: #foo.
+	theClass class removeSelector: #foo.
 "2. install a new compiledMethod leaving the oldLoadedMethod intact"
 	theClass
+		compileMethod:  'foo ^''foo'''
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	theClass class
 		compileMethod:  'foo ^''foo'''
 		dictionaries: GsCurrentSession currentSession symbolList
 		category: ('*', packageName2 asLowercase) asSymbol
@@ -767,45 +778,39 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 "validate that we've got 'Missing loaded method' and 'compiled method is not identical to loaded class method' audit errors"
 	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
 	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason ]) asArray sort.
-	self assert: reasons equals: #(methodsNotIdentical missingLoadedMethod) sort.
-
+	self assert: reasons equals: #(methodsNotIdentical missingLoadedMethod methodsNotIdentical missingLoadedMethod) sort.
 "analyze"
-	candidateMap := StringKeyValueDictionary new.
+	candidateMap := IdentityKeyValueDictionary new.
 	audit keysAndValuesDo: [:packageName :auditReport |
 		auditReport keysAndValuesDo: [:theClassName :auditDetails |
 			| methodsNotIdenticalMap |
-methodsNotIdenticalMap := Dictionary new.
+			methodsNotIdenticalMap := IdentityKeyValueDictionary new.
 			(auditDetails select: [:auditDetail | auditDetail reason == #methodsNotIdentical ])
-				do: [:auditDetail | methodsNotIdenticalMap at: auditDetail selector put: auditDetail].	
+				do: [:auditDetail | 
+					(methodsNotIdenticalMap at: auditDetail behavior ifAbsentPut: [SymbolKeyValueDictionary new])
+						at: auditDetail selector put: auditDetail].	
 			(auditDetails select: [:auditDetail | auditDetail reason == #missingLoadedMethod]) 
 				do: [:auditDetail | 
-					(methodsNotIdenticalMap includesKey: auditDetail selector) 
+					((methodsNotIdenticalMap includesKey: auditDetail behavior) and: [(methodsNotIdenticalMap at: auditDetail behavior) includesKey: auditDetail selector])
 						ifTrue: [
-							(candidateMap at: theClassName ifAbsentPut: [ Dictionary new])
-								at: #missingLoadedMethodDetail put: auditDetail;
-								at: #methodsNotIdenticalDetail put: (methodsNotIdenticalMap at: auditDetail selector) ] ] ] ].
-true
-	ifTrue: [
-		"repair using candidate map"
-		candidateMap keysAndValuesDo: [:theClassName :detailDict |
-			| aClass methodsNotIdenticalDetail theSelector |
-			aClass := Rowan globalNamed: theClassName.
+							((candidateMap at: auditDetail behavior ifAbsentPut: [ SymbolKeyValueDictionary new])
+								at: auditDetail selector ifAbsentPut: [Dictionary new])
+									at: #missingLoadedMethodDetail put: auditDetail;
+									at: #methodsNotIdenticalDetail put: ((methodsNotIdenticalMap at: auditDetail behavior) at: auditDetail selector) ] ] ] ].
+	"repair using candidate map"
+	candidateMap keysAndValuesDo: [:theBehavior :selectorDict |
+		selectorDict keysAndValuesDo: [:theSelector :detailDict |
+			| methodsNotIdenticalDetail  |
 			methodsNotIdenticalDetail := detailDict at: #methodsNotIdenticalDetail.
-			loadedClass :=  (Rowan image loadedClassExtensionsForClass: aClass) any.
-			theSelector := methodsNotIdenticalDetail selector.
-			theMethod := aClass compiledMethodAt: theSelector.
+			loadedClass :=  (Rowan image loadedClassExtensionsForClass: theBehavior theNonMetaClass) any.
+			theMethod := theBehavior compiledMethodAt: theSelector.
 			self assert: theMethod == methodsNotIdenticalDetail method.
-			loadedMethod := loadedClass loadedInstanceMethods at: theSelector.
+			loadedMethod := theBehavior isMeta
+				ifTrue: [ loadedClass loadedClassMethods at: theSelector ]
+				ifFalse: [ loadedClass loadedInstanceMethods at: theSelector ].
 			self assert: loadedMethod == methodsNotIdenticalDetail loadedMethod.
 			loadedMethod handle: theMethod.
-			theMethod _rowanPackageInfo: loadedMethod ] ]
-	ifFalse: [
-		"repair"
-		loadedClass := (Rowan image loadedClassExtensionsForClass: theClass) any.
-		theMethod := theClass compiledMethodAt: #foo.
-		loadedMethod := loadedClass loadedInstanceMethods at: #foo.
-		loadedMethod handle: theMethod.
-		theMethod _rowanPackageInfo: loadedMethod ].
+			theMethod _rowanPackageInfo: loadedMethod ] ].
 
 "validate"
 	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
