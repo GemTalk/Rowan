@@ -202,7 +202,9 @@ RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta lo
 RwClsAuditTool >> _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension compiledMethodOnly: compiledMethodOnly [
 	"verify that compiled method is present for each loaded class method. return nil if no error"
 
-	"we already check verifying selectors that compiled method matches loaded method"
+	"compiledMethodOnly
+		if true - the compiled method has already been checked for identity
+		if false - we need to check compiled method for identity"
 
 	| res |
 	res := self _result.

@@ -710,6 +710,78 @@ RwProjectAuditToolTest >> testMissingMethods [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRepair [
+	"It is possible to get two VALID audit errors for the same method, 
+		which complicates the algorithm used to repair the audit method
+		during upgrade (see internal bugs 49709 and 49814). This test
+		aims to reproduce the audit errors and validate the audit algorthm.
+	"
+
+	"related to https://github.com/GemTalk/Rowan/issues/799"
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit componentName definedProject reasons loadedClass theMethod loadedMethod |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'RowanHybrid';
+		yourself.
+	definedProject resolve load.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+"add a method and create Rowan metadata"
+	theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*', packageName2 asLowercase.
+"simulate upgradeImage on a kernel class (i.e., remove method and compile new method without touching Rowan metadata"
+"1. remove method from theClass, leaving the oldLoadedMethod intact"
+	theClass removeSelector: #foo.
+"2. install a new compiledMethod leaving the oldLoadedMethod intact"
+	theClass
+		compileMethod:  'foo ^''foo'''
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+"validate that we've got 'Missing loaded method' and 'compiled method is not identical to loaded class method' audit errors"
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason ]) asArray sort.
+	self assert: reasons equals: #(methodsNotIdentical missingLoadedMethod) sort.
+
+"repair"
+	loadedClass := (Rowan image loadedClassExtensionsForClass: theClass) any.
+	theMethod := theClass compiledMethodAt: #foo.
+	loadedMethod := loadedClass loadedInstanceMethods at: #foo.
+	loadedMethod handle: theMethod.
+	theMethod _rowanPackageInfo: loadedMethod.
+
+"validate"
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit isEmpty
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testNonIdenticalMethods_1 [
 	"Two 'method is not identical' audit errors:
 		RwClsAuditTool>>_auditRowanCategory:forBehavior:loadedClass:
