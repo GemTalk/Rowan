@@ -719,7 +719,7 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 
 	"related to https://github.com/GemTalk/Rowan/issues/799"
 
-	| packageTools projectName packageNames className packageName1 packageName2 theClass audit componentName definedProject reasons loadedClass theMethod loadedMethod |
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit componentName definedProject reasons loadedClass theMethod loadedMethod candidateMap |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -769,12 +769,43 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason ]) asArray sort.
 	self assert: reasons equals: #(methodsNotIdentical missingLoadedMethod) sort.
 
-"repair"
-	loadedClass := (Rowan image loadedClassExtensionsForClass: theClass) any.
-	theMethod := theClass compiledMethodAt: #foo.
-	loadedMethod := loadedClass loadedInstanceMethods at: #foo.
-	loadedMethod handle: theMethod.
-	theMethod _rowanPackageInfo: loadedMethod.
+"analyze"
+	candidateMap := StringKeyValueDictionary new.
+	audit keysAndValuesDo: [:packageName :auditReport |
+		auditReport keysAndValuesDo: [:theClassName :auditDetails |
+			| methodsNotIdenticalMap |
+methodsNotIdenticalMap := Dictionary new.
+			(auditDetails select: [:auditDetail | auditDetail reason == #methodsNotIdentical ])
+				do: [:auditDetail | methodsNotIdenticalMap at: auditDetail selector put: auditDetail].	
+			(auditDetails select: [:auditDetail | auditDetail reason == #missingLoadedMethod]) 
+				do: [:auditDetail | 
+					(methodsNotIdenticalMap includesKey: auditDetail selector) 
+						ifTrue: [
+							(candidateMap at: theClassName ifAbsentPut: [ Dictionary new])
+								at: #missingLoadedMethodDetail put: auditDetail;
+								at: #methodsNotIdenticalDetail put: (methodsNotIdenticalMap at: auditDetail selector) ] ] ] ].
+true
+	ifTrue: [
+		"repair using candidate map"
+		candidateMap keysAndValuesDo: [:theClassName :detailDict |
+			| aClass methodsNotIdenticalDetail theSelector |
+			aClass := Rowan globalNamed: theClassName.
+			methodsNotIdenticalDetail := detailDict at: #methodsNotIdenticalDetail.
+			loadedClass :=  (Rowan image loadedClassExtensionsForClass: aClass) any.
+			theSelector := methodsNotIdenticalDetail selector.
+			theMethod := aClass compiledMethodAt: theSelector.
+			self assert: theMethod == methodsNotIdenticalDetail method.
+			loadedMethod := loadedClass loadedInstanceMethods at: theSelector.
+			self assert: loadedMethod == methodsNotIdenticalDetail loadedMethod.
+			loadedMethod handle: theMethod.
+			theMethod _rowanPackageInfo: loadedMethod ] ]
+	ifFalse: [
+		"repair"
+		loadedClass := (Rowan image loadedClassExtensionsForClass: theClass) any.
+		theMethod := theClass compiledMethodAt: #foo.
+		loadedMethod := loadedClass loadedInstanceMethods at: #foo.
+		loadedMethod handle: theMethod.
+		theMethod _rowanPackageInfo: loadedMethod ].
 
 "validate"
 	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
