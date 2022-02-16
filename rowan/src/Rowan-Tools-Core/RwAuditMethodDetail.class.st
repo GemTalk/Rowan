@@ -52,7 +52,7 @@ RwAuditMethodDetail >> loadedCategory: object [
 ]
 
 { #category : 'accessing' }
-RwAuditMethodDetail >> loadedClassOrClassExtenstion [
+RwAuditMethodDetail >> loadedClassOrClassExtension [
 	^ self owner
 ]
 

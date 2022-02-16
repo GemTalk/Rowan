@@ -63893,7 +63893,7 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 							res
 								add:
 									((RwAuditMethodDetail
-										for: aClassOrMeta
+										for: aLoadedClassOrExtension
 										message:
 											'Mismatched method category (expected: ' , expected printString , ' actual: '
 												, actual printString , '): ' , aClassOrMeta printString , '>>'
@@ -63913,8 +63913,8 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 									((RwAuditMethodDetail
 										for: aLoadedClassOrExtension
 										message:
-											'Compiled method is not identical to loaded method: '
-												, aClassOrMeta printString , '>>' , aLoadedMethod selector)
+											'Compiled method is not identical to loaded method: ' , aClassOrMeta printString
+												, '>>' , aLoadedMethod selector)
 										reason: #'methodsNotIdentical';
 										loadedMethod: aLoadedMethod;
 										method: aMethod;
@@ -68395,7 +68395,7 @@ loadedCategory: object
 
 category: 'accessing'
 method: RwAuditMethodDetail
-loadedClassOrClassExtenstion
+loadedClassOrClassExtension
 	^ self owner
 %
 
