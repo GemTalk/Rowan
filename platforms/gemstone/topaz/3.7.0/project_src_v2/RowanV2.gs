@@ -63860,7 +63860,9 @@ method: RwClsAuditTool
 _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension compiledMethodOnly: compiledMethodOnly
 	"verify that compiled method is present for each loaded class method. return nil if no error"
 
-	"we already check verifying selectors that compiled method matches loaded method"
+	"compiledMethodOnly
+		if true - the compiled method has already been checked for identity
+		if false - we need to check compiled method for identity"
 
 	| res |
 	res := self _result.
@@ -63908,7 +63910,7 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 									((RwAuditMethodDetail
 										for: aLoadedClassOrExtension
 										message:
-											'Compiled method is not identical to loaded class method: '
+											'Compiled method is not identical to loaded method: '
 												, aClassOrMeta printString , '>>' , aLoadedMethod selector)
 										reason: #'methodsNotIdentical';
 										loadedMethod: aLoadedMethod;
@@ -63957,6 +63959,8 @@ _auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 								yourself.
 							notification signal
 								ifTrue: [ 
+(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
+ifTrue: [ self halt ].
 									res
 										add:
 											((RwAuditMethodDetail
@@ -64076,6 +64080,8 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				yourself.
 			notification signal
 				ifTrue: [ 
+(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
+ifTrue: [ self halt ].
 					{((RwAuditMethodDetail
 						for: aLoadedClass
 						message:
@@ -73639,7 +73645,7 @@ loadedMethodForMethod: compiledMethod
 		ifAbsent: [ 
 			self
 				error:
-					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
+					'No loadedMethod found for the compiled method ' , compiledMethod printString ]
 %
 
 category: 'querying'
