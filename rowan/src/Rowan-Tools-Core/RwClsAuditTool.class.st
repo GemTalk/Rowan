@@ -422,7 +422,8 @@ RwClsAuditTool >> _auditSelector: aSelector inCategory: category forBehavior: aB
 				gciLogServer:
 					'**NOTE** no method or loaded method found for selector '
 						, aSelector printString , 'in category ' , category , ' for class '
-						, aBehavior printString ].
+						, aBehavior printString.
+			^ {} ].
 	^ (Rowan image loadedMethodForMethod: compiledMethod ifAbsent: [  ])
 		ifNil: [ 
 			| notification |
