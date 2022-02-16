@@ -63692,8 +63692,11 @@ _auditCategory: category selectors: aSelectorSet forBehavior: aBehavior loadedCl
 	res := self _result.
 	aSelectorSet
 		do: [ :aSelector | 
-			(self _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass)
-				ifNotNil: [ :aRes | res addAll: aRes ] ].
+			(self
+				_auditSelector: aSelector
+				inCategory: category
+				forBehavior: aBehavior
+				loadedClass: aLoadedClass) ifNotNil: [ :aRes | res addAll: aRes ] ].
 	^ res
 %
 
@@ -63959,20 +63962,27 @@ _auditRowanCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 								yourself.
 							notification signal
 								ifTrue: [ 
-(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
-ifTrue: [ self halt ].
-									res
-										add:
-											((RwAuditMethodDetail
-												for: aLoadedClass
-												message:
-													'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
-												reason: #'missingLoadedMethod';
-												loadedMethod: nil;
-												category: category;
-												selector: aSelector;
-												behavior: aBehavior;
-												yourself) ] ] ]
+									(aBehavior compiledMethodAt: aSelector otherwise: nil)
+										ifNil: [ 
+											"interesting anomaly, but not necessarily a Rowan corruption issue"
+											GsFile
+												gciLogServer:
+													'**NOTE** no method or loaded method found for selector '
+														, aSelector printString , 'in category ' , category
+														, ' for class ' , aBehavior printString ]
+										ifNotNil: [ 
+											res
+												add:
+													((RwAuditMethodDetail
+														for: aLoadedClass
+														message:
+															'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
+														reason: #'missingLoadedMethod';
+														loadedMethod: nil;
+														category: category;
+														selector: aSelector;
+														behavior: aBehavior;
+														yourself) ] ] ] ]
 				ifNotNil: [ :aLoadedMethod | 
 					"full audit of loaded method has been performed in auditLoadedClass, but we do need to audit category and compiled method"
 					res
@@ -64060,7 +64070,7 @@ _auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedC
 
 category: 'audit'
 method: RwClsAuditTool
-_auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
+_auditSelector: aSelector inCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 	"#rentamed from _auidtClassSelector since functionality is same for instanance and class
  verify compiled method matches loaded method reference return nil if no problem found"
 
@@ -64080,18 +64090,26 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 				yourself.
 			notification signal
 				ifTrue: [ 
-(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
-ifTrue: [ self halt ].
-					{((RwAuditMethodDetail
-						for: aLoadedClass
-						message:
-							'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
-						reason: #'missingLoadedMethod';
-						loadedMethod: nil;
-						method: compiledMethod;
-						selector: aSelector;
-						behavior: aBehavior;
-						yourself)} ]
+					(aBehavior compiledMethodAt: aSelector otherwise: nil)
+						ifNil: [ 
+							"interesting anomaly, but not necessarily a Rowan corruption issue"
+							GsFile
+								gciLogServer:
+									'**NOTE** no method or loaded method found for selector '
+										, aSelector printString , 'in category ' , category , ' for class '
+										, aBehavior printString.
+							{} ]
+						ifNotNil: [ 
+							{((RwAuditMethodDetail
+								for: aLoadedClass
+								message:
+									'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
+								reason: #'missingLoadedMethod';
+								loadedMethod: nil;
+								method: compiledMethod;
+								selector: aSelector;
+								behavior: aBehavior;
+								yourself)} ] ]
 				ifFalse: [ 
 					"don't record audit error"
 					{} ] ]
