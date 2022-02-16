@@ -311,7 +311,7 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 													'**NOTE** no method or loaded method found for selector '
 														, aSelector printString , 'in category ' , category
 														, ' for class ' , aBehavior printString ]
-										ifNotNil: [ 
+										ifNotNil: [:method | 
 											res
 												add:
 													((RwAuditMethodDetail
@@ -320,6 +320,7 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 															'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
 														reason: #'missingLoadedMethod';
 														loadedMethod: nil;
+														method: method;
 														category: category;
 														selector: aSelector;
 														behavior: aBehavior;
@@ -414,7 +415,14 @@ RwClsAuditTool >> _auditSelector: aSelector inCategory: category forBehavior: aB
  verify compiled method matches loaded method reference return nil if no problem found"
 
 	| compiledMethod |
-	compiledMethod := aBehavior compiledMethodAt: aSelector otherwise: nil.
+	(compiledMethod := aBehavior compiledMethodAt: aSelector otherwise: nil)
+		ifNil: [ 
+			"interesting anomaly, but not necessarily a Rowan corruption issue"
+			GsFile
+				gciLogServer:
+					'**NOTE** no method or loaded method found for selector '
+						, aSelector printString , 'in category ' , category , ' for class '
+						, aBehavior printString ].
 	^ (Rowan image loadedMethodForMethod: compiledMethod ifAbsent: [  ])
 		ifNil: [ 
 			| notification |
@@ -429,26 +437,16 @@ RwClsAuditTool >> _auditSelector: aSelector inCategory: category forBehavior: aB
 				yourself.
 			notification signal
 				ifTrue: [ 
-					(aBehavior compiledMethodAt: aSelector otherwise: nil)
-						ifNil: [ 
-							"interesting anomaly, but not necessarily a Rowan corruption issue"
-							GsFile
-								gciLogServer:
-									'**NOTE** no method or loaded method found for selector '
-										, aSelector printString , 'in category ' , category , ' for class '
-										, aBehavior printString.
-							{} ]
-						ifNotNil: [ 
-							{((RwAuditMethodDetail
-								for: aLoadedClass
-								message:
-									'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
-								reason: #'missingLoadedMethod';
-								loadedMethod: nil;
-								method: compiledMethod;
-								selector: aSelector;
-								behavior: aBehavior;
-								yourself)} ] ]
+					{((RwAuditMethodDetail
+						for: aLoadedClass
+						message:
+							'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
+						reason: #'missingLoadedMethod';
+						loadedMethod: nil;
+						method: compiledMethod;
+						selector: aSelector;
+						behavior: aBehavior;
+						yourself)} ]
 				ifFalse: [ 
 					"don't record audit error"
 					{} ] ]
