@@ -300,6 +300,8 @@ RwClsAuditTool >> _auditRowanCategory: category forBehavior: aBehavior loadedCla
 								yourself.
 							notification signal
 								ifTrue: [ 
+(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
+ifTrue: [ self halt ].
 									res
 										add:
 											((RwAuditMethodDetail
@@ -417,6 +419,8 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 				yourself.
 			notification signal
 				ifTrue: [ 
+(aBehavior == Class and: [aSelector == #subclass:instVarNames:classVars:classInstVars:poolDictionaries:category:inDictionary:options:])
+ifTrue: [ self halt ].
 					{((RwAuditMethodDetail
 						for: aLoadedClass
 						message:
