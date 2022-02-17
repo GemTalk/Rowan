@@ -63640,23 +63640,19 @@ auditLoadedClass: aLoadedClass
 						loadedClass: aLoadedClass) ].
 	aLoadedClass
 		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
-				ifNil: [ 
-					res
-						addAll:
-							(self
-								_auditLoadedMethod: aLoadedMethod
-								forBehavior: aBehavior
-								loadedClass: loadedClass) ] ]
+			res
+				addAll:
+					(self
+						_auditLoadedMethod: aLoadedMethod
+						forBehavior: aBehavior
+						loadedClass: loadedClass) ]
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil)
-				ifNil: [ 
-					res
-						addAll:
-							(self
-								_auditLoadedMethod: aLoadedMethod
-								forBehavior: aBehavior class
-								loadedClass: loadedClass) ] ].
+			res
+				addAll:
+					(self
+						_auditLoadedMethod: aLoadedMethod
+						forBehavior: aBehavior class
+						loadedClass: loadedClass) ].
 	^ res
 %
 
