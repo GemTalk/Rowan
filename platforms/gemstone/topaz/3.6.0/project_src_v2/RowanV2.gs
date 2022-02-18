@@ -63879,31 +63879,31 @@ _auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoaded
 						behavior: aClassOrMeta;
 						yourself) ]
 		ifNotNil: [ :aMethod | 
-			aMethod == aLoadedMethod handle
+			compiledMethodOnly not
 				ifTrue: [ 
-					| expected actual |
-					((expected := aLoadedMethod methodCategory)
-						equalsNoCase:
-							(actual := aClassOrMeta categoryOfSelector: aMethod selector))
-						ifFalse: [ 
-							res
-								add:
-									((RwAuditMethodDetail
-										for: aLoadedClassOrExtension
-										message:
-											'Mismatched method category (expected: ' , expected printString , ' actual: '
-												, actual printString , '): ' , aClassOrMeta printString , '>>'
-												, aLoadedMethod selector)
-										reason: #'differentMethodCategory';
-										loadedMethod: aLoadedMethod;
-										method: aMethod;
-										loadedCategory: actual;
-										category: expected;
-										behavior: aClassOrMeta;
-										yourself) ] ]
-				ifFalse: [ 
-					compiledMethodOnly not
+					aMethod == aLoadedMethod handle
 						ifTrue: [ 
+							| expected actual |
+							((expected := aLoadedMethod methodCategory)
+								equalsNoCase:
+									(actual := aClassOrMeta categoryOfSelector: aMethod selector))
+								ifFalse: [ 
+									res
+										add:
+											((RwAuditMethodDetail
+												for: aLoadedClassOrExtension
+												message:
+													'Mismatched method category (expected: ' , expected printString , ' actual: '
+														, actual printString , '): ' , aClassOrMeta printString , '>>'
+														, aLoadedMethod selector)
+												reason: #'differentMethodCategory';
+												loadedMethod: aLoadedMethod;
+												method: aMethod;
+												loadedCategory: actual;
+												category: expected;
+												behavior: aClassOrMeta;
+												yourself) ] ]
+						ifFalse: [ 
 							res
 								add:
 									((RwAuditMethodDetail

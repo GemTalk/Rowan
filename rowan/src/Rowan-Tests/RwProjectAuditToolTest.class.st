@@ -405,7 +405,7 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testClassExtension [
 
-| packageTools projectName packageNames className packageName1 packageName2 packageName3 theClass fooMethod x y|
+| packageTools projectName packageNames className packageName1 packageName2 packageName3 theClass fooMethod audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -452,10 +452,8 @@ RwProjectAuditToolTest >> testClassExtension [
 		rwCompileExtensionMethod: 'foo ^''foo'''
 		package: packageName2.
 	
-x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
-
-
-self assert: x isEmpty.
+	audit:= Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	self assert: audit isEmpty.
 
 	fooMethod := theClass
 		compileMethod: 'bar: aBar bar := aBar'
@@ -489,14 +487,26 @@ self assert: x isEmpty.
 		intoCategories: nil
 		environmentId: 0.
 
-x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	audit := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	self deny: audit isEmpty.
 
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 5.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod methodsNotIdentical) sort.
 
-	self 
-	  assert: x size = 3;
-	  assert: ((y := x at: packageName1) at: className) size = 4;
-	  assert: ((y := x at: packageName2) at: className) size = 3;
-	  assert: ((y := x at: packageName3) at: className) size = 2
+	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 3.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod methodsNotIdentical) sort.
+
+	reasons := ((audit at: packageName3) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod methodsNotIdentical) sort.
 ]
 
 { #category : 'tests' }
@@ -550,7 +560,7 @@ RwProjectAuditToolTest >> testClassVars [
 { #category : 'tests' }
 RwProjectAuditToolTest >> testInvalidCategory [
 
-| packageTools projectName packageNames className packageName theClass  x category|
+	| packageTools projectName packageNames className packageName theClass audit category reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -585,8 +595,14 @@ RwProjectAuditToolTest >> testInvalidCategory [
 	theClass renameCategory: category to: 'testing new category'.
 	theClass class renameCategory: 'Instance creation' to: 'testing'.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
-	self assert: ((x at: packageName) at: className) size = 2
+"validate"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory) sort.
+
 
 ]
 
