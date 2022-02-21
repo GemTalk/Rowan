@@ -347,9 +347,57 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_D [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testAuditDetails [
+
+	| packageTools projectName packageNames className packageName theClass audit category reasons |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName := 'Audit-Core'.
+	packageNames := {packageName}.
+	className := 'AuditClass'.
+	category := 'Accessing'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	self assert: theClass rowanPackageName = packageName.
+
+	theClass
+		rwCompileMethod: 'bar ^bar'
+		category: category.
+	 
+	theClass class
+		rwCompileMethod: 'new ^self basicNew'
+		category: 'Instance creation'.
+	 
+	theClass renameCategory: category to: 'testing new category'.
+	theClass class renameCategory: 'Instance creation' to: 'testing'.
+
+"validate"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory) sort.
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassBadExtensionName [
 
-| packageTools projectName packageNames className packageName1 packageName2 theClass fooMethod x y|
+	| packageTools projectName packageNames className packageName1 packageName2 theClass
+		fooMethod audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -374,7 +422,7 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 
 	self assert: theClass rowanPackageName = packageName1.
 
-   theClass 
+	theClass 
 		rwCompileMethod: 'bar ^bar'
 	    category: 'Accessing' "'*'  packageName1 asLowercase".
 
@@ -382,7 +430,7 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 		rwCompileExtensionMethod: 'foo ^''foo'''
 		package: packageName2.
 
-self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
  
  "lets break it"
 	fooMethod := theClass
@@ -393,13 +441,29 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 		intoCategories: nil
 		environmentId: 0.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
+
+
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod rowanHybridExtensionCategoryMatchesClassPackage) sort.
+
+	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory methodsNotIdentical) sort.
+
+"
 	self assert: ( y := x at: packageName1) notNil; 
 		assert: y size = 1;
 		assert: (y at: className) size = 1;
 		assert: (y := x at: packageName2 ) notNil;
 		assert: y size = 1;
 		assert: (y at: className) size = 1
+"
 ]
 
 { #category : 'tests' }
@@ -491,22 +555,22 @@ RwProjectAuditToolTest >> testClassExtension [
 	self deny: audit isEmpty.
 
 	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
-	self assert: reasons size equals: 5.
+	self assert: reasons size equals: 6.
 	self
 		assert: reasons asSet asArray sort
-		equals: #(missingLoadedMethod methodsNotIdentical) sort.
+		equals: #(missingLoadedMethod methodsNotIdentical differentMethodCategory) sort.
 
 	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
-	self assert: reasons size equals: 3.
+	self assert: reasons size equals: 1.
 	self
 		assert: reasons asSet asArray sort
-		equals: #(missingLoadedMethod methodsNotIdentical) sort.
+		equals: #(methodsNotIdentical) sort.
 
 	reasons := ((audit at: packageName3) at: className) collect: [:auditDetail | auditDetail reason].
-	self assert: reasons size equals: 2.
+	self assert: reasons size equals: 1.
 	self
 		assert: reasons asSet asArray sort
-		equals: #(missingLoadedMethod methodsNotIdentical) sort.
+		equals: #(methodsNotIdentical) sort.
 ]
 
 { #category : 'tests' }
@@ -608,8 +672,7 @@ RwProjectAuditToolTest >> testInvalidCategory [
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testInvalidExtensionCategory [
-
-| packageTools projectName packageNames className packageName theClass  x|
+	| packageTools projectName packageNames className packageName theClass audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -644,8 +707,13 @@ RwProjectAuditToolTest >> testInvalidExtensionCategory [
 		rwCompileMethod: 'new2 ^self basicNew'
 		category: '*' , packageName.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
-	self assert: ((x at: packageName) at: className) size = 3
+	audit := Rowan projectTools audit auditForProjectNamed: projectName.
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 3.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(rowanHybridExtensionCategoryMatchesClassPackage) sort.
 ]
 
 { #category : 'tests' }
@@ -735,7 +803,7 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 
 	"related to https://github.com/GemTalk/Rowan/issues/799"
 
-	| packageTools projectName packageNames className packageName1 packageName2 theClass audit componentName definedProject reasons loadedClass theMethod loadedMethod candidateMap |
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit componentName definedProject reasons loadedClass theMethod loadedMethod candidateMap finalAudit |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -772,6 +840,9 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 	theClass class
 		rwCompileMethod: 'foo ^''foo'''
 		category: '*', packageName2 asLowercase.
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit isEmpty.
+
 "simulate upgradeImage on a kernel class (i.e., remove method and compile new method without touching Rowan metadata"
 "1. remove method from theClass, leaving the oldLoadedMethod intact"
 	theClass removeSelector: #foo.
@@ -794,7 +865,7 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 "validate that we've got 'Missing loaded method' and 'compiled method is not identical to loaded class method' audit errors"
 	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
 	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason ]) asArray sort.
-	self assert: reasons equals: #(methodsNotIdentical missingLoadedMethod methodsNotIdentical missingLoadedMethod) sort.
+	self assert: reasons equals: #(methodsNotIdentical methodsNotIdentical) sort.
 "analyze"
 	candidateMap := IdentityKeyValueDictionary new.
 	audit keysAndValuesDo: [:packageName :auditReport |
@@ -829,8 +900,8 @@ RwProjectAuditToolTest >> testNonIdenticalMethodAndMissingLoadedMethodUpgradeRep
 			theMethod _rowanPackageInfo: loadedMethod ] ].
 
 "validate"
-	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
-	self assert: audit isEmpty
+	finalAudit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: finalAudit isEmpty
 ]
 
 { #category : 'tests' }

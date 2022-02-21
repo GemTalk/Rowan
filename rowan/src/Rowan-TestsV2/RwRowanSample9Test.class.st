@@ -25,6 +25,65 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 		yourself
 ]
 
+{ #category : 'audit tests' }
+RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
+	| className packageName1 packageName2 class |
+"remove compiled methods"
+	className := 'RowanSample9Class1'.
+	packageName1 := 'RowanSample9-Core'.
+	packageName2 := 'RowanSample9-Extensions'.
+	class := Rowan globalNamed: className.
+	class removeSelector: #foo4.
+	class removeSelector: #foo5.
+	class removeSelector: #foo6.
+	class class  removeSelector: #bar.
+	class class  removeSelector: #bar4.
+	class class  removeSelector: #bar5.
+"recompile without packaging"
+	class
+		compileMethod:  'foo4 ^4'
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	class
+		compileMethod:  'foo5 ^5'
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	class
+		compileMethod:  'foo6 ^6'
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	class class
+		compileMethod:  'bar ^''bar'''
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	class class
+		compileMethod:  'bar4 ^4'
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+	class class
+		compileMethod:  'bar5 ^5'
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+]
+
 { #category : 'private' }
 RwRowanSample9Test >> _expectedIssue766GsFileContents [
 	^ '! Class Declarations
@@ -565,6 +624,202 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 												, ' not present in the expected symbol dictionary '
 												, symDictName printString ] ] ] ].
 	self assert: exceptions isEmpty
+]
+
+{ #category : 'audit tests' }
+RwRowanSample9Test >> testAuditMethodsNotIdentical [
+	"RwAuditMethodDetail with #'methodsNotIdentical' reason for instance and class side methods"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit className packageName1 packageName2 reasons class |
+	loadSpec := self _loadSpecNamed: 'spec_0081'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	audit := project audit.
+	self assert: audit isEmpty.
+
+"remove compiled methods and recompile without packaging"
+	className := 'RowanSample9Class1'.
+	packageName1 := 'RowanSample9-Core'.
+	packageName2 := 'RowanSample9-Extensions'.
+	class := Rowan globalNamed: className.
+	self _auditRemoveAndRecompiledMethods_0081.
+
+"audit"
+	audit := project audit.
+
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 6.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod) sort.
+	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 6.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(methodsNotIdentical) sort.
+]
+
+{ #category : 'audit tests' }
+RwRowanSample9Test >> testAuditMismatchedMethodCategory [
+	"RwAuditMethodDetail with #'differentMethodCategory' reason for instance and class side methods
+		#'missingExtensionCategory' comes along for the ride"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class className packageName1 packageName2 reasons |
+	loadSpec := self _loadSpecNamed: 'spec_0081'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	audit := project audit.
+	self assert: audit isEmpty.
+
+"rename method categories"
+	className := 'RowanSample9Class1'.
+	packageName1 := 'RowanSample9-Core'.
+	packageName2 := 'RowanSample9-Extensions'.
+	class := Rowan globalNamed: className.
+
+	class renameCategory: '*rowansample9-extensions' to: 'another category'.
+	class class renameCategory: '*rowansample9-extensions' to: 'another category'.
+
+"audit"
+	audit := project audit.
+
+"validate"
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 8.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory missingExtensionCategory) sort.
+]
+
+{ #category : 'audit tests' }
+RwRowanSample9Test >> testAuditMismatchedMethodCategoryAndMethodsNotIdentical [
+	"RwAuditMethodDetail with #'methodsNotIdentical' and #'differentMethodCategory' reason for instance and class side methods"
+
+	"testAuditMismatchedMethodCategory passes and testAuditMethodsNotIdentical passes, but the OLD audit fails to detect differentMethodCategory ... new audit
+		created to address this deficiency"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class className packageName1 packageName2 reasons |
+	loadSpec := self _loadSpecNamed: 'spec_0081'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: {}.
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	audit := project audit.
+	self assert: audit isEmpty.
+
+"remove compiled methods and recompile without packaging"
+	self _auditRemoveAndRecompiledMethods_0081.
+
+"rename method categories"
+	className := 'RowanSample9Class1'.
+	packageName1 := 'RowanSample9-Core'.
+	packageName2 := 'RowanSample9-Extensions'.
+	class := Rowan globalNamed: className.
+	class renameCategory: '*rowansample9-extensions' to: 'another category'.
+	class class renameCategory: '*rowansample9-extensions' to: 'another category'.
+
+"audit"
+	audit := project audit.
+
+"validate"
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 14.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory methodsNotIdentical missingExtensionCategory) sort.
+]
+
+{ #category : 'audit tests' }
+RwRowanSample9Test >> testAuditMissingCompiledMethod [
+	"RwAuditMethodDetail with #'missingCompiledMethod' reason for instance and class side methods"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class className packageName1 packageName2 reasons |
+	loadSpec := self _loadSpecNamed: 'spec_0081'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects at: 1.
+
+"validate"
+	audit := project audit.
+	self assert: audit isEmpty.
+
+"remove compiled methods"
+	className := 'RowanSample9Class1'.
+	packageName1 := 'RowanSample9-Core'.
+	packageName2 := 'RowanSample9-Extensions'.
+	class := Rowan globalNamed: className.
+	class removeSelector: #foo.
+	class class  removeSelector: #bar.
+
+"audit"
+	audit := project audit.
+
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingCompiledMethod) sort.
+	reasons := (((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingCompiledMethod) sort.
 ]
 
 { #category : 'migration tests' }
@@ -6663,6 +6918,29 @@ RwRowanSample9Test >> testSpec_0080 [
 
 	| loadSpec projectName resolvedProject loadedProjects |
 	loadSpec := self _loadSpecNamed: 'spec_0080'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0081 [
+	"spec_0081 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0081'.
 
 	projectName := loadSpec projectName.
 
