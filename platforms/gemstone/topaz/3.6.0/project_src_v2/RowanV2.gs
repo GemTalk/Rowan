@@ -48535,7 +48535,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-	^ '2.2.0'
+	^ '2.3.0'
 %
 
 ! Class implementation for 'RowanCommandResult'
