@@ -72302,8 +72302,7 @@ method: RwReadOnlyDiskRepositoryDefinitionV2
 readOnlyRepositoryRoot: repositoryRootPathString commitId: aString
 	self
 		repositoryUrl: 'file:' , repositoryRootPathString;
-		commitId: aString;
-		loadedCommitId: aString
+		commitId: aString
 %
 
 category: 'accessing'
