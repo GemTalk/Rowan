@@ -97,16 +97,12 @@ RwPkgAuditToolV2 >> auditForPackageNamed: packageName [
 RwPkgAuditToolV2 >> auditLoadedClass: aLoadedClass [
 	"look for methods compiled into class without Rowan API"
 
-	^ false
-		ifTrue: [ RwClsAuditTool new auditLoadedClass: aLoadedClass ]
-		ifFalse: [ RwNewClsAuditTool new auditClass: aLoadedClass ]
+	^ RwClsAuditTool new auditClass: aLoadedClass
 ]
 
 { #category : 'other' }
 RwPkgAuditToolV2 >> auditLoadedClassExtension: aLoadedClass [
 "look for methods compiled into class without Rowan API"
 
-	^ false
-		ifTrue: [ RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass ]
-		ifFalse: [ RwNewClsExtensionAuditTool new auditClass: aLoadedClass ]
+	^ RwClsExtensionAuditTool new auditClass: aLoadedClass
 ]

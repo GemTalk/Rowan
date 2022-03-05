@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwNewClsCommonAuditTool',
+	#name : 'RwClsCommonAuditTool',
 	#superclass : 'RwClassTool',
 	#instVars : [
 		'theAuditDetails'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'audit' }
-RwNewClsCommonAuditTool >> auditClass: aLoadedClassOrExtension [
+RwClsCommonAuditTool >> auditClass: aLoadedClassOrExtension [
 	| aClass |
 	self auditGlobalFor: aLoadedClassOrExtension.
 	aClass := aLoadedClassOrExtension handle.
@@ -29,12 +29,12 @@ RwNewClsCommonAuditTool >> auditClass: aLoadedClassOrExtension [
 ]
 
 { #category : 'audit' }
-RwNewClsCommonAuditTool >> auditCompiledMethods: aLoadedClassOrExtension forClass: aClass [
+RwClsCommonAuditTool >> auditCompiledMethods: aLoadedClassOrExtension forClass: aClass [
 	self subclassResponsibility: #'auditCompiledMethods:forClass:'
 ]
 
 { #category : 'audit' }
-RwNewClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: aLoadedClassOrExtension [
+RwClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: aLoadedClassOrExtension [
 	(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil)
 		ifNil: [ 
 			self theAuditDetails
@@ -85,7 +85,7 @@ RwNewClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavi
 ]
 
 { #category : 'audit' }
-RwNewClsCommonAuditTool >> auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
+RwClsCommonAuditTool >> auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
 	| aPackage |
 	"must be an extension. Do basic checks"
 	aPackage := category copyFrom: 2 to: category size.
@@ -124,7 +124,7 @@ RwNewClsCommonAuditTool >> auditRowanHybridCategory: category forBehavior: aBeha
 ]
 
 { #category : 'audit' }
-RwNewClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
+RwClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
 	"every method in a packaged class is expected to be packaged (i.e. have a loaded method)"
 
 	| compiledMethod |
@@ -169,6 +169,6 @@ RwNewClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBeha
 ]
 
 { #category : 'accessing' }
-RwNewClsCommonAuditTool >> theAuditDetails [
+RwClsCommonAuditTool >> theAuditDetails [
 	^ theAuditDetails ifNil: [ theAuditDetails := Array new ]
 ]
