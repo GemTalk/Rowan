@@ -6503,6 +6503,7 @@ doit
 	options: #( #logCreation )
 )
 		category: 'Rowan-Tools-Core';
+		comment: 'This class audits individual classes';
 		immediateInvariant.
 true.
 %
@@ -63842,7 +63843,7 @@ auditCompiledMethods: aLoadedClass forClass: aClass
 category: 'audit'
 method: RwClsAuditTool
 auditGlobalFor: aLoadedClass
-	^ (Rowan globalNamed: aLoadedClass name)
+	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
 			"there is no matching Class for LoadedClass"
 			self theAuditDetails
@@ -63851,6 +63852,17 @@ auditGlobalFor: aLoadedClass
 						for: aLoadedClass
 						reason: #'missingGemStoneClassForLoadedClass'
 						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name) ]
+		ifNotNil: [ :theClass | 
+			theClass == aLoadedClass handle
+				ifFalse: [ 
+					"the loadedClass is for a different version of the current class installed in symbol dictionaries"
+					self theAuditDetails
+						add:
+							(RwAuditClassDetail
+								for: aLoadedClass
+								reason: #'classesNotIdentical'
+								message:
+									'Installed class is not identical to the loaded class: ' , aLoadedClass name) ] ]
 %
 
 category: 'audit'
@@ -64101,6 +64113,18 @@ auditGlobalFor: aLoadedClassExtension
 						message:
 							' Class does not exists for loaded class extension: '
 								, aLoadedClassExtension name) ]
+		ifNotNil: [ :theClass | 
+			theClass == aLoadedClassExtension handle
+				ifFalse: [ 
+					"the loadedClassExtension is for a different version of the current class installed in symbol dictionaries"
+					self theAuditDetails
+						add:
+							(RwAuditClassDetail
+								for: aLoadedClassExtension
+								reason: #'classesNotIdentical'
+								message:
+									'Installed class is not identical to the loaded class: '
+										, aLoadedClassExtension name) ] ]
 %
 
 category: 'audit'
