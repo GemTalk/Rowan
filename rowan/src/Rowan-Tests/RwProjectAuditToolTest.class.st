@@ -467,6 +467,67 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassesNotIdentical [
+	"#classesNotIdentical audit error occurs during upgrade when a new version of a class is introduced in a new version of GemStone:
+		1. reproduce condition
+		2. repair
+	"
+
+	| packageTools projectName packageNames className packageName1 packageName2 oldClass newClass audit loadedClass componentName definedProject reasons newLoadedClass |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'Rowan';
+		yourself.
+	definedProject resolve load.
+
+	oldClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+
+	loadedClass := Rowan image loadedClassForClass: oldClass ifAbsent: [].
+	self assert: loadedClass notNil.
+
+	newClass := Object
+		rwSubclass: className
+		instVarNames: #(foo bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	newLoadedClass := Rowan image loadedClassForClass: newClass ifAbsent: [].
+"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+	newLoadedClass handle: oldClass.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(classesNotIdentical differentClassInstVars) sort.
+
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassExtension [
 
 | packageTools projectName packageNames className packageName1 packageName2 packageName3 theClass fooMethod audit reasons |
