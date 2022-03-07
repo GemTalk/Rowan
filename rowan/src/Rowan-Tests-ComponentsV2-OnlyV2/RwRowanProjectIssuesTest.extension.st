@@ -1501,7 +1501,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 |
+	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1560,6 +1560,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	theClass1 := Object
 		rwSubclass: className1
 		instVarNames: #(#'ivar1')
@@ -1569,6 +1571,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.  "moving a class to a package where an extension method already exists ... method should be moved?"
 	self assert: (theClass1 new perform: #'foo') = 1.
 	self assert: (theClass1 new perform: #'foo') = 1.
 	self assert: theClass1 category = packageName2.
@@ -1679,7 +1683,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
     Bug is that method extendedMethod was not brought into the new class version. No methods are shown.
 "
 
-	| projectName packageName1 packageName2 className theClass |
+	| projectName packageName1 packageName2 className theClass audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1726,6 +1730,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self
 		assert: (theClass compiledMethodAt: #'foo') rowanPackageName = packageName2.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	theClass := Object
 		rwSubclass: className
 		instVarNames: #(#'ivar1')
@@ -1735,6 +1741,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty. "moving a class to a package where an extension method already exists ... method should be moved?"
 	self assert: (theClass new perform: #'foo') = 1.
 	self assert: theClass category = packageName2.
 	self assert: theClass rowanPackageName = packageName2.
@@ -1756,7 +1764,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 x oldClass |
+	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 x oldClass audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1822,6 +1830,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: oldClass ~~ theClass1.
 	self assert: (theClass1 new perform: #'foo') = 1.
 	self assert: (theClass1 new perform: #'foo') = 1.
@@ -1918,7 +1928,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className theClass oldClass |
+	| projectName packageName1 packageName2 className theClass oldClass audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1972,6 +1982,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: oldClass ~= theClass.
 	self assert: (theClass new perform: #'foo') = 1.
 	self assert: (theClass new perform: #'foo') = 1.

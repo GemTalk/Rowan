@@ -104,6 +104,18 @@ RwClsExtensionAuditTool >> auditGlobalFor: aLoadedClassExtension [
 						message:
 							' Class does not exists for loaded class extension: '
 								, aLoadedClassExtension name) ]
+		ifNotNil: [ :theClass | 
+			theClass == aLoadedClassExtension handle
+				ifFalse: [ 
+					"the loadedClassExtension is for a different version of the current class installed in symbol dictionaries"
+					self theAuditDetails
+						add:
+							(RwAuditClassDetail
+								for: aLoadedClassExtension
+								reason: #'classesNotIdentical'
+								message:
+									'Installed class is not identical to the loaded class: '
+										, aLoadedClassExtension name) ] ]
 ]
 
 { #category : 'audit' }

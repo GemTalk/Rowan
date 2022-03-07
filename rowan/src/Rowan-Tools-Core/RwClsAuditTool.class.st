@@ -1,3 +1,6 @@
+"
+This class audits individual classes
+"
 Class {
 	#name : 'RwClsAuditTool',
 	#superclass : 'RwClsCommonAuditTool',
@@ -45,7 +48,7 @@ RwClsAuditTool >> auditCompiledMethods: aLoadedClass forClass: aClass [
 
 { #category : 'audit' }
 RwClsAuditTool >> auditGlobalFor: aLoadedClass [
-	^ (Rowan globalNamed: aLoadedClass name)
+	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
 			"there is no matching Class for LoadedClass"
 			self theAuditDetails
@@ -54,6 +57,17 @@ RwClsAuditTool >> auditGlobalFor: aLoadedClass [
 						for: aLoadedClass
 						reason: #'missingGemStoneClassForLoadedClass'
 						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name) ]
+		ifNotNil: [ :theClass | 
+			theClass == aLoadedClass handle
+				ifFalse: [ 
+					"the loadedClass is for a different version of the current class installed in symbol dictionaries"
+					self theAuditDetails
+						add:
+							(RwAuditClassDetail
+								for: aLoadedClass
+								reason: #'classesNotIdentical'
+								message:
+									'Installed class is not identical to the loaded class: ' , aLoadedClass name) ] ]
 ]
 
 { #category : 'audit' }

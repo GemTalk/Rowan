@@ -1344,7 +1344,7 @@ RwHybridBrowserToolTest >> testHybridMoveMethodIntoSessionMethods [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1381,6 +1381,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1390,7 +1392,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1429,6 +1431,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 
 	self assert: subclass superClass == class.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty. "not following category naming rules for package convention"
 	newClassVersion := Object
 		rwSubclass: 'SimpleHybrid1'
 		instVarNames: #('ivar1')
@@ -1451,7 +1455,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project B'.
 	packageName1 := 'HybridB-Core'.
 	packageNames := {packageName1}.
@@ -1493,6 +1497,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1506,7 +1512,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 
-	| class subclass projectName packageNames packageName1 packageName2 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 packageName2 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project C'.
 	packageName1 := 'HybridC-Core'.
 	packageName2 := 'HybridC-Extensions'.
@@ -1552,6 +1558,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1565,7 +1573,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 
-	| class subclass1 subclass2 subclass3 subclass4 projectName packageNames packageName1 newClassVersion newSubclassVersion1 newSubclassVersion2 newSubclassVersion3 newSubclassVersion4 |
+	| class subclass1 subclass2 subclass3 subclass4 projectName packageNames packageName1 newClassVersion newSubclassVersion1 newSubclassVersion2 newSubclassVersion3 newSubclassVersion4 audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1632,6 +1640,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion1 := Rowan globalNamed: subclass1 name.
 	self assert: newSubclassVersion1 ~~ subclass1.
