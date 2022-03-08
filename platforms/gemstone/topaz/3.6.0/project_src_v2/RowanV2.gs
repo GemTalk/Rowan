@@ -68094,6 +68094,14 @@ reason: aSymbol
 	reason := aSymbol
 %
 
+category: 'accessing'
+method: RwAuditDetail
+selector
+	"non-method audit detail"
+
+	^ nil
+%
+
 ! Class implementation for 'RwAuditClassDetail'
 
 !		Instance methods for 'RwAuditClassDetail'
