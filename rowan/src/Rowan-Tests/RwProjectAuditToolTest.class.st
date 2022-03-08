@@ -515,15 +515,15 @@ RwProjectAuditToolTest >> testClassesNotIdentical [
 		category: packageName1
 		options: #().
 	newLoadedClass := Rowan image loadedClassForClass: newClass ifAbsent: [].
-"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+"brain surgery --- transplant oldClass in new loadedMethod, but oldClass is an older version of className"
 	newLoadedClass handle: oldClass.
 
 	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
 	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
-	self assert: reasons size equals: 2.
+	self assert: reasons size equals: 1.
 	self
 		assert: reasons asSet asArray sort
-		equals: #(classesNotIdentical differentClassInstVars) sort.
+		equals: #(classesNotIdentical) sort.
 
 ]
 
@@ -780,7 +780,7 @@ RwProjectAuditToolTest >> testInvalidExtensionCategory [
 { #category : 'tests' }
 RwProjectAuditToolTest >> testMissingBehavior [
 
-| packageTools projectName packageNames className packageName theClass  x|
+| packageTools projectName packageNames className packageName theClass audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -803,8 +803,13 @@ RwProjectAuditToolTest >> testMissingBehavior [
 		options: #().
 	
 	(System myUserProfile resolveSymbol: self _symbolDictionaryName1) value removeKey: theClass name asSymbol.
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 2
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingGemStoneClassForLoadedClass) sort
 ]
 
 { #category : 'tests' }

@@ -63627,21 +63627,23 @@ category: 'audit'
 method: RwClsCommonAuditTool
 auditClass: aLoadedClassOrExtension
 	| aClass |
-	self auditGlobalFor: aLoadedClassOrExtension.
-	aClass := aLoadedClassOrExtension handle.
-	self auditLoadedClassProperties: aLoadedClassOrExtension forClass: aClass.
-	self auditCompiledMethods: aLoadedClassOrExtension forClass: aClass.
-	aLoadedClassOrExtension
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			self
-				auditLoadedMethod: aLoadedMethod
-				forBehavior: aClass
-				loadedClass: loadedClass ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			self
-				auditLoadedMethod: aLoadedMethod
-				forBehavior: aClass class
-				loadedClass: loadedClass ].
+	(self auditGlobalFor: aLoadedClassOrExtension)
+		ifTrue: [ 
+			"audit class details, since there are no issues with the class itself"
+			aClass := aLoadedClassOrExtension handle.
+			self auditLoadedClassProperties: aLoadedClassOrExtension forClass: aClass.
+			self auditCompiledMethods: aLoadedClassOrExtension forClass: aClass.
+			aLoadedClassOrExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					self
+						auditLoadedMethod: aLoadedMethod
+						forBehavior: aClass
+						loadedClass: loadedClass ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					self
+						auditLoadedMethod: aLoadedMethod
+						forBehavior: aClass class
+						loadedClass: loadedClass ] ].
 	^ self theAuditDetails
 %
 
@@ -63843,6 +63845,8 @@ auditCompiledMethods: aLoadedClass forClass: aClass
 category: 'audit'
 method: RwClsAuditTool
 auditGlobalFor: aLoadedClass
+	"answer true if there are no audit issues with the class"
+
 	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
 			"there is no matching Class for LoadedClass"
@@ -63851,7 +63855,8 @@ auditGlobalFor: aLoadedClass
 					(RwAuditClassDetail
 						for: aLoadedClass
 						reason: #'missingGemStoneClassForLoadedClass'
-						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name) ]
+						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name).
+			^ false ]
 		ifNotNil: [ :theClass | 
 			theClass == aLoadedClass handle
 				ifFalse: [ 
@@ -63862,7 +63867,9 @@ auditGlobalFor: aLoadedClass
 								for: aLoadedClass
 								reason: #'classesNotIdentical'
 								message:
-									'Installed class is not identical to the loaded class: ' , aLoadedClass name) ] ]
+									'Installed class is not identical to the loaded class: ' , aLoadedClass name).
+					^ false ] ].
+	^ true
 %
 
 category: 'audit'
@@ -64012,16 +64019,6 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 
 category: 'audit'
 method: RwClsExtensionAuditTool
-auditClass: aLoadedClassOrExtension
-	| aClass |
-	super auditClass: aLoadedClassOrExtension.
-	aClass := aLoadedClassOrExtension handle.
-"stuff not covered by auditCompiledMethods:...."
-	^ self theAuditDetails
-%
-
-category: 'audit'
-method: RwClsExtensionAuditTool
 auditCompiledMethods: aLoadedClassExtension forClass: aClass
 	| categories |
 	aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
@@ -64103,7 +64100,9 @@ auditCompiledMethods: aLoadedClassExtension forClass: aClass
 category: 'audit'
 method: RwClsExtensionAuditTool
 auditGlobalFor: aLoadedClassExtension
-	^ (Rowan globalNamed: aLoadedClassExtension name)
+	"answer true if there are no audit issues with the class"
+
+	(Rowan globalNamed: aLoadedClassExtension name)
 		ifNil: [ 
 			self theAuditDetails
 				add:
@@ -64112,7 +64111,8 @@ auditGlobalFor: aLoadedClassExtension
 						reason: #'missingGemStoneClassForLoadedClassExtension'
 						message:
 							' Class does not exists for loaded class extension: '
-								, aLoadedClassExtension name) ]
+								, aLoadedClassExtension name).
+			^ false ]
 		ifNotNil: [ :theClass | 
 			theClass == aLoadedClassExtension handle
 				ifFalse: [ 
@@ -64124,7 +64124,9 @@ auditGlobalFor: aLoadedClassExtension
 								reason: #'classesNotIdentical'
 								message:
 									'Installed class is not identical to the loaded class: '
-										, aLoadedClassExtension name) ] ]
+										, aLoadedClassExtension name).
+					^ false ] ].
+	^ true
 %
 
 category: 'audit'

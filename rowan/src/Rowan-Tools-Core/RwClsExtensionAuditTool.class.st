@@ -5,15 +5,6 @@ Class {
 }
 
 { #category : 'audit' }
-RwClsExtensionAuditTool >> auditClass: aLoadedClassOrExtension [
-	| aClass |
-	super auditClass: aLoadedClassOrExtension.
-	aClass := aLoadedClassOrExtension handle.
-"stuff not covered by auditCompiledMethods:...."
-	^ self theAuditDetails
-]
-
-{ #category : 'audit' }
 RwClsExtensionAuditTool >> auditCompiledMethods: aLoadedClassExtension forClass: aClass [
 	| categories |
 	aLoadedClassExtension loadedProject packageConvention = 'RowanHybrid'
@@ -94,7 +85,9 @@ RwClsExtensionAuditTool >> auditCompiledMethods: aLoadedClassExtension forClass:
 
 { #category : 'audit' }
 RwClsExtensionAuditTool >> auditGlobalFor: aLoadedClassExtension [
-	^ (Rowan globalNamed: aLoadedClassExtension name)
+	"answer true if there are no audit issues with the class"
+
+	(Rowan globalNamed: aLoadedClassExtension name)
 		ifNil: [ 
 			self theAuditDetails
 				add:
@@ -103,7 +96,8 @@ RwClsExtensionAuditTool >> auditGlobalFor: aLoadedClassExtension [
 						reason: #'missingGemStoneClassForLoadedClassExtension'
 						message:
 							' Class does not exists for loaded class extension: '
-								, aLoadedClassExtension name) ]
+								, aLoadedClassExtension name).
+			^ false ]
 		ifNotNil: [ :theClass | 
 			theClass == aLoadedClassExtension handle
 				ifFalse: [ 
@@ -115,7 +109,9 @@ RwClsExtensionAuditTool >> auditGlobalFor: aLoadedClassExtension [
 								reason: #'classesNotIdentical'
 								message:
 									'Installed class is not identical to the loaded class: '
-										, aLoadedClassExtension name) ] ]
+										, aLoadedClassExtension name).
+					^ false ] ].
+	^ true
 ]
 
 { #category : 'audit' }

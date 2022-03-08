@@ -48,6 +48,8 @@ RwClsAuditTool >> auditCompiledMethods: aLoadedClass forClass: aClass [
 
 { #category : 'audit' }
 RwClsAuditTool >> auditGlobalFor: aLoadedClass [
+	"answer true if there are no audit issues with the class"
+
 	(Rowan globalNamed: aLoadedClass name)
 		ifNil: [ 
 			"there is no matching Class for LoadedClass"
@@ -56,7 +58,8 @@ RwClsAuditTool >> auditGlobalFor: aLoadedClass [
 					(RwAuditClassDetail
 						for: aLoadedClass
 						reason: #'missingGemStoneClassForLoadedClass'
-						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name) ]
+						message: 'Missing gemstone class for loaded class: ' , aLoadedClass name).
+			^ false ]
 		ifNotNil: [ :theClass | 
 			theClass == aLoadedClass handle
 				ifFalse: [ 
@@ -67,7 +70,9 @@ RwClsAuditTool >> auditGlobalFor: aLoadedClass [
 								for: aLoadedClass
 								reason: #'classesNotIdentical'
 								message:
-									'Installed class is not identical to the loaded class: ' , aLoadedClass name) ] ]
+									'Installed class is not identical to the loaded class: ' , aLoadedClass name).
+					^ false ] ].
+	^ true
 ]
 
 { #category : 'audit' }

@@ -10,21 +10,23 @@ Class {
 { #category : 'audit' }
 RwClsCommonAuditTool >> auditClass: aLoadedClassOrExtension [
 	| aClass |
-	self auditGlobalFor: aLoadedClassOrExtension.
-	aClass := aLoadedClassOrExtension handle.
-	self auditLoadedClassProperties: aLoadedClassOrExtension forClass: aClass.
-	self auditCompiledMethods: aLoadedClassOrExtension forClass: aClass.
-	aLoadedClassOrExtension
-		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			self
-				auditLoadedMethod: aLoadedMethod
-				forBehavior: aClass
-				loadedClass: loadedClass ]
-		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-			self
-				auditLoadedMethod: aLoadedMethod
-				forBehavior: aClass class
-				loadedClass: loadedClass ].
+	(self auditGlobalFor: aLoadedClassOrExtension)
+		ifTrue: [ 
+			"audit class details, since there are no issues with the class itself"
+			aClass := aLoadedClassOrExtension handle.
+			self auditLoadedClassProperties: aLoadedClassOrExtension forClass: aClass.
+			self auditCompiledMethods: aLoadedClassOrExtension forClass: aClass.
+			aLoadedClassOrExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					self
+						auditLoadedMethod: aLoadedMethod
+						forBehavior: aClass
+						loadedClass: loadedClass ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
+					self
+						auditLoadedMethod: aLoadedMethod
+						forBehavior: aClass class
+						loadedClass: loadedClass ] ].
 	^ self theAuditDetails
 ]
 
