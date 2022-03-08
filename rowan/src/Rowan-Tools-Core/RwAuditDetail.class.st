@@ -102,3 +102,10 @@ RwAuditDetail >> reason [
 RwAuditDetail >> reason: aSymbol [
 	reason := aSymbol
 ]
+
+{ #category : 'accessing' }
+RwAuditDetail >> selector [
+	"non-method audit detail"
+
+	^ nil
+]
