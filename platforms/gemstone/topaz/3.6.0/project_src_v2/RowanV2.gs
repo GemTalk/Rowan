@@ -68120,6 +68120,12 @@ loadedClass
 
 category: 'accessing'
 method: RwAuditClassPropertyDetail
+behavior
+	^ self class
+%
+
+category: 'accessing'
+method: RwAuditClassPropertyDetail
 class
 	^class
 %

@@ -23,6 +23,11 @@ Class {
 }
 
 { #category : 'accessing' }
+RwAuditClassPropertyDetail >> behavior [
+	^ self class
+]
+
+{ #category : 'accessing' }
 RwAuditClassPropertyDetail >> class [
 	^class
 ]
