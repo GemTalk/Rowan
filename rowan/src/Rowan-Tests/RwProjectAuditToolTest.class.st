@@ -757,21 +757,24 @@ RwProjectAuditToolTest >> testInvalidExtensionCategory [
 	self assert: theClass rowanPackageName = packageName.
 
 	theClass
-		rwCompileExtensionMethod: 'bar ^bar'
-		package: "'*' , "packageName asLowercase.
+		rwCompileMethod: 'bar ^bar'
+		category: 'accessing'.
+	theClass moveMethod: #bar toCategory: '*' , packageName asLowercase.
 	 
 	theClass class
-		rwCompileExtensionMethod: 'new ^self basicNew'
-		package: "'*' , "packageName asLowercase.
+		rwCompileMethod: 'new ^self basicNew'
+		category:'instance creation'.
+	theClass class moveMethod: #new toCategory: '*' , packageName asLowercase.
 	 
 	theClass class
 		rwCompileMethod: 'new2 ^self basicNew'
-		category: '*' , packageName.
+		category: 'accessing'.
+	theClass class moveMethod: #new2 toCategory: '*' , packageName asLowercase.
 
 	audit := Rowan projectTools audit auditForProjectNamed: projectName.
 	self deny: audit isEmpty.
 	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
-	self assert: reasons size equals: 3.
+	self assert: reasons size equals: 2.
 	self
 		assert: reasons asSet asArray sort
 		equals: #(rowanHybridExtensionCategoryMatchesClassPackage) sort.

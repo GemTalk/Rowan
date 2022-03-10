@@ -34,7 +34,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'accessing'.
 
 	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
@@ -91,7 +91,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'accessing'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -157,7 +157,7 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'accessing'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -225,7 +225,7 @@ RwDisownToolApiTest >> testDisownMethod [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'accessing'.
 
 	self assert: (theClass new perform: #foo) = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
@@ -280,7 +280,7 @@ RwDisownToolApiTest >> testDisownPackage1 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'accessing'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -349,7 +349,7 @@ RwDisownToolApiTest >> testDisownPackage2 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'accessing'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -497,7 +497,7 @@ RwDisownToolApiTest >> testDisownProject [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'accessing'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.

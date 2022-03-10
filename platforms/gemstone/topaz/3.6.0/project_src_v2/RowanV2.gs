@@ -65449,8 +65449,15 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 					pkgConvention := hybridLoadedProject packageConvention.
 					(pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
 						ifTrue: [ 
-							"everything is cool - the project associated with hybridPackageName _is_ using the `RowanHybrid` package convention"
-							 ]
+							| classPackageName "everything is cool" |
+							classPackageName := (Rowan image objectNamed: className) rowanPackageName.
+							classPackageName = hybridLoadedPackage name
+								ifTrue: [ 
+									"https://github.com/GemTalk/Rowan/issues/802"
+									self
+										error:
+											'extension category name ' , hybridPackageName printString
+												, '  must not match class package name (' , classPackageName , ')' ] ]
 						ifFalse: [ 
 							"the project associated with the hybridPackageName _is NOT_ using the `RowanHybrid` package convention - questionable use of hybrid convention in a non-hybrid project"
 							hybridLoadedProject := nil ] ] ].
@@ -75230,13 +75237,43 @@ createNewClassesAndClassVersions
 category: 'private - applying'
 method: RwGsPatchSet_V2
 doMoveClassesBetweenPackages
-
 	| image |
 	image := Rowan image.
-	movedClasses 
-		do: [:aClassMove |
-			| loadedClass |
+	movedClasses
+		do: [ :aClassMove | 
+			| loadedClass pkgConvention |
 			loadedClass := image loadedClassNamed: aClassMove classBefore name.
+			pkgConvention := loadedClass loadedProject packageConvention.
+			((pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
+				and: [ aClassMove packageBefore name ~= aClassMove packageAfter name ])
+				ifTrue: [ 
+					| newPackageName theClass |
+					newPackageName := aClassMove packageAfter name.
+					theClass := loadedClass handle.
+					theClass
+						methodsDo: [ :sel :meth | 
+							meth rowanPackageName = newPackageName
+								ifTrue: [ 
+									self
+										error:
+											'The class ' , theClass name , ' has extension methods for the package '
+												, newPackageName , ', so the class cannot be added to the package '
+												, newPackageName
+												,
+													' without violating the restriction that extension category names must not match the class package name.' ] ].
+					theClass class
+						methodsDo: [ :sel :meth | 
+							meth rowanPackageName = newPackageName
+								ifTrue: [ 
+									self
+										error:
+											'The class ' , theClass name , ' class has extension methods for the package '
+												, newPackageName , ', so the class cannot be added to the package '
+												, newPackageName
+												,
+													' without violating the restriction that extension category names must not match the class package name.' ] ] ].
+
+
 			loadedClass loadedPackage removeLoadedClass: loadedClass.
 			(image loadedPackageNamed: aClassMove packageAfter name)
 				addLoadedClass: loadedClass ]
