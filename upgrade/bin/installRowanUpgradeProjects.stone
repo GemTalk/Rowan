@@ -1,0 +1,72 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+SuperDoitRequiredOptionWithRequiredArg long: 'projectsHome'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D]  --projectsHome=<projects-home> \
+      <project-names>...
+
+DESCRIPTION
+  Install one or more of the named project into the stone.
+
+  KNOWN PROJECTS
+    RowanUpgrade    - <projects-home>/RowanUpgrade
+    RowanV12Upgrade - <projects-home>/RowanV12Upgrade
+
+OPTIONS
+  <project-names>      One or more of the known project names. The project names
+                       are case insensitive
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error
+  --projectsHome=<projects-home>
+                       The parent directory of the RowanUpgrade and RowanV12Upgrade
+                       projects. The standard location for these projects is either 
+                       in a Rowan project clone 
+                       ($ROWAN_PROJECTS_HOME/Rowan/upgrade/projectsHome or in a 3.6.4
+                       GemStone product tree ($GEMSTONE/rowan/projectsHome).
+
+EXAMPLES
+  $basename -h
+
+  $basename --projectsHome=$GEMSTONE/rowan/projectsHome RowanUpgrade
+  $basename --projectsHome=$GEMSTONE/rowan/projectsHome RowanUpgrade RowanV12Upgrade
+-----
+%
+method
+loadProject: projectName projectsHome: projectsHomeReference
+	| projectRoot loadSpecRef|
+	projectRoot := projectsHomeReference / projectName.
+	loadSpecRef := projectRoot / 'rowan' / 'specs' / projectName, 'ston'.
+	resolvedProject := Rowan 
+		projectFromUrl: 'file:' , loadSpecRef pathString 
+		diskUrl: 'file:' , projectRoot pathString.
+	resolvedProject load.
+	^ System commit
+%
+doit
+	| spec args projectsHome |
+	args := self positionalArgs collect: [:each | each asLowercase ].
+	args size < 1
+		ifTrue: [
+			self usage. 
+			self error: 'missing positional <project-names> arguments' ].
+	projectsHome := self projectsHome asFileReference.
+	projectsHome exists 
+		ifFalse: [ self error: 'The directory: ', projectsName patString, ' does not exist.' ].
+	args do: [:projectName |
+		projectName = 'rowanupgrade'
+			ifTrue: [ 
+				self loadProject: 'RowanUpgrade' projectsHome: projectsHome.
+				self stdout nextPutAll: 'loaded RowanUpgrade'; lf ]
+			ifFalse: [ 
+				projectName = 'rowanv12upgrade'
+					ifTrue: [ 
+						self loadProject: 'RowanV12Upgrade' projectsHome: projectsHome.
+						self stdout nextPutAll: 'loaded RowanV12Upgrade'; lf ]
+					ifFalse: [ self error: 'Unknown project ', projectName printString ] ] ].
+	^ System commit
+%
