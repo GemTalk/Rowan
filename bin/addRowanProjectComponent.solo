@@ -1,0 +1,78 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'parentComponent'.
+SuperDoitOptionalOptionWithRequiredArg long: 'componentCondition' default: 'common'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename <spec-url> <component-name>
+      $basename <spec-url> <component-name> --parentComponent=<parent-component-name>
+      $basename <spec-url> <component-name> --parentComponent=<parent-component-name> \
+                --componentCondition=<condition>
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk and add a component named 
+  <component-name>.
+
+OPTIONS
+  <spec-url>           Url referencing the load spec of the project, the load.
+                       Spec is used to read the project from disk.
+  <component-name>     new component name.
+  --parentComponent=<parent-component-name>
+                       Name of the parent component. If not specified, the
+                       component will be added as a top-level component and
+                       it's name will be added to the load spec component names
+                       field.
+  --componentCondition=<condition>
+                       Used in conjunction with --parentComponent. Specify the
+                       load condition. The default <condition> is 'common'.
+  --projectsHome=<projects-home-directory>
+                       The directory where the project is located. By default,
+                       $ROWAN_PROJECTS_HOME.
+                       
+  -h, --help           Display usage message
+  -D, --debug          Bring up topaz debugger in the event of a script error.
+
+EXAMPLES
+  $basename -h
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston NewComponent
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston common/Common --parentComponent=NewComponent
+
+-----
+%
+doit
+	| loadSpecUrl args loadSpec resolvedProject componentName |
+	args := self positionalArgs.
+	args size ~= 2
+		ifTrue: [
+			self usage. 
+			self error: 'expected two positional arguments: <spec-url> <component-name>' ].
+	loadSpecUrl := args removeFirst.
+	componentName := args removeFirst.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	loadSpec
+		projectsHome: self projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	self parentComponent
+		ifNil: [ resolvedProject addTopLevelComponentNamed: componentName ]
+		ifNotNil: [:parentComponentName |
+			| component |
+			resolvedProject
+				componentNamed: componentName
+				ifAbsent: [
+					resolvedProject
+						addNewComponentNamed: componentName 
+						condition: self componentCondition ].
+			resolvedProject 
+				addComponentNamed: componentName
+				toComponentNamed: parentComponentName ].
+	resolvedProject 
+		exportLoadSpecification;
+		export.
+	^ self noResult.
+%

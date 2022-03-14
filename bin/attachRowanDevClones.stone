@@ -1,0 +1,46 @@
+#!/usr/bin/env superdoit_stone
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] [OPTIONS]
+
+DESCRIPTION
+  Attach the standard Rowan development projects in the stone to git clones:
+    gemstoneBaseImage to $ARCHBASE/image, if ARCHBASE env var defined
+    Rowan             to $ROWAN_PROJECTS_HOME/Rowan
+    RowanClientServices to $ROWAN_PROJECTS_HOME/RowanClientServices
+    
+  and reload Rowan, including tests.
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help -- -L -I .topazini
+  $basename -- -L -I .topazini
+-----
+%
+doit
+	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
+	(System gemEnvironmentVariable: 'ARCHBASE')
+		ifNotNil: [
+		 	(Rowan projectNamed: 'gemstoneBaseImage') 
+				gitRepositoryRoot: '$ARCHBASE/image'.
+			self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString ].
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+		ifNil: [ self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
+	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
+	(Rowan projectNamed: 'Rowan') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
+	(Rowan projectNamed: 'RowanClientServices') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
+	(Rowan projectNamed: 'Rowan')
+		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
+	(Rowan projectNamed: 'RowanClientServices')
+		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
+	(Rowan projectNamed: 'Rowan')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	^ System commit
+%

@@ -1,0 +1,51 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+	SuperDoitRequiredOptionWithRequiredArg long: 'expected'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] --expected=<expected-results-json> <test-results-json>
+
+DESCRIPTION
+  Print differences between the <test-results-json> produced by 
+  rowanUnitTest.solo and the <expected-results-json>.
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help
+  $basename -h
+  $basename --debug
+  $basename -D
+  $basename --expected=expectedTestResults.json testResults.json
+-----
+%
+specs
+[
+RwLoadSpecificationV2 {
+	#specName : 'GsTestStats',
+	#projectName : 'GsTestStats',
+	#gitUrl : 'https://github.com/dalehenrich/GsTestStats',
+	#revision : 'v1',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Samples'
+	],
+	#customConditionalAttributes : [],
+	#comment : 'test results tracking'
+}
+]
+%
+doit
+	| expectedSample mySample |
+	self positionalArgs size < 1 ifTrue: [ self error: 'Missing required positional argument <testResults.json>'].
+	self preDoitSpecLoad.
+	expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: self expected.
+	mySample := (self globalNamed: 'GsTestSuiteSample') fromJson: (self positionalArgs at: 1).
+	mySample compareTo: expectedSample on: self stdout.
+	^ self noResult
+%

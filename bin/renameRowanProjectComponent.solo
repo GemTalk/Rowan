@@ -1,0 +1,56 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D] <spec-url> <old-component-name> <new-component-name> 
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk and rename the component named 
+  <old-component-name> to <new-component-name>.
+
+OPTIONS
+  <spec-url>           url referencing the load spec of the project, the load.
+                       spec is used to read the project from disk.
+  <old-component-name> component to be renamed.
+  <new-component-name> new component name.
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error.
+
+EXAMPLES
+  $basename -h
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston Core Driver
+
+-----
+%
+doit
+	| loadSpecUrl args loadSpec resolvedProject oldComponentName newComponentName |
+	args := self positionalArgs.
+	args size ~= 3
+		ifTrue: [
+			self usage. 
+			self error: 'expected three positional arguments: <spec-url> <old-component-name> and <new-component-name>' ].
+	loadSpecUrl := args removeFirst.
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: self projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	oldComponentName := args at: 1.
+	newComponentName := args at: 2.
+	resolvedProject renameComponentNamed: oldComponentName  to: newComponentName.	
+	resolvedProject componentsRoot ensureDeleteAll.
+	(resolvedProject componentNames includes: oldComponentName)
+		ifTrue: [
+			| componentNames |
+			componentNames := resolvedProject componentNames copy.
+			componentNames remove: oldComponentName.
+			componentNames add: newComponentName.
+			resolvedProject componentNames: componentNames.
+			resolvedProject exportLoadSpecification ].
+	resolvedProject exportComponents.
+  ^ self noResult.
+%

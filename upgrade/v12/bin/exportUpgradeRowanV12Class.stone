@@ -1,0 +1,70 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithRequiredArg long: 'gsDir' default: '$ARCHBASE/examples/rowanV12'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'symDict' default: 'UserGlobals'.
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] [--gsDir=<directory>] \
+            [--symbolDictionary=<symbol-dictionary-name>]
+
+DESCRIPTION
+  Write the .gs file for the class named UpgradeRowanV12 to the given directory.
+
+  Use '$GEMSTONE/examples/rowan/reloadGemStoneBase.stone --rowanV12Upgrade' to 
+  load the UpgradeRowanV12 class into your image.
+
+  UpgradeRowanV12 development is expected to be done in a RowanV2.2 image.
+
+  NOTE: the --symbolDictionaly option is not currently functional.
+
+OPTIONS
+  -h, --help                          display usage message
+  -D, --debug                         bring up topaz debugger in the event of a 
+                                      script error
+  --gsDir=<director>                  path to directory where UpgradeRowanV12.gs
+                                      file will be written. By default 
+                                      $ARCHBASE/image/bootstrap.
+  --symDict=<symbol-dictionary-name>  name of symbol dictionary into which the class
+                                      will be loaded. By default Globals (not yet
+                                      implemented)
+
+EXAMPLES
+  $basename --help 
+  $basename 
+  $basename --gsDir=/tmp
+  $basename --symDict=RowanKernel
+-----
+%
+doit
+	| className projectSetDefinition projectSetModification visitor fileReference projectDefinition topazFileHeader |
+	className := 'UpgradeRowanV12'.
+	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
+	self 
+		globalNamed: 'UpgradeRowanV12' 
+		ifAbsent: [ self error: 'The class UpgradeRowanV12 is expected to be present in the image.' ].
+	fileReference := self gsDir asFileReference / className.
+  projectDefinition := (Rowan projectNamed: 'gemstoneBaseImage') _loadedProject asDefinition.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	topazFileHeader := '! Copyright (C) GemTalk Systems 1986-', Date today year printString, '.  All Rights Reserved.
+'.	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: false;
+		excludeClassInitializers: true;
+		excludeRemoveAllMethods: false;
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference base;
+		topazFilenamePackageNamesMap: (Dictionary new
+			at: className put: {'GemStone-RowanV12-Upgrade'};
+			yourself);
+		topazFileHeader: topazFileHeader;
+		yourself.
+	visitor visit: projectSetModification.
+	^ true
+%

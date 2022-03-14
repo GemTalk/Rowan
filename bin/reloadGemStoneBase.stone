@@ -1,0 +1,36 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D]
+
+DESCRIPTION
+  Reload the gemstoneBaseImage project. If ARCHBASE env var defined, attach the
+  gemstoneBaseImage project to $ARCHBASE/image before loading. If 
+
+OPTIONS
+  -h, --help            display usage message
+  -D, --debug           bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help 
+  $basename 
+-----
+%
+doit
+	| attributes |
+	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
+	(System gemEnvironmentVariable: 'ARCHBASE')
+		ifNotNil: [
+		 	(Rowan projectNamed: 'gemstoneBaseImage') 
+				gitRepositoryRoot: '$ARCHBASE/image' ].
+	attributes :=  Rowan platformConditionalAttributes, #('filein3' 'filein4' 'x509' 'ANSI_PortableStreams').
+	(Rowan projectNamed: 'gemstoneBaseImage')
+		loadProjectSet:attributes.
+	^ System commit
+%

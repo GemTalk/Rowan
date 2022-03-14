@@ -1,0 +1,462 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithNoArg long: 'dev_loadProjectsOnly'.
+	SuperDoitOptionalOptionWithNoArg long: 'dev_persistScriptClass'.
+	SuperDoitOptionalOptionWithNoArg long: 'debugSuite'.
+	SuperDoitOptionalOptionWithNoArg long: 'legacyStreams'.
+	SuperDoitOptionalOptionWithNoArg long: 'skipLoad'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'.
+	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir'.
+}
+%
+usage
+-----
+USAGE
+  $basename [--help | -h] [--debug | -D] [OPTIONS]
+
+DESCRIPTION
+  Run unit tests for Rowan V1.2. Can be run interactively or from a battery
+  test.
+
+  The environment variable ROWAN_PROJECTS_HOME must be defined and both Rowan
+  (git@git.gemtalksystems.com:Rowan, branch masterV1.2) and GsTestStats
+  (git@git.gemtalksystems.com:GsTestStats, branch v1) git clones should be
+  present there.
+
+  If the environment variable EXTERNALS_ST_BASE is defined (used for internal 
+  development), then the GsTestStats (git@git.gemtalksystems.com:GsTestStats, 
+  branch v1) git clone should be present there.
+
+OPTIONS
+  --debugSuite               If present, test suite will be run in debug
+                             mode. If -- expectedResults option is used,
+                             then only those tests that are expected to
+                             fail will be debugged.
+  --dev_loadProjectsOnly     Exit the script immediately after doing a project
+                             load and commit.
+  --dev_persistScriptClass   Save a copy of the script class in the
+                             SuperDoit_trasientSymbolDictionary symbol dictionary
+                             for reference. Used in conjunction with the
+                             --dev_loadProjecstOnly option.
+  --expectedResults=<path-to-expected-testResults-json>
+                             If specified, the testSuiteSample from the JSON
+                             file will be compared to the testSuiteSample
+                             produced by the test. The tests results are
+                             expected to match the expected results, if they
+                             do not, a difference report is produced.
+  --isColorful=[true|false]  By default ASCII colors are used on stdout if
+                             stdout is attached to a terminal. There are
+                             certain use cases (i.e., GitHub CI) where it
+                             is desirable to use ASCII colors even though
+                             stdout is not a terminal.
+  --legacyStreams            Before Rowan is installed, execute Stream class>>
+                             installLegacyStreamImplementation.
+  --resultDir=<path-results-directory>
+                             Location of the battery test result directory
+                             where the various test directories and results
+                             files are to be found. REQUIRED.
+  --skipLoad                 Run tests against the current extent.
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --debugSuite -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --expectedResults=expectedTestResults.json -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --expectedResults=TEST_RESULTS/expectedTestResults.json --isColorful=false -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --dev_loadProjectsOnly
+-----
+%
+instvars
+testStatusStream
+%
+method: GsFile
+print: anObject
+       anObject printOn: self
+%
+method
+_writeTestStatus: testStatus
+	self testStatusStream
+		nextPutAll: testStatus; lf;
+		nextPutAll: 'SECTION 2: UNREPORTED BUGS'; lf; "without this entry, batterytest.pl thinks it's a crash (instead of a failure)"
+		close.
+	testStatusStream := nil.
+%
+method
+adoptRowan
+ 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
+	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	{
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+	}
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
+		| specification specUrl readTool |
+		specUrl := ar at: 1.
+		specification := (self globalNamed: 'RwSpecification') fromUrl: specUrl.
+		specification
+			repositoryRootPath: gitRepoPath;
+			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+			register. "Create each of the loaded projects"
+		readTool := (self globalNamed: 'Rowan') projectTools read.
+		ar size = 1
+			ifTrue: [
+				| theProjectSetDefinition |
+				theProjectSetDefinition := readTool
+					readProjectSetForProjectNamed: specification specName
+					withGroupNames: #('tests' 'deprecated' 'jadeServer').
+				theProjectSetDefinition
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ].
+				projectSetDefinition properties: theProjectSetDefinition properties ]
+			ifFalse: [
+				| configName |
+				configName := ar at: 2.
+				(readTool readProjectSetForProjectNamed: specification specName withConfiguration: configName)
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ] ] ].
+
+	loadedProjectInfo := projectSetDefinition properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			projectName = 'Rowan'
+				ifTrue: [
+					"install the packageMapSpecs for this load into the specification prior to the load"
+					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
+					projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+					spec := projectDefinition specification.
+					thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+					gemstoneSpec := spec platformSpec at: 'gemstone'.
+					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil)
+						ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
+					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil)
+						ifNotNil: [:boolean |
+							gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
+					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil)
+						ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ] ].
+
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanLoader'.
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanTools'.
+
+	packageCreateTool := (self globalNamed: 'Rowan') packageTools create.
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			"The loaded project was created by the earlier #register,
+				traverse the package definitions and create loaded packages for each"
+			| specification projectName |
+			projectName := projectDefinition name.
+			specification := ((self globalNamed: 'Rowan') image loadedProjectNamed: projectName) specification.
+			projectDefinition packageNames
+				do: [:packageName |
+					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
+
+	"Adopt the project set definition"
+	(self globalNamed: 'Rowan') projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
+
+	projectLoadTool := (self globalNamed: 'Rowan') projectTools load.
+
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			"make sure that the loaded SHA is set for each project"
+			projectLoadTool specification: projectDefinition specification.
+			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool.
+			projectDefinition name = 'Rowan'
+				ifTrue: [
+					(loadedProjectInfo at: projectDefinition name ifAbsent: [])
+						ifNotNil: [:map |
+							projectDefinition specification imageSpec
+								loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+								loadedGroupNames: (map at: 'loadedGroupNames') ] ] ].
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		"mark projects and packages not dirty"
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			| audit projectName |
+			projectName := projectDefinition name.
+			GsFile gciLogServer: '---Auditing project: ', projectName printString.
+			audit := (self globalNamed: 'Rowan') projectTools audit auditForProjectNamed: projectName.
+			GsFile gciLogServer: '	-- audit finished '.
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
+	System commit.
+%
+method
+ansiGreen
+^ (self globalNamed: 'GsTestStatsCI') ansiGreen
+%
+method
+ansiRed
+^ (self globalNamed: 'GsTestStatsCI') ansiRed
+%
+method
+bootstrapRowanV12
+	"bootstrap Rowan V1.2"
+	self skipLoad
+		ifTrue: [
+			GsFileIn
+				fromServerPath: (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE'), '/GsTestStats/gs/GsTestStats.gs'.
+			^ self ].
+	self
+		createSymbolDictionaries;
+		fileinRowanV12;
+		adoptRowan;
+		reloadRowan;
+		yourself.
+%
+method
+buildTestSuite: testSuiteName
+	| systemTestSuite |
+	systemTestSuite := (self globalNamed: 'Rowan') projectTools test
+		testSuiteForProjectsNamed: { 'Rowan' . 'STON' . 'Cypress' .  'Tonel' }.
+	systemTestSuite name: testSuiteName.
+	^ systemTestSuite
+%
+method
+createSymbolDictionaries
+	| session symbolList symbolDictNames |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	symbolDictNames := symbolList names.
+	#( #RowanKernel #RowanLoader #RowanTools)
+		do: [:symbolName |
+			(symbolDictNames includes: symbolName)
+				ifFalse: [
+					| newDict size |
+					newDict := SymbolDictionary new
+						name: symbolName;
+						objectSecurityPolicy: symbolList objectSecurityPolicy;
+						yourself.
+					size := System myUserProfile symbolList size.
+					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
+	System commit.
+%
+method
+fileinRowanV12
+	"fail if there are compile warnings"
+	| warnings |
+	self legacyStreams
+		ifTrue: [
+			Stream installLegacyStreamImplementation.
+			System commit ].
+	warnings := {}.
+	[
+		GsFileIn
+			fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs';
+			fromServerPath: (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE'), '/GsTestStats/gs/GsTestStats.gs'
+	]
+		on: CompileWarning
+		do: [:ex |
+			(ex description includesString: 'not optimized')
+					ifFalse: [ warnings add: ex asString printString ].
+			ex resume ].
+	System commit.
+ 	warnings isEmpty ifFalse: [
+		| warningStatusStream |
+		warningStatusStream := WriteStream on: String new.
+		self testStatusStream nextPutAll: 'COMPILE WARNINGS:'; lf.
+		warnings do: [:warning | self testStatusStream nextPutAll: '	', warning; lf ].
+		self stdout
+			nextPutAll: 'COMPILE WARNINGS:'; lf;
+			nextPutAll:  ' See teststatus.txt for more details'; lf.
+		false ifTrue: [
+			"don't fail run if compile warnings are present ... for now"
+			self testStatusStream nextPutAll: 'Compile warnings results in test failure'; lf.
+			self
+				writeTestDone: ' fails with compile warnings: ', warnings size printString
+				explanation: 'See teststatus.txt for more details'.
+		  self testStatusStream close.
+			self writeFailingTestStatusAndExit ] ].
+	System commit.
+%
+method
+printFailingBanner: message reporter: reporter
+	reporter printBanner: message color: self ansiRed
+%
+method
+printPassingBanner: message reporter: reporter
+	reporter printBanner: message color: self ansiGreen
+%
+method
+reloadRowan
+	#( 'Rowan' 'Cypress' 'STON' 'Tonel' )
+		do: [:projectName |
+			"make sure test group is loaded ... include deprecated packages for now"
+			[
+			| groupNames |
+			groupNames := #('tests' 'deprecated' 'jadeServer').
+			GsFile gciLogServer: 'Loading ', projectName.
+			(self globalNamed: 'Rowan') projectTools load
+				loadProjectNamed: projectName
+				withGroupNames: groupNames ]
+					on: CompileWarning do: [:ex | ex resume ] ].
+	System commit.
+%
+method
+runTestSuite: testSuiteName
+	| systemTestSuite |
+	systemTestSuite := self buildTestSuite: testSuiteName.
+	self debugSuite
+		ifTrue: [
+			| debugOption |
+			"interactive debugging of failures"
+			debugOption := self optionsDict at: 'debug'.
+			debugOption value
+				ifFalse: [
+					"set the --debug option"
+					debugOption value: true ].
+			self expectedResults
+				ifNil: [
+					"debug test failures"
+					^ (self globalNamed: 'GsTestStatsCITestRunner') debugSuite: systemTestSuite ]
+				ifNotNil: [ :expectedResultsPath |
+          "debug unexpected test failures"
+					| expectedFailures |
+					expectedFailures := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
+					^(self globalNamed: 'GsTestStatsCITestRunner')
+						debugUnexpectedFailures: systemTestSuite
+						expectedFailures: expectedFailures ] ]
+		ifFalse: [
+			"run tests and produce report of test failures"
+			^ (self globalNamed: 'GsTestStatsCITestRunner') runSuite: systemTestSuite ].
+%
+method
+testStatusStream
+	testStatusStream ifNotNil: [ ^ testStatusStream].
+	(GsFile isServerDirectory: self resultDir) ~~ true
+		ifTrue: [
+			(GsFile createServerDirectory: self resultDir)
+				ifNil: [ self error: 'Could not create ', self resultDir printString ] ].
+	testStatusStream := GsFile openAppendOnServer:  self resultDir, '/teststatus.txt'.
+	testStatusStream ifNil: [ self error: 'Could not create ', self resultDir, '/teststatus.txt' ].
+	^ testStatusStream
+%
+method
+writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSample: expectedSample testSuiteSample: testSuiteSample
+	| failingStatus |
+	failingStatus := 'fails by not matching expected results'.
+	self printFailingBanner: failingStatus reporter: reporter.
+	"stdout is routed to a log file, so disable isColorful"
+	(self globalNamed: 'GsTestStatsCI') isColorful: false.
+	(self globalNamed: 'GsTestStatsCITestReporterStdout')
+		reportNotPassing: runner
+			on: self testStatusStream.
+	self testStatusStream nextPutAll: '----------------------------------------------------'; lf.
+	self testStatusStream nextPutAll: failingStatus, ' (test results diff report follows)'; lf.
+	self testStatusStream nextPutAll: '----------------------------------------------------'; lf.
+	{ self stdout . self testStatusStream}
+		do: [:outputStream |
+			testSuiteSample compareTo: expectedSample on: outputStream.
+							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
+	self
+		writeTestDone: 'fails with differences in expected results'
+		explanation: 'See teststatus.txt for more details'.
+	self writeFailingTestStatusAndExit
+%
+method
+writeFailingTestResultsSummaryReport: runner reporter: reporter
+	| failingStatus |
+	failingStatus := 'test failures'.
+	self printFailingBanner: failingStatus reporter: reporter.
+	"test status is not written to stdout, so disable isColorful"
+	(self globalNamed: 'GsTestStatsCI') isColorful: false.
+	(self globalNamed: 'GsTestStatsCITestReporterStdout')
+		reportNotPassing: runner
+			on: self testStatusStream.
+	self testStatusStream lf; nextPutAll: failingStatus; lf; nextPutAll: runner summary; lf.
+	self
+		writeTestDone: 'fails with ', runner summary
+		explanation: 'See teststatus.txt for more details'.
+	self writeFailingTestStatusAndExit
+%
+method
+writeFailingTestStatusAndExit
+	"does not return"
+	self _writeTestStatus: 'TEST STATUS:: fails with errors'.
+	^ self exitWithStatus: 1
+%
+method
+writePassingTestStatus
+	self _writeTestStatus: 'TEST STATUS:: passes with no errors'.
+	^ self noResult
+%
+method
+writeTestDone: detailedTestStatus
+	"write $resultsDir/testdone.txt"
+	self writeTestDone: detailedTestStatus explanation: ''
+%
+method
+writeTestDone: detailedTestStatus explanation: explanation
+	"write $resultsDir/testdone.txt"
+	| stream |
+	stream := GsFile openAppendOnServer:  self resultDir, '/testdone.txt'.
+	stream
+		lf; nextPutAll: 'TEST STATUS:: ', detailedTestStatus; lf.
+	explanation isEmpty
+		ifFalse: [
+			stream lf; nextPutAll: explanation; lf ].
+	stream close
+%
+doit
+	| runner testSuiteSample passingStatus  stdoutReporter exportStream |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') 
+		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
+	(System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') 
+		ifNil: [ System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: '$ROWAN_PROJECTS_HOME' ].
+	self bootstrapRowanV12.
+	self dev_loadProjectsOnly
+		ifTrue: [
+			"EXIT if only a project load is desired"
+			self dev_persistScriptClass
+				ifTrue: [
+					"save copy of script class in image and commit"
+					self persist ].
+			self exitWithStatus: 0 ].
+	self isColorful ifNotNil: [:aBoolString | (self globalNamed: 'GsTestStatsCI') isColorful: aBoolString = 'true' ].
+	"run tests"
+	runner := self runTestSuite: 'Rowan projects Test Suite'.
+	"report results to stdout"
+	stdoutReporter := (self globalNamed: 'GsTestStatsCITestReporterStdout') reportNotPassing: runner.
+	"create testSuiteSample with results of test"
+	testSuiteSample := ((self globalNamed: 'GsTestStatsCITestReporterTestSuiteSample') report: runner) testSuiteSample.
+	"write testSuiteSample to results directory in JSON"
+	exportStream := GsFile openWriteOnServer: self resultDir, '/testResults.json'.
+	testSuiteSample exportJsonTo: exportStream.
+	exportStream close.
+	"different reporting requirements for failures when expected results are available"
+	self expectedResults
+		ifNil: [
+			"no expected test results, pass/failure depends on successful test run"
+			passingStatus := 'passes with no error'.
+			runner isSuccessful
+				ifFalse: [
+					"test failures, does not return"
+					self writeFailingTestResultsSummaryReport: runner reporter: stdoutReporter ] ]
+		ifNotNil: [:expectedResultsPath |
+			"with expected test results, pass/failure depends up matching expected results"
+			| expectedSample dummyStream |
+			expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
+			passingStatus := 'passes matching expected results'.
+			dummyStream := WriteStream on: String new.
+			(testSuiteSample compareTo: expectedSample on: dummyStream)
+				ifFalse: [
+					"differences between test results and expected results, does not return"
+					self writeFailingExpectedResultsSummaryReport: runner
+						reporter: stdoutReporter
+						expectedSample: expectedSample
+						testSuiteSample: testSuiteSample ] ].
+  "PASSING tests (not test failures, or test results match expected results)"
+	self printPassingBanner: passingStatus reporter: stdoutReporter.
+	self
+		writeTestDone: 'passes with ', runner summary.
+	^ self writePassingTestStatus
+%
