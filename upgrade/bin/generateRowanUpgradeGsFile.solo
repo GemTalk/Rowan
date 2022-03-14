@@ -1,21 +1,24 @@
 #!/usr/bin/env superdoit_solo
 options
 {
-  SuperDoitOptionalOptionWithRequiredArg long: 'archbase' default: '$ARCHBASE'.
   SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 }
 %
 usage
 -----
 USAGE
-  $basename [--help | -h] [--debug | -D] <OPTIONS>
+  $basename [--help | -h] [--debug | -D] --projectsHome=<Rowan-project-parent-directory>
 
 DESCRIPTION
-	Generate the Rowan v2.2 kernel class extensions .gs file.
+	Generate the UpgradeRowanV2.gs file. The file contains the GemStone kernel
+  class extension methods used to bootstrap Rowan V2.2 into an image after
+  upgradeImage has been run.
 
 OPTIONS
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
+  --projectsHome=<Rowan-project-parent-directory>
+                             The parent of the Rowan project.
 
 EXAMPLES
   $basename --help
@@ -78,6 +81,7 @@ doit
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: theRepositoryRoot;
 		topazFilenamePackageNamesMap: topazFileNameMap;
+		topazFileHeader: '! ', self _copyright, String new lf; 
 		yourself.
 	visitor visit: projectSetModification.
 	theGsFile := GsFile openAppendOnServer: (theRepositoryRoot / gsFileName, 'gs') pathString.

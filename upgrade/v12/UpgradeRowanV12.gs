@@ -12,7 +12,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'GemStone-RowanV12-Upgrade';
+		category: 'RowanV12Upgrade-Core';
 		comment: 'This class is intended to be loaded into a Rowan v1.2 image to repair and 
 reload Rowan v1.2 after upgradeImage has been performed. 
 
@@ -41,7 +41,7 @@ removeallclassmethods UpgradeRowanV12
 
 !		Class methods for 'UpgradeRowanV12'
 
-category: 'Rowan Upgrade'
+category: 'Rowan V12 Upgrade'
 classmethod: UpgradeRowanV12
 globalNamed: aString
 	"return nil if global not defined"
@@ -49,13 +49,13 @@ globalNamed: aString
 	^ GsSession currentSession objectNamed: aString asSymbol
 %
 
-category: 'Rowan Upgrade'
+category: 'Rowan V12 Upgrade'
 classmethod: UpgradeRowanV12
 logMessage: message
 	GsFile gciLogServer: message
 %
 
-category: 'Rowan Upgrade'
+category: 'Rowan V12 Upgrade'
 classmethod: UpgradeRowanV12
 upgradeRowan
 	"Currently only upgrades of Rowan v1.2.13 are supported"

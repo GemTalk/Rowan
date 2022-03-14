@@ -1,7 +1,6 @@
 #!/usr/bin/env superdoit_solo
 options
 {
-  SuperDoitOptionalOptionWithRequiredArg long: 'archbase' default: '$ARCHBASE'.
   SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 }
 %
@@ -11,11 +10,15 @@ USAGE
   $basename [--help | -h] [--debug | -D] <OPTIONS>
 
 DESCRIPTION
-	Generate the Rowan v2.2 kernel class extensions .gs file.
+	Generate the UpgradeRowanV12.gs file. The file contains the class
+  UpgradeRowanV12 which is used to drive the upgrade process for Rowan v1.2 and
+  is expected to be run after upgradeImage has been run.
 
 OPTIONS
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
+  --projectsHome=<Rowan-project-parent-directory>
+                             The parent directory of the RowanV12Upgrade project.
 
 EXAMPLES
   $basename --help
@@ -23,66 +26,36 @@ EXAMPLES
 -----
 %
 doit
-	| loadSpecUrl loadSpec theProjectSetDefinition theRepositoryRoot topazFileNameMap 
-		projectSetModification visitor resolvedProject customConditionalAttributes 
-		xProjectSetDefinition gsFileName theGsFile |
-	loadSpecUrl := 'file:', self projectsHome, '/Rowan/rowan/specs/Rowan.ston'.
-	loadSpec := RwSpecification fromUrl: loadSpecUrl.
-	customConditionalAttributes := {
-		'common'.
-		'gemstone'.
-		'gemstone-kernel'.
-		'upgrade' .
-		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
-	}.
-	loadSpec 
-		customConditionalAttributes: customConditionalAttributes;
-		componentNames: { 'Upgrade' };
-		yourself.
-	theRepositoryRoot := (self archbase, '/examples/rowanV2') asFileReference.
-	theRepositoryRoot ensureCreateDirectory.
-	resolvedProject := loadSpec
-			projectsHome: self projectsHome;
-			resolve.
-
-	"UGLY hack PART 1: because embedded projects ignore conditionals IF the project is loaded in the
-		image .... WHAT WAS I THINKING ... at least it is fixed in v3.0"
-	xProjectSetDefinition :=  resolvedProject readProjectSet: customConditionalAttributes.
+	| projectName projectsHomeReference projectRoot loadSpecRef resolvedProject 
+		gsFileParent theProjectSetDefinition gsFileName topazFileNameMap 
+		projectSetModification theGsFile visitor |
+	projectName := 'RowanV12Upgrade'.
+	projectsHomeReference := self projectsHome asFileReference.
+	projectRoot := projectsHomeReference /projectName .
+	loadSpecRef := projectRoot / 'rowan' / 'specs' / projectName, 'ston'.
+	resolvedProject := Rowan 
+		projectFromUrl: 'file:' , loadSpecRef pathString 
+		diskUrl: 'file:' , projectRoot pathString.
+	gsFileParent := projectRoot parent parent / 'v12'.
+	gsFileParent ensureCreateDirectory.
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	theProjectSetDefinition 
-		addProject: (xProjectSetDefinition projectNamed: 'FileSystemGs');
-		addProject: (resolvedProject read: customConditionalAttributes);
+		addProject: resolvedProject _resolvedProject;
 		yourself.
 	
-	gsFileName := 'UpgradeRowanV2'.
+	gsFileName := 'UpgradeRowanV12'.
 	topazFileNameMap := Dictionary new
-		at: gsFileName put: Set new;
+		at: gsFileName put: resolvedProject packageNames;
 		yourself.
-	GsFile gciLogServer: 'Creating UpgradeRowanV2.gs:'.
-	theProjectSetDefinition keys do: [:projectName |
-		| projectDefinition thePackages |
-		projectDefinition := theProjectSetDefinition projectNamed: projectName.
-		projectName = 'Rowan'
-			ifTrue: [ thePackages := projectDefinition packageNames ].
-		projectName = 'FileSystemGs'
-			ifTrue: [ 
-				"UGLY hack PART@ 2: brute force grab the packages from the component"
-				thePackages := (projectDefinition componentNamed: 'Gemstone35-') packageNames ].
-
-		thePackages do: [:packageName |
-			(topazFileNameMap at: gsFileName) add: packageName.
-			GsFile gciLogServer: '	', packageName ] ].
+	GsFile gciLogServer: 'Creating UpgradeRowanV12.gs:'.
 
 	projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
-		repositoryRootPath: theRepositoryRoot;
+		repositoryRootPath: gsFileParent;
 		topazFilenamePackageNamesMap: topazFileNameMap;
+		topazFileHeader: '! ', self _copyright, String new lf; 
 		yourself.
 	visitor visit: projectSetModification.
-	theGsFile := GsFile openAppendOnServer: (theRepositoryRoot / gsFileName, 'gs') pathString.
-	[ 
-		"seems that a commit is needed at end of .gs file?"
-		theGsFile lf; nextPutAll: 'commit'; lf ] ensure: [ theGsFile close ].
 	^ self noResult
 %
