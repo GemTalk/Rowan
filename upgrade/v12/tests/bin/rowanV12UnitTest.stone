@@ -6,6 +6,7 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'debugSuite'.
 	SuperDoitOptionalOptionWithNoArg long: 'legacyStreams'.
 	SuperDoitOptionalOptionWithNoArg long: 'skipLoad'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'externalsStBase'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'.
 	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir'.
@@ -46,6 +47,9 @@ OPTIONS
                              produced by the test. The tests results are
                              expected to match the expected results, if they
                              do not, a difference report is produced.
+  --externalsStBase          In a GemStone build environment, the the location
+                             externals_st directory used to do the build. 
+                             Default is $ROWAN_PROJECTS_HOME.
   --isColorful=[true|false]  By default ASCII colors are used on stdout if
                              stdout is attached to a terminal. There are
                              certain use cases (i.e., GitHub CI) where it
@@ -407,11 +411,24 @@ writeTestDone: detailedTestStatus explanation: explanation
 	stream close
 %
 doit
-	| runner testSuiteSample passingStatus  stdoutReporter exportStream |
-	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') 
+	| runner testSuiteSample passingStatus  stdoutReporter exportStream rowanProjectsHome externalsStBase |
+	(rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') 
 		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
 	(System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') 
 		ifNil: [ System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: '$ROWAN_PROJECTS_HOME' ].
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') asFileReference pathString; lf.
+	self externalsStBase
+		ifNotNil: [:value | 
+			externalsStBase := value.
+			System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: value ]
+		ifNil: [
+			(externalsStBase := System gemEnvironmentVariable: 'EXTERNALS_ST_BASE')
+				ifNil: [
+					externalsStBase := rowanProjectsHome.
+					System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: rowanProjectsHome ] ].
+	externalsStBase asFileReference exists
+		ifFalse: [ self error: 'Directory referred to by EXTERNALS_ST_BASE (', externalsStBase asFileReference pathString, ') does not exist' ].
+	self stdout nextPutAll: '-- EXTERNALS_ST_BASE = ', (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') asFileReference pathString; lf.
 	self bootstrapRowanV12.
 	self dev_loadProjectsOnly
 		ifTrue: [
