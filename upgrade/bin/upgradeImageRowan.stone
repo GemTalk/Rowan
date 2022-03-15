@@ -57,7 +57,7 @@ EXAMPLES
 -----
 %
 input
-	$GEMSTONE/examples/rowanV2/UpgradeRowanV2.gs
+	$GEMSTONE/rowan/upgrade/UpgradeRowanV2.gs
 %
 specs
 [
@@ -85,7 +85,7 @@ doit
 	(rowanClass respondsTo: #versionString)
 		ifFalse: [ 
 			"Rowan version older than Rowan v2.3.0"
-			self error: 'Rowan version must be at least v2.3.0 to finish upgrade. Use $GEMSTONE/examples/rowanV2/updateRowan.stone to upgrade Rowan prior to running this script' ].
+			self error: 'Rowan version must be at least v2.3.0 to finish upgrade. Use $GEMSTONE/rowan/bin/updateRowan.stone to upgrade Rowan prior to running this script' ].
 	((self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
 			>= ((self globalNamed: 'RwSemanticVersionNumber') fromString: '2.3.0')
 		ifFalse: [
@@ -98,7 +98,7 @@ doit
 		"we don't want the UpgradeRowan project to persisted in the image ... load into transient
 			symbol dictionary"
 		loadSpec 
-			projectsHome: '$GEMSTONE/examples/rowanV2/projects';
+			projectsHome: '$GEMSTONE/rowan/projectsHome';
 			gemstoneSetDefaultSymbolDictNameTo: SuperDoitCommandParser transientSymbolDictionaryName;
 			yourself ].
 	Rowan projectTools disown disownProjectNamed: 'RowanUpgrade'. "remove Rowan metadata and leave class in transient symbol dict"

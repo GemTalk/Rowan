@@ -61,7 +61,7 @@ EXAMPLES
 -----
 %
 input
-$GEMSTONE/examples/rowanV12/UpgradeRowanV12.gs
+$GEMSTONE/rowan/upgrade/v12/UpgradeRowanV12.gs
 %
 doit
 	| rowanClass upgrader |
