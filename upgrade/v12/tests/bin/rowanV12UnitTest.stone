@@ -416,7 +416,7 @@ doit
 		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
 	(System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') 
 		ifNil: [ System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: '$ROWAN_PROJECTS_HOME' ].
-	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') asFileReference pathString; lf.
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'); lf.
 	self externalsStBase
 		ifNotNil: [:value | 
 			externalsStBase := value.
@@ -426,9 +426,9 @@ doit
 				ifNil: [
 					externalsStBase := rowanProjectsHome.
 					System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: rowanProjectsHome ] ].
-	externalsStBase asFileReference exists
-		ifFalse: [ self error: 'Directory referred to by EXTERNALS_ST_BASE (', externalsStBase asFileReference pathString, ') does not exist' ].
-	self stdout nextPutAll: '-- EXTERNALS_ST_BASE = ', (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') asFileReference pathString; lf.
+	GsFile existsOnServer: externalsStBase)
+		ifFalse: [ self error: 'Directory referred to by EXTERNALS_ST_BASE (', externalsStBase, ') does not exist' ].
+	self stdout nextPutAll: '-- EXTERNALS_ST_BASE = ', (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE'); lf.
 	self bootstrapRowanV12.
 	self dev_loadProjectsOnly
 		ifTrue: [
