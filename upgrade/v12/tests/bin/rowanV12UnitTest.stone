@@ -426,7 +426,7 @@ doit
 				ifNil: [
 					externalsStBase := rowanProjectsHome.
 					System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: rowanProjectsHome ] ].
-	GsFile existsOnServer: externalsStBase)
+	(GsFile existsOnServer: externalsStBase)
 		ifFalse: [ self error: 'Directory referred to by EXTERNALS_ST_BASE (', externalsStBase, ') does not exist' ].
 	self stdout nextPutAll: '-- EXTERNALS_ST_BASE = ', (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE'); lf.
 	self bootstrapRowanV12.
