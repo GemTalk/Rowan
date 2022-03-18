@@ -7,7 +7,6 @@ options
 	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'externalsStBase'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'rowanHome' default: '$GEMSTONE/upgrade/projects'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsHome'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsSandbox'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'
@@ -46,9 +45,15 @@ OPTIONS
                              produced by the test. The tests results are 
                              expected to match the expected results, if they
                              do not, a difference report is produced.
-  --externalsStBase          In a GemStone build environment, the the location
-                             externals_st directory used to do the build. 
-                             Default is $ROWAN_PROJECTS_HOME.
+  --externalsStBase          Location where Rowan, RowanClientServices, 
+                             GsTestStats and other projects that are used to 
+                             build the product are found. The environment variable 
+                             EXTERNALS_ST_BASE is used to isolate the projects 
+                             used to build the product (Rowan, etc.) from 
+                             ROWAN_PROJECTS_HOME, which is used by the test 
+                             framework as the location where projects downloaded 
+                             by the tests are located. If EXTERNALS_ST_BASE is 
+                             not defined, then it defaults to ROWAN_PROJECTS_HOME.
   --isColorful=[true|false]  By default ASCII colors are used on stdout if 
                              stdout is attached to a terminal. There are 
                              certain use cases (i.e., GitHub CI) where it
@@ -58,19 +63,12 @@ OPTIONS
                              Location of the battery test result directory
                              where the various test directories and results
                              files are to be found. REQUIRED.
-  --rowanHome=<Rowan-project-parent>
-                             Location of Rowan clone to be loaded and tested.
-                             By default, $GEMSTONE/upgrade/projects, 
-                             which is the parent directory of the Rowan 
-                             repository used to create extent0.rowan.dbf. The 
-                             script reloads Rowan, so if an alternate location 
-                             is used, the alternate Rowan version should already
-                             be cloned and should be compatible with the version 
-                             in $GEMSTONE/upgrade/projects.
   --rowanProjectsHome=<directory-path>
-                             Location where the GsTestStats (and other dependent
-                             projects will be cloned unless already present. By 
-                             default, $ROWAN_PROJECTS_HOME. MUST BE DEFINED.
+                             Location where the projects cloned by the tests will 
+                             be located. Use EXTERNALS_ST_BASE or --externalsStBase 
+                             to isolate the projects included in extent0.rowan.dbf 
+                             from the test projects. ROWAN_PROJECTS_HOME MUST BE 
+                             DEFINED.
   --rowanProjectsSandbox=<directory-path>
                              Location used by tests when cloning git repositores. 
                              By default, $ROWAN_PROJECTS_SANDBOX. MUST BE DEFINED.
@@ -94,7 +92,7 @@ RwLoadSpecificationV2 {
 	#specName : 'Rowan',
 	#projectName : 'Rowan',
 	#gitUrl : 'git@git.gemtalksystems.com:Rowan',
-	#revision : 'candidateV2.3',
+	#revision : 'masterV2.3',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
 		'Rowan'
@@ -119,6 +117,28 @@ RwLoadSpecificationV2 {
 		}
 	},
 	#comment : 'Load spec for loading Rowan v2'
+},
+RwLoadSpecificationV2 {
+	#specName : 'RowanClientServices',
+	#projectName : 'RowanClientServices',
+	#gitUrl : 'git@github.com:GemTalk/RowanClientServices.git',
+	#revision : 'masterv2.2',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'RowanClientServices'
+	],
+	#customConditionalAttributes : [
+		'v2'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanClientServices'
+			}
+		}
+	},
+
+	#comment : ''
 },
 RwLoadSpecificationV2 {
 	#specName : 'GsTestStats',
@@ -236,12 +256,7 @@ loadProjectSpecs
 	[ 
 		self preDoitSpecLoad: [:loadSpec |
 			loadSpec customConditionalAttributes: (loadSpec customConditionalAttributes, { 'tests' . 'testsV2' }).
-			loadSpec projectName = 'Rowan'
-				ifTrue: [ 
-					loadSpec
-						diskUrl: self rowanHome, '/Rowan';
-						projectsHome: self rowanHome ]
-				ifFalse: [ loadSpec projectsHome: externalsStBase ] ].
+			loadSpec projectsHome: externalsStBase ].
 	]
 		on: CompileWarning
 		do: [:ex | 
