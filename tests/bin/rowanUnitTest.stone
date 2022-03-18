@@ -102,7 +102,9 @@ RwLoadSpecificationV2 {
 		'stubs',
 		'tonel',
 		'v2',
-		'v2Only'
+		'v2Only',
+		'tests',
+		'testsV2'
 	],
 	#platformProperties : {
 		'gemstone' : {
@@ -128,7 +130,9 @@ RwLoadSpecificationV2 {
 		'RowanClientServices'
 	],
 	#customConditionalAttributes : [
-		'v2'
+		'v2',
+		'tests',
+		'testsV2'
 	],
 	#platformProperties : {
 		'gemstone' : {
@@ -149,7 +153,8 @@ RwLoadSpecificationV2 {
 	#componentNames : [
 		'Samples'
 	],
-	#customConditionalAttributes : [],
+	#customConditionalAttributes : [
+		'tests' ],
 	#comment : 'test results tracking'
 }
 ]
@@ -255,8 +260,16 @@ loadProjectSpecs
 	warnings := {}.
 	[ 
 		self preDoitSpecLoad: [:loadSpec |
-			loadSpec customConditionalAttributes: (loadSpec customConditionalAttributes, { 'tests' . 'testsV2' }).
-			loadSpec projectsHome: externalsStBase ].
+			| projectName |
+			projectName := loadSpec projectName.
+			loadSpec projectsHome: externalsStBase.
+			projectName = 'GsTestStats'
+				ifFalse: [
+					"Rowan and RowanClientServices ... compensate for V2.x bugs"
+					| project |
+					project := Rowan projectNamed: projectName.
+					project gitRepositoryRoot: externalsStBase, '/', projectName.
+					project_loadedProject resolvedProject projectsHome: rowanProjectsHome ] ].
 	]
 		on: CompileWarning
 		do: [:ex | 
