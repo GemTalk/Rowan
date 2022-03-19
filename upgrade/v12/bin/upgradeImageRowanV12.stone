@@ -77,7 +77,7 @@ doit
 			| rowanVersion |
 			"assume 3.2.15 to 3.5.7 to 3.6.4 upgrade sequence for Rowan v1.2.10"
 			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
-			 := self rowanVersion
+			rowanVersion := self rowanVersion
 				ifNil: [ '1.2.14' ]
 				ifNotNil: [:version  | version ].
 			self stdout 
