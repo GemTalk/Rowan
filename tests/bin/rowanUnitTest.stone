@@ -269,7 +269,7 @@ loadProjectSpecs
 					| project |
 					project := Rowan projectNamed: projectName.
 					project gitRepositoryRoot: externalsStBase, '/', projectName.
-					project project_loadedProject resolvedProject projectsHome: rowanProjectsHome ] ].
+					project _loadedProject resolvedProject projectsHome: rowanProjectsHome ] ].
 	]
 		on: CompileWarning
 		do: [:ex | 
