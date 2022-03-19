@@ -89,62 +89,6 @@ testStatusStream
 specs
 [
 RwLoadSpecificationV2 {
-	#specName : 'Rowan',
-	#projectName : 'Rowan',
-	#gitUrl : 'git@git.gemtalksystems.com:Rowan',
-	#revision : 'masterV2.3',
-	#projectSpecFile : 'rowan/project.ston',
-	#componentNames : [
-		'Rowan'
-	],
-	#groupNames : [ ],
-	#customConditionalAttributes : [
-		'stubs',
-		'tonel',
-		'v2',
-		'v2Only',
-		'tests',
-		'testsV2'
-	],
-	#platformProperties : {
-		'gemstone' : {
-			'allusers' : {
-				#defaultUseSessionMethodsForExtensions : false,
-				#defaultSymbolDictName : 'UserGlobals'
-			},
-			'SystemUser' : {
-				#defaultUseSessionMethodsForExtensions : false,
-				#defaultSymbolDictName : 'RowanKernel'
-			}
-		}
-	},
-	#comment : 'Load spec for loading Rowan v2'
-},
-RwLoadSpecificationV2 {
-	#specName : 'RowanClientServices',
-	#projectName : 'RowanClientServices',
-	#gitUrl : 'git@github.com:GemTalk/RowanClientServices.git',
-	#revision : 'masterv2.2',
-	#projectSpecFile : 'rowan/project.ston',
-	#componentNames : [
-		'RowanClientServices'
-	],
-	#customConditionalAttributes : [
-		'v2',
-		'tests',
-		'testsV2'
-	],
-	#platformProperties : {
-		'gemstone' : {
-			'SystemUser' : {
-				#defaultSymbolDictName : 'RowanClientServices'
-			}
-		}
-	},
-
-	#comment : ''
-},
-RwLoadSpecificationV2 {
 	#specName : 'GsTestStats',
 	#projectName : 'GsTestStats',
 	#gitUrl : 'git@git.gemtalksystems.com:GsTestStats',
@@ -260,16 +204,19 @@ loadProjectSpecs
 	warnings := {}.
 	[ 
 		self preDoitSpecLoad: [:loadSpec |
-			| projectName |
-			projectName := loadSpec projectName.
-			loadSpec projectsHome: externalsStBase.
-			projectName = 'GsTestStats'
-				ifFalse: [
-					"Rowan and RowanClientServices ... compensate for V2.x bugs"
-					| project |
-					project := Rowan projectNamed: projectName.
-					project gitRepositoryRoot: externalsStBase, '/', projectName.
-					project _loadedProject resolvedProject projectsHome: rowanProjectsHome ] ].
+			loadSpec projectsHome: externalsStBase ].
+		"Compensate for Rowan v2 bugs"
+		(Rowan projectNamed: 'Rowan') 
+			gitRepositoryRoot: externalsStBase, '/Rowan'.
+		(Rowan projectNamed: 'RowanClientServices') 
+			gitRepositoryRoot: externalsStBase, '/RowanClientServices'.
+		(Rowan projectNamed: 'Rowan')
+			_loadedProject resolvedProject projectsHome: externalsStBase.
+		(Rowan projectNamed: 'RowanClientServices')
+			_loadedProject resolvedProject projectsHome: externalsStBase.
+		(Rowan projectNamed: 'Rowan')
+			loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').	
+		System commit.
 	]
 		on: CompileWarning
 		do: [:ex | 
