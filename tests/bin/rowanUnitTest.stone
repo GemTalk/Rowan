@@ -318,6 +318,7 @@ writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSamp
 			testSuiteSample compareTo: expectedSample on: outputStream.
 							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
 	message := 'fails with differences in expected results'.
+self halt.
 	self 
 		writeTestDone:  message
 		explanation: 'See teststatus.txt for more details'.
