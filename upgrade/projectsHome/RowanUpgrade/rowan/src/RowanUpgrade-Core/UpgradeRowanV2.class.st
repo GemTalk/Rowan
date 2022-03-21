@@ -95,8 +95,8 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 UpgradeRowanV2 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
 
-	(self gemstoneVersion >= '3.6.4' asRwGemStoneVersion
-		and: [ self upgradeFrom asRwGemStoneVersion < '3.6.4' asRwGemStoneVersion ])
+	(self gemstoneVersion >= '3.6.4' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.4' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"CCalloutStructs is a new class in 3.6.4 that needs to be adopted before reloading GemStone packages"
 			Rowan packageTools adopt
