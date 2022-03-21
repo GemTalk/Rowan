@@ -1058,7 +1058,8 @@ UpgradeRowanV2 >> step_7_finalAudit [
 
 { #category : 'accessing' }
 UpgradeRowanV2 >> upgradeFrom [
-	^upgradeFrom
+	upgradeFrom ifNil: [ self error: 'upgradeFrom must be defined' ].
+	^ upgradeFrom
 ]
 
 { #category : 'accessing' }

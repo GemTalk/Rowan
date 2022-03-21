@@ -99,7 +99,9 @@ doit
 	Rowan projectTools disown disownProjectNamed: 'RowanUpgrade'. "remove Rowan metadata and leave class in transient symbol dict"
 
 	upgrader := (self globalNamed: 'UpgradeRowanV2') new.
-	upgrader shouldCommit: self commit.
+	upgrader
+		upgradeFrom: self upgradeFrom;
+		shouldCommit: self commit.
 	self rowanRepair
 		ifTrue: [ upgrader step_1_repairRowanAuditFailures ].
 	self gemstoneBaseRepair
