@@ -275,11 +275,10 @@ fileinRowanV12
 		false ifTrue: [
 			"don't fail run if compile warnings are present ... for now"
 			self testStatusStream nextPutAll: 'Compile warnings results in test failure'; lf.
+			self writeFailingTestStatus.
 			self
 				writeTestDone: ' fails with compile warnings: ', warnings size printString
-				explanation: 'See teststatus.txt for more details'.
-		  self testStatusStream close.
-			self writeFailingTestStatusAndExit ] ].
+				explanation: 'See teststatus.txt for more details' ] ].
 	System commit.
 %
 method
@@ -361,10 +360,11 @@ writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSamp
 		do: [:outputStream |
 			testSuiteSample compareTo: expectedSample on: outputStream.
 							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
+	self writeFailingTestStatus
 	self
 		writeTestDone: 'fails with differences in expected results'
 		explanation: 'See teststatus.txt for more details'.
-	self writeFailingTestStatusAndExit
+	self exit: 'fails with differences in expected results' withStatus: 1
 %
 method
 writeFailingTestResultsSummaryReport: runner reporter: reporter
@@ -377,21 +377,20 @@ writeFailingTestResultsSummaryReport: runner reporter: reporter
 		reportNotPassing: runner
 			on: self testStatusStream.
 	self testStatusStream lf; nextPutAll: failingStatus; lf; nextPutAll: runner summary; lf.
+	self writeFailingTestStatus.
 	self
 		writeTestDone: 'fails with ', runner summary
 		explanation: 'See teststatus.txt for more details'.
-	self writeFailingTestStatusAndExit
+	self exit: 'fails with ', runner summary withStatus: 1
 %
 method
-writeFailingTestStatusAndExit
+writeFailingTestStatus
 	"does not return"
 	self _writeTestStatus: 'TEST STATUS:: fails with errors'.
-	^ self exitWithStatus: 1
 %
 method
 writePassingTestStatus
 	self _writeTestStatus: 'TEST STATUS:: passes with no errors'.
-	^ self noResult
 %
 method
 writeTestDone: detailedTestStatus
@@ -473,7 +472,8 @@ doit
 						testSuiteSample: testSuiteSample ] ].
   "PASSING tests (not test failures, or test results match expected results)"
 	self printPassingBanner: passingStatus reporter: stdoutReporter.
+	self writePassingTestStatus.
 	self
 		writeTestDone: 'passes with ', runner summary.
-	^ self writePassingTestStatus
+	^ self noResult
 %

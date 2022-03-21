@@ -21,6 +21,7 @@ Class {
 	#name : 'UpgradeRowanV2',
 	#superclass : 'Object',
 	#instVars : [
+		'upgradeFrom',
 		'audit',
 		'missingLoadedNotIdenticalCandidateMap',
 		'repairedCount',
@@ -88,6 +89,21 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 										at: #'methodsNotIdenticalDetail'
 											put:
 												((methodsNotIdenticalMap at: auditDetail behavior) at: auditDetail selector) ] ] ] ]
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV2 >> adoptGemstoneBase [
+	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
+
+	(self gemstoneVersion >= '3.6.4' asRwGemStoneVersion
+		and: [ self upgradeFrom asRwGemStoneVersion < '3.6.4' asRwGemStoneVersion ])
+		ifTrue: [ 
+			"CCalloutStructs is a new class in 3.6.4 that needs to be adopted before reloading GemStone packages"
+			Rowan packageTools adopt
+				adoptClassNamed: 'CCalloutStructs'
+				instanceSelectors: #()
+				classSelectors: #()
+				intoPackageNamed: 'Filein4Rowan' ]
 ]
 
 { #category : 'upgrade' }
@@ -392,11 +408,21 @@ UpgradeRowanV2 >> gemstoneBaseRepairNonIdenticalMethod: auditDetail [
 		inPackageNamed: auditDetail loadedMethod loadedPackage name
 ]
 
+{ #category : 'accessing' }
+UpgradeRowanV2 >> gemstoneVersion [
+	^ self gsVersion asRwGemStoneVersionNumber
+]
+
 { #category : 'private' }
 UpgradeRowanV2 >> globalNamed: aString [
 	"return nil if global not defined"
 
 	^ self class globalNamed: aString
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV2 >> gsVersion [
+	^ System gemVersionReport at: 'gsVersion'
 ]
 
 { #category : 'private' }
@@ -438,6 +464,7 @@ UpgradeRowanV2 >> reloadCustomer [
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> reloadGemstoneBase [
+	self adoptGemstoneBase.
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
@@ -1027,4 +1054,14 @@ UpgradeRowanV2 >> step_7_finalAudit [
 			self
 				error:
 					'Final Audit did not run clean ... repair audit errors before proceeding' ]
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV2 >> upgradeFrom [
+	^upgradeFrom
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV2 >> upgradeFrom: object [
+	upgradeFrom := object
 ]

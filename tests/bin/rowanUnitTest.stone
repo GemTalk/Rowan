@@ -149,14 +149,15 @@ writeTestDone: detailedTestStatus explanation: explanation
 	stream close
 %
 method
-writeFailingTestStatusAndExit: message
+writeTestStatus: message
 	"does not return"
-	self _writeTestStatus: 'TEST STATUS:: fails with errors'.
-	^ self exit: message withStatus: 1
+	self _writeTestStatus: 'TEST STATUS:: ', message.
 %
 method
-writePassingTestStatus
+writePassingTestStatus: runner
 	self _writeTestStatus: 'TEST STATUS:: passes with no errors'.
+	self 
+		writeTestDone: 'passes with ', runner summary.
 	^ self noResult
 %
 method
@@ -239,10 +240,11 @@ loadProjectSpecs
 		warnings do: [:warning | self testStatusStream nextPutAll: '	', warning ].
 		self testStatusStream nextPutAll: 'Compile warnings results in test failure'; lf.
 		message := ' fails with compile warnings: ', warnings size printString.
+		self writeTestStatus: message.
 		self 
 			writeTestDone: message 
 			explanation: 'See teststatus.txt for more details'.
-		self writeFailingTestStatusAndExit: message ]. 
+		self exit: message withStatus: 1 ]. 
 %
 method
 buildTestSuite: testSuiteName
@@ -295,10 +297,11 @@ writeFailingTestResultsSummaryReport: runner reporter: reporter
 			on: self testStatusStream.
 	self testStatusStream lf; nextPutAll: failingStatus; lf; nextPutAll: runner summary; lf.
 	message := 'fails with ', runner summary.
+	self writeTestStatus: message.
 	self 
 		writeTestDone: message 
 		explanation: 'See teststatus.txt for more details'.
-	self writeFailingTestStatusAndExit: message
+  self exit: message withStatus: 1
 %
 method
 writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSample: expectedSample testSuiteSample: testSuiteSample
@@ -318,11 +321,11 @@ writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSamp
 			testSuiteSample compareTo: expectedSample on: outputStream.
 							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
 	message := 'fails with differences in expected results'.
-self halt.
+	self writeTestStatus: message 
 	self 
 		writeTestDone:  message
 		explanation: 'See teststatus.txt for more details'.
-	self writeFailingTestStatusAndExit: message 
+	self exit: message withStatus: 1
 %
 doit
 	| runner testSuiteSample passingStatus  stdoutReporter |
@@ -361,8 +364,6 @@ doit
 						testSuiteSample: testSuiteSample ] ].
   "PASSING tests (not test failures, or test results match expected results)"
 	self printPassingBanner: passingStatus reporter: stdoutReporter.
-	self 
-		writeTestDone: 'passes with ', runner summary.
-	^ self writePassingTestStatus
+	^ self writePassingTestStatus: runner
 %
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env superdoit_stone
 options
 {
+	SuperDoitRequiredOptionWithRequiredArg long: 'upgradeFrom'.
+
 	SuperDoitOptionalOptionWithNoArg long: 'commit'.
 	SuperDoitOptionalOptionWithNoArg long: 'audit'.
 	SuperDoitOptionalOptionWithNoArg long: 'customerReload'.
@@ -15,7 +17,7 @@ options
 usage
 -----
 USAGE
-  $basename [--help | -h] [--debug | -D] <OPTIONS>
+  $basename [--help | -h] [--debug | -D] --upgradeFrom=<original-gemstone-version> <OPTIONS>
 
 DESCRIPTION
 	During upgradeImage, all methods for kernel classes are removed, without
@@ -44,16 +46,9 @@ EXAMPLES
   $basename --debug <script-arguments>       <topaz-arguments>
   $basename <script-arguments>               <topaz-arguments>
 
-  $basename -D --rowanRepair --skip --commit
-  $basename -D --rowanRepair                    # expected to run clean before reload
-  $basename -D --gemstoneBaseRepair --commit
-  $basename -D --gemstoneBaseReload --commit
-  $basename -D --rowanRepair                    # expected to run clean before reload
-  $basename -D --customerRepair --skip --commit
-  $basename -D --customerRepair                 # expected to run clean before reload
-  $basename -D --rowanReload --commit
-  $basename -D --customerReload --commit
-  $basename -D --audit                          # audit all projects ... run clean
+  $basename --upgradeFrom=3.6.3  --commit --rowanRepair --rowanReload \
+            --gemstoneBaseRepair --gemstoneBaseReload --customerRepair \
+            --customerReload --audit
 -----
 %
 input
