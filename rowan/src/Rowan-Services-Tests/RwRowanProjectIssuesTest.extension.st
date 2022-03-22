@@ -35,9 +35,10 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 	Rowan projectTools load loadProjectNamed: projectName.
 	testClass := Rowan globalNamed: 'RowanSample3'.
 	testClass rwCompileMethod: 'foo "', DateAndTime now printString, '"^''foo''' category: 'accessing'.
-	service
-		commitWithMessage: 'a commit';
-		pushToGit;
-		yourself
-
+	service commitWithMessage: 'a commit'.
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [ 
+			"at a minimum I know that I've got credentials to push to github"
+			"see https://github.com/GemTalk/Rowan/issues/150#issuecomment-1074567333"
+			service pushToGit ]
 ]
