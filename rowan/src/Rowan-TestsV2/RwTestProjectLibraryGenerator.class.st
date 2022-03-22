@@ -3245,7 +3245,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0060: resolvedProject [
 		specName: requiredProjectName;
 		projectName: requiredProjectName;
 		revision: 'spec_0001';
-		gitUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		gitUrl: 'https://git@github.com:dalehenrich/RowanSample10';
 		componentNames: {componentName};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
 		customConditionalAttributes: { 'tests' }
@@ -7126,7 +7126,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/' , projectName , '.git'.
+		with: 'https://git@github.com:dalehenrich/' , projectName.
 	indexCardMap := Dictionary new.
 	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
 		do: [ :file | 
