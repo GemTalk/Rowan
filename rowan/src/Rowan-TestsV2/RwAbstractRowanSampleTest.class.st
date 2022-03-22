@@ -10,7 +10,7 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 
 	"have to use https for project url if NOT dhenrich"
 
-	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
 		ifTrue: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ loadSpecification projectUrl: 'https://git@github.com/dalehenrich/RowanSample9' ]
