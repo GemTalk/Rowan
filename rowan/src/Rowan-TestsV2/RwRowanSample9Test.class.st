@@ -4234,7 +4234,7 @@ RwRowanSample9Test >> testNoMigration_bitbucket [
 		_migrationLoadSpecNamed:  'spec_0034' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_No_Migration' 
-		gitUrl: 'git@bitbucket.org:dalehenrich/rowansample9.git'.
+		gitUrl: 'https://git@bitbucket.org/dalehenrich/rowansample9'.
 
 	instanceMap := self 
 		_testMigration: loadSpec 
