@@ -924,6 +924,7 @@ RwRowanSample9Test >> testIndexCards [
 	projectSpecification := self _rowanSample9_0000_load_spec.
 	projectSpecification repositoryRoot ensureDeleteAll.
 	projectSpecification revision: 'master'.
+	self class _adjustSpecForIssue805: projectSpecification.
 	projectSpecification resolveStrict.
 
 	indexCards := (projectSpecification repositoryRoot / 'indexCards') files

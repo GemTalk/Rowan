@@ -5,6 +5,22 @@ Class {
 }
 
 { #category : 'private' }
+RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
+	"https://github.com/GemTalk/Rowan/issues/805"
+
+	"have to use https for project url if NOT dhenrich"
+
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [ 
+			(loadSpecification projectUrl includesString: 'RowanSample9')
+				ifTrue: [ loadSpecification projectUrl: 'https://git@github.com/dalehenrich/RowanSample9' ]
+				ifFalse: [ 
+					(loadSpecification projectUrl includesString: 'RowanSample10')
+						ifTrue: [ loadSpecification projectUrl: 'https://git@github.com/dalehenrich/RowanSample10' ]
+						ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ]
+]
+
+{ #category : 'private' }
 RwAbstractRowanSampleTest class >> _clearLoadSpecSessionCache [
 	"self _clearLoadSpecSessionCache"
 
@@ -33,16 +49,7 @@ RwAbstractRowanSampleTest class >> _loadSpecNamed: specName [
 			"The first time we access the repository in this session, we'll refresh the 
 				master branch and cache the session specs"
 			loadSpecification revision: 'master'.
-			(System gemEnvironmentVariable: 'USER') = 'dhenrich'
-				ifTrue: [ 
-					"https://github.com/GemTalk/Rowan/issues/805"
-					"have to use https for project url if NOT dhenrich"
-					(loadSpecification projectUrl includesString: 'RowanSample9')
-						ifTrue: [ loadSpecification projectUrl: 'https://git@github.com/dalehenrich/RowanSample9' ]
-						ifFalse: [ 
-							(loadSpecification projectUrl includesString: 'RowanSample10')
-								ifTrue: [ loadSpecification projectUrl: 'https://git@github.com/dalehenrich/RowanSample10' ]
-								ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ].
+			self _adjustSpecForIssue805: loadSpecification.
 			resolvedProject := loadSpecification resolveStrict.
 
 			resolvedRepository := resolvedProject repository.
