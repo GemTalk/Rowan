@@ -905,7 +905,7 @@ RwRowanSample9Test >> testDeferredMigration_gitlab [
 		_migrationLoadSpecNamed:  'spec_0034' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_Deferred_Migration' 
-		gitUrl: 'git@gitlab.com:dalehenrichs/rowansample9.git'.
+		gitUrl: 'https://git@gitlab.com/dalehenrichs/rowansample9.git'.
 
 	instanceMigrator := RwGsDeferredInstanceMigrator noMigration.
 	instanceMap := self 
