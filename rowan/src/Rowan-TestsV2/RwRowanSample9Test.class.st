@@ -27,11 +27,14 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 
 { #category : 'private' }
 RwRowanSample9Test >> _adjustRequiredProjectsForIssue805: resolvedProject [
-	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+	"If the tests are run by someone other than myself, we have to arrange for anonymous access to the public repos using http://"
+
+	"see https://github.com/GemTalk/Rowan/issues/805"
+
+	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
 		ifTrue: [ 
 			| projectLoadSpec projectsRoot |
 			"need to modify the rquired project load spec on disk ..."
-			"see https://github.com/GemTalk/Rowan/issues/805"
 			projectsRoot := resolvedProject projectsRoot.
 			projectLoadSpec := RwSpecification
 				fromFile: projectsRoot / 'RowanSample10.ston'.
