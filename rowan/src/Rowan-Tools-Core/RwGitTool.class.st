@@ -177,9 +177,14 @@ RwGitTool >> isGitHome: homeReferenceOrPath [
 
 	| homeFileReference expandedHomePath expandedGitRootPath |
 	homeFileReference := homeReferenceOrPath asFileReference.
+	(self gitPresentIn: homeFileReference pathString)
+		ifFalse: [ 
+			"early check needed to protect gitrevparseShowTopLevelIn: call"
+			^ false ].
 	expandedHomePath := self readlink: homeFileReference pathString.
 	expandedGitRootPath := self
-		readlink: (self gitrevparseShowTopLevelIn: homeFileReference pathString) trimBoth.
+		readlink:
+			(self gitrevparseShowTopLevelIn: homeFileReference pathString) trimBoth.
 	^ (self gitPresentIn: expandedGitRootPath)
 		and: [ expandedHomePath = expandedGitRootPath ]
 ]
