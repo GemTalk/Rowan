@@ -378,8 +378,12 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 
 "do git push and pull without error"
 	Rowan gemstoneTools topaz
-		gitPullProject: projectName remote: 'origin' branch: 'spec_0001';
-		gitPushProject: projectName remote: 'origin' branch: 'spec_0001'
+		gitPullProject: projectName remote: 'origin' branch: 'spec_0001'.
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [
+			"I'm the only one guaranteed to be able to push to the project ... for test coverage"
+			Rowan gemstoneTools topaz
+				gitPushProject: projectName remote: 'origin' branch: 'spec_0001' ].
 ]
 
 { #category : 'project support' }
