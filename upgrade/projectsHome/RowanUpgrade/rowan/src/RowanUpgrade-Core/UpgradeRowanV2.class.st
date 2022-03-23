@@ -98,12 +98,23 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.6.4' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.4' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"CCalloutStructs is a new class in 3.6.4 that needs to be adopted before reloading GemStone packages"
+			| gciLibraryClass |
+			"CCalloutStructs is a new class in 3.6.4 that needs to be adopted 
+				before reloading GemStone packages.
+			GciLibrary is a class that does not have managed source, as it is 
+				generated and loaded on the fly. 
+			The UnPackagedProject is a temporary project for classes that 
+				do not have managed source"
 			Rowan packageTools adopt
 				adoptClassNamed: 'CCalloutStructs'
 				instanceSelectors: #()
 				classSelectors: #()
-				intoPackageNamed: 'Filein4Rowan' ]
+				intoPackageNamed: 'Filein4Rowan'.
+			gciLibraryClass := Rowan globalNamed: 'GciLibrary'.
+			Rowan packageTools disown disownClass: gciLibraryClass.
+			Rowan packageTools adopt
+				adoptClass: gciLibraryClass
+				intoPackageNamed: 'UnPackaged-Globals' ]
 ]
 
 { #category : 'upgrade' }
