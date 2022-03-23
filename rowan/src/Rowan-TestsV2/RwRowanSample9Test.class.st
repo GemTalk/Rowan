@@ -25,6 +25,20 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 		yourself
 ]
 
+{ #category : 'private' }
+RwRowanSample9Test >> _adjustRequiredProjectsForIssue805: resolvedProject [
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [ 
+			| projectLoadSpec projectsRoot |
+			"need to modify the rquired project load spec on disk ..."
+			"see https://github.com/GemTalk/Rowan/issues/805"
+			projectsRoot := resolvedProject projectsRoot.
+			projectLoadSpec := RwSpecification
+				fromFile: projectsRoot / 'RowanSample10.ston'.
+			projectLoadSpec gitUrl: 'https://git@github.com/dalehenrich/RowanSample10'.
+			projectLoadSpec exportTo: projectsRoot ]
+]
+
 { #category : 'audit tests' }
 RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
 	| className packageName1 packageName2 class |
@@ -6480,6 +6494,9 @@ RwRowanSample9Test >> testSpec_0060_1 [
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
+[ 
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "load project"
 	loadedProjects := resolvedProject load.
 
@@ -6488,6 +6505,10 @@ RwRowanSample9Test >> testSpec_0060_1 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
@@ -6527,6 +6548,9 @@ RwRowanSample9Test >> testSpec_0060_2 [
 "checkout spec_0060 and reload"
 	project checkout: 'spec_0060'.
 
+[
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "reload project"
 	loadedProjects := project reload. "can afford to take required projects into account"
 
@@ -6535,6 +6559,11 @@ RwRowanSample9Test >> testSpec_0060_2 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames_2.
+
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
@@ -6612,6 +6641,9 @@ RwRowanSample9Test >> testSpec_0064_2 [
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
+[
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "load project"
 	loadedProjects := resolvedProject load.
 
@@ -6625,6 +6657,10 @@ RwRowanSample9Test >> testSpec_0064_2 [
 
 	project := Rowan projectNamed: requiredProjectName.
 	self assert: project packageNames asArray sort equals: #('RowanSample10-Core' 'RowanSample10-Tests' ) sort
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
@@ -6701,6 +6737,9 @@ RwRowanSample9Test >> testSpec_0064_3 [
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
+[
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "load project"
 	loadedProjects := resolvedProject load.
 
@@ -6719,6 +6758,11 @@ RwRowanSample9Test >> testSpec_0064_3 [
 	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
 		equals: #'accessing'.
 	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
@@ -6789,6 +6833,9 @@ RwRowanSample9Test >> testSpec_0064_4 [
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
+[
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "load project"
 	loadedProjects := resolvedProject load.
 
@@ -6807,6 +6854,11 @@ RwRowanSample9Test >> testSpec_0064_4 [
 	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
 		equals: #'accessing'.
 	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
@@ -6869,6 +6921,9 @@ RwRowanSample9Test >> testSpec_0064_5 [
 "resolve project"
 	resolvedProject := loadSpec resolve.
 
+[
+self _adjustRequiredProjectsForIssue805: resolvedProject.
+
 "load project"
 	loadedProjects := resolvedProject load.
 
@@ -6887,6 +6942,11 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	self assert: ((Rowan globalNamed: className1) categoryOfSelector: #foo)
 		equals: #'accessing'.
 	self assert: ((Rowan globalNamed: className1) class compiledMethodAt: #bar otherwise: nil) isNil.
+
+] ensure: [ 
+	"Don't leave a dirty git checkout lying around"
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+]
 ]
 
 { #category : 'tests' }
