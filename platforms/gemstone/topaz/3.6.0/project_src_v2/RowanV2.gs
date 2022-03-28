@@ -26951,7 +26951,7 @@ at: index read: aCollection startingAt: start count: count
 category: 'public'
 method: MemoryHandle
 at: first write: aCollection startingAt: start count: count 
-	writable ifFalse: [ self primitiveFailed ].
+	writable ifFalse: [ self error: 'The receiver is not writable' ].
 	entry at: first write: aCollection startingAt: start count: count.
 %
 
@@ -28141,7 +28141,7 @@ rename: sourcePath ifAbsent: absentBlock to: destinationPath ifPresent: presentB
 	(self exists: destinationPath) ifTrue: [ ^ presentBlock value ].
 	(self exists: sourcePath) ifFalse: [ ^ absentBlock value ].
 	result := self rename: sourcePath to: destinationPath.
-	result ifNil: [ self primitiveFailed ].
+	result ifNil: [ self  error: 'Could not rename ',  sourcePath pathString, ' to ', destinationPath pathString ].
 	^ self.
 %
 
@@ -28441,7 +28441,7 @@ createDirectory: path
 						ifFalse: [ self signalDirectoryExists: path ] ].
 			(self isDirectory: parent)
 				ifFalse: [ ^ self signalDirectoryDoesNotExist: parent ].
-			self primitiveFailed ].
+			self error: 'Could not create the directory ',  pathString ].
 	^ self
 %
 
@@ -64322,9 +64322,14 @@ isGitHome: homeReferenceOrPath
 
 	| homeFileReference expandedHomePath expandedGitRootPath |
 	homeFileReference := homeReferenceOrPath asFileReference.
+	(self gitPresentIn: homeFileReference pathString)
+		ifFalse: [ 
+			"early check needed to protect gitrevparseShowTopLevelIn: call"
+			^ false ].
 	expandedHomePath := self readlink: homeFileReference pathString.
 	expandedGitRootPath := self
-		readlink: (self gitrevparseShowTopLevelIn: homeFileReference pathString) trimBoth.
+		readlink:
+			(self gitrevparseShowTopLevelIn: homeFileReference pathString) trimBoth.
 	^ (self gitPresentIn: expandedGitRootPath)
 		and: [ expandedHomePath = expandedGitRootPath ]
 %

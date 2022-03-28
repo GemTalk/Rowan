@@ -224,7 +224,7 @@ DiskStore >> createDirectory: path [
 						ifFalse: [ self signalDirectoryExists: path ] ].
 			(self isDirectory: parent)
 				ifFalse: [ ^ self signalDirectoryDoesNotExist: parent ].
-			self primitiveFailed ].
+			self error: 'Could not create the directory ',  pathString ].
 	^ self
 ]
 
