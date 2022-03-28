@@ -360,7 +360,7 @@ writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSamp
 		do: [:outputStream |
 			testSuiteSample compareTo: expectedSample on: outputStream.
 							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
-	self writeFailingTestStatus
+	self writeFailingTestStatus.
 	self
 		writeTestDone: 'fails with differences in expected results'
 		explanation: 'See teststatus.txt for more details'.
