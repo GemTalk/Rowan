@@ -7454,7 +7454,7 @@ removeallclassmethods RwProjectDefinitionV2
 doit
 (RwDefinition
 	subclass: 'RwAbstractRepositoryDefinitionV2'
-	instVarNames: #( projectsHome repositoryRoot repositoryUrl )
+	instVarNames: #( projectsHome repositoryRoot repositoryUrl sessionTempsKey )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -7526,7 +7526,7 @@ removeallclassmethods RwNoRepositoryDefinitionV2
 doit
 (RwDiskRepositoryDefinitionV2
 	subclass: 'RwReadOnlyDiskRepositoryDefinitionV2'
-	instVarNames: #( sesstionTempsKey commitId )
+	instVarNames: #( commitId )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -71116,21 +71116,18 @@ method: RwAbstractRepositoryDefinitionV2
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ repositoryRoot
-		ifNil: [ 
-			repositoryUrl
-				ifNotNil: [ :urlString | 
-					| url |
-					url := urlString asRwUrl.
-					url scheme = 'file'
-						ifTrue: [ ^ repositoryRoot := url pathString ] ].
-			repositoryRoot := self projectsHome / self name ]
+	^ self
+		_safeGetRepositoryRootIfNil: [ self _safeSetRepositoryRoot: self projectsHome / self name ]
 %
 
 category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
-repositoryRoot: pathStringOrReference
-	repositoryRoot := pathStringOrReference
+repositoryRoot: pathStringOrReferenceOrNil
+	| pathStringOrReference |
+	pathStringOrReference := pathStringOrReferenceOrNil
+		ifNil: [ nil ]
+		ifNotNil: [ pathStringOrReferenceOrNil asFileReference ].
+	^ self _safeSetRepositoryRoot: pathStringOrReference
 %
 
 category: 'accessing'
@@ -71162,6 +71159,57 @@ category: 'testing'
 method: RwAbstractRepositoryDefinitionV2
 useGit
 	^ false
+%
+
+category: 'private'
+method: RwAbstractRepositoryDefinitionV2
+_safeGetRepositoryRootIfNil: ifNilBlock
+	"When a Rowan extent is created the repository roots for the included projects are not explicitly 
+		set, since the disk location is relative to the location of $GEMSTONE and we want to do a late 
+		binding on the disk location. The repository instances are owned by SystemUser, so if the 
+		first user to log into a system is not SystemUser, the disk locations cannot be lazily set, 
+		since the user may not have permission to write to the receiver. Consequently, if the 
+		current user cannot write to the repository location we'll resolve the relative location and 
+		store the resulting path in session temps."
+
+	^ self _storeRepositoryRootInSessionTemps
+		ifTrue: [ SessionTemps current at: self _sessionTempsKey ifAbsentPut: ifNilBlock ]
+		ifFalse: [ repositoryRoot ifNil: ifNilBlock ]
+%
+
+category: 'private'
+method: RwAbstractRepositoryDefinitionV2
+_safeSetRepositoryRoot: pathStringOrReferenceOrNil
+	"When a Rowan extent is created the repository roots for the included projects are not explicitly 
+		set, since the disk location is relative to the location of $GEMSTONE and we want to do a late 
+		binding on the disk location. The repository instances are owned by SystemUser, so if the 
+		first user to log into a system is not SystemUser, the disk locations cannot be lazily set, 
+		since the user may not have permission to write to the receiver. Consequently, if the 
+		current user cannot write to the repository location we'll resolve the relative location and 
+		store the resulting path in session temps."
+
+	^ self _storeRepositoryRootInSessionTemps
+		ifTrue: [ 
+			pathStringOrReferenceOrNil
+				ifNil: [ SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ] ]
+				ifNotNil: [ 
+					SessionTemps current
+						at: self _sessionTempsKey
+						put: [ pathStringOrReferenceOrNil ] ] ]
+		ifFalse: [ repositoryRoot := pathStringOrReferenceOrNil ]
+%
+
+category: 'private'
+method: RwAbstractRepositoryDefinitionV2
+_sessionTempsKey
+	^ sessionTempsKey
+		ifNil: [ sessionTempsKey := ('rwSessionTempsRepositoryKey_' , self asOop printString) asSymbol ]
+%
+
+category: 'private'
+method: RwAbstractRepositoryDefinitionV2
+_storeRepositoryRootInSessionTemps
+	^ self canBeWritten not
 %
 
 ! Class implementation for 'RwDiskRepositoryDefinitionV2'
@@ -71244,28 +71292,6 @@ method: RwDiskRepositoryDefinitionV2
 repositoryExists
 
 	^ self repositoryRoot exists
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ repositoryRoot
-		ifNil: [ 
-			repositoryUrl
-				ifNotNil: [ :urlString | 
-					| url |
-					url := urlString asRwUrl.
-					url scheme = 'file'
-						ifTrue: [ ^ repositoryRoot := url pathString asFileReference ] ].
-			repositoryRoot := self projectsHome / self name ]
-%
-
-category: 'accessing'
-method: RwDiskRepositoryDefinitionV2
-repositoryRoot: pathStringOrReference
-	repositoryRoot := pathStringOrReference asFileReference
 %
 
 category: 'actions'
@@ -71592,9 +71618,12 @@ repositoryExists
 category: 'accessing'
 method: RwNoRepositoryDefinitionV2
 repositoryRoot
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
 	^ nil
+%
+
+category: 'accessing'
+method: RwNoRepositoryDefinitionV2
+repositoryRoot: ignored
 %
 
 category: 'actions'
@@ -71634,26 +71663,12 @@ method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ repositoryRoot
-		ifNil: [ 
+	^ self
+		_safeGetRepositoryRootIfNil: [ 
 			repositoryUrl
-				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
-				ifNotNil: [ :urlString | 
-					^ (SessionTemps current
-						at: self _sessionTempsKey
-						ifAbsentPut: [ 
-							| url |
-							url := urlString asRwUrl.
-							url scheme = 'file'
-								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
-										url pathString ]) asFileReference ] ]
-%
-
-category: 'accessing'
-method: RwReadOnlyDiskRepositoryDefinitionV2
-repositoryRoot: pathStringOrReference
-	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+				ifNil:
+					[ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+						self _safeSetRepositoryRoot: self projectsHome / self name ]
 %
 
 category: 'accessing'
@@ -71665,9 +71680,12 @@ repositoryUrl: urlString
 
 category: 'private'
 method: RwReadOnlyDiskRepositoryDefinitionV2
-_sessionTempsKey
-	^ sesstionTempsKey
-		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
+_storeRepositoryRootInSessionTemps
+	"always use sessionTemps, because we do not want to ever have a hard-wired reference to
+		the disk location ... used for references to standard projects in product tree 
+		extent0.rowan.dbf ... since the reference should always be through $GEMSTONE"
+
+	^ true
 %
 
 ! Class implementation for 'RwDefinitionSetDefinition'

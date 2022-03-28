@@ -2,16 +2,18 @@ Class {
 	#name : 'RwReadOnlyDiskRepositoryDefinitionV2',
 	#superclass : 'RwDiskRepositoryDefinitionV2',
 	#instVars : [
-		'sesstionTempsKey',
 		'commitId'
 	],
 	#category : 'Rowan-DefinitionsV2'
 }
 
 { #category : 'private' }
-RwReadOnlyDiskRepositoryDefinitionV2 >> _sessionTempsKey [
-	^ sesstionTempsKey
-		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
+RwReadOnlyDiskRepositoryDefinitionV2 >> _storeRepositoryRootInSessionTemps [
+	"always use sessionTemps, because we do not want to ever have a hard-wired reference to
+		the disk location ... used for references to standard projects in product tree 
+		extent0.rowan.dbf ... since the reference should always be through $GEMSTONE"
+
+	^ true
 ]
 
 { #category : 'accessing' }
@@ -35,25 +37,12 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> readOnlyRepositoryRoot: repositoryRootPa
 RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ repositoryRoot
-		ifNil: [ 
+	^ self
+		_safeGetRepositoryRootIfNil: [ 
 			repositoryUrl
-				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
-				ifNotNil: [ :urlString | 
-					^ (SessionTemps current
-						at: self _sessionTempsKey
-						ifAbsentPut: [ 
-							| url |
-							url := urlString asRwUrl.
-							url scheme = 'file'
-								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
-										url pathString ]) asFileReference ] ]
-]
-
-{ #category : 'accessing' }
-RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
-	SessionTemps current removeKey: self _sessionTempsKey ifAbsent: [  ].
+				ifNil:
+					[ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+						self _safeSetRepositoryRoot: self projectsHome / self name ]
 ]
 
 { #category : 'accessing' }

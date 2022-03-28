@@ -70,26 +70,6 @@ RwDiskRepositoryDefinitionV2 >> repositoryExists [
 	^ self repositoryRoot exists
 ]
 
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> repositoryRoot [
-	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
-
-	^ repositoryRoot
-		ifNil: [ 
-			repositoryUrl
-				ifNotNil: [ :urlString | 
-					| url |
-					url := urlString asRwUrl.
-					url scheme = 'file'
-						ifTrue: [ ^ repositoryRoot := url pathString asFileReference ] ].
-			repositoryRoot := self projectsHome / self name ]
-]
-
-{ #category : 'accessing' }
-RwDiskRepositoryDefinitionV2 >> repositoryRoot: pathStringOrReference [
-	repositoryRoot := pathStringOrReference asFileReference
-]
-
 { #category : 'actions' }
 RwDiskRepositoryDefinitionV2 >> resolve [
 	"attach to existing repository structure"
