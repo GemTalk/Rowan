@@ -383,6 +383,10 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [ 
+			"This test only runs in the GemStone dev environment"
+			^ self ].
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
