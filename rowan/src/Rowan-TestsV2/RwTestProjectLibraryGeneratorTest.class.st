@@ -16,7 +16,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
-	commitComment := 'running testLibraryGenerator tests ... no changes expected, thus no commits exprected'.
+	commitComment := 'running testLibraryGenerator tests ... no changes expected, thus no commits expected'.
 	RwTestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample9';
@@ -101,7 +101,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
 
-	commitComment := 'running RowanSample10 testLibraryGenerator tests ... no changes expected, thus no commits exprected'.
+	commitComment := 'running RowanSample10 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
 	RwRowanSample10TestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample10';
