@@ -491,7 +491,7 @@ UpgradeRowanV2 >> reloadRowan [
 			| project |
 			"projects home for each project needs to be reset to the parent of the repository root (a v2.0 bug)"
 			project := Rowan projectNamed: projectName.
-			project projectsHome: project repositoryRoot parent ].
+			project _loadedProject handle projectsHome: project repositoryRoot parent ].
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
