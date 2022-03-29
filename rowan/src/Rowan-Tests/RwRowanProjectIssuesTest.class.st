@@ -152,7 +152,7 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 	projectTools clone
 		cloneSpecUrl: projectUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: ((System gemEnvironmentVariable: 'USER') = 'dhenrich').
 
 ]
 

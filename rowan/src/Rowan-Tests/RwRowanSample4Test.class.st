@@ -67,7 +67,7 @@ RwRowanSample4Test >> test_projectUrl_issue_463 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	project := RwProject newNamed: projectName.
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -102,7 +102,7 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 	projectTools clone
 		cloneSpecification: specUrlString asRwUrl asSpecification
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
@@ -140,7 +140,7 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
@@ -173,7 +173,7 @@ RwRowanSample4Test >> testIssue14 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -232,7 +232,7 @@ RwRowanSample4Test >> testIssue185_254_move_newClassVariable_to_symbolDict [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -319,7 +319,7 @@ RwRowanSample4Test >> testIssue185_254_move_newClassVersion_to_symbolDict [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -407,7 +407,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_class [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -494,7 +494,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_classVariable [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -581,7 +581,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_newClassVersion [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -668,7 +668,7 @@ RwRowanSample4Test >> testIssue185_254_simple_package_rename [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -757,7 +757,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -842,7 +842,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -929,7 +929,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1017,7 +1017,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1104,7 +1104,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1191,7 +1191,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1278,7 +1278,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1433,7 +1433,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1540,7 +1540,7 @@ RwRowanSample4Test >> testIssue210 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1640,7 +1640,7 @@ RwRowanSample4Test >> testIssue230 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1676,7 +1676,7 @@ RwRowanSample4Test >> testIssue284 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1731,7 +1731,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1825,7 +1825,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -1935,7 +1935,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2038,7 +2038,7 @@ RwRowanSample4Test >> testIssue304 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2093,7 +2093,7 @@ RwRowanSample4Test >> testIssue305 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2142,7 +2142,7 @@ RwRowanSample4Test >> testIssue460_1 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2250,7 +2250,7 @@ RwRowanSample4Test >> testIssue460_2 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2357,7 +2357,7 @@ RwRowanSample4Test >> testIssue490 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2447,7 +2447,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
@@ -2487,7 +2487,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"load project into stone"
@@ -2523,7 +2523,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"load project into stone"
@@ -2567,7 +2567,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false. 	"does not register the project, so it is not visible in project list ... does however clone the project to local disk --- which we need"
 
 	self assert: (Rowan fileUtilities directoryExists: gitRootPath , projectName).
@@ -2583,7 +2583,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath_symLink, '/', symLinkName
-		useSsh: true
+		useSsh: false
 		registerProject: true.
 
 	self assert: spec repositoryUrl notNil.
@@ -2622,7 +2622,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
 	projectTools clone
 		cloneSpecification: spec
 		gitRootPath: gitRootPath
-		useSsh: true
+		useSsh: false
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"load project into stone"
@@ -2656,7 +2656,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2744,7 +2744,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221B [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2789,7 +2789,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221C [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2834,7 +2834,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.
@@ -2874,7 +2874,7 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -2919,7 +2919,7 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	repoRootPath := rowanSampleSpec repositoryRootPath.

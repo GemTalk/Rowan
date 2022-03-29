@@ -33,7 +33,7 @@ RwRowanSample1Test >> testIssue345 [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')

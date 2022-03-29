@@ -77,7 +77,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: ((System gemEnvironmentVariable: 'USER') = 'dhenrich').
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -150,7 +150,7 @@ RwRowanSample2Test >> testDeferredMigration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: ((System gemEnvironmentVariable: 'USER') = 'dhenrich').
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -201,7 +201,7 @@ RwRowanSample2Test >> testNoMigration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -267,7 +267,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -333,7 +333,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -399,7 +399,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -481,7 +481,7 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
@@ -529,7 +529,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
-		useSsh: true.
+		useSsh: false.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
