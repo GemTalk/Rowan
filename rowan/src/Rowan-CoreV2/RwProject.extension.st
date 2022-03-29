@@ -20,7 +20,8 @@ RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitI
 { #category : '*rowan-corev2' }
 RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString projectsHome: projectsHome commitId: commitId [
 	self _loadedProject resolvedProject _loadSpecification
-		projectsHome: projectsHome.
+		projectsHome: projectsHome;
+		readonlyDiskUrl: 'file:' , repositoryRootPathString.
 	self _loadedProject resolvedProject
 		readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
