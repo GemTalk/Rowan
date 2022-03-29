@@ -488,10 +488,14 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 UpgradeRowanV2 >> reloadRowan [
 	self rowanProjectNames
 		do: [ :projectName | 
-			| project |
+			| project repositoryRoot resolvedProject |
 			"projects home for each project needs to be reset to the parent of the repository root (a v2.0 bug)"
 			project := Rowan projectNamed: projectName.
-			project _loadedProject handle projectsHome: project repositoryRoot parent ].
+			repositoryRoot := project repositoryRoot.
+			resolvedProject := project _loadedProject handle.
+			resolvedProject projectsHome: project repositoryRoot parent.
+
+			resolvedProject diskRepositoryRoot: project repositoryRoot pathString ].
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
