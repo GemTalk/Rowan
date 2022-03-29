@@ -1,0 +1,194 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithNoArg long: 'legacyStreams'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsHome'.
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] [--gsDir=<directory>] \
+            [--symbolDictionary=<symbol-dictionary-name>]
+
+DESCRIPTION
+  Install Rowan v1.2 into a fresh extent0.dbf. 
+
+OPTIONS
+  -h, --help                          display usage message
+  -D, --debug                         bring up topaz debugger in the event of a 
+                                      script error
+  --gsDir=<director>                  path to directory where UpgradeRowanV12.gs
+                                            implemented)
+
+EXAMPLES
+  $basename --help 
+  $basename 
+-----
+%
+method
+createSymbolDictionaries
+	| session symbolList symbolDictNames |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	symbolDictNames := symbolList names.
+	#( #RowanKernel #RowanLoader #RowanTools)
+		do: [:symbolName |
+			(symbolDictNames includes: symbolName)
+				ifFalse: [
+					| newDict size |
+					newDict := SymbolDictionary new
+						name: symbolName;
+						objectSecurityPolicy: symbolList objectSecurityPolicy;
+						yourself.
+					size := System myUserProfile symbolList size.
+					System myUserProfile insertDictionary: newDict at: size + 1 ] ].
+	System commit.
+%
+method
+fileinRowanV12
+	self legacyStreams
+		ifTrue: [
+			Stream installLegacyStreamImplementation.
+			System commit ].
+	GsFileIn
+		fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'
+	System commit.
+%
+method
+adoptRowan
+ 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
+	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	{
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+	}
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
+		| specification specUrl readTool |
+		specUrl := ar at: 1.
+		specification := (self globalNamed: 'RwSpecification') fromUrl: specUrl.
+		specification
+			repositoryRootPath: gitRepoPath;
+			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+			register. "Create each of the loaded projects"
+		readTool := (self globalNamed: 'Rowan') projectTools read.
+		ar size = 1
+			ifTrue: [
+				| theProjectSetDefinition |
+				theProjectSetDefinition := readTool
+					readProjectSetForProjectNamed: specification specName
+					withGroupNames: #('tests' 'deprecated' 'jadeServer').
+				theProjectSetDefinition
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ].
+				projectSetDefinition properties: theProjectSetDefinition properties ]
+			ifFalse: [
+				| configName |
+				configName := ar at: 2.
+				(readTool readProjectSetForProjectNamed: specification specName withConfiguration: configName)
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ] ] ].
+
+	loadedProjectInfo := projectSetDefinition properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			projectName = 'Rowan'
+				ifTrue: [
+					"install the packageMapSpecs for this load into the specification prior to the load"
+					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
+					projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+					spec := projectDefinition specification.
+					thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+					gemstoneSpec := spec platformSpec at: 'gemstone'.
+					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil)
+						ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
+					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil)
+						ifNotNil: [:boolean |
+							gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
+					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil)
+						ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ] ].
+
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanLoader'.
+	(self globalNamed: 'Rowan') image newOrExistingSymbolDictionaryNamed: 'RowanTools'.
+
+	packageCreateTool := (self globalNamed: 'Rowan') packageTools create.
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			"The loaded project was created by the earlier #register,
+				traverse the package definitions and create loaded packages for each"
+			| specification projectName |
+			projectName := projectDefinition name.
+			specification := ((self globalNamed: 'Rowan') image loadedProjectNamed: projectName) specification.
+			projectDefinition packageNames
+				do: [:packageName |
+					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
+
+	"Adopt the project set definition"
+	(self globalNamed: 'Rowan') projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
+
+	projectLoadTool := (self globalNamed: 'Rowan') projectTools load.
+
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			"make sure that the loaded SHA is set for each project"
+			projectLoadTool specification: projectDefinition specification.
+			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool.
+			projectDefinition name = 'Rowan'
+				ifTrue: [
+					(loadedProjectInfo at: projectDefinition name ifAbsent: [])
+						ifNotNil: [:map |
+							projectDefinition specification imageSpec
+								loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+								loadedGroupNames: (map at: 'loadedGroupNames') ] ] ].
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		"mark projects and packages not dirty"
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			| audit projectName |
+			projectName := projectDefinition name.
+			GsFile gciLogServer: '---Auditing project: ', projectName printString.
+			audit := (self globalNamed: 'Rowan') projectTools audit auditForProjectNamed: projectName.
+			GsFile gciLogServer: '	-- audit finished '.
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
+	System commit.
+%
+method
+reloadRowan
+	#( 'Rowan' 'Cypress' 'STON' 'Tonel' )
+		do: [:projectName |
+			"make sure test group is loaded ... include deprecated packages for now"
+			[
+			| groupNames |
+			groupNames := #('tests' 'deprecated' 'jadeServer').
+			GsFile gciLogServer: 'Loading ', projectName.
+			(self globalNamed: 'Rowan') projectTools load
+				loadProjectNamed: projectName
+				withGroupNames: groupNames ]
+					on: CompileWarning do: [:ex | ex resume ] ].
+	System commit.
+%
+doit
+	| rowanProjectsHome |
+	self rowanProjectsHome
+		ifNotNil: [:value |
+			rowanProjectsHome := value.
+			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value ] 
+		ifNil: [ 
+			(rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNil: [ self error: 'ROWAN_PROJECTS_HOME env var or --rowanProjectsHome option must be defined' ] ].
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') asFileReference pathString; lf.
+	self
+		createSymbolDictionaries;
+		fileinRowanV12;
+		adoptRowan;
+		reloadRowan;
+		yourself.
+%
