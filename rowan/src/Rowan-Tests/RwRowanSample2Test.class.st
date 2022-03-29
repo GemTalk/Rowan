@@ -403,7 +403,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
-		useSsh: false.
+		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
 	(rowanSampleSpec platformSpec at: 'gemstone')
