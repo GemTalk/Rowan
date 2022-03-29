@@ -488,6 +488,12 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 UpgradeRowanV2 >> reloadRowan [
 	self rowanProjectNames
 		do: [ :projectName | 
+			| project |
+			"projects home for each project needs to be reset to the parent of the repository root (a v2.0 bug)"
+			project := Rowan projectNamed: projectName.
+			project projectsHome: project repositoryRoot parent ].
+	self rowanProjectNames
+		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
 			[ (Rowan projectNamed: projectName) reload ]
 				on: CompileWarning
