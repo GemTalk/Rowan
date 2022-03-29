@@ -8,22 +8,23 @@ options
 usage
 -----
 USAGE 
-  $basename [--help | -h] [--debug | -D] [--gsDir=<directory>] \
-            [--symbolDictionary=<symbol-dictionary-name>]
+  $basename [--help | -h] [--debug | -D] [OPTIONS]
 
 DESCRIPTION
   Install Rowan v1.2 into a fresh extent0.dbf. 
 
 OPTIONS
-  -h, --help                          display usage message
-  -D, --debug                         bring up topaz debugger in the event of a 
-                                      script error
-  --gsDir=<director>                  path to directory where UpgradeRowanV12.gs
-                                            implemented)
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a 
+                             script error
+  --legacyStreams            Before Rowan is installed, execute Stream class>>
+                             installLegacyStreamImplementation.
+  --rowanProjectsHome=<directory-path>
+                             Parent directory of the Rowan v1.2 git project.
 
 EXAMPLES
   $basename --help 
-  $basename 
+  $basename --legacyStreams --rowanProjectsHome=$GS_HOME/shared/repos
 -----
 %
 method
@@ -52,7 +53,7 @@ fileinRowanV12
 			Stream installLegacyStreamImplementation.
 			System commit ].
 	GsFileIn
-		fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'
+		fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
 	System commit.
 %
 method
@@ -184,11 +185,12 @@ doit
 		ifNil: [ 
 			(rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
 				ifNil: [ self error: 'ROWAN_PROJECTS_HOME env var or --rowanProjectsHome option must be defined' ] ].
-	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') asFileReference pathString; lf.
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') ; lf.
 	self
 		createSymbolDictionaries;
 		fileinRowanV12;
 		adoptRowan;
 		reloadRowan;
 		yourself.
+	^ self noResult
 %
