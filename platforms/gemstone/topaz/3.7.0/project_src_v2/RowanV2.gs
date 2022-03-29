@@ -94242,6 +94242,28 @@ readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 
 category: '*rowan-corev2'
 method: RwProject
+readOnlyRepositoryRoot: repositoryRootPathString projectsHome: projectsHome commitId: commitId
+	| originalRepositoryRoot |
+	repositoryRootPathString isString
+		ifFalse: [ self error: 'readOnly repository root must be a string' ].
+	originalRepositoryRoot := self repositoryRoot.
+	self requiredProjects
+		do: [ :project | 
+			project repositoryRoot = originalRepositoryRoot
+				ifTrue: [ 
+					"only embedded required projects should have their repository root swapped out"
+					project
+						_readOnlyRepositoryRoot: repositoryRootPathString
+						projectsHome: projectsHome
+						commitId: commitId ] ].
+	self
+		_readOnlyRepositoryRoot: repositoryRootPathString
+		projectsHome: projectsHome
+		commitId: commitId
+%
+
+category: '*rowan-corev2'
+method: RwProject
 removePackageNamed: packageName
 	| projectDefinition |
 	Rowan image
@@ -94364,6 +94386,16 @@ _gitRepositoryRoot: repositoryRootPathString
 category: '*rowan-corev2'
 method: RwProject
 _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
+	self _loadedProject resolvedProject
+		readOnlyRepositoryRoot: repositoryRootPathString
+		commitId: commitId
+%
+
+category: '*rowan-corev2'
+method: RwProject
+_readOnlyRepositoryRoot: repositoryRootPathString projectsHome: projectsHome commitId: commitId
+	self _loadedProject resolvedProject _loadSpecification
+		projectsHome: projectsHome.
 	self _loadedProject resolvedProject
 		readOnlyRepositoryRoot: repositoryRootPathString
 		commitId: commitId
