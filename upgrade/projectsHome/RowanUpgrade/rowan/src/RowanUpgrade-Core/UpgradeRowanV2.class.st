@@ -486,17 +486,6 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
-false ifTrue: [ 
-	self rowanProjectNames
-		do: [ :projectName | 
-			| project repositoryRoot resolvedProject |
-			"projects home for each project needs to be reset to the parent of the repository root and load spec project url needs to be adjusted (see https://github.com/GemTalk/Rowan/issues/806)"
-			project := Rowan projectNamed: projectName.
-			repositoryRoot := project repositoryRoot.
-			resolvedProject := project _loadedProject handle.
-			resolvedProject projectsHome: project repositoryRoot parent.
-			resolvedProject _loadSpecification diskUrl: 'file:', project repositoryRoot pathString ].
-].
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
