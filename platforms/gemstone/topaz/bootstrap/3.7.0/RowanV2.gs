@@ -51025,12 +51025,6 @@ currentBranchName
 	^ Rowan gitTools gitBranchNameIn:rootPath
 %
 
-category: 'accessing'
-method: RwProject
-customConditionalAttributes: anArray
-	self loadSpecification customConditionalAttributes: anArray
-%
-
 category: 'transitions'
 method: RwProject
 defined
