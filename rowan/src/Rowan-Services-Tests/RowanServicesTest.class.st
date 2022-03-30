@@ -188,7 +188,7 @@ RowanServicesTest >> loadRowanSample1 [
   Rowan projectTools clone
     cloneSpecUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
     gitRootPath: gitRootPath
-    useSsh: true.
+    useSsh: false.
   Rowan projectTools load loadProjectNamed: projectName
 ]
 
