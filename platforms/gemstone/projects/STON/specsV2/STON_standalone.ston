@@ -9,13 +9,13 @@ RwLoadSpecificationV2 {
 		'Tests'
 	],
 	#customConditionalAttributes : [
-		'tests'
+		'gemstone-kernel'
 	],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {
-				#defaultSymbolDictName : 'RowanKernel'
+				#defaultSymbolDictName : 'UserGlobals'
 			}
 		}
 	},

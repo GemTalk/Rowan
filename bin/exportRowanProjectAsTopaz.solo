@@ -49,6 +49,10 @@ doit
 		projectsHome: self projectsHome;
 		yourself.
 	resolvedProject := loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}.
-self halt.
+	resolvedProject
+		exportTopazFormatTo: topazFilename 
+		logClassCreation: false 
+		excludeClassInitializers: false 
+		excludeRemoveAllMethods: true.
 	^ self noResult.
 %
