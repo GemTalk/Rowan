@@ -5,14 +5,9 @@ set -e
 
 vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
-if [ "$vers" = "3.6.1" ] || [ "$vers" = "3.6.2" ] ; then
-       # 3.6.0, 3.6.1, and 3.6.2 share same scripts
-       vers=3.6.0
-fi
-
 rm -rf *.log *.out
 
-if [ "$vers" = "3.6.4" ] ; then
+if [ "$vers" = "3.6.4" ]  || [ "$vers" = "3.7.0" ] ; then
 	# starting in 3.6.4, extent0.rowan.dbf is in $GEMSTONE/bin
 	newExtent -s product/bin/extent0.rowan.dbf $GEMSTONE_NAME
 else
