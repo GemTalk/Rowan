@@ -114,7 +114,17 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools disown disownClass: gciLibraryClass.
 			Rowan packageTools adopt
 				adoptClass: gciLibraryClass
-				intoPackageNamed: 'UnPackaged-Globals' ]
+				intoPackageNamed: 'UnPackaged-Globals' ].
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"GcFinalizeNotification is a new class in 3.7.0 that needs to be adopted
+			before reloading GemStone packages."
+			Rowan packageTools adopt
+				adoptClassNamed: 'GcFinalizeNotification'
+				instanceSelectors: #()
+				classSelectors: #()
+				intoPackageNamed: 'Filein4Rowan' ]
 ]
 
 { #category : 'upgrade' }
