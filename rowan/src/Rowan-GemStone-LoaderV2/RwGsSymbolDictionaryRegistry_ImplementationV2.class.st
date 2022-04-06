@@ -162,7 +162,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
 	(ObsoleteClasses at: class name ifAbsent: [  ])
-		fNotNil: [ :obsoleteClass | 
+		ifNotNil: [ :obsoleteClass | 
 			| loadedClass |
 			loadedClass := self
 				loadedClassForClass: class
