@@ -161,7 +161,18 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class no
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
-
+	(ObsoleteClasses at: class name ifAbsent: [  ])
+		fNotNil: [ :obsoleteClass | 
+			| loadedClass |
+			loadedClass := self
+				loadedClassForClass: class
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class for the class '
+								, class name asString printString ].
+			obsoleteClass == class
+				ifTrue: [ ^ noNewVersionBlock cull: loadedClass ] ].
 	registryInstance
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
