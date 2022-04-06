@@ -118,12 +118,17 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"GcFinalizeNotification, GsSftpSocket, and GsSshSocket  are new classes in 3.7.0 that need to be adopted before reloading GemStone packages."
+			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, SshSocketError are new classes in 3.7.0 that need to be adopted before reloading GemStone packages."
 			Rowan packageTools adopt
 				adoptClassNamed: 'GcFinalizeNotification'
 				instanceSelectors: #()
 				classSelectors: #()
 				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClassNamed: 'GsSftpRemoteFile'
+				instanceSelectors: #()
+				classSelectors: #()
+				intoPackageNamed: 'Filein3B'.
 			Rowan packageTools adopt
 				adoptClassNamed: 'GsSftpSocket'
 				instanceSelectors: #()
@@ -131,6 +136,11 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein3B'.
 			Rowan packageTools adopt
 				adoptClassNamed: 'GsSshSocket'
+				instanceSelectors: #()
+				classSelectors: #()
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClassNamed: 'SshSocketError'
 				instanceSelectors: #()
 				classSelectors: #()
 				intoPackageNamed: 'Filein3B' ]
