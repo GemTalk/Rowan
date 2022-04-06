@@ -378,15 +378,22 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteClassFromPackage: c
 
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteClassNamedFromPackage: className instance: registryInstance [
-
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
 	| class |
 	class := registryInstance _symbolDictionary
 		at: className asSymbol
-		ifAbsent: [ registryInstance error: 'No class found for the given class name: ' , className printString ].
+		ifAbsent: [ 
+			"if the class is in ObsoleteClasses, then just delete the class from loaded things"
+			(ObsoleteClasses at: className asSymbol ifAbsent: [  ])
+				ifNotNil: [ :obsoleteClass | 
+					^ self
+						_doDeleteClassFromLoadedThings: obsoleteClass
+						removeClassFromSystem: false
+						instance: registryInstance ].
+			registryInstance
+				error: 'No class found for the given class name: ' , className printString ].
 	^ self deleteClassFromPackage: class instance: registryInstance
-
 ]
 
 { #category : 'method - patch api' }
