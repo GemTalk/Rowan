@@ -119,12 +119,17 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"GcFinalizeNotification is a new class in 3.7.0 that needs to be adopted
-			before reloading GemStone packages."
+				before reloading GemStone packages."
 			Rowan packageTools adopt
 				adoptClassNamed: 'GcFinalizeNotification'
 				instanceSelectors: #()
 				classSelectors: #()
-				intoPackageNamed: 'Filein4Rowan' ]
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClassNamed: 'GsSftpSocket'
+				instanceSelectors: #()
+				classSelectors: #()
+				intoPackageNamed: 'Filein3B' ]
 ]
 
 { #category : 'upgrade' }
