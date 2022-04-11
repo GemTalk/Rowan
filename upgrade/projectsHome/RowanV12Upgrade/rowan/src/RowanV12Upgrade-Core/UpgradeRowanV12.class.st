@@ -295,11 +295,23 @@ UpgradeRowanV12 >> errorMessages [
 
 ]
 
+{ #category : 'accessing' }
+UpgradeRowanV12 >> gemstoneVersion [
+	"run during upgrade, so CharacterCollection>>asRwGemStoneVersionNumber may not be functional"
+
+	^ RwGemStoneVersionNumber fromString: self gsVersion
+]
+
 { #category : 'private' }
 UpgradeRowanV12 >> globalNamed: aString [
 	"return nil if global not defined"
 
 	^ self class globalNamed: aString
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV12 >> gsVersion [
+	^ System gemVersionReport at: 'gsVersion'
 ]
 
 { #category : 'private' }
@@ -539,7 +551,7 @@ UpgradeRowanV12 >> step_1_installRowan [
 	self moveCypressClassesToGlobals: self cypressClassNames.
 	self logMessage: 'Installing RowanV12.gs'.
 	rowanBootstrapPath := self projectsHome
-		, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
+		, '/Rowan/platforms/gemstone/topaz/upgrade/' , self gsVersion , '/RowanV12.gs'.
 	(self globalNamed: 'GsFileIn') fromServerPath: rowanBootstrapPath.
 	self logMessage: 'Installed Rowan from ' , rowanBootstrapPath.
 	self commit
