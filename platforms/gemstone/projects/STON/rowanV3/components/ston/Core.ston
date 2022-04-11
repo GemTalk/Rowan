@@ -1,0 +1,12 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'ston/Core',
+	#condition : 'ston',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'STON-Core',
+		'STON-GemStoneBase',
+		'STON-GemStoneCommon'
+ ],
+	#comment : 'STON packages, used when bootstrapping into 3.7.0'
+}

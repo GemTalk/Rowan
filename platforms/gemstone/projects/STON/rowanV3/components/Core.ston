@@ -3,6 +3,7 @@ RwSimpleProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
+		'ston/Core',
 		'tests/Core'
 	],
 	#packageNames : [ ],
