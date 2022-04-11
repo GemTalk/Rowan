@@ -82,6 +82,10 @@ print: anObject
        anObject printOn: self
 %
 method
+gsVersion
+	^ System gemVersionReport at: 'gsVersion'
+%
+method
 _writeTestStatus: testStatus
 	self testStatusStream
 		nextPutAll: testStatus; lf;
@@ -255,7 +259,7 @@ fileinRowanV12
 	warnings := {}.
 	[
 		GsFileIn
-			fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs';
+			fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/', self gsVersion, '/RowanV12.gs';
 			fromServerPath: (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE'), '/GsTestStats/gs/GsTestStats.gs'
 	]
 		on: CompileWarning
