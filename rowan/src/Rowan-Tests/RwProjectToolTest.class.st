@@ -25,7 +25,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 				createDiskBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'].
+				root: '/tmp/rowanSimpleProject_02/'].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -73,7 +73,6 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }
@@ -588,7 +587,7 @@ RwProjectToolTest >> testSimpleProject1 [
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: '/tmp/rowanSimpleProject_03/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -636,7 +635,6 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }
@@ -686,7 +684,7 @@ RwProjectToolTest >> testSimpleProject2 [
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject2/'
+				root: '/tmp/rowanSimpleProject2_04/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -696,7 +694,6 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }
@@ -773,7 +770,7 @@ RwProjectToolTest >> testSimpleProject3 [
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject3/'
+				root: '/tmp/rowanSimpleProject3_05/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -783,5 +780,4 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple3 class and methods'
-
 ]

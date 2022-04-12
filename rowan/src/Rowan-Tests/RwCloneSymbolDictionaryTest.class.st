@@ -25,7 +25,7 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_01/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -69,7 +69,6 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	validationBlock value: clonedClass value: #ONE.
 	validationBlock value: theOriginalClass value: #one.
-
 ]
 
 { #category : 'tests' }
@@ -88,7 +87,7 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_02/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -208,7 +207,6 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	validationBlock value: clonedClass1 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass2 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass3 value: #ONE value: #TWO value: #THREE.
-
 ]
 
 { #category : 'tests' }
@@ -237,7 +235,7 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_03/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -282,7 +280,6 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 	self assert: clonedClass classHistory ~~ theOriginalClass classHistory.
 
 	validationBlock value: clonedClass.
-
 ]
 
 { #category : 'tests' }
@@ -300,7 +297,7 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_04/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -339,5 +336,4 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 	self assert: clonedClass2 classHistory ~~ theOriginalSubclass classHistory.
 
 	self assert: (x := clonedClass2 superclass) == clonedClass1
-
 ]

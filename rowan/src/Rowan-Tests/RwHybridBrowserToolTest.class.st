@@ -839,7 +839,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: '/tmp/rowanHybridPatchProject_01/'.
 	className1 := 'SimpleHybridNormalReload1'.
 	className2 := 'SimpleHybridNormalReload2'.
 	classNames := {className1.
@@ -2579,7 +2579,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: '/tmp/rowanHybridPatchProject_02/'.
 	className := 'SimpleHybridNormalReload'.
 
 	normalClass := Object
