@@ -14,7 +14,6 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 	(Rowan image
 		loadedRegistryForPackageNamed: loadedPackage name
 		ifAbsent: [ 
-self halt.
 			packageAuditDetail
 				add:
 					(RwAuditPackageDetail
