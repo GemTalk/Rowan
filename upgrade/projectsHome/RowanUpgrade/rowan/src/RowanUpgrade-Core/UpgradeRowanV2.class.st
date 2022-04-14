@@ -532,20 +532,23 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 						do: [ :auditDetail | 
 							(repairedDetails includes: auditDetail)
 								ifFalse: [ 
-									| behavior |
-									behavior := auditDetail behavior.
-									auditDetail selector
-										ifNotNil: [ :theSelector | 
-											(missingLoadedNotIdenticalCandidateMap at: behavior ifAbsent: [  ])
-												ifNotNil: [ :selectorDetailMap | 
-													(selectorDetailMap at: theSelector ifAbsent: [  ])
-														ifNotNil: [ :detailDict | 
-															self
-																repairMissingLoadedNotIdenticalFor: theSelector
-																detailDict: detailDict
-																repairedDetails: repairedDetails
-																forPackageName: packageName
-																andBehavior: behavior ] ] ].
+									"package audit details do not have associated behavior, so skip this clause"
+									auditDetail isPackageDetail
+										ifFalse: [ 
+											| behavior |
+											behavior := auditDetail behavior.
+											auditDetail selector
+												ifNotNil: [ :theSelector | 
+													(missingLoadedNotIdenticalCandidateMap at: behavior ifAbsent: [  ])
+														ifNotNil: [ :selectorDetailMap | 
+															(selectorDetailMap at: theSelector ifAbsent: [  ])
+																ifNotNil: [ :detailDict | 
+																	self
+																		repairMissingLoadedNotIdenticalFor: theSelector
+																		detailDict: detailDict
+																		repairedDetails: repairedDetails
+																		forPackageName: packageName
+																		andBehavior: behavior ] ] ] ].
 									(repairedDetails includes: auditDetail)
 										ifFalse: [ 
 											| message repairSelector |

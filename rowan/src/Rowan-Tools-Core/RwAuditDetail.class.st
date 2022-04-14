@@ -39,6 +39,13 @@ RwAuditDetail class >> for: anObject reason: aSymbol message: aString [
 		yourself
 ]
 
+{ #category : 'testing' }
+RwAuditDetail >> isPackageDetail [
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ false
+]
+
 { #category : 'other' }
 RwAuditDetail >> matches: aString [
 "see if my messages matches expected string"

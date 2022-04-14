@@ -7,7 +7,7 @@ Reasons:
 "
 Class {
 	#name : 'RwAuditPackageClassSymbolDictionaryDetail',
-	#superclass : 'RwAuditDetail',
+	#superclass : 'RwAuditPackageDetail',
 	#instVars : [
 		'loadedClass',
 		'classSymbolDictionaryName',

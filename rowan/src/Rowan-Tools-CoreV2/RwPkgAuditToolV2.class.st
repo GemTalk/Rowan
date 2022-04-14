@@ -16,7 +16,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 		ifAbsent: [ 
 			packageAuditDetail
 				add:
-					(RwAuditDetail
+					(RwAuditPackageDetail
 						for: loadedPackage
 						reason: #'loadedPackageNotInRegistry'
 						message:
@@ -31,7 +31,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage [
 				ifFalse: [ 
 					packageAuditDetail
 						add:
-							(RwAuditDetail
+							(RwAuditPackageDetail
 								for: loadedPackage
 								reason: #'loadedPackageInWrongRegistry'
 								message:
