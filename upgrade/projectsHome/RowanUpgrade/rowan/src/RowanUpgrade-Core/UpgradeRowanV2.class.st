@@ -651,9 +651,10 @@ UpgradeRowanV2 >> repairedWhenDefinitionsReloaded:ignoredMethod [
 UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 	"loadedPackageNotInRegistry occur because a symbol dictionary where 
 		the package is registered is no longer in the symbol list. To repair
-		we put the symbol dictionary in the transient symbol list, where
-		the package will be available to be unloaded when the base image is
-		reloaded and will then disappear when we log out."
+		we put the symbol dictionary in the transient symbol list and remove
+		all of the class and class extension definitions, since we do not want
+		the classes associated with symbol dictionary to be REMOVED when
+		the package is unloaded when the base image is reloaded."
 
 	| loadedPackage symbolDictName sess transientSymbolList symbolDict |
 	loadedPackage := auditDetail owner.
@@ -666,6 +667,7 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 						, ' for the loaded package ' , loadedPackage key printString
 						,
 							' is not in the list of repairable symbol dictionaries (GsCompilerClasses)' ].
+	loadedPackage initialize.	"nuke loaded classes and classExtensions"
 	sess := GsCurrentSession currentSession.
 	sess _transientSymbolList ifNil: [ System refreshTransientSymbolList ].
 	transientSymbolList := sess transientSymbolList.
