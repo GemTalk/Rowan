@@ -394,6 +394,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'methodsNotIdentical' put: #'gemstoneBaseRepairNonIdenticalMethod:';
 		at: #'differentClassInstVars' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
+		at: #'loadedPackageNotInRegistry' put: #'repairedLoadedPackageNotInRegistry:';
 		yourself.
 	^ repairMap
 ]
@@ -639,6 +640,12 @@ UpgradeRowanV2 >> repairedByReload [
 UpgradeRowanV2 >> repairedCount [
 	^ repairedCount ifNil: [ repairedCount := 0 ].
 
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairedLoadedPackageNotInRegistry: auditDetail [
+	"loadedPackageNotInRegistry occur because ???"
+self halt.
 ]
 
 { #category : 'repair' }
