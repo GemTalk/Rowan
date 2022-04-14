@@ -658,10 +658,10 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 	| loadedPackage symbolDictName sess transientSymbolList symbolDict |
 	loadedPackage := auditDetail owner.
 	symbolDictName := loadedPackage packageSymbolDictionaryName.
-	(#('GsCompilerClasses') includes: symbolDictName)
+	(#('GsCompilerClasses' 'ObsoleteClasses') includes: symbolDictName)
 		ifFalse: [ 
 			self
-				error:
+				halt:
 					'The symbol dictionary ' , symbolDictName printString
 						, ' for the loaded package ' , loadedPackage key printString
 						,
