@@ -154,6 +154,37 @@ updateRowanV220
 	rowanClientServicesProject load.
 	^ System commit
 %
+method
+updateRowanV230
+	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
+	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
+	self stdout nextPutAll: 'Start updating Rowan v2.3 to Rowan v2.3'; lf.
+	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
+	rowanProject := Rowan projectNamed: 'Rowan'.
+	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
+	rowanProject _loadSpecification 
+		projectsHome: rowanRepositoryRoot parent;
+		readonlyDiskUrl: 'file://', rowanRepositoryRoot pathString.
+	rowanProject readOnlyRepositoryRoot: rowanRepositoryRoot pathString commitId: commitId.
+	commitId := self extractCommitIdFrom: self productTreeRoot for: 'RowanClientServices'.
+	rowanClientServicesRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'RowanClientServices'.
+	rowanClientServicesProject := Rowan projectNamed: 'RowanClientServices'.
+	rowanClientServicesProject _loadSpecification 
+		projectsHome: rowanClientServicesRepositoryRoot parent;
+		readonlyDiskUrl: 'file://', rowanClientServicesRepositoryRoot pathString.
+	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
+	self stdout nextPutAll: '	load Rowan v2.3.0'; lf.
+	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
+	(Rowan projectNamed: 'Rowan')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	"address the required project bug in V2.x ... fixed in v3.0.0"
+	rowanClientServicesProject _loadSpecification 
+		projectsHome: rowanClientServicesRepositoryRoot parent;
+		readonlyDiskUrl: 'file://', rowanClientServicesRepositoryRoot pathString.
+	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
+	rowanClientServicesProject load.
+	^ System commit
+%
 doit
 	| version |
 	self positionalArgs size ~= 1
@@ -161,6 +192,9 @@ doit
 	version := self rowanVersion.
 	version < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0'].
+	version = ('2.3.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			^ self updateRowanV230 ].
 	version = ('2.2.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV220 ].
