@@ -394,7 +394,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'methodsNotIdentical' put: #'gemstoneBaseRepairNonIdenticalMethod:';
 		at: #'differentClassInstVars' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
-		at: #'loadedPackageNotInRegistry' put: #'repairedLoadedPackageNotInRegistry:';
+		at: #'loadedPackageNotInRegistry' put: #'repairLoadedPackageNotInRegistry:';
 		yourself.
 	^ repairMap
 ]
@@ -643,14 +643,34 @@ UpgradeRowanV2 >> repairedCount [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairedLoadedPackageNotInRegistry: auditDetail [
-	"loadedPackageNotInRegistry occur because ???"
-self halt.
+UpgradeRowanV2 >> repairedWhenDefinitionsReloaded:ignoredMethod [ 
+	repairedByReload := self repairedByReload + 1
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairedWhenDefinitionsReloaded:ignoredMethod [ 
-	repairedByReload := self repairedByReload + 1
+UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
+	"loadedPackageNotInRegistry occur because a symbol dictionary where 
+		the package is registered is no longer in the symbol list. To repair
+		we put the symbol dictionary in the transient symbol list, where
+		the package will be available to be unloaded when the base image is
+		reloaded and will then disappear when we log out."
+
+	| loadedPackage symbolDictName sess transientSymbolList symbolDict |
+	loadedPackage := auditDetail owner.
+	symbolDictName := loadedPackage packageSymbolDictionaryName.
+	(#('GsCompilerClasses') includes: symbolDictName)
+		ifFalse: [ 
+			self
+				error:
+					'The symbol dictionary ' , symbolDictName printString
+						, ' for the loaded package ' , loadedPackage key printString
+						,
+							' is not in the list of repairable symbol dictionaries (GsCompilerClasses)' ].
+	sess := GsCurrentSession currentSession.
+	sess _transientSymbolList ifNil: [ System refreshTransientSymbolList ].
+	transientSymbolList := sess transientSymbolList.
+	symbolDict := Globals at: symbolDictName asSymbol.
+	transientSymbolList insertObject: symbolDict at: 1
 ]
 
 { #category : 'repair' }
