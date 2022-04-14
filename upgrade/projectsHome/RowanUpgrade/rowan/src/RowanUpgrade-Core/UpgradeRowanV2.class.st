@@ -661,7 +661,7 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 	(#('GsCompilerClasses' 'ObsoleteClasses') includes: symbolDictName)
 		ifFalse: [ 
 			self
-				halt:
+				error:
 					'The symbol dictionary ' , symbolDictName printString
 						, ' for the loaded package ' , loadedPackage key printString
 						,
