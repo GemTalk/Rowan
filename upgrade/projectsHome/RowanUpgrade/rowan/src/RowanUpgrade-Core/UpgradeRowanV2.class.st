@@ -667,7 +667,8 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 						, ' for the loaded package ' , loadedPackage key printString
 						,
 							' is not in the list of repairable symbol dictionaries (GsCompilerClasses)' ].
-	loadedPackage initialize.	"nuke loaded classes and classExtensions"
+	loadedPackage loadedClasses removeAllKeys.	"nuke loaded classes "
+	loadedPackage loadedClassExtensions removeAllKeys.	"nuke loaded class extensions"
 	sess := GsCurrentSession currentSession.
 	sess _transientSymbolList ifNil: [ System refreshTransientSymbolList ].
 	transientSymbolList := sess transientSymbolList.
