@@ -120,12 +120,19 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.6.3' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.3' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"AwsCredentials is new class in 3.6.3 that needs 
+			"AwsCredentials, AwsDataKey,  AwsError are new classes in 3.6.3 that need 
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages."
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'AwsCredentials')
-				intoPackageNamed: 'Filein3B' ].
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AwsDataKey')
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AwsError')
+				intoPackageNamed: 'Filein3B'.
+ ].
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
