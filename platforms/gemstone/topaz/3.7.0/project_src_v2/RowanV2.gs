@@ -906,21 +906,6 @@ doit
 true.
 %
 
-doit
-(RwAuditDetail
-	subclass: 'RwAuditPackageDetail'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
 removeallmethods RwAuditClassErrorNotification
 removeallclassmethods RwAuditClassErrorNotification
 
@@ -7177,6 +7162,24 @@ true.
 
 removeallmethods RwAuditPackageClassSymbolDictionaryDetail
 removeallclassmethods RwAuditPackageClassSymbolDictionaryDetail
+
+doit
+(RwAuditDetail
+	subclass: 'RwAuditPackageDetail'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tools-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAuditPackageDetail
+removeallclassmethods RwAuditPackageDetail
 
 doit
 (Object
