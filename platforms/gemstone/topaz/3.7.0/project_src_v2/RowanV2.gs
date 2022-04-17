@@ -906,6 +906,21 @@ doit
 true.
 %
 
+doit
+(RwAuditDetail
+	subclass: 'RwAuditPackageDetail'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tools-Core';
+		immediateInvariant.
+true.
+%
+
 removeallmethods RwAuditClassErrorNotification
 removeallclassmethods RwAuditClassErrorNotification
 
@@ -68038,6 +68053,14 @@ for: anObject reason: aSymbol message: aString
 
 !		Instance methods for 'RwAuditDetail'
 
+category: 'testing'
+method: RwAuditDetail
+isPackageDetail
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ false
+%
+
 category: 'other'
 method: RwAuditDetail
 matches: aString
@@ -68348,6 +68371,15 @@ category: 'accessing'
 method: RwAuditPackageClassSymbolDictionaryDetail
 packageSymbolDictionaryName: object
 	packageSymbolDictionaryName := object
+%
+
+
+category: 'testing'
+method: RwAuditPackageDetail
+isPackageDetail
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ true
 %
 
 ! Class implementation for 'RwBasicProjectLoadComponentV2'
