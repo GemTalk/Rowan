@@ -7142,6 +7142,24 @@ removeallclassmethods RwAuditMethodDetail
 
 doit
 (RwAuditDetail
+	subclass: 'RwAuditPackageDetail'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tools-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAuditPackageDetail
+removeallclassmethods RwAuditPackageDetail
+
+doit
+(RwAuditPackageDetail
 	subclass: 'RwAuditPackageClassSymbolDictionaryDetail'
 	instVarNames: #( loadedClass classSymbolDictionaryName packageSymbolDictionaryName )
 	classVars: #(  )
@@ -64901,79 +64919,81 @@ method: RwPkgAuditToolV2
 auditForPackage: loadedPackage
 	"audit dirty packages"
 
-	| res loadedPackageRegistry packageSymbolDictionaryName registrySymbolDictionaryName packageAuditDetail |
+	| res packageSymbolDictionaryName registrySymbolDictionaryName packageAuditDetail |
 	res := RwAuditReport for: loadedPackage.
 	packageAuditDetail := {}.
-	loadedPackageRegistry := Rowan image
+	(Rowan image
 		loadedRegistryForPackageNamed: loadedPackage name
 		ifAbsent: [ 
 			packageAuditDetail
 				add:
-					(RwAuditDetail
+					(RwAuditPackageDetail
 						for: loadedPackage
 						reason: #'loadedPackageNotInRegistry'
 						message:
 							'The loaded package ' , loadedPackage name printString
-								, ' is not found in a package registry') ].
-	packageSymbolDictionaryName := loadedPackage packageSymbolDictionaryName.
-	registrySymbolDictionaryName := loadedPackageRegistry _symbolDictionary name
-		asString.
-	registrySymbolDictionaryName = packageSymbolDictionaryName
-		ifFalse: [ 
-			packageAuditDetail
-				add:
-					(RwAuditDetail
-						for: loadedPackage
-						reason: #'loadedPackageInWrongRegistry'
-						message:
-							'The loaded package ' , loadedPackage name printString
-								, ' is registered in the wrong symbol dictionary ('
-								, registrySymbolDictionaryName printString
-								, '). It is expected to be registered in '
-								, packageSymbolDictionaryName printString) ].
-	loadedPackage
-		loadedClassesDo: [ :aLoadedClass | 
-			| classSymbolDictName |
-			classSymbolDictName := aLoadedClass classSymbolDictionaryName.
-			classSymbolDictName = packageSymbolDictionaryName
+								, ' is not found in a package registry').
+			nil ])
+		ifNotNil: [ :loadedPackageRegistry | 
+			packageSymbolDictionaryName := loadedPackage packageSymbolDictionaryName.
+			registrySymbolDictionaryName := loadedPackageRegistry _symbolDictionary name
+				asString.
+			registrySymbolDictionaryName = packageSymbolDictionaryName
 				ifFalse: [ 
 					packageAuditDetail
 						add:
-							((RwAuditPackageClassSymbolDictionaryDetail
+							(RwAuditPackageDetail
 								for: loadedPackage
+								reason: #'loadedPackageInWrongRegistry'
 								message:
-									'The loaded class symbol dictionary name ' , classSymbolDictName printString
-										, ' does not match the loaded package symbol dictionary name '
-										, packageSymbolDictionaryName printString)
-								reason: #'differentSymbolDictionaryForClassAndPackage';
-								loadedClass: aLoadedClass;
-								classSymbolDictionaryName: classSymbolDictName;
-								packageSymbolDictionaryName: packageSymbolDictionaryName;
-								yourself) ].
-			(self auditLoadedClass: aLoadedClass)
-				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
-		loadedClassExtensionsDo: [ :aLoadedClass | 
-			| classEtensionSymbolDictionaryName |
-			classEtensionSymbolDictionaryName := loadedPackageRegistry _symbolDictionary
-				name asString.
-			classEtensionSymbolDictionaryName = packageSymbolDictionaryName
-				ifFalse: [ 
-					packageAuditDetail
-						add:
-							((RwAuditPackageClassSymbolDictionaryDetail
-								for: loadedPackage
-								message:
-									'The loaded extension class symbol dictionary name '
-										, classEtensionSymbolDictionaryName printString
-										, ' does not match the loaded package symbol dictionary name '
-										, packageSymbolDictionaryName printString)
-								reason: #'differentSymbolDictionaryForClassExtensionAndPackage';
-								loadedClass: aLoadedClass;
-								classSymbolDictionaryName: classEtensionSymbolDictionaryName;
-								packageSymbolDictionaryName: packageSymbolDictionaryName;
-								yourself) ].
-			(self auditLoadedClassExtension: aLoadedClass)
-				ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ].
+									'The loaded package ' , loadedPackage name printString
+										, ' is registered in the wrong symbol dictionary ('
+										, registrySymbolDictionaryName printString
+										, '). It is expected to be registered in '
+										, packageSymbolDictionaryName printString) ].
+			loadedPackage
+				loadedClassesDo: [ :aLoadedClass | 
+					| classSymbolDictName |
+					classSymbolDictName := aLoadedClass classSymbolDictionaryName.
+					classSymbolDictName = packageSymbolDictionaryName
+						ifFalse: [ 
+							packageAuditDetail
+								add:
+									((RwAuditPackageClassSymbolDictionaryDetail
+										for: loadedPackage
+										message:
+											'The loaded class symbol dictionary name ' , classSymbolDictName printString
+												, ' does not match the loaded package symbol dictionary name '
+												, packageSymbolDictionaryName printString)
+										reason: #'differentSymbolDictionaryForClassAndPackage';
+										loadedClass: aLoadedClass;
+										classSymbolDictionaryName: classSymbolDictName;
+										packageSymbolDictionaryName: packageSymbolDictionaryName;
+										yourself) ].
+					(self auditLoadedClass: aLoadedClass)
+						ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
+				loadedClassExtensionsDo: [ :aLoadedClass | 
+					| classEtensionSymbolDictionaryName |
+					classEtensionSymbolDictionaryName := loadedPackageRegistry
+						_symbolDictionary name asString.
+					classEtensionSymbolDictionaryName = packageSymbolDictionaryName
+						ifFalse: [ 
+							packageAuditDetail
+								add:
+									((RwAuditPackageClassSymbolDictionaryDetail
+										for: loadedPackage
+										message:
+											'The loaded extension class symbol dictionary name '
+												, classEtensionSymbolDictionaryName printString
+												, ' does not match the loaded package symbol dictionary name '
+												, packageSymbolDictionaryName printString)
+										reason: #'differentSymbolDictionaryForClassExtensionAndPackage';
+										loadedClass: aLoadedClass;
+										classSymbolDictionaryName: classEtensionSymbolDictionaryName;
+										packageSymbolDictionaryName: packageSymbolDictionaryName;
+										yourself) ].
+					(self auditLoadedClassExtension: aLoadedClass)
+						ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ] ].
 	packageAuditDetail
 		ifNotEmpty: [ :aColl | res at: loadedPackage name put: aColl ].
 	^ res
@@ -68038,6 +68058,14 @@ for: anObject reason: aSymbol message: aString
 
 !		Instance methods for 'RwAuditDetail'
 
+category: 'testing'
+method: RwAuditDetail
+isPackageDetail
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ false
+%
+
 category: 'other'
 method: RwAuditDetail
 matches: aString
@@ -68302,6 +68330,18 @@ category: 'accessing'
 method: RwAuditMethodDetail
 selector: object
 	selector := object
+%
+
+! Class implementation for 'RwAuditPackageDetail'
+
+!		Instance methods for 'RwAuditPackageDetail'
+
+category: 'testing'
+method: RwAuditPackageDetail
+isPackageDetail
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ true
 %
 
 ! Class implementation for 'RwAuditPackageClassSymbolDictionaryDetail'
@@ -79018,13 +79058,21 @@ deleteClassFromPackage: class instance: registryInstance
 category: 'class - patch api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 deleteClassNamedFromPackage: className instance: registryInstance
-
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
 	| class |
 	class := registryInstance _symbolDictionary
 		at: className asSymbol
-		ifAbsent: [ registryInstance error: 'No class found for the given class name: ' , className printString ].
+		ifAbsent: [ 
+			"if the class is in ObsoleteClasses, then just delete the class from loaded things"
+			(ObsoleteClasses at: className asSymbol ifAbsent: [  ])
+				ifNotNil: [ :obsoleteClass | 
+					^ self
+						_doDeleteClassFromLoadedThings: obsoleteClass
+						removeClassFromSystem: false
+						instance: registryInstance ].
+			registryInstance
+				error: 'No class found for the given class name: ' , className printString ].
 	^ self deleteClassFromPackage: class instance: registryInstance
 %
 
@@ -79427,7 +79475,18 @@ _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlo
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
 				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
-
+	(ObsoleteClasses at: class name ifAbsent: [  ])
+		ifNotNil: [ :obsoleteClass | 
+			| loadedClass |
+			loadedClass := self
+				loadedClassForClass: class
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded class for the class '
+								, class name asString printString ].
+			obsoleteClass == class
+				ifTrue: [ ^ noNewVersionBlock cull: loadedClass ] ].
 	registryInstance
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
