@@ -27,6 +27,9 @@ EXAMPLES
   $basename --legacyStreams --rowanProjectsHome=$GS_HOME/shared/repos
 -----
 %
+instvars
+rowanProjectsHome
+%
 method
 createSymbolDictionaries
 	| session symbolList symbolDictNames |
@@ -53,19 +56,19 @@ fileinRowanV12
 			Stream installLegacyStreamImplementation.
 			System commit ].
 	GsFileIn
-		fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
+		fromServerPath: rowanProjectsHome, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
 	System commit.
 %
 method
 adoptRowan
  	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
-	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	gitRepoPath := rowanProjectsHome, '/Rowan'.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/rowan/specs/Rowan.ston'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
 	}
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
@@ -177,7 +180,6 @@ reloadRowan
 	System commit.
 %
 doit
-	| rowanProjectsHome |
 	self rowanProjectsHome
 		ifNotNil: [:value |
 			rowanProjectsHome := value.
