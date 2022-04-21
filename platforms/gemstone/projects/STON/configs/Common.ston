@@ -1,0 +1,10 @@
+ RwProjectCompoundConfiguration{
+	#name : 'Common',
+	#version : '0.1.0',
+	#packageNames : Set [
+		'STON-Core',
+		'STON-GemStoneBase',
+		'STON-GemStoneCommon'
+	],
+	#comment : 'Common set of packages '
+}

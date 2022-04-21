@@ -77449,7 +77449,7 @@ test_issue428_loaded_on_disk
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject_01/' ].
+				root: '/tmp/rowanSimpleProject/' ].
 
 "test existsOnDisk"
 
@@ -88363,7 +88363,7 @@ testHybridComplicatedProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject_01/'.
+		root: '/tmp/rowanHybridPatchProject/'.
 	className1 := 'SimpleHybridNormalReload1'.
 	className2 := 'SimpleHybridNormalReload2'.
 	classNames := {className1.
@@ -90112,7 +90112,7 @@ testHybridProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject_02/'.
+		root: '/tmp/rowanHybridPatchProject/'.
 	className := 'SimpleHybridNormalReload'.
 
 	normalClass := Object
@@ -91620,8 +91620,8 @@ testReconcileGlobalExtensionMethods
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest_01/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:/tmp/rowanTest_01/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -91740,8 +91740,8 @@ testReconcileGlobalExtensionMethods_issue_290
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest_02/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:/tmp/rowanTest_02/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'tonel:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -91864,7 +91864,7 @@ testIssue114_bothModificationsMustShareCommonAfter_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_05/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -91914,7 +91914,7 @@ testIssue114_bothModificationsMustShareCommonAfter_2
 	packageName2 := 'Issue114-Core2'.
 	comment := 'a class comment'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_06/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -91960,7 +91960,7 @@ testIssue114_bothModificationsMustShareCommonAfter_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_07/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92017,7 +92017,7 @@ testIssue114_bothModificationsMustShareCommonAfter_4
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_08/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92080,7 +92080,7 @@ testIssue114_bothModificationsMustShareCommonAfter_5
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_09/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92145,7 +92145,7 @@ testIssue114_classComment
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_10/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92196,7 +92196,7 @@ testIssue114_classCommentChange_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_11/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92249,7 +92249,7 @@ testIssue114_classCommentChange_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_12/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92302,7 +92302,7 @@ testIssue114_classCommentChange_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_13/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92356,7 +92356,7 @@ testIssue114_methodSourceIsNotTheSame_0
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_14/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92421,7 +92421,7 @@ testIssue114_methodSourceIsNotTheSame_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_15/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92488,7 +92488,7 @@ testIssue114_methodSourceIsNotTheSame_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_16/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92559,7 +92559,7 @@ testIssue114_missingClassModification
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_17/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92746,7 +92746,7 @@ testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNe
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_18/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92820,7 +92820,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_19/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92879,7 +92879,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_20/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92935,7 +92935,7 @@ testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVer
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_101/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93009,7 +93009,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_21/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93064,7 +93064,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93123,7 +93123,7 @@ testIssue125_1
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22_101/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93165,7 +93165,7 @@ testIssue125_2
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_23/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93208,7 +93208,7 @@ testIssue125_3
 	packageName3 := 'Issue125-Extensions2'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_24/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93247,7 +93247,7 @@ testIssue165
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_25/' 
+		root: '/tmp/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -95603,7 +95603,7 @@ testIssue24_addProject
 	| projectName |
 	projectName := 'Issue24_addProject'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_26/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName
 %
@@ -95616,7 +95616,7 @@ testIssue24_addRemovePackage
 	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_27/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95638,7 +95638,7 @@ testIssue24_addUpdateRemoveClass
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_28/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95668,7 +95668,7 @@ testIssue24_addUpdateRemoveMethods
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_29/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95714,7 +95714,7 @@ testIssue24_loadProject
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject_30/'  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject/'  validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
@@ -95769,7 +95769,7 @@ testIssue24_moveClassBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_31/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -95802,8 +95802,8 @@ testIssue24_moveClassBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_32/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_32/'.
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -95840,7 +95840,7 @@ testIssue24_moveMethodBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_32/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -95871,8 +95871,8 @@ testIssue24_moveMethodBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_33/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_33/'.
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -96512,7 +96512,7 @@ testIssue263
 	"https://github.com/dalehenrich/Rowan/issues/263"
 
 	| projectName packageName projectDefinition projectSetDefinition |
-	projectName := 'Issue263_01'.
+	projectName := 'Issue263'.
 	packageName := 'Issue263-Kernel'.
 
 	{projectName}
@@ -99712,7 +99712,7 @@ testIssue40
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_33/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
 
 	theClass1 := self 
@@ -99768,7 +99768,7 @@ testIssue41_addUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_34/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -99813,7 +99813,7 @@ testIssue41_interactiveAddUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_35/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -99847,7 +99847,7 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_36/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -99955,7 +99955,7 @@ testIssue41_moveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_37/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -100052,7 +100052,7 @@ testIssue41_moveUnchangedInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_38/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -102120,7 +102120,7 @@ testClassVarSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_01/' 
+		root: '/tmp/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102183,7 +102183,7 @@ testMultiDependentClassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_02/' 
+		root: '/tmp/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102332,7 +102332,7 @@ testSimpleSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_03/' 
+		root: '/tmp/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102395,7 +102395,7 @@ testSubclassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_04/' 
+		root: '/tmp/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102881,7 +102881,7 @@ testIssue263
 
 	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
 
-	projectName := 'Issue263_02'.
+	projectName := 'Issue263'.
 	packageName := 'Issue263-Extension'.
 
 	{projectName}
@@ -108539,7 +108539,7 @@ testDiskSimpleProject1
 				createDiskBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject_02/'].
+				root: '/tmp/rowanSimpleProject/'].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -109102,7 +109102,7 @@ testSimpleProject1
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject_03/' ].
+				root: '/tmp/rowanSimpleProject/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -109200,7 +109200,7 @@ testSimpleProject2
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject2_04/'
+				root: '/tmp/rowanSimpleProject2/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -109287,7 +109287,7 @@ testSimpleProject3
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject3_05/'
+				root: '/tmp/rowanSimpleProject3/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].

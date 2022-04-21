@@ -1,28 +1,9 @@
-RwProjectLoadConfiguration{
+RwProjectCompoundConfiguration{
 	#name : 'Default',
 	#version : '0.1.0',
-	#definedGroupNames : {
-		'core' : [ ],
-		'tests' : [ 'core' ]
-		},
-	#conditionalPackages : {
-		[ 'gemstone' ] : {
-			'tests' : {
-				#packageNames : [
-					'STON-Tests',
-					'STON-GemStone-Tests'
-					]
-				}
-			},
-		[ 'gs3.[7-]' ] : {
-			'core' : {
-				#packageNames : [
-					'STON-Core',
-					'STON-GemStoneBase',
-					'STON-GemStoneCommon'
-					]
-				}
-			}
-		},
-	#comment : 'for 3.7.0 need to have conditional loading as STON classes present in 3.6 and absent in 3.7'
+	#packageNames : Set [ ],
+	#configurationNames : [
+		'Tests'
+	],
+	#comment : 'For load the Tests by default, for 3.6.2, the STON classes are present in base image'
 }
