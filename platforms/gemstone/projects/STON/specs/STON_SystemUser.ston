@@ -14,5 +14,6 @@
 		#committishType : 'branch'
 	},
 	#repoPath : 'platforms/gemstone/projects/STON/src',
+	#defaultGroupNames : [ 'core' , 'tests' ],
 	#comment : ''
 }
