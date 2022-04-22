@@ -1164,17 +1164,46 @@ RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> doMoveClassesBetweenPackages [
-
 	| image |
 	image := Rowan image.
-	movedClasses 
-		do: [:aClassMove |
-			| loadedClass |
+	movedClasses
+		do: [ :aClassMove | 
+			| loadedClass pkgConvention |
 			loadedClass := image loadedClassNamed: aClassMove classBefore name.
+			pkgConvention := loadedClass loadedProject packageConvention.
+			((pkgConvention = 'RowanHybrid' or: [ pkgConvention = 'Monticello' ])
+				and: [ aClassMove packageBefore name ~= aClassMove packageAfter name ])
+				ifTrue: [ 
+					| newPackageName theClass |
+					newPackageName := aClassMove packageAfter name.
+					theClass := loadedClass handle.
+					theClass
+						methodsDo: [ :sel :meth | 
+							meth rowanPackageName = newPackageName
+								ifTrue: [ 
+									self
+										error:
+											'The class ' , theClass name , ' has extension methods for the package '
+												, newPackageName , ', so the class cannot be added to the package '
+												, newPackageName
+												,
+													' without violating the restriction that extension category names must not match the class package name.' ] ].
+					theClass class
+						methodsDo: [ :sel :meth | 
+							meth rowanPackageName = newPackageName
+								ifTrue: [ 
+									self
+										error:
+											'The class ' , theClass name , ' class has extension methods for the package '
+												, newPackageName , ', so the class cannot be added to the package '
+												, newPackageName
+												,
+													' without violating the restriction that extension category names must not match the class package name.' ] ] ].
+
+
 			loadedClass loadedPackage removeLoadedClass: loadedClass.
 			(image loadedPackageNamed: aClassMove packageAfter name)
 				addLoadedClass: loadedClass ]
-
 ]
 
 { #category : 'initialization' }

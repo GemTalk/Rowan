@@ -1,0 +1,22 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone_gemstoneBase/ComponentsUpgrade',
+	#condition : [
+		'gemstone',
+		'gemstoneBase'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Components-Kernel'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Components-Kernel' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'gemstone conditional packages required to restore Rowan functionality immediately after running upgradeImage'
+}

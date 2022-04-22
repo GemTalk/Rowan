@@ -114,9 +114,12 @@ RwUnmanagedClassesV2Test >> _validateAuditFailure: audit forPackage: packageName
 	"right now there are unrelated auditissues in UnPackaged project, so filter them out"
 
 	self
-		assert:
-			((audit at: packageName) at: className) first message
-				= ('Missing loaded method>>' , selector asString)
+		assert: ((audit at: packageName) at: className) first reason
+		equals: #'missingLoadedMethod'.
+	self
+		assert: ((audit at: packageName) at: className) first selector
+		equals: selector.
+
 ]
 
 { #category : 'private' }
@@ -1175,8 +1178,8 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 	self assert: ((audit at: packageName) at: className) size = 2.
 	details := ((audit at: packageName) at: className)
 		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method>>' , 'foo').
-	self assert: (details includes: 'Missing loaded method>>' , 'bar')
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo').
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>bar')
 ]
 
 { #category : 'tests' }
@@ -1232,8 +1235,8 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 	self assert: ((audit at: packageName) at: className) size = 2.
 	details := ((audit at: packageName) at: className)
 		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method>>' , 'foo').
-	self assert: (details includes: 'Missing loaded method>>' , 'bar')
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo').
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>bar')
 ]
 
 { #category : 'tests' }
@@ -1302,7 +1305,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	self assert: ((audit at: packageName) at: className) size = 1.
 	details := ((audit at: packageName) at: className)
 		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method>>' , 'foo')
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo')
 ]
 
 { #category : 'tests' }
@@ -1393,7 +1396,7 @@ baz ^3
 	self assert: ((audit at: packageName1) at: className) size = 1.
 	details := ((audit at: packageName1) at: className)
 		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method>>' , 'foo')
+	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo')
 ]
 
 { #category : 'tests' }

@@ -250,6 +250,14 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 	self assert: project gitShortStatus isEmpty.
 
 "export project components and packages"
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [ 
+			"since we've made changes to the load spec (not dhenrich), 
+				we shouldn't write it as the test will fail the empty 
+				gitShortStatus test"
+			"https://github.com/GemTalk/Rowan/issues/805"
+			Rowan gemstoneTools topaz
+				exportLoadSpecificationForProject: projectName].
 	Rowan gemstoneTools topaz
 		exportComponentsForProject: projectName;
 		exportPackagesForProject: projectName;
@@ -379,8 +387,12 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 
 "do git push and pull without error"
 	Rowan gemstoneTools topaz
-		gitPullProject: projectName remote: 'origin' branch: 'spec_0001';
-		gitPushProject: projectName remote: 'origin' branch: 'spec_0001'
+		gitPullProject: projectName remote: 'origin' branch: 'spec_0001'.
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [
+			"I'm the only one guaranteed to be able to push to the project ... for test coverage"
+			Rowan gemstoneTools topaz
+				gitPushProject: projectName remote: 'origin' branch: 'spec_0001' ].
 ]
 
 { #category : 'project support' }
@@ -398,16 +410,22 @@ RwGsTopazRowanToolTest >> testTopazListPackageNames [
 
 { #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazListProjects [
-	"return the list of loaded projects"
+	"validate the list of loaded projects"
 
-	| projectList |
+	| minimumRequiredProjectList loadedProjectList |
+	minimumRequiredProjectList := #('Cypress' 'Rowan' 'RowanClientServices' 'FileSystemGs' 'STON' 'UnPackaged' 'gemstoneBaseImage').
 	RwGsTestImage resetTestProjectRegistry.
-	projectList := Rowan gemstoneTools topaz listProjects sort.
-	#('Cypress' 'FileSystemGs' 'gemstoneBaseImage' 'Rowan' 'RowanClientServices' 'STON' 'UnPackaged')
-		do: [ :projectName | 
-			self
-				assert: (projectList includes: projectName)
-				description: 'expected ' , projectName , ' to be included in project list' ]
+	loadedProjectList := Rowan gemstoneTools topaz listProjects sort.
+	loadedProjectList = minimumRequiredProjectList sort
+		ifFalse: [ 
+			minimumRequiredProjectList
+				do: [ :projectName | 
+					loadedProjectList
+						remove: projectName
+						ifAbsent: [ 
+							self
+								assert: false
+								description: projectName printString , ' is expected to be present.' ] ] ]
 ]
 
 { #category : 'project support' }

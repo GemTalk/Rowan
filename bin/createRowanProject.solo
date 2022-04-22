@@ -1,0 +1,101 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitRequiredOptionWithRequiredArg long: 'projectName'.
+
+SuperDoitOptionalOptionWithRequiredArg long: 'componentName' default: 'Core'.
+SuperDoitOptionalOptionWithRequiredArg long: 'defaultSymbolDictName' default: 'Globals'.
+SuperDoitOptionalOptionWithRequiredArg long: 'packageConvention' default: 'RowanHybrid'.
+SuperDoitOptionalOptionWithRequiredArg long: 'packageFormat' default: 'tonel'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+SuperDoitOptionalOptionWithRequiredArg long: 'repositoryType' default: 'git'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D] --projectName=<project-name> \
+                [--componentName=<component-name>] \
+                [--defaultSymbolDictName=<symbol-dictionary-name>] \
+                [--packageConvention=(Rowan|RowanHybrid |Monticello)] \
+                [--packageFormat=(tonel|filetree)] \
+                [--projectsHome=<project-directory>] \
+                [--repositoryType=(git|disk)]
+      					
+
+DESCRIPTION
+  Create a Rowan project named <project-name>, in the directory <project-directory>
+  with a top-level component named <component-name> and a default symbol dictionary
+  named <symbol-dictionary-name>. The following expression is used to create the
+  project:
+
+    (Rowan newProjectNamed: self projectName)
+	  	packageConvention: self packageConvention;
+  		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictName;
+  		repoType: self repositoryType asSymbol;	
+	  	packageFormat: self packageFormat;
+      addTopLevelComponentNamed: self componentName;
+      write.
+
+  The directory <project-directory>/<project-name> is deleted and replaced by a new
+  set of Rowan project directory structure.
+
+OPTIONS
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error
+  --projectName=<project-name>
+                       The name of the project to be created.
+  --componentName=<component-name>
+                       The name of the top-level component to be used. The 
+                       addRowanProjectPackages.solo script is used to add packages
+                       to components. The default component name is Core.
+  --defaultSymbolDictName=<symbol-dictionary-name>
+                       The name of the default symbol dictionary for the project.
+                       When packages are loaded, unless otherwise specified the 
+                       classes will be created in the default symbol dictionary.
+                       The default symbol dictionary name is Globals.
+  --packageConvention=<package-convention>
+                       Rowan currently supports three package conventions: Rowan
+                       RowanHybrid, and Monticello. If you are using Jadeite to 
+                       edit code, then RowanHybrid (the default) is recommended.
+                       If you are sharing code with GLASS or Pharo, then Monticello
+                       is recommended. The Rowan pacagke convention is best used
+                       with Rowan v3.0.
+  --packageFormat=<package-format>
+                       Rowan supports two package formats: tonel and filetree.
+                       The default format is tonel and is recommended unless you
+                       are going to share code with GLASS, then you should use
+                       filetree.
+  --projectsHome=<project-directory>
+                       This is the directory where the project will be created.
+                       By default, projects are created in $ROWAN_PROJECTS_HOME.
+  --repositoryType=<repository-type>
+                       Rowan supports 3 repository types: git or disk (the default). 
+                       If disk is selected, the project will be written to the 
+                       project directory. If git is selected, a git init is performed
+                       in the project directory.    
+  
+
+EXAMPLES
+  $basename -h
+  $basename --projectName=MyProject
+  $basename --projectName=MyProject -D
+  $basename --projectName=MyProject --defaultSymbolDictName=UserGlobals \
+            --packageConvention=RowanHybrid --packageFormat=filetree \
+            --projectsHome=$GS_HOME/share/repos --repositoryType=disk
+-----
+%
+doit
+	| definedProject |
+	definedProject := (Rowan newProjectNamed: self projectName)
+		addTopLevelComponentNamed: self componentName;
+		packageConvention: self packageConvention;
+		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictName;
+		repoType: self repositoryType asSymbol;	
+		packageFormat: self packageFormat;
+		projectsHome: self projectsHome;
+		yourself.
+	(self projectsHome asFileReference / self projectName / 'rowan') ensureDeleteAll.
+	definedProject resolve write.
+	^ self noResult
+%

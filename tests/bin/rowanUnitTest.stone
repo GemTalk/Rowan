@@ -1,0 +1,369 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithNoArg long: 'debugSuite'.
+	SuperDoitOptionalOptionWithNoArg long: 'dev_loadProjectsOnly'.
+	SuperDoitOptionalOptionWithNoArg long: 'dev_persistScriptClass'.
+	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'externalsStBase'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsHome'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsSandbox'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'
+}
+%
+usage
+-----
+USAGE
+  $basename [--help | -h] [--debug | -D] [OPTIONS]
+
+DESCRIPTION
+  Run unit tests for Rowan. Can be run interactively or from a battery test.
+
+  The environment variables ROWAN_PROJECTS_HOME and ROWAN_PROJECTS_SANDBOX, 
+  should be defined. Required projects will be cloned by Rowan using 
+  ROWAN_PROJECTS_HOME. The tests use ROWAN_PROJECTS_SANDBOX as the
+  location where their projects are cloned. Note that an alternate 
+  ROWAN_PROJECTS_HOME can be specified by the --rowanProjectsHome option
+  and an alternate ROWAN_PROJECTS_SANDBOX can be specified by the
+  --rowanProjectsSandbox option.
+
+OPTIONS
+  --debugSuite               If present, test suite will be run in debug 
+                             mode. If -- expectedResults option is used, 
+                             then only those tests that are expected to
+                             fail will be debugged.
+  --dev_loadProjectsOnly     Exit the script immediately after doing a project
+                             load and commit.
+  --dev_persistScriptClass   Save a copy of the script class in the 
+                             SuperDoit_trasientSymbolDictionary symbol dictionary
+                             for reference. Used in conjunction with the 
+                             --loadProjecstOnly option.
+  --expectedResults=<path-to-expected-testResults-json>
+                             If specified, the testSuiteSample from the JSON
+                             file will be compared to the testSuiteSample
+                             produced by the test. The tests results are 
+                             expected to match the expected results, if they
+                             do not, a difference report is produced.
+  --externalsStBase          Location where Rowan, RowanClientServices, 
+                             GsTestStats and other projects that are used to 
+                             build the product are found. The environment variable 
+                             EXTERNALS_ST_BASE is used to isolate the projects 
+                             used to build the product (Rowan, etc.) from 
+                             ROWAN_PROJECTS_HOME, which is used by the test 
+                             framework as the location where projects downloaded 
+                             by the tests are located. If EXTERNALS_ST_BASE is 
+                             not defined, then it defaults to ROWAN_PROJECTS_HOME.
+  --isColorful=[true|false]  By default ASCII colors are used on stdout if 
+                             stdout is attached to a terminal. There are 
+                             certain use cases (i.e., GitHub CI) where it
+                             is desirable to use ASCII colors even though
+                             stdout is not a terminal.
+  --resultDir=<path-results-directory>
+                             Location of the battery test result directory
+                             where the various test directories and results
+                             files are to be found. REQUIRED.
+  --rowanProjectsHome=<directory-path>
+                             Location where the projects cloned by the tests will 
+                             be located. Use EXTERNALS_ST_BASE or --externalsStBase 
+                             to isolate the projects included in extent0.rowan.dbf 
+                             from the test projects. ROWAN_PROJECTS_HOME MUST BE 
+                             DEFINED.
+  --rowanProjectsSandbox=<directory-path>
+                             Location used by tests when cloning git repositores. 
+                             By default, $ROWAN_PROJECTS_SANDBOX. MUST BE DEFINED.
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --debugSuite -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --expectedResults=expectedTestResults.json -- -L -I .topazini
+  $basename --resultDir=TEST_RESULTS --expectedResults=TEST_RESULTS/expectedTestResults.json --isColorful=false -- -L -I .topazini
+-----
+%
+instvars
+testStatusStream
+%
+specs
+[
+RwLoadSpecificationV2 {
+	#specName : 'GsTestStats',
+	#projectName : 'GsTestStats',
+	#gitUrl : 'git@git.gemtalksystems.com:GsTestStats',
+	#revision : 'v1',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Samples'
+	],
+	#customConditionalAttributes : [
+		'tests' ],
+	#comment : 'test results tracking'
+}
+]
+%
+method
+testStatusStream
+	testStatusStream ifNotNil: [ ^ testStatusStream].
+	self resultDir asFileReference ensureCreateDirectory.
+	(self resultDir, '/teststatus.txt') asFileReference ensureCreateFile.
+	testStatusStream  := File 
+			open: (self resultDir, '/teststatus.txt') asFileReference pathString 
+			writable: #append.
+	^ testStatusStream
+%
+method
+ansiGreen
+^ (self globalNamed: 'GsTestStatsCI') ansiGreen
+%
+method
+ansiRed
+^ (self globalNamed: 'GsTestStatsCI') ansiRed
+%
+method
+printPassingBanner: message reporter: reporter
+	reporter printBanner: message color: self ansiGreen
+%
+method
+printFailingBanner: message reporter: reporter
+	reporter printBanner: message color: self ansiRed
+%
+method
+writeTestDone: detailedTestStatus
+	"write $resultsDir/testdone.txt"
+	self writeTestDone: detailedTestStatus explanation: ''
+%
+method
+writeTestDone: detailedTestStatus explanation: explanation
+	"write $resultsDir/testdone.txt"
+	| stream |
+	stream := File 
+			open: (self resultDir, '/testdone.txt') asFileReference pathString 
+			writable: #append.
+	stream 
+		lf; nextPutAll: 'TEST STATUS:: ', detailedTestStatus; lf.
+	explanation isEmpty
+		ifFalse: [ 
+			stream lf; nextPutAll: explanation; lf ].
+	stream close
+%
+method
+writeTestStatus: message
+	"does not return"
+	self _writeTestStatus: 'TEST STATUS:: ', message.
+%
+method
+writePassingTestStatus: runner
+	self _writeTestStatus: 'TEST STATUS:: passes with no errors'.
+	self 
+		writeTestDone: 'passes with ', runner summary.
+	^ self noResult
+%
+method
+_writeTestStatus: testStatus
+	self testStatusStream
+		nextPutAll: testStatus; lf;
+		nextPutAll: 'SECTION 2: UNREPORTED BUGS'; lf; "without this entry, batterytest.pl thinks it's a crash (instead of a failure)"
+		close.
+	testStatusStream := nil.
+%
+method
+loadProjectSpecs
+	"load specurls ... fail the run if there are CompileWarnings"
+	| warnings rowanProjectsHome rowanProjectsSandbox externalsStBase |
+	self rowanProjectsHome
+		ifNotNil: [:value |
+			rowanProjectsHome := value.
+			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value ] 
+		ifNil: [ 
+			(rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNil: [ self error: 'ROWAN_PROJECTS_HOME env var or --rowanProjectsHome option must be defined' ] ].
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') asFileReference pathString; lf.
+	self externalsStBase
+		ifNotNil: [:value | 
+			externalsStBase := value.
+			System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: value ]
+		ifNil: [
+			(externalsStBase := System gemEnvironmentVariable: 'EXTERNALS_ST_BASE')
+				ifNil: [
+					externalsStBase := rowanProjectsHome.
+					System gemEnvironmentVariable: 'EXTERNALS_ST_BASE' put: rowanProjectsHome ] ].
+	externalsStBase asFileReference exists
+		ifFalse: [ self error: 'Directory referred to by EXTERNALS_ST_BASE (', externalsStBase asFileReference pathString, ') does not exist' ].
+	self stdout nextPutAll: '-- EXTERNALS_ST_BASE = ', (System gemEnvironmentVariable: 'EXTERNALS_ST_BASE') asFileReference pathString; lf.
+	self rowanProjectsSandbox
+		ifNotNil: [:value | 
+				rowanProjectsSandbox := value.
+				System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX' put: value ]
+		ifNil: [
+			(rowanProjectsSandbox := System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+				ifNil: [ self error: 'ROWAN_PROJECTS_SANDBOX env var or --rowanProjectsSandbox option must be used' ] ].
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_SANDBOX = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX') asFileReference pathString; lf.
+	rowanProjectsHome asFileReference ensureCreateDirectory.
+	rowanProjectsSandbox asFileReference ensureCreateDirectory.
+	warnings := {}.
+	[ 
+		self preDoitSpecLoad: [:loadSpec |
+			loadSpec projectsHome: externalsStBase ].
+		"Compensate for Rowan v2 bugs"
+		(Rowan projectNamed: 'Rowan') 
+			gitRepositoryRoot: externalsStBase, '/Rowan'.
+		(Rowan projectNamed: 'RowanClientServices') 
+			gitRepositoryRoot: externalsStBase, '/RowanClientServices'.
+		(Rowan projectNamed: 'Rowan')
+			_loadedProject resolvedProject projectsHome: externalsStBase.
+		(Rowan projectNamed: 'RowanClientServices')
+			_loadedProject resolvedProject projectsHome: externalsStBase.
+		(Rowan projectNamed: 'Rowan')
+			loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').	
+		System commit.
+	]
+		on: CompileWarning
+		do: [:ex | 
+			(ex description includesString: 'not optimized')
+					ifFalse: [ warnings add: ex asString printString ].
+			ex resume ].
+	self isSolo ifFalse: [ System commit "as loaded" ].	
+	self dev_loadProjectsOnly 
+		ifTrue: [
+			"EXIT if only a project load is desired"
+			self dev_persistScriptClass 
+				ifTrue: [ 
+					"save copy of script class in image and commit"
+					self persist ].
+			self exitWithStatus: 0].
+ 	warnings isEmpty ifFalse: [
+		| warningStatusStream message |
+		warningStatusStream := WriteStream on: String new.
+		self testStatusStream nextPutAll: 'COMPILE WARNINGS:'; lf.
+		warnings do: [:warning | self testStatusStream nextPutAll: '	', warning ].
+		self testStatusStream nextPutAll: 'Compile warnings results in test failure'; lf.
+		message := ' fails with compile warnings: ', warnings size printString.
+		self writeTestStatus: message.
+		self 
+			writeTestDone: message 
+			explanation: 'See teststatus.txt for more details'.
+		self exit: message withStatus: 1 ]. 
+%
+method
+buildTestSuite: testSuiteName
+	| systemTestSuite |
+	systemTestSuite := TestSuite named: testSuiteName.
+	{ 'Rowan' . 'STON' . 'Cypress' . 'FileSystemGs' .  'RowanClientServices' }
+		do: [:projectName |
+		| testSuite |
+		testSuite := (Rowan projectNamed: projectName) testSuite.
+		systemTestSuite addTests: testSuite tests ].
+	^ systemTestSuite
+%
+method
+runTestSuite: testSuiteName
+	| systemTestSuite |
+	systemTestSuite := self buildTestSuite: testSuiteName.
+	self debugSuite
+		ifTrue: [
+			| debugOption |
+			"interactive debugging of failures"
+			debugOption := self optionsDict at: 'debug'.
+			debugOption value
+				ifFalse: [
+					"set the --debug option"
+					debugOption value: true ].
+			self expectedResults
+				ifNil: [ 
+					"debug test failures"
+					^ (self globalNamed: 'GsTestStatsCITestRunner') debugSuite: systemTestSuite ]
+				ifNotNil: [ :expectedResultsPath |
+          "debug unexpected test failures"
+					| expectedFailures |
+					expectedFailures := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
+					^(self globalNamed: 'GsTestStatsCITestRunner') 
+						debugUnexpectedFailures: systemTestSuite 
+						expectedFailures: expectedFailures ] ]
+		ifFalse: [ 
+			"run tests and produce report of test failures"
+			^ (self globalNamed: 'GsTestStatsCITestRunner') runSuite: systemTestSuite ].
+%
+method
+writeFailingTestResultsSummaryReport: runner reporter: reporter
+	| failingStatus message |
+	failingStatus := 'test failures'.
+	self printFailingBanner: failingStatus reporter: reporter.
+	"test status is not written to stdout, so disable isColorful"
+	(self globalNamed: 'GsTestStatsCI') isColorful: false.
+	(self globalNamed: 'GsTestStatsCITestReporterStdout') 
+		reportNotPassing: runner
+			on: self testStatusStream.
+	self testStatusStream lf; nextPutAll: failingStatus; lf; nextPutAll: runner summary; lf.
+	message := 'fails with ', runner summary.
+	self writeTestStatus: message.
+	self 
+		writeTestDone: message 
+		explanation: 'See teststatus.txt for more details'.
+  self exit: message withStatus: 1
+%
+method
+writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSample: expectedSample testSuiteSample: testSuiteSample
+	| failingStatus message |
+	failingStatus := 'fails by not matching expected results'.
+	self printFailingBanner: failingStatus reporter: reporter.
+	"stdout is routed to a log file, so disable isColorful"
+	(self globalNamed: 'GsTestStatsCI') isColorful: false.
+	(self globalNamed: 'GsTestStatsCITestReporterStdout') 
+		reportNotPassing: runner
+			on: self testStatusStream.
+	self testStatusStream nextPutAll: '----------------------------------------------------'; lf.
+	self testStatusStream nextPutAll: failingStatus, ' (test results diff report follows)'; lf.
+	self testStatusStream nextPutAll: '----------------------------------------------------'; lf.
+	{ self stdout . self testStatusStream}
+		do: [:outputStream |
+			testSuiteSample compareTo: expectedSample on: outputStream.
+							outputStream nextPutAll: '----------------------------------------------------'; lf; lf ].
+	message := 'fails with differences in expected results'.
+	self writeTestStatus: message.
+	self 
+		writeTestDone:  message
+		explanation: 'See teststatus.txt for more details'.
+	self exit: message withStatus: 1
+%
+doit
+	| runner testSuiteSample passingStatus  stdoutReporter |
+	self loadProjectSpecs.
+	self isColorful ifNotNil: [:aBoolString | (self globalNamed: 'GsTestStatsCI') isColorful: aBoolString = 'true' ].
+	"run tests"
+	runner := self runTestSuite: 'Rowan projects Test Suite'.
+	"report results to stdout"
+	stdoutReporter := (self globalNamed: 'GsTestStatsCITestReporterStdout') reportNotPassing: runner.
+	"create testSuiteSample with results of test"
+	testSuiteSample := ((self globalNamed: 'GsTestStatsCITestReporterTestSuiteSample') report: runner) testSuiteSample.
+	"write testSuiteSample to results directory in JSON"
+	(self resultDir asFileReference / 'testResults.json') writeStreamDo: [:fileStream |
+		testSuiteSample exportJsonTo: fileStream ].
+	"different reporting requirements for failures when expected results are available"
+	self expectedResults
+		ifNil: [
+			"no expected test results, pass/failure depends on successful test run"
+			passingStatus := 'passes with no error'.
+			runner isSuccessful
+				ifFalse: [ 
+					"test failures, does not return"
+					self writeFailingTestResultsSummaryReport: runner reporter: stdoutReporter ] ]
+		ifNotNil: [:expectedResultsPath |
+			"with expected test results, pass/failure depends up matching expected results"
+			| expectedSample dummyStream |
+			expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
+			passingStatus := 'passes matching expected results'.
+			dummyStream := WriteStream on: String new.
+			(testSuiteSample compareTo: expectedSample on: dummyStream)
+				ifFalse: [ 
+					"differences between test results and expected results, does not return"
+					self writeFailingExpectedResultsSummaryReport: runner 
+						reporter: stdoutReporter 
+						expectedSample: expectedSample
+						testSuiteSample: testSuiteSample ] ].
+  "PASSING tests (not test failures, or test results match expected results)"
+	self printPassingBanner: passingStatus reporter: stdoutReporter.
+	^ self writePassingTestStatus: runner
+%
+

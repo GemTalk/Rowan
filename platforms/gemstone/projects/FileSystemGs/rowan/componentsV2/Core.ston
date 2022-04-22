@@ -6,7 +6,6 @@ RwSimpleProjectLoadComponentV2 {
 	#packageNames : [
 		'FileSystem-Core',
 		'FileSystem-Disk',
-		'FileSystem-GemStone-Kernel',
 		'FileSystem-Memory',
 		'FileSystem-Path',
 		'Zinc-Character-Encoding-Core',

@@ -100,7 +100,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> checkMethodDefinitions: aClas
      cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
   ].
   cls ifNil:[   
-    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+    (cls := GsCurrentSession currentSession resolveSymbol: clsName ) ifNil:[
        "creating the class not implemented yet"
        Warning signal:'class ' , clsName , ' not found by name lookup'.
        ^ self "can't check syntax on the methods until class is defined"
@@ -110,7 +110,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> checkMethodDefinitions: aClas
   methBlk := [ :methDef "a RwMethodDefinition" |
     [
       cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
+      dictionaries: GsCurrentSession currentSession symbolList
       category: methDef protocol asSymbol
       intoMethodDict: fakeMethDict
       intoCategories: nil

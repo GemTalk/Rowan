@@ -1495,13 +1495,15 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNewClassVersion [
 	"https://github.com/dalehenrich/Rowan/issues/123"
 
+	"https://github.com/GemTalk/Rowan/issues/802"
+
 	"
     Create class Issue91 in Package RowanSample1-XXX.
     Add non-extension method .
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 |
+	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 audit hasError |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1560,6 +1562,10 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+	hasError := false.
+	[
 	theClass1 := Object
 		rwSubclass: className1
 		instVarNames: #(#'ivar1')
@@ -1567,23 +1573,12 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 		classInstVars: #()
 		poolDictionaries: #()
 		category: packageName2
-		options: #().
+		options: #()
+	] on: Error do: [:ex |
+		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		hasError := true ].
 
-	self assert: (theClass1 new perform: #'foo') = 1.
-	self assert: (theClass1 new perform: #'foo') = 1.
-	self assert: theClass1 category = packageName2.
-	self assert: theClass1 rowanPackageName = packageName2.
-	self
-		assert:
-			(theClass1 categoryOfSelector: #'foo') asString
-				= ('*' , packageName2 asLowercase).
-	self
-		assert: (theClass1 compiledMethodAt: #'foo') rowanPackageName = packageName2.
-	self assert: (Rowan globalNamed: className2) ~~ theClass2.
-	theClass2 := Rowan globalNamed: className2.
-	self assert: (theClass2 new perform: #'foo') = 1.
-	self assert: theClass2 category = packageName1.
-	self assert: theClass2 rowanPackageName = packageName1
+	self assert: hasError description: 'Expected an error'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -1598,7 +1593,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
     Using the class definition template, move the class to RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className theClass |
+	| projectName packageName1 packageName2 className theClass hasError |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1645,6 +1640,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self
 		assert: (theClass compiledMethodAt: #'foo') rowanPackageName = packageName2.
 
+	hasError := false.
+	[
 	theClass := Object
 		rwSubclass: className
 		instVarNames: #()
@@ -1653,16 +1650,11 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		poolDictionaries: #()
 		category: packageName2
 		options: #().
+	] on: Error do: [:ex |
+		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		hasError := true ].
 
-	self assert: theClass category = packageName2.
-	self assert: theClass rowanPackageName = packageName2.
-	self assert: (theClass new perform: #'foo') = 1.
-	self
-		assert:
-			(theClass categoryOfSelector: #'foo') asString
-				= ('*' , packageName2 asLowercase).
-	self
-		assert: (theClass compiledMethodAt: #'foo') rowanPackageName = packageName2
+	self assert: hasError description: 'Expected an error'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -1679,7 +1671,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
     Bug is that method extendedMethod was not brought into the new class version. No methods are shown.
 "
 
-	| projectName packageName1 packageName2 className theClass |
+	| projectName packageName1 packageName2 className theClass audit hasError |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1726,6 +1718,10 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self
 		assert: (theClass compiledMethodAt: #'foo') rowanPackageName = packageName2.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+	hasError := false.
+	[
 	theClass := Object
 		rwSubclass: className
 		instVarNames: #(#'ivar1')
@@ -1734,16 +1730,11 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		poolDictionaries: #()
 		category: packageName2
 		options: #().
+	] on: Error do: [:ex |
+		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		hasError := true ].
 
-	self assert: (theClass new perform: #'foo') = 1.
-	self assert: theClass category = packageName2.
-	self assert: theClass rowanPackageName = packageName2.
-	self
-		assert:
-			(theClass categoryOfSelector: #'foo') asString
-				= ('*' , packageName2 asLowercase).
-	self
-		assert: (theClass compiledMethodAt: #'foo') rowanPackageName = packageName2
+	self assert: hasError description: 'Expected an error'
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -1756,7 +1747,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 x oldClass |
+	| projectName packageName1 packageName2 className1 className2 theClass1 theClass2 x oldClass audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1822,6 +1813,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: oldClass ~~ theClass1.
 	self assert: (theClass1 new perform: #'foo') = 1.
 	self assert: (theClass1 new perform: #'foo') = 1.
@@ -1918,7 +1911,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className theClass oldClass |
+	| projectName packageName1 packageName2 className theClass oldClass audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1972,6 +1965,8 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 		category: packageName2
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: oldClass ~= theClass.
 	self assert: (theClass new perform: #'foo') = 1.
 	self assert: (theClass new perform: #'foo') = 1.

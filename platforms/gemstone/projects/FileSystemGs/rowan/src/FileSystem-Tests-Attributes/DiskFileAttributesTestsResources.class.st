@@ -51,7 +51,7 @@ DiskFileAttributesTestsResources >> setUp [
 		bufferedStream nextPutAll: 'Created by FileAttributesTestsResources>>setUp '.
 		beforeCreationTime printOn: bufferedStream.
 	] ensure: [ bufferedStream close ].
-	afterCreationTime := DateAndTime now beRounded.
+	afterCreationTime := DateAndTime now.
 	"Round up to the next second"
 	days := afterCreationTime dayOfYear.
 	hours := afterCreationTime hour.

@@ -1,0 +1,52 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D] <spec-url> [<component-name>...] [--projectsHome=<projects-directory>]
+
+DESCRIPTION
+  Install the project associated with the given <spec-url> into the stone.
+
+OPTIONS
+  <spec-url>           url referencing the load spec of the project to be loaded.
+  <component-name>...  if present, names of components to load. Overrides the 
+                       component names in the load spec.
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error
+  --projectsHome=<project-directory>
+                       This is the directory where the project will be loaded
+                       from. By default, projects are loaded from 
+                       $ROWAN_PROJECTS_HOME.
+
+EXAMPLES
+  $basename -h
+  $basename -h -- -l -I $GEMSTONE/data/.topazini
+
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston Core \
+            --projectsHome=$GS_HOME/share/repos
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --projectsHome=$GS_HOME/share/repos
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --projectsHome=$GS_HOME/share/repos -- -l -I $GEMSTONE/data/.topazini
+-----
+%
+doit
+	| spec args |
+	args := self positionalArgs.
+	args size < 1
+		ifTrue: [
+			self usage. 
+			self error: 'missing positional <spec-url> argument' ].
+	spec := (RwSpecification fromUrl: args removeFirst)
+		projectsHome: self projectsHome;
+		yourself.
+	args size > 0
+		ifTrue: [ spec componentNames: args ].
+	spec resolve load.
+	^ System commit
+%

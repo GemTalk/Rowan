@@ -1,0 +1,78 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'componentName' default: 'Core'.
+SuperDoitOptionalOptionWithRequiredArg long: 'packageSymbolDictName'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D] <spec-url> <package-name>... \
+                [--componentName=<component-name>] \
+                [--packageSymbolDictName=<symbol-dictionary-name>] \
+                [--projectsHome=<projects-directory>] 
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk, and add the packages named
+  in the list to the named component.
+
+OPTIONS
+  <spec-url>           url referencing the load spec of the project, the load
+                       spec is used to read the project from disk.
+  <package-name>...    List of package names to be added to the named compoonent.
+  --componentName=<component-name>
+                       The name of the component to which the packages will be 
+                       added. The default component name is Core.
+  --packageSymbolDictName=<symbol-dictionary-name>
+                       The name of the symbol dictionary to be associated with 
+                       the named packages. If not specified the packages will 
+                       be loaded into the default symbol dictionary for the project.
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename -h
+
+  createRowanProject.solo --projectName=MyProject --projectsHome=$GS_HOME/share/repos
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            MyProject-Core
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --componentName=Tests \
+            MyProject-Tests
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --packageSymbolDictName=UserGlobals \
+            MyProject-UserGlobals-Core
+
+-----
+%
+doit
+	| packages loadSpecUrl loadSpec resolvedProject |
+
+	self positionalArgs size < 2
+		ifTrue: [
+			self usage. 
+			self error: 'incorrect number of positional arguments, Missing <spec-url> and/or <package-name>' ].
+	packages := self positionalArgs copy.
+	loadSpecUrl := packages removeFirst.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	loadSpec
+		projectsHome: self projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+	self packageSymbolDictName
+		ifNotNil: [:symbolDictName |
+			packages do: [:packageName |
+				resolvedProject 
+					addPackageNamed: packageName 
+					toComponentNamed: self componentName
+					gemstoneDefaultSymbolDictionaryForUser: (System myUserProfile userId -> symbolDictName) ] ]
+		ifNil: [
+			packages do: [:packageName |
+				resolvedProject 
+					addPackageNamed: packageName 
+					toComponentNamed: self componentName ] ].
+	resolvedProject export.
+	^ self noResult.
+%

@@ -1,7 +1,15 @@
+"
+Audit failure detail for a class. 
+
+Reasons:
+	#loadedPackageNotInRegistry
+	#loadedPackageInWrongRegistry
+"
 Class {
 	#name : 'RwAuditDetail',
 	#superclass : 'Object',
 	#instVars : [
+		'reason',
 		'message',
 		'owner'
 	],
@@ -17,6 +25,25 @@ RwAuditDetail class >> for: anObject message: aString [
 			notify; 
 			yourself
 
+]
+
+{ #category : 'other' }
+RwAuditDetail class >> for: anObject reason: aSymbol message: aString [
+	"add error to results. print to file"
+
+	^ self new
+		owner: anObject;
+		reason: aSymbol;
+		message: aString;
+		notify;
+		yourself
+]
+
+{ #category : 'testing' }
+RwAuditDetail >> isPackageDetail [
+	"package details do not respond to #behavior ... need to filter details during Rowan upgrade"
+
+	^ false
 ]
 
 { #category : 'other' }
@@ -43,9 +70,8 @@ RwAuditDetail >> message: aString [
 { #category : 'other' }
 RwAuditDetail >> notify [
 
-	GsFile gciLogServer: self message,'  ', self owner name asString.
-	Notification signal: self message asString,'  ', self owner name asString.
-
+	GsFile gciLogServer: self message.
+	Notification signal: self message.
 ]
 
 { #category : 'other' }
@@ -72,4 +98,21 @@ RwAuditDetail >> printOn: aStream [
 			nextPutAll: '>>';
 			nextPutAll: self message
 
+]
+
+{ #category : 'accessing' }
+RwAuditDetail >> reason [
+	^reason
+]
+
+{ #category : 'accessing' }
+RwAuditDetail >> reason: aSymbol [
+	reason := aSymbol
+]
+
+{ #category : 'accessing' }
+RwAuditDetail >> selector [
+	"non-method audit detail"
+
+	^ nil
 ]

@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project_standalone',
+	#projectSpecPath : '',
+	#componentsPath : 'componentsV2',
+	#packagesPath : 'src',
+	#projectsPath : 'projectsV2',
+	#specsPath : 'specsV2',
+	#packageFormat : 'tonel',
+	#comment : 'V2 STON standalone project specification'
+}

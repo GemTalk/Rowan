@@ -267,7 +267,7 @@ RwHybridBrowserToolTest >> testHybridClassRename [
 
 	normalClass
 		rwCompileMethod: 'foo ^foo'
-		category: '*' , packageName1 asLowercase.
+		category: '*' , packageName2 asLowercase.
 	normalClass class
 		rwCompileMethod: 'bar ^Bar'
 		category: 'accessing'.
@@ -405,7 +405,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
 
 	fooMethod := normalClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: '*' , packageName2 asLowercase.
 	barMethod := normalClass class
 		rwCompileMethod: 'bar ^''bar'''
 		category: 'accessing'.
@@ -416,7 +416,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
 	self
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'accessing'.
-	self assert: fooMethod rowanPackageName = packageName1.
+	self assert: fooMethod rowanPackageName = packageName2.
 	self assert: barMethod rowanPackageName = packageName1.
 
 	barMethod := normalClass class
@@ -870,7 +870,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToEx
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		category: packageName3
+		category: packageName2
 		options: #().
 
 	self assert: (normalClass new perform: #foo) = 'foo'.
@@ -884,9 +884,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassWithMethodsAndExtensionMethodsToEx
 	ext2Method := movedNormalClass class compiledMethodAt: #ext2.
 
 	self assert: movedNormalClass == normalClass.
-	self assert: movedNormalClass rowanPackageName = packageName3.
-	self assert: fooMethod rowanPackageName = packageName3.
-	self assert: barMethod rowanPackageName = packageName3.
+	self assert: movedNormalClass rowanPackageName = packageName2.
+	self assert: fooMethod rowanPackageName = packageName2.
+	self assert: barMethod rowanPackageName = packageName2.
 	self assert: ext1Method rowanPackageName = packageName3.
 	self assert: ext2Method rowanPackageName = packageName3.
 ]
@@ -1344,7 +1344,7 @@ RwHybridBrowserToolTest >> testHybridMoveMethodIntoSessionMethods [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1381,6 +1381,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1389,8 +1391,11 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
+	"we've been illegally moving methods into extension methods in the same package as the class... should throw errors"
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	"https://github.com/GemTalk/Rowan/issues/802"
+
+	| class  projectName packageNames packageName1 hadError |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1407,51 +1412,21 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 		poolDictionaries: #()
 		category: packageName1
 		options: #().
-	class rwCompileMethod: 'foo ^''foo''' category: '*' , packageName1 asLowercase.
-	class class
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+	hadError := false.
+	[class rwCompileMethod: 'foo ^''foo''' category: '*' , packageName1 asLowercase] 
+		on: Error do: [:ex |
+			hadError := true.
+			self 
+				assert: ex description 
+				equals:  'UserDefinedError: extension category name ''*hybrida-core''  must not match class package name (HybridA-Core)' ].
+	self assert: hadError description: 'Expected an error'
 
-	subclass := class
-		rwSubclass: 'SimpleHybridSubclass1'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	subclass
-		rwCompileMethod: 'foo1 ^''foo'''
-		category: '*' , packageName1 asLowercase.
-	subclass class
-		rwCompileMethod: 'foo1 ^''foo'''
-		category: '*' , packageName1 asLowercase.
-
-	self assert: subclass superClass == class.
-
-	newClassVersion := Object
-		rwSubclass: 'SimpleHybrid1'
-		instVarNames: #('ivar1')
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	self assert: newClassVersion ~~ class.
-	newSubclassVersion := Rowan globalNamed: subclass name.
-	self assert: newSubclassVersion ~~ subclass.
-	self assert: newSubclassVersion superClass == newClassVersion.
-	self assert: (newSubclassVersion perform: #foo) = 'foo'.
-	self assert: (newSubclassVersion perform: #foo1) = 'foo'.
-	self assert: (newSubclassVersion new perform: #foo) = 'foo'.
-	self assert: (newSubclassVersion new perform: #foo1) = 'foo'
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 
-	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project B'.
 	packageName1 := 'HybridB-Core'.
 	packageNames := {packageName1}.
@@ -1471,6 +1446,9 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 	class rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
 	class class rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+
 	subclass := class
 		rwSubclass: 'SimpleHybridSubclass1'
 		instVarNames: #()
@@ -1483,6 +1461,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 	subclass class rwCompileMethod: 'foo1 ^''foo''' category: 'accessing'.
 
 	self assert: subclass superClass == class.
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 
 	newClassVersion := Object
 		rwSubclass: 'SimpleHybrid1'
@@ -1493,6 +1473,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1506,7 +1488,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 
-	| class subclass projectName packageNames packageName1 packageName2 newClassVersion newSubclassVersion |
+	| class subclass projectName packageNames packageName1 packageName2 newClassVersion newSubclassVersion audit |
 	projectName := 'Hybrid Project C'.
 	packageName1 := 'HybridC-Core'.
 	packageName2 := 'HybridC-Extensions'.
@@ -1528,6 +1510,9 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 	class rwCompileMethod: 'foo ^''foo''' category: '*' , packageName2 asLowercase.
 	class class rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+
 	subclass := class
 		rwSubclass: 'SimpleHybridSubclass1'
 		instVarNames: #()
@@ -1542,6 +1527,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 		category: '*' , packageName2 asLowercase.
 
 	self assert: subclass superClass == class.
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 
 	newClassVersion := Object
 		rwSubclass: 'SimpleHybrid1'
@@ -1552,6 +1539,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
@@ -1563,9 +1552,76 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 ]
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsD [
+	"Create new class version of class in new package ... where the class already has an 
+		extension method for that package. Recompile succeeds, but audit fails ... recompile 
+		should throw the error"
+
+	"https://github.com/GemTalk/Rowan/issues/802"
+
+	| class subclass projectName packageNames packageName1 packageName2 newClassVersion audit hadError |
+	projectName := 'Hybrid Project C'.
+	packageName1 := 'HybridC-Core'.
+	packageName2 := 'HybridC-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+	class := Object
+		rwSubclass: 'SimpleHybrid1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	class rwCompileMethod: 'foo ^''foo''' category: '*' , packageName2 asLowercase.
+	class class rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+
+	subclass := class
+		rwSubclass: 'SimpleHybridSubclass1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName2
+		options: #().
+	subclass rwCompileMethod: 'foo1 ^''foo''' category: 'accessing'.
+	subclass class
+		rwCompileMethod: 'foo1 ^''foo'''
+		category: '*' , packageName1 asLowercase.
+
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.	self assert: subclass superClass == class.
+
+	hadError := false.
+	[
+		newClassVersion := Object
+			rwSubclass: 'SimpleHybrid1'
+			instVarNames: #('ivar1')
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: packageName2
+			options: #()
+	] on: Error do: [:ex |
+		self 
+			assert: ex description 
+			equals: 'UserDefinedError: The class SimpleHybrid1 has extension methods for the package HybridC-Extensions, so the class cannot be added to the package HybridC-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		hadError := true ].
+	self assert: hadError description: 'Expected and error'.
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 
-	| class subclass1 subclass2 subclass3 subclass4 projectName packageNames packageName1 newClassVersion newSubclassVersion1 newSubclassVersion2 newSubclassVersion3 newSubclassVersion4 |
+	| class subclass1 subclass2 subclass3 subclass4 projectName packageNames packageName1 newClassVersion newSubclassVersion1 newSubclassVersion2 newSubclassVersion3 newSubclassVersion4 audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -1632,6 +1688,8 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 		category: packageName1
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: newClassVersion ~~ class.
 	newSubclassVersion1 := Rowan globalNamed: subclass1 name.
 	self assert: newSubclassVersion1 ~~ subclass1.

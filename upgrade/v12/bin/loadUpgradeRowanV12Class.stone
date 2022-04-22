@@ -1,0 +1,32 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithRequiredArg long: 'gsPath' default: '$ARCHBASE/examples/rowanV12/UpgradeRowanV12.gs'.
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] [--gsPath=<gsfile-path>]
+
+DESCRIPTION
+  Load the UpgradeRowanV12.gs file into the image. Used in Rowan v1.2 image.
+  In Rowan v2.2 image, use reloadGemStoneBase.stone to load from package source.
+
+OPTIONS
+  -h, --help             display usage message
+  -D, --debug            bring up topaz debugger in the event of a script error
+  --gsPath=<gsfile-path> Filein file <gsfile-path>. By default load
+                         $ARCHBASE/examples/rowanV12/UpgradeRowanV12.gs.
+                         If using default, then ARCHBASE must be defined.
+
+EXAMPLES
+  $basename --help 
+  $basename 
+  $basename --gsPath=/tmp/UpgradeRowanV12.gs
+-----
+%
+doit
+	GsFileIn fromServerPath: self gsPath. 
+	^ System commit
+%

@@ -1,0 +1,23 @@
+RwLoadSpecificationV2 {
+	#specName : 'STON_standalone',
+	#projectName : 'STON',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'masterV2.3',
+	#projectSpecFile : 'project_standalone.ston',
+	#componentNames : [
+		'Core',
+		'Tests'
+	],
+	#customConditionalAttributes : [
+		'gemstone-kernel'
+	],
+	#groupNames : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : 'Standalone STON project for reading project independently of Rowan project'
+}

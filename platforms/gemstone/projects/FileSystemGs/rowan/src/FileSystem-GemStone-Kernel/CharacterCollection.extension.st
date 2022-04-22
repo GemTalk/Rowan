@@ -1,6 +1,40 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*filesystem-gemstone-kernel' }
+CharacterCollection class >> crlf [
+	"Answer a string containing a carriage return and a linefeed."
+
+	^ self with: Character cr with: Character lf
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asFileReference [
+
+	^ FileSystem disk referenceTo: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asPath [
+	"convert myself to a path"
+	"Examples:
+		'.' asPath
+		'~/Desktop' asPath
+		'/home/foo' asPath
+		'../../foo.bar' asPath"
+	^ FileSystem disk resolve: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asPathWith: anObject [ 
+	^ anObject pathFromString: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> asResolvedBy: aFileSystem [
+	^ aFileSystem resolveString: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 CharacterCollection >> asZnCharacterEncoder [
 	"Return a ZnCharacterEncoder instance using the receiver as identifier"
 	
@@ -20,11 +54,4 @@ CharacterCollection >> encodeWith: encoding [
 	
 	^ encoding asZnCharacterEncoder encodeString: self
 
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
-CharacterCollection class >> crlf [
-	"Answer a string containing a carriage return and a linefeed."
-
-	^ self with: Character cr with: Character lf
 ]

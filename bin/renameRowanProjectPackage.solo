@@ -1,0 +1,53 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename [--help | -h] [--debug | -D] <spec-url> <old-package-name> <new-package-name> 
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk and rename the package named 
+  <old-package-name> to <new-package-name>.
+
+OPTIONS
+  <spec-url>           url referencing the load spec of the project, the load.
+                       spec is used to read the project from disk.
+  <old-package-name>   package to be renamed.
+  <new-package-name>   new package name.
+  -h, --help           display usage message
+  -D, --debug          bring up topaz debugger in the event of a script error.
+
+EXAMPLES
+  $basename -h
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston MyProject-Core MyProject-Base
+
+-----
+%
+doit
+	| loadSpecUrl args loadSpec resolvedProject originalProjectSetDefinition |
+	args := self positionalArgs.
+	args size ~= 3
+		ifTrue: [
+			self usage. 
+			self error: 'expected three positional arguments: <spec-url> <old-package-name> and <new-package-name>' ].
+	loadSpecUrl := args removeFirst.
+	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
+		projectsHome: self projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve.
+  originalProjectSetDefinition := RwProjectSetDefinition new
+		addProject: resolvedProject copy;
+		yourself.
+	resolvedProject renamePackageNamed: (args at: 1)  to: (args at: 2).	
+	resolvedProject 
+		exportComponents;
+		exportPackages: originalProjectSetDefinition
+			packagesRoot: resolvedProject packagesRoot
+			packageFormat: resolvedProject packageFormat
+			packageConvention: resolvedProject packageConvention.
+	^ self noResult.
+%

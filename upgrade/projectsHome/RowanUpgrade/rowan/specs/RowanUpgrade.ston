@@ -1,0 +1,15 @@
+RwLoadSpecificationV2 {
+	#projectName : 'RowanUpgrade',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'UpgradeRowan'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : ''
+}

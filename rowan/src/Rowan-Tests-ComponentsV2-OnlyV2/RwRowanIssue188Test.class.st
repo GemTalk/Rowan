@@ -166,7 +166,7 @@ RwRowanIssue188Test >> testNewClassAndNewClassReferences [
 			and verify that method z returns the current version of C
 	"
 
-	| projectName packageName className1 className2 className3 theClass1 theClass2 theClass3 oldTheClass1 oldTheClass3 |
+	| projectName packageName className1 className2 className3 theClass1 theClass2 theClass3 oldTheClass1 oldTheClass3 audit |
 	projectName := 'Issue_188'.
 	packageName := 'Issue_188-Core'.
 	className1 := 'Issue_188_A'.
@@ -205,6 +205,8 @@ RwRowanIssue188Test >> testNewClassAndNewClassReferences [
 		category: packageName
 		options: #().
 
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
 	self assert: theClass3 ~~ oldTheClass3.
 	self assert: (theClass3 classHistory includes: oldTheClass3).
 	self assert: (theClass2 new perform: #w) == theClass1.		"association in method #w is still correct"

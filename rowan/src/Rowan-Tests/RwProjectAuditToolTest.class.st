@@ -347,9 +347,57 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_D [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testAuditDetails [
+
+	| packageTools projectName packageNames className packageName theClass audit category reasons |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName := 'Audit-Core'.
+	packageNames := {packageName}.
+	className := 'AuditClass'.
+	category := 'Accessing'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	self assert: theClass rowanPackageName = packageName.
+
+	theClass
+		rwCompileMethod: 'bar ^bar'
+		category: category.
+	 
+	theClass class
+		rwCompileMethod: 'new ^self basicNew'
+		category: 'Instance creation'.
+	 
+	theClass renameCategory: category to: 'testing new category'.
+	theClass class renameCategory: 'Instance creation' to: 'testing'.
+
+"validate"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory) sort.
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassBadExtensionName [
 
-| packageTools projectName packageNames className packageName1 packageName2 theClass fooMethod x y|
+	| packageTools projectName packageNames className packageName1 packageName2 theClass
+		fooMethod audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -374,7 +422,7 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 
 	self assert: theClass rowanPackageName = packageName1.
 
-   theClass 
+	theClass 
 		rwCompileMethod: 'bar ^bar'
 	    category: 'Accessing' "'*'  packageName1 asLowercase".
 
@@ -382,7 +430,7 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 		rwCompileExtensionMethod: 'foo ^''foo'''
 		package: packageName2.
 
-self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
  
  "lets break it"
 	fooMethod := theClass
@@ -393,19 +441,96 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 		intoCategories: nil
 		environmentId: 0.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
+
+
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod rowanHybridExtensionCategoryMatchesClassPackage) sort.
+
+	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory methodsNotIdentical) sort.
+
+"
 	self assert: ( y := x at: packageName1) notNil; 
 		assert: y size = 1;
 		assert: (y at: className) size = 1;
 		assert: (y := x at: packageName2 ) notNil;
 		assert: y size = 1;
 		assert: (y at: className) size = 1
+"
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testClassesNotIdentical [
+	"#classesNotIdentical audit error occurs during upgrade when a new version of a class is introduced in a new version of GemStone:
+		1. reproduce condition
+		2. repair
+	"
+
+	| packageTools projectName packageNames className packageName1 packageName2 oldClass newClass audit loadedClass componentName definedProject reasons newLoadedClass |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'Rowan';
+		yourself.
+	definedProject resolve load.
+
+	oldClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+
+	loadedClass := Rowan image loadedClassForClass: oldClass ifAbsent: [].
+	self assert: loadedClass notNil.
+
+	newClass := Object
+		rwSubclass: className
+		instVarNames: #(foo bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	newLoadedClass := Rowan image loadedClassForClass: newClass ifAbsent: [].
+"brain surgery --- transplant oldClass in new loadedMethod, but oldClass is an older version of className"
+	newLoadedClass handle: oldClass.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(classesNotIdentical) sort.
+
 ]
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testClassExtension [
 
-| packageTools projectName packageNames className packageName1 packageName2 packageName3 theClass fooMethod x y|
+| packageTools projectName packageNames className packageName1 packageName2 packageName3 theClass fooMethod audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName1 := 'Audit-Core'.
@@ -452,10 +577,8 @@ RwProjectAuditToolTest >> testClassExtension [
 		rwCompileExtensionMethod: 'foo ^''foo'''
 		package: packageName2.
 	
-x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
-
-
-self assert: x isEmpty.
+	audit:= Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	self assert: audit isEmpty.
 
 	fooMethod := theClass
 		compileMethod: 'bar: aBar bar := aBar'
@@ -489,14 +612,26 @@ self assert: x isEmpty.
 		intoCategories: nil
 		environmentId: 0.
 
-x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	audit := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
+	self deny: audit isEmpty.
 
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 6.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod methodsNotIdentical differentMethodCategory) sort.
 
-	self 
-	  assert: x size = 3;
-	  assert: ((y := x at: packageName1) at: className) size = 4;
-	  assert: ((y := x at: packageName2) at: className) size = 3;
-	  assert: ((y := x at: packageName3) at: className) size = 2
+	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(methodsNotIdentical) sort.
+
+	reasons := ((audit at: packageName3) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(methodsNotIdentical) sort.
 ]
 
 { #category : 'tests' }
@@ -550,7 +685,7 @@ RwProjectAuditToolTest >> testClassVars [
 { #category : 'tests' }
 RwProjectAuditToolTest >> testInvalidCategory [
 
-| packageTools projectName packageNames className packageName theClass  x category|
+	| packageTools projectName packageNames className packageName theClass audit category reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -585,15 +720,20 @@ RwProjectAuditToolTest >> testInvalidCategory [
 	theClass renameCategory: category to: 'testing new category'.
 	theClass class renameCategory: 'Instance creation' to: 'testing'.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
-	self assert: ((x at: packageName) at: className) size = 2
+"validate"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory) sort.
+
 
 ]
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testInvalidExtensionCategory [
-
-| packageTools projectName packageNames className packageName theClass  x|
+	| packageTools projectName packageNames className packageName theClass audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -617,25 +757,33 @@ RwProjectAuditToolTest >> testInvalidExtensionCategory [
 	self assert: theClass rowanPackageName = packageName.
 
 	theClass
-		rwCompileExtensionMethod: 'bar ^bar'
-		package: "'*' , "packageName asLowercase.
+		rwCompileMethod: 'bar ^bar'
+		category: 'accessing'.
+	theClass moveMethod: #bar toCategory: '*' , packageName asLowercase.
 	 
 	theClass class
-		rwCompileExtensionMethod: 'new ^self basicNew'
-		package: "'*' , "packageName asLowercase.
+		rwCompileMethod: 'new ^self basicNew'
+		category:'instance creation'.
+	theClass class moveMethod: #new toCategory: '*' , packageName asLowercase.
 	 
 	theClass class
 		rwCompileMethod: 'new2 ^self basicNew'
-		category: '*' , packageName.
+		category: 'accessing'.
+	theClass class moveMethod: #new2 toCategory: '*' , packageName asLowercase.
 
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
-	self assert: ((x at: packageName) at: className) size = 3
+	audit := Rowan projectTools audit auditForProjectNamed: projectName.
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(rowanHybridExtensionCategoryMatchesClassPackage) sort.
 ]
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testMissingBehavior [
 
-| packageTools projectName packageNames className packageName theClass  x|
+| packageTools projectName packageNames className packageName theClass audit reasons |
 	packageTools := Rowan packageTools.
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
@@ -658,8 +806,13 @@ RwProjectAuditToolTest >> testMissingBehavior [
 		options: #().
 	
 	(System myUserProfile resolveSymbol: self _symbolDictionaryName1) value removeKey: theClass name asSymbol.
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 2
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	reasons := ((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingGemStoneClassForLoadedClass) sort
 ]
 
 { #category : 'tests' }
@@ -707,6 +860,116 @@ RwProjectAuditToolTest >> testMissingMethods [
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
 	self assert: ((x at: packageName) at: className) size = 3
 
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testNonIdenticalMethods_1 [
+	"Two 'method is not identical' audit errors:
+		RwClsAuditTool>>_auditRowanCategory:forBehavior:loadedClass:
+		RwClsExtensionAuditTool>>auditLoadedClassExtension:
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/799"
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit oldMethod newMethod loadedMethod componentName definedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'Rowan';
+		yourself.
+	definedProject resolve load.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+	oldMethod := theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: 'cat' 
+		packageName: packageName2.
+	loadedMethod :=  Rowan image loadedMethodForMethod: oldMethod.
+	newMethod := theClass
+		rwCompileMethod: 'foo "" ^''foo'''
+		category: 'cat'.
+"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+	loadedMethod handle: oldMethod.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit size equals: 1
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testNonIdenticalMethods_2 [
+	"Three 'method is not identical' audit errors:
+		RwClsAuditTool>>_auditSelector:forBehavior:loadedClass:
+		RwClsAuditTool>>_auditSelector:forBehavior:loadedClass:
+		RwClsExtensionAuditTool>>auditLoadedClassExtension:
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/799"
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass audit oldMethod newMethod loadedMethod componentName definedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 . packageName2 . }.
+	className := 'AuditClass'.
+	componentName := 'Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	definedProject := (Rowan newProjectNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
+		addTopLevelComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		packageConvention: 'RowanHybrid';
+		yourself.
+	definedProject resolve load.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+	oldMethod := theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*', packageName2 asLowercase.
+	loadedMethod :=  Rowan image loadedMethodForMethod: oldMethod.
+	newMethod := theClass
+		rwCompileMethod: 'foo "" ^''foo'''
+		category: '*', packageName2 asLowercase.
+"brain surgery --- transplant oldMethod in loadedMethod, but newMethod is in method dictionary"
+	loadedMethod handle: oldMethod.
+
+	audit := Rowan projectTools audit auditForProjectNamed:  projectName.
+	self assert: audit size equals: 1
 ]
 
 { #category : 'tests' }

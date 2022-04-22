@@ -91,6 +91,7 @@ RwTestProjectLibraryGenerator new
 	genSpec_0078: commitComment;
 	genSpec_0079: commitComment;
 	genSpec_0080: commitComment;
+	genSpec_0081: commitComment;
 	yourself
 "
 Class {
@@ -4239,6 +4240,56 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0080: resolvedProject [
 
 	"https://github.com/GemTalk/Rowan/issues/777"
 
+	^ resolvedProject
+]
+
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0081: resolvedProject [
+	"Start with spec_0011; add 2 more instance methods and 3 class methods to RowanSample9Class1 in RowanSample9-Core; then add 3 instance-side extension methods to RowanSample9Class1 and 2 more class-side extension methods; add tests for all of the new methods. Fodder for audit testing."
+
+	| packageName1 packageName2 packageName3 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Extensions'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		addInstanceMethod: 'foo2 ^2' protocol: 'accessing';
+		addInstanceMethod: 'foo3 ^3' protocol: 'accessing';
+		addClassMethod: 'bar1 ^1' protocol: 'accessing';
+		addClassMethod: 'bar2 ^2' protocol: 'accessing';
+		addClassMethod: 'bar3 ^3' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		classExtensionDefinitionNamed: className1)
+		addInstanceMethod: 'foo4 ^4' protocol: '*' , packageName2 asLowercase;
+		addInstanceMethod: 'foo5 ^5' protocol: '*' , packageName2 asLowercase;
+		addInstanceMethod: 'foo6 ^6' protocol: '*' , packageName2 asLowercase;
+		addClassMethod: 'bar4 ^4' protocol: '*' , packageName2 asLowercase;
+		addClassMethod: 'bar5 ^5' protocol: '*' , packageName2 asLowercase;
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'test3  self assert: ' , className1 , ' new foo2 = 2'
+			protocol: 'tests';
+		addInstanceMethod: 'test4  self assert: ' , className1 , ' new foo3 = 3'
+			protocol: 'tests';
+		addInstanceMethod: 'test5  self assert: ' , className1 , ' new foo4 = 4'
+			protocol: 'tests';
+		addInstanceMethod: 'test6  self assert: ' , className1 , ' new foo5 = 5'
+			protocol: 'tests';
+		addInstanceMethod: 'test7  self assert: ' , className1 , ' new foo6 = 6'
+			protocol: 'tests';
+		addInstanceMethod: 'test8  self assert: ' , className1 , ' bar1 = 1'
+			protocol: 'tests';
+		addInstanceMethod: 'test9  self assert: ' , className1 , ' bar2 = 2'
+			protocol: 'tests';
+		addInstanceMethod: 'test10  self assert: ' , className1 , ' bar3 = 3'
+			protocol: 'tests';
+		addInstanceMethod: 'test11  self assert: ' , className1 , ' bar4 = 4'
+			protocol: 'tests';
+		addInstanceMethod: 'test12  self assert: ' , className1 , ' bar5 = 5'
+			protocol: 'tests';
+		yourself.
 	^ resolvedProject
 ]
 
@@ -8776,6 +8827,51 @@ RwTestProjectLibraryGenerator >> genSpec_0080: commitMessage [
 		commitMessage: commitMessage
 ]
 
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0081: commitMessage [
+	"Start with spec_0011; add 2 more instance methods and 3 class methods to RowanSample9Class1 in RowanSample9-Core; then add 3 instance-side extension methods to RowanSample9Class1 and 2 more class-side extension methods; add tests for all of the new methods. Fodder for audit testing."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0081'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0011'.
+	title := 'Start with spec_0011; add 2 more instance methods and 3 class methods to RowanSample9Class1 in RowanSample9-Core; then add 3 instance-side extension methods to RowanSample9Class1 and 2 more class-side extension methods; add tests for all of the new methods. Fodder for audit testing.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 81
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #();
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		specComment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0081: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository _loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> indexCardMap [
 	^ indexCardMap
@@ -8817,7 +8913,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/' , projectName , '.git'.
+		with: 'https://git@github.com/dalehenrich/' , projectName.
 	indexCardMap := Dictionary new.
 	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
 		do: [ :file | 

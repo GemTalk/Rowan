@@ -159,7 +159,7 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod [
 		ifAbsent: [ 
 			self
 				error:
-					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
+					'No loadedMethod found for the compiled method ' , compiledMethod printString ]
 ]
 
 { #category : 'querying' }

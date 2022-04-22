@@ -20,7 +20,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	RwTestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample9';
-		projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
+		projectUrl: 'https://git@github.com/dalehenrich/RowanSample9';
 		preserveRowanSHA: true;
 		primeIndexCardMap;
 		preserveChangesOnGithub: false;
@@ -122,7 +122,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 	RwRowanSample10TestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample10';
-		projectUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		projectUrl: 'https://git@github.com/dalehenrich/RowanSample10';
 		preserveRowanSHA: true;
 		primeIndexCardMap;
 		preserveChangesOnGithub: false;

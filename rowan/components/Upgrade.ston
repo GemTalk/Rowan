@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Upgrade',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'upgrade/Upgrade'
+	],
+	#packageNames : [ ],
+	#comment : 'top-level component for generating Rowan upgrade .gs files ... required GemStone kernel class extensions'
+}

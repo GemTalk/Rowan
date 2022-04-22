@@ -357,7 +357,7 @@ FileSystemStore >> rename: sourcePath ifAbsent: absentBlock to: destinationPath 
 	(self exists: destinationPath) ifTrue: [ ^ presentBlock value ].
 	(self exists: sourcePath) ifFalse: [ ^ absentBlock value ].
 	result := self rename: sourcePath to: destinationPath.
-	result ifNil: [ self primitiveFailed ].
+	result ifNil: [ self  error: 'Could not rename ',  sourcePath pathString, ' to ', destinationPath pathString ].
 	^ self.
 ]
 

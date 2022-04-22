@@ -1,0 +1,58 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+      $basename <spec-url> <topaz-file-name> [--projectsHome=<projects-home-directory>]
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk and export it to a .gs file name
+  <topaz-file-path>.
+
+OPTIONS
+  <spec-url>           Url referencing the load spec of the project, the load.
+                       Spec is used to read the project from disk.
+  <topaz-file-name>    Full name of the topaz .gs file
+  --projectsHome=<projects-home-directory>
+                       The directory where the project is located. By default,
+                       $ROWAN_PROJECTS_HOME.
+                       
+  -h, --help           Display usage message
+  -D, --debug          Bring up topaz debugger in the event of a script error.
+
+EXAMPLES
+  $basename -h
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs
+  $basename file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
+            $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
+            --projectsHome=/home/daleh/projects/
+
+-----
+%
+doit
+	| loadSpecUrl args loadSpec resolvedProject topazFilename |
+	args := self positionalArgs.
+	args size ~= 2
+		ifTrue: [
+			self usage. 
+			self error: 'expected two positional arguments: <spec-url> <topaz-file-name>' ].
+	loadSpecUrl := args removeFirst.
+	topazFilename := args removeFirst.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	loadSpec
+		diskUrl: 'file://', self projectsHome, '/', loadSpec projectName;
+		projectsHome: self projectsHome;
+		yourself.
+	resolvedProject := loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}.
+	resolvedProject
+		exportTopazFormatTo: topazFilename 
+		logClassCreation: false 
+		excludeClassInitializers: false 
+		excludeRemoveAllMethods: true.
+	^ self noResult.
+%
