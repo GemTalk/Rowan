@@ -4243,6 +4243,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0080: resolvedProject [
 	^ resolvedProject
 ]
 
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor_0081: resolvedProject [
 	"Start with spec_0011; add 2 more instance methods and 3 class methods to RowanSample9Class1 in RowanSample9-Core; then add 3 instance-side extension methods to RowanSample9Class1 and 2 more class-side extension methods; add tests for all of the new methods. Fodder for audit testing."
 

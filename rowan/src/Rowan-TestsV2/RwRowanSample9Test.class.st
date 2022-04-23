@@ -25,23 +25,6 @@ RwRowanSample9Test class >> _rowanSample_0000_load_spec [
 		yourself
 ]
 
-{ #category : 'private' }
-RwRowanSample9Test >> _adjustRequiredProjectsForIssue805: resolvedProject [
-	"If the tests are run by someone other than myself, we have to arrange for anonymous access to the public repos using http://"
-
-	"see https://github.com/GemTalk/Rowan/issues/805"
-
-	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
-		ifTrue: [ 
-			| projectLoadSpec projectsRoot |
-			"need to modify the rquired project load spec on disk ..."
-			projectsRoot := resolvedProject projectsRoot.
-			projectLoadSpec := RwSpecification
-				fromFile: projectsRoot / 'RowanSample10.ston'.
-			projectLoadSpec gitUrl: 'https://git@github.com/dalehenrich/RowanSample10'.
-			projectLoadSpec exportTo: projectsRoot ]
-]
-
 { #category : 'audit tests' }
 RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
 	| className packageName1 packageName2 class |
@@ -9456,9 +9439,6 @@ RwRowanSample9Test >> testSpec_0076_3 [
 	loadSpec customConditionalAttributes: #('gnu' 'tests').
 	projectDefinitionSet := loadSpec readProjectSet.
 
-[ 
-self _adjustRequiredProjectsForIssue805: resolvedProject.
-
 "load project"
 	loadedProjects := projectDefinitionSet load.
 
@@ -9660,9 +9640,6 @@ RwRowanSample9Test >> testSpec_0077_2 [
 		projectLoadSpec addCustomConditionalAttributes: { '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
 
-[
-self _adjustRequiredProjectsForIssue805: resolvedProject.
-
 "load project"
 	loadedProjects := resolvedProjectSet load.
 
@@ -9736,9 +9713,6 @@ RwRowanSample9Test >> testSpec_0078_1 [
 
 "resolve project"
 	resolvedProjectSet := loadSpec readProjectSet.
-
-[
-self _adjustRequiredProjectsForIssue805: resolvedProject.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
@@ -9820,9 +9794,6 @@ RwRowanSample9Test >> testSpec_0078_3 [
 	requiredLoadSpecSet do: [:projectLoadSpec | 
 		projectLoadSpec addCustomConditionalAttributes: {'tests' . '2.4.0' asRwGemStoneVersionNumber } ].
 	resolvedProjectSet := requiredLoadSpecSet read.
-
-[
-self _adjustRequiredProjectsForIssue805: resolvedProject.
 
 "load project"
 	loadedProjects := resolvedProjectSet load.
