@@ -7,11 +7,14 @@ vers=`awk 'NR==2{print $1; exit}' product/version.txt`
 
 rm -rf *.log *.out
 
-if [ "$vers" = "3.6.4" ]  || [ "$vers" = "3.7.0" ] ; then
-	# starting in 3.6.4, extent0.rowan.dbf is in $GEMSTONE/bin
+if [ -f "product/bin/extent0.rowan.dbf" ] ; then
 	newExtent -s product/bin/extent0.rowan.dbf $GEMSTONE_NAME
 else
 	newExtent -s product/../hidden/bin/extent0.rowan.dbf $GEMSTONE_NAME
 fi
 
-$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --tests --gemstoneBaseImage -- $GEMSTONE_NAME
+if [ "$ARCHBASE"x != "x" ] && [  -f "$ARCHBASE/tests/rowan/bin/specUrlsInstall.stone" ]; then
+	$ARCHBASE/tests/rowan/bin/specUrlsInstall.stone --tests --externals_st=$ROWAN_PROJECTS_HOME
+else
+	$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/gsdevkit/superdoit/rowanAttachGitRepos.stone -D --tests --gemstoneBaseImage -- $GEMSTONE_NAME
+fi
