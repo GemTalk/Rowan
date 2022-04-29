@@ -488,11 +488,11 @@ RwProjectAuditToolTest >> testClassesNotIdentical [
 	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addTopLevelComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		packageConvention: 'Rowan';
 		yourself.
-	definedProject resolve load.
+	definedProject resolveProject loadAsDefined.
 
 	oldClass := Object
 		rwSubclass: className
@@ -524,7 +524,6 @@ RwProjectAuditToolTest >> testClassesNotIdentical [
 	self
 		assert: reasons asSet asArray sort
 		equals: #(classesNotIdentical) sort.
-
 ]
 
 { #category : 'tests' }
@@ -886,11 +885,11 @@ RwProjectAuditToolTest >> testNonIdenticalMethods_1 [
 	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addTopLevelComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		packageConvention: 'Rowan';
 		yourself.
-	definedProject resolve load.
+	definedProject resolveProject loadAsDefined.
 
 	theClass := Object
 		rwSubclass: className
@@ -942,11 +941,11 @@ RwProjectAuditToolTest >> testNonIdenticalMethods_2 [
 	definedProject := (Rowan newProjectNamed: projectName)
 		projectsHome: self _testRowanProjectsSandbox;
 		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName1;
-		addTopLevelComponentNamed: componentName;
+		addLoadComponentNamed: componentName;
 		addPackagesNamed: packageNames toComponentNamed: componentName;
 		packageConvention: 'RowanHybrid';
 		yourself.
-	definedProject resolve load.
+	definedProject resolveProject loadAsDefined.
 
 	theClass := Object
 		rwSubclass: className

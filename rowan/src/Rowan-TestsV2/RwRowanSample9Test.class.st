@@ -715,7 +715,7 @@ RwRowanSample9Test >> testAuditMethodsNotIdentical [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	audit := project audit.
@@ -764,7 +764,7 @@ RwRowanSample9Test >> testAuditMismatchedMethodCategory [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	audit := project audit.
@@ -814,7 +814,7 @@ RwRowanSample9Test >> testAuditMismatchedMethodCategoryAndMethodsNotIdentical [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	audit := project audit.
@@ -862,7 +862,7 @@ RwRowanSample9Test >> testAuditMissingCompiledMethod [
 
 "load project"
 	loadedProjects := resolvedProject load.
-	project := loadedProjects at: 1.
+	project := loadedProjects projectNamed: projectName.
 
 "validate"
 	audit := project audit.
@@ -9876,7 +9876,7 @@ RwRowanSample9Test >> testSpec_0081 [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 
 "load project"
 	loadedProjects := resolvedProject load.

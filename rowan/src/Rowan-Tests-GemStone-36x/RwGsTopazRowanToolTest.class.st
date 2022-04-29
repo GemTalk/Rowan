@@ -250,14 +250,6 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 	self assert: project gitShortStatus isEmpty.
 
 "export project components and packages"
-	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
-		ifTrue: [ 
-			"since we've made changes to the load spec (not dhenrich), 
-				we shouldn't write it as the test will fail the empty 
-				gitShortStatus test"
-			"https://github.com/GemTalk/Rowan/issues/805"
-			Rowan gemstoneTools topaz
-				exportLoadSpecificationForProject: projectName].
 	Rowan gemstoneTools topaz
 		exportComponentsForProject: projectName;
 		exportPackagesForProject: projectName;
