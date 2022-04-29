@@ -8856,7 +8856,7 @@ RwTestProjectLibraryGenerator >> genSpec_0081: commitMessage [
 		gitUrl: self projectUrl;
 		specComponentNames: {'Core'};
 		customConditionalAttributes: {'tests'};
-		specComment: title;
+		comment: title;
 		yourself.
 
 	resolvedRepository := self
@@ -8866,7 +8866,7 @@ RwTestProjectLibraryGenerator >> genSpec_0081: commitMessage [
 
 	self
 		_finishCommitAndPush: specName
-		loadSpecification: resolvedRepository _loadSpecification
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
@@ -8914,7 +8914,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'https://git@github.com/dalehenrich/' , projectName.
+		with: 'git@github.com:dalehenrich/' , projectName, '.git'.
 	indexCardMap := Dictionary new.
 	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
 		do: [ :file | 

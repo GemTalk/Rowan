@@ -13,6 +13,10 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	"skip spec_004, because it makes two changes in a row, so always commits"
 
 	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
@@ -20,7 +24,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	RwTestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample9';
-		projectUrl: 'https://git@github.com/dalehenrich/RowanSample9';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample9.git';
 		preserveRowanSHA: true;
 		primeIndexCardMap;
 		preserveChangesOnGithub: false;
@@ -105,6 +109,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 		genSpec_0078: commitComment;
 		genSpec_0079: commitComment;
 		genSpec_0080: commitComment;
+		genSpec_0081: commitComment;
 		yourself
 ]
 
@@ -115,6 +120,10 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
 
@@ -122,7 +131,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 	RwRowanSample10TestProjectLibraryGeneratorTester new
 		testCase: self;
 		projectName: 'RowanSample10';
-		projectUrl: 'https://git@github.com/dalehenrich/RowanSample10';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample10.git';
 		preserveRowanSHA: true;
 		primeIndexCardMap;
 		preserveChangesOnGithub: false;
@@ -131,6 +140,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		genSpec_0002: commitComment;
 		genSpec_0003: commitComment;
 		genSpec_0004: commitComment;
+		genSpec_0005: commitComment;
 		yourself
 ]
 
@@ -141,6 +151,10 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample11') ensureDeleteAll.
 
@@ -157,6 +171,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 		genSpec_0002: commitComment;
 		genSpec_0003: commitComment;
 		genSpec_0004: commitComment;
+		genSpec_0005: commitComment;
 		yourself
 ]
 
@@ -167,6 +182,10 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
 	RwRowanSample9Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample12') ensureDeleteAll.
 
@@ -183,5 +202,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
 		genSpec_0002: commitComment;
 		genSpec_0003: commitComment;
 		genSpec_0004: commitComment;
+		genSpec_0005: commitComment;
+		genSpec_0006: commitComment;
 		yourself
 ]

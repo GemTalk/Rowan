@@ -1680,7 +1680,7 @@ RwRowanSample9Test >> testIssue_587 [
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_Issue_493' 
-		gitUrl: 'https://git@github.com/dalehenrich/RowanSample9'.
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
 
 	projectName := loadSpec projectName.
 
@@ -3517,7 +3517,7 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_Issue_493' 
-		gitUrl: 'https://git@github.com/dalehenrich/RowanSample9'.
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
 
 	projectName := loadSpec projectName.
 
@@ -3728,7 +3728,7 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9'
-		gitUrl: 'https://git@github.com/dalehenrich/RowanSample9'.
+		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
 
 	projectName := loadSpec projectName.
 

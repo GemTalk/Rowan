@@ -13,10 +13,17 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
 		ifTrue: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
-				ifTrue: [ loadSpecification gitUrl: 'https://git@github.com/dalehenrich/RowanSample9' ]
+				ifTrue: [ loadSpecification gitUrl: 'https://github.com/dalehenrich/RowanSample9.git' ]
 				ifFalse: [ 
 					(loadSpecification projectUrl includesString: 'RowanSample10')
-						ifTrue: [ loadSpecification gitUrl: 'https://git@github.com/dalehenrich/RowanSample10' ]
+						ifTrue: [ loadSpecification gitUrl: 'https://github.com/dalehenrich/RowanSample10.git' ]
+						ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ]
+		ifFalse: [ 
+			(loadSpecification projectUrl includesString: 'RowanSample9')
+				ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample9.git' ]
+				ifFalse: [ 
+					(loadSpecification projectUrl includesString: 'RowanSample10')
+						ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample10.git' ]
 						ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ]
 ]
 
