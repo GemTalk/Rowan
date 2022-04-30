@@ -73,7 +73,7 @@ extractCommitIdFrom: productTreeRoot for: projectName
 			ifTrue: [
 				"short SHA" 
 				^ (lines at: index + 1) copyFrom: 1 to: 9 ] ].
-	self error: 'Did not find SHA for ', projectName, ' as expected in ', externalsSHA pathString.
+	^'' "workaound for bug 49952"
 %
 method
 productTreeRoot
@@ -185,6 +185,29 @@ updateRowanV230
 	rowanClientServicesProject load.
 	^ System commit
 %
+method
+updateRowanV300
+	"Rowan v3.0.0 update - GemStone 3.7.0 ... need to use the latest version of Rowan v3.0"
+	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
+	self stdout nextPutAll: 'Start updating Rowan v3.0 to Rowan v3.0'; lf.
+	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
+	rowanProject := Rowan projectNamed: 'Rowan'.
+	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
+	rowanProject
+		readOnlyRepositoryRoot: rowanRepositoryRoot pathString 
+		projectsHome: rowanRepositoryRoot parent 
+		commitId: commitId.
+	commitId := self extractCommitIdFrom: self productTreeRoot for: 'RowanClientServices'.
+	rowanClientServicesRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'RowanClientServices'.
+	rowanClientServicesProject := Rowan projectNamed: 'RowanClientServices'.
+	rowanClientServicesProject
+		readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString 
+		projectsHome: rowanClientServicesRepositoryRoot parent 
+		commitId: commitId.
+	self stdout nextPutAll: '	load Rowan v3.0.0'; lf.
+	rowanProject reload.
+	^ System commit
+%
 doit
 	| version |
 	self positionalArgs size ~= 1
@@ -192,6 +215,9 @@ doit
 	version := self rowanVersion.
 	version < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0'].
+	version = ('3.0.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			^ self updateRowanV300 ].
 	version = ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV230 ].
