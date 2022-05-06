@@ -7234,7 +7234,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 									ar
 										do: [ :infoAr | 
 											"ignore superDoit classes - need two for short period of time ... the spelling error fixed in latest superDoit version"
-											unexpected := #(SuperDoit_trasientSymbolDictionary SuperDoit_transientSymbolDictionary) includes: (infoAr at: 1) name ] ].
+											unexpected := (#(SuperDoit_trasientSymbolDictionary SuperDoit_transientSymbolDictionary) includes: (infoAr at: 1) name) not ] ].
 							unexpected
 								ifTrue: [ 
 									self
