@@ -246,7 +246,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: '/tmp/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: '/tmp/rowanTest_02/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
 ]
