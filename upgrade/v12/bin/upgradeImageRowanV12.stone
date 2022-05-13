@@ -73,10 +73,10 @@ checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 	
 	| rowanVersion minimumVersion |
 	rowanVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: currentRowanVersion) normalVersion.
-	minimumVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: minimumRowanVersion) normalVersion.
-	(((rowanVersion at: 1) >= (minimalVersion at: 1)) and: [
-		((rowanVersion at: 2) >= (minimalVersion at: 2)) and: [
-			((rowanVersion at: 3) >= (minimalVersion at: 3)) ] ])
+	minimumRowanVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: minimumRowanVersion) normalVersion.
+	(((rowanVersion at: 1) >= (minimumRowanVersion at: 1)) and: [
+		((rowanVersion at: 2) >= (minimumRowanVersion at: 2)) and: [
+			((rowanVersion at: 3) >= (minimumRowanVersion at: 3)) ] ])
 		ifTrue: [ ^ self ].
 
 	self
