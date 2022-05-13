@@ -314,12 +314,26 @@ errorMessages
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
 %
 
+category: 'accessing'
+method: UpgradeRowanV12
+gemstoneVersion
+	"run during upgrade, so CharacterCollection>>asRwGemStoneVersionNumber may not be functional"
+
+	^ RwGemStoneVersionNumber fromString: self gsVersion
+%
+
 category: 'private'
 method: UpgradeRowanV12
 globalNamed: aString
 	"return nil if global not defined"
 
 	^ self class globalNamed: aString
+%
+
+category: 'accessing'
+method: UpgradeRowanV12
+gsVersion
+	^ System gemVersionReport at: 'gsVersion'
 %
 
 category: 'private'
@@ -429,6 +443,46 @@ repairedWhenDefinitionsReloaded:ignoredMethod inClassNamed: ignoredClassName inP
 
 category: 'repair'
 method: UpgradeRowanV12
+repairMissingLoadedClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
+%
+
+category: 'repair'
+method: UpgradeRowanV12
+repairMissingLoadedInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
+%
+
+category: 'repair'
+method: UpgradeRowanV12
+repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
+		newCompiledMethod registryInstance |
+
+	loadedPackage := (self globalNamed: 'Rowan') image loadedPackageNamed: packageName.
+	loadedClass := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
+	selector := self selectorFromMethodSpec: methodSpec.
+	loadedProject := loadedClass loadedProject.
+	theClass := self globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	newCompiledMethod := theBehavior compiledMethodAt: selector.
+
+"create new loaded method"
+self halt.
+
+	registryInstance := (self globalNamed: 'Rowan') image loadedRegistryForPackageNamed: packageName.
+	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	repairedCount := self repairedCount + 1.
+%
+
+category: 'repair'
+method: UpgradeRowanV12
 repairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
 	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
 %
@@ -514,6 +568,8 @@ rowanRepairMap
 			put: #'repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded class method.' put: #'repairMissingLoadedClassMethod:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method.' put: #'repairMissingLoadedInstanceMethod:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 %
@@ -574,7 +630,7 @@ step_1_installRowan
 	self moveCypressClassesToGlobals: self cypressClassNames.
 	self logMessage: 'Installing RowanV12.gs'.
 	rowanBootstrapPath := self projectsHome
-		, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
+		, '/Rowan/platforms/gemstone/topaz/upgrade/' , self gsVersion , '/RowanV12.gs'.
 	(self globalNamed: 'GsFileIn') fromServerPath: rowanBootstrapPath.
 	self logMessage: 'Installed Rowan from ' , rowanBootstrapPath.
 	self commit

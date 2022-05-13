@@ -48,7 +48,7 @@ doit
 		globalNamed: 'UpgradeRowanV12' 
 		ifAbsent: [ self error: 'The class UpgradeRowanV12 is expected to be present in the image.' ].
 	fileReference := self gsDir asFileReference / className.
-  projectDefinition := (Rowan projectNamed: 'gemstoneBaseImage') _loadedProject asDefinition.
+  projectDefinition := (Rowan projectNamed: 'RowanV12Upgrade') _loadedProject asDefinition.
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	projectSetModification := projectSetDefinition
@@ -61,7 +61,7 @@ doit
 		repositoryRootPath: fileReference parent;
 		topazFilename: fileReference base;
 		topazFilenamePackageNamesMap: (Dictionary new
-			at: className put: {'GemStone-RowanV12-Upgrade'};
+			at: className put: {'RowanV12Upgrade-Core'};
 			yourself);
 		topazFileHeader: topazFileHeader;
 		yourself.
