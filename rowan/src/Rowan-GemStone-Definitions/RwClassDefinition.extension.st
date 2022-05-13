@@ -69,8 +69,8 @@ RwClassDefinition >> gs_constraints: constraintsArray [
 			constraintsArray isEmpty
 				ifTrue: [ 
 					self properties
-						at: 'gs_constraints'
-						put: #() ]
+						removeKey: 'gs_constraints'
+						ifAbsent: [] ]
 				ifFalse: [ 
 					self properties
 						at: 'gs_constraints'
