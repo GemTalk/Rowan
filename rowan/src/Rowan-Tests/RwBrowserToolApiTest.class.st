@@ -1376,6 +1376,671 @@ RwBrowserToolApiTest >> testIssue471_2 [
 ]
 
 { #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_1 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"change constraint"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar1' . Integer} .  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_2 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+"create subclass"
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint on ivar1"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_3 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+"create subclass"
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+	self assert: (x := testClass _constraintOn: #ivar2) = Integer.
+
+"add constraint overriding inherited"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { {'ivar1' . SmallInteger} . {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_4 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"remove superclass constraint"
+Object rwSubclass: className
+	instVarNames: #( ivar1)
+	classVars: #(Cvar1)
+	classInstVars: #(civar1)
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { }
+	options: #().
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_5 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
+"add superclass constraint"
+Object rwSubclass: className
+	instVarNames: #( ivar1)
+	classVars: #(Cvar1)
+	classInstVars: #(civar1)
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { {'ivar1' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue817_6 [
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"change constraint"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar1' . Integer} .  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue818 [
+	"completely remove constraints does not work"
+
+	"https://github.com/GemTalk/Rowan/issues/818"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar1' . 'SmallInteger'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint"
+	(Rowan globalNamed: className) rwSubclass: subclassName
+		instVarNames: #( 'ivar2' 'ivar3')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: 'Simple Things'
+		packageName: 'Simple-Core'
+		constraints: {  }
+		options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testIssue819 [
+	"https://github.com/GemTalk/Rowan/issues/819"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar1' . 'SmallInteger'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint"
+Object rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+]
+
+{ #category : 'tests' }
 RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 
 	"set up projects and packages for hybrid browser implementation"

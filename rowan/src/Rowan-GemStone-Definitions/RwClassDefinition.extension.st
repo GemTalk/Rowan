@@ -64,11 +64,17 @@ RwClassDefinition >> gs_constraints [
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_constraints: constraintsArray [
 
-	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
+	constraintsArray _isArray
 		ifTrue: [ 
-			self properties
-				at: 'gs_constraints'
-				put: constraintsArray ]
+			constraintsArray isEmpty
+				ifTrue: [ 
+					self properties
+						at: 'gs_constraints'
+						put: #() ]
+				ifFalse: [ 
+					self properties
+						at: 'gs_constraints'
+						put: constraintsArray ] ]
 ]
 
 { #category : '*rowan-gemstone-definitions' }
