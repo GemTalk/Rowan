@@ -58929,8 +58929,8 @@ installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
 				ifTrue: [ 
 					(theConstraint isNil and: [ superConstraint notNil ])
 						ifTrue: [ 
-							"inherit constraint from superclass"
-							self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+							"this is not possible -: both existing and new constraint not defined?"
+							existingClass _rwInstVar: instVarString constrainTo: superConstraint ] ]
 				ifFalse: [ 
 					existingConstraint == nil
 						ifTrue: [ 
@@ -58944,7 +58944,7 @@ installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry
 											existingConstraint ~= superConstraint
 												ifTrue: [ 
 													"inherit constraint from superclass"
-													self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+													existingClass _rwInstVar: instVarString constrainTo: superConstraint ] ]
 										ifFalse: [ 
 											"remove the constraint"
 											existingClass _rwInstVar: instVarString constrainTo: Object ] ]
@@ -77449,7 +77449,7 @@ test_issue428_loaded_on_disk
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: '/tmp/rowanSimpleProject_01/' ].
 
 "test existsOnDisk"
 
@@ -83811,6 +83811,596 @@ testIssue471_2
 
 category: 'tests'
 method: RwBrowserToolApiTest
+testIssue817_1
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"change constraint"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar1' . Integer} .  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue817_2
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+"create subclass"
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint on ivar1"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue817_3
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+"create subclass"
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+	self assert: (x := testClass _constraintOn: #ivar2) = Integer.
+
+"add constraint overriding inherited"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { {'ivar1' . SmallInteger} . {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue817_4
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"remove superclass constraint"
+Object rwSubclass: className
+	instVarNames: #( ivar1)
+	classVars: #(Cvar1)
+	classInstVars: #(civar1)
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { }
+	options: #().
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue817_5
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
+"add superclass constraint"
+Object rwSubclass: className
+	instVarNames: #( ivar1)
+	classVars: #(Cvar1)
+	classInstVars: #(civar1)
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { {'ivar1' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue817_6
+	"https://github.com/GemTalk/Rowan/issues/817"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'SmallInteger'} . {'ivar2' . 'Integer'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"change constraint"
+(Rowan globalNamed: className) rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: {  {'ivar1' . Integer} .  {'ivar2' . Integer} }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
+testIssue818
+	"completely remove constraints does not work"
+
+	"https://github.com/GemTalk/Rowan/issues/818"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar1' . 'SmallInteger'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint"
+	(Rowan globalNamed: className) rwSubclass: subclassName
+		instVarNames: #( 'ivar2' 'ivar3')
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: 'Simple Things'
+		packageName: 'Simple-Core'
+		constraints: {  }
+		options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
 testLoadFullMultiProjectDefs
 
 	"set up projects and packages for hybrid browser implementation"
@@ -88363,7 +88953,7 @@ testHybridComplicatedProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: '/tmp/rowanHybridPatchProject_01/'.
 	className1 := 'SimpleHybridNormalReload1'.
 	className2 := 'SimpleHybridNormalReload2'.
 	classNames := {className1.
@@ -90112,7 +90702,7 @@ testHybridProjectLoad
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'.
+		root: '/tmp/rowanHybridPatchProject_02/'.
 	className := 'SimpleHybridNormalReload'.
 
 	normalClass := Object
@@ -91620,8 +92210,8 @@ testReconcileGlobalExtensionMethods
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: '/tmp/rowanTest_01/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:/tmp/rowanTest_01/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -91740,8 +92330,8 @@ testReconcileGlobalExtensionMethods_issue_290
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: '/tmp/rowanTest_02/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'tonel:/tmp/rowanTest_02/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -91842,7 +92432,7 @@ testReconcileGlobalExtensionMethods_issue_290
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: '/tmp/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: '/tmp/rowanTest_02/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
 %
@@ -91864,7 +92454,7 @@ testIssue114_bothModificationsMustShareCommonAfter_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_05/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -91914,7 +92504,7 @@ testIssue114_bothModificationsMustShareCommonAfter_2
 	packageName2 := 'Issue114-Core2'.
 	comment := 'a class comment'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_06/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -91960,7 +92550,7 @@ testIssue114_bothModificationsMustShareCommonAfter_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_07/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92017,7 +92607,7 @@ testIssue114_bothModificationsMustShareCommonAfter_4
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_08/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92080,7 +92670,7 @@ testIssue114_bothModificationsMustShareCommonAfter_5
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_09/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92145,7 +92735,7 @@ testIssue114_classComment
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_10/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92196,7 +92786,7 @@ testIssue114_classCommentChange_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_11/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92249,7 +92839,7 @@ testIssue114_classCommentChange_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_12/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92302,7 +92892,7 @@ testIssue114_classCommentChange_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_13/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92356,7 +92946,7 @@ testIssue114_methodSourceIsNotTheSame_0
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_14/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92421,7 +93011,7 @@ testIssue114_methodSourceIsNotTheSame_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_15/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92488,7 +93078,7 @@ testIssue114_methodSourceIsNotTheSame_2
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_16/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92559,7 +93149,7 @@ testIssue114_missingClassModification
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_17/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -92746,7 +93336,7 @@ testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNe
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_18/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92820,7 +93410,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_19/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92879,7 +93469,7 @@ testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_20/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -92935,7 +93525,7 @@ testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVer
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_101/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93009,7 +93599,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackage
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_21/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93064,7 +93654,7 @@ testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93123,7 +93713,7 @@ testIssue125_1
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22_101/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93165,7 +93755,7 @@ testIssue125_2
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_23/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93208,7 +93798,7 @@ testIssue125_3
 	packageName3 := 'Issue125-Extensions2'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_24/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -93247,7 +93837,7 @@ testIssue165
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_25/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -95603,7 +96193,7 @@ testIssue24_addProject
 	| projectName |
 	projectName := 'Issue24_addProject'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_26/'.
 
 	self _writeProjectNamed: projectName
 %
@@ -95616,7 +96206,7 @@ testIssue24_addRemovePackage
 	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_27/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95638,7 +96228,7 @@ testIssue24_addUpdateRemoveClass
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_28/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95668,7 +96258,7 @@ testIssue24_addUpdateRemoveMethods
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_29/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -95714,7 +96304,7 @@ testIssue24_loadProject
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject/'  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject_30/'  validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
@@ -95769,7 +96359,7 @@ testIssue24_moveClassBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_31/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -95802,8 +96392,8 @@ testIssue24_moveClassBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_32/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_32/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -95840,7 +96430,7 @@ testIssue24_moveMethodBetweenPackages
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_32/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -95871,8 +96461,8 @@ testIssue24_moveMethodBetweenProjects
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_33/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_33/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -96512,7 +97102,7 @@ testIssue263
 	"https://github.com/dalehenrich/Rowan/issues/263"
 
 	| projectName packageName projectDefinition projectSetDefinition |
-	projectName := 'Issue263'.
+	projectName := 'Issue263_01'.
 	packageName := 'Issue263-Kernel'.
 
 	{projectName}
@@ -99712,7 +100302,7 @@ testIssue40
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_33/' validate: false.
 	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
 
 	theClass1 := self 
@@ -99768,7 +100358,7 @@ testIssue41_addUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_34/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -99813,7 +100403,7 @@ testIssue41_interactiveAddUpdateInitializeExtensionMethods
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_35/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -99847,7 +100437,7 @@ testIssue41_interactiveMoveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_36/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -99955,7 +100545,7 @@ testIssue41_moveInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_37/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -100052,7 +100642,7 @@ testIssue41_moveUnchangedInitializeExtensionMethodToPackage
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_38/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -102120,7 +102710,7 @@ testClassVarSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_01/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102183,7 +102773,7 @@ testMultiDependentClassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_02/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102332,7 +102922,7 @@ testSimpleSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_03/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102395,7 +102985,7 @@ testSubclassSystemDictionaryClone
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject/' 
+		root: '/tmp/rowanIssuesProject_04/' 
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -102881,7 +103471,7 @@ testIssue263
 
 	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
 
-	projectName := 'Issue263'.
+	projectName := 'Issue263_02'.
 	packageName := 'Issue263-Extension'.
 
 	{projectName}
@@ -108539,7 +109129,7 @@ testDiskSimpleProject1
 				createDiskBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'].
+				root: '/tmp/rowanSimpleProject_02/'].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -109102,7 +109692,7 @@ testSimpleProject1
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: '/tmp/rowanSimpleProject_03/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -109200,7 +109790,7 @@ testSimpleProject2
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject2/'
+				root: '/tmp/rowanSimpleProject2_04/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -109287,7 +109877,7 @@ testSimpleProject3
 			projectTools create
 				createProjectFor: projectDefinition
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject3/'
+				root: '/tmp/rowanSimpleProject3_05/'
 				configsPath: 'configs'
 				repoPath: 'src' 
 				specsPath: 'specs' ].
@@ -121319,11 +121909,17 @@ category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 gs_constraints: constraintsArray
 
-	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
+	constraintsArray _isArray
 		ifTrue: [ 
-			self properties
-				at: 'gs_constraints'
-				put: constraintsArray ]
+			constraintsArray isEmpty
+				ifTrue: [ 
+					self properties
+						removeKey: 'gs_constraints'
+						ifAbsent: [] ]
+				ifFalse: [ 
+					self properties
+						at: 'gs_constraints'
+						put: constraintsArray ] ]
 %
 
 category: '*rowan-gemstone-definitions'
