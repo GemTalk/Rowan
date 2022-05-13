@@ -67,7 +67,7 @@ method
 checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 	"in-line the test for
 			(RwSemanticVersionNumber fromString: currentRowanVersion) >= (RwSemanticVersionNumber fromString: minimumRowanVersion)
-	'>=" implementation involves messages in Integer and CharacterCollection which are removed by upgradeImage.
+	'>=' implementation involves messages in Integer and CharacterCollection which are removed by upgradeImage.
 
 	Just compare the three Integer elements of the normalVersion"
 	
