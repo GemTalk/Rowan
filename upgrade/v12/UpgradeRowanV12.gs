@@ -582,7 +582,7 @@ rowanRepairMap
 			put: #'repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
-		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethod:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 %
