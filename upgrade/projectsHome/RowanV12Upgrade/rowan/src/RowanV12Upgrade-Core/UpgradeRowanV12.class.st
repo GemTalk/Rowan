@@ -413,6 +413,43 @@ UpgradeRowanV12 >> repairedWhenDefinitionsReloaded:ignoredMethod inClassNamed: i
 ]
 
 { #category : 'repair' }
+UpgradeRowanV12 >> repairMissingLoadedClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName [
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
+]
+
+{ #category : 'repair' }
+UpgradeRowanV12 >> repairMissingLoadedInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName [
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
+]
+
+{ #category : 'repair' }
+UpgradeRowanV12 >> repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
+		newCompiledMethod registryInstance |
+
+	loadedPackage := (self globalNamed: 'Rowan') image loadedPackageNamed: packageName.
+	loadedClass := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
+	selector := self selectorFromMethodSpec: methodSpec.
+	loadedProject := loadedClass loadedProject.
+	theClass := self globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	newCompiledMethod := theBehavior compiledMethodAt: selector.
+
+"create new loaded method"
+self halt.
+
+	registryInstance := (self globalNamed: 'Rowan') image loadedRegistryForPackageNamed: packageName.
+	registryInstance methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	repairedCount := self repairedCount + 1.
+]
+
+{ #category : 'repair' }
 UpgradeRowanV12 >> repairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName [
 	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
 
@@ -495,6 +532,8 @@ UpgradeRowanV12 >> rowanRepairMap [
 			put: #'repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded class method.' put: #'repairMissingLoadedClassMethod:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method.' put: #'repairMissingLoadedInstanceMethod:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 ]
