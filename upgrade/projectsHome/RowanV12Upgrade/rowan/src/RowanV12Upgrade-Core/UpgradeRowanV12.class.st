@@ -427,6 +427,10 @@ UpgradeRowanV12 >> repairMissingLoadedMethodFor: methodSpec inClassNamed: classN
 	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
 		newCompiledMethod registryInstance |
 
+	self
+		logMessage:
+			'  Repairing missing loaded method...'.
+
 	loadedPackage := (self globalNamed: 'Rowan') image loadedPackageNamed: packageName.
 	loadedClass := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -446,6 +450,11 @@ self halt.
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	self
+		logMessage:
+			'  Repair missing loaded method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 ]
 
@@ -491,6 +500,11 @@ UpgradeRowanV12 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: classNa
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	self
+		logMessage:
+			'  Repair nonidentical method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 ]
 

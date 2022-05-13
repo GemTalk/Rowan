@@ -459,6 +459,10 @@ repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta 
 	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
 		newCompiledMethod registryInstance |
 
+	self
+		logMessage:
+			'  Repairing missing loaded method...'.
+
 	loadedPackage := (self globalNamed: 'Rowan') image loadedPackageNamed: packageName.
 	loadedClass := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -478,6 +482,11 @@ self halt.
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	self
+		logMessage:
+			'  Repair missing loaded method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 %
 
@@ -524,6 +533,11 @@ repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta i
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	self
+		logMessage:
+			'  Repair nonidentical method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 %
 
