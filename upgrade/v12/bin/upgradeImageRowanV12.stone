@@ -63,6 +63,27 @@ EXAMPLES
 input
 $GEMSTONE/rowan/upgrade/v12/UpgradeRowanV12.gs
 %
+method
+checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
+	"in-line the test for
+			(RwSemanticVersionNumber fromString: currentRowanVersion) >= (RwSemanticVersionNumber fromString: minimumRowanVersion)
+	'>=" implementation involves messages in Integer and CharacterCollection which are removed by upgradeImage.
+
+	Just compare the three Integer elements of the normalVersion"
+	
+	| rowanVersion minimumVersion |
+	rowanVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: currentRowanVersion) normalVersion.
+	minimumVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: minimumRowanVersion) normalVersion.
+	(((rowanVersion at: 1) >= (minimalVersion at: 1)) and: [
+		((rowanVersion at: 2) >= (minimalVersion at: 2)) and: [
+			((rowanVersion at: 3) >= (minimalVersion at: 3)) ] ])
+		ifTrue: [ ^ self ].
+
+	self
+		error:
+			'Upgrade for Rowan v' , currentRowanVersion
+				, ' is not supported. No Rowan upgrade performed.'
+%
 doit
 	| rowanClass upgrader currentRowanVersion |
 	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
@@ -89,13 +110,7 @@ doit
 			GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/adoptRowan.gs'.
 			"Customer installation performed in caller"
  			^ 'success' ].
-	((self globalNamed: 'RwSemanticVersionNumber') fromString: currentRowanVersion)
-		>= ((self globalNamed: 'RwSemanticVersionNumber') fromString: '1.2.13')
-		ifFalse: [
-			self
-				error:
-					'Upgrade for Rowan v' , currentRowanVersion
-						, ' is not supported. No Rowan upgrade performed.' ].
+	self checkVersion: currentRowanVersion greaterThanOrEqualTo: '1.2.13'.
 	upgrader := (self globalNamed: 'UpgradeRowanV12') new.
 	upgrader shouldCommit: self commit.
 	self installRowan
