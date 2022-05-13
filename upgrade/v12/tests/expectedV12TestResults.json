@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 8,
-		"failures" : 5,
-		"passed" : 772,
-		"summary" : "785 Tests with 5 Failures, 8 Errors and 0 DeprecationWarnings in 102.30s",
-		"tests" : 785,
-		"time" : 102.302
+		"errors" : 9,
+		"failures" : 4,
+		"passed" : 779,
+		"summary" : "792 Tests with 4 Failures, 9 Errors and 0 DeprecationWarnings in 51.44s",
+		"tests" : 792,
+		"time" : 51.437
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -1291,6 +1291,48 @@
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testIssue471_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_1",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_3",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_4",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_5",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue817_6",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue818",
 			"time" : "0"
 		},
 		{
@@ -4726,5 +4768,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-01-05T14:22:04.375777-08:00"
+	"timeStamp" : "2022-05-13T11:14:35.379245-07:00"
 }
