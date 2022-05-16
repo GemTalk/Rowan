@@ -660,6 +660,7 @@ step_2_repairRowanAuditFailures
 	audit isEmpty
 		ifFalse: [ 
 			self repairAuditFailures: self rowanRepairMap.
+self halt.
 			self commit ]
 %
 
