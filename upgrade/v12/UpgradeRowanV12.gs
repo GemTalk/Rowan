@@ -482,6 +482,7 @@ repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta 
 		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	loadedClass addLoadedMethod: loadedMethod.
 
 	self
 		logMessage:
@@ -660,7 +661,6 @@ step_2_repairRowanAuditFailures
 	audit isEmpty
 		ifFalse: [ 
 			self repairAuditFailures: self rowanRepairMap.
-self halt.
 			self commit ]
 %
 
