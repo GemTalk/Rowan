@@ -23,6 +23,7 @@ OPTIONS
 EXAMPLES
   $basename --help
   $basename -D
+	$basename --projectsHome=$GS_HOME/Rowan/upgrade/projectsHome
 -----
 %
 doit

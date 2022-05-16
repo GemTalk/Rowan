@@ -456,8 +456,8 @@ repairMissingLoadedInstanceMethodFor: methodSpec inClassNamed: className inPacka
 category: 'repair'
 method: UpgradeRowanV12
 repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
-	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior oldCompiledMethod
-		newCompiledMethod registryInstance |
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior 
+		newCompiledMethod registryInstance existing |
 
 	self
 		logMessage:
@@ -476,12 +476,13 @@ repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta 
 	newCompiledMethod := theBehavior compiledMethodAt: selector.
 
 "create new loaded method"
-self halt.
-
+	existing := registryInstance methodRegistry at: newCompiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
 	registryInstance := (self globalNamed: 'Rowan') image loadedRegistryForPackageNamed: packageName.
-	registryInstance methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+
 	self
 		logMessage:
 			'  Repair missing loaded method: '
