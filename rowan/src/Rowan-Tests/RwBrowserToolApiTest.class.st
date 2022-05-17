@@ -1959,7 +1959,7 @@ RwBrowserToolApiTest >> testIssue818 [
 ]
 
 { #category : 'tests' }
-RwBrowserToolApiTest >> testIssue819 [ 
+RwBrowserToolApiTest >> testIssue819_1 [
 	"https://github.com/GemTalk/Rowan/issues/819"
 
 	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
@@ -2037,7 +2037,7 @@ Object rwSubclass: subclassName
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: subclassName) == testClass.
 
-	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+	self assert: (x := testClass _constraintOn: #ivar1) isNil.
 ]
 
 { #category : 'tests' }

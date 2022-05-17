@@ -40574,7 +40574,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-  ^ '1.2.13'
+  ^ '1.2.15'
 %
 
 ! Class implementation for 'RowanCommandResult'
@@ -82978,6 +82978,89 @@ testIssue818
 
 category: 'tests'
 method: RwBrowserToolApiTest
+testIssue819_1
+	"https://github.com/GemTalk/Rowan/issues/819"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x subclassName |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
+"create subclass"
+	subclassName := 'SimpleClassFor817'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: subclassName
+		super:className
+		instvars: #('ivar2' 'ivar3')
+		classinstvars: #()
+		classvars: #()
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: {{'ivar1' . 'SmallInteger'}}.
+
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
+"remove constraint"
+Object rwSubclass: subclassName
+	instVarNames: #( ivar2 ivar3)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: 'Simple Things'
+	packageName: 'Simple-Core'
+	constraints: { }
+	options: #().
+
+	testClass := Rowan globalNamed: subclassName.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: subclassName) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) isNil.
+%
+
+category: 'tests'
+method: RwBrowserToolApiTest
 testLoadFullMultiProjectDefs
 
 	"set up projects and packages for hybrid browser implementation"
@@ -118086,10 +118169,35 @@ category: '*rowan-gemstone-kernel-extensions-36x'
 method: Class
 _installConstraints: theConstraints oldClass: oldClass
 
-	oldClass ifNotNil: [ [ self _installOldConstraints: oldClass _constraints ] on: Deprecated do: [:ex | ex resume ] ].
-	theConstraints 
+	| initialConstraints |
+	initialConstraints := theConstraints.
+	oldClass ifNotNil: [ [ 
+		| oldSuperclass theSuperclass oldSuperConstraints theSuperConstraints |
+		oldSuperclass := oldClass superclass.
+		theSuperclass :=  self superclass.
+		(oldSuperclass == theSuperclass or: [ oldSuperclass allInstVarNames = theSuperclass allInstVarNames ])
+			ifTrue: [ self _installOldConstraints: oldClass _constraints ]
+			ifFalse: [
+				| theConstraintMap |
+				theConstraintMap := Dictionary new.
+				theConstraints do: [:ar |
+					theConstraintMap at: (ar at: 1) put: (ar at: 2) ].
+				oldSuperConstraints := oldSuperclass _constraints ifNil: [ #() ].
+				theSuperConstraints := theSuperclass _constraints ifNil: [ #() ].
+				oldSuperConstraints = theSuperConstraints
+					ifFalse: [ 
+						| superInstVars theInstVars |
+						superInstVars := theSuperclass allInstVarNames.
+						theInstVars := self allInstVarNames.
+						initialConstraints := {}.
+						theConstraints do: [:ar | 
+							((superInstVars includes: (ar at: 1)) or: [ theInstVars includes: (ar at: 1) ])
+								ifFalse: [ theConstraintMap removeKey: (ar at: 1) ] ].
+						initialConstraints := theConstraints select: [:ar | theConstraintMap includesKey: (ar at: 1) ] ] ] ] 
+		on: Deprecated do: [:ex | ex resume ] ].
+	initialConstraints 
 		ifNil: [ constraints := nil ]
-		ifNotNil: [ self _installConstraints: theConstraints ]
+		ifNotNil: [ self _installConstraints: initialConstraints ]
 %
 
 category: '*rowan-gemstone-kernel-extensions-36x'
