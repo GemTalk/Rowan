@@ -119784,7 +119784,8 @@ _installConstraints: theConstraints oldClass: oldClass
 	| initialConstraints |
 	initialConstraints := theConstraints.
 	oldClass ifNotNil: [ [ 
-		| oldSuperclass theSuperclass oldSuperConstraints theSuperConstraints |
+		| oldSuperclass theSuperclass oldSuperConstraints theSuperConstraints theConstraintsAr |
+		theConstraintsAr := theConstraints ifNil: [ #() ].
 		oldSuperclass := oldClass superclass.
 		theSuperclass :=  self superclass.
 		(oldSuperclass == theSuperclass or: [ oldSuperclass allInstVarNames = theSuperclass allInstVarNames ])
@@ -119792,7 +119793,7 @@ _installConstraints: theConstraints oldClass: oldClass
 			ifFalse: [
 				| theConstraintMap |
 				theConstraintMap := Dictionary new.
-				theConstraints do: [:ar |
+				theConstraintsAr do: [:ar |
 					theConstraintMap at: (ar at: 1) put: (ar at: 2) ].
 				oldSuperConstraints := oldSuperclass _constraints ifNil: [ #() ].
 				theSuperConstraints := theSuperclass _constraints ifNil: [ #() ].
@@ -119802,10 +119803,10 @@ _installConstraints: theConstraints oldClass: oldClass
 						superInstVars := theSuperclass allInstVarNames.
 						theInstVars := self allInstVarNames.
 						initialConstraints := {}.
-						theConstraints do: [:ar | 
+						theConstraintsAr do: [:ar | 
 							((superInstVars includes: (ar at: 1)) or: [ theInstVars includes: (ar at: 1) ])
 								ifFalse: [ theConstraintMap removeKey: (ar at: 1) ] ].
-						initialConstraints := theConstraints select: [:ar | theConstraintMap includesKey: (ar at: 1) ] ] ] ] 
+						initialConstraints := theConstraintsAr select: [:ar | theConstraintMap includesKey: (ar at: 1) ] ] ] ] 
 		on: Deprecated do: [:ex | ex resume ] ].
 	initialConstraints 
 		ifNil: [ constraints := nil ]
