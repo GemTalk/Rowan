@@ -84544,7 +84544,6 @@ testIssue819_2
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
-self halt.
 "remove constraint"
 (Rowan globalNamed: className)  rwSubclass: 'SimpleClassFor817'
 	instVarNames: #( ivar2 ivar3)
