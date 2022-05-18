@@ -76,8 +76,8 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 				ifTrue: [ 
 					(theConstraint isNil and: [ superConstraint notNil ])
 						ifTrue: [ 
-							"inherit constraint from superclass"
-							self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+							"this is not possible -: both existing and new constraint not defined?"
+							existingClass _rwInstVar: instVarString constrainTo: superConstraint  ] ]
 				ifFalse: [ 
 					existingConstraint == nil
 						ifTrue: [ 
@@ -91,7 +91,7 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 											existingConstraint ~= superConstraint
 												ifTrue: [ 
 													"inherit constraint from superclass"
-													self _rwInstVar: instVarString constrainTo: superConstraint ] ]
+													existingClass _rwInstVar: instVarString constrainTo: superConstraint ] ]
 										ifFalse: [ 
 											"remove the constraint"
 											existingClass _rwInstVar: instVarString constrainTo: Object ] ]
@@ -107,5 +107,4 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 	aSymbolDictionaryRegistry
 		updateClassProperties: existingClass
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
 ]

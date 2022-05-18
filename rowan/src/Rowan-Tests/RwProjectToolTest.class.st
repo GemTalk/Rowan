@@ -25,7 +25,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 				createDiskBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'].
+				root: '/tmp/rowanSimpleProject_01/'].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -73,7 +73,6 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }
@@ -588,7 +587,7 @@ RwProjectToolTest >> testSimpleProject1 [
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: '/tmp/rowanSimpleProject_02/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -636,7 +635,6 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }

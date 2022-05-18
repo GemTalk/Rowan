@@ -108,7 +108,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 
 	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
 
-	projectName := 'Issue263'.
+	projectName := 'Issue263_02'.
 	packageName := 'Issue263-Extension'.
 
 	{projectName}

@@ -53,7 +53,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/' ].
+				root: '/tmp/rowanSimpleProject_01/' ].
 
 "test existsOnDisk"
 
