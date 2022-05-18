@@ -80,14 +80,14 @@ upgradeRowan
 					'Upgrade for Rowan v' , rowanClass versionString
 						, ' is not supported. No Rowan upgrade performed.' ].
 	upgrader := self new.
-	[upgrader
+	upgrader
 		step_1_installRowan;
 		step_2_repairRowanAuditFailures;
 		step_3_repairCustomerAuditFailures;
 		step_4_reloadRowan;
 		step_5_reloadCustomer;
 		step_6_finalAudit;
-		yourself] on: AlmostOutOfStack do: [:ex | self error: 'Almost out of stack' ]
+		yourself
 %
 
 !		Instance methods for 'UpgradeRowanV12'
@@ -685,7 +685,14 @@ step_4_reloadRowan
 
 	self logMessage: 'reload Rowan'.
 	self reloadRowan.
-	self commit
+	self commit.
+	self logMessage: ' post ROWAN reload audit'.
+	self auditForProjectsNamed: self rowanProjectNames.
+	audit isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'post ROWAN reload audit did not run clean ... contact GemStone support' ]
 %
 
 category: 'steps'
