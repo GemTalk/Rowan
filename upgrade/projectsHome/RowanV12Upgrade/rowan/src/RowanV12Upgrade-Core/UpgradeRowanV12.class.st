@@ -60,6 +60,7 @@ UpgradeRowanV12 class >> upgradeRowan [
 		the upgrade"
 
 	| rowanClass upgrader |
+AlmostOutOfStackError enable.	"debugging"
 	rowanClass := (self globalNamed: 'Rowan')
 		ifNil: [ self logMessage: 'Rowan not present. No Rowan upgrade performed.' ].
 	((self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
@@ -144,6 +145,7 @@ UpgradeRowanV12 >> customerRepairMap [
 			put: #'customerRepairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 ]
