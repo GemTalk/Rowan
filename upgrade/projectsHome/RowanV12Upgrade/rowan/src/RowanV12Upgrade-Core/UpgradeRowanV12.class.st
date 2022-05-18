@@ -642,7 +642,14 @@ UpgradeRowanV12 >> step_4_reloadRowan [
 
 	self logMessage: 'reload Rowan'.
 	self reloadRowan.
-	self commit
+	self commit.
+	self logMessage: ' post ROWAN reload audit'.
+	self auditForProjectsNamed: self rowanProjectNames.
+	audit isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'post ROWAN reload audit did not run clean ... contact GemStone support' ]
 ]
 
 { #category : 'steps' }
