@@ -60,7 +60,6 @@ UpgradeRowanV12 class >> upgradeRowan [
 		the upgrade"
 
 	| rowanClass upgrader |
-AlmostOutOfStackError enable.	"debugging"
 	rowanClass := (self globalNamed: 'Rowan')
 		ifNil: [ self logMessage: 'Rowan not present. No Rowan upgrade performed.' ].
 	((self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
@@ -71,14 +70,14 @@ AlmostOutOfStackError enable.	"debugging"
 					'Upgrade for Rowan v' , rowanClass versionString
 						, ' is not supported. No Rowan upgrade performed.' ].
 	upgrader := self new.
-	upgrader
+	[upgrader
 		step_1_installRowan;
 		step_2_repairRowanAuditFailures;
 		step_3_repairCustomerAuditFailures;
 		step_4_reloadRowan;
 		step_5_reloadCustomer;
 		step_6_finalAudit;
-		yourself
+		yourself] on: AlmostOutOfStack do: [:ex | self error: 'Almost out of stack' ]
 ]
 
 { #category : 'upgrade' }
