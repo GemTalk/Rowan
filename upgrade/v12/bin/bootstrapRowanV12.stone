@@ -185,7 +185,10 @@ doit
 			rowanProjectsHome := value.
 			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value ] 
 		ifNil: [ 
-			(rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+			"if the resulting extent is targeted for upgrade and running tests, the using the following defult is REQUIRED
+				otherwise it doesn't matter"
+			rowanProjectsHome := '$ROWAN_PROJECTS_HOME'.
+			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
 				ifNil: [ self error: 'ROWAN_PROJECTS_HOME env var or --rowanProjectsHome option must be defined' ] ].
 	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') ; lf.
 	self
