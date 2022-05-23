@@ -7,3 +7,5 @@ With the release of [GemStone 3.6.4](https://gemtalksystems.com/products/gs64/ve
 
 ## Jadeite: IDE for Rowan
 The IDE for Rowan is [Jadeite Oscar-3.1.1-pre-release4](https://github.com/GemTalk/Jadeite/releases/tag/Oscar-3.1.1-pre-release4).
+
+Send mail to the [GemStone-Smalltalk mailing list](https://lists.gemtalksystems.com/mailman/listinfo/gemstone-smalltalk) if you have questions.
