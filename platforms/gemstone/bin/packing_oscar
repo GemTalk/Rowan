@@ -8,7 +8,7 @@
 set -e
 
 # Usage:
-#  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> <jadeite_tag>
+#  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> 
 #
 # 1. clone the Rowan project
 # 2. confirm that the master branches of Rowan is on the correct tag
@@ -43,7 +43,8 @@ set -e
 # 1.2.11 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.11 v1.2.11 Oscar-3.0.91.1
 # 1.2.12 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.12 v1.2.12 Oscar-3.0.91.1
 # 1.2.13 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.13 v1.2.13 Oscar-3.0.91.2
-#
+## from this point on Oscar will be shipped separately from the Edelweiss bundle
+# 1.2.14 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.14 v1.2.14
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
 ANSI_RESET="\033[0m"
@@ -54,7 +55,7 @@ if [ "$base_label"x = "x" ] ; then
   exit 1
 fi
 rowan_tag="$2"
-jadeite_tag="$3"
+#jadeite_tag="$3"
 rowanDeploymentBranch="masterV1.2"
 
 if [ "production" != "production" ] ; then
@@ -155,20 +156,20 @@ padded_manifest_line "Git_Project" "Tag" "SHA"
 echo "-------------------|---------------------|---------------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag" $rowanDeploymentBranch
 
-# create Jadeite runtime directory
-jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
-wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/runtime.zip
-unzip runtime.zip
-mv runtime "$jadeite_runtime_dirName"
+## create Jadeite runtime directory
+#jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
+#wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/runtime.zip
+#unzip runtime.zip
+#mv runtime "$jadeite_runtime_dirName"
 
 # copy documentation 
 cp /export/techpubs/JadeiteCurrent/*.pdf .
 
-echo "" >> MANIFEST.TXT
-echo "------------------------------" >> MANIFEST.TXT
-echo "  Jadeite runtime directory" >> MANIFEST.TXT
-echo "------------------------------" >> MANIFEST.TXT
-echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
+#echo "" >> MANIFEST.TXT
+#echo "------------------------------" >> MANIFEST.TXT
+#echo "  Jadeite runtime directory" >> MANIFEST.TXT
+#echo "------------------------------" >> MANIFEST.TXT
+#echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
@@ -190,7 +191,7 @@ fi
 
 # create zip file
 
-zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} *.pdf Rowan 
+zip -r ${base_label}.zip MANIFEST.TXT *.pdf Rowan 
 
 # create sha256 file
 
