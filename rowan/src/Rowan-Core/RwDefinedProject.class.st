@@ -435,7 +435,7 @@ RwDefinedProject >> packageGroupNamed: componentName [
 
 { #category : 'components' }
 RwDefinedProject >> packageGroupNames [
-	^ self _concreteProject packageGroupNames
+	^ self _projectComponents packageGroupNames
 ]
 
 { #category : 'accessing' }

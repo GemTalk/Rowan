@@ -6086,6 +6086,32 @@ RwRowanSample9Test >> testIssue784 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue787 [
+	"https://github.com/GemTalk/Rowan/issues/787"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects definedProject |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+"validate"
+	self assert: definedProject packageGroupNames sort equals: #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 
