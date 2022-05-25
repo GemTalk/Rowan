@@ -23,6 +23,11 @@ RwAbstractUnloadedProject >> _projectComponents [
 ]
 
 { #category : 'private' }
+RwAbstractUnloadedProject >> _projectDefinition [
+	^ self _concreteProject _projectDefinition
+]
+
+{ #category : 'private' }
 RwAbstractUnloadedProject >> _projectRepository [
 	^ self _concreteProject _projectRepository
 ]

@@ -6112,6 +6112,110 @@ RwRowanSample9Test >> testIssue787 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue789_01 [
+	"https://github.com/GemTalk/Rowan/issues/789"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects loadedProject definedProject1 definedProject2 packageGroup1 packageGroup2|
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	loadedProject := loadedProjects projectNamed: projectName.
+
+	definedProject1 := loadedProject defined.
+	packageGroup1 := definedProject1 packageGroupNamed: 'groups/Rowan'.
+
+	definedProject2 := loadedProject defined.
+	packageGroup2 := definedProject2 packageGroupNamed: 'groups/Rowan'.
+
+"validate"
+	self assert: definedProject1 ~~ definedProject2.
+	self assert: definedProject1 _projectRepository ~~ definedProject2 _projectRepository.
+	self assert: definedProject1 _projectSpecification ~~ definedProject2 _projectSpecification.
+	self assert: definedProject1 _projectComponents ~~ definedProject2 _projectComponents.
+	self assert: definedProject1 _projectDefinition ~~ definedProject2 _projectDefinition.
+	self assert: packageGroup1 ~~ packageGroup2.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue789_02 [
+	"https://github.com/GemTalk/Rowan/issues/789"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects loadedProject definedProject1 definedProject2 component1 component2 conditionalPackageMapSpecs1 conditionalPackageMapSpecs2 |
+	loadSpec := self _loadSpecNamed: 'spec_0009'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	loadedProject := loadedProjects projectNamed: projectName.
+
+	definedProject1 := loadedProject defined.
+	component1 := definedProject1 componentNamed: 'Core'.
+	conditionalPackageMapSpecs1 := component1 conditionalPackageMapSpecs.
+
+	definedProject2 := loadedProject defined.
+	component2 := definedProject2 componentNamed: 'Core'.
+	conditionalPackageMapSpecs2 := component2 conditionalPackageMapSpecs.
+
+"validate"
+	self assert: definedProject1 ~~ definedProject2.
+	self assert: definedProject1 _projectRepository ~~ definedProject2 _projectRepository.
+	self assert: definedProject1 _projectSpecification ~~ definedProject2 _projectSpecification.
+	self assert: definedProject1 _projectComponents ~~ definedProject2 _projectComponents.
+	self assert: definedProject1 _projectDefinition ~~ definedProject2 _projectDefinition.
+	self assert: component1  ~~ component2 .
+	self assert:  conditionalPackageMapSpecs1 ~~ conditionalPackageMapSpecs2.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue822 [
+	"https://github.com/GemTalk/Rowan/issues/822"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects definedProject baselinePackageGroupNames |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+"validate"
+	baselinePackageGroupNames := #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh').
+	self assert: definedProject packageGroupNames sort equals: baselinePackageGroupNames sort.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 

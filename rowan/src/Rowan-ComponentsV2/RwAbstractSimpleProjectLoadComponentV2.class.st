@@ -21,3 +21,9 @@ RwAbstractSimpleProjectLoadComponentV2 >> packageNames [
 RwAbstractSimpleProjectLoadComponentV2 >> packageNames: anArray [
  packageNames := anArray
 ]
+
+{ #category : 'copying' }
+RwAbstractSimpleProjectLoadComponentV2 >> postCopy [
+	super postCopy.
+	packageNames := packageNames copy.
+]

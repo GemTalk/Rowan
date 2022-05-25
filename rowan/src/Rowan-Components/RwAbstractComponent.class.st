@@ -237,6 +237,17 @@ RwAbstractComponent >> _validatedPackageNames [
 	^ self packageNames asSet
 ]
 
+{ #category : 'comparing' }
+RwAbstractComponent >> = aRwProjectLoadComponentV2 [
+	(aRwProjectLoadComponentV2 isKindOf: self class)
+		ifFalse: [ ^ false ].
+	^ (((self name = aRwProjectLoadComponentV2 name
+		and: [ self comment = aRwProjectLoadComponentV2 comment ])
+		and: [ self projectName = aRwProjectLoadComponentV2 projectName])
+		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
+		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
+]
+
 { #category : 'accessing' }
 RwAbstractComponent >> addComponentNamed: aComponentName [
 	"avoid duplicates and keep the list sorted"
@@ -365,6 +376,13 @@ RwAbstractComponent >> name: anObject [
 RwAbstractComponent >> packageNames [
 
 	^ packageNames copy
+]
+
+{ #category : 'copying' }
+RwAbstractComponent >> postCopy [
+	super postCopy.
+	componentNames := componentNames copy.
+	packageNames := packageNames copy
 ]
 
 { #category : 'printing' }

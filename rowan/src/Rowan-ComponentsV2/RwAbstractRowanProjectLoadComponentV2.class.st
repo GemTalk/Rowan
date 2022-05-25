@@ -625,6 +625,12 @@ RwAbstractRowanProjectLoadComponentV2 >> packageNamesForConditionalAttributes: c
 	^ allDefinedPackageNames
 ]
 
+{ #category : 'copying' }
+RwAbstractRowanProjectLoadComponentV2 >> postCopy [
+	super postCopy.
+	componentNames := componentNames copy.
+]
+
 { #category : 'accessing' }
 RwAbstractRowanProjectLoadComponentV2 >> postloadDoitName [
 	^postloadDoitName

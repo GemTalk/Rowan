@@ -14,6 +14,12 @@ RwPackageGroup >> _addToResolvedProjectComponents: aRwResolvedProjectComponentsV
 	aRwResolvedProjectComponentsV2 _addPackageGroup: self
 ]
 
+{ #category : 'comparing' }
+RwPackageGroup >> = aRwProjectLoadComponentV2 [
+	^ super = aRwProjectLoadComponentV2
+		and: [ self condition = aRwProjectLoadComponentV2 condition ]
+]
+
 { #category : 'visiting' }
 RwPackageGroup >> acceptNestedVisitor: aVisitor [
 	^ aVisitor visitPackageGroupComponent: self

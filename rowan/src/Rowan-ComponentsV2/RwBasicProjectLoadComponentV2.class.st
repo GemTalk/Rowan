@@ -49,3 +49,34 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: use
 		at: 'gemstone'
 		ifAbsent: [ ^ Dictionary new ]) at: userId ifAbsent: [ ^ Dictionary new ]
 ]
+
+{ #category : 'copying' }
+RwBasicProjectLoadComponentV2 >> postCopy [
+	super postCopy.
+	doitDict := doitDict copy.
+	conditionalPackageMapSpecs
+		ifNotNil: [ 
+			| packageMapSpecsCopy |
+			packageMapSpecsCopy := conditionalPackageMapSpecs copy.
+			conditionalPackageMapSpecs
+				keysAndValuesDo: [ :platformName :userMap | 
+					platformName = 'gemstone'
+						ifTrue: [ 
+							| userMapCopy |
+							userMapCopy := userMap copy.
+							packageMapSpecsCopy at: platformName put: userMapCopy.
+							userMap
+								keysAndValuesDo: [ :userName :attributeMap | 
+									| attributeMapCopy |
+									attributeMapCopy := attributeMap copy.
+									userMapCopy at: userName put: attributeMapCopy.
+									attributeMap
+										keysAndValuesDo: [ :attributeName :packageMap | 
+											| packageMapCopy |
+											packageMapCopy := packageMap copy.
+											attributeMapCopy at: attributeName put: packageMapCopy.
+											packageMap
+												keysAndValuesDo: [ :packageName :packageAttribute | packageMapCopy at: packageName put: packageAttribute copy ] ] ] ]
+						ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+			conditionalPackageMapSpecs := packageMapSpecsCopy ]
+]

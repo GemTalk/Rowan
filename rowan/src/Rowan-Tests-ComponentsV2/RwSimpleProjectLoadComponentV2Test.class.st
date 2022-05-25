@@ -88,6 +88,72 @@ RwSimpleProjectLoadComponentV2Test >> testBasic_nested [
 ]
 
 { #category : 'tests' }
+RwSimpleProjectLoadComponentV2Test >> testIssue789 [
+	"https://github.com/GemTalk/Rowan/issues/789"
+
+	| componentName projectName component packageName componentCopy |
+	projectName := 'RowanSample9'.
+	componentName := 'Core'.
+	{
+		{ RwSimpleProjectLoadComponentV2 .  'common' } .
+		{ RwSimpleNestedProjectLoadComponentV2 .  'common' } .
+		{ RwPlatformNestedProjectLoadComponentV2 . {'common'} }.
+	} 
+		do: [:ar |
+			| componentClass condition |
+			componentClass := ar at: 1.
+			condition := ar at: 2.
+			component := (componentClass
+				newNamed: componentName
+				for: projectName) condition: condition.
+			self assert: component validate.
+			packageName := projectName , '-Core'.
+			component
+				addPackageNames: {packageName};
+				conditionalPackageMapSpecsAtGemStoneUserId: 'DataCurator'
+					andPackageName: packageName
+					setSymbolDictNameTo: 'UserGlobals';
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser'
+					andPackageName: packageName
+					setSymbolDictNameTo: 'UserGlobals';
+				conditionalPackageMapSpecsAtGemStoneUserId: 'DataCurator' 
+					andPackageName: packageName 
+					setUseSessionMethodsForExtensions: true;
+				conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+					andPackageName: packageName 
+					setUseSessionMethodsForExtensions: false;
+				yourself.
+
+			componentCopy := component copy.
+			self assert: component ~~ componentCopy.
+
+			self assert: component conditionalPackageMapSpecs equals: componentCopy conditionalPackageMapSpecs.
+			self assert: (component conditionalPackageMapSpecs at: 'gemstone') ~~ (componentCopy conditionalPackageMapSpecs at: 'gemstone').
+
+			#('DataCurator' 'SystemUser') do: [:userId |
+				" Issue #789 - ensure that the copy is deep enough"
+				self 
+					assert: 
+						((component conditionalPackageMapSpecs at: 'gemstone') at: 'DataCurator') ~~ 
+						((componentCopy conditionalPackageMapSpecs at: 'gemstone') at: 'DataCurator').
+				self 
+					assert: 
+						(((component conditionalPackageMapSpecs at: 'gemstone') at: userId) 
+							at: #packageNameToPlatformPropertiesMap) ~~ 
+						(((componentCopy conditionalPackageMapSpecs at: 'gemstone') at: userId)
+							at: #packageNameToPlatformPropertiesMap).
+				self 
+					assert: 
+						((((component conditionalPackageMapSpecs at: 'gemstone') at: userId) 
+							at: #packageNameToPlatformPropertiesMap) at: packageName) ~~ 
+						((((componentCopy conditionalPackageMapSpecs at: 'gemstone') at: userId)
+							at: #packageNameToPlatformPropertiesMap) at: packageName) ].
+
+			self assert: component = componentCopy.
+			self assert: component ~~ componentCopy ].
+]
+
+{ #category : 'tests' }
 RwSimpleProjectLoadComponentV2Test >> testUknownPlatform [
 	"error coverage for invalid components"
 

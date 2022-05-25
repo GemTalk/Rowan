@@ -130,16 +130,14 @@ RwAbstractActiveComponent >> _validateGemStonePlatform: allDefinedPackageNames u
 
 { #category : 'comparing' }
 RwAbstractActiveComponent >> = aRwProjectLoadComponentV2 [
-	(aRwProjectLoadComponentV2 isKindOf: self class)
+	super = aRwProjectLoadComponentV2
 		ifFalse: [ ^ false ].
-	^ ((((self name = aRwProjectLoadComponentV2 name
-		and: [ self comment = aRwProjectLoadComponentV2 comment ])
-		and: [ 
-			self conditionalPackageMapSpecs
-				= aRwProjectLoadComponentV2 conditionalPackageMapSpecs ])
-		and: [ self condition = aRwProjectLoadComponentV2 condition ])
-		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
-		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
+	^ (((self conditionalPackageMapSpecs
+		= aRwProjectLoadComponentV2 conditionalPackageMapSpecs
+		and: [ self doitDict = aRwProjectLoadComponentV2 doitDict ])
+		and: [ self projectNames = aRwProjectLoadComponentV2 projectNames ])
+		and: [ self postloadDoitName = aRwProjectLoadComponentV2 postloadDoitName ])
+		and: [ self preloadDoitName = aRwProjectLoadComponentV2 preloadDoitName ]
 ]
 
 { #category : 'accessing' }
@@ -324,6 +322,38 @@ RwAbstractActiveComponent >> packageNamesForConditionalAttributes: conditionalAt
 							(matcher match: anObject)
 								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
 	^ allDefinedPackageNames
+]
+
+{ #category : 'copying' }
+RwAbstractActiveComponent >> postCopy [
+	super postCopy.
+	projectNames := projectNames copy.
+	doitDict := doitDict copy.
+	conditionalPackageMapSpecs
+		ifNotNil: [ 
+			| packageMapSpecsCopy |
+			packageMapSpecsCopy := conditionalPackageMapSpecs copy.
+			conditionalPackageMapSpecs
+				keysAndValuesDo: [ :platformName :userMap | 
+					platformName = 'gemstone'
+						ifTrue: [ 
+							| userMapCopy |
+							userMapCopy := userMap copy.
+							packageMapSpecsCopy at: platformName put: userMapCopy.
+							userMap
+								keysAndValuesDo: [ :userName :attributeMap | 
+									| attributeMapCopy |
+									attributeMapCopy := attributeMap copy.
+									userMapCopy at: userName put: attributeMapCopy.
+									attributeMap
+										keysAndValuesDo: [ :attributeName :packageMap | 
+											| packageMapCopy |
+											packageMapCopy := packageMap copy.
+											attributeMapCopy at: attributeName put: packageMapCopy.
+											packageMap
+												keysAndValuesDo: [ :packageName :packageAttribute | packageMapCopy at: packageName put: packageAttribute copy ] ] ] ]
+						ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+			conditionalPackageMapSpecs := packageMapSpecsCopy ]
 ]
 
 { #category : 'accessing' }

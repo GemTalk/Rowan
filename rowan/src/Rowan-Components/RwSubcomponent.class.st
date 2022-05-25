@@ -7,6 +7,12 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'comparing' }
+RwSubcomponent >> = aRwProjectLoadComponentV2 [
+	^ super = aRwProjectLoadComponentV2
+		and: [ self condition = aRwProjectLoadComponentV2 condition ]
+]
+
 { #category : 'visiting' }
 RwSubcomponent >> acceptNestedVisitor: aVisitor [
 	^ aVisitor visitComponent: self

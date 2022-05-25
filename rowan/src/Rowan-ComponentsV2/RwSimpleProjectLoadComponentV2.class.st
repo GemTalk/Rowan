@@ -72,6 +72,12 @@ RwSimpleProjectLoadComponentV2 >> label [
 	^ self basename , ' [' , self condition , ']'
 ]
 
+{ #category : 'copying' }
+RwSimpleProjectLoadComponentV2 >> postCopy [
+	super postCopy.
+	projectNames := projectNames copy.
+]
+
 { #category : 'accessing' }
 RwSimpleProjectLoadComponentV2 >> projectNames [
 	^projectNames

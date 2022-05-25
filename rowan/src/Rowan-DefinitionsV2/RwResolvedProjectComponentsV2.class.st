@@ -561,9 +561,14 @@ RwResolvedProjectComponentsV2 >> packageGroups [
 
 { #category : 'copying' }
 RwResolvedProjectComponentsV2 >> postCopy [
+	| old |
 	super postCopy.
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	old := self components.
+	components := Dictionary new.
+	old keysAndValuesDo: [ :key :value | components at: key put: value copy ].
+	old := self packageGroups.
+	packageGroups := Dictionary new.
+	old keysAndValuesDo: [ :key :value | packageGroups at: key put: value copy ]
 ]
 
 { #category : 'accessing' }
