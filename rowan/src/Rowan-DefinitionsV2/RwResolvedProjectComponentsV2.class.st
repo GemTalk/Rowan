@@ -211,21 +211,21 @@ RwResolvedProjectComponentsV2 >> addLoadComponentNamed: aComponentName comment: 
 ]
 
 { #category : 'components' }
-RwResolvedProjectComponentsV2 >> addPackageGroupNamed: aComponentName condition: aCondition comment: aString [
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
+RwResolvedProjectComponentsV2 >> addPackageGroupNamed: aPackageGroupName condition: aCondition comment: aString [
+	| packageGroup |
+	(self packageGroupNamed: aPackageGroupName ifAbsent: [  ])
+		ifNotNil: [ 
 			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwPackageGroup newNamed: aComponentName ].
-	component
+				error:
+					'The package group ' , aPackageGroupName printString , ' is already present' ].
+	packageGroup := self packageGroups
+		at: aPackageGroupName
+		ifAbsentPut: [ RwPackageGroup newNamed: aPackageGroupName ].
+	packageGroup
 		comment: aString;
 		condition: aCondition;
 		yourself.
-	^ component
+	^ packageGroup
 ]
 
 { #category : 'accessing' }

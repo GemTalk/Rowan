@@ -6213,6 +6213,12 @@ RwRowanSample9Test >> testIssue822 [
 "validate"
 	baselinePackageGroupNames := #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh').
 	self assert: definedProject packageGroupNames sort equals: baselinePackageGroupNames sort.
+
+	definedProject addPackageGroupNamed: 'groups/XXX' condition: 'common' comment: 'hello'.
+
+	self 
+		assert: definedProject packageGroupNames sort 
+		equals:( baselinePackageGroupNames, #( 'groups/XXX'  )) sort.
 ]
 
 { #category : 'tests' }
