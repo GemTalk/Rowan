@@ -62,6 +62,28 @@ RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId 
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed_X: packageName [
+	^ self
+		gemstoneSymbolDictNameForPackageNamed_X: packageName
+		forUser: Rowan image currentUserId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: userId [
+	| resolvedLoadComponents packagePropertiesMap |
+	resolvedLoadComponents := self _projectComponents.
+	packagePropertiesMap := resolvedLoadComponents
+		gemstonePackagePropertyPropertyMapForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ].
+	^ (packagePropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ])
+		at: 'symbolDictName'
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ]
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 	^ self
 		gemstoneSymbolDictNameForPackageNamed: packageName

@@ -49351,6 +49351,13 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
+category: 'querying'
+method: RwAbstractProject
+gemstoneSymbolDictNameForPackageNamed_X: packageName
+
+	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName
+%
+
 category: 'accessing'
 method: RwAbstractProject
 loadSpecification
@@ -49595,6 +49602,12 @@ category: 'private'
 method: RwAbstractUnloadedProject
 _projectComponents
 	^ self _concreteProject _projectComponents
+%
+
+category: 'private'
+method: RwAbstractUnloadedProject
+_projectDefinition
+	^ self _concreteProject _projectDefinition
 %
 
 category: 'private'
@@ -50018,6 +50031,15 @@ gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 		forPackageNamed: packageName
 %
 
+category: 'accessing'
+method: RwDefinedProject
+gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName
+	self _concreteProject
+		gemstoneSetSymbolDictNameForUser: userId
+		to: symbolDictName
+		forPackageNamed: packageName
+%
+
 category: 'testing'
 method: RwDefinedProject
 isStrict
@@ -50075,7 +50097,7 @@ packageGroupNamed: componentName
 category: 'components'
 method: RwDefinedProject
 packageGroupNames
-	^ self _concreteProject packageGroupNames
+	^ self _projectComponents packageGroupNames
 %
 
 category: 'accessing'
@@ -50173,6 +50195,8 @@ removePackageNamed: packageName fromComponentNamed: componentName
 category: 'accessing'
 method: RwDefinedProject
 renameComponentNamed: aComponentPath to: aComponentName
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
 	^ self _concreteProject renameComponentNamed: aComponentPath to: aComponentName
 %
 
@@ -58756,6 +58780,18 @@ _readStonFrom: stream
 
 !		Instance methods for 'RwAbstractComponent'
 
+category: 'comparing'
+method: RwAbstractComponent
+= aRwProjectLoadComponentV2
+	(aRwProjectLoadComponentV2 isKindOf: self class)
+		ifFalse: [ ^ false ].
+	^ (((self name = aRwProjectLoadComponentV2 name
+		and: [ self comment = aRwProjectLoadComponentV2 comment ])
+		and: [ self projectName = aRwProjectLoadComponentV2 projectName])
+		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
+		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
+%
+
 category: 'accessing'
 method: RwAbstractComponent
 addComponentNamed: aComponentName
@@ -58898,6 +58934,14 @@ method: RwAbstractComponent
 packageNames
 
 	^ packageNames copy
+%
+
+category: 'copying'
+method: RwAbstractComponent
+postCopy
+	super postCopy.
+	componentNames := componentNames copy.
+	packageNames := packageNames copy
 %
 
 category: 'printing'
@@ -59080,16 +59124,14 @@ _gemstoneSupportedPackagePropertyNames
 category: 'comparing'
 method: RwAbstractActiveComponent
 = aRwProjectLoadComponentV2
-	(aRwProjectLoadComponentV2 isKindOf: self class)
+	super = aRwProjectLoadComponentV2
 		ifFalse: [ ^ false ].
-	^ ((((self name = aRwProjectLoadComponentV2 name
-		and: [ self comment = aRwProjectLoadComponentV2 comment ])
-		and: [ 
-			self conditionalPackageMapSpecs
-				= aRwProjectLoadComponentV2 conditionalPackageMapSpecs ])
-		and: [ self condition = aRwProjectLoadComponentV2 condition ])
-		and: [ self packageNames = aRwProjectLoadComponentV2 packageNames ])
-		and: [ self componentNames = aRwProjectLoadComponentV2 componentNames ]
+	^ (((self conditionalPackageMapSpecs
+		= aRwProjectLoadComponentV2 conditionalPackageMapSpecs
+		and: [ self doitDict = aRwProjectLoadComponentV2 doitDict ])
+		and: [ self projectNames = aRwProjectLoadComponentV2 projectNames ])
+		and: [ self postloadDoitName = aRwProjectLoadComponentV2 postloadDoitName ])
+		and: [ self preloadDoitName = aRwProjectLoadComponentV2 preloadDoitName ]
 %
 
 category: 'accessing'
@@ -59110,10 +59152,17 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwAbstractActiveComponent
-conditionalPackageMapSpecsAtGemStoneUserId: userId 
-
-	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsent: [ ^ Dictionary new ])
+conditionalPackageMapSpecsAtGemStoneUserId: userId
+	| userIdPropertiesMap |
+	userIdPropertiesMap := self conditionalPackageMapSpecs
+		at: 'gemstone'
+		ifAbsent: [ ^ Dictionary new ].
+	^ userIdPropertiesMap
+		at: userId
+		ifAbsent: [ 
+			userIdPropertiesMap
+				at: RwLoadSpecificationV2 _gemstoneAllUsersName
+				ifAbsent: [ ^ Dictionary new ] ]
 %
 
 category: 'accessing'
@@ -59290,6 +59339,39 @@ packageNamesForConditionalAttributes: conditionalAttributes
 							(matcher match: anObject)
 								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
 	^ allDefinedPackageNames
+%
+
+category: 'copying'
+method: RwAbstractActiveComponent
+postCopy
+	super postCopy.
+	projectNames := projectNames copy.
+	doitDict := doitDict copy.
+	conditionalPackageMapSpecs
+		ifNotNil: [ 
+			| packageMapSpecsCopy |
+			packageMapSpecsCopy := conditionalPackageMapSpecs copy.
+			conditionalPackageMapSpecs
+				keysAndValuesDo: [ :platformName :userMap | 
+					platformName = 'gemstone'
+						ifTrue: [ 
+							| userMapCopy |
+							userMapCopy := userMap copy.
+							packageMapSpecsCopy at: platformName put: userMapCopy.
+							userMap
+								keysAndValuesDo: [ :userName :attributeMap | 
+									| attributeMapCopy |
+									attributeMapCopy := attributeMap copy.
+									userMapCopy at: userName put: attributeMapCopy.
+									attributeMap
+										keysAndValuesDo: [ :attributeName :packageMap | 
+											| packageMapCopy |
+											packageMapCopy := packageMap copy.
+											attributeMapCopy at: attributeName put: packageMapCopy.
+											packageMap
+												keysAndValuesDo: [ :packageName :packageAttribute | packageMapCopy at: packageName put: packageAttribute copy ] ] ] ]
+						ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+			conditionalPackageMapSpecs := packageMapSpecsCopy ]
 %
 
 category: 'accessing'
@@ -59574,6 +59656,13 @@ removeProjectNamed: aProjectName
 
 !		Instance methods for 'RwSubcomponent'
 
+category: 'comparing'
+method: RwSubcomponent
+= aRwProjectLoadComponentV2
+	^ super = aRwProjectLoadComponentV2
+		and: [ self condition = aRwProjectLoadComponentV2 condition ]
+%
+
 category: 'visiting'
 method: RwSubcomponent
 acceptNestedVisitor: aVisitor
@@ -59693,6 +59782,13 @@ label
 ! Class implementation for 'RwPackageGroup'
 
 !		Instance methods for 'RwPackageGroup'
+
+category: 'comparing'
+method: RwPackageGroup
+= aRwProjectLoadComponentV2
+	^ super = aRwProjectLoadComponentV2
+		and: [ self condition = aRwProjectLoadComponentV2 condition ]
+%
 
 category: 'visiting'
 method: RwPackageGroup
@@ -71960,9 +72056,48 @@ conditionalPackageMapSpecsAtGemStoneUserId: userId
 		used during project load and superclass methods removed before subclass methods added.
 		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
 
-	^ (self conditionalPackageMapSpecs
+	| userIdPropertiesMap |
+	userIdPropertiesMap := self conditionalPackageMapSpecs
 		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ]) at: userId ifAbsent: [ ^ Dictionary new ]
+		ifAbsent: [ ^ Dictionary new ].
+	^ userIdPropertiesMap
+		at: userId
+		ifAbsent: [ 
+			userIdPropertiesMap
+				at: RwLoadSpecificationV2 _gemstoneAllUsersName
+				ifAbsent: [ ^ Dictionary new ] ]
+%
+
+category: 'copying'
+method: RwBasicProjectLoadComponentV2
+postCopy
+	super postCopy.
+	doitDict := doitDict copy.
+	conditionalPackageMapSpecs
+		ifNotNil: [ 
+			| packageMapSpecsCopy |
+			packageMapSpecsCopy := conditionalPackageMapSpecs copy.
+			conditionalPackageMapSpecs
+				keysAndValuesDo: [ :platformName :userMap | 
+					platformName = 'gemstone'
+						ifTrue: [ 
+							| userMapCopy |
+							userMapCopy := userMap copy.
+							packageMapSpecsCopy at: platformName put: userMapCopy.
+							userMap
+								keysAndValuesDo: [ :userName :attributeMap | 
+									| attributeMapCopy |
+									attributeMapCopy := attributeMap copy.
+									userMapCopy at: userName put: attributeMapCopy.
+									attributeMap
+										keysAndValuesDo: [ :attributeName :packageMap | 
+											| packageMapCopy |
+											packageMapCopy := packageMap copy.
+											attributeMapCopy at: attributeName put: packageMapCopy.
+											packageMap
+												keysAndValuesDo: [ :packageName :packageAttribute | packageMapCopy at: packageName put: packageAttribute copy ] ] ] ]
+						ifFalse: [ self error: 'Unknown platform name ' , platformName printString ] ].
+			conditionalPackageMapSpecs := packageMapSpecsCopy ]
 %
 
 category: 'dispatching'
@@ -71991,6 +72126,13 @@ category: 'accessing'
 method: RwAbstractSimpleProjectLoadComponentV2
 packageNames: anArray
  packageNames := anArray
+%
+
+category: 'copying'
+method: RwAbstractSimpleProjectLoadComponentV2
+postCopy
+	super postCopy.
+	packageNames := packageNames copy.
 %
 
 ! Class implementation for 'RwAbstractRowanProjectLoadComponentV2'
@@ -72276,10 +72418,17 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwAbstractRowanProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId 
-
-	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsent: [ ^ Dictionary new ])
+conditionalPackageMapSpecsAtGemStoneUserId: userId
+	| userIdPropertiesMap |
+	userIdPropertiesMap := self conditionalPackageMapSpecs
+		at: 'gemstone'
+		ifAbsent: [ ^ Dictionary new ].
+	^ userIdPropertiesMap
+		at: userId
+		ifAbsent: [ 
+			userIdPropertiesMap
+				at: RwLoadSpecificationV2 _gemstoneAllUsersName
+				ifAbsent: [ ^ Dictionary new ] ]
 %
 
 category: 'accessing'
@@ -72518,6 +72667,13 @@ packageNamesForConditionalAttributes: conditionalAttributes
 							(matcher match: anObject)
 								ifTrue: [ allDefinedPackageNames addAll: self packageNames ] ] ] ].
 	^ allDefinedPackageNames
+%
+
+category: 'copying'
+method: RwAbstractRowanProjectLoadComponentV2
+postCopy
+	super postCopy.
+	componentNames := componentNames copy.
 %
 
 category: 'accessing'
@@ -72846,6 +73002,13 @@ category: 'accessing'
 method: RwSimpleProjectLoadComponentV2
 label
 	^ self basename , ' [' , self condition , ']'
+%
+
+category: 'copying'
+method: RwSimpleProjectLoadComponentV2
+postCopy
+	super postCopy.
+	projectNames := projectNames copy.
 %
 
 category: 'accessing'
@@ -87265,21 +87428,21 @@ addLoadComponentNamed: aComponentName comment: aString
 
 category: 'components'
 method: RwResolvedProjectComponentsV2
-addPackageGroupNamed: aComponentName condition: aCondition comment: aString
-	| component |
-	self components
-		at: aComponentName
-		ifPresent: [ 
+addPackageGroupNamed: aPackageGroupName condition: aCondition comment: aString
+	| packageGroup |
+	(self packageGroupNamed: aPackageGroupName ifAbsent: [  ])
+		ifNotNil: [ 
 			self
-				error: 'The component ' , aComponentName printString , ' is already present' ].
-	component := self components
-		at: aComponentName
-		ifAbsentPut: [ RwPackageGroup newNamed: aComponentName ].
-	component
+				error:
+					'The package group ' , aPackageGroupName printString , ' is already present' ].
+	packageGroup := self packageGroups
+		at: aPackageGroupName
+		ifAbsentPut: [ RwPackageGroup newNamed: aPackageGroupName ].
+	packageGroup
 		comment: aString;
 		condition: aCondition;
 		yourself.
-	^ component
+	^ packageGroup
 %
 
 category: 'accessing'
@@ -87529,6 +87692,31 @@ export: componentsRoot
 
 category: 'gemstone support'
 method: RwResolvedProjectComponentsV2
+gemstonePackagePropertyPropertyMapForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| gemstonePropertiesMap packagePropertiesMap |
+					gemstonePropertiesMap := component conditionalPackageMapSpecs
+						at: 'gemstone'
+						ifAbsent: [ ^ Dictionary new ].
+					{userId.
+					(RwLoadSpecificationV2 _gemstoneAllUsersName)}
+						do: [ :theUserId | 
+							"if we don't get a valid result with userId use allusers"
+							(gemstonePropertiesMap at: theUserId ifAbsent: [  ])
+								ifNotNil: [ :userIdPropertiesMap | 
+									packagePropertiesMap := userIdPropertiesMap
+										at: #'packageNameToPlatformPropertiesMap'
+										ifAbsent: absentBlock.
+									(packagePropertiesMap includesKey: packageName)
+										ifTrue: [ ^ packagePropertiesMap ] ] ] ] ].
+	^ absentBlock value
+%
+
+category: 'gemstone support'
+method: RwResolvedProjectComponentsV2
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	self
 		gemstoneSetSymbolDictNameForUser: self _gemstoneAllUsersName
@@ -87592,12 +87780,7 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 					userIdPropertiesMap := (component
 						conditionalPackageMapSpecsAtGemStoneUserId: userId)
 						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: [ 
-							"no entries for the specific userId, check if there's an entry for allusers"
-							(component
-								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
-								at: #'packageNameToPlatformPropertiesMap'
-								ifAbsent: absentBlock ].
+						ifAbsent: absentBlock.
 					packagePropertiesMap := userIdPropertiesMap
 						at: packageName
 						ifAbsent: absentBlock.
@@ -87647,9 +87830,14 @@ packageGroups
 category: 'copying'
 method: RwResolvedProjectComponentsV2
 postCopy
+	| old |
 	super postCopy.
-	components := self components copy.
-	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	old := self components.
+	components := Dictionary new.
+	old keysAndValuesDo: [ :key :value | components at: key put: value copy ].
+	old := self packageGroups.
+	packageGroups := Dictionary new.
+	old keysAndValuesDo: [ :key :value | packageGroups at: key put: value copy ]
 %
 
 category: 'accessing'
@@ -99781,6 +99969,30 @@ gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: abs
 		gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: userId
 		ifAbsent: absentBlock
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSymbolDictNameForPackageNamed_X: packageName
+	^ self
+		gemstoneSymbolDictNameForPackageNamed_X: packageName
+		forUser: Rowan image currentUserId
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: userId
+	| resolvedLoadComponents packagePropertiesMap |
+	resolvedLoadComponents := self _projectComponents.
+	packagePropertiesMap := resolvedLoadComponents
+		gemstonePackagePropertyPropertyMapForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ].
+	^ (packagePropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ])
+		at: 'symbolDictName'
+		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ]
 %
 
 category: '*rowan-gemstone-definitionsv2'

@@ -156,11 +156,17 @@ RwAbstractActiveComponent >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
-RwAbstractActiveComponent >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
-
-	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
-		at: userId ifAbsent: [ ^ Dictionary new ])
-
+RwAbstractActiveComponent >> conditionalPackageMapSpecsAtGemStoneUserId: userId [
+	| userIdPropertiesMap |
+	userIdPropertiesMap := self conditionalPackageMapSpecs
+		at: 'gemstone'
+		ifAbsent: [ ^ Dictionary new ].
+	^ userIdPropertiesMap
+		at: userId
+		ifAbsent: [ 
+			userIdPropertiesMap
+				at: RwLoadSpecificationV2 _gemstoneAllUsersName
+				ifAbsent: [ ^ Dictionary new ] ]
 ]
 
 { #category : 'accessing' }

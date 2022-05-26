@@ -6189,6 +6189,134 @@ RwRowanSample9Test >> testIssue789_02 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue809_01 [
+	"https://github.com/GemTalk/Rowan/issues/809"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects loadedProject definedProject  |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	loadedProject := loadedProjects projectNamed: projectName.
+	definedProject := loadedProject defined.
+
+"validate"
+	self 
+		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2')
+		equals: 'RowanSample9_3'.
+	self 
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2')
+		equals: 'RowanSample9_3'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue809_02 [
+	"!!!DO NOT COMMIT AFTER RUNNING THIS TEST!!! Until the implementation details have stabilized ... can have a project with a loaded package that has not been installed and cannot be unloaded"
+
+	"reproduce the 'allusers'/'SystemUser' duplication in conditionaPackageMapSpecs"
+	"https://github.com/GemTalk/Rowan/issues/809"
+
+	"RwRowanSample9Test cleanup"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects loadedProject component userIdMap |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	loadedProject := loadedProjects projectNamed: projectName.
+
+	Rowan image
+		loadedPackageNamed: 'Rowan-Services-Tools-Extensions'
+		ifAbsent: [ 
+			(RwProject newNamed: projectName)
+				addNewPackageNamed: 'Rowan-Services-Tools-Extensions'
+				inSybolDictionaryNamed: self _sampleSymbolDictionaryName4
+				toComponentNamed: 'Core2'].
+
+	component := loadedProject componentNamed: 'Core2'.
+	userIdMap := component conditionalPackageMapSpecs at: 'gemstone'.
+	self deny: ((userIdMap includesKey: 'allusers') and: [ userIdMap includesKey: 'SystemUser']).
+self halt.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue809_03 [
+	"https://github.com/GemTalk/Rowan/issues/809"
+
+	| loadSpec projectName projectNames resolvedProject definedProject componentName component packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	definedProject := resolvedProject defined.
+	packageName := projectName, '-New'.
+	componentName := 'Core2'.
+
+	definedProject addPackageNamed: packageName toComponentNamed: componentName.
+	definedProject 
+		gemstoneSetSymbolDictNameForUser: 'SystemUser' 
+			to: 'SystemUserDict' 
+			forPackageNamed: 'RowanSample9-Core2';
+		gemstoneSetSymbolDictNameForUser: 'DataCurator' 
+			to: 'DataCuratorDict' 
+			forPackageNamed: packageName;
+		gemstoneSetSymbolDictNameForUser: RwLoadSpecificationV2 _gemstoneAllUsersName
+			to: 'AllUsersDict' 
+			forPackageNamed: packageName;
+		yourself.
+	component := definedProject componentNamed: componentName.
+
+"validate"
+	self 
+		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: 'Bozo')
+		equals: 'AllUsersDict'.	"existing package, unkown user ... should match allusers"
+	self 
+		assert: (definedProject  _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: 'SystemUser')
+		equals: 'AllUsersDict'.	"existing package, no entry for SystemUser and this package"	
+	self 
+		assert: (definedProject  _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: 'DataCurator')
+		equals: 'DataCuratorDict'.	"existing package, entry for DataCurator"
+	self 
+		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed_X: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		equals: 'SystemUserDict'.	"existing package, entry for SystemUser"
+	self 
+		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed_X: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		equals: self _sampleSymbolDictionaryName1 asString.	"unknown package, should match default"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue822 [
 	"https://github.com/GemTalk/Rowan/issues/822"
 

@@ -32,6 +32,12 @@ RwAbstractProject >> gemstoneDefaultSymbolDictName [
 ]
 
 { #category : 'querying' }
+RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed_X: packageName [
+
+	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName
+]
+
+{ #category : 'querying' }
 RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName

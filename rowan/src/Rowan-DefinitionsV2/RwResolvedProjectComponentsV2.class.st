@@ -454,6 +454,30 @@ RwResolvedProjectComponentsV2 >> export: componentsRoot [
 ]
 
 { #category : 'gemstone support' }
+RwResolvedProjectComponentsV2 >> gemstonePackagePropertyPropertyMapForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					| gemstonePropertiesMap packagePropertiesMap |
+					gemstonePropertiesMap := component conditionalPackageMapSpecs
+						at: 'gemstone'
+						ifAbsent: [ ^ Dictionary new ].
+					{userId.
+					(RwLoadSpecificationV2 _gemstoneAllUsersName)}
+						do: [ :theUserId | 
+							"if we don't get a valid result with userId use allusers"
+							(gemstonePropertiesMap at: theUserId ifAbsent: [  ])
+								ifNotNil: [ :userIdPropertiesMap | 
+									packagePropertiesMap := userIdPropertiesMap
+										at: #'packageNameToPlatformPropertiesMap'
+										ifAbsent: absentBlock.
+									(packagePropertiesMap includesKey: packageName)
+										ifTrue: [ ^ packagePropertiesMap ] ] ] ] ].
+	^ absentBlock value
+]
+
+{ #category : 'gemstone support' }
 RwResolvedProjectComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	self
 		gemstoneSetSymbolDictNameForUser: self _gemstoneAllUsersName
@@ -513,12 +537,7 @@ RwResolvedProjectComponentsV2 >> gemstoneSymbolDictNameForPackageNamed: packageN
 					userIdPropertiesMap := (component
 						conditionalPackageMapSpecsAtGemStoneUserId: userId)
 						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: [ 
-							"no entries for the specific userId, check if there's an entry for allusers"
-							(component
-								conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
-								at: #'packageNameToPlatformPropertiesMap'
-								ifAbsent: absentBlock ].
+						ifAbsent: absentBlock.
 					packagePropertiesMap := userIdPropertiesMap
 						at: packageName
 						ifAbsent: absentBlock.

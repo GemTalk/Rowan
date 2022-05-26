@@ -45,9 +45,16 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: use
 		used during project load and superclass methods removed before subclass methods added.
 		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
 
-	^ (self conditionalPackageMapSpecs
+	| userIdPropertiesMap |
+	userIdPropertiesMap := self conditionalPackageMapSpecs
 		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ]) at: userId ifAbsent: [ ^ Dictionary new ]
+		ifAbsent: [ ^ Dictionary new ].
+	^ userIdPropertiesMap
+		at: userId
+		ifAbsent: [ 
+			userIdPropertiesMap
+				at: RwLoadSpecificationV2 _gemstoneAllUsersName
+				ifAbsent: [ ^ Dictionary new ] ]
 ]
 
 { #category : 'copying' }

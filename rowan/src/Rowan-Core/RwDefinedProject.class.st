@@ -386,6 +386,14 @@ RwDefinedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: p
 		forPackageNamed: packageName
 ]
 
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetSymbolDictNameForUser: userId
+		to: symbolDictName
+		forPackageNamed: packageName
+]
+
 { #category : 'testing' }
 RwDefinedProject >> isStrict [
 	^ self _concreteProject isStrict
@@ -518,6 +526,8 @@ RwDefinedProject >> removePackageNamed: packageName fromComponentNamed: componen
 
 { #category : 'accessing' }
 RwDefinedProject >> renameComponentNamed: aComponentPath to: aComponentName [
+	"change the basename of aComponentPath to <baseName>, i.e., the path is not changed"
+
 	^ self _concreteProject renameComponentNamed: aComponentPath to: aComponentName
 ]
 
