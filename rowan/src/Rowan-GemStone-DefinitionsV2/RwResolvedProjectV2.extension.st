@@ -62,14 +62,14 @@ RwResolvedProjectV2 >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId 
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed_X: packageName [
+RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 	^ self
-		gemstoneSymbolDictNameForPackageNamed_X: packageName
+		gemstoneSymbolDictNameForPackageNamed: packageName
 		forUser: Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: userId [
+RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
 	| resolvedLoadComponents packagePropertiesMap |
 	resolvedLoadComponents := self _projectComponents.
 	packagePropertiesMap := resolvedLoadComponents
@@ -81,25 +81,6 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed_X: packageName forU
 		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ])
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ]
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
-	^ self
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: Rowan image currentUserId
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
-	| resolvedLoadComponents |
-	resolvedLoadComponents := self _projectComponents.
-	^ resolvedLoadComponents
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: userId
-		ifAbsent: [ 
-			"no entry for this package, use the defaultSymbolDictName"
-			^ self gemstoneDefaultSymbolDictNameForUser: userId ]
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }

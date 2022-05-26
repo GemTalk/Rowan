@@ -49351,13 +49351,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 %
 
-category: 'querying'
-method: RwAbstractProject
-gemstoneSymbolDictNameForPackageNamed_X: packageName
-
-	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed_X: packageName
-%
-
 category: 'accessing'
 method: RwAbstractProject
 loadSpecification
@@ -99952,36 +99945,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
 gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
-	| resolvedLoadComponents |
-	resolvedLoadComponents := self _projectComponents.
-	^ resolvedLoadComponents
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: userId
-		ifAbsent: [ 
-			"no entry for this package, use the defaultSymbolDictName"
-			^ self gemstoneDefaultSymbolDictNameForUser: userId ]
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwResolvedProjectV2
-gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
-	^ self _projectComponents
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: userId
-		ifAbsent: absentBlock
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwResolvedProjectV2
-gemstoneSymbolDictNameForPackageNamed_X: packageName
-	^ self
-		gemstoneSymbolDictNameForPackageNamed_X: packageName
-		forUser: Rowan image currentUserId
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwResolvedProjectV2
-gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: userId
 	| resolvedLoadComponents packagePropertiesMap |
 	resolvedLoadComponents := self _projectComponents.
 	packagePropertiesMap := resolvedLoadComponents
@@ -99993,6 +99956,15 @@ gemstoneSymbolDictNameForPackageNamed_X: packageName forUser: userId
 		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ])
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self gemstoneDefaultSymbolDictNameForUser: userId ]
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock
+	^ self _projectComponents
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: absentBlock
 %
 
 category: '*rowan-gemstone-definitionsv2'
