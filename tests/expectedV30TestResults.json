@@ -1,12 +1,17 @@
 {
 	"properties" : { },
 	"resultsSummary" : {
-		"passed" : 1511,
+		"passed" : 1512,
 		"errors" : 16,
 		"failures" : 15,
-		"summary" : "1542 run, 1511 passed, 15 failed, 16 errors"
+		"summary" : "1543 run, 1512 passed, 15 failed, 16 errors"
 	},
 	"testCases" : [
+		{
+			"status" : "passed",
+			"selector" : "testBasic",
+			"className" : "RwResolvedProjectComponentsV2Test"
+		},
 		{
 			"status" : "passed",
 			"selector" : "testBasic",
@@ -41,11 +46,6 @@
 			"status" : "passed",
 			"selector" : "testUnknownPackagePropertName",
 			"className" : "RwSimpleProjectLoadComponentV2Test"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testBasic",
-			"className" : "RwResolvedProjectComponentsV2Test"
 		},
 		{
 			"status" : "passed",
@@ -225,6 +225,11 @@
 		{
 			"status" : "passed",
 			"selector" : "testIssue515_RowanSample2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue533",
 			"className" : "RwRowanSample9Test"
 		},
 		{
@@ -1114,6 +1119,26 @@
 		},
 		{
 			"status" : "passed",
+			"selector" : "testIndexCards",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0004",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
 			"selector" : "testGemStoneVersionPattern",
 			"className" : "RwPlatformPatternMatcherTest"
 		},
@@ -1140,42 +1165,42 @@
 		{
 			"status" : "passed",
 			"selector" : "testIndexCards",
-			"className" : "RwRowanSample10Test"
+			"className" : "RwRowanSample11Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0001",
-			"className" : "RwRowanSample10Test"
+			"className" : "RwRowanSample11Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0002",
-			"className" : "RwRowanSample10Test"
+			"className" : "RwRowanSample11Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0004",
-			"className" : "RwRowanSample10Test"
+			"className" : "RwRowanSample11Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testIndexCards",
-			"className" : "RwRowanSample11Test"
+			"className" : "RwRowanSample12Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0001",
-			"className" : "RwRowanSample11Test"
+			"className" : "RwRowanSample12Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0002",
-			"className" : "RwRowanSample11Test"
+			"className" : "RwRowanSample12Test"
 		},
 		{
 			"status" : "passed",
 			"selector" : "testSpec_0004",
-			"className" : "RwRowanSample11Test"
+			"className" : "RwRowanSample12Test"
 		},
 		{
 			"status" : "passed",
@@ -1196,26 +1221,6 @@
 			"status" : "passed",
 			"selector" : "testRowanSample12LibraryGenerator",
 			"className" : "RwTestProjectLibraryGeneratorTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testIndexCards",
-			"className" : "RwRowanSample12Test"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_0001",
-			"className" : "RwRowanSample12Test"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_0002",
-			"className" : "RwRowanSample12Test"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_0004",
-			"className" : "RwRowanSample12Test"
 		},
 		{
 			"status" : "passed",
@@ -1344,6 +1349,16 @@
 		},
 		{
 			"status" : "passed",
+			"selector" : "testProjectClassExtensionsInSeparateSymbolDictionary",
+			"className" : "RwProjectToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectClassExtensionsInSessionMethods",
+			"className" : "RwProjectToolTest"
+		},
+		{
+			"status" : "passed",
 			"selector" : "testReconcileGlobalExtensionMethods",
 			"className" : "RwReconcileToolApiTest"
 		},
@@ -1356,16 +1371,6 @@
 			"status" : "passed",
 			"selector" : "testReconcileProjectSetMethods",
 			"className" : "RwReconcileToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testProjectClassExtensionsInSeparateSymbolDictionary",
-			"className" : "RwProjectToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testProjectClassExtensionsInSessionMethods",
-			"className" : "RwProjectToolTest"
 		},
 		{
 			"status" : "passed",
@@ -1411,6 +1416,71 @@
 			"status" : "passed",
 			"selector" : "testSubclassSystemDictionaryClone",
 			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteProjectWithExtensionMethods",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteProjectWithExtensionMethods_345",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteSimpleProject",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testForceDeleteProjectWithExtensionMethods",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testForceDeleteSimpleProject",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_A",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_A_export",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_B",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_C",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_C_export",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_D",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_MultiProject_A",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_MultiProject_B",
+			"className" : "RwProjectTopazWriterTestV2"
 		},
 		{
 			"status" : "passed",
@@ -1569,31 +1639,6 @@
 		},
 		{
 			"status" : "passed",
-			"selector" : "testDeleteProjectWithExtensionMethods",
-			"className" : "RwProjectDeleteToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDeleteProjectWithExtensionMethods_345",
-			"className" : "RwProjectDeleteToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDeleteSimpleProject",
-			"className" : "RwProjectDeleteToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testForceDeleteProjectWithExtensionMethods",
-			"className" : "RwProjectDeleteToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testForceDeleteSimpleProject",
-			"className" : "RwProjectDeleteToolTest"
-		},
-		{
-			"status" : "passed",
 			"selector" : "testProjectAdoptTool",
 			"className" : "RwProjectSetTest"
 		},
@@ -1606,46 +1651,6 @@
 			"status" : "passed",
 			"selector" : "testProjectSetLoad1",
 			"className" : "RwProjectSetTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_A",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_A_export",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_B",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_C",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_C_export",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_D",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_MultiProject_A",
-			"className" : "RwProjectTopazWriterTestV2"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGsTopazWriter_MultiProject_B",
-			"className" : "RwProjectTopazWriterTestV2"
 		},
 		{
 			"status" : "passed",
@@ -2604,6 +2609,51 @@
 		},
 		{
 			"status" : "passed",
+			"selector" : "testDiskProjectApi",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGitProjectApi",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectCreation",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolvedProjectAPI",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleProjectLifeCycle_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleProjectLifeCycle_git",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue428_loaded_no_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue428_loaded_on_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue714",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
 			"selector" : "testReadExistingDiskProject",
 			"className" : "RwProjectFiletreeReaderWriterTest"
 		},
@@ -2696,51 +2746,6 @@
 			"status" : "passed",
 			"selector" : "testWriterReader_E",
 			"className" : "RwProjectFiletreeReaderWriterTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDiskProjectApi",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGitProjectApi",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testProjectCreation",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testResolvedProjectAPI",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSimpleProjectLifeCycle_disk",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSimpleProjectLifeCycle_git",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_issue428_loaded_no_disk",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_issue428_loaded_on_disk",
-			"className" : "RwProjectTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_issue714",
-			"className" : "RwProjectTest"
 		},
 		{
 			"status" : "passed",
@@ -3009,6 +3014,86 @@
 		},
 		{
 			"status" : "passed",
+			"selector" : "testAddAndRemoveClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClassExtension",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClass_blackList_A",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClass_blackList_B",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddUpdateAndRemoveClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreferences",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpdateClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpdateClassExtension",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownClass1",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownClass2",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownExtensionMethods",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownMethod",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage1",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage2",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage3",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownProject",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
 			"selector" : "testAddMethod",
 			"className" : "RwBrowserToolApiTest"
 		},
@@ -3159,86 +3244,6 @@
 		},
 		{
 			"status" : "passed",
-			"selector" : "testDisownClass1",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownClass2",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownExtensionMethods",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownMethod",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownPackage1",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownPackage2",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownPackage3",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testDisownProject",
-			"className" : "RwDisownToolApiTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAddAndRemoveClass",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAddClassExtension",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAddClass_blackList_A",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAddClass_blackList_B",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAddUpdateAndRemoveClass",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testPreferences",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testUpdateClass",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testUpdateClassExtension",
-			"className" : "RwEditToolTest"
-		},
-		{
-			"status" : "passed",
 			"selector" : "testNumberParser",
 			"className" : "RBGemStoneNumberParserTest"
 		},
@@ -3246,6 +3251,271 @@
 			"status" : "passed",
 			"selector" : "testRadixNumberParser",
 			"className" : "RBGemStoneNumberParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGitDescribe",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_02",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_09",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_10",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_11",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion1",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion01",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion02",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion03",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion04",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion05",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCollapseZeros",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion01",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion02",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion03",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion04",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion05",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion06",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion07",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion09",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion10",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion12",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion13",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion17",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion18",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion20",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion21",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion24",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion1",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion2",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion3",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion4",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqualityComparison",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLessThanComparison",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOfficialInvalidSemanticVersions",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOfficialValidSemanticVersions",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrinting",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioning",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioningSpecItem10",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioningSubsetCompliance",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion01",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion02",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion04",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion05",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion09",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion10",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion12",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion14",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion15",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion16",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion17",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion18",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion19",
+			"className" : "RwSemanticVersionNumberTestCase"
 		},
 		{
 			"status" : "passed",
@@ -3491,271 +3761,6 @@
 			"status" : "passed",
 			"selector" : "testUnpackageManagedMethod_01",
 			"className" : "RwUnmanagedClassesV2Test"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testGitDescribe",
-			"className" : "RwSemanticVersionNumber200TestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_02",
-			"className" : "RwSemanticVersionNumber200TestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_09",
-			"className" : "RwSemanticVersionNumber200TestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_10",
-			"className" : "RwSemanticVersionNumber200TestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSpec_11",
-			"className" : "RwSemanticVersionNumber200TestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAlphaNumericVersion1",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAlphaNumericVersion2",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAlphaNumericVersion3",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAlphaNumericVersion4",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testEqualityComparison",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testLessThanComparison",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testOfficialInvalidSemanticVersions",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testOfficialValidSemanticVersions",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testPrinting",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSemanticVersioning",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSemanticVersioningSpecItem10",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testSemanticVersioningSubsetCompliance",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion01",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion02",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion04",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion05",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion09",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion10",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion12",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion14",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion15",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion16",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion17",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion18",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion19",
-			"className" : "RwSemanticVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAlphaNumericVersion1",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testApproxVersion01",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testApproxVersion02",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testApproxVersion03",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testApproxVersion04",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testApproxVersion05",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testCollapseZeros",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion01",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion02",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion03",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion04",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion05",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion06",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion07",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion09",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion10",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion12",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion13",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion17",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion18",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion20",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion21",
-			"className" : "RwGemStoneVersionNumberTestCase"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testVersion24",
-			"className" : "RwGemStoneVersionNumberTestCase"
 		},
 		{
 			"status" : "passed",
@@ -5814,11 +5819,6 @@
 		},
 		{
 			"status" : "passed",
-			"selector" : "testAll",
-			"className" : "PostorderGuideTest"
-		},
-		{
-			"status" : "passed",
 			"selector" : "testCached",
 			"className" : "InteractiveResolverTest"
 		},
@@ -5826,6 +5826,11 @@
 			"status" : "passed",
 			"selector" : "testNew",
 			"className" : "InteractiveResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "PostorderGuideTest"
 		},
 		{
 			"status" : "passed",
@@ -5876,11 +5881,6 @@
 			"status" : "passed",
 			"selector" : "testSize",
 			"className" : "DirectoryEntryTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testAll",
-			"className" : "BreadthFirstGuideTest"
 		},
 		{
 			"status" : "passed",
@@ -6231,6 +6231,11 @@
 			"status" : "passed",
 			"selector" : "testWorkingDirPrintString",
 			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "BreadthFirstGuideTest"
 		},
 		{
 			"status" : "passed",
@@ -7204,86 +7209,6 @@
 		},
 		{
 			"status" : "passed",
-			"selector" : "test_insertRemoveDictionary",
-			"className" : "RowanDictionaryServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_isAbstract",
-			"className" : "RowanDictionaryServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_disableBreakpointsInterface",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_execCompileError",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_execNilContext",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_execWithContext",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_expressionSelector",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_initializeAutoCommit",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_initializeBreakPointsAreDisabled",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_isAbstract",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_loadedPackageExists",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_matchingPattern",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_maxPrint",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_methodHistory",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_play",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
-			"selector" : "test_setAutoCommit",
-			"className" : "RowanAnsweringServiceTest"
-		},
-		{
-			"status" : "passed",
 			"selector" : "test_addCategory",
 			"className" : "RowanClassServiceTest"
 		},
@@ -7411,6 +7336,86 @@
 			"status" : "passed",
 			"selector" : "test_zzz",
 			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_insertRemoveDictionary",
+			"className" : "RowanDictionaryServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanDictionaryServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_disableBreakpointsInterface",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execCompileError",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execNilContext",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execWithContext",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_expressionSelector",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_initializeAutoCommit",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_initializeBreakPointsAreDisabled",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_loadedPackageExists",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_matchingPattern",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_maxPrint",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistory",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_play",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setAutoCommit",
+			"className" : "RowanAnsweringServiceTest"
 		},
 		{
 			"status" : "passed",
@@ -7649,37 +7654,7 @@
 		},
 		{
 			"status" : "failures",
-			"selector" : "testFileSize",
-			"className" : "FileReferenceAttributeTests"
-		},
-		{
-			"status" : "passed",
-			"selector" : "testUnmanagedSpec_0057_02",
-			"className" : "RwRowanSample9Test"
-		},
-		{
-			"status" : "failures",
-			"selector" : "test_testClassesIncludesExtensions",
-			"className" : "RowanPackageServiceTest"
-		},
-		{
-			"status" : "failures",
-			"selector" : "test_updateAddsCommandResult",
-			"className" : "RowanProjectServiceTest"
-		},
-		{
-			"status" : "failures",
-			"selector" : "testNewClassVersion_session_method_change_extension_method_source",
-			"className" : "RwBrowserToolApiTest"
-		},
-		{
-			"status" : "failures",
 			"selector" : "testIssue310",
-			"className" : "RwRowanProjectIssuesTest"
-		},
-		{
-			"status" : "failures",
-			"selector" : "testIssue498_constraint_ordering_1",
 			"className" : "RwRowanProjectIssuesTest"
 		},
 		{
@@ -7689,13 +7664,13 @@
 		},
 		{
 			"status" : "failures",
-			"selector" : "testImplementedButNotSent",
-			"className" : "RwImplementedButNotSentTest"
+			"selector" : "testIssue498_constraint_ordering_1",
+			"className" : "RwRowanProjectIssuesTest"
 		},
 		{
-			"status" : "failures",
-			"selector" : "testNewClassVersion_session_method_change_extension_method_protocol",
-			"className" : "RwBrowserToolApiTest"
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_02",
+			"className" : "RwRowanSample9Test"
 		},
 		{
 			"status" : "failures",
@@ -7704,8 +7679,33 @@
 		},
 		{
 			"status" : "failures",
+			"selector" : "test_updateAddsCommandResult",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "test_testClassesIncludesExtensions",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "failures",
 			"selector" : "test_projectIsDirtyWithNonUpdatedPackage",
 			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testModificationTimeIsADateAndTimeInstance",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testFileSize",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testImplementedButNotSent",
+			"className" : "RwImplementedButNotSentTest"
 		},
 		{
 			"status" : "failures",
@@ -7714,11 +7714,16 @@
 		},
 		{
 			"status" : "failures",
-			"selector" : "testModificationTimeIsADateAndTimeInstance",
-			"className" : "DirectoryEntryTest"
+			"selector" : "testNewClassVersion_session_method_change_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testNewClassVersion_session_method_change_extension_method_source",
+			"className" : "RwBrowserToolApiTest"
 		}
 	],
-	"timeStamp" : "2022-05-26T19:07:43.184065-07:00",
+	"timeStamp" : "2022-05-27T11:24:53.320066-07:00",
 	"notes" : "",
 	"suiteName" : "Rowan STON Cypress FileSystemGs RowanClientServices tests",
 	"gsVersion" : "3.7.0"
