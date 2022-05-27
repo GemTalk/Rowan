@@ -5724,6 +5724,27 @@ removeallmethods RowanAnsweringService
 removeallclassmethods RowanAnsweringService
 
 doit
+(RowanAnsweringService
+	subclass: 'RowanFileService'
+	instVarNames: #( path )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		comment: 'Simple service that returns the contents of directories. 
+
+A server file browser could be built on top of me.';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanFileService
+removeallclassmethods RowanFileService
+
+doit
 (RowanService
 	subclass: 'RowanAutoCommitService'
 	instVarNames: #( autoCommit )
@@ -5766,7 +5787,7 @@ removeallclassmethods RowanBrowserService
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName hasSubclasses )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -5783,6 +5804,26 @@ true.
 
 removeallmethods RowanClassService
 removeallclassmethods RowanClassService
+
+doit
+(RowanClassService
+	subclass: 'RowanFillerClassService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		comment: 'Used only on the client but may be passed to the server. 
+Doesn''t really do much but help the hierarchy behind the scenes.';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanFillerClassService
+removeallclassmethods RowanFillerClassService
 
 doit
 (RowanService
@@ -5824,6 +5865,188 @@ true.
 
 removeallmethods RowanDebuggerService
 removeallclassmethods RowanDebuggerService
+
+doit
+(RowanService
+	subclass: 'RowanDefinitionService'
+	instVarNames: #( name properties )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanDefinitionService
+removeallclassmethods RowanDefinitionService
+
+doit
+(RowanDefinitionService
+	subclass: 'RowanClassDefinitionService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanClassDefinitionService
+removeallclassmethods RowanClassDefinitionService
+
+doit
+(RowanDefinitionService
+	subclass: 'RowanComponentDefinitionService'
+	instVarNames: #( subcomponentDefinitions packageNames preloadDoitName projectDefinitionService postloadDoitName projectNames comment )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanComponentDefinitionService
+removeallclassmethods RowanComponentDefinitionService
+
+doit
+(RowanComponentDefinitionService
+	subclass: 'RowanPackageGroupService'
+	instVarNames: #( condition packageServices )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanPackageGroupService
+removeallclassmethods RowanPackageGroupService
+
+doit
+(RowanPackageGroupService
+	subclass: 'RowanPackageGroupDefinitionService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		comment: 'The packages in this class may or may not be loaded.';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanPackageGroupDefinitionService
+removeallclassmethods RowanPackageGroupDefinitionService
+
+doit
+(RowanComponentDefinitionService
+	subclass: 'RowanSubcomponentDefinitionService'
+	instVarNames: #( condition )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanSubcomponentDefinitionService
+removeallclassmethods RowanSubcomponentDefinitionService
+
+doit
+(RowanSubcomponentDefinitionService
+	subclass: 'RowanPlatformSubcomponentDefinitionService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanPlatformSubcomponentDefinitionService
+removeallclassmethods RowanPlatformSubcomponentDefinitionService
+
+doit
+(RowanDefinitionService
+	subclass: 'RowanMethodDefinitionService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanMethodDefinitionService
+removeallclassmethods RowanMethodDefinitionService
+
+doit
+(RowanDefinitionService
+	subclass: 'RowanPackageDefinitionService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanPackageDefinitionService
+removeallclassmethods RowanPackageDefinitionService
+
+doit
+(RowanDefinitionService
+	subclass: 'RowanProjectDefinitionService'
+	instVarNames: #( definitionOop componentDefinitions packageDefinitions specService comment conditionalAttributes platformProperties packageGroups showLoadedPackageGroupsOnly definition )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #( #logCreation )
+)
+		category: 'Rowan-Services-Core';
+		comment: 'RowanProjectDefinitionService presents a gui-ready presentation of a Rowan project definition and load specification.';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RowanProjectDefinitionService
+removeallclassmethods RowanProjectDefinitionService
 
 doit
 (RowanService
@@ -5896,8 +6119,8 @@ removeallclassmethods RowanInspectorService
 
 doit
 (RowanInspectorService
-	subclass: 'RowanSpecificationService'
-	instVarNames: #()
+	subclass: 'RowanLoadSpecService'
+	instVarNames: #( loadSpecOop loadSpecPath comment conditionalAttributes platformProperties loadSpec )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -5909,8 +6132,8 @@ doit
 true.
 %
 
-removeallmethods RowanSpecificationService
-removeallclassmethods RowanSpecificationService
+removeallmethods RowanLoadSpecService
+removeallclassmethods RowanLoadSpecService
 
 doit
 (RowanService
@@ -6007,7 +6230,7 @@ removeallclassmethods RowanProcessService
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty projectOop specService componentServices )
+	instVarNames: #( rwProject name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome isDiskDirty projectOop specService componentServices definition )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6044,42 +6267,6 @@ true.
 
 removeallmethods RowanDefinedProjectService
 removeallclassmethods RowanDefinedProjectService
-
-doit
-(RowanProjectService
-	subclass: 'RowanLoadedProjectService'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: RowanClientServices
-	options: #( #logCreation )
-)
-		category: 'Rowan-Services-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RowanLoadedProjectService
-removeallclassmethods RowanLoadedProjectService
-
-doit
-(RowanProjectService
-	subclass: 'RowanResolvedProjectService'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: RowanClientServices
-	options: #( #logCreation )
-)
-		category: 'Rowan-Services-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RowanResolvedProjectService
-removeallclassmethods RowanResolvedProjectService
 
 doit
 (RowanService
@@ -51907,7 +52094,7 @@ category: 'commands support'
 method: RowanService
 classHierarchy: theClasses
 	| superclassChains levels services hierarchies toExpand hierarchyServices |
-	superclassChains := self peerHierarchies: theClasses.
+	superclassChains := self superclassChainsFor: theClasses.
 	hierarchies := self extendHierarchies: superclassChains forClasses: theClasses.
 	levels := self hierarchiesByLevel: hierarchies.
 	services := Dictionary new.
@@ -51976,6 +52163,23 @@ createSampleSymbolDictionary
 
 	self removeSymbolDictionaryNamed: self sampleSymbolDictionaryName.
 	self createSymbolDictionaryNamed: self sampleSymbolDictionaryName
+%
+
+category: 'commands support'
+method: RowanService
+createServiceFor: aClass unlessExistingIn: newServices expand: toExpand
+	| service |
+	service := newServices
+		detect: [ :classService | classService name = aClass name ]
+		ifNone: [ RowanClassService new classServiceFromOop: aClass asOop ].
+	(toExpand includes: service theClass)
+		ifTrue: [ service expand: true ]
+		ifFalse: [ service expand: false ].
+
+	aClass subclasses size > 0
+		ifTrue: [ service hasSubclasses: true ].
+
+	^ service
 %
 
 category: 'symbol dictionaries'
@@ -52309,38 +52513,24 @@ servicePerform: symbol withArguments: collection shouldUpdate: shouldUpdate
 category: 'commands support'
 method: RowanService
 services: services from: levels expand: toExpand classes: theClasses
-  "In order to avoid the expense of creating duplicate services, we cache
+	"In order to avoid the expense of creating duplicate services, we cache
 them in the newServices temporary for look up"
 
-  | newServices |
-  newServices := Array new.
-  theClasses
-    do: [ :aClass | toExpand addAll: (organizer allSuperclassesOf: aClass) ].
-  levels
-    keysAndValuesDo: [ :key :value | 
-      | newKey service |
-      newKey := key = #'nil'
-        ifTrue: [ #'nil' ]
-        ifFalse: [ 
-          service := newServices
-            detect: [ :classService | classService name = key name ]
-            ifNone: [ RowanClassService new classServiceFromOop: key asOop ].
-          (toExpand includes: service theClass)
-            ifTrue: [ service expand: true ]
-            ifFalse: [ service expand: false ].
-          service ].
-      services
-        at: newKey
-        put:
-          (value
-            collect: [ :cls | 
-              service := newServices
-                detect: [ :classService | classService name = cls name ]
-                ifNone: [ RowanClassService new classServiceFromOop: cls asOop ].
-              (toExpand includes: service theClass)
-                ifTrue: [ service expand: true ]
-                ifFalse: [ service expand: false ].
-              service ]) ]
+	| newServices |
+	newServices := Array new.
+	theClasses
+		do: [ :aClass | toExpand addAll: (organizer allSuperclassesOf: aClass) ].
+	levels
+		keysAndValuesDo: [ :key :value | 
+			| newKey |
+			newKey := key = #'nil'
+				ifTrue: [ #'nil' ]
+				ifFalse: [ self createServiceFor: key unlessExistingIn: newServices expand: toExpand ].
+			services
+				at: newKey
+				put:
+					(value
+						collect: [ :cls | self createServiceFor: cls unlessExistingIn: newServices expand: toExpand ]) ]
 %
 
 category: 'replication'
@@ -52989,6 +53179,16 @@ needsCommit
 
 category: 'client commands'
 method: RowanAnsweringService
+packageNamed: packageName 
+	| service |
+	service := RowanPackageService forPackageNamed: packageName.
+	service update.
+	answer := service.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 packageOrDictionaryFor: classService 
 	| service |
 	service := classService packageName = Rowan unpackagedName
@@ -53037,6 +53237,18 @@ answeringService answer. "
   ns := ProfMonitor computeInterval: time / 1000.
   answer := ProfMonitor monitorBlock: block intervalNs: ns.
   RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+projectsRepositoryRoots: projectNames
+	answer := Dictionary new.
+	projectNames
+		do: [ :projectName | 
+			answer
+				at: projectName
+				put: (RowanProjectService new name: projectName) repositoryRootPath ].
+	RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -53158,9 +53370,27 @@ subclassCreationTemplate: className
 
 category: 'client commands'
 method: RowanAnsweringService
+symbolDictionaryNames
+	answer := (Rowan image symbolList
+		collect: [ :symbolDictionary | symbolDictionary name asString ])
+		asSortedCollection asOrderedCollection.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
 symbolExists: aSymbol
   answer := (Rowan image symbolList resolveSymbol: aSymbol) isNil not.
   RowanCommandResult addResult: self
+%
+
+category: 'testing'
+method: RowanAnsweringService
+symbolListHasNil
+	"Debugging code - Sending after each test in #tearDown method from client.
+	Halt if symbol list has a nil." 
+	Rowan image symbolList detect:[:symDict | symDict isNil] ifNone:[^false].
+	self halt.
 %
 
 category: 'client commands'
@@ -53220,6 +53450,44 @@ updateAutocompleteSymbols
   answer := Array with: newClassNames with: newLowerCaseSymbols.
   updateType := #'updateSymbols:'.
   RowanCommandResult addResult: self
+%
+
+! Class implementation for 'RowanFileService'
+
+!		Instance methods for 'RowanFileService'
+
+category: 'client commands'
+method: RowanFileService
+directoryContents
+	answer := (GsFile isServerDirectory: path)
+		ifTrue: [ 
+			(GsFile contentsOfDirectory: path onClient: false)
+				collect: [ :subpath | subpath -> (GsFile isServerDirectory: subpath) ] ]
+		ifFalse: [ nil ].
+	answer ifNil:[^self]. 
+	answer := (answer asSortedCollection:[:x :y | x key < y key]) asArray.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanFileService
+diveInto: directory
+	path := (Path from: path) resolveString: directory.
+	self directoryContents
+%
+
+category: 'client commands'
+method: RowanFileService
+isDirectory: directory
+	answer := GsFile isServerDirectory: directory. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanFileService
+pop
+	path := (Path from: path) parent asString. 
+	self directoryContents
 %
 
 ! Class implementation for 'RowanAutoCommitService'
@@ -53462,7 +53730,7 @@ newProjectNamed: projectName windowHandle: handle
 	definedProjectService projectOop: (project := Rowan newProjectNamed: projectName) asOop.
 	self saveRootObject: definedProjectService projectOop windowHandle: handle. 
 	definedProjectService := definedProjectService updateType: #newProject:.
-	definedProjectService specService: (RowanSpecificationService new initialize: project loadSpecification asOop).
+	definedProjectService specService: (RowanLoadSpecService new initialize: project loadSpecification asOop).
 	RowanCommandResult addResult: definedProjectService
 %
 
@@ -53609,15 +53877,17 @@ removeMethods: methodServices
 category: 'client commands'
 method: RowanBrowserService
 saveRootObject: oop windowHandle: integer
-  " a window has been opened on the client. Save the 
+	" a window has been opened on the client. Save the 
 	root object of the window so it won't be recycled"
 
-  | dictionary |
-  dictionary := SessionTemps current
-    at: #'rowanServicesWindowRegistry'
-    ifAbsentPut: [ Dictionary new ].
-  dictionary at: integer ifAbsentPut: [ Array new ].
-  (dictionary at: integer) add: (Object _objectForOop: oop)
+	| dictionary object |
+	dictionary := SessionTemps current
+		at: #'rowanServicesWindowRegistry'
+		ifAbsentPut: [ Dictionary new ].
+	dictionary at: integer ifAbsentPut: [ Array new ].
+	object := Object _objectForOop: oop.
+	((dictionary at: integer) includes: object)
+		ifFalse: [ (dictionary at: integer) add: (Object _objectForOop: oop) ]
 %
 
 category: 'accessing'
@@ -53637,7 +53907,12 @@ selectedClass: object
 category: 'client commands'
 method: RowanBrowserService
 unloadProjectsNamed: projectNames
-	projectNames do: [ :projectName | (Rowan projectNamed: projectName) unload ].
+	projectNames
+		do: [ :projectName | 
+			Rowan
+				projectNamed: projectName
+				ifPresent: [ :proj | proj unload ]
+				ifAbsent: [  ] ].
 	self updateProjects
 %
 
@@ -53825,6 +54100,7 @@ basicRefreshFrom: theClass
 	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 	self updateIsExtension.
+	hasSubclasses := (organizer subclassesOf: theClass) notEmpty.
 %
 
 category: 'Accessing'
@@ -54121,6 +54397,18 @@ hash
 	^self name hash bitXor: meta hash
 %
 
+category: 'accessing'
+method: RowanClassService
+hasSubclasses
+	^hasSubclasses
+%
+
+category: 'accessing'
+method: RowanClassService
+hasSubclasses: object
+	hasSubclasses := object
+%
+
 category: 'Accessing'
 method: RowanClassService
 hierarchyServices
@@ -54141,6 +54429,7 @@ initialize
 	isInSymbolList := true.
 	categories := Array new.
 	updateAfterCommand := true.
+	hasSubclasses := false.
 %
 
 category: 'initialization'
@@ -54191,7 +54480,7 @@ initializeTestMethodsFor: aClass
 	| testSelectors |
 	(aClass inheritsFrom: TestCase) ifTrue:[
 		aClass isAbstract ifTrue:[^self]. 
-		testSelectors := aClass thisClass suite tests collect:[:method | method selector]. 
+		testSelectors := aClass thisClass allTestSelectors.
 		methods do:[:methodService | 
 			methodService isTestMethod: (testSelectors includes: methodService selector)]].
 %
@@ -54437,20 +54726,23 @@ objectInBaseNamed: aString
 category: 'client commands'
 method: RowanClassService
 oneLevelClassHierarchy
-  "good for expanding an existing hierarchy quickly"
+	"good for expanding an existing hierarchy quickly"
 
-  | behavior sortedSubclasses |
-  behavior := self theClass.
-  hierarchyServices := Dictionary new.
-  hierarchyServices at: #'expand' put: Array new.
-  sortedSubclasses := behavior subclasses
-    asSortedCollection: [ :x :y | x name < y name ].
-  sortedSubclasses
-    do: [ :subclass | 
-      | classService |
-      classService := (self classServiceFromOop: subclass asOop) meta: meta.
-      (hierarchyServices at: #'expand') add: classService ].
-  RowanCommandResult addResult: self
+	| behavior sortedSubclasses |
+	behavior := self theClass.
+	hierarchyServices := Dictionary new.
+	hierarchyServices at: #'expand' put: Array new.
+	sortedSubclasses := behavior subclasses
+		asSortedCollection: [ :x :y | x name < y name ].
+	sortedSubclasses
+		do: [ :subclass | 
+			| classService |
+			classService := (self classServiceFromOop: subclass asOop) meta: meta.
+			(hierarchyServices at: #'expand') add: classService.
+			(organizer subclassesOf: subclass) notEmpty
+				ifTrue: [ classService hasSubclasses: true ] ].
+	updateType := #'updatedOneLevelInClassHierarchy:browser:'.
+	RowanCommandResult addResult: self
 %
 
 category: 'Accessing'
@@ -54739,46 +55031,50 @@ runMethodTests: methodServices
 category: 'client commands'
 method: RowanClassService
 saveMethodSource: source category: category
-  | behavior compilationResult gsNMethod updatedCategory methodService |
-  meta
-    ifNil: [ 
-      behavior := Object _objectForOop: oop.
-      meta := behavior isMeta ]
-    ifNotNil: [ 
-      behavior := meta
-        ifTrue: [ self theClass class ]
-        ifFalse: [ self theClass ] ].
-  oop := behavior asOop.
-  self initializeMethodHistoryFor: source.
-  updatedCategory := category ifNil: [ 'other' ].
-  compilationResult := self
-    compileMethod: source
-    behavior: behavior
-    symbolList: Rowan image symbolList
-    inCategory: updatedCategory asSymbol.
-  (gsNMethod := compilationResult key) isNil
-    ifTrue: [ 
-      System
-        signal: 1001
-        args: (Array with: compilationResult value)
-        signalDictionary: GemStoneError ].
-  self update.
-  methodService := self
-    methodServiceFrom: gsNMethod
-    in: behavior
-    compiltationResult: compilationResult.
-  RowanCommandResult addResult: methodService.
-  RowanQueryService new
-    organizer: ClassOrganizer new;
-    hierarchyImplementorsOf: methodService selector
-      inClass: methodService className.	"this will update hierarchy method indicators for client"
-  self selectedMethods: (Array with: methodService).
-  self updateDirtyState.
-  self updateTests.
-  self
-    updateSymbols:
-      gsNMethod _selectorPool asArray , (Array with: methodService selector).
-  methodService addToMethodHistory
+	| behavior compilationResult gsNMethod updatedCategory methodService |
+	meta
+		ifNil: [ 
+			behavior := Object _objectForOop: oop.
+			meta := behavior isMeta ]
+		ifNotNil: [ 
+			behavior := meta
+				ifTrue: [ self theClass class ]
+				ifFalse: [ self theClass ] ].
+	oop := behavior asOop.
+	self initializeMethodHistoryFor: source.
+	updatedCategory := category ifNil: [ 'other' ].
+	compilationResult := self
+		compileMethod: source
+		behavior: behavior
+		symbolList: Rowan image symbolList
+		inCategory: updatedCategory asSymbol.
+	(gsNMethod := compilationResult key) isNil
+		ifTrue: [ 
+			System
+				signal: 1001
+				args: (Array with: compilationResult value)
+				signalDictionary: GemStoneError ].
+	methodService := self
+		methodServiceFrom: gsNMethod
+		in: behavior
+		compiltationResult: compilationResult.
+	RowanCommandResult addResult: methodService.
+	RowanQueryService new
+		organizer: ClassOrganizer new;
+		hierarchyImplementorsOf: methodService selector
+			inClass: methodService className.	"this will update hierarchy method indicators for client"
+	self selectedMethods: (Array with: methodService).
+	self updateDirtyState.
+	methods isEmpty
+		ifTrue: [ self updateTests ]
+		ifFalse: [ 
+			(methods includes: methodService)
+				ifFalse: [ methods add: methodService ] ].
+	self
+		updateSymbols:
+			gsNMethod _selectorPool asArray , (Array with: methodService selector).
+	methodService addToMethodHistory.
+	RowanCommandResult addResult: self
 %
 
 category: 'other'
@@ -54817,6 +55113,7 @@ category: 'perform'
 method: RowanClassService
 servicePerform: symbol withArguments: collection
 	| wasClean |
+	packageName ifNil: [self update]. "the class may not have enough information to perform the symbol"
 	self isUpdatingButFoundToBeDeleted
 		ifTrue: [ ^ self handleDeletedService ].
 	wasClean := self isPackageClean.
@@ -55117,9 +55414,7 @@ forComponentNamed: componentName projectService: theProjectService
 category: 'operations'
 method: RowanComponentService
 addFlattenedHierarchyTo: dictionary
-	dictionary
-		at: self
-		put: (componentServices collect: [ :service | service ]).
+	dictionary at: self put: componentServices.
 	componentServices
 		do: [ :componentService | componentService addFlattenedHierarchyTo: dictionary ]
 %
@@ -55316,6 +55611,697 @@ updateProcesses
   RowanCommandResult addResult: self.
   (self registeredWindowsIncludesOop: initialProcessOop) 
 		ifTrue:[	"the oop should be there but just in case" self releaseProcessOop: initialProcessOop.].
+%
+
+! Class implementation for 'RowanDefinitionService'
+
+!		Class methods for 'RowanDefinitionService'
+
+category: 'accessing'
+classmethod: RowanDefinitionService
+named: aName
+
+	^self new name: aName
+%
+
+!		Instance methods for 'RowanDefinitionService'
+
+category: 'accessing'
+method: RowanDefinitionService
+name
+	^name
+%
+
+category: 'accessing'
+method: RowanDefinitionService
+name: object
+	name := object
+%
+
+category: 'accessing'
+method: RowanDefinitionService
+properties
+	^properties
+%
+
+category: 'accessing'
+method: RowanDefinitionService
+properties: object
+	properties := object
+%
+
+! Class implementation for 'RowanComponentDefinitionService'
+
+!		Class methods for 'RowanComponentDefinitionService'
+
+category: 'private'
+classmethod: RowanComponentDefinitionService
+componentDefinitionServiceClassFor: theComponent
+	^ (theComponent isKindOf: RwPlatformSubcomponent)
+		ifTrue: [ RowanPlatformSubcomponentDefinitionService ]
+		ifFalse: [ 
+			(theComponent isKindOf: RwSubcomponent)
+				ifTrue: [ RowanSubcomponentDefinitionService ]
+				ifFalse: [ RowanComponentDefinitionService ] ]
+%
+
+category: 'instance creation'
+classmethod: RowanComponentDefinitionService
+forComponentNamed: componentName projectDefinition: projectDefinition
+	| inst subcomponentNames component |
+	inst := self new.
+	inst name: componentName.
+	component := projectDefinition
+		componentOrPackageGroupNamed: componentName
+		ifAbsent: [ nil ].
+	(projectDefinition componentNamed: componentName ifAbsent: [ ^ nil ])
+		ifNotNil: [ 
+			inst setPrePostDoItsFrom: component.
+			inst setConditionFrom: component ].
+	subcomponentNames := component
+		ifNil: [ Array new ]
+		ifNotNil: [ component componentNames ].
+	inst
+		subcomponentDefinitions:
+			(subcomponentNames
+				collect: [ :subcomponentName | 
+					| subComponent |
+					(subComponent := projectDefinition
+						componentNamed: subcomponentName
+						ifAbsent: [  ])
+						ifNotNil: [ 
+							(self componentDefinitionServiceClassFor: subComponent)
+								forComponentNamed: subcomponentName
+								projectDefinition: projectDefinition ] ]) asSet asArray.
+	^ inst
+%
+
+!		Instance methods for 'RowanComponentDefinitionService'
+
+category: 'other'
+method: RowanComponentDefinitionService
+addFlattenedHierarchyTo: dictionary
+	dictionary at: self put: subcomponentDefinitions.
+	subcomponentDefinitions
+		do: [ :componentService | componentService addFlattenedHierarchyTo: dictionary ]
+%
+
+category: 'client commands support'
+method: RowanComponentDefinitionService
+computePackageNames
+	self computePackageNames: projectDefinitionService definition
+%
+
+category: 'client commands support'
+method: RowanComponentDefinitionService
+computePackageNames: projectDefinition
+	| component |
+	component := projectDefinition
+		componentNamed: name
+		ifAbsent: [ ^ packageNames := Array new ].
+	packageNames := component packageNames
+%
+
+category: 'client commands'
+method: RowanComponentDefinitionService
+packageNames
+	self computePackageNames. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+packageNames: object
+	packageNames := object
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+postloadDoitName
+	^postloadDoitName
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+postloadDoitName: object
+	postloadDoitName := object
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+preloadDoitName
+	^preloadDoitName
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+preloadDoitName: object
+	preloadDoitName := object
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+projectDefinitionService
+	^projectDefinitionService
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+projectDefinitionService: object
+	projectDefinitionService := object
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+setConditionFrom: component
+
+	"only subcomponents have conditions"
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+setPrePostDoItsFrom: component
+	self
+		preloadDoitName:
+			(component preloadDoitName
+				ifNotNil: [ :theName | theName -> (component doitDict at: theName) ]).
+	self
+		postloadDoitName:
+			(component postloadDoitName
+				ifNotNil: [ :theName | theName -> (component doitDict at: theName) ])
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+subcomponentDefinitions
+	^subcomponentDefinitions
+%
+
+category: 'accessing'
+method: RowanComponentDefinitionService
+subcomponentDefinitions: object
+	subcomponentDefinitions := object
+%
+
+! Class implementation for 'RowanPackageGroupService'
+
+!		Class methods for 'RowanPackageGroupService'
+
+category: 'constants'
+classmethod: RowanPackageGroupService
+allPackagesGroupName
+	^'All Packages'
+%
+
+category: 'instance creation'
+classmethod: RowanPackageGroupService
+forPackageGroupNamed: packageGroupName projectDefinition: projectDefService
+	| inst projectDefinition |
+	inst := self new name: packageGroupName; projectDefinitionService: projectDefService.
+	projectDefinition := projectDefService definition. 
+	inst condition: (projectDefinition packageGroupNamed: packageGroupName) condition.
+	inst computePackageNames.
+	^ inst
+%
+
+!		Instance methods for 'RowanPackageGroupService'
+
+category: 'client commands support'
+method: RowanPackageGroupService
+computePackageNames
+	projectDefinitionService := RowanProjectDefinitionService new name: projectDefinitionService name.  "Always get a new one in browser"
+	name = self class allPackagesGroupName
+		ifTrue: [ 
+			packageNames := Rowan image
+				packageNamesForLoadedProjectNamed: projectDefinitionService name ]
+		ifFalse: [ 
+			| loadedPackageNames packageGroup |
+			loadedPackageNames := (Rowan image
+				loadedProjectNamed: projectDefinitionService name) packageNames.
+			packageGroup :=  self projectDefinition packageGroupNamed: name. 
+			packageNames := packageGroup packageNames
+				select: [ :pkgName | loadedPackageNames includes: pkgName ] ]
+%
+
+category: 'updating'
+method: RowanPackageGroupService
+computePackageServices
+	packageServices := packageNames
+		collect: [ :packageName | (RowanPackageService forPackageNamed: packageName) update ]
+%
+
+category: 'accessing'
+method: RowanPackageGroupService
+condition
+	^condition
+%
+
+category: 'accessing'
+method: RowanPackageGroupService
+condition: object
+	condition := object
+%
+
+category: 'replication'
+method: RowanPackageGroupService
+excludedInstVars
+
+	^super excludedInstVars, #( #projectDefinition)
+%
+
+category: 'accessing'
+method: RowanPackageGroupService
+projectDefinition
+	^projectDefinitionService initializeDefinitionOop definition
+%
+
+category: 'updating'
+method: RowanPackageGroupService
+update
+	self computePackageNames. 
+	self computePackageServices. 
+	wasUpdated := true. 
+	RowanCommandResult addResult: self.
+%
+
+! Class implementation for 'RowanPackageGroupDefinitionService'
+
+!		Instance methods for 'RowanPackageGroupDefinitionService'
+
+category: 'client commands'
+method: RowanPackageGroupDefinitionService
+computePackageNames
+	name = self class allPackagesGroupName
+		ifTrue: [ packageNames := self projectDefinition packageNames ]
+		ifFalse: [ 
+			| packageGroup |
+			packageGroup := self projectDefinition packageGroupNamed: name.
+			packageNames := packageGroup packageNames ]
+%
+
+category: 'packages'
+method: RowanPackageGroupDefinitionService
+computePackageServices
+	packageServices := packageNames
+		collect: [ :packageName | RowanPackageDefinitionService new name: packageName ]
+%
+
+! Class implementation for 'RowanSubcomponentDefinitionService'
+
+!		Instance methods for 'RowanSubcomponentDefinitionService'
+
+category: 'accessing'
+method: RowanSubcomponentDefinitionService
+setConditionFrom: component
+	condition := component condition
+%
+
+! Class implementation for 'RowanProjectDefinitionService'
+
+!		Instance methods for 'RowanProjectDefinitionService'
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addComponent: componentName
+	self definition addLoadComponentNamed: componentName.
+	self initializeComponentDefinitions.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPackageGroupNamed: aComponentName
+	"for adding new package groups. condition and comment added later by the user"
+
+	self definition
+		addPackageGroupNamed: aComponentName
+		condition: String new
+		comment: String new
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPackageGroupNamed: packageGroupName condition: condition comment: aString
+	(self definition packageGroupNamed: packageGroupName) condition: condition.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPackageNamed: packageName toComponentNamed: componentName
+	| componentDefinitionService |
+	self definition addPackageNamed: packageName toComponentNamed: componentName.
+	componentDefinitionService := (self
+		componentDefinitionServiceClassFor: componentName)
+		forComponentNamed: componentName
+		projectDefinition: self definition.
+	componentDefinitionService computePackageNames: self definition.
+	RowanCommandResult addResult: componentDefinitionService
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPackagesNamed: packageNames toPackageGroupNamed: packageGroupName
+	| packageGroupService |
+	(self definition packageGroupNamed: packageGroupName) addPackageNames: packageNames.
+	packageGroupService := self packageGroupServiceClass forPackageGroupNamed: packageGroupName projectDefinition: self.
+	RowanCommandResult addResult: packageGroupService
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPostloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	self definition
+		addPostloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addPreloadDoitName: doitName withSource: doitSource toComponentNamed: aComponentName
+	self definition
+		addPreloadDoitName: doitName
+		withSource: doitSource
+		toComponentNamed: aComponentName.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+addSubcomponentNamed: componentName toComponentNamed: toComponentName
+	self rowanFixMe.	"What should the default condition be?"
+	self definition
+		addSubcomponentNamed: componentName
+		condition: 'common'
+		toComponentNamed: toComponentName.
+	self initializeComponentDefinitions.
+	RowanCommandResult addResult: self
+%
+
+category: 'constants'
+method: RowanProjectDefinitionService
+allUsersName
+
+	^self definition loadSpecification _gemstoneAllUsersName
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+comment: projectComment
+	self definition loadSpecification comment: projectComment
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+componentDefinitions
+	^componentDefinitions
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+componentDefinitions: object
+	componentDefinitions := object
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+componentDefinitionServiceClassFor: componentName
+	| theComponent |
+	theComponent := self definition componentNamed: componentName.
+	^ RowanComponentDefinitionService
+		componentDefinitionServiceClassFor: theComponent
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+componentDefinitionServicesFor: projectDefinition
+	| componentDictionary |
+	componentDictionary := Dictionary new.
+	componentDictionary
+		at: #'nil'
+		put:
+			(projectDefinition componentNames
+				collect: [ :componentName | 
+					| componentDefinitionService |
+					componentDefinitionService := (self
+						componentDefinitionServiceClassFor: componentName)
+						forComponentNamed: componentName
+						projectDefinition: projectDefinition.
+					componentDefinitionService
+						ifNotNil: [ 
+							componentDefinitionService addFlattenedHierarchyTo: componentDictionary.
+							componentDefinitionService ] ]) asSet asArray.	"eliminate nils"
+	^ componentDictionary
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+definition
+
+	^Object _objectForOop: definitionOop
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+editInWindow: handle
+	self initializeDefinitionOop.
+	handle
+		ifNotNil: [ 
+			RowanBrowserService new saveRootObject: self asOop windowHandle: handle.
+			RowanBrowserService new saveRootObject: definitionOop windowHandle: handle ].
+	RowanCommandResult addResult: self
+%
+
+category: 'replication'
+method: RowanProjectDefinitionService
+excludedInstVars
+	^ super excludedInstVars , #(#'definition')
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+export
+
+	self definition resolveProject export
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+exportLoadSpecification
+	self definition resolveProject exportLoadSpecification
+%
+
+category: 'initialization'
+method: RowanProjectDefinitionService
+initialize
+
+	super initialize. 
+	showLoadedPackageGroupsOnly := true.
+%
+
+category: 'initialization'
+method: RowanProjectDefinitionService
+initializeComponentDefinitions
+	self
+		componentDefinitions: (self componentDefinitionServicesFor: self definition)
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+initializeDefinitionOop
+	definitionOop
+		ifNil: [ 
+			definition := (Rowan projectNamed: name) defined.
+			definitionOop := definition asOop ]
+%
+
+category: 'initialization'
+method: RowanProjectDefinitionService
+initializePackageGroups
+	definitionOop ifNil: [self initializeDefinitionOop].
+	self
+		packageGroups:
+			(self definition packageGroupNames
+				collect: [ :theName | 
+					self packageGroupServiceClass
+						forPackageGroupNamed: theName
+						projectDefinition: self ]).
+	wasUpdated := true.
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+movePackageNamed: aPackageName toComponentNamed: aComponentName
+	self definition movePackageNamed: aPackageName toComponentNamed: aComponentName
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+packageDefinitions
+	^packageDefinitions
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+packageDefinitions: object
+	packageDefinitions := object
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+packageGroups
+	^packageGroups
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+packageGroups: object
+	packageGroups := object
+%
+
+category: 'accessing'
+method: RowanProjectDefinitionService
+packageGroupServiceClass
+	^ showLoadedPackageGroupsOnly
+		ifTrue: [ RowanPackageGroupService ]
+		ifFalse: [ RowanPackageGroupDefinitionService ]
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+removeComponentNamed: componentName
+	self definition removeComponentNamed: componentName.
+	self initializeComponentDefinitions.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+removePackageGroupNamed: aComponentName
+	self definition removePackageGroupNamed: aComponentName
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+removePackageGroupsNamed: packageGroupNames
+	packageGroupNames
+		do: [ :packageGroupName | self definition removePackageGroupNamed: packageGroupName].
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+removePackagesFromProjectDefinition: packageNames
+	packageNames
+		do: [ :packageName | self definition removePackageNamed: packageName ]
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+removePackagesNamed: packageNames fromPackageGroupNamed: packageGroupName
+	packageNames
+		do: [ :packageName | 
+			(self definition packageGroupNamed: packageGroupName)
+				removePackageNamed: packageName ]
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+renameComponent: aComponentPath to: aComponentName
+	self definition renameComponentNamed: aComponentPath to: aComponentName.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+renamePackageGroup: packageGroupName to: newPackageGroupName
+	self definition renamePackageGroupNamed: packageGroupName to: newPackageGroupName.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+renamePackageNamed: packageName to: newPackageName
+	self definition renamePackageNamed: packageName to: newPackageName.
+	self update. 
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+setConditionalAttributes: array
+	self definition customConditionalAttributes: array
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+setLoadSpecProperty: property to: value
+	self definition loadSpecification
+		perform: (property , ':') asSymbol
+		with: value
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+setPlatformProperty: property to: value
+	property = #'defaultMethodEnv'
+		ifTrue: [ self definition loadSpecification gemstoneSetDefaultMethodEnvTo: value ].
+	property = #'defaultSymbolDict'
+		ifTrue: [ self definition loadSpecification gemstoneSetDefaultSymbolDictNameTo: value ].
+
+	property = #'useSessionMethods'
+		ifTrue: [ 
+			self definition loadSpecification
+				gemstoneSetDefaultUseSessionMethodsForExtensionsTo: value ]
+%
+
+category: 'client commands'
+method: RowanProjectDefinitionService
+subcomponentNamed: subcomponentName condition: condition
+	| subcomponent |
+	subcomponent := self definition componentNamed: subcomponentName.
+	subcomponent condition: condition.
+%
+
+category: 'updating'
+method: RowanProjectDefinitionService
+update
+	self initializeComponentDefinitions.
+	self initializePackageGroups. 
+	self updateLoadSpecService.
+	comment := self definition loadSpecification comment. 
+	conditionalAttributes := self definition customConditionalAttributes asOrderedCollection. 
+	self updatePlatformProperties. 
+	RowanCommandResult addResult: self
+%
+
+category: 'updating'
+method: RowanProjectDefinitionService
+updateLoadSpecService
+	specService := RowanLoadSpecService new
+		initialize: self definition loadSpecification asOop.
+	specService removeHiddenAttributes.
+%
+
+category: 'updating'
+method: RowanProjectDefinitionService
+updatePlatformProperties
+	platformProperties := Dictionary new.
+	platformProperties
+		at: #'defaultMethodEnv'
+		put:
+			(self definition loadSpecification
+				gemstoneDefaultMethodEnvForUser: self allUsersName).
+	platformProperties
+		at: #'defaultSymbolDict'
+		put: self definition loadSpecification gemstoneDefaultSymbolDictName.
+	platformProperties
+		at: #'useSessionMethods'
+		put:
+			(self definition loadSpecification
+				gemstoneDefaultUseSessionMethodsForExtensionsForUser: self allUsersName)
 %
 
 ! Class implementation for 'RowanDictionaryService'
@@ -56057,37 +57043,181 @@ variablesFrom: indexStart to: indexStop
   ^ indexedVars
 %
 
-! Class implementation for 'RowanSpecificationService'
+! Class implementation for 'RowanLoadSpecService'
 
-!		Instance methods for 'RowanSpecificationService'
+!		Instance methods for 'RowanLoadSpecService'
 
 category: 'command support'
-method: RowanSpecificationService
+method: RowanLoadSpecService
 addInstVars: anObject
 	"coerce the oops into strings for display in the browsers"
 
+	objects := Array new.
 	super addInstVars: anObject.
 	1 to: objects size do: [ :index | 
 		objects
 			at: index
 			put:
 				(objects at: index) key
-					-> (Object _objectForOop: (objects at: index) value) printString ]
+					->
+						((Object _objectForOop: (objects at: index) value) ifNil: [ String new ])
+							asString ]
+%
+
+category: 'updating'
+method: RowanLoadSpecService
+allUsersName
+
+	^self loadSpec _gemstoneAllUsersName
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+editInWindow: handle
+	loadSpecPath
+		ifNotNil: [ :path | 
+			[ loadSpecOop := (RwSpecification fromFile: loadSpecPath) asOop ]
+				on: Error
+				do: [ :ex | self inform: 'Not a valid load spec file!'. ^self ] ].
+	handle
+		ifNotNil: [ RowanBrowserService new saveRootObject: loadSpecOop windowHandle: handle ].
+	self update.
+	RowanCommandResult addResult: self
+%
+
+category: 'ston'
+method: RowanLoadSpecService
+excludedInstVars
+
+	^super excludedInstVars, #( #loadSpec)
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+export
+	| path directory |
+	path := Path from: loadSpecPath.
+	directory := path parent fullName. 
+	self loadSpec exportTo:  (FileReference / directory)
+%
+
+category: 'constants'
+method: RowanLoadSpecService
+hiddenAttributes
+	^ #('customConditionalAttributes' 'comment' 'componentNames' 'platformProperties' 'mercurialUrl' 'svnUrl' 'projectsHome' 'repositoryResolutionPolicy')
 %
 
 category: 'initialization'
-method: RowanSpecificationService
+method: RowanLoadSpecService
+initialize
+	super initialize.
+	isOop := true.
+	maxIndexedVars := 0.
+	conditionalAttributes := Array new.
+	comment := String new.
+	platformProperties := Dictionary new.
+%
+
+category: 'initialization'
+method: RowanLoadSpecService
 initialize: anOop
-	"intention revealing - not really an inspect"
+	loadSpecOop := anOop. 
 	isOop := true. 
-	maxIndexedVars := 0. 
+	maxIndexedVars := 0.
+	conditionalAttributes := Array new. 
+	comment := String new. 
 	super inspect: anOop
 %
 
 category: 'constants'
-method: RowanSpecificationService
+method: RowanLoadSpecService
 instVarPrefix
 	^ String new
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+load
+	self loadSpec load
+%
+
+category: 'accessing'
+method: RowanLoadSpecService
+loadSpec
+
+	^loadSpec ifNil: [loadSpec := Object _objectForOop: loadSpecOop]
+%
+
+category: 'accessing'
+method: RowanLoadSpecService
+removeHiddenAttributes
+	self hiddenAttributes
+		do: [ :attribute | objects remove: (objects detect: [ :assoc | assoc key = attribute ]) ]
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+setComment: aString
+	self loadSpec comment: aString
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+setConditionalAttributes: anArray
+	self loadSpec customConditionalAttributes: anArray
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+setLoadSpecProperty: property to: value
+	self loadSpec
+		perform: (property , ':') asSymbol
+		with: value
+%
+
+category: 'client commands'
+method: RowanLoadSpecService
+setPlatformProperty: property to: value
+	property = #'defaultMethodEnv'
+		ifTrue: [ self loadSpec gemstoneSetDefaultMethodEnvTo: value ].
+	property = #'defaultSymbolDict'
+		ifTrue: [ self loadSpec gemstoneSetDefaultSymbolDictNameTo: value ].
+	property = #'useSessionMethods'
+		ifTrue: [ self loadSpec gemstoneSetDefaultUseSessionMethodsForExtensionsTo: value ]
+%
+
+category: 'updating'
+method: RowanLoadSpecService
+update
+	loadSpecOop ifNil:[^self]. 
+	self updateSettableAttributes.
+	comment := self loadSpec comment.
+	conditionalAttributes := self loadSpec customConditionalAttributes asOrderedCollection. 
+	self updatePlatformProperties.
+%
+
+category: 'updating'
+method: RowanLoadSpecService
+updatePlatformProperties
+	platformProperties := Dictionary new.
+	platformProperties
+		at: #'defaultMethodEnv'
+		put: (self loadSpec gemstoneDefaultMethodEnvForUser: self allUsersName).
+	platformProperties
+		at: #'defaultSymbolDict'
+		put: self loadSpec gemstoneDefaultSymbolDictName.
+	platformProperties
+		at: #'useSessionMethods'
+		put:
+			(self loadSpec
+				gemstoneDefaultUseSessionMethodsForExtensionsForUser: self allUsersName)
+%
+
+category: 'updating'
+method: RowanLoadSpecService
+updateSettableAttributes
+	self initialize: loadSpecOop.
+	self removeHiddenAttributes
 %
 
 ! Class implementation for 'RowanLoggingService'
@@ -56652,6 +57782,8 @@ initialize
 	failedCompile := false.
 	isMethodForBlock := false.
 	hasMethodHistory := true.
+	inSelectedPackage := true.
+	isExtension := false.
 %
 
 category: 'initialization'
@@ -56684,14 +57816,13 @@ initialize: aGsNMethod organizer: aClassOrganizer
 category: 'initialization'
 method: RowanMethodService
 initializeTestMethodsFor: aClass
-  | testSelectors |
-  (aClass inheritsFrom: TestCase)
-    ifTrue: [ 
-      aClass isAbstract
-        ifTrue: [ ^ self ].
-      testSelectors := aClass thisClass suite tests
-        collect: [ :method | method selector ].
-      isTestMethod := testSelectors includes: selector ]
+	| testSelectors |
+	(aClass inheritsFrom: TestCase)
+		ifTrue: [ 
+			aClass isAbstract
+				ifTrue: [ ^ self ].
+			testSelectors := aClass thisClass allTestSelectors.
+			isTestMethod := testSelectors includes: selector ]
 %
 
 category: 'testing'
@@ -57613,6 +58744,21 @@ method: RowanProjectService
 
 category: 'client commands'
 method: RowanProjectService
+addNewPackageNamed: packageName inSymbolDictionaryNamed: symbolDictionaryName toComponentNamed: componentName
+	Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self rwProject
+				addNewPackageNamed: packageName
+				inSybolDictionaryNamed: symbolDictionaryName
+				toComponentNamed: componentName.
+			self update.
+			^ self answer: #'added' ].
+	self answer: #'duplicatePackage'
+%
+
+category: 'client commands'
+method: RowanProjectService
 addPackageNamed: packageName
 	self rowanFixMe.	"remove after #addPackageNamed:toComponentNamed: is integrated in v2.0 work"
 	Rowan image
@@ -57679,7 +58825,7 @@ basicRefresh
 	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
 	isDiskDirty := self isGitDirty.
 	componentServices := self componentServices.
-	specService := RowanSpecificationService new initialize: self rwProject loadSpecification asOop.
+	specService := RowanLoadSpecService new initialize: self rwProject loadSpecification asOop.
 	RowanCommandResult addResult: self
 %
 
@@ -57750,12 +58896,18 @@ commitWithMessage: message
 category: 'accessing'
 method: RowanProjectService
 componentServices
+	^self componentServicesFor: self rwProject
+%
+
+category: 'client commands support'
+method: RowanProjectService
+componentServicesFor: theRwProject
 	| componentDictionary |
 	componentDictionary := Dictionary new.
 	componentDictionary
 		at: #'nil'
 		put:
-			(self rwProject componentNames
+			(theRwProject componentNames
 				collect: [ :componentName | 
 					| componentService |
 					componentService := RowanComponentService
@@ -57782,6 +58934,15 @@ createProjectNamed: projectName in: symbolDictionaryName
 	(Rowan projectNames includes: projectName) ifFalse:[
 		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
 				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
+%
+
+category: 'accessing'
+method: RowanProjectService
+definition
+	definition := RowanProjectDefinitionService named: name.
+	definition initializeDefinitionOop.
+	RowanCommandResult addResult: self.
+	^ definition
 %
 
 category: 'replication'
@@ -58093,7 +59254,7 @@ removeProjectNamed: projectName
 category: 'rowan'
 method: RowanProjectService
 repositoryRoot
-	^ (RwProject newNamed: name) repositoryRoot
+	^ self rwProject repositoryRoot
 %
 
 category: 'rowan'
@@ -58222,8 +59383,14 @@ unload
 category: 'update'
 method: RowanProjectService
 update
+	| def |
 	super update.
 	self refresh.
+	isLoaded ifFalse:[^self]. 
+	name
+		ifNotNil: [ 
+			def := self definition initializePackageGroups.
+			RowanCommandResult addResult: def ]
 %
 
 category: 'update'
@@ -58288,59 +59455,6 @@ load
 category: 'client commands'
 method: RowanDefinedProjectService
 resolve
-%
-
-! Class implementation for 'RowanLoadedProjectService'
-
-!		Instance methods for 'RowanLoadedProjectService'
-
-category: 'client commands'
-method: RowanLoadedProjectService
-define
-%
-
-category: 'client commands'
-method: RowanLoadedProjectService
-load
-%
-
-category: 'client commands'
-method: RowanLoadedProjectService
-resolve
-%
-
-category: 'client commands'
-method: RowanLoadedProjectService
-unload
-%
-
-category: 'client commands'
-method: RowanLoadedProjectService
-write
-%
-
-! Class implementation for 'RowanResolvedProjectService'
-
-!		Instance methods for 'RowanResolvedProjectService'
-
-category: 'client commands'
-method: RowanResolvedProjectService
-define
-%
-
-category: 'client commands'
-method: RowanResolvedProjectService
-load
-%
-
-category: 'client commands'
-method: RowanResolvedProjectService
-read
-%
-
-category: 'client commands'
-method: RowanResolvedProjectService
-write
 %
 
 ! Class implementation for 'RowanQueryService'
@@ -97840,12 +98954,6 @@ jadeServerClassNamed: className
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
-loadedProjectServiceClass
-	^ RowanLoadedProjectService
-%
-
-category: '*rowan-services-extensions'
-method: RwGsPlatform
 loggingServiceClass
 
 	^ RowanLoggingService
@@ -97890,12 +98998,6 @@ projectTools
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
-resolvedProjectServiceClass
-	^ RowanResolvedProjectService
-%
-
-category: '*rowan-services-extensions'
-method: RwGsPlatform
 serviceClass
 
 	^ RowanService
@@ -97915,21 +99017,29 @@ serviceClasses
 		add: RowanAutoCommitService;
 		add: RowanBrowserService;
 		add: RowanClassService;
+		add: RowanClassDefinitionService;
 		add: RowanComponentService;
+		add: RowanComponentDefinitionService;
 		add: RowanDebuggerService;
 		add: RowanDefinedProjectService;
+		add: RowanDefinitionService;
 		add: RowanDictionaryService;
 		add: RowanFrameService;
 		add: RowanInspectorService;
-		add: RowanLoadedProjectService;
+		add: RowanLoadSpecService;
 		add: RowanLoggingService;
 		add: RowanMethodService;
+		add: RowanMethodDefinitionService; 
 		add: RowanPackageService;
+		add: RowanPackageDefinitionService;
+		add: RowanPackageGroupService;
+		add: RowanPackageGroupDefinitionService;
+		add: RowanPlatformSubcomponentDefinitionService; 
 		add: RowanProcessService;
 		add: RowanProjectService;
+		add: RowanProjectDefinitionService;
 		add: RowanQueryService;
-		add: RowanResolvedProjectService;
-		add: RowanSpecificationService;
+		add: RowanSubcomponentDefinitionService; 
 		add: RowanTestService;
 		add: RowanVariableService.
 	^ array
@@ -97945,7 +99055,7 @@ serviceClassFor: className
 category: '*rowan-services-extensions'
 method: RwGsPlatform
 specificationServiceClass
-  ^ RowanSpecificationService
+  ^ RowanLoadSpecService
 %
 
 ! Class extensions for 'RwGsSymbolDictionaryRegistryV2'
