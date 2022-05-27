@@ -1,0 +1,7725 @@
+{
+	"properties" : { },
+	"resultsSummary" : {
+		"passed" : 1511,
+		"errors" : 16,
+		"failures" : 15,
+		"summary" : "1542 run, 1511 passed, 15 failed, 16 errors"
+	},
+	"testCases" : [
+		{
+			"status" : "passed",
+			"selector" : "testBasic",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic_nested",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue789",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUknownPlatform",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUknownPlatformPropertiesKey",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUndefinedPackageName",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnknownPackagePropertName",
+			"className" : "RwSimpleProjectLoadComponentV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic",
+			"className" : "RwResolvedProjectComponentsV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue789",
+			"className" : "RwActiveComponentTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditMethodsNotIdentical",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditMismatchedMethodCategory",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditMismatchedMethodCategoryAndMethodsNotIdentical",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditMissingCompiledMethod",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAutomaticMigration_gitolite",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeferredMigration_gitlab",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndexCards",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue14",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_class_to_symbolDict",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_class_to_symbolDict_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_class_to_symbolDict_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_newClassVariable_to_symbolDict",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_newClassVersion_to_symbolDict",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_classVariable",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_newClassVersion",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_simple_package_rename",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue208_adopt_load",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue230",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue284",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue295_rename_package_move_newClassVersion_newProject_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue295_rename_package_move_newClassVersion_with_subclass_newProject",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue300",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue304",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue305",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue345",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue460_0",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue460_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue490_rename_package_move_newClassVersion_newProject_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue493",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue493_RowanSample2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue495_move_class_and_extension_method_to_new_symbol_dictV2_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue514",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue515_RowanSample2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue571",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue586_move_class_to_symbolDict_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue586_move_class_to_symbolDict_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue586_move_class_to_symbolDict_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue594",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue653",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue700_0",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue700_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue701_requiredProjectSet",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue704_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue704_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue705",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue707_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue711_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue711_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue714_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue714_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue714_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue715_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue715_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue715_03",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue724",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue743_0",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue743_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_02a",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_02b1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_02b2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_03",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue752_04",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue761",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue766",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue777_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue777_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue780",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue781",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue784",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue787",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue789_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue789_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue809_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue809_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue809_03",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue822",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_254",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_446",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_493",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_495_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_495_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_504_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_504_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_504_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_504_4",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_504_5",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_527",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_531_baseline",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_532",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_549",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_549_errorCondition",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_557",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_568",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_571_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_587",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_read_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_resolve_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_resolve_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_resolve_03",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_resolve_04",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadSpec_resolve_05",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNoMigration_bitbucket",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceRepositoryDirectory",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveSubclassOfClassWithNewVersion",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanSample4_basic_504",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanSample4_primer_504",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001_A",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001_B",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001_C",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002_to_0003",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0008",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0009",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0010",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0011",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0012",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0013",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0014",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0015",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0015_to_0016",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0016",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0016_to_0017",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0017",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0019",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0020",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0021",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0023_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0024",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0026",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0027",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0028",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0029",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0030",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0031",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0032",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0033",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0034",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0035",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0036",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0038",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0039",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0040",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0041",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0042",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0043",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0044",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0045",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0046",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0047",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0048",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0049",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0050",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0051",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0057",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0058",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0059_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0059_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0060_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0060_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0061",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0062",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0063",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0064_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0064_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0064_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0064_4",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0064_5",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0065",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0066",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0067",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0068",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0069_Bridge",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0069_Child",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0069_Parent",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0070",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0071",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0072",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0073",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0074_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0074_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0074_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0075",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_4",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_5",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0076_6",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0077_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0077_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0077_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0078_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0078_2",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0078_3",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0079",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0080",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0081",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSwitchRepository",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSwitchRepository_591",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_01",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasicResolve_1",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasicResolve_2",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasicResolve_git",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateNewDiskProject",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateNewDiskProject_removePackageNamed",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateNewGitProject",
+			"className" : "RwResolvedProjectV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVerifySpecialCasesStillRelevant",
+			"className" : "RwImplementedButNotSentTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneVersionPattern",
+			"className" : "RwPlatformPatternMatcherTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneVersionRangePattern",
+			"className" : "RwPlatformPatternMatcherTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneVersionWildCardPattern",
+			"className" : "RwPlatformPatternMatcherTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPatternErrors",
+			"className" : "RwPlatformPatternMatcherTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStringPattern",
+			"className" : "RwPlatformPatternMatcherTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndexCards",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0004",
+			"className" : "RwRowanSample10Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndexCards",
+			"className" : "RwRowanSample11Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001",
+			"className" : "RwRowanSample11Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002",
+			"className" : "RwRowanSample11Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0004",
+			"className" : "RwRowanSample11Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLibraryGenerator",
+			"className" : "RwTestProjectLibraryGeneratorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanSample10LibraryGenerator",
+			"className" : "RwTestProjectLibraryGeneratorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanSample11LibraryGenerator",
+			"className" : "RwTestProjectLibraryGeneratorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanSample12LibraryGenerator",
+			"className" : "RwTestProjectLibraryGeneratorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndexCards",
+			"className" : "RwRowanSample12Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0001",
+			"className" : "RwRowanSample12Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0002",
+			"className" : "RwRowanSample12Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_0004",
+			"className" : "RwRowanSample12Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic_1",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic_2",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic_3",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparison_1",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparison_2",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInvalidPropertyValue",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInvalidPropertyValueForUser",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInvalidRevision",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_530_1",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_530_2",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue_530_3",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMissingRevision",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNilInstanceVariable",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOnlyOneRepositoryUrl",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRevisionMustBeSet",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUknownPlatform",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnknownPropertyKey",
+			"className" : "RwLoadSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasic",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparisonV3_1",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparisonV3_2",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparison_1",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparison_2",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNilInstanceVariable",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNilInstanceVariableV3",
+			"className" : "RwProjectSpecificationV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateProjects",
+			"className" : "RwDataCuratorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReconcileGlobalExtensionMethods",
+			"className" : "RwReconcileToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReconcileGlobalExtensionMethods_issue_290",
+			"className" : "RwReconcileToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReconcileProjectSetMethods",
+			"className" : "RwReconcileToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectClassExtensionsInSeparateSymbolDictionary",
+			"className" : "RwProjectToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectClassExtensionsInSessionMethods",
+			"className" : "RwProjectToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBaselineScenario",
+			"className" : "RwRowanIssue188Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassAndNewClassReferences",
+			"className" : "RwRowanIssue188Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOriginalFailureMode",
+			"className" : "RwRowanIssue188Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOriginalSetupMode",
+			"className" : "RwRowanIssue188Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassVarSystemDictionaryClone",
+			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMultiDependentClassSystemDictionaryClone",
+			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRowanLoaderSystemDictionaryClone",
+			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleSystemDictionaryClone",
+			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSubclassSystemDictionaryClone",
+			"className" : "RwCloneSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_between_existing_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_changed_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_changed_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_extension_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_extension_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_new_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_class_with_new_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_modified_class_structure_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_modified_class_structure_between_packages_and_symbol_dicts",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_modified_class_structure_with_new_class_version_between_packages_and_symbol_dicts_286",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_extension_method_between_existing_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_extension_method_between_existing_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_extension_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_extension_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_method_between_existing_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_method_between_existing_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_new_method_between_packages",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_new_class_version_with_new_method_between_packages_and_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_move_packages_between_symbolDict",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_rename_package",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_rename_package_add_change_remove_method",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSet_rename_package_and_symbolDict_add_change_remove_method",
+			"className" : "RwMoveTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteProjectWithExtensionMethods",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteProjectWithExtensionMethods_345",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteSimpleProject",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testForceDeleteProjectWithExtensionMethods",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testForceDeleteSimpleProject",
+			"className" : "RwProjectDeleteToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectAdoptTool",
+			"className" : "RwProjectSetTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectAdoptTool_existing_project",
+			"className" : "RwProjectSetTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectSetLoad1",
+			"className" : "RwProjectSetTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_A",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_A_export",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_B",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_C",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_C_export",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_D",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_MultiProject_A",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_MultiProject_B",
+			"className" : "RwProjectTopazWriterTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddUnpackagedClassMethod",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddUnpackagedMethod",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue263",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue420_A",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue420_B",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue420_C",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue420_D",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue420_E",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveUnpackagedMethod",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpdateUnpackagedClassComment",
+			"className" : "RwUnpackagedBrowserApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComment",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtractSelector",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMetadata",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethod",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodBody",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDef",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDefList",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDef_627_01",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDef_627_02",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDef_627_03",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDef_627_04",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveFromEnclosingStartEnd",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testType",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTypeDef",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTypeDefWithClassVars",
+			"className" : "RwTonelParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDefaultPrecedence",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGlobalPreferences",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreferencePrecedence",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreferences",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSessionPreferences",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUserPreferences",
+			"className" : "RwPlatformInstanceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProject",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithBothMethodProtocolValidationError",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithClassCategoryValidationError",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithEmptyClassExtension",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithExtensionMethodProtocolValidationError",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithMethodProtocolValidationError",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_A",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_moveClass_518",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeClass",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeExtensionClass",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removePackage",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_C",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_D_changeClass",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_D_changeMethods",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_E",
+			"className" : "RwProjectTonelReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCompileMethodsInFile",
+			"className" : "RwTopazTonelReaderTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCompileMethod_01",
+			"className" : "RwTopazTonelReaderTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCompileMethod_02",
+			"className" : "RwTopazTonelReaderTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCompileMethod_03",
+			"className" : "RwTopazTonelReaderTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptClass",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptClassWithExistingExtensionMethods_1",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_1",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_2",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_3",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_A",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_B",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_C",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptMethod_issue389_D",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptSymbolDictionary_1",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptSymbolDictionary_2",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptSymbolList_1",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdoptSymbolList_2",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_A",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_A_F",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_B",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_C",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_D",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_E",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAdopt_issue481_F",
+			"className" : "RwAdoptToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_bothModificationsMustShareCommonAfter_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_bothModificationsMustShareCommonAfter_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_bothModificationsMustShareCommonAfter_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_bothModificationsMustShareCommonAfter_4",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_bothModificationsMustShareCommonAfter_5",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_classComment",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_classCommentChange_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_classCommentChange_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_classCommentChange_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_methodSourceIsNotTheSame_0",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_methodSourceIsNotTheSame_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_methodSourceIsNotTheSame_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue114_missingClassModification",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_definition_based_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVersion",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithExtensionMethodsAndSubclassesToNewPackageAndNewClassVersion",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithExtensionMethodsToNewPackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithExtensionMethodsToNewPackageAndNewClassVersion",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithMethodsAndSubclassesToNewPackageAndNewClassVersion",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithMethodsToNewPackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue123_moveExistingClassWithMethodsToNewPackageAndNewClassVersion",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue125_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue125_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue125_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_move_class_to_package",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class_to_symbolDict_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class_to_symbolDict_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class_to_symbolDict_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_methods_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_methods_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue198A",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue198B",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue198C",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue199",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue206_move_extension_method_to_new_package",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_addProject",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_addRemovePackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_addUpdateRemoveClass",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_addUpdateRemoveMethods",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_loadProject",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_moveClassBetweenPackages",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_moveClassBetweenProjects",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_moveMethodBetweenPackages",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue24_moveMethodBetweenProjects",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_class_modification_constraints",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_class_modification_no_constraints",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_constraints",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_external_constraints",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_internal_constraints_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_internal_constraints_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_internal_constraints_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue255_modification",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue263",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue275_delete_class_handle_keep_in_system",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue275_delete_class_handle_remove_from_system",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue275_delete_class_remove_from_system",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue275_delete_subclass_handle_keep_in_system",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue291_new_version_class_with_subclass_constraints_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue291_new_version_class_with_subclass_constraints_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue291_new_version_class_with_subclass_constraints_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue291_new_version_class_with_subclass_constraints_4",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue293_constraint_ordering",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue305_delete_package_with_class",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue305_delete_package_with_extension_method",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_4",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_5",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue313_6",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue325",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue326_class_modification_remove_constraint",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue326_new_version_class_with_subclass_constraints_remove_constraint",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue326_new_version_class_with_subclass_constraints_remove_subclass_constraint",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue353_new_version_class_with_subclass_with_method_deletion_A",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue353_new_version_class_with_subclass_with_method_deletion_B",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue353_new_version_class_with_subclass_with_method_deletion_C",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue353_new_version_class_with_subclass_with_method_deletion_D",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue393_new_version_class_with_subclass_with_extension_method_deletion_A",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue393_new_version_class_with_subclass_with_method_deletion_E",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue393_new_version_class_with_subclass_with_method_deletion_F",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue393_new_version_class_with_subclass_with_method_deletion_G",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue40",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue41_addUpdateInitializeExtensionMethods",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue41_interactiveAddUpdateInitializeExtensionMethods",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue41_interactiveMoveInitializeExtensionMethodToPackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue41_moveInitializeExtensionMethodToPackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue41_moveUnchangedInitializeExtensionMethodToPackage",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_4",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_5",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue467_new_version_class_with_subclasses_6",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue495_move_class_and_extension_method_to_new_symbol_dict",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue498_constraint_ordering_2",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue582",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue72_addMethod",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue72_removeClass",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue72_removeClassWithExtensions",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue72_removeMethod",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue72_updateMethod",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue91",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditAndRepair_issue481_A",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditAndRepair_issue481_B",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditAndRepair_issue481_C",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditAndRepair_issue481_D",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAuditDetails",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassBadExtensionName",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassesNotIdentical",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassExtension",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassVars",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInvalidCategory",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInvalidExtensionCategory",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMissingBehavior",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMissingMethods",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonIdenticalMethods_1",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonIdenticalMethods_2",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNotification",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue478",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProject",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithBothMethodProtocolValidationError",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithClassCategoryValidationError",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithEmptyClassExtension",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithExtensionMethodProtocolValidationError",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadExistingDiskProjectWithMethodProtocolValidationError",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_A",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_moveClass_518",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_moveInstanceClassMethods_518",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_moveLastInstanceClassMethods_518",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeClass",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeExtensionClass",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeInstanceClassMethods",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removeLastInstanceClassMethods",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_B_removePackage",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_C",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_D_changeClass",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_D_changeMethods",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriterReader_E",
+			"className" : "RwProjectFiletreeReaderWriterTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDiskProjectApi",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGitProjectApi",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectCreation",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolvedProjectAPI",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleProjectLifeCycle_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleProjectLifeCycle_git",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue428_loaded_no_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue428_loaded_on_disk",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_issue714",
+			"className" : "RwProjectTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassAdditionPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassAdditionPatchWithCategory",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassDeletionPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassPropertiesPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassVariableChangePatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassVersioningPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodAdditionPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodDeletionPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodExtensionPatchInGlobalsExtension",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodExtensionPatchInSymbolDictionaryExtension",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodExtensionPatchInUserExtension",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodPropertiesPatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodSourcePatch",
+			"className" : "RwSymbolDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassComment",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassCopy",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassCreation",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassCreationWithClassCreationTemplateA",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassCreationWithClassCreationTemplateB",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassCreationWithClassCreationTemplate_292",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridClassRename",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridCompileMethodMoveToProtocol",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridCompileMethodRemove",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridCompileMethodRemove_315",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridCompileMethod_01",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridCompileMethod_02",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridComplicatedClassCopy",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridComplicatedProjectLoad",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridDeletePackage",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridModifyExtensionCompileMethod",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackage",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackageInAlternaterSymbolDict",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints_new_class_version",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassToPackageWithClassModifications",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassWithMethodsAndExtensionMethodsToExtensionPackage",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassWithMethodsAndExtensionMethodsToPackage",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveClassWithMethodsToPackage",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveMethod",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveMethod_185",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveMethod_309",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveMethod_simple_A",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridMoveMethod_simple_B",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesA",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesAndMethodsA",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesAndMethodsB",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesAndMethodsC",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesAndMethodsD",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesB",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridProjectLoad",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHybridRemoveCategory",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsRwUrl",
+			"className" : "RwUrlTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsRwUrlForFileUrls",
+			"className" : "RwUrlTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddMethod",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClassCreationTemplate",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateClass",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateClassWithConstraints",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateClassWithOptions",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteClass",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteComplicatedClass",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteComplicatedPackage",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteGlobalExtensionMethod",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteMethod",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeletePackage",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsExtensionMethod",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue471_1",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIssue471_2",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadFullMultiProjectDefs",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLoadMultiProjectDefs",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveMethod",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersionA",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_260_change_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_260_change_extension_method_source",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_260_unchanged_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_multi_project_change_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_multi_project_change_extension_method_source",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewClassVersion_multi_project_unchanged_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_1",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_2",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_3",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_4",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_5",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameClass_Issue_490",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownClass1",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownClass2",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownExtensionMethods",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownMethod",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage1",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage2",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownPackage3",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDisownProject",
+			"className" : "RwDisownToolApiTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddAndRemoveClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClassExtension",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClass_blackList_A",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddClass_blackList_B",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddUpdateAndRemoveClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreferences",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpdateClass",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpdateClassExtension",
+			"className" : "RwEditToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNumberParser",
+			"className" : "RBGemStoneNumberParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRadixNumberParser",
+			"className" : "RBGemStoneNumberParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_A1",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_A2",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_A3",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_B1",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_B2",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsModificationTopazWriter_B3",
+			"className" : "RwGsModificationTopazWriterVisitorTestV2"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazAddToplevelComponent",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazCreateProject_disk",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazCreateProject_git",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazExportProject",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazExportProjectGsFile",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazGitSupport_01",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazGitSupport_02",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazListPackageNames",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazListProjects",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazLoadProjectFromUrl",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazMoveClassToPackage",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazMoveMethodToPackage_01",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazMoveMethodToPackage_02",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazMoveMethodToPackage_03",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazReadTonelFile",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazReloadProject",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTopazUnloadProject",
+			"className" : "RwGsTopazRowanToolTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentTopazPackageClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentTopazPackageFilein_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentTopazPackageFilein_02",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentTopazPackageFilein_03",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentTopazPackageMethod_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveManagedClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveManagedMethod_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveUnmanagedClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveUnmanagedMethod_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPackagedClassNewVersion_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPackagedClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveAllMethods",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClassNewVersion_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClassNewVersion_02",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClass_02",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClass_03",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClass_04",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedClass_05",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedFilein_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedFilein_02",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedFilein_03",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedFilein_04",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedFilein_05",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnpackageManagedClass_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnpackageManagedMethod_01",
+			"className" : "RwUnmanagedClassesV2Test"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGitDescribe",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_02",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_09",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_10",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSpec_11",
+			"className" : "RwSemanticVersionNumber200TestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion1",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion2",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion3",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion4",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqualityComparison",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLessThanComparison",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOfficialInvalidSemanticVersions",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOfficialValidSemanticVersions",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrinting",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioning",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioningSpecItem10",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSemanticVersioningSubsetCompliance",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion01",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion02",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion04",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion05",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion09",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion10",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion12",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion14",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion15",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion16",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion17",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion18",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion19",
+			"className" : "RwSemanticVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAlphaNumericVersion1",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion01",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion02",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion03",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion04",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testApproxVersion05",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCollapseZeros",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion01",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion02",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion03",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion04",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion05",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion06",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion07",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion09",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion10",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion12",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion13",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion17",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion18",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion20",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion21",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testVersion24",
+			"className" : "RwGemStoneVersionNumberTestCase"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testArray",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBestNodeFor",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBlockRewrites",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCascadeReplacement",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparingTrees",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopy",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyInContext",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationProtocol",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqualToWithMapping",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEquivalentExceptRenaming",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFormatter",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsNumberParsing",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIntervals",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsA",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLiteralArray",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLiteralIntevals",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMatchInContext",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMethodPatterns",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifying",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMultimatch",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNodesDo",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNumberParsing",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNumberRadixParsing",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParents",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParserErrors",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParsingLiteralMessages",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPatternCascade",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPositions",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPragmas",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrimitives",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProtectedPrimitives",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testQuerying",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadBeforeWritten",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadBeforeWritten1",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplacingNodes",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRewriteMethods",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRewrites",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSearching",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStatements",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbolLiteral",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbolNumber",
+			"className" : "RBParserTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCoreSystem",
+			"className" : "RBFormatterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndexingSystem",
+			"className" : "RBFormatterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testQueryBlocks",
+			"className" : "RBFormatterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtError",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtIfAbsent",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtPut",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopy",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmpty",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIncludesKey",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testKeys",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testKeysAndValuesDo",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testKeysDo",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveKey",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveKeyIfAbsent",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testValues",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testValuesDo",
+			"className" : "RBSmallDictionaryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNode",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNodeBefore",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNodeFirst",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNodes",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNodesBefore",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddNodesFirst",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddReturn",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddSelfReturn",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddTemporariesNamed",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAddTemporaryNamed",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHasProperty",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPropertyAt",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPropertyAtIfAbsent",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPropertyAtIfAbsentPut",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemoveProperty",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRemovePropertyIfAbsent",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceLiteral",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceLiteralArray",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMessage",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMessageArgument",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMessageReceiver",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMethodBinary",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMethodKeyword",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMethodKeywordLong",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceMethodUnary",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReplaceVariable",
+			"className" : "RBProgramNodeTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBoolean",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testByteArray",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCustomNewline",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDate",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDateAndTime",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDictionary",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDictionaryWithComplexKeys",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoubleQuotedString",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmptyArrayPretty",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmptyDictionaryPretty",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFloat",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIdentityDictionary",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInteger",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsSimpleSymbol",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testList",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMap",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNil",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNull",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testObject",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOrderedCollection",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceCycle",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceSharing",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceSharingError",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceSharingIgnore",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRestrictedClassesInJsonMode",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testString",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbol",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbolAsString",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTime",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser2",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser3Nil",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUserNil",
+			"className" : "STONWriterTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAssociations",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCharacters",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCollections",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComplexSet",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDomainObject",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmpty",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFloats",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneCollections",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testJsonMode",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrimitives",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSmallIntegers",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStrings",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbols",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnicodeStrings",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser2",
+			"className" : "STONWritePrettyPrinterReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAssociations",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCharacters",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCollections",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComplexSet",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDomainObject",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmpty",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFloats",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneCollections",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testJsonMode",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrimitives",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSmallIntegers",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStrings",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbols",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnicodeStrings",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser2",
+			"className" : "STONWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFromString",
+			"className" : "STONTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrettyPrinting",
+			"className" : "STONTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRoomExitCycles",
+			"className" : "STONTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testToString",
+			"className" : "STONTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAssociations",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCharacters",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCollections",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComplexSet",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDomainObject",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEmpty",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFloats",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGemStoneCollections",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testJsonMode",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrimitives",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSmallIntegers",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStrings",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbols",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnicodeStrings",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser2",
+			"className" : "STONLargeWriteReadTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBoolean",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testByteArray",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCharacter",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDate",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDateAndTime",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDictionary",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDictionaryWithComplexKeys",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testError",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFloat",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIdentityDictionary",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInteger",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testJsonString",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testList",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMap",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMultiple",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNewSymbol",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNil",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNull",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testObject",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOrderedCollection",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceCycle",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceSharing",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStreaming",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testString",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSymbol",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTime",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUser2",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWhitespace",
+			"className" : "STONReaderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAbsoluteFullName",
+			"className" : "WindowsStoreTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAbsolutePath",
+			"className" : "WindowsStoreTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrintString",
+			"className" : "WindowsStoreTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeFullName",
+			"className" : "WindowsStoreTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativePath",
+			"className" : "WindowsStoreTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAt",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtPut",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtPutBinaryAscii",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtWriteBinaryAscii",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClose",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreatedOpen",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureClosed",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIO",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadBufferTooLarge",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadOnly",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReference",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSizeAfterGrow",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSizeNoGrow",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStream",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStream",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamDo",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamDoIfAbsent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamIfAbsent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenAt",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenSorting",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenSortingRoot",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopy",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyAndDelete",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyDestExists",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopySourceDoesntExist",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyWithCorrectBasename",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryExists",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryNoParent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryNotCreateParent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateFile",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateFileNotCreateParent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDefaultWorkingDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDelete",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDelimiter",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectoryCreatesParent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectoryExists",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEntriesAt",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEntryAt",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqual",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFile",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGsDeleteDirectoryOnError",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsDiskFileSystem",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveMemoryToDisk",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveTo",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingExistingDestination",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingMissingDestination",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingMissingSource",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonExistentEntryAt",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonExistentFileSize",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadingAfterWriting",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStream",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDo",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDoIfAbsent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamIfAbsent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceTo",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRoot",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootExists",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootIsDirectory",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootIsNotAFile",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWorking",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStream",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDo",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDoIfPresent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamIfPresent",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparison",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testComparisonA",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreation",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationEquality",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationFromString",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationFromStringNotNil",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationNil",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationNodeBased",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDuplicationsKinda",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOrder",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUniqueness",
+			"className" : "FastUUIDTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBreadthFirst",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBreadthFirstSelect",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPostorder",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPostorderSelect",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreorder",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreorderSelect",
+			"className" : "SelectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAllChildren",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAllDirectories",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAllEntries",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsAbsoluteConverted",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsAbsoluteIdentity",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBaseAndExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasename",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasenameWithoutExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCanonicalization",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildDirectories",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildFiles",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildOfPath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildOfReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildren",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtensionAgain",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsLocator",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsPath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContents",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteAll",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteAllChildren",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDeleteIfAbsent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoesContainReferenceFileSystem",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoesNotContainReferenceWhenUsingDifferentInstancesOfMemoryFileSystem",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoesntContainLocator",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoesntContainPath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDoesntContainReferencePath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDelete",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDeleteAll",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDeleteNonEmptyDirectory",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEntries",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqual",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqualityRelativeVsAbsolute",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExists",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGlob",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGrandchildOfReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHasChildren",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHasDirectories",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHasFiles",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIndicator",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsAbsolute",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotAbsolute",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotRelative",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotRoot",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRelative",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRoot",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMakeRelative",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentResolutionWithAbsoluteReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentResolutionWithPath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentResolutionWithReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentResolutionWithRemoteReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentUpTo",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPathRelativeTo",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStream",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDo",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDoifAbsent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDoifAbsentNot",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDoNotFound",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamIfAbsent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamNotFound",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeToPath",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeToReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRename",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRenameTargetExists",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolve",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootParent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSiblingOfReference",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleResolution",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSlash",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTempFilePrefixSuffix",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnequalContent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnequalSize",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpToAll",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtentionAddsExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtentionReplacesExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithoutExtension",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWorkingDirectoryParent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStream",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDo",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDoExists",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDoifPresent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDoifPresentNot",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamExists",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamifPresent",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamifPresentExists",
+			"className" : "FileReferenceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "PreorderGuideTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsAbsolute",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasename",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtension",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtensionAgain",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsLocator",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsPath",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsReference",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCPath",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqual",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtension",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFileSystem",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testImageDirectory",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsAbsolute",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotRoot",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRelative",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRoot",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveTo",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOriginBasename",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParent",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveAbsoluteReference",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveCompoundString",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolvePath",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveRelativeReference",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveString",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSlash",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtensionAddsExtension",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtensionReplacesExtension",
+			"className" : "FileLocatorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCache",
+			"className" : "PlatformResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testHome",
+			"className" : "PlatformResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDbfScratchDir",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtent1",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtent1Directory",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testImage",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testImageDirectory",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTranlog",
+			"className" : "SystemResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "PostorderGuideTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCached",
+			"className" : "InteractiveResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNew",
+			"className" : "InteractiveResolverTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "CopyVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBreadthFirst",
+			"className" : "CollectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPostorder",
+			"className" : "CollectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPreorder",
+			"className" : "CollectVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsDirectory",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsFile",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotDirectory",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotFile",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReference",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSize",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAll",
+			"className" : "BreadthFirstGuideTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBeta",
+			"className" : "DeleteVisitorTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAbsolutePath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAbsolutePrintString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAbsoluteWithParents",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAsReference",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasename",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasenameNoParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBasenameWithoutExtension",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCanonicalization",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtension",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCommaAddsExtensionAgain",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContains",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testContainsLocator",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEqual",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtendingPath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExtensions",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFullName",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testGrandchildOfPath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsAbsolute",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsAbsoluteWindowsPathReturnsFalseWhenNoWindowsAbsolutePathProvided",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsAbsoluteWindowsPathReturnsTrueWhenWindowsAbsolutePathProvided",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsChildOfPath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsChildOfReference",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsEmpty",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotAbsolute",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotRelative",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsNotRoot",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRelative",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsRoot",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMakeRelative",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMakeRelativeFrom2RelativePaths",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentResolution",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParentUpTo",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParse",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParseBogus",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParseTrailingSlash",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testParseWindowsPathWithUnixDelimiters",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPathString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrintPathOn",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrintPathOnDelimiter",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrintRelativeWithParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPrintWithDelimiter",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRedundantSeparators",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeFromString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeFromStringNormalization",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeFromStringNormalizationParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeFromStringParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativePrintString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeTo",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeToBranch",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRelativeWithParents",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveAbsolute",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolvePath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveRelative",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testResolveString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootPrintString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSiblingOfPath",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleResolution",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSlash",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnequalContent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnequalSize",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnixAbsolutePathName",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWindowsAbsolutePathName",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtentionAddsExtension",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWithExtentionReplacesExtension",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWorkingDirectoryParent",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWorkingDirPrintString",
+			"className" : "PathTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreationTime",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testExists",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsCharacter",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsDirectory",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsFile",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsReadable",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsSymlink",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsWriteable",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModificationTime",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCheckExistenceOfExistingFileThrowsException",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCheckExistenceOfNonExistingFileDoesNotThrowException",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFileDelete",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFileExists",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOpenFileForReadDoesNotDeleteExistingFile",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOpeningFileNormallyDoesNotDeleteExistingFile",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOpeningFileObjectCreatesFile",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOpeningFileSetsPositionAtBeggining",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testOpeningForAppendSetsPositionAtEnd",
+			"className" : "FileTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBuffering",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPeek",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadInto",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadIntoLarger",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadUpTo",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadUpToEnd",
+			"className" : "ZnBufferedReadStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testByteDecoding",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCodePointEncodingDecoding",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testConvencienceMethods",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testKnownEncodingIdentifiers",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextPutAllStartingAtToStream",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadIntoStartingAtCountFromStream",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadIntoStartingAtCountFromStreamAtEnd",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadIntoStartingAtCountFromStreamWithOffset",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testStringEncoding",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8Boundaries",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8Encoder",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8EncoderAuto",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8EncoderByteCount",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8EncoderWide",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextPutAllStartingAt",
+			"className" : "ZnBufferedWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriting",
+			"className" : "ZnBufferedWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWritingOverflow",
+			"className" : "ZnBufferedWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInt16Aliases",
+			"className" : "ZnBufferedStreamByteTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInt32Aliases",
+			"className" : "ZnBufferedStreamByteTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testInt8",
+			"className" : "ZnBufferedStreamByteTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextIntegerOfSizeSignedBigEndian",
+			"className" : "ZnBufferedStreamByteTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextIntegerOfSizeSignedBigEndianPut",
+			"className" : "ZnBufferedStreamByteTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextLine",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPeek",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStream",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleUTF8ReadStream",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSimpleUTF8WriteStream",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpToAll",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUpToAllTwice",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUTF8ReadStreamReadInto",
+			"className" : "ZnCharacterStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBuffering",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNextPutAllStartingAt",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testPeek",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadInto",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadIntoLarger",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadThenWrite",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadUpTo",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadUpToEnd",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteThenRead",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriting",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWritingOverflow",
+			"className" : "ZnBufferedReadWriteStreamTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAllButFirst",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAllButFirstNElements",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyAfterLast",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyUpToLast",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyWithFirst",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDifference",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLastIndexOfIfAbsent",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLastIndexOfIfAbsentDuplicate",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLastIndexOfStartingAt",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testLastIndexOfStartingAtDuplicate",
+			"className" : "FSGemStoneKernelTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStream",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamDo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamDoIfAbsent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testBinaryReadStreamIfAbsent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenAt",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenSorting",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testChildrenSortingRoot",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopy",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyAndDelete",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyDestExists",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopySourceDoesntExist",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCopyWithCorrectBasename",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectory",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryExists",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryNoParent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateDirectoryNotCreateParent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateFile",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreateFileNotCreateParent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCurrentEqual",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDefaultWorkingDirectory",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDelete",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDelimiter",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testDirectory",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectory",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectoryCreatesParent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureDirectoryExists",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEntriesAt",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEntryAt",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFile",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testFileNames",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIsMemoryFileSystem",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifiedTimeWhenFileCreated",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifiedTimeWhenFileModifiedByWriteStream",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifiedTimeWhenFileModifiedWithBinaryWriteStream",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifiedTimeWhenFileWrittenTo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testModifiedTimeWhenHandleTruncated",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveTo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingExistingDestination",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingMissingDestination",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testMoveToFailingMissingSource",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonExistentEntryAt",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNonExistentFileSize",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNotEqualWhenCreatingNewMemoryFileSystem",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testNotEqualWhenRequestingMemoryFileSystem",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadingAfterWriting",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStream",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamDoIfAbsent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadStreamIfAbsent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReferenceTo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRoot",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootExists",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootIsDirectory",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testRootIsNotAFile",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWorking",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStream",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDo",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamDoIfPresent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStreamIfPresent",
+			"className" : "MemoryFileSystemTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAt",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtPut",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtPutBinaryAscii",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testAtWriteBinaryAscii",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testClose",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testCreatedOpen",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testEnsureClosed",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testIO",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadBufferTooLarge",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReadOnly",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testReference",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSizeAfterGrow",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testSizeNoGrow",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testTruncate",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testWriteStream",
+			"className" : "MemoryHandleTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testProjectName",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addPackage",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_commandResultSessionTemp",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_loadedGitProject",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_unloadNotLoadedProjectDoesNotWalkback",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileClassWithClassSelected",
+			"className" : "RowanBrowserServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_flipAutoCommit",
+			"className" : "RowanBrowserServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanBrowserServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_windowsRegistry",
+			"className" : "RowanBrowserServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classNameIsString",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isTestMethod",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_reformatSource",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_runMethodTest",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setDefinedClass",
+			"className" : "RowanMethodServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_dontUseFileStream",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_hierarchyImplementors",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_hierarchyImplementorsGetsAllSubclasses",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_hierarchySenders",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_implementors",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_projectLog",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_senders",
+			"className" : "RowanQueryServicesTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugBlanksOnly",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugEmptyString",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugStringBarInString",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugStringLeadingWhitespace",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugStringNoTemps",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_debugStringTemps",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_malformed",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_saveUniqueProcess",
+			"className" : "RowanDebuggerServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_jadeServerCanonicalLocation",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_jadeServerExists",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_jadeServerHierarchyValid",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_rowanCanFindJadeServer",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_serviceUsesCanonicalJadeServer",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_updateFromSton",
+			"className" : "JadeServerTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classHierarchy",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileAndSelectClass",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileAndSelectClassDifferentPackage",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_packageWasDeleted",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_insertRemoveDictionary",
+			"className" : "RowanDictionaryServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanDictionaryServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_disableBreakpointsInterface",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execCompileError",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execNilContext",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_execWithContext",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_expressionSelector",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_initializeAutoCommit",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_initializeBreakPointsAreDisabled",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_loadedPackageExists",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_matchingPattern",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_maxPrint",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistory",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_play",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setAutoCommit",
+			"className" : "RowanAnsweringServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addCategory",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_behavior",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classComment",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classFromName",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classHierarchy",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classHierarchyClassSide",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classWasDeleted",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileClassInitializer",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileMethodNoCategory",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_dirtyStateNewProject",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_equality",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_instVarNamesIsArray",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistoryAdd",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistoryInitialize",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_nameIsString",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_rowanCompileGone",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_selectedMethod",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setClassCommentDuringMetaclassRefresh",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setSuperSubIndicators",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompile",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileClassSide",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileOnClassWithoutMetaSet",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileWithoutMetaSet",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_zzz",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addCategory",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_behavior",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classComment",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classFromName",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classHierarchy",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classHierarchyClassSide",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_classWasDeleted",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileClassInitializer",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_compileMethodNoCategory",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_dirtyStateNewProject",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_equality",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_instVarNamesIsArray",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_isTestCase",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistoryAdd",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_methodHistoryInitialize",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_nameIsString",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_rowanCompileGone",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_runClassService",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_selectedMethod",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setClassCommentDuringMetaclassRefresh",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setSuperSubIndicators",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_setTestClass",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompile",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileClassSide",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileOnClassWithoutMetaSet",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_simpleCompileWithoutMetaSet",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_testSelectors",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "passed",
+			"selector" : "test_zzz",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testSpec_0023_1",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testProjectGlobalsClassesExtensionsInSessionMethods",
+			"className" : "RwProjectToolTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testIssue150_branches",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testIssue498_constraint_ordering_3",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "test_Issue_535",
+			"className" : "RwProjectAuditToolTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testHybridMoveMethodFromSessionMethodsIntoSessionMethods",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testHybridMoveMethodIntoSessionMethods",
+			"className" : "RwHybridBrowserToolTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testAsRwRepository",
+			"className" : "RwUrlTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testMoveGlobalExtensionSessionMethods",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testNewClassVersionB",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testTruncate",
+			"className" : "FileHandleTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testFileNames",
+			"className" : "DiskFileSystemTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "testUTF8Back",
+			"className" : "ZnCharacterEncoderTests"
+		},
+		{
+			"status" : "errors",
+			"selector" : "test_compileClassSelectsPackageAndClass",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "test_dirtyState",
+			"className" : "RowanClassServiceTest"
+		},
+		{
+			"status" : "errors",
+			"selector" : "test_dirtyState",
+			"className" : "RowanTestClassServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testCreationTimeIsADateAndTimeInstance",
+			"className" : "DirectoryEntryTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testFileSize",
+			"className" : "FileReferenceAttributeTests"
+		},
+		{
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_02",
+			"className" : "RwRowanSample9Test"
+		},
+		{
+			"status" : "failures",
+			"selector" : "test_testClassesIncludesExtensions",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "test_updateAddsCommandResult",
+			"className" : "RowanProjectServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testNewClassVersion_session_method_change_extension_method_source",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testIssue310",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testIssue498_constraint_ordering_1",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testSentButNotImplemented",
+			"className" : "RwSentButNotImplementedTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testImplementedButNotSent",
+			"className" : "RwImplementedButNotSentTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testNewClassVersion_session_method_change_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testNewClassVersion_session_method_unchanged_extension_method_protocol",
+			"className" : "RwBrowserToolApiTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "test_projectIsDirtyWithNonUpdatedPackage",
+			"className" : "RowanPackageServiceTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testIssue208_move_method_from_project_to_project",
+			"className" : "RwRowanProjectIssuesTest"
+		},
+		{
+			"status" : "failures",
+			"selector" : "testModificationTimeIsADateAndTimeInstance",
+			"className" : "DirectoryEntryTest"
+		}
+	],
+	"timeStamp" : "2022-05-26T19:07:43.184065-07:00",
+	"notes" : "",
+	"suiteName" : "Rowan STON Cypress FileSystemGs RowanClientServices tests",
+	"gsVersion" : "3.7.0"
+}
