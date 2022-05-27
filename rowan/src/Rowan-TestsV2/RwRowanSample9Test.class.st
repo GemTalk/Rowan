@@ -6190,6 +6190,8 @@ RwRowanSample9Test >> testIssue789_02 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue809_01 [
+	"testing symbol dictionary package properties"
+
 	"https://github.com/GemTalk/Rowan/issues/809"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects loadedProject definedProject  |
@@ -6221,7 +6223,66 @@ RwRowanSample9Test >> testIssue809_01 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue809_02 [
+	"testing session methods package properties (subject to same issue as reported against symbol dictionary package properties"
+
+	"https://github.com/GemTalk/Rowan/issues/809"
+
+	| loadSpec projectName projectNames resolvedProject definedProject componentName component packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	definedProject := resolvedProject defined.
+	packageName := projectName, '-New'.
+	componentName := 'Core2'.
+
+	definedProject addPackageNamed: packageName toComponentNamed: componentName.
+	definedProject 
+		gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser' 
+			to: true
+			forPackageNamed: 'RowanSample9-Core2';
+		gemstoneSetUseSessionMethodsForExtensionsForUser: 'DataCurator' 
+			to: true
+			forPackageNamed: packageName;
+		gemstoneSetUseSessionMethodsForExtensionsForUser: RwLoadSpecificationV2 _gemstoneAllUsersName
+			to: true
+			forPackageNamed: packageName;
+		yourself.
+	component := definedProject componentNamed: componentName.
+
+"validate"
+	self 
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: 'Bozo')
+		equals: true.	"existing package, unkown user ... should match allusers"
+	self 
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: 'SystemUser')
+		equals: true.	"existing package, no entry for SystemUser and this package"	
+	self 
+		assert: (definedProject  gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: 'DataCurator')
+		equals: true.	"existing package, entry for DataCurator"
+	self 
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		equals: true.	"existing package, entry for SystemUser"
+	self 
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		equals: (definedProject gemstoneDefaultUseSessionMethodsForExtensionsForUser: 'SystemUser').	"unknown package, should match default"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue809_03 [
+	"testing symbol dictionary package properties"
+
 	"https://github.com/GemTalk/Rowan/issues/809"
 
 	| loadSpec projectName projectNames resolvedProject definedProject componentName component packageName |
@@ -6259,20 +6320,20 @@ RwRowanSample9Test >> testIssue809_03 [
 
 "validate"
 	self 
-		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'Bozo')
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'Bozo')
 		equals: 'AllUsersDict'.	"existing package, unkown user ... should match allusers"
 	self 
-		assert: (definedProject  _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'SystemUser')
+		assert: (definedProject  gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'SystemUser')
 		equals: 'AllUsersDict'.	"existing package, no entry for SystemUser and this package"	
 	self 
-		assert: (definedProject  _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'DataCurator')
+		assert: (definedProject  gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'DataCurator')
 		equals: 'DataCuratorDict'.	"existing package, entry for DataCurator"
 	self 
-		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
 		equals: 'SystemUserDict'.	"existing package, entry for SystemUser"
 	self 
-		assert: (definedProject _concreteProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
-		equals: self _sampleSymbolDictionaryName1 asString.	"unknown package, should match default"
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		equals: (definedProject gemstoneDefaultSymbolDictNameForUser: 'SystemUser').	"unknown package, should match default"
 ]
 
 { #category : 'tests' }

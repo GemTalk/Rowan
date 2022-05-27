@@ -527,24 +527,6 @@ RwResolvedProjectComponentsV2 >> gemstoneSetUseSessionMethodsForExtensionsForUse
 		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
 ]
 
-{ #category : 'gemstone support' }
-RwResolvedProjectComponentsV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
-	self components
-		keysAndValuesDo: [ :componentName :component | 
-			(component packageNames includes: packageName)
-				ifTrue: [ 
-					| userIdPropertiesMap packagePropertiesMap |
-					userIdPropertiesMap := (component
-						conditionalPackageMapSpecsAtGemStoneUserId: userId)
-						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: absentBlock.
-					packagePropertiesMap := userIdPropertiesMap
-						at: packageName
-						ifAbsent: absentBlock.
-					^ packagePropertiesMap at: 'symbolDictName' ifAbsent: absentBlock ] ].
-	^ absentBlock value
-]
-
 { #category : 'initialization' }
 RwResolvedProjectComponentsV2 >> initialize [
 	components := Dictionary new.

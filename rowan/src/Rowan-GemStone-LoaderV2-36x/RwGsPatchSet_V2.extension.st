@@ -53,7 +53,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 			registry := (Rowan image
 				symbolDictNamed:
 					(aMethodMove projectAfter
-						gemstoneSymbolDictNameForPackageNamed: aMethodMove packageAfter name))
+						gemstoneUseSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name))
 				rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage
 				classOrExtensionForClassNamed: classOrExtensionDef name
@@ -62,7 +62,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 						ifTrue: [ 
 							"add a new class extension on demand"
 							(aMethodMove projectAfter
-								useSessionMethodsForExtensionsForPackageNamed:
+								gemstoneUseSessionMethodsForExtensionsForPackageNamed:
 									aMethodMove packageAfter name)
 								ifTrue: [ 
 									| resolved |

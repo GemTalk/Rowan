@@ -31,10 +31,32 @@ RwAbstractProject >> gemstoneDefaultSymbolDictName [
 	^ self _concreteProject gemstoneDefaultSymbolDictName
 ]
 
+{ #category : 'accessing' }
+RwAbstractProject >> gemstoneDefaultSymbolDictNameForUser: userId [
+	^ self _concreteProject gemstoneDefaultSymbolDictNameForUser: userId
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> gemstoneDefaultUseSessionMethodsForExtensions [
+	^ self _concreteProject gemstoneDefaultUseSessionMethodsForExtensions
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId [
+	^ self _concreteProject
+		gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
+]
+
 { #category : 'querying' }
 RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
+]
+
+{ #category : 'querying' }
+RwAbstractProject >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName [
+	^ self _concreteProject
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
 ]
 
 { #category : 'accessing' }

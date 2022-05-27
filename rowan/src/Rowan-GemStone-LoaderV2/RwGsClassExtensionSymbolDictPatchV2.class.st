@@ -13,7 +13,7 @@ RwGsClassExtensionSymbolDictPatchV2 >> installClassExtensionInSystem: aSymbolLis
         Create or update the LoadedClassExtension for the extended class."
 
 	(self projectDefinition
-		useSessionMethodsForExtensionsForPackageNamed: self packageName)
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ 
 			| resolved |
 			Rowan image ensureSessionMethodsEnabled.

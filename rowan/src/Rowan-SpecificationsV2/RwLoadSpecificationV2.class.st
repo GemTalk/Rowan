@@ -321,6 +321,13 @@ RwLoadSpecificationV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 ]
 
 { #category : 'gemstone-support' }
+RwLoadSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensions [
+	^ self
+		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
+			self _gemstoneAllUsersName
+]
+
+{ #category : 'gemstone-support' }
 RwLoadSpecificationV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties

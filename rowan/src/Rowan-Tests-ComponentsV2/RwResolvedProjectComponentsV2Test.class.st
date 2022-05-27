@@ -70,10 +70,11 @@ RwResolvedProjectComponentsV2Test >> testBasic [
 						sort.
 	self
 		assert:
-			(resolvedComponents
-				gemstoneSymbolDictNameForPackageNamed: projectName , '-Shared'
-				forUser: 'AUser'
-				ifAbsent: [  ]) = 'Globals'.
+			(((resolvedComponents
+				gemstonePackagePropertyPropertyMapForPackageNamed: projectName , '-Shared'
+					forUser:  'AUser'
+					ifAbsent: []) at: projectName , '-Shared' ifAbsent: []) at: 'symbolDictName') 
+		equals: 'Globals'.
 
 
 	self

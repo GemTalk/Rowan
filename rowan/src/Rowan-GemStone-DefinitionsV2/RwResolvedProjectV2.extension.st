@@ -11,6 +11,18 @@ RwResolvedProjectV2 >> gemstoneDefaultSymbolDictNameForUser: userId [
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneDefaultUseSessionMethodsForExtensions [
+	^ self loadSpecification gemstoneDefaultUseSessionMethodsForExtensions
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId [
+	^ self loadSpecification
+		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
+			Rowan image currentUserId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
 	self loadSpecification gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
 ]
@@ -84,37 +96,29 @@ RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUse
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId ifAbsent: absentBlock [
-	^ self _projectComponents
-		gemstoneSymbolDictNameForPackageNamed: packageName
+RwResolvedProjectV2 >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName [
+	^ self
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+		forUser: Rowan image currentUserId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: userId [
+	| resolvedLoadComponents packagePropertiesMap |
+	resolvedLoadComponents := self _projectComponents.
+	packagePropertiesMap := resolvedLoadComponents
+		gemstonePackagePropertyPropertyMapForPackageNamed: packageName
 		forUser: userId
-		ifAbsent: absentBlock
+		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ].
+	^ (packagePropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ])
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ]
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
 
 	^self loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> useSessionMethodsForExtensionsForPackageNamed: packageName [
-	| default |
-	default := self loadSpecification
-		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
-			Rowan image currentUserId.
-	(self componentForPackageNamed: packageName)
-		ifNil: [ ^ default ]
-		ifNotNil: [ :component | 
-			| packageMap propertiesMap |
-			packageMap := (component
-				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId)
-				at: #'packageNameToPlatformPropertiesMap'
-				ifAbsent: [ 
-					(component
-						conditionalPackageMapSpecsAtGemStoneUserId: self _gemstoneAllUsersName)
-						at: #'packageNameToPlatformPropertiesMap'
-						ifAbsent: [ ^ default ] ].
-			propertiesMap := packageMap at: packageName ifAbsent: [ ^ default ].
-			^ propertiesMap at: 'useSessionMethodsForExtensions' ifAbsent: [ ^ default ] ]
 ]

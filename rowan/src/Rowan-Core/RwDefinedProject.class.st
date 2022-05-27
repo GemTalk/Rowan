@@ -394,6 +394,35 @@ RwDefinedProject >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName 
 		forPackageNamed: packageName
 ]
 
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSetUseSessionMethodsForExtensions: userId to: aBool [
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensions: userId
+		to: aBool
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
+		forPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
+	^ self _concreteProject
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+]
+
+{ #category : 'accessing' }
+RwDefinedProject >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: userId [
+	^ self _concreteProject
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+		forUser: userId
+]
+
 { #category : 'testing' }
 RwDefinedProject >> isStrict [
 	^ self _concreteProject isStrict

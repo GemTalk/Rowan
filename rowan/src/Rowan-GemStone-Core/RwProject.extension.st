@@ -32,10 +32,3 @@ RwProject >> methodEnvForPackageNamed: packageName [
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
 ]
-
-{ #category : '*rowan-gemstone-core' }
-RwProject >> useSessionMethodsForExtensionsForPackageNamed: packageName [
-
-	^ self _gemstonePlatformSpec
-		useSessionMethodsForExtensionsForPackageNamed: packageName
-]

@@ -269,7 +269,7 @@ RwGsPatchSet_V2 >> _methodDeletionPatchClass [
 RwGsPatchSet_V2 >> _methodExtensionDeletionPatchClass: packageName [
 
 	^ (self _currentProjectDefinition
-		useSessionMethodsForExtensionsForPackageNamed: packageName)
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName)
 			ifTrue: [ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatchV2 ]
 			ifFalse: [ RwGsMethodDeletionExtensionSymbolDictPatchV2 ]
 ]
@@ -278,7 +278,7 @@ RwGsPatchSet_V2 >> _methodExtensionDeletionPatchClass: packageName [
 RwGsPatchSet_V2 >> _methodExtensionPatchClass: packageName [
 
 	^ (self _currentProjectDefinition
-		useSessionMethodsForExtensionsForPackageNamed: packageName)
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName)
 			ifTrue: [ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 ]
 			ifFalse: [ RwGsMethodExtensionSymbolDictPatchV2 ]
 ]
@@ -287,7 +287,7 @@ RwGsPatchSet_V2 >> _methodExtensionPatchClass: packageName [
 RwGsPatchSet_V2 >> _methodExtensionPropertiesPatchClass:  packageName [
 
 	^ (self _currentProjectDefinition
-			useSessionMethodsForExtensionsForPackageNamed: packageName)
+			gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ RwGsMethodExtensionSessionMethodPropertiesSymDictPatchV2 ]
 				ifFalse: [ RwGsMethodPropertiesSymDictPatchV2 ]
 ]
@@ -296,7 +296,7 @@ RwGsPatchSet_V2 >> _methodExtensionPropertiesPatchClass:  packageName [
 RwGsPatchSet_V2 >> _methodExtensionSourcePatchClass: packageName [
 
 	^ (self _currentProjectDefinition
-			useSessionMethodsForExtensionsForPackageNamed: packageName)
+			gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ RwGsMethodExtensionSessionMethodSourceSymbolDictPatchV2 ]
 				ifFalse: [ RwGsMethodSourceSymbolDictPatchV2 ]
 ]
