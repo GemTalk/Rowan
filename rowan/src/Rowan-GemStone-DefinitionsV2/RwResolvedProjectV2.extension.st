@@ -1,6 +1,16 @@
 Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneDefaultMethodEnv [
+	^ self loadSpecification gemstoneDefaultMethodEnv
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneDefaultMethodEnvForUser: userId [
+	^ self loadSpecification gemstoneDefaultMethodEnvForUser: userId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
 RwResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
 	^ self loadSpecification gemstoneDefaultSymbolDictName
 ]
@@ -20,6 +30,38 @@ RwResolvedProjectV2 >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: use
 	^ self loadSpecification
 		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
 			Rowan image currentUserId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneMethodEnvForPackageNamed: packageName [
+	^ self
+		gemstoneMethodEnvForPackageNamed: packageName
+		forUser: Rowan image currentUserId
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneMethodEnvForPackageNamed: packageName forUser: userId [
+	| resolvedLoadComponents packagePropertiesMap |
+	resolvedLoadComponents := self _projectComponents.
+	packagePropertiesMap := resolvedLoadComponents
+		gemstonePackagePropertyPropertyMapForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ].
+	^ (packagePropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ])
+		at: 'methodEnv'
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ]
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
+	self loadSpecification gemstoneSetDefaultMethodEnvForUser: userId to: env
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetDefaultMethodEnvTo: env [
+	self loadSpecification gemstoneSetDefaultMethodEnvTo: env
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
@@ -43,6 +85,19 @@ RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: 
 RwResolvedProjectV2 >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
 	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
+	self _projectComponents gemstoneSetMethodEnv: env forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-definitionsv2' }
+RwResolvedProjectV2 >> gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName [
+	self _projectComponents
+		gemstoneSetMethodEnvForUser: userId
+		to: env
+		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-definitionsv2' }
@@ -115,10 +170,4 @@ RwResolvedProjectV2 >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: pa
 		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ])
 		at: 'useSessionMethodsForExtensions'
 		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ]
-]
-
-{ #category : '*rowan-gemstone-definitionsv2' }
-RwResolvedProjectV2 >> methodEnvForPackageNamed: packageName [
-
-	^self loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 ]

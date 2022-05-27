@@ -48,8 +48,76 @@ RwAbstractUnloadedProject >> diskUrl: aString [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetDefaultMethodEnvForUser: userId to: env [
+	self _concreteProject gemstoneSetDefaultMethodEnvForUser: userId to: env
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetDefaultMethodEnvTo: env [
+	self _concreteProject gemstoneSetDefaultMethodEnvTo: env
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName [
+	self _concreteProject gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> gemstoneSetDefaultSymbolDictNameTo: symbolDictName [
 	self _concreteProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool [
+	self _concreteProject gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool [
+	self _concreteProject gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
+	self _concreteProject gemstoneSetMethodEnv: env forPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetMethodEnvForUser: userId
+		to: env
+		forPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetSymbolDictNameForUser: userId
+		to: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetUseSessionMethodsForExtensions: userId to: aBool [
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensions: userId
+		to: aBool
+]
+
+{ #category : 'accessing' }
+RwAbstractUnloadedProject >> gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName [
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
+		forPackageNamed: packageName
 ]
 
 { #category : 'accessing' }

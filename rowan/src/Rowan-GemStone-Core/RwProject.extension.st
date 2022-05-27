@@ -26,9 +26,3 @@ RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation ex
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
 ]
-
-{ #category : '*rowan-gemstone-core' }
-RwProject >> methodEnvForPackageNamed: packageName [
-
-	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
-]

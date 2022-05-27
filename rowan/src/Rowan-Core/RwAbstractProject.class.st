@@ -27,6 +27,16 @@ RwAbstractProject >> defined [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> gemstoneDefaultMethodEnv [
+	^ self _concreteProject gemstoneDefaultMethodEnv
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> gemstoneDefaultMethodEnvForUser: userId [
+	^ self _concreteProject gemstoneDefaultMethodEnvForUser: userId
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> gemstoneDefaultSymbolDictName [
 	^ self _concreteProject gemstoneDefaultSymbolDictName
 ]
@@ -48,15 +58,42 @@ RwAbstractProject >> gemstoneDefaultUseSessionMethodsForExtensionsForUser: userI
 ]
 
 { #category : 'querying' }
+RwAbstractProject >> gemstoneMethodEnvForPackageNamed: packageName [
+
+	^ self _concreteProject gemstoneMethodEnvForPackageNamed: packageName
+]
+
+{ #category : 'querying' }
+RwAbstractProject >> gemstoneMethodEnvForPackageNamed: packageName forUser: userId [
+	^ self _concreteProject
+		gemstoneMethodEnvForPackageNamed: packageName
+		forUser: userId
+]
+
+{ #category : 'querying' }
 RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
 ]
 
 { #category : 'querying' }
+RwAbstractProject >> gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId [
+	^ self _concreteProject
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+]
+
+{ #category : 'querying' }
 RwAbstractProject >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName [
 	^ self _concreteProject
 		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+]
+
+{ #category : 'querying' }
+RwAbstractProject >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: userId [
+	^ self _concreteProject
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+		forUser: userId
 ]
 
 { #category : 'accessing' }

@@ -39,24 +39,6 @@ RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecs: aDict [
 	 conditionalPackageMapSpecs := aDict
 ]
 
-{ #category : 'accessing' }
-RwBasicProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [
-	"duplication of subclass implementation until we've moved to V2.1, since this method is 
-		used during project load and superclass methods removed before subclass methods added.
-		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
-
-	| userIdPropertiesMap |
-	userIdPropertiesMap := self conditionalPackageMapSpecs
-		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ].
-	^ userIdPropertiesMap
-		at: userId
-		ifAbsent: [ 
-			userIdPropertiesMap
-				at: RwLoadSpecificationV2 _gemstoneAllUsersName
-				ifAbsent: [ ^ Dictionary new ] ]
-]
-
 { #category : 'copying' }
 RwBasicProjectLoadComponentV2 >> postCopy [
 	super postCopy.

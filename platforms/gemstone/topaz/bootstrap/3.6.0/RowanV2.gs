@@ -49527,6 +49527,18 @@ defined
 
 category: 'accessing'
 method: RwAbstractProject
+gemstoneDefaultMethodEnv
+	^ self _concreteProject gemstoneDefaultMethodEnv
+%
+
+category: 'accessing'
+method: RwAbstractProject
+gemstoneDefaultMethodEnvForUser: userId
+	^ self _concreteProject gemstoneDefaultMethodEnvForUser: userId
+%
+
+category: 'accessing'
+method: RwAbstractProject
 gemstoneDefaultSymbolDictName
 	^ self _concreteProject gemstoneDefaultSymbolDictName
 %
@@ -49552,6 +49564,21 @@ gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 
 category: 'querying'
 method: RwAbstractProject
+gemstoneMethodEnvForPackageNamed: packageName
+
+	^ self _concreteProject gemstoneMethodEnvForPackageNamed: packageName
+%
+
+category: 'querying'
+method: RwAbstractProject
+gemstoneMethodEnvForPackageNamed: packageName forUser: userId
+	^ self _concreteProject
+		gemstoneMethodEnvForPackageNamed: packageName
+		forUser: userId
+%
+
+category: 'querying'
+method: RwAbstractProject
 gemstoneSymbolDictNameForPackageNamed: packageName
 
 	^ self _concreteProject gemstoneSymbolDictNameForPackageNamed: packageName
@@ -49559,9 +49586,25 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 
 category: 'querying'
 method: RwAbstractProject
+gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
+	^ self _concreteProject
+		gemstoneSymbolDictNameForPackageNamed: packageName
+		forUser: userId
+%
+
+category: 'querying'
+method: RwAbstractProject
 gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
 	^ self _concreteProject
 		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
+category: 'querying'
+method: RwAbstractProject
+gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: userId
+	^ self _concreteProject
+		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
+		forUser: userId
 %
 
 category: 'accessing'
@@ -49673,8 +49716,87 @@ diskUrl: aString
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+gemstoneSetDefaultMethodEnvForUser: userId to: env
+	self _concreteProject gemstoneSetDefaultMethodEnvForUser: userId to: env
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetDefaultMethodEnvTo: env
+	self _concreteProject gemstoneSetDefaultMethodEnvTo: env
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+	self _concreteProject gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 gemstoneSetDefaultSymbolDictNameTo: symbolDictName
 	self _concreteProject gemstoneSetDefaultSymbolDictNameTo: symbolDictName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+	self _concreteProject gemstoneSetDefaultUseSessionMethodsForExtensionsForUser: userId to: aBool
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+	self _concreteProject gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetMethodEnv: env forPackageNamed: packageName
+	self _concreteProject gemstoneSetMethodEnv: env forPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName
+	self _concreteProject
+		gemstoneSetMethodEnvForUser: userId
+		to: env
+		forPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
+	self _concreteProject
+		gemstoneSetSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName
+	self _concreteProject
+		gemstoneSetSymbolDictNameForUser: userId
+		to: symbolDictName
+		forPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetUseSessionMethodsForExtensions: userId to: aBool
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensions: userId
+		to: aBool
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName
+	self _concreteProject
+		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
+		to: aBool
+		forPackageNamed: packageName
 %
 
 category: 'accessing'
@@ -50219,64 +50341,6 @@ category: 'transitions'
 method: RwDefinedProject
 defined
 	^ self
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSetDefaultSymbolDictNameForUser: userId to: symbolDictName
-	self _concreteProject
-		gemstoneSetDefaultSymbolDictNameForUser: userId
-		to: symbolDictName
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
-	self _concreteProject
-		gemstoneSetSymbolDictName: symbolDictName
-		forPackageNamed: packageName
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSetSymbolDictNameForUser: userId to: symbolDictName forPackageNamed: packageName
-	self _concreteProject
-		gemstoneSetSymbolDictNameForUser: userId
-		to: symbolDictName
-		forPackageNamed: packageName
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSetUseSessionMethodsForExtensions: userId to: aBool
-	self _concreteProject
-		gemstoneSetUseSessionMethodsForExtensions: userId
-		to: aBool
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNamed: packageName
-	self _concreteProject
-		gemstoneSetUseSessionMethodsForExtensionsForUser: userId
-		to: aBool
-		forPackageNamed: packageName
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneSymbolDictNameForPackageNamed: packageName forUser: userId
-	^ self _concreteProject
-		gemstoneSymbolDictNameForPackageNamed: packageName
-		forUser: userId
-%
-
-category: 'accessing'
-method: RwDefinedProject
-gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: userId
-	^ self _concreteProject
-		gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
-		forUser: userId
 %
 
 category: 'testing'
@@ -60318,17 +60382,18 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwAbstractActiveComponent
-conditionalPackageMapSpecsAtGemStoneUserId: userId
-	| userIdPropertiesMap |
-	userIdPropertiesMap := self conditionalPackageMapSpecs
+conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setMethodEnvTo: env
+	| dict |
+	dict := (((self conditionalPackageMapSpecs
 		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ].
-	^ userIdPropertiesMap
-		at: userId
-		ifAbsent: [ 
-			userIdPropertiesMap
-				at: RwLoadSpecificationV2 _gemstoneAllUsersName
-				ifAbsent: [ ^ Dictionary new ] ]
+		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
+		at: #'packageNameToPlatformPropertiesMap'
+		ifAbsentPut: [ Dictionary new ])
+		at: packageName
+		ifAbsentPut: [ Dictionary new ].
+	env
+		ifNil: [ dict removeKey: 'methodEnv' ifAbsent: [  ] ]
+		ifNotNil: [ dict at: 'methodEnv' put: env ]
 %
 
 category: 'accessing'
@@ -65524,18 +65589,6 @@ category: 'exporting'
 method: RwAbstractResolvedObjectV2
 exportProjectSpecification
 	self _projectSpecification exportTo: self repositoryRoot
-%
-
-category: 'package properties'
-method: RwAbstractResolvedObjectV2
-gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
-	self subclassResponsibility: #'gemstoneSetSymbolDictName:forPackageNamed:'
-%
-
-category: 'package properties'
-method: RwAbstractResolvedObjectV2
-gemstoneSymbolDictNameForPackageNamed: packageName
-	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
 %
 
 category: 'accessing'
@@ -73215,25 +73268,6 @@ conditionalPackageMapSpecs: aDict
 	 conditionalPackageMapSpecs := aDict
 %
 
-category: 'accessing'
-method: RwBasicProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId
-	"duplication of subclass implementation until we've moved to V2.1, since this method is 
-		used during project load and superclass methods removed before subclass methods added.
-		This duplication will go away, once this obsolete class is removed (planned for v2.1)."
-
-	| userIdPropertiesMap |
-	userIdPropertiesMap := self conditionalPackageMapSpecs
-		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ].
-	^ userIdPropertiesMap
-		at: userId
-		ifAbsent: [ 
-			userIdPropertiesMap
-				at: RwLoadSpecificationV2 _gemstoneAllUsersName
-				ifAbsent: [ ^ Dictionary new ] ]
-%
-
 category: 'copying'
 method: RwBasicProjectLoadComponentV2
 postCopy
@@ -73584,17 +73618,18 @@ conditionalPackageMapSpecs
 
 category: 'accessing'
 method: RwAbstractRowanProjectLoadComponentV2
-conditionalPackageMapSpecsAtGemStoneUserId: userId
-	| userIdPropertiesMap |
-	userIdPropertiesMap := self conditionalPackageMapSpecs
+conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setMethodEnvTo: env
+	| dict |
+	dict := (((self conditionalPackageMapSpecs
 		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ].
-	^ userIdPropertiesMap
-		at: userId
-		ifAbsent: [ 
-			userIdPropertiesMap
-				at: RwLoadSpecificationV2 _gemstoneAllUsersName
-				ifAbsent: [ ^ Dictionary new ] ]
+		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
+		at: #'packageNameToPlatformPropertiesMap'
+		ifAbsentPut: [ Dictionary new ])
+		at: packageName
+		ifAbsentPut: [ Dictionary new ].
+	env
+		ifNil: [ dict removeKey: 'methodEnv' ifAbsent: [  ] ]
+		ifNotNil: [ dict at: 'methodEnv' put: env ]
 %
 
 category: 'accessing'
@@ -82765,7 +82800,7 @@ methodEnvironmentId
 
 	"use the project load spec package properties"
 
-	^ self projectDefinition methodEnvForPackageNamed: self packageName
+	^ self projectDefinition gemstoneMethodEnvForPackageNamed: self packageName
 %
 
 category: 'private'
@@ -88883,6 +88918,33 @@ gemstonePackagePropertyPropertyMapForPackageNamed: packageName forUser: userId i
 
 category: 'gemstone support'
 method: RwResolvedProjectComponentsV2
+gemstoneSetMethodEnv: env forPackageNamed: packageName
+	self
+		gemstoneSetMethodEnvForUser: self _gemstoneAllUsersName
+		to: env
+		forPackageNamed: packageName
+%
+
+category: 'gemstone support'
+method: RwResolvedProjectComponentsV2
+gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: userId
+						andPackageName: packageName
+						setMethodEnvTo: env ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+%
+
+category: 'gemstone support'
+method: RwResolvedProjectComponentsV2
 gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName
 	self
 		gemstoneSetSymbolDictNameForUser: self _gemstoneAllUsersName
@@ -90197,6 +90259,12 @@ fromSton: stonReader
 	^ (super fromSton: stonReader)
 		_validate;
 		yourself
+%
+
+category: 'gemstone-support'
+method: RwLoadSpecificationV2
+gemstoneDefaultMethodEnv
+	^ self gemstoneDefaultMethodEnvForUser: self _gemstoneAllUsersName
 %
 
 category: 'gemstone-support'
@@ -100048,17 +100116,6 @@ addMovedMethodToPatchSet: aPatchSet
 	aPatchSet addMethodMove: self
 %
 
-! Class extensions for 'RwPackage'
-
-!		Instance methods for 'RwPackage'
-
-category: '*rowan-gemstone-core'
-method: RwPackage
-methodEnv
-
-	^ self _gemstonePlatformSpec methodEnvForPackageNamed: self name
-%
-
 ! Class extensions for 'RwPackageDefinition'
 
 !		Instance methods for 'RwPackageDefinition'
@@ -100667,13 +100724,6 @@ gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceO
 	self gitRepositoryRoot: repositoryRootPathString
 %
 
-category: '*rowan-gemstone-core'
-method: RwProject
-methodEnvForPackageNamed: packageName
-
-	^ self _gemstonePlatformSpec methodEnvForPackageNamed: packageName
-%
-
 category: '*rowan-corev2'
 method: RwProject
 readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
@@ -101015,6 +101065,18 @@ compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anEl
 
 category: '*rowan-gemstone-definitionsv2'
 method: RwResolvedProjectV2
+gemstoneDefaultMethodEnv
+	^ self loadSpecification gemstoneDefaultMethodEnv
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneDefaultMethodEnvForUser: userId
+	^ self loadSpecification gemstoneDefaultMethodEnvForUser: userId
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
 gemstoneDefaultSymbolDictName
 	^ self loadSpecification gemstoneDefaultSymbolDictName
 %
@@ -101037,6 +101099,42 @@ gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId
 	^ self loadSpecification
 		gemstoneDefaultUseSessionMethodsForExtensionsForUser:
 			Rowan image currentUserId
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneMethodEnvForPackageNamed: packageName
+	^ self
+		gemstoneMethodEnvForPackageNamed: packageName
+		forUser: Rowan image currentUserId
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneMethodEnvForPackageNamed: packageName forUser: userId
+	| resolvedLoadComponents packagePropertiesMap |
+	resolvedLoadComponents := self _projectComponents.
+	packagePropertiesMap := resolvedLoadComponents
+		gemstonePackagePropertyPropertyMapForPackageNamed: packageName
+		forUser: userId
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ].
+	^ (packagePropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ])
+		at: 'methodEnv'
+		ifAbsent: [ ^ self gemstoneDefaultMethodEnvForUser: userId ]
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSetDefaultMethodEnvForUser: userId to: env
+	self loadSpecification gemstoneSetDefaultMethodEnvForUser: userId to: env
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSetDefaultMethodEnvTo: env
+	self loadSpecification gemstoneSetDefaultMethodEnvTo: env
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -101064,6 +101162,21 @@ method: RwResolvedProjectV2
 gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
 	self loadSpecification
 		gemstoneSetDefaultUseSessionMethodsForExtensionsTo: aBool
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSetMethodEnv: env forPackageNamed: packageName
+	self _projectComponents gemstoneSetMethodEnv: env forPackageNamed: packageName
+%
+
+category: '*rowan-gemstone-definitionsv2'
+method: RwResolvedProjectV2
+gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName
+	self _projectComponents
+		gemstoneSetMethodEnvForUser: userId
+		to: env
+		forPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-definitionsv2'
@@ -101144,13 +101257,6 @@ gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: user
 		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ])
 		at: 'useSessionMethodsForExtensions'
 		ifAbsent: [ ^ self gemstoneDefaultUseSessionMethodsForExtensionsForUser: userId ]
-%
-
-category: '*rowan-gemstone-definitionsv2'
-method: RwResolvedProjectV2
-methodEnvForPackageNamed: packageName
-
-	^self loadSpecification gemstoneDefaultMethodEnvForUser: Rowan image currentUserId
 %
 
 ! Class extensions for 'RwSpecification'

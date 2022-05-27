@@ -478,6 +478,31 @@ RwResolvedProjectComponentsV2 >> gemstonePackagePropertyPropertyMapForPackageNam
 ]
 
 { #category : 'gemstone support' }
+RwResolvedProjectComponentsV2 >> gemstoneSetMethodEnv: env forPackageNamed: packageName [
+	self
+		gemstoneSetMethodEnvForUser: self _gemstoneAllUsersName
+		to: env
+		forPackageNamed: packageName
+]
+
+{ #category : 'gemstone support' }
+RwResolvedProjectComponentsV2 >> gemstoneSetMethodEnvForUser: userId to: env forPackageNamed: packageName [
+	| foundOne |
+	foundOne := false.
+	self components
+		keysAndValuesDo: [ :componentName :component | 
+			(component packageNames includes: packageName)
+				ifTrue: [ 
+					foundOne := true.
+					component
+						conditionalPackageMapSpecsAtGemStoneUserId: userId
+						andPackageName: packageName
+						setMethodEnvTo: env ] ].
+	foundOne
+		ifFalse: [ self error: 'No package named ' , packageName printString , ' found.' ]
+]
+
+{ #category : 'gemstone support' }
 RwResolvedProjectComponentsV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
 	self
 		gemstoneSetSymbolDictNameForUser: self _gemstoneAllUsersName

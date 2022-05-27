@@ -133,7 +133,7 @@ RwGsMethodPatchV2 >> methodEnvironmentId [
 
 	"use the project load spec package properties"
 
-	^ self projectDefinition methodEnvForPackageNamed: self packageName
+	^ self projectDefinition gemstoneMethodEnvForPackageNamed: self packageName
 ]
 
 { #category : 'private' }

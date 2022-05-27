@@ -3788,6 +3788,61 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue533 [
+	"https://github.com/GemTalk/Rowan/issues/533"
+
+	| loadSpec projectName projectNames resolvedProject definedProject componentName component packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	definedProject := resolvedProject defined.
+	packageName := projectName, '-New'.
+	componentName := 'Core2'.
+
+	definedProject addPackageNamed: packageName toComponentNamed: componentName.
+	definedProject 
+		gemstoneSetMethodEnvForUser: 'SystemUser' 
+			to: 1
+			forPackageNamed: 'RowanSample9-Core2';
+		gemstoneSetMethodEnvForUser: 'DataCurator' 
+			to: 2
+			forPackageNamed: packageName;
+		gemstoneSetMethodEnvForUser: RwLoadSpecificationV2 _gemstoneAllUsersName
+			to: 3
+			forPackageNamed: packageName;
+		yourself.
+	component := definedProject componentNamed: componentName.
+
+"validate"
+	self 
+		assert: (definedProject gemstoneMethodEnvForPackageNamed: packageName forUser: 'Bozo')
+		equals: 3.	"existing package, unkown user ... should match allusers"
+	self 
+		assert: (definedProject  gemstoneMethodEnvForPackageNamed: packageName forUser: 'SystemUser')
+		equals: 3.	"existing package, no entry for SystemUser and this package"	
+	self 
+		assert: (definedProject  gemstoneMethodEnvForPackageNamed: packageName forUser: 'DataCurator')
+		equals: 2.	"existing package, entry for DataCurator"
+	self 
+		assert: (definedProject gemstoneMethodEnvForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		equals: 1.	"existing package, entry for SystemUser"
+	self 
+		assert: (definedProject gemstoneMethodEnvForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		equals: (definedProject gemstoneDefaultMethodEnvForUser: 'SystemUser').	"unknown package, should match default"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue571 [
 	"record/reuse/update the platformConditionalAttributes used to read the project from disk"
 

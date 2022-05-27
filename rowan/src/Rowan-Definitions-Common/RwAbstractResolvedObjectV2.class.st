@@ -137,16 +137,6 @@ RwAbstractResolvedObjectV2 >> exportProjectSpecification [
 	self _projectSpecification exportTo: self repositoryRoot
 ]
 
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> gemstoneSetSymbolDictName: symbolDictName forPackageNamed: packageName [
-	self subclassResponsibility: #'gemstoneSetSymbolDictName:forPackageNamed:'
-]
-
-{ #category : 'package properties' }
-RwAbstractResolvedObjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
-	self subclassResponsibility: #'gemstoneSymbolDictNameForPackageNamed:'
-]
-
 { #category : 'accessing' }
 RwAbstractResolvedObjectV2 >> gitRoot [
 	^ self _projectRepository gitRoot

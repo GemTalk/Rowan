@@ -282,6 +282,11 @@ RwLoadSpecificationV2 >> fromSton: stonReader [
 ]
 
 { #category : 'gemstone-support' }
+RwLoadSpecificationV2 >> gemstoneDefaultMethodEnv [
+	^ self gemstoneDefaultMethodEnvForUser: self _gemstoneAllUsersName
+]
+
+{ #category : 'gemstone-support' }
 RwLoadSpecificationV2 >> gemstoneDefaultMethodEnvForUser: userId [
 	| gemstoneProperties userProperties |
 	gemstoneProperties := self platformProperties

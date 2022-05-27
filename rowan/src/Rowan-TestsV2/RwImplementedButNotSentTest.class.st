@@ -205,5 +205,5 @@ RwImplementedButNotSentTest >> unsentSelectorsThatWillBeSent [
 
 	"Use this list for selectors that we intend to keep"
 
-	^ #(#'mercurialUrl:' #'methodEnv' #'svnUrl:' #'revert' #'revert:')
+	^ #(#'mercurialUrl:' #'svnUrl:' #'revert' #'revert:')
 ]

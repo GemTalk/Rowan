@@ -399,17 +399,18 @@ RwAbstractRowanProjectLoadComponentV2 >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
-RwAbstractRowanProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId [
-	| userIdPropertiesMap |
-	userIdPropertiesMap := self conditionalPackageMapSpecs
+RwAbstractRowanProjectLoadComponentV2 >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setMethodEnvTo: env [
+	| dict |
+	dict := (((self conditionalPackageMapSpecs
 		at: 'gemstone'
-		ifAbsent: [ ^ Dictionary new ].
-	^ userIdPropertiesMap
-		at: userId
-		ifAbsent: [ 
-			userIdPropertiesMap
-				at: RwLoadSpecificationV2 _gemstoneAllUsersName
-				ifAbsent: [ ^ Dictionary new ] ]
+		ifAbsentPut: [ Dictionary new ]) at: userId ifAbsentPut: [ Dictionary new ])
+		at: #'packageNameToPlatformPropertiesMap'
+		ifAbsentPut: [ Dictionary new ])
+		at: packageName
+		ifAbsentPut: [ Dictionary new ].
+	env
+		ifNil: [ dict removeKey: 'methodEnv' ifAbsent: [  ] ]
+		ifNotNil: [ dict at: 'methodEnv' put: env ]
 ]
 
 { #category : 'accessing' }
