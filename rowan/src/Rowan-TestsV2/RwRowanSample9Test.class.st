@@ -6167,6 +6167,52 @@ RwRowanSample9Test >> testIssue787 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue788 [
+	"https://github.com/GemTalk/Rowan/issues/788"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects definedProject packageGroup |
+	loadSpec := self _loadSpecNamed: 'spec_0061'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+"validate"
+	self assert: definedProject packageGroupNames sort equals: #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+
+"add new package group"
+	packageGroup := definedProject
+		addPackageGroupNamed: 'groups/issue_788' condition: 'common' comment: ''.
+
+"validate"
+	self assert: definedProject packageGroupNames sort equals: #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/issue_788') sort.
+
+"reload"
+	loadedProjects := definedProject load.
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+"validate"
+	self assert: definedProject packageGroupNames sort equals: #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh' 'groups/issue_788') sort.
+
+"remove new package group"
+	definedProject removePackageGroupNamed: 'groups/issue_788'.
+
+"validate"
+	self assert: definedProject packageGroupNames sort equals: #( 'groups/Examples' 'groups/Loader' 'groups/Projects' 'groups/Rowan' 'groups/Tests' 'groups/WorkGroup_dkh') sort.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue789_01 [
 	"https://github.com/GemTalk/Rowan/issues/789"
 
