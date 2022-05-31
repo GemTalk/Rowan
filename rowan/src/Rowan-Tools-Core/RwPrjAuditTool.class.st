@@ -6,27 +6,50 @@ Class {
 
 { #category : 'other' }
 RwPrjAuditTool >> auditAll [
-	
-	^self auditAllForUser: System myUserProfile userId
+	^ self auditAllOn: nil
 ]
 
 { #category : 'other' }
 RwPrjAuditTool >> auditAllForUser: aUserId [
-| res |
-	res := StringKeyValueDictionary new.
-			(Rowan image  _loadedProjectRegistryForUserId: aUserId) keysAndValuesDo: [:prjName :aLoadedProject |
-				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
-	].
-	^res
+	^ self auditAllForUser: aUserId on: nil
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditAllForUser: aUserId on: logStreamOrNil [
+	| res |
+	res := RwAuditReport for: self on: logStreamOrNil.
+	(Rowan image _loadedProjectRegistryForUserId: aUserId)
+		keysAndValuesDo: [ :prjName :aLoadedProject | 
+			(self auditForProject: aLoadedProject on: logStreamOrNil)
+				ifNotEmpty: [ :aColl | res at: prjName put: aColl ] ].
+	^ res
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditAllOn: logStreamOrNil [
+	^ self auditAllForUser: System myUserProfile userId on: logStreamOrNil
 ]
 
 { #category : 'other' }
 RwPrjAuditTool >> auditForProject: aLoadedProject [
 	"audit loaded project"
 
-	| res |
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '==============Auditing project ' , aLoadedProject name.
+	^ self auditForProject: aLoadedProject on: nil
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditForProject: aLoadedProject on: logStreamOrNil [
+	"audit loaded project"
+
+	| res logMessage |
+	res := RwAuditReport for: aLoadedProject on: logStreamOrNil.
+	logMessage := '==============Auditing project ' , aLoadedProject name.
+	logStreamOrNil
+		ifNil: [ GsFile gciLogClient: logMessage ]
+		ifNotNil: [ 
+			logStreamOrNil
+				nextPutAll: logMessage;
+				lf ].
 	aLoadedProject loadedPackages values
 		do: [ :loadedPackage | 
 			(Rowan image loadedPackageNamed: loadedPackage name ifAbsent: [  ])
@@ -37,36 +60,37 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 					"https://github.com/GemTalk/Rowan/issues/546"
 					 ]
 				ifNotNil: [ 
-					(Rowan packageTools audit auditForPackage: loadedPackage)
+					(Rowan packageTools audit auditForPackage: loadedPackage on: logStreamOrNil)
 						ifNotEmpty: [ :aColl | res at: loadedPackage name put: aColl ] ] ].
 	^ res
 ]
 
 { #category : 'other' }
 RwPrjAuditTool >> auditForProjectNamed: aProjectName [
+	^ self auditForProject: (Rowan image loadedProjectNamed: aProjectName) on: nil
+]
 
-	^self auditForProject: (Rowan image loadedProjectNamed: aProjectName)
-
+{ #category : 'other' }
+RwPrjAuditTool >> auditForProjectNamed: aProjectName on: logStreamOrNil [
+	^ self
+		auditForProject: (Rowan image loadedProjectNamed: aProjectName)
+		on: logStreamOrNil
 ]
 
 { #category : 'other' }
 RwPrjAuditTool >> auditForProjectsNamed: aCol [
-"audit all named projects"
-	
-	| res |
-	res := Array new.
-		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
-	^res
+	"audit all named projects"
 
+	^ self auditForProjectsNamed: aCol on: nil
 ]
 
 { #category : 'other' }
-RwPrjAuditTool >> auditProjectsNamed: aCol [
-"audit all named projects"
-	
+RwPrjAuditTool >> auditForProjectsNamed: aCol on: logStreamOrNil [
+	"audit all named projects"
+
 	| res |
 	res := Array new.
-		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
-	^res
-
+	aCol
+		do: [ :prjName | res addAll: (self auditForProjectNamed: prjName on: logStreamOrNil) ].
+	^ res
 ]

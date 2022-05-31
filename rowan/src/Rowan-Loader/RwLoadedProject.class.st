@@ -78,6 +78,13 @@ RwLoadedProject >> audit [
 	^ Rowan projectTools audit auditForProject: self
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> auditOn: logStreamOrNil [
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self on: logStreamOrNil
+]
+
 { #category : 'commit log' }
 RwLoadedProject >> commitLog: logLimit [
 

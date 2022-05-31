@@ -146,6 +146,13 @@ RwProject >> audit [
 	^ self _loadedProject audit
 ]
 
+{ #category : 'actions' }
+RwProject >> auditOn: logStreamOrNil [
+	"run audit on the receiver"
+
+	^ self _loadedProject auditOn: logStreamOrNil
+]
+
 { #category : 'properties' }
 RwProject >> canCommit [
 

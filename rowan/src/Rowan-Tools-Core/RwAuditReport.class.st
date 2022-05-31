@@ -2,7 +2,8 @@ Class {
 	#name : 'RwAuditReport',
 	#superclass : 'StringKeyValueDictionary',
 	#instVars : [
-		'owner'
+		'owner',
+		'logStream'
 	],
 	#category : 'Rowan-Tools-Core'
 }
@@ -10,26 +11,58 @@ Class {
 { #category : 'other' }
 RwAuditReport class >> for: anObject [
 
-	^self new owner: anObject; 
-			log;
-			yourself
-
+	^self new owner: anObject on: nil
 ]
 
 { #category : 'other' }
+RwAuditReport class >> for: anObject on: logStreamOrNil [
+	^ self new
+		logStream: logStreamOrNil;
+		owner: anObject;
+		log;
+		yourself
+]
+
+{ #category : 'other' }
+RwAuditReport class >> on: logStreamOrNil [
+	^ self new
+		logStream: logStreamOrNil;
+		yourself
+]
+
+{ #category : 'logging' }
 RwAuditReport >> log [
-
-	GsFile gciLogClient: '==== Auditing ', owner prettyName.
+	owner ifNotNil: [ self logMessage: '==== Auditing ' , owner prettyName ]
 ]
 
-{ #category : 'other' }
+{ #category : 'logging' }
+RwAuditReport >> logMessage: aMessage [
+	logStream
+		ifNil: [ GsFile gciLogClient: aMessage ]
+		ifNotNil: [ 
+			logStream
+				nextPutAll: aMessage;
+				lf ]
+]
+
+{ #category : 'accessing' }
+RwAuditReport >> logStream [
+	^logStream
+]
+
+{ #category : 'accessing' }
+RwAuditReport >> logStream: object [
+	logStream := object
+]
+
+{ #category : 'accessing' }
 RwAuditReport >> owner [
 
 	^owner
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RwAuditReport >> owner: anObject [
 
 
@@ -37,14 +70,20 @@ RwAuditReport >> owner: anObject [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'printing' }
 RwAuditReport >> printOn: aStream [
-	
-	aStream nextPutAll: '==============Auditing ', self owner prettyName asString; lf.
-	self do: [:e | 
-		(e isKindOf: Array) ifTrue: [
-			e do: [:err | err printOn: aStream. aStream lf]
-		] ifFalse: [e printOn: aStream].
-	]
-
+	self owner
+		ifNotNil: [ 
+			aStream
+				nextPutAll: '==============Auditing ' , self owner prettyName asString;
+				lf ].
+	self
+		do: [ :e | 
+			(e isKindOf: Array)
+				ifTrue: [ 
+					e
+						do: [ :err | 
+							err printOn: aStream.
+							aStream lf ] ]
+				ifFalse: [ e printOn: aStream ] ]
 ]

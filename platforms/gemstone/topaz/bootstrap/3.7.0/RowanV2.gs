@@ -10564,7 +10564,7 @@ removeallclassmethods BinaryFileStream
 doit
 (StringKeyValueDictionary
 	subclass: 'RwAuditReport'
-	instVarNames: #( owner )
+	instVarNames: #( owner logStream )
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -51435,6 +51435,14 @@ audit
 	^ self _loadedProject audit
 %
 
+category: 'actions'
+method: RwProject
+auditOn: logStreamOrNil
+	"run audit on the receiver"
+
+	^ self _loadedProject auditOn: logStreamOrNil
+%
+
 category: 'properties'
 method: RwProject
 canCommit
@@ -69655,6 +69663,91 @@ auditForPackage: loadedPackage
 
 category: 'other'
 method: RwPkgAuditToolV2
+auditForPackage: loadedPackage on: logStreamOrNil
+	"audit dirty packages"
+
+	| res packageSymbolDictionaryName registrySymbolDictionaryName packageAuditDetail |
+	res := RwAuditReport for: loadedPackage on: logStreamOrNil.
+	packageAuditDetail := {}.
+	(Rowan image
+		loadedRegistryForPackageNamed: loadedPackage name
+		ifAbsent: [ 
+			packageAuditDetail
+				add:
+					(RwAuditPackageDetail
+						for: loadedPackage
+						reason: #'loadedPackageNotInRegistry'
+						message:
+							'The loaded package ' , loadedPackage name printString
+								, ' is not found in a package registry').
+			nil ])
+		ifNotNil: [ :loadedPackageRegistry | 
+			packageSymbolDictionaryName := loadedPackage packageSymbolDictionaryName.
+			registrySymbolDictionaryName := loadedPackageRegistry _symbolDictionary name
+				asString.
+			registrySymbolDictionaryName = packageSymbolDictionaryName
+				ifFalse: [ 
+					packageAuditDetail
+						add:
+							(RwAuditPackageDetail
+								for: loadedPackage
+								reason: #'loadedPackageInWrongRegistry'
+								message:
+									'The loaded package ' , loadedPackage name printString
+										, ' is registered in the wrong symbol dictionary ('
+										, registrySymbolDictionaryName printString
+										, '). It is expected to be registered in '
+										, packageSymbolDictionaryName printString) ].
+			loadedPackage
+				loadedClassesDo: [ :aLoadedClass | 
+					| classSymbolDictName |
+					classSymbolDictName := aLoadedClass classSymbolDictionaryName.
+					classSymbolDictName = packageSymbolDictionaryName
+						ifFalse: [ 
+							packageAuditDetail
+								add:
+									((RwAuditPackageClassSymbolDictionaryDetail
+										for: loadedPackage
+										message:
+											'The loaded class symbol dictionary name ' , classSymbolDictName printString
+												, ' does not match the loaded package symbol dictionary name '
+												, packageSymbolDictionaryName printString)
+										reason: #'differentSymbolDictionaryForClassAndPackage';
+										loadedClass: aLoadedClass;
+										classSymbolDictionaryName: classSymbolDictName;
+										packageSymbolDictionaryName: packageSymbolDictionaryName;
+										yourself) ].
+					(self auditLoadedClass: aLoadedClass)
+						ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
+				loadedClassExtensionsDo: [ :aLoadedClass | 
+					| classEtensionSymbolDictionaryName |
+					classEtensionSymbolDictionaryName := loadedPackageRegistry
+						_symbolDictionary name asString.
+					classEtensionSymbolDictionaryName = packageSymbolDictionaryName
+						ifFalse: [ 
+							packageAuditDetail
+								add:
+									((RwAuditPackageClassSymbolDictionaryDetail
+										for: loadedPackage
+										message:
+											'The loaded extension class symbol dictionary name '
+												, classEtensionSymbolDictionaryName printString
+												, ' does not match the loaded package symbol dictionary name '
+												, packageSymbolDictionaryName printString)
+										reason: #'differentSymbolDictionaryForClassExtensionAndPackage';
+										loadedClass: aLoadedClass;
+										classSymbolDictionaryName: classEtensionSymbolDictionaryName;
+										packageSymbolDictionaryName: packageSymbolDictionaryName;
+										yourself) ].
+					(self auditLoadedClassExtension: aLoadedClass)
+						ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ] ].
+	packageAuditDetail
+		ifNotEmpty: [ :aColl | res at: loadedPackage name put: aColl ].
+	^ res
+%
+
+category: 'other'
+method: RwPkgAuditToolV2
 auditForPackageNamed: packageName
 	
 	^self auditForPackage: (Rowan image loadedPackageNamed: packageName).
@@ -69805,19 +69898,31 @@ adoptProjectSetDefinition: projectSetDefinitionToAdopt
 category: 'other'
 method: RwPrjAuditTool
 auditAll
-	
-	^self auditAllForUser: System myUserProfile userId
+	^ self auditAllOn: nil
 %
 
 category: 'other'
 method: RwPrjAuditTool
 auditAllForUser: aUserId
-| res |
-	res := StringKeyValueDictionary new.
-			(Rowan image  _loadedProjectRegistryForUserId: aUserId) keysAndValuesDo: [:prjName :aLoadedProject |
-				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
-	].
-	^res
+	^ self auditAllForUser: aUserId on: nil
+%
+
+category: 'other'
+method: RwPrjAuditTool
+auditAllForUser: aUserId on: logStreamOrNil
+	| res |
+	res := RwAuditReport for: self on: logStreamOrNil.
+	(Rowan image _loadedProjectRegistryForUserId: aUserId)
+		keysAndValuesDo: [ :prjName :aLoadedProject | 
+			(self auditForProject: aLoadedProject on: logStreamOrNil)
+				ifNotEmpty: [ :aColl | res at: prjName put: aColl ] ].
+	^ res
+%
+
+category: 'other'
+method: RwPrjAuditTool
+auditAllOn: logStreamOrNil
+	^ self auditAllForUser: System myUserProfile userId on: logStreamOrNil
 %
 
 category: 'other'
@@ -69825,9 +69930,23 @@ method: RwPrjAuditTool
 auditForProject: aLoadedProject
 	"audit loaded project"
 
-	| res |
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '==============Auditing project ' , aLoadedProject name.
+	^ self auditForProject: aLoadedProject on: nil
+%
+
+category: 'other'
+method: RwPrjAuditTool
+auditForProject: aLoadedProject on: logStreamOrNil
+	"audit loaded project"
+
+	| res logMessage |
+	res := RwAuditReport for: aLoadedProject on: logStreamOrNil.
+	logMessage := '==============Auditing project ' , aLoadedProject name.
+	logStreamOrNil
+		ifNil: [ GsFile gciLogClient: logMessage ]
+		ifNotNil: [ 
+			logStreamOrNil
+				nextPutAll: logMessage;
+				lf ].
 	aLoadedProject loadedPackages values
 		do: [ :loadedPackage | 
 			(Rowan image loadedPackageNamed: loadedPackage name ifAbsent: [  ])
@@ -69838,7 +69957,7 @@ auditForProject: aLoadedProject
 					"https://github.com/GemTalk/Rowan/issues/546"
 					 ]
 				ifNotNil: [ 
-					(Rowan packageTools audit auditForPackage: loadedPackage)
+					(Rowan packageTools audit auditForPackage: loadedPackage on: logStreamOrNil)
 						ifNotEmpty: [ :aColl | res at: loadedPackage name put: aColl ] ] ].
 	^ res
 %
@@ -69846,30 +69965,35 @@ auditForProject: aLoadedProject
 category: 'other'
 method: RwPrjAuditTool
 auditForProjectNamed: aProjectName
+	^ self auditForProject: (Rowan image loadedProjectNamed: aProjectName) on: nil
+%
 
-	^self auditForProject: (Rowan image loadedProjectNamed: aProjectName)
+category: 'other'
+method: RwPrjAuditTool
+auditForProjectNamed: aProjectName on: logStreamOrNil
+	^ self
+		auditForProject: (Rowan image loadedProjectNamed: aProjectName)
+		on: logStreamOrNil
 %
 
 category: 'other'
 method: RwPrjAuditTool
 auditForProjectsNamed: aCol
-"audit all named projects"
-	
-	| res |
-	res := Array new.
-		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
-	^res
+	"audit all named projects"
+
+	^ self auditForProjectsNamed: aCol on: nil
 %
 
 category: 'other'
 method: RwPrjAuditTool
-auditProjectsNamed: aCol
-"audit all named projects"
-	
+auditForProjectsNamed: aCol on: logStreamOrNil
+	"audit all named projects"
+
 	| res |
 	res := Array new.
-		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
-	^res
+	aCol
+		do: [ :prjName | res addAll: (self auditForProjectNamed: prjName on: logStreamOrNil) ].
+	^ res
 %
 
 ! Class implementation for 'RwPrjBrowserToolV2'
@@ -85876,6 +86000,14 @@ audit
 	^ Rowan projectTools audit auditForProject: self
 %
 
+category: 'actions'
+method: RwLoadedProject
+auditOn: logStreamOrNil
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self on: logStreamOrNil
+%
+
 category: 'commit log'
 method: RwLoadedProject
 commitLog: logLimit
@@ -94735,28 +94867,66 @@ category: 'other'
 classmethod: RwAuditReport
 for: anObject
 
-	^self new owner: anObject; 
-			log;
-			yourself
+	^self new owner: anObject on: nil
+%
+
+category: 'other'
+classmethod: RwAuditReport
+for: anObject on: logStreamOrNil
+	^ self new
+		logStream: logStreamOrNil;
+		owner: anObject;
+		log;
+		yourself
+%
+
+category: 'other'
+classmethod: RwAuditReport
+on: logStreamOrNil
+	^ self new
+		logStream: logStreamOrNil;
+		yourself
 %
 
 !		Instance methods for 'RwAuditReport'
 
-category: 'other'
+category: 'logging'
 method: RwAuditReport
 log
-
-	GsFile gciLogClient: '==== Auditing ', owner prettyName.
+	owner ifNotNil: [ self logMessage: '==== Auditing ' , owner prettyName ]
 %
 
-category: 'other'
+category: 'logging'
+method: RwAuditReport
+logMessage: aMessage
+	logStream
+		ifNil: [ GsFile gciLogClient: aMessage ]
+		ifNotNil: [ 
+			logStream
+				nextPutAll: aMessage;
+				lf ]
+%
+
+category: 'accessing'
+method: RwAuditReport
+logStream
+	^logStream
+%
+
+category: 'accessing'
+method: RwAuditReport
+logStream: object
+	logStream := object
+%
+
+category: 'accessing'
 method: RwAuditReport
 owner
 
 	^owner
 %
 
-category: 'other'
+category: 'accessing'
 method: RwAuditReport
 owner: anObject
 
@@ -94764,16 +94934,23 @@ owner: anObject
 	owner := anObject
 %
 
-category: 'other'
+category: 'printing'
 method: RwAuditReport
 printOn: aStream
-	
-	aStream nextPutAll: '==============Auditing ', self owner prettyName asString; lf.
-	self do: [:e | 
-		(e isKindOf: Array) ifTrue: [
-			e do: [:err | err printOn: aStream. aStream lf]
-		] ifFalse: [e printOn: aStream].
-	]
+	self owner
+		ifNotNil: [ 
+			aStream
+				nextPutAll: '==============Auditing ' , self owner prettyName asString;
+				lf ].
+	self
+		do: [ :e | 
+			(e isKindOf: Array)
+				ifTrue: [ 
+					e
+						do: [ :err | 
+							err printOn: aStream.
+							aStream lf ] ]
+				ifFalse: [ e printOn: aStream ] ]
 %
 
 ! Class implementation for 'CypressMessageDigestStream'
