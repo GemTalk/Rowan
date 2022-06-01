@@ -22,6 +22,7 @@ EXAMPLES
 -----
 %
 doit
+	| definedProject |
 	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
 	(System gemEnvironmentVariable: 'ARCHBASE')
@@ -40,7 +41,9 @@ doit
 		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
 	(Rowan projectNamed: 'RowanClientServices')
 		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
-	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	definedProject := ((Rowan projectNamed: 'Rowan') defined)
+		customConditionalAttributes: #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel');
+		yourself.
+	definedProject readProjectSet load.
 	^ System commit
 %
