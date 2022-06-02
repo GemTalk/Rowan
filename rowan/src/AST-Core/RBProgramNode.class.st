@@ -441,6 +441,11 @@ RBProgramNode >> isVariable [
 ]
 
 { #category : 'testing' }
+RBProgramNode >> isWorkspace [
+	^ false
+]
+
+{ #category : 'testing' }
 RBProgramNode >> lastIsReturn [
 	^self isReturn
 ]
