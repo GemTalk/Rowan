@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwProjectFiletreeTonelReaderWriterTest',
-	#superclass : 'RwProjectReaderWriterTest',
+	#superclass : 'RwProjectFiletreeTonelTopazReaderWriterTest',
 	#category : 'Rowan-Tests'
 }
 
@@ -34,12 +34,6 @@ RwProjectFiletreeTonelReaderWriterTest >> _classRemovedArtifactFileReference: re
 RwProjectFiletreeTonelReaderWriterTest >> _packageRemovedArtifactFileReference: repositoryRoot [
 
 	self subclassResponsibility: #_packageRemovedArtifactFileReference:
-]
-
-{ #category : 'private' }
-RwProjectFiletreeTonelReaderWriterTest >> _repositoryFormat [
-
-	^ self subclassResponsibility: #_repositoryFormat
 ]
 
 { #category : 'private' }
@@ -239,34 +233,6 @@ RwProjectFiletreeTonelReaderWriterTest >> _validateIssue361ProjectDefinitionSet:
 										self assert: classExtension classMethodDefinitions isEmpty ]
 									ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
 						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
-]
-
-{ #category : 'tests' }
-RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
-
-	"multiple class extensions from multiple packages for multiple classes"
-
-	| projectName writtenProjectDefinition readProjectDefinition readProjectSetDefinition projectSetModification writeProjectSetDefinition |
-	projectName := 'Issue361'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-"write projectDefinition to disk"
-	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
-
-	readProjectDefinition := writtenProjectDefinition copy.
-	readProjectSetDefinition := readProjectDefinition readProjectSet.
-
-"validation"
-	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
-	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
-	self assert: projectSetModification isEmpty.
 ]
 
 { #category : 'tests' }

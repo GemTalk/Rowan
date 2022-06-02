@@ -170,7 +170,7 @@ RwProjectSpecificationV2 >> packageFormat [
 
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> packageFormat: aString [
-	(#('tonel' 'filetree') includes: aString)
+	(#('tonel' 'filetree' 'topaz') includes: aString)
 		ifFalse: [ 
 			self
 				error:

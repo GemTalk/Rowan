@@ -415,7 +415,8 @@ RwResolvedProjectV2 >> exportPackages [
 
 { #category : 'exporting' }
 RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
-	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	| projectSetDefinition visitor projectSetModification writerVisitorClass sourceProjectSetDefinition |
+	sourceProjectSetDefinition := diskProjectSetDefinition.
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
 			fileStream
@@ -431,11 +432,20 @@ RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: pa
 				lf ].	"write out packages"
 	writerVisitorClass := packageFormat = 'tonel'
 		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
-		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
+		ifFalse: [ 
+			packageFormat = 'filetree'
+				ifTrue: [ RwModificationFiletreeWriterVisitorV2 ]
+				ifFalse: [ 
+					packageFormat = 'topaz'
+						ifTrue: [ 
+							"topaz package format does not do incremental writes, to compare against empty disk project set"
+							sourceProjectSetDefinition := RwProjectSetDefinition new.
+							RwGsModificationTopazPackageWriterVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , packageFormat printString ] ] ].
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
-		compareAgainstBase: diskProjectSetDefinition.
+		compareAgainstBase: sourceProjectSetDefinition.
 	visitor := writerVisitorClass new
 		packagesRoot: packagesRoot;
 		yourself.
