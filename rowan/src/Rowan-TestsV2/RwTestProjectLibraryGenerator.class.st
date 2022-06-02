@@ -3582,7 +3582,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			resolvedRepository repositoryRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
-						nextPutAll: '# ', projectName, ' - ' , specName;
+						nextPutAll: '# ' , projectName , ' - ' , specName;
 						lf;
 						nextPutAll: indexCard title;
 						lf;
@@ -3626,7 +3626,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
-				nextPutAll: '# ', projectName;
+				nextPutAll: '# ' , projectName;
 				lf;
 				nextPutAll: self projectReadmeIntro;
 				lf;
@@ -3638,7 +3638,9 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 				sort: [ :a :b | a specName <= b specName ])
 				do: [ :loadSpec | 
 					fileStream
-						nextPutAll: '### ' , loadSpec specName;
+						nextPutAll:
+								'### [' , loadSpec specName , '](https://github.com/dalehenrich/'
+										, self primaryProjectName , '/tree/' , loadSpec specName , ')';
 						lf;
 						nextPutAll: '```';
 						lf;
@@ -7117,6 +7119,11 @@ RwTestProjectLibraryGenerator >> preserveRowanSHA [
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
 	preserveRowanSHA := aBool
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> primaryProjectName [
+	^ 'RowanSample9'
 ]
 
 { #category : 'accessing' }
