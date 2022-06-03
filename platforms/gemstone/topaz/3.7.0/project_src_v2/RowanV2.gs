@@ -73325,6 +73325,82 @@ addClassNamed: className super: superclassName category: categryName comment: co
 
 category: 'accessing'
 method: RwPackageDefinition
+addClassNamed: className super: superclassName category: category comment: comment type: type
+	"byteSubclass classes don't declare instvars"
+
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: #()
+				classinstvars: #()
+				classvars: #()
+				category: category
+				comment: comment
+				pools: #()
+				type: type)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName category: category type: type
+	"byteSubclass classes don't declare instvars"
+
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: #()
+				classinstvars: #()
+				classvars: #()
+				category: category
+				comment: nil
+				pools: #()
+				type: type)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type
+	"byteSubclass classes don't declare instvars"
+
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: #()
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: pools
+				type: type)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+addClassNamed: className super: superclassName classinstvars: classinstvars classvars: classvars category: category comment: comment type: type
+	"byteSubclass classes don't declare instvars"
+
+	^ self
+		addClassDefinition:
+			(RwClassDefinition
+				newForClassNamed: className
+				super: superclassName
+				instvars: #()
+				classinstvars: classinstvars
+				classvars: classvars
+				category: category
+				comment: comment
+				pools: #()
+				type: type)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
 addClassNamed: className super: superclassName instvars: instvars
 	^ self
 		addClassDefinition:
