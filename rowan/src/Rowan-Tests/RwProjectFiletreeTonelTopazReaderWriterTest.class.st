@@ -4,6 +4,14 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'testing' }
+RwProjectFiletreeTonelTopazReaderWriterTest class >> isAbstract [
+  "Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+  ^ self sunitName = #'RwProjectFiletreeTonelTopazReaderWriterTest'
+]
+
 { #category : 'private' }
 RwProjectFiletreeTonelTopazReaderWriterTest >> _repositoryFormat [
 
