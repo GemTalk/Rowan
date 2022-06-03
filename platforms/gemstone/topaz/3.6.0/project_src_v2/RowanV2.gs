@@ -354,6 +354,24 @@ removeallmethods ZnCharacterEncodingError
 removeallclassmethods ZnCharacterEncodingError
 
 doit
+(GsFileIn
+	subclass: 'GsFileinPackager'
+	instVarNames: #( definedProject packageNameToComponentNameMap defaultComponentName packageDefinition packageCount onDoitBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-Kernel-36x';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GsFileinPackager
+removeallclassmethods GsFileinPackager
+
+doit
 (Magnitude
 	indexableSubclass: 'RwGemStoneVersionNumber'
 	instVarNames: #(  )
@@ -4865,6 +4883,24 @@ removeallmethods RBPatternVariableNode
 removeallclassmethods RBPatternVariableNode
 
 doit
+(RBProgramNode
+	subclass: 'RBWorkspaceNode'
+	instVarNames: #( body source )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'AST-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RBWorkspaceNode
+removeallclassmethods RBWorkspaceNode
+
+doit
 (Object
 	subclass: 'RBProgramNodeVisitor'
 	instVarNames: #(  )
@@ -6113,8 +6149,44 @@ removeallclassmethods RwModificationWriterVisitor
 
 doit
 (RwModificationWriterVisitor
+	subclass: 'RwAbstractGsModificationTopazWriterVisitorV2'
+	instVarNames: #( bufferedStream classDefinitions classExtensions classInitializationDefinitions classSymbolDictionaryNames excludeClassInitializers excludeRemoveAllMethods filenameExtension logCreation topazFileFooter topazFileHeader )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-CoreV2';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAbstractGsModificationTopazWriterVisitorV2
+removeallclassmethods RwAbstractGsModificationTopazWriterVisitorV2
+
+doit
+(RwAbstractGsModificationTopazWriterVisitorV2
+	subclass: 'RwGsModificationTopazPackageWriterVisitorV2'
+	instVarNames: #( packagesRoot )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-Core-36x';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwGsModificationTopazPackageWriterVisitorV2
+removeallclassmethods RwGsModificationTopazPackageWriterVisitorV2
+
+doit
+(RwAbstractGsModificationTopazWriterVisitorV2
 	subclass: 'RwGsModificationTopazWriterVisitorV2'
-	instVarNames: #( topazFilenameComponentMap topazFilename topazFileHeader topazFileFooter excludeClassInitializers excludeRemoveAllMethods fileNamesInFileInOrder logCreation filenameExtension classSymbolDictionaryNames classDefinitions classExtensions bufferedStream topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap classInitializationDefinitions buildPackageNamesMap repositoryRootPath )
+	instVarNames: #( topazFilenameComponentMap topazFilename fileNamesInFileInOrder topazFilenamePackageNamesMap classDefPackageNameMap classExtPackageNameMap buildPackageNamesMap repositoryRootPath )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6314,6 +6386,24 @@ true.
 
 removeallmethods RwRepositoryResolvedProjectTonelReaderVisitorV2
 removeallclassmethods RwRepositoryResolvedProjectTonelReaderVisitorV2
+
+doit
+(RwRepositoryComponentProjectReaderVisitor
+	subclass: 'RwRepositoryResolvedProjectTopazPackageReaderVisitorV2'
+	instVarNames: #( filenameExtension )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-Core-36x';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwRepositoryResolvedProjectTopazPackageReaderVisitorV2
+removeallclassmethods RwRepositoryResolvedProjectTopazPackageReaderVisitorV2
 
 doit
 (Object
@@ -10569,6 +10659,574 @@ category: 'accessing'
 method: IllegalName
 name
 	^ name
+%
+
+! Class implementation for 'GsFileinPackager'
+
+!		Class methods for 'GsFileinPackager'
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackage: packageName fromServerPath: aString
+	self toPackage: packageName fromServerPath: aString onDoitBlock: nil
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackage: packageName fromServerPath: aString onDoitBlock: aZeroOneOrTwoArgBlockOrNil
+	| fileStream gsFilein |
+	fileStream := FileStreamPortable read: aString type: #'serverText'.
+	[ 
+	gsFilein := self new
+		fileStream: fileStream;
+		setSession: nil;
+		yourself.
+	aZeroOneOrTwoArgBlockOrNil
+		ifNotNil: [ gsFilein onDoitBlock: aZeroOneOrTwoArgBlockOrNil ].
+	gsFilein currentPackage: packageName.
+	gsFilein doFileIn ]
+		ensure: [ fileStream close ]
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject componentName: componentName fromServerPath: aString
+	self
+		toPackagesForDefinedProject: definedProject
+		packageNameToComponentNameMap: Dictionary new
+		defaultComponentName: componentName
+		fromServerPath: aString
+		onDoitBlock: [ :chunk :fileinPackager | fileinPackager parseRBDoitChunkForDefinition: chunk ]
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject componentName: componentName fromStream: aStream
+	self
+		toPackagesForDefinedProject: definedProject
+		packageNameToComponentNameMap: Dictionary new
+		defaultComponentName: componentName
+		fromStream: aStream
+		onDoitBlock: [ :chunk :fileinPackager | fileinPackager parseRBDoitChunkForDefinition: chunk ]
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject fromServerPath: aString
+	self
+		toPackagesForDefinedProject: definedProject
+		componentName: 'Core'
+		fromServerPath: aString
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject fromStream: aStream
+	self
+		toPackagesForDefinedProject: definedProject
+		componentName: 'Core'
+		fromStream: aStream
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject packageNameToComponentNameMap: packageNameToComponentNameMap defaultComponentName: defaultComponentName fromServerPath: aString onDoitBlock: aZeroOneOrTwoArgBlockOrNil
+	| fileStream |
+	fileStream := FileStreamPortable read: aString type: #'serverText'.
+	[ 
+	self
+		toPackagesForDefinedProject: definedProject
+		packageNameToComponentNameMap: packageNameToComponentNameMap
+		defaultComponentName: defaultComponentName
+		fromStream: fileStream
+		onDoitBlock: aZeroOneOrTwoArgBlockOrNil ]
+		ensure: [ fileStream close ]
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackagesForDefinedProject: definedProject packageNameToComponentNameMap: packageNameToComponentNameMap defaultComponentName: defaultComponentName fromStream: aStream onDoitBlock: aZeroOneOrTwoArgBlockOrNil
+	|  gsFilein |
+	gsFilein := self new
+		fileStream: aStream;
+		setSession: nil;
+		setEnableRemoveAll: false;
+		yourself.
+	aZeroOneOrTwoArgBlockOrNil
+		ifNotNil: [ gsFilein onDoitBlock: aZeroOneOrTwoArgBlockOrNil ].
+	gsFilein 
+		definedProject: definedProject;
+		defaultComponentName: defaultComponentName;
+		packageNameToComponentNameMap: packageNameToComponentNameMap;
+		yourself.
+	gsFilein doFileIn
+%
+
+!		Instance methods for 'GsFileinPackager'
+
+category: 'processing'
+method: GsFileinPackager
+abort
+	^ GsSession isSolo
+		ifFalse: [ super abort ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+abortTransaction
+	^ GsSession isSolo
+		ifFalse: [ super abortTransaction ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+classMethod
+	currentClass ifNil: [ self error: 'current class not defined' ].
+	self packageDefinition
+		ifNotNil: [ :packageDef | 
+			(packageDef
+				classDefinitionNamed: currentClass
+				ifAbsent: [ 
+					packageDef
+						classExtensionDefinitionNamed: currentClass
+						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
+				addClassMethod: self nextChunk
+				protocol: category ]
+		ifNil: [ self compileMethodIn: currentClass , ' class' ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+classMethod: aString
+
+	aString ifNotNil:[ currentClass := aString ].
+	self classMethod.
+%
+
+category: 'processing'
+method: GsFileinPackager
+commit
+	^ GsSession isSolo
+		ifFalse: [ super commit ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+commitTransaction
+	^ GsSession isSolo
+		ifFalse: [ super commitTransaction ]
+%
+
+category: 'class definition creation'
+method: GsFileinPackager
+createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNode
+	| messages classCreationMessageNode args cat comment superclassName |
+	self packageDefinition ifNil: [ self error: 'current package not defined' ].
+	messages := cascadeNode messages.
+	classCreationMessageNode := messages first receiver.
+	args := classCreationMessageNode arguments.
+	superclassName := classCreationMessageNode receiver token value.
+
+	(messages detect: [ :each | each selector == #'category:' ] ifNone: [  ])
+		ifNotNil: [ :messageNode | cat := messageNode arguments first token value ].
+	(messages detect: [ :each | each selector == #'comment:' ] ifNone: [  ])
+		ifNotNil: [ :messageNode | comment := messageNode arguments first token value ].
+
+	(classCreationMessageNode selector
+		==
+			#'subclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:'
+		or: [ 
+			classCreationMessageNode selector
+				==
+					#'_newKernelSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'_newKernelIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+						or: [ 
+							classCreationMessageNode selector
+								==
+									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
+		ifTrue: [ 
+			| classDef type |
+			type := 'normal'.
+			(classCreationMessageNode selector
+				==
+					#'_newKernelIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ])
+				ifTrue: [ type := 'variable' ].
+			classDef := self packageDefinition
+				addClassNamed: (args at: 1) token value
+				super: superclassName
+				instvars: (args at: 2) value
+				classinstvars: (args at: 4) value
+				classvars: (args at: 3) value
+				category: cat
+				comment: comment
+				pools: (args at: 5) value
+				type: type.
+			classDef gs_options: (args at: 7) value.
+			classCreationMessageNode selector
+				==
+					#'_newKernelSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				ifTrue: [ classDef gs_reservedOop: (args at: 8) token value asString ] ]
+		ifFalse: [ 
+			(classCreationMessageNode selector
+				== #'byteSubclass:classVars:poolDictionaries:inDictionary:options:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
+				ifTrue: [ 
+					| classDef type |
+					type := 'byteSubclass'.
+					classDef := self packageDefinition
+						addClassNamed: (args at: 1) token value
+						super: superclassName
+						instvars: #()
+						classinstvars: #()
+						classvars: (args at: 2) value
+						category: cat
+						comment: comment
+						pools: (args at: 3) value
+						type: type.
+					classDef gs_options: (args at: 5) value.
+					classCreationMessageNode selector
+						==
+							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) token value asString ] ] ]
+%
+
+category: 'class definition creation'
+method: GsFileinPackager
+createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: cascadeNode
+	| messages classCreationMessageNode args cat comment superclassName |
+	self packageDefinition ifNil: [ self error: 'current package not defined' ].
+	messages := cascadeNode messages.
+	classCreationMessageNode := cascadeNode receiver.
+	args := classCreationMessageNode arguments.
+	superclassName := classCreationMessageNode receiver leaf litValue asString.
+
+	(messages detect: [ :each | each selector == #'category:' ] ifNone: [  ])
+		ifNotNil: [ :messageNode | cat := messageNode arguments first leaf litValue ].
+	(messages detect: [ :each | each selector == #'comment:' ] ifNone: [  ])
+		ifNotNil: [ :messageNode | comment := messageNode arguments first leaf litValue ].
+
+	(classCreationMessageNode selector
+		==
+			#'subclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:'
+		or: [ 
+			classCreationMessageNode selector
+				==
+					#'_newKernelSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'_newKernelIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+						or: [ 
+							classCreationMessageNode selector
+								==
+									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
+		ifTrue: [ 
+			| classDef type |
+			type := 'normal'.
+			(classCreationMessageNode selector
+				==
+					#'_newKernelIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ])
+				ifTrue: [ type := 'variable' ].
+			classDef := self packageDefinition
+				addClassNamed: (args at: 1) leaf litValue
+				super: superclassName
+				instvars: (args at: 2) leaf litValue
+				classinstvars: (args at: 4) leaf litValue
+				classvars: (args at: 3) leaf litValue
+				category: cat
+				comment: comment
+				pools: (args at: 5) leaf litValue
+				type: type.
+			classDef gs_options: (args at: 7) leaf litValue.
+			classCreationMessageNode selector
+				==
+					#'_newKernelSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:'
+				ifTrue: [ classDef gs_reservedOop: (args at: 8) leaf litValue asString ] ]
+		ifFalse: [ 
+			(classCreationMessageNode selector
+				== #'byteSubclass:classVars:poolDictionaries:inDictionary:options:'
+				or: [ 
+					classCreationMessageNode selector
+						==
+							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
+				ifTrue: [ 
+					| classDef type |
+					type := 'byteSubclass'.
+					classDef := self packageDefinition
+						addClassNamed: (args at: 1) leaf litValue
+						super: superclassName
+						instvars: #()
+						classinstvars: #()
+						classvars: (args at: 2) leaf litValue
+						category: cat
+						comment: comment
+						pools: (args at: 3) leaf litValue
+						type: type.
+					classDef gs_options: (args at: 5) leaf litValue.
+					classCreationMessageNode selector
+						==
+							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) leaf litValue asString ] ] ]
+%
+
+category: 'private'
+method: GsFileinPackager
+createGsComMethodForWorkspace: chunk
+	| lastNonSeparatorCharacter |
+	lastNonSeparatorCharacter := nil.
+	chunk size to: 1 do: [ :index | 
+		lastNonSeparatorCharacter
+			ifNil: [ 
+				| ch |
+				(ch := chunk at: index) isSeparator
+					ifFalse: [ lastNonSeparatorCharacter := ch ] ] ].
+	^ lastNonSeparatorCharacter = $.
+		ifTrue: [ ^ 'xxx ' , chunk , ' ^ true ' ]
+		ifFalse: [ ^ 'xxx ' , chunk , '. ^ true ' ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+currentPackage: aPackageName
+	(self definedProject notNil and: [ aPackageName notNil ])
+		ifTrue: [ 
+			| componentName packageDef |
+			self packageCount: self packageCount + 1.
+			self packageCount > 1
+				ifTrue: [ 
+					self
+						error:
+							'Only one CURRENTPACKAGE: command allowed when creating package definitions' ].
+			componentName := self packageNameToComponentNameMap
+				at: aPackageName
+				ifAbsent: [ self defaultComponentName ].
+			packageDef := self definedProject
+				packageNamed: aPackageName
+				ifAbsent: [ 
+					self definedProject
+						addPackageNamed: aPackageName
+						toComponentNamed: componentName ].
+			self packageDefinition: packageDef ]
+		ifFalse: [ Rowan gemstoneTools topaz currentTopazPackageName: aPackageName ]
+%
+
+category: 'accessing'
+method: GsFileinPackager
+defaultComponentName
+	^ defaultComponentName ifNil: [ 'Core' ]
+%
+
+category: 'accessing'
+method: GsFileinPackager
+defaultComponentName: object
+	defaultComponentName := object
+%
+
+category: 'accessing'
+method: GsFileinPackager
+definedProject
+	^definedProject
+%
+
+category: 'accessing'
+method: GsFileinPackager
+definedProject: object
+	definedProject := object
+%
+
+category: 'processing'
+method: GsFileinPackager
+doit
+	self onDoitBlock cull: self nextChunk cull: self
+%
+
+category: 'processing'
+method: GsFileinPackager
+ignoreList
+	^ super ignoreList , #('IFERROR' 'DEFINE' 'SEND' 'OBJ')
+%
+
+category: 'testing'
+method: GsFileinPackager
+isSupportedClassCreationSelector: sel
+	^ #(#'subclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' #'_newKernelSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:' #'_newKernelIndexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:reservedOop:' #'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' #'byteSubclass:classVars:poolDictionaries:inDictionary:options:' #'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:')
+		includes: sel
+%
+
+category: 'processing'
+method: GsFileinPackager
+method
+	currentClass ifNil: [ self error: 'current class not defined' ].
+	self packageDefinition
+		ifNotNil: [ :packageDef | 
+			(packageDef
+				classDefinitionNamed: currentClass
+				ifAbsent: [ 
+					packageDef
+						classExtensionDefinitionNamed: currentClass
+						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
+				addInstanceMethod: self nextChunk
+				protocol: category ]
+		ifNil: [ self compileMethodIn: currentClass ]
+%
+
+category: 'processing'
+method: GsFileinPackager
+method: aString
+
+	aString ifNotNil:[ currentClass := aString ].
+	self method.
+%
+
+category: 'accessing'
+method: GsFileinPackager
+onDoitBlock
+	"give user ability to track doits in .gs file ... by default execute the doitSrc"
+
+	^ onDoitBlock ifNil: [ ^ [ :doitSrc | self execute: doitSrc ] ]
+%
+
+category: 'accessing'
+method: GsFileinPackager
+onDoitBlock: aZeroOneOrTwoArgBlock
+	onDoitBlock := aZeroOneOrTwoArgBlock
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageCount
+	^ packageCount ifNil: [ packageCount := 0 ]
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageCount: object
+	packageCount := object
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageDefinition
+	^packageDefinition
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageDefinition: aPackageDefinition
+	packageDefinition := aPackageDefinition
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageNameToComponentNameMap
+	^packageNameToComponentNameMap
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageNameToComponentNameMap: object
+	packageNameToComponentNameMap := object
+%
+
+category: 'doit parser'
+method: GsFileinPackager
+parseRBDoitChunkForDefinition: chunk
+	"The doit chunk produced by topaz fileout (via Rowan) is:
+		(<class-creation-message>)
+			category: #categoryOrNil;
+			comment: 'xxx';
+			immediateInvariant.
+	Will attempt to recognize as many standard class creation patterns as is required ..."
+
+	| workspaceNode |
+	workspaceNode := RBParser parseWorkspace: chunk.
+	workspaceNode body
+		do: [ :sequenceNode | 
+			sequenceNode isSequence
+				ifTrue: [ 
+					sequenceNode statements
+						do: [ :cascadeNode | 
+							cascadeNode isCascade
+								ifTrue: [ 
+									| messages cascadeMessagePattern |
+									"start matching class creation cascade message patterns"
+									messages := cascadeNode messages.
+									(messages size = 3
+										and: [ 
+											(cascadeMessagePattern := (messages collect: [ :message | message selector ])
+												asArray sort)
+												= #(#'comment:' #'category:' #'immediateInvariant') sort ])
+										ifTrue: [ 
+											| classCreationSelector |
+											classCreationSelector := messages first receiver selector.
+											(self isSupportedClassCreationSelector: classCreationSelector)
+												ifTrue: [ 
+													^ self
+														createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode:
+															cascadeNode ]
+												ifFalse: [ 
+													self
+														error:
+															'Unrecognized class creation selector: ' , classCreationSelector printString ] ]
+										ifFalse: [ 
+											((messages size = 3
+												and: [ 
+													(cascadeMessagePattern := (messages collect: [ :message | message selector ])
+														asArray sort)
+														= #(#'comment:' #'category:' #'immediateInvariant') sort ])
+												or: [ 
+													messages size = 2
+														and: [ 
+															(cascadeMessagePattern := (messages collect: [ :message | message selector ])
+																asArray sort) = #(#'category:' #'immediateInvariant') sort ] ])
+												ifTrue: [ 
+													| classCreationSelector |
+													classCreationSelector := messages first receiver selector.
+													(self isSupportedClassCreationSelector: classCreationSelector)
+														ifTrue: [ 
+															^ self
+																createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode:
+																	cascadeNode ]
+														ifFalse: [ 
+															self
+																error:
+																	'Unrecognized class creation selector: ' , classCreationSelector printString ] ]
+												ifFalse: [ 
+													self
+														error:
+															'Unrecognized class creation message pattern: '
+																, cascadeMessagePattern printString ] ] ]
+								ifFalse: [ 
+									((cascadeNode isMessage and: [ cascadeNode selector == #'initialize' ])
+										or: [ cascadeNode isLiteralNode and: [ cascadeNode value == true ] ])
+										ifTrue: [ 
+											"initialize message sends and literal true in doits should be ignored"
+											 ]
+										ifFalse: [ self unexpectedNode: cascadeNode expectedNode: 'RBCascadeNode' ] ] ] ]
+				ifFalse: [ self unexpectedNode: sequenceNode expectedNode: 'RBSequenceNode' ] ]
+%
+
+category: 'errors'
+method: GsFileinPackager
+unexpectedNode: node expectedNode: expectedNode
+	self
+		error:
+			'Unrecognized class creation pattern. Expected a ' , expectedNode , ' not '
+				, node class name asString , '.'
 %
 
 ! Class implementation for 'RwGemStoneVersionNumber'
@@ -37795,6 +38453,22 @@ parseRewriteMethod: aString onError: aBlock
 	^RBPatternParser parseMethod: aString onError: aBlock
 %
 
+category: 'accessing'
+classmethod: RBParser
+parseWorkspace: aString
+	^ self parseWorkspace: aString onError: nil
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseWorkspace: aString onError: aBlock
+	| parser |
+	parser := self new.
+	parser errorBlock: aBlock.
+	parser initializeParserWith: aString.
+	^ parser parseWorkspace: aString
+%
+
 !		Instance methods for 'RBParser'
 
 category: 'private'
@@ -38514,6 +39188,102 @@ parseVariableNode
 	^self parsePrimitiveIdentifier
 %
 
+category: 'accessing'
+method: RBParser
+parseWorkspace
+	| workspaceNode sequenceNode args leftBar rightBar |
+	""
+	workspaceNode := self workspaceNodeClass new.
+	(currentToken notNil and: [ currentToken comments notNil ])
+		ifTrue: [ 
+			comments addAll: currentToken comments.
+			currentToken comments: nil ].
+	self addCommentsTo: workspaceNode.
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary
+		ifTrue: [ 
+			currentToken value = #'|'
+				ifTrue: [ 
+					leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [ currentToken value = #'|' ])
+						ifFalse: [ self parserError: '''|'' expected' ].
+					rightBar := currentToken start.
+					self step ]
+				ifFalse: [ 
+					currentToken value = #'||'
+						ifTrue: [ 
+							rightBar := (leftBar := currentToken start) + 1.
+							self step ] ] ].
+	workspaceNode
+		body:
+			(self
+				parseWorkspaceStatementList: workspaceNode
+				into:
+					(self sequenceNodeClass leftBar: leftBar temporaries: args rightBar: rightBar)).
+	^ workspaceNode
+%
+
+category: 'accessing'
+method: RBParser
+parseWorkspace: aString
+	| node |
+	node := self parseWorkspace.
+	self atEnd
+		ifFalse: [ self parserError: 'Unknown input at end' ].
+	node source: aString.
+	^ node
+%
+
+category: 'accessing'
+method: RBParser
+parseWorkspaceStatementList: workspaceNode into: aSequenceNode
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: aSequenceNode.
+	[ currentToken isSpecial and: [ currentToken value = $. ] ]
+		whileTrue: [ 
+			periods add: currentToken start.
+			self step ].
+	[ 
+	self atEnd
+		or: [ currentToken isSpecial and: [ '])}' includes: currentToken value ] ] ]
+		whileFalse: [ 
+			return
+				ifTrue: [ self parserError: 'End of statement list encounted' ].
+			(currentToken isSpecial and: [ currentToken value = $^ ])
+				ifTrue: [ 
+					returnPosition := currentToken start.
+					self step.
+					node := self returnNodeClass
+						return: returnPosition
+						value: self parseAssignment.
+					statements add: node.
+					return := true ]
+				ifFalse: [ 
+					node := self parseAssignment.
+					statements add: node ].
+			(currentToken isSpecial and: [ currentToken value = $. ])
+				ifTrue: [ 
+					periods add: currentToken start.
+					self step.
+					self addCommentsTo: node ]
+				ifFalse: [ return := true ].
+			[ currentToken isSpecial and: [ currentToken value = $. ] ]
+				whileTrue: [ 
+					periods add: currentToken start.
+					self step ] ].
+	self addCommentsTo: workspaceNode.
+	aSequenceNode
+		statements: statements;
+		periods: periods.
+	^ aSequenceNode
+%
+
 category: 'private'
 method: RBParser
 patchLiteralArrayToken
@@ -38656,6 +39426,12 @@ category: 'private-classes'
 method: RBParser
 variableNodeClass
 	^ RBVariableNode
+%
+
+category: 'private-classes'
+method: RBParser
+workspaceNodeClass
+	^ RBWorkspaceNode
 %
 
 ! Class implementation for 'RBPatternParser'
@@ -39870,6 +40646,12 @@ category: 'testing'
 method: RBProgramNode
 isVariable
 	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isWorkspace
+	^ false
 %
 
 category: 'testing'
@@ -44296,6 +45078,113 @@ recurseInto
 	^recurseInto
 %
 
+! Class implementation for 'RBWorkspaceNode'
+
+!		Instance methods for 'RBWorkspaceNode'
+
+category: 'comparing'
+method: RBWorkspaceNode
+= anObject
+	self == anObject
+		ifTrue: [ ^ true ].
+	self class = anObject class
+		ifFalse: [ ^ false ].
+	self comments = anObject comments
+		ifFalse: [ ^ false ].
+	self body = anObject body
+		ifFalse: [ ^ false ].
+	^ true
+%
+
+category: 'visitor'
+method: RBWorkspaceNode
+acceptVisitor: aProgramNodeVisitor
+	^ aProgramNodeVisitor acceptWorkspaceNode: self
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+addNode: aNode
+	^ body addNode: aNode
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+body
+	body ifNil: [ body := OrderedCollection new ].
+	^ body
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+body: stmtsNode
+	body := stmtsNode.
+	body parent: self
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+children
+	^ OrderedCollection new
+		add: self body;
+		yourself
+%
+
+category: 'comparing'
+method: RBWorkspaceNode
+hash
+	^ (self hashForCollection: self comments) bitXor: self body hash
+%
+
+category: 'testing'
+method: RBWorkspaceNode
+isWorkspace
+	^ true
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+methodNode
+	^ self
+%
+
+category: 'copying'
+method: RBWorkspaceNode
+postCopy
+	super postCopy.
+	self body: self body copy
+%
+
+category: 'printing'
+method: RBWorkspaceNode
+printOn: aStream
+	aStream nextPutAll: self formattedCode
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+source
+	^ source
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+source: anObject
+	source := anObject
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+start
+	^ 1
+%
+
+category: 'accessing'
+method: RBWorkspaceNode
+stop
+	^ source size
+%
+
 ! Class implementation for 'RBProgramNodeVisitor'
 
 !		Class methods for 'RBProgramNodeVisitor'
@@ -44917,6 +45806,15 @@ category: 'visitor-double dispatching'
 method: RBConfigurableFormatter
 acceptVariableNode: aVariableNode 
 	codeStream nextPutAll: aVariableNode name
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptWorkspaceNode: aWorkspaceNode
+	self
+		indentAround: [ 
+			self formatMethodCommentFor: aWorkspaceNode.
+			self visitNode: aWorkspaceNode body ]
 %
 
 category: 'private'
@@ -58051,12 +58949,12 @@ _newLine
 	 ^ self class lineEnding
 %
 
-! Class implementation for 'RwGsModificationTopazWriterVisitorV2'
+! Class implementation for 'RwAbstractGsModificationTopazWriterVisitorV2'
 
-!		Instance methods for 'RwGsModificationTopazWriterVisitorV2'
+!		Instance methods for 'RwAbstractGsModificationTopazWriterVisitorV2'
 
 category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
+method: RwAbstractGsModificationTopazWriterVisitorV2
 bufferedStream
 
 	^ bufferedStream ifNil: [ 
@@ -58064,6 +58962,482 @@ bufferedStream
 		encodedStream := (self repositoryRootPath / self topazFilename, self filenameExtension) writeStreamEncoded: 'utf8'.
 		bufferedStream := ZnBufferedWriteStream on: encodedStream ]
 %
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+classDefinitions
+
+	^ classDefinitions ifNil: [ classDefinitions := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+classExtensions
+
+	^ classExtensions ifNil: [ classExtensions := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+classInitializationDefinitions
+
+	^ classInitializationDefinitions
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+classSymbolDictionaryNames
+
+	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+excludeClassInitializers
+	^ excludeClassInitializers ifNil: [ false ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+excludeClassInitializers: aBool
+	excludeClassInitializers := aBool
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+excludeRemoveAllMethods
+	^ excludeRemoveAllMethods ifNil: [ false ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+excludeRemoveAllMethods: aBool
+	excludeRemoveAllMethods := aBool
+%
+
+category: 'exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+exportClassInitializations
+	| stream exclude |
+	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
+	stream := self bufferedStream.
+  exclude := self excludeClassInitializers.
+  exclude ifTrue:[
+    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
+  ] ifFalse:[
+	  stream 
+		  nextPutAll: '! Class Initialization'; lf;
+      lf;
+		  nextPutAll: 'run'; lf.
+  ].
+	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
+    exclude ifTrue:[ stream nextPutAll:'!  ' ].
+		stream nextPutAll: classDef name, ' initialize.'; lf 
+  ].
+  exclude ifFalse:[
+	  stream nextPutAll: 'true'; lf;
+	  nextPutAll: '%'; lf .
+  ].
+%
+
+category: 'exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+exportExtensionMethodDefinitions: classDefinitionsInOrder
+
+	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class extensions'
+%
+
+category: 'exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+exportMethodDefinitions: classDefinitionsInOrder
+
+	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class implementation'
+%
+
+category: 'exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+exportMethodDefinitions: classDefinitionsInOrder labeled: label
+	| stream |
+	stream := self bufferedStream.
+	classDefinitionsInOrder do: [:classDef | 
+		| className |
+		className := classDef name.
+		(classDef classMethodDefinitions isEmpty not or: [ classDef instanceMethodDefinitions isEmpty not])
+			ifTrue: [ 
+				stream nextPutAll: '! ', label, ' for ', className printString; lf;
+				lf ].
+		classDef classMethodDefinitions isEmpty not
+			ifTrue: [ 
+				stream nextPutAll: '!		Class methods for ', className printString; lf;
+				lf ].
+		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
+			do: [:methodDef |
+				methodDef selector == #initialize
+					ifTrue: [ self classInitializationDefinitions add: classDef ].
+				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
+		classDef instanceMethodDefinitions isEmpty not
+			ifTrue: [ 
+				stream nextPutAll: '!		Instance methods for ', className printString; lf;
+				lf ].
+		(classDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
+			do: [:methodDef |
+				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+filenameExtension
+
+	^ filenameExtension ifNil: ['gs' ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+filenameExtension: aString
+
+	filenameExtension := aString
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+logCreation
+	^logCreation ifNil: [ ^false ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+logCreation: object
+	logCreation := object
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+topazFileFooter
+	^ topazFileFooter ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+topazFileFooter: object
+	topazFileFooter := object
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+topazFileHeader
+
+	^ topazFileHeader ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+topazFileHeader: aString
+
+	topazFileHeader := aString
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+_fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream
+
+	aStream
+		nextPutAll: 'category: ', methodDefinition protocol printString; lf;
+		nextPutAll: (isMeta ifTrue: ['classmethod: '] ifFalse: ['method: ']), className; lf;
+		nextPutAll: methodDefinition source.
+	methodDefinition source last = Character lf
+		ifFalse: [aStream lf].
+	aStream nextPutAll: '%'; lf;
+		lf
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+_fileoutRemoveAllMethodsFor: className on: aStream
+	self excludeRemoveAllMethods
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'removeallmethods ' , className;
+				lf;
+				nextPutAll: 'removeallclassmethods ' , className;
+				lf;
+				lf ]
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+_setBufferedStreamFor: filename extension: extension
+
+	| encodedStream |
+	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
+	bufferedStream := ZnBufferedWriteStream on: encodedStream
+%
+
+! Class implementation for 'RwGsModificationTopazPackageWriterVisitorV2'
+
+!		Instance methods for 'RwGsModificationTopazPackageWriterVisitorV2'
+
+category: 'exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+exportClassDefinitions: classDefinitionsInOrder
+	| stream |
+	stream := self bufferedStream.
+	classDefinitionsInOrder isEmpty not
+		ifTrue: [ 
+			stream
+				nextPutAll: '! Class Declarations';
+				lf ].
+	classDefinitionsInOrder
+		do: [ :classDef | self _fileOutClassDeclaration: classDef on: stream ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazPackageWriterVisitorV2
+packagesRoot
+	^packagesRoot
+%
+
+category: 'accessing'
+method: RwGsModificationTopazPackageWriterVisitorV2
+packagesRoot: object
+	packagesRoot := object
+%
+
+category: 'class writing'
+method: RwGsModificationTopazPackageWriterVisitorV2
+processClass: aClassModification
+
+	| classDefinition symbolDictName clsName |
+	classDefinition := aClassModification after.
+	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
+   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
+
+	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
+	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
+	self classDefinitions at: classDefinition name put: classDefinition.
+
+	"no need to visit any further as the class definition records the instance and class methods"
+%
+
+category: 'class writing'
+method: RwGsModificationTopazPackageWriterVisitorV2
+processClassExtension: aClassExtensionModification
+
+	| classExtension |
+	classExtension := aClassExtensionModification after.
+	(self classExtensions at: classExtension name ifAbsentPut: [ Set new ])
+		add: classExtension.
+
+	"no need to visit any further as the class etension records the instance and class methods"
+%
+
+category: 'package writing'
+method: RwGsModificationTopazPackageWriterVisitorV2
+processPackage: aPackageModification
+	| packageName classDefinitionsList classDefinitionsInOrder classExtensionsList classExtensionsInOrder |
+	packageName := aPackageModification after name.
+	super processPackage: aPackageModification.
+	self _setBufferedStreamFor: packageName.
+	self bufferedStream
+		nextPutAll: self topazFileHeader;
+		lf;
+		nextPutAll: 'SET PACKAGE: ' , packageName;
+		lf.
+
+	classInitializationDefinitions := Set new.	"per file record"
+	classDefinitionsList := self classDefinitions values.
+
+	classDefinitionsInOrder := (RowanGsGeneralDependencySorter
+		on: classDefinitionsList
+		dependsOn: [ :candidate | candidate superclassName ]
+		dependent: [ :candidate | candidate name ]) inOrder.
+	self
+		exportClassDefinitions: classDefinitionsInOrder;
+		exportMethodDefinitions: classDefinitionsInOrder.	"consolidate the classExtensions for a class from multiple packages into a single definition"
+	classExtensionsList := Set new.
+	self classExtensions
+		keysAndValuesDo: [ :classExtName :extsInConfig | 
+			extsInConfig size <= 1
+				ifTrue: [ classExtensionsList addAll: extsInConfig ]
+				ifFalse: [ 
+					| ar def |
+					ar := extsInConfig asArray.
+					def := (ar at: 1) copy.
+					2 to: ar size do: [ :index | 
+						| d |
+						d := ar at: index.
+						d classMethodDefinitions values
+							do: [ :m | def addClassMethodDefinition: m ].
+						d instanceMethodDefinitions values
+							do: [ :m | def addInstanceMethodDefinition: m ] ].
+					classExtensionsList add: def ] ].
+
+	classExtensionsInOrder := classExtensionsList
+		sort: [ :a :b | a name <= b name ].
+	self exportExtensionMethodDefinitions: classExtensionsInOrder.
+
+	self exportClassInitializations.
+
+	self bufferedStream nextPutAll: self topazFileFooter.
+
+	self bufferedStream
+		flush;
+		close.
+	self _resetState
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_fileOutClassDeclaration: classDefinition on: aStream
+	| optionsString reservedOopString hasClassInstVars |
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(' , classDefinition superclassName;
+		lf.
+	hasClassInstVars := self
+		_writeClassTypeMessage: classDefinition
+		on: aStream
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
+	optionsString := String new.
+	classDefinition gs_options isEmpty
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
+	reservedOopString := ''.
+	classDefinition gs_reservedOop isEmpty
+		ifFalse: [ 
+			| strm |
+			strm := WriteStream on: String new.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
+			reservedOopString := strm contents ].
+	aStream
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
+		lf.
+	hasClassInstVars
+		ifTrue: [ 
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
+	aStream
+		nextPutAll: '	poolDictionaries: #()';
+		lf;
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
+		lf;
+		nextPutAll: '	options: #(' , optionsString , ')';
+		lf;
+		nextPutAll: reservedOopString;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		category: ' , classDefinition category printString , ';';
+		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
+		nextPutAll: '		immediateInvariant.';
+		lf;
+		nextPutAll: 'true.';
+		lf;
+		nextPutAll: '%';
+		lf;
+		lf.
+	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
+%
+
+category: 'private'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_resetState
+	"clear the instance vars and get ready for the next package"
+
+	currentPackageDefinition := currentClassDefinition := currentClassExtension := bufferedStream := classDefinitions := classExtensions := classInitializationDefinitions := classSymbolDictionaryNames := excludeClassInitializers := excludeRemoveAllMethods := nil
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_setBufferedStreamFor: filename
+
+	^ self _setBufferedStreamFor: filename extension: self filenameExtension
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_setBufferedStreamFor: filename extension: extension
+
+	| encodedStream |
+	encodedStream := (self packagesRoot / filename, extension) writeStreamEncoded: 'utf8'.
+	bufferedStream := ZnBufferedWriteStream on: encodedStream
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_stringForVariables: variableList
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each]
+		separatedBy: [stream space].
+	^stream contents
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazPackageWriterVisitorV2
+_writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
+	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
+	hasInstanceVariables := true.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
+	hasClassInstVars := true.
+	classType := classDefinition subclassType.
+	classType = 'variable'
+		ifTrue: [ 
+			classTypeMessage := hasReservedOop
+				ifTrue: [ '_newKernelIndexableSubclass:' ]
+				ifFalse: [ 'indexableSubclass: ' ] ]
+		ifFalse: [ 
+			classType = 'byteSubclass'
+				ifTrue: [ 
+					classTypeMessage := hasReservedOop
+						ifTrue: [ '_newKernelByteSubclass:' ]
+						ifFalse: [ 'byteSubclass: ' ].
+					hasClassInstVars := hasInstanceVariables := false ]
+				ifFalse: [ 
+					(classType = '' or: [ classType = 'immediate' ])
+						ifTrue: [ 
+							classTypeMessage := hasReservedOop
+								ifTrue: [ '_newKernelSubclass:' ]
+								ifFalse: [ 'subclass: ' ] ]
+						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+	aStream
+		tab;
+		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		lf.
+	hasInstanceVariables
+		ifTrue: [ instanceVariableBlock value ].
+	^ hasClassInstVars
+%
+
+! Class implementation for 'RwGsModificationTopazWriterVisitorV2'
+
+!		Instance methods for 'RwGsModificationTopazWriterVisitorV2'
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
@@ -58077,13 +59451,6 @@ buildPackageNamesMap
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
-classDefinitions
-
-	^ classDefinitions ifNil: [ classDefinitions := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
 classDefPackageNameMap
 
 	^ classDefPackageNameMap ifNil: [ classDefPackageNameMap := Dictionary new ]
@@ -58091,30 +59458,9 @@ classDefPackageNameMap
 
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
-classExtensions
-
-	^ classExtensions ifNil: [ classExtensions := Dictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
 classExtPackageNameMap
 
 	^ classExtPackageNameMap ifNil: [ classExtPackageNameMap := IdentityKeyValueDictionary new ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-classInitializationDefinitions
-
-	^ classInitializationDefinitions
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-classSymbolDictionaryNames
-
-	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
 %
 
 category: 'actions'
@@ -58136,30 +59482,6 @@ method: RwGsModificationTopazWriterVisitorV2
 deletededPackage: aPackageModification
 
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-excludeClassInitializers
-	^ excludeClassInitializers ifNil: [ false ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-excludeClassInitializers: aBool
-	excludeClassInitializers := aBool
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-excludeRemoveAllMethods
-	^ excludeRemoveAllMethods ifNil: [ false ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-excludeRemoveAllMethods: aBool
-	excludeRemoveAllMethods := aBool
 %
 
 category: 'exporting'
@@ -58237,82 +59559,6 @@ exportClassDefinitions: classDefinitionsInOrder
 		self _fileOutClassDeclaration: classDef on: stream ].
 %
 
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitorV2
-exportClassInitializations
-	| stream exclude |
-	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
-	stream := self bufferedStream.
-  exclude := self excludeClassInitializers.
-  exclude ifTrue:[
-    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
-  ] ifFalse:[
-	  stream 
-		  nextPutAll: '! Class Initialization'; lf;
-      lf;
-		  nextPutAll: 'run'; lf.
-  ].
-	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
-    exclude ifTrue:[ stream nextPutAll:'!  ' ].
-		stream nextPutAll: classDef name, ' initialize.'; lf 
-  ].
-  exclude ifFalse:[
-	  stream nextPutAll: 'true'; lf;
-	  nextPutAll: '%'; lf .
-  ].
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitorV2
-exportExtensionMethodDefinitions: classDefinitionsInOrder
-
-	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class extensions'
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitorV2
-exportMethodDefinitions: classDefinitionsInOrder
-
-	self exportMethodDefinitions: classDefinitionsInOrder labeled: 'Class implementation'
-%
-
-category: 'exporting'
-method: RwGsModificationTopazWriterVisitorV2
-exportMethodDefinitions: classDefinitionsInOrder labeled: label
-	| stream |
-	stream := self bufferedStream.
-	classDefinitionsInOrder do: [:classDef | 
-		| className |
-		className := classDef name.
-		(classDef classMethodDefinitions isEmpty not or: [ classDef instanceMethodDefinitions isEmpty not])
-			ifTrue: [ 
-				stream nextPutAll: '! ', label, ' for ', className printString; lf;
-				lf ].
-		classDef classMethodDefinitions isEmpty not
-			ifTrue: [ 
-				stream nextPutAll: '!		Class methods for ', className printString; lf;
-				lf ].
-		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
-			do: [:methodDef |
-				methodDef selector == #initialize
-					ifTrue: [ self classInitializationDefinitions add: classDef ].
-				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
-		classDef instanceMethodDefinitions isEmpty not
-			ifTrue: [ 
-				stream nextPutAll: '!		Instance methods for ', className printString; lf;
-				lf ].
-		(classDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
-			do: [:methodDef |
-				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-filenameExtension
-
-	^ filenameExtension ifNil: ['gs' ]
-%
-
 category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 filenameExtension: aString
@@ -58332,18 +59578,6 @@ category: 'accessing'
 method: RwGsModificationTopazWriterVisitorV2
 fileNamesInFileInOrder: object
 	fileNamesInFileInOrder := object
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-logCreation
-	^logCreation ifNil: [ ^false ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-logCreation: object
-	logCreation := object
 %
 
 category: 'class writing'
@@ -58437,32 +59671,6 @@ repositoryRootPath: aStringOrFileReference
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-topazFileFooter
-	^ topazFileFooter ifNil: [ '' ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-topazFileFooter: object
-	topazFileFooter := object
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-topazFileHeader
-
-	^ topazFileHeader ifNil: [ '' ]
-%
-
-category: 'accessing'
-method: RwGsModificationTopazWriterVisitorV2
-topazFileHeader: aString
-
-	topazFileHeader := aString
 %
 
 category: 'accessing'
@@ -58614,45 +59822,9 @@ _fileOutClassDeclaration: classDefinition on: aStream
 
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitorV2
-_fileOutMethod: methodDefinition forClass: className isMeta: isMeta on: aStream
-
-	aStream
-		nextPutAll: 'category: ', methodDefinition protocol printString; lf;
-		nextPutAll: (isMeta ifTrue: ['classmethod: '] ifFalse: ['method: ']), className; lf;
-		nextPutAll: methodDefinition source.
-	methodDefinition source last = Character lf
-		ifFalse: [aStream lf].
-	aStream nextPutAll: '%'; lf;
-		lf
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitorV2
-_fileoutRemoveAllMethodsFor: className on: aStream
-	self excludeRemoveAllMethods
-		ifFalse: [ 
-			aStream
-				nextPutAll: 'removeallmethods ' , className;
-				lf;
-				nextPutAll: 'removeallclassmethods ' , className;
-				lf;
-				lf ]
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitorV2
 _setBufferedStreamFor: filename
 
 	^ self _setBufferedStreamFor: filename extension: self filenameExtension
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitorV2
-_setBufferedStreamFor: filename extension: extension
-
-	| encodedStream |
-	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
-	bufferedStream := ZnBufferedWriteStream on: encodedStream
 %
 
 category: 'private exporting'
@@ -61370,7 +62542,7 @@ checkMethodDefinitions: aClassDef
      cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
   ].
   cls ifNil:[   
-    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+    (cls := GsCurrentSession currentSession resolveSymbol: clsName ) ifNil:[
        "creating the class not implemented yet"
        Warning signal:'class ' , clsName , ' not found by name lookup'.
        ^ self "can't check syntax on the methods until class is defined"
@@ -61380,7 +62552,7 @@ checkMethodDefinitions: aClassDef
   methBlk := [ :methDef "a RwMethodDefinition" |
     [
       cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
+      dictionaries: GsCurrentSession currentSession symbolList
       category: methDef protocol asSymbol
       intoMethodDict: fakeMethDict
       intoCategories: nil
@@ -61552,6 +62724,53 @@ _packageNameFromPackageDir: packageDir ifAbsent: absentBlock
 	^ ((self _readObjectFrom: tonelPackageFile)
 		at: #'name'
 		ifAbsent: [ ^ absentBlock value ]) asString
+%
+
+! Class implementation for 'RwRepositoryResolvedProjectTopazPackageReaderVisitorV2'
+
+!		Instance methods for 'RwRepositoryResolvedProjectTopazPackageReaderVisitorV2'
+
+category: 'accessing'
+method: RwRepositoryResolvedProjectTopazPackageReaderVisitorV2
+filenameExtension
+
+	^ filenameExtension ifNil: ['gs' ]
+%
+
+category: 'accessing'
+method: RwRepositoryResolvedProjectTopazPackageReaderVisitorV2
+filenameExtension: aString
+
+	filenameExtension := aString
+%
+
+category: 'package reading'
+method: RwRepositoryResolvedProjectTopazPackageReaderVisitorV2
+readPackages: packagesRoot
+	| trace |
+	trace := Rowan projectTools trace.
+	packagesRoot files
+		do: [ :packageFile | 
+			packageFile extension = self filenameExtension
+				ifFalse: [ 
+					trace
+						trace:
+							'--- skip reading ' , packageFile printString
+								, ' not a topaz package file (missing or malformed package.gs file' ]
+				ifTrue: [ 
+					| packageName |
+					packageName := packageFile base.
+					trace
+						trace:
+							'--- reading package ' , packageName asString , ' dir ' , packageFile asString.
+					(self packageNamesBlock value: packageName)
+						ifTrue: [ 
+							GsFileinPackager
+								toPackagesForDefinedProject: self currentProjectDefinition
+								componentName:
+									(self currentProjectDefinition componentForPackageNamed: packageName) name
+								fromServerPath: packageFile pathString ]
+						ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ]
 %
 
 ! Class implementation for 'RwAbstractResolvedObjectV2'
@@ -62744,7 +63963,8 @@ exportPackages
 category: 'exporting'
 method: RwResolvedProjectV2
 exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention
-	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	| projectSetDefinition visitor projectSetModification writerVisitorClass sourceProjectSetDefinition |
+	sourceProjectSetDefinition := diskProjectSetDefinition.
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
 			fileStream
@@ -62760,11 +63980,20 @@ exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageForma
 				lf ].	"write out packages"
 	writerVisitorClass := packageFormat = 'tonel'
 		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
-		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
+		ifFalse: [ 
+			packageFormat = 'filetree'
+				ifTrue: [ RwModificationFiletreeWriterVisitorV2 ]
+				ifFalse: [ 
+					packageFormat = 'topaz'
+						ifTrue: [ 
+							"topaz package format does not do incremental writes, to compare against empty disk project set"
+							sourceProjectSetDefinition := RwProjectSetDefinition new.
+							RwGsModificationTopazPackageWriterVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , packageFormat printString ] ] ].
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
-		compareAgainstBase: diskProjectSetDefinition.
+		compareAgainstBase: sourceProjectSetDefinition.
 	visitor := writerVisitorClass new
 		packagesRoot: packagesRoot;
 		yourself.
@@ -63159,7 +64388,13 @@ readPackageNames: packageNames
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'filetree'
+				ifTrue: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ]
+				ifFalse: [ 
+					format = 'topaz'
+						ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , format printString ] ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
@@ -63182,7 +64417,13 @@ readPackageNamesBlock: packageNamesBlock
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'filetree'
+				ifTrue: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ]
+				ifFalse: [ 
+					format = 'topaz'
+						ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , format printString ] ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNamesBlock: packageNamesBlock;
@@ -85100,7 +86341,7 @@ packageFormat
 category: 'accessing'
 method: RwProjectSpecificationV2
 packageFormat: aString
-	(#('tonel' 'filetree') includes: aString)
+	(#('tonel' 'filetree' 'topaz') includes: aString)
 		ifFalse: [ 
 			self
 				error:
