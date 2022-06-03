@@ -85,6 +85,13 @@ RwGsModificationTopazPackageWriterVisitorV2 >> _fileOutClassDeclaration: classDe
 	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
 ]
 
+{ #category : 'private' }
+RwGsModificationTopazPackageWriterVisitorV2 >> _resetState [
+	"clear the instance vars and get ready for the next package"
+
+	currentPackageDefinition := currentClassDefinition := currentClassExtension := bufferedStream := classDefinitions := classExtensions := classInitializationDefinitions := classSymbolDictionaryNames := excludeClassInitializers := excludeRemoveAllMethods := nil
+]
+
 { #category : 'private exporting' }
 RwGsModificationTopazPackageWriterVisitorV2 >> _setBufferedStreamFor: filename [
 
@@ -202,7 +209,7 @@ RwGsModificationTopazPackageWriterVisitorV2 >> processPackage: aPackageModificat
 	self bufferedStream
 		nextPutAll: self topazFileHeader;
 		lf;
-		nextPutAll: 'SET PACKAGENAME: ' , packageName;
+		nextPutAll: 'SET PACKAGE: ' , packageName;
 		lf.
 
 	classInitializationDefinitions := Set new.	"per file record"
@@ -243,5 +250,6 @@ RwGsModificationTopazPackageWriterVisitorV2 >> processPackage: aPackageModificat
 
 	self bufferedStream
 		flush;
-		close
+		close.
+	self _resetState
 ]

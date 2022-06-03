@@ -799,7 +799,13 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'filetree'
+				ifTrue: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ]
+				ifFalse: [ 
+					format = 'topaz'
+						ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , format printString ] ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
@@ -821,7 +827,13 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'filetree'
+				ifTrue: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ]
+				ifFalse: [ 
+					format = 'topaz'
+						ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+						ifFalse: [ self error: 'Unknown package format ' , format printString ] ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNamesBlock: packageNamesBlock;

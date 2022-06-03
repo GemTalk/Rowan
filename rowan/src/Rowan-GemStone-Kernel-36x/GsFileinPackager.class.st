@@ -332,7 +332,7 @@ GsFileinPackager >> createGsComMethodForWorkspace: chunk [
 GsFileinPackager >> currentPackage: aPackageName [
 	(self definedProject notNil and: [ aPackageName notNil ])
 		ifTrue: [ 
-			| componentName |
+			| componentName packageDef |
 			self packageCount: self packageCount + 1.
 			self packageCount > 1
 				ifTrue: [ 
@@ -342,11 +342,13 @@ GsFileinPackager >> currentPackage: aPackageName [
 			componentName := self packageNameToComponentNameMap
 				at: aPackageName
 				ifAbsent: [ self defaultComponentName ].
-			self
-				packageDefinition:
-					(self definedProject
+			packageDef := self definedProject
+				packageNamed: aPackageName
+				ifAbsent: [ 
+					self definedProject
 						addPackageNamed: aPackageName
-						toComponentNamed: componentName) ]
+						toComponentNamed: componentName ].
+			self packageDefinition: packageDef ]
 		ifFalse: [ Rowan gemstoneTools topaz currentTopazPackageName: aPackageName ]
 ]
 
@@ -438,8 +440,8 @@ GsFileinPackager >> packageDefinition [
 ]
 
 { #category : 'accessing' }
-GsFileinPackager >> packageDefinition: object [
-	packageDefinition := object
+GsFileinPackager >> packageDefinition: aPackageDefinition [
+	packageDefinition := aPackageDefinition
 ]
 
 { #category : 'accessing' }
