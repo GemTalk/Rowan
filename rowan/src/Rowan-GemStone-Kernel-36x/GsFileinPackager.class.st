@@ -7,23 +7,20 @@ Class {
 		'defaultComponentName',
 		'packageDefinition',
 		'packageCount',
-		'onDoitBlock'
+		'onDoitBlock',
+		'packageConvention'
 	],
 	#category : 'Rowan-GemStone-Kernel-36x'
 }
 
 { #category : 'instance creation' }
-GsFileinPackager class >> toPackage: packageName fromServerPath: aString [
-	self toPackage: packageName fromServerPath: aString onDoitBlock: nil
-]
-
-{ #category : 'instance creation' }
-GsFileinPackager class >> toPackage: packageName fromServerPath: aString onDoitBlock: aZeroOneOrTwoArgBlockOrNil [
+GsFileinPackager class >> toPackage: packageName fromServerPath: aString packageConvention: packageConvention onDoitBlock: aZeroOneOrTwoArgBlockOrNil [
 	| fileStream gsFilein |
 	fileStream := FileStreamPortable read: aString type: #'serverText'.
 	[ 
 	gsFilein := self new
 		fileStream: fileStream;
+		packageConvention: packageConvention;
 		setSession: nil;
 		yourself.
 	aZeroOneOrTwoArgBlockOrNil
@@ -31,6 +28,11 @@ GsFileinPackager class >> toPackage: packageName fromServerPath: aString onDoitB
 	gsFilein currentPackage: packageName.
 	gsFilein doFileIn ]
 		ensure: [ fileStream close ]
+]
+
+{ #category : 'instance creation' }
+GsFileinPackager class >> toPackage: packageName packageConvention: packageConvention fromServerPath: aString [
+	self toPackage: packageName fromServerPath: aString packageConvention: packageConvention onDoitBlock: nil
 ]
 
 { #category : 'instance creation' }
@@ -118,14 +120,28 @@ GsFileinPackager >> classMethod [
 	currentClass ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
-			(packageDef
+			| classDef methodDef |
+			methodDef := ((classDef := packageDef
 				classDefinitionNamed: currentClass
-				ifAbsent: [ 
+				ifAbsent: [  ])
+				ifNil: [ 
 					packageDef
 						classExtensionDefinitionNamed: currentClass
 						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
 				addClassMethod: self nextChunk
-				protocol: category ]
+				protocol: category.
+			[ 
+			RwAbstractReaderWriterVisitor
+				validatePackageConvention: self packageConvention
+				forClassDefinition: classDef
+				forMethodDefinitionProtocol: methodDef
+				className: currentClass
+				isMeta: true
+				forPackageNamed: packageDef name ]
+				on: RwInvalidMethodProtocolConventionErrorNotification
+				do: [ :ex | 
+					"opportunity to automatically correct method protocol"
+					self halt ] ]
 		ifNil: [ self compileMethodIn: currentClass , ' class' ]
 ]
 
@@ -151,7 +167,7 @@ GsFileinPackager >> commitTransaction [
 
 { #category : 'class definition creation' }
 GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNode [
-	| messages classCreationMessageNode args cat comment superclassName |
+	| messages classCreationMessageNode args cat comment superclassName classDef |
 	self packageDefinition ifNil: [ self error: 'current package not defined' ].
 	messages := cascadeNode messages.
 	classCreationMessageNode := messages first receiver.
@@ -179,7 +195,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantCa
 								==
 									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
 		ifTrue: [ 
-			| classDef type |
+			| type |
 			type := 'normal'.
 			(classCreationMessageNode selector
 				==
@@ -212,7 +228,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantCa
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
 				ifTrue: [ 
-					| classDef type |
+					| type |
 					type := 'byteSubclass'.
 					classDef := self packageDefinition
 						addClassNamed: (args at: 1) token value
@@ -228,12 +244,21 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantCa
 					classCreationMessageNode selector
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
-						ifTrue: [ classDef gs_reservedOop: (args at: 6) token value asString ] ] ]
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) token value asString ] ] ].
+	[ 
+	RwAbstractReaderWriterVisitor
+		validatePackageConvention: self packageConvention
+		forClassCategory: classDef
+		inPackageNamed: self packageDefinition name ]
+		on: RwInvalidClassCategoryConventionErrorNotification
+		do: [ :ex | 
+			"opportunity to automatically correct class category"
+			self halt ]
 ]
 
 { #category : 'class definition creation' }
 GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: cascadeNode [
-	| messages classCreationMessageNode args cat comment superclassName |
+	| messages classCreationMessageNode args cat comment superclassName classDef |
 	self packageDefinition ifNil: [ self error: 'current package not defined' ].
 	messages := cascadeNode messages.
 	classCreationMessageNode := cascadeNode receiver.
@@ -261,7 +286,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantGs
 								==
 									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
 		ifTrue: [ 
-			| classDef type |
+			| type |
 			type := 'normal'.
 			(classCreationMessageNode selector
 				==
@@ -294,7 +319,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantGs
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
 				ifTrue: [ 
-					| classDef type |
+					| type |
 					type := 'byteSubclass'.
 					classDef := self packageDefinition
 						addClassNamed: (args at: 1) leaf litValue
@@ -310,7 +335,16 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantGs
 					classCreationMessageNode selector
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
-						ifTrue: [ classDef gs_reservedOop: (args at: 6) leaf litValue asString ] ] ]
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) leaf litValue asString ] ] ].
+	[ 
+	RwAbstractReaderWriterVisitor
+		validatePackageConvention: self packageConvention
+		forClassCategory: classDef
+		inPackageNamed: self packageDefinition name ]
+		on: RwInvalidClassCategoryConventionErrorNotification
+		do: [ :ex | 
+			"opportunity to automatically correct class category"
+			self halt ]
 ]
 
 { #category : 'private' }
@@ -393,14 +427,28 @@ GsFileinPackager >> method [
 	currentClass ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
-			(packageDef
+			| classDef methodDef |
+			methodDef := ((classDef := packageDef
 				classDefinitionNamed: currentClass
-				ifAbsent: [ 
+				ifAbsent: [  ])
+				ifNil: [ 
 					packageDef
 						classExtensionDefinitionNamed: currentClass
 						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
 				addInstanceMethod: self nextChunk
-				protocol: category ]
+				protocol: category.
+			[ 
+			RwAbstractReaderWriterVisitor
+				validatePackageConvention: self packageConvention
+				forClassDefinition: classDef
+				forMethodDefinitionProtocol: methodDef
+				className: currentClass
+				isMeta: false
+				forPackageNamed: packageDef name ]
+				on: RwInvalidMethodProtocolConventionErrorNotification
+				do: [ :ex | 
+					"opportunity to automatically correct method protocol"
+					self halt ] ]
 		ifNil: [ self compileMethodIn: currentClass ]
 ]
 
@@ -422,6 +470,17 @@ GsFileinPackager >> onDoitBlock [
 { #category : 'accessing' }
 GsFileinPackager >> onDoitBlock: aZeroOneOrTwoArgBlock [
 	onDoitBlock := aZeroOneOrTwoArgBlock
+]
+
+{ #category : 'accessing' }
+GsFileinPackager >> packageConvention [
+	^ packageConvention
+		ifNil: [ packageConvention := self definedProject packageConvention ]
+]
+
+{ #category : 'accessing' }
+GsFileinPackager >> packageConvention: object [
+	packageConvention := object
 ]
 
 { #category : 'accessing' }

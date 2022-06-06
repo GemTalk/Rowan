@@ -56,6 +56,11 @@ RwAbstractUnloadedProject >> load [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> packageConvention [
+	^ self _resolvedProject packageConvention
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> packageFormat: aString [
 	^ self _resolvedProject packageFormat: aString
 ]

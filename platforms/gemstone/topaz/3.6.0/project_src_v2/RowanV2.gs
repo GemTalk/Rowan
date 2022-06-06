@@ -356,7 +356,7 @@ removeallclassmethods ZnCharacterEncodingError
 doit
 (GsFileIn
 	subclass: 'GsFileinPackager'
-	instVarNames: #( definedProject packageNameToComponentNameMap defaultComponentName packageDefinition packageCount onDoitBlock )
+	instVarNames: #( definedProject packageNameToComponentNameMap defaultComponentName packageDefinition packageCount onDoitBlock packageConvention )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -10667,18 +10667,13 @@ name
 
 category: 'instance creation'
 classmethod: GsFileinPackager
-toPackage: packageName fromServerPath: aString
-	self toPackage: packageName fromServerPath: aString onDoitBlock: nil
-%
-
-category: 'instance creation'
-classmethod: GsFileinPackager
-toPackage: packageName fromServerPath: aString onDoitBlock: aZeroOneOrTwoArgBlockOrNil
+toPackage: packageName fromServerPath: aString packageConvention: packageConvention onDoitBlock: aZeroOneOrTwoArgBlockOrNil
 	| fileStream gsFilein |
 	fileStream := FileStreamPortable read: aString type: #'serverText'.
 	[ 
 	gsFilein := self new
 		fileStream: fileStream;
+		packageConvention: packageConvention;
 		setSession: nil;
 		yourself.
 	aZeroOneOrTwoArgBlockOrNil
@@ -10686,6 +10681,12 @@ toPackage: packageName fromServerPath: aString onDoitBlock: aZeroOneOrTwoArgBloc
 	gsFilein currentPackage: packageName.
 	gsFilein doFileIn ]
 		ensure: [ fileStream close ]
+%
+
+category: 'instance creation'
+classmethod: GsFileinPackager
+toPackage: packageName packageConvention: packageConvention fromServerPath: aString
+	self toPackage: packageName fromServerPath: aString packageConvention: packageConvention onDoitBlock: nil
 %
 
 category: 'instance creation'
@@ -10784,14 +10785,28 @@ classMethod
 	currentClass ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
-			(packageDef
+			| classDef methodDef |
+			methodDef := ((classDef := packageDef
 				classDefinitionNamed: currentClass
-				ifAbsent: [ 
+				ifAbsent: [  ])
+				ifNil: [ 
 					packageDef
 						classExtensionDefinitionNamed: currentClass
 						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
 				addClassMethod: self nextChunk
-				protocol: category ]
+				protocol: category.
+			[ 
+			RwAbstractReaderWriterVisitor
+				validatePackageConvention: self packageConvention
+				forClassDefinition: classDef
+				forMethodDefinitionProtocol: methodDef
+				className: currentClass
+				isMeta: true
+				forPackageNamed: packageDef name ]
+				on: RwInvalidMethodProtocolConventionErrorNotification
+				do: [ :ex | 
+					"opportunity to automatically correct method protocol"
+					self halt ] ]
 		ifNil: [ self compileMethodIn: currentClass , ' class' ]
 %
 
@@ -10820,7 +10835,7 @@ commitTransaction
 category: 'class definition creation'
 method: GsFileinPackager
 createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNode
-	| messages classCreationMessageNode args cat comment superclassName |
+	| messages classCreationMessageNode args cat comment superclassName classDef |
 	self packageDefinition ifNil: [ self error: 'current package not defined' ].
 	messages := cascadeNode messages.
 	classCreationMessageNode := messages first receiver.
@@ -10848,7 +10863,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNo
 								==
 									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
 		ifTrue: [ 
-			| classDef type |
+			| type |
 			type := 'normal'.
 			(classCreationMessageNode selector
 				==
@@ -10881,7 +10896,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNo
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
 				ifTrue: [ 
-					| classDef type |
+					| type |
 					type := 'byteSubclass'.
 					classDef := self packageDefinition
 						addClassNamed: (args at: 1) token value
@@ -10897,13 +10912,22 @@ createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNo
 					classCreationMessageNode selector
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
-						ifTrue: [ classDef gs_reservedOop: (args at: 6) token value asString ] ] ]
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) token value asString ] ] ].
+	[ 
+	RwAbstractReaderWriterVisitor
+		validatePackageConvention: self packageConvention
+		forClassCategory: classDef
+		inPackageNamed: self packageDefinition name ]
+		on: RwInvalidClassCategoryConventionErrorNotification
+		do: [ :ex | 
+			"opportunity to automatically correct class category"
+			self halt ]
 %
 
 category: 'class definition creation'
 method: GsFileinPackager
 createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: cascadeNode
-	| messages classCreationMessageNode args cat comment superclassName |
+	| messages classCreationMessageNode args cat comment superclassName classDef |
 	self packageDefinition ifNil: [ self error: 'current package not defined' ].
 	messages := cascadeNode messages.
 	classCreationMessageNode := cascadeNode receiver.
@@ -10931,7 +10955,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: casc
 								==
 									#'indexableSubclass:instVarNames:classVars:classInstVars:poolDictionaries:inDictionary:options:' ] ] ])
 		ifTrue: [ 
-			| classDef type |
+			| type |
 			type := 'normal'.
 			(classCreationMessageNode selector
 				==
@@ -10964,7 +10988,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: casc
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:' ])
 				ifTrue: [ 
-					| classDef type |
+					| type |
 					type := 'byteSubclass'.
 					classDef := self packageDefinition
 						addClassNamed: (args at: 1) leaf litValue
@@ -10980,7 +11004,16 @@ createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: casc
 					classCreationMessageNode selector
 						==
 							#'_newKernelByteSubclass:classVars:poolDictionaries:inDictionary:options:reservedOop:'
-						ifTrue: [ classDef gs_reservedOop: (args at: 6) leaf litValue asString ] ] ]
+						ifTrue: [ classDef gs_reservedOop: (args at: 6) leaf litValue asString ] ] ].
+	[ 
+	RwAbstractReaderWriterVisitor
+		validatePackageConvention: self packageConvention
+		forClassCategory: classDef
+		inPackageNamed: self packageDefinition name ]
+		on: RwInvalidClassCategoryConventionErrorNotification
+		do: [ :ex | 
+			"opportunity to automatically correct class category"
+			self halt ]
 %
 
 category: 'private'
@@ -11073,14 +11106,28 @@ method
 	currentClass ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
-			(packageDef
+			| classDef methodDef |
+			methodDef := ((classDef := packageDef
 				classDefinitionNamed: currentClass
-				ifAbsent: [ 
+				ifAbsent: [  ])
+				ifNil: [ 
 					packageDef
 						classExtensionDefinitionNamed: currentClass
 						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
 				addInstanceMethod: self nextChunk
-				protocol: category ]
+				protocol: category.
+			[ 
+			RwAbstractReaderWriterVisitor
+				validatePackageConvention: self packageConvention
+				forClassDefinition: classDef
+				forMethodDefinitionProtocol: methodDef
+				className: currentClass
+				isMeta: false
+				forPackageNamed: packageDef name ]
+				on: RwInvalidMethodProtocolConventionErrorNotification
+				do: [ :ex | 
+					"opportunity to automatically correct method protocol"
+					self halt ] ]
 		ifNil: [ self compileMethodIn: currentClass ]
 %
 
@@ -11104,6 +11151,19 @@ category: 'accessing'
 method: GsFileinPackager
 onDoitBlock: aZeroOneOrTwoArgBlock
 	onDoitBlock := aZeroOneOrTwoArgBlock
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageConvention
+	^ packageConvention
+		ifNil: [ packageConvention := self definedProject packageConvention ]
+%
+
+category: 'accessing'
+method: GsFileinPackager
+packageConvention: object
+	packageConvention := object
 %
 
 category: 'accessing'
@@ -58362,6 +58422,60 @@ tonelExtensionLabel
 	^ 'Extension'
 %
 
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+validatePackageConvention: packageConvention forClassCategory: aClassDefinition inPackageNamed: packageName
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	"signal an error if the class category does not conform to the convention for the current project"
+
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ 
+			^ self
+				_validateRowanHybridClassCategoryConvention: aClassDefinition
+				forPackageNamed: packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ 
+			^ self
+				_validateRowanMonticelloClassCategoryConvention: aClassDefinition
+				forPackageNamed: packageName ].
+	"Rowan - no convention ... any old class category is fine"
+%
+
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+validatePackageConvention: packageConvention forClassDefinition: classDefinition forMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed: packageName
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	"signal an error if the protocol does not conform to the convention for the current project"
+
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ 
+			^ self
+				_validateRowanHybridProtocolConventionClassDefinition: classDefinition
+				methodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				forPackageNamed: packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ 
+			^ self
+				_validateRowanMonticelloProtocolConventionClassDefinition: classDefinition
+				methodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				forPackageNamed: packageName ]
+	"Rowan - no convention ... any old protocol is fine"
+%
+
 category: 'private'
 classmethod: RwAbstractReaderWriterVisitor
 _readObjectFrom: aFileReference
@@ -58391,6 +58505,119 @@ _repositoryPropertyDictFor: packagesRoot
 			propertiesDict at: #'format' put: 'filetree'.
 			^ propertiesDict ].
 	^ self _readObjectFrom: propertiesFile
+%
+
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+_validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
+	aClassDefinition category = packageName
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'RowanHybrid'
+%
+
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+_validateRowanHybridProtocolConventionClassDefinition: classDefinition methodDefinition: methodDef className: className isMeta: isMeta forPackageNamed: packageName
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
+	(protocol at: 1) = $*
+		ifTrue: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'RowanHybrid'.
+					^ self ] ]
+		ifFalse: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol does not start with $* which is correct"
+					^ self ] ].	
+	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'RowanHybrid'.
+			^ self ].
+	canonProtocol := protocol asLowercase.
+	expectedProtocol := '*' , packageName asLowercase.
+	canonProtocol = expectedProtocol
+		ifTrue: [ ^ self ].	
+	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'RowanHybrid'
+%
+
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+_validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
+	(aClassDefinition category beginsWith: packageName)
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'Monticello'
+%
+
+category: 'validation'
+classmethod: RwAbstractReaderWriterVisitor
+_validateRowanMonticelloProtocolConventionClassDefinition: classDefinition methodDefinition: methodDef className: className isMeta: isMeta forPackageNamed: packageName
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
+	(protocol at: 1) = $*
+		ifTrue: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'Monticello'.
+					^ self ] ]
+		ifFalse: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol does not start with $* as expected"
+					^ self ] ].
+	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'Monticello'.
+			^ self ].
+	canonProtocol := protocol asLowercase.
+	expectedProtocol := '*' , packageName asLowercase.
+	(canonProtocol beginsWith: expectedProtocol)
+		ifTrue: [ ^ self ].	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'Monticello'
 %
 
 !		Instance methods for 'RwAbstractReaderWriterVisitor'
@@ -58480,8 +58707,7 @@ projectName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateClassCategory: aClassDefinition  forPackageNamed: packageName
-
+validateClassCategory: aClassDefinition forPackageNamed: packageName
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
 		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
@@ -58490,17 +58716,15 @@ validateClassCategory: aClassDefinition  forPackageNamed: packageName
 
 	"signal an error if the protocol does not conform to the convention for the current project"
 
-	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
-	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
-	"Rowan - no convention ... any old protocol is fine"
+	self class
+		validatePackageConvention: self packageConvention
+		forClassCategory: aClassDefinition
+		inPackageNamed: packageName
 %
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed:  packageName
-
+validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed: packageName
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
 		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
@@ -58509,11 +58733,13 @@ validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta 
 
 	"signal an error if the protocol does not conform to the convention for the current project"
 
-	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
-	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention:methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
-	"Rowan - no convention ... any old protocol is fine"
+	^ self class
+		validatePackageConvention: self packageConvention
+		forClassDefinition: self currentClassDefinition
+		forMethodDefinitionProtocol: methodDef
+		className: className
+		isMeta: isMeta
+		forPackageNamed: packageName
 %
 
 category: 'private'
@@ -58549,118 +58775,6 @@ method: RwAbstractReaderWriterVisitor
 _repositoryPropertyDictFor: packagesRoot
 
 	^ self class _repositoryPropertyDictFor: packagesRoot
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-
-	aClassDefinition category = packageName ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification 
-		signalWithClassDefinition: aClassDefinition 
-			packageName: packageName 
-			packageConvention: 'RowanHybrid'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanHybridProtocolConvention:  methodDef className: className isMeta: isMeta forPackageNamed:  packageName
-
-	| canonProtocol expectedProtocol protocol |
-	protocol := methodDef protocol.
-	(protocol at: 1) = $*
-		ifTrue: [
-			currentClassDefinition
-				ifNotNil: [
-					"protocol should not start with $* for a non-extension method"
-					RwExtensionProtocolNonExtensionMethodErrorNotification 
-						signalWithMethodDefinition: methodDef
-							className: className 
-							isMeta: isMeta 
-							packageName:  packageName
-							packageConvention: 'RowanHybrid'.
-					^ self ] ]
-		ifFalse: [
-			currentClassDefinition 
-				ifNotNil:  [ 
-					"protocol does not start with $* as expected"
-					^ self ] ].			
-	"validate conformance to convention for extension method"
-	(protocol at: 1) = $*
-		ifFalse: [
-			"extension method protocol must start with a *"
-			RwNonExtensionProtocolExtensionMethodErrorNotification
-				signalWithMethodDefinition: methodDef
-					className: className 
-					isMeta: isMeta 
-					packageName:  packageName
-					packageConvention: 'RowanHybrid'.
-			^ self  ].
-	canonProtocol := protocol asLowercase.
-	expectedProtocol := '*', packageName asLowercase.
-	canonProtocol = expectedProtocol ifTrue: [ ^ self ].
-	"protocol does not match package name"
-	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
-		signalWithMethodDefinition: methodDef
-			className: className 
-			isMeta: isMeta 
-			packageName:  packageName
-			packageConvention: 'RowanHybrid'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-	(aClassDefinition category beginsWith: packageName)
-		ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification
-		signalWithClassDefinition: aClassDefinition
-		packageName: packageName
-		packageConvention: 'Monticello'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed: packageName
-	| canonProtocol expectedProtocol protocol |
-	protocol := methodDef protocol.
-	(protocol at: 1) = $*
-		ifTrue: [ 
-			currentClassDefinition
-				ifNotNil: [ 
-					"protocol should not start with $* for a non-extension method"
-					RwExtensionProtocolNonExtensionMethodErrorNotification
-						signalWithMethodDefinition: methodDef
-						className: className
-						isMeta: isMeta
-						packageName: packageName
-						packageConvention: 'Monticello'.
-					^ self ] ]
-		ifFalse: [ 
-			currentClassDefinition
-				ifNotNil: [ 
-					"protocol does not start with $* as expected"
-					^ self ] ].	"validate conformance to convention for extension method"
-	(protocol at: 1) = $*
-		ifFalse: [ 
-			"extension method protocol must start with a *"
-			RwNonExtensionProtocolExtensionMethodErrorNotification
-				signalWithMethodDefinition: methodDef
-				className: className
-				isMeta: isMeta
-				packageName: packageName
-				packageConvention: 'Monticello'.
-			^ self ].
-	canonProtocol := protocol asLowercase.
-	expectedProtocol := '*' , packageName asLowercase.
-	(canonProtocol beginsWith: expectedProtocol)
-		ifTrue: [ ^ self ].	"protocol does not match package name"
-	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
-		signalWithMethodDefinition: methodDef
-		className: className
-		isMeta: isMeta
-		packageName: packageName
-		packageConvention: 'Monticello'
 %
 
 ! Class implementation for 'RwModificationWriterVisitor'
