@@ -70,14 +70,16 @@ RwRowanCrooked9Test >> _checkoutBranchNamed: branchName [
 RwRowanCrooked9Test >> testIssue820 [
 	"https://github.com/GemTalk/Rowan/issues/820"
 
-	| loadSpec projectName rowanSample9Project crookedProjectName crookedSourceProjectName |
+	| loadSpec projectName rowanSample9Project crookedProjectName crookedSourceProjectName rowanProjectsSandbox |
 	loadSpec := RwRowanSample9Test _loadSpecNamed: 'spec_0082'.
 	projectName := loadSpec projectName.
 	crookedProjectName := 'RowanCrooked9_gen'.
 	crookedSourceProjectName := 'RowanCrooked9'.
 
 	{projectName.
-	crookedProjectName}
+	(crookedProjectName , '_Rowan').
+	(crookedProjectName , '_RowanHybrid').
+	(crookedProjectName , '_Monticello')}
 		do: [ :pName | 
 			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
@@ -86,25 +88,49 @@ RwRowanCrooked9Test >> testIssue820 [
 
 	self _checkoutBranchNamed: 'spec_0003'.
 
+	rowanProjectsSandbox := self _testRowanProjectsSandbox.
 	{'Rowan'.
 	'RowanHybrid'.
 	'Monticello'}
 		do: [ :packageConvention | 
-			| resolvedProject definedProject |
-			definedProject := (Rowan newProjectNamed: crookedProjectName)
+			| resolvedProject definedProject theProjectName |
+			theProjectName := crookedProjectName , '_' , packageConvention.
+			(rowanProjectsSandbox / theProjectName) ensureDeleteAll.
+			definedProject := (Rowan newProjectNamed: theProjectName)
 				packageConvention: packageConvention;
 				gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 				repoType: #'git';
 				packageFormat: 'topaz';
-				projectsHome: self _testRowanProjectsSandbox / crookedProjectName;
+				projectsHome: rowanProjectsSandbox;
 				addTopLevelComponentNamed: 'Core';
 				yourself.
 			(Rowan globalNamed: 'GsFileinPackager')
 				toPackagesForDefinedProject: definedProject
 				fromServerPath:
-					(self _testRowanProjectsSandbox / crookedSourceProjectName / 'extensions.gs') pathString.
-self halt: 'that stupid cross resolve boundary reread from disk bug!!!!'.
+					(rowanProjectsSandbox / crookedSourceProjectName / 'extensions.gs') pathString.
 			resolvedProject := definedProject resolve.
-			resolvedProject write.
-self halt ]
+			resolvedProject write ].
+
+	{'Rowan'.
+	'RowanHybrid'.
+	'Monticello'}
+		do: [ :packageConvention | 
+			| theProjectName loadedProject testResult audit |
+			"now load/test/unload each project in turn"
+			theProjectName := crookedProjectName , '_' , packageConvention.
+			loadedProject := (Rowan
+				projectFromUrl:
+					'file:'
+						,
+							(rowanProjectsSandbox / theProjectName / 'rowan' / 'specs' / theProjectName
+								, 'ston') pathString
+				projectsHome: rowanProjectsSandbox) load first.
+			packageConvention ~= 'Monticello'
+				ifTrue: [ 
+					"audit for Monticello packaage convention not yet supported (https://github.com/GemTalk/Rowan/issues/829)"
+					self assert: (audit := loadedProject audit) isEmpty ].
+			testResult := loadedProject testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures.
+			loadedProject unload ]
 ]

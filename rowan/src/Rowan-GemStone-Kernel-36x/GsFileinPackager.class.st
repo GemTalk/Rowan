@@ -103,6 +103,30 @@ GsFileinPackager class >> toPackagesForDefinedProject: definedProject packageNam
 	gsFilein doFileIn
 ]
 
+{ #category : 'private' }
+GsFileinPackager >> _correctClassCategoryFor: classDef [
+	(self packageConvention = 'RowanHybrid'
+		or: [ self packageConvention = 'Monticello' ])
+		ifTrue: [ classDef category: self packageDefinition name ]
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected invalid class category for package convention '
+						, self packageConvention printString ]
+]
+
+{ #category : 'private' }
+GsFileinPackager >> _correctMethodProtocolFor: methodDef [
+	(self packageConvention = 'RowanHybrid'
+		or: [ self packageConvention = 'Monticello' ])
+		ifTrue: [ methodDef protocol: '*' , self packageDefinition name asLowercase ]
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected invalid method protocol for package convention '
+						, self packageConvention printString ]
+]
+
 { #category : 'processing' }
 GsFileinPackager >> abort [
 	^ GsSession isSolo
@@ -141,7 +165,7 @@ GsFileinPackager >> classMethod [
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
-					self halt ] ]
+					self _correctMethodProtocolFor: methodDef ] ]
 		ifNil: [ self compileMethodIn: currentClass , ' class' ]
 ]
 
@@ -253,7 +277,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantCa
 		on: RwInvalidClassCategoryConventionErrorNotification
 		do: [ :ex | 
 			"opportunity to automatically correct class category"
-			self halt ]
+			self _correctClassCategoryFor: classDef ]
 ]
 
 { #category : 'class definition creation' }
@@ -344,7 +368,7 @@ GsFileinPackager >> createClassDefinitionFromCommentCategoryImmediateInvariantGs
 		on: RwInvalidClassCategoryConventionErrorNotification
 		do: [ :ex | 
 			"opportunity to automatically correct class category"
-			self halt ]
+			self _correctClassCategoryFor: classDef ]
 ]
 
 { #category : 'private' }
@@ -448,7 +472,7 @@ GsFileinPackager >> method [
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
-					self halt ] ]
+					self _correctMethodProtocolFor: methodDef ] ]
 		ifNil: [ self compileMethodIn: currentClass ]
 ]
 

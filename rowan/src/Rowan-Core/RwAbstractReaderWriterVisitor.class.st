@@ -97,7 +97,8 @@ RwAbstractReaderWriterVisitor class >> _validateRowanHybridProtocolConventionCla
 
 { #category : 'validation' }
 RwAbstractReaderWriterVisitor class >> _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
-	(aClassDefinition category beginsWith: packageName)
+	(aClassDefinition category notNil
+		and: [ aClassDefinition category beginsWith: packageName ])
 		ifTrue: [ ^ self ].
 	RwInvalidClassCategoryConventionErrorNotification
 		signalWithClassDefinition: aClassDefinition

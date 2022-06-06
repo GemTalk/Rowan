@@ -10806,7 +10806,7 @@ classMethod
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
-					self halt ] ]
+					self _correctMethodProtocolFor: methodDef ] ]
 		ifNil: [ self compileMethodIn: currentClass , ' class' ]
 %
 
@@ -10921,7 +10921,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantCascadeNode: cascadeNo
 		on: RwInvalidClassCategoryConventionErrorNotification
 		do: [ :ex | 
 			"opportunity to automatically correct class category"
-			self halt ]
+			self _correctClassCategoryFor: classDef ]
 %
 
 category: 'class definition creation'
@@ -11013,7 +11013,7 @@ createClassDefinitionFromCommentCategoryImmediateInvariantGsComCascadeNode: casc
 		on: RwInvalidClassCategoryConventionErrorNotification
 		do: [ :ex | 
 			"opportunity to automatically correct class category"
-			self halt ]
+			self _correctClassCategoryFor: classDef ]
 %
 
 category: 'private'
@@ -11127,7 +11127,7 @@ method
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
-					self halt ] ]
+					self _correctMethodProtocolFor: methodDef ] ]
 		ifNil: [ self compileMethodIn: currentClass ]
 %
 
@@ -11287,6 +11287,32 @@ unexpectedNode: node expectedNode: expectedNode
 		error:
 			'Unrecognized class creation pattern. Expected a ' , expectedNode , ' not '
 				, node class name asString , '.'
+%
+
+category: 'private'
+method: GsFileinPackager
+_correctClassCategoryFor: classDef
+	(self packageConvention = 'RowanHybrid'
+		or: [ self packageConvention = 'Monticello' ])
+		ifTrue: [ classDef category: self packageDefinition name ]
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected invalid class category for package convention '
+						, self packageConvention printString ]
+%
+
+category: 'private'
+method: GsFileinPackager
+_correctMethodProtocolFor: methodDef
+	(self packageConvention = 'RowanHybrid'
+		or: [ self packageConvention = 'Monticello' ])
+		ifTrue: [ methodDef protocol: '*' , self packageDefinition name asLowercase ]
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected invalid method protocol for package convention '
+						, self packageConvention printString ]
 %
 
 ! Class implementation for 'RwGemStoneVersionNumber'
@@ -49817,6 +49843,12 @@ load
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
+packageConvention
+	^ self _resolvedProject packageConvention
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
 packageFormat: aString
 	^ self _resolvedProject packageFormat: aString
 %
@@ -58567,7 +58599,8 @@ _validateRowanHybridProtocolConventionClassDefinition: classDefinition methodDef
 category: 'validation'
 classmethod: RwAbstractReaderWriterVisitor
 _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-	(aClassDefinition category beginsWith: packageName)
+	(aClassDefinition category notNil
+		and: [ aClassDefinition category beginsWith: packageName ])
 		ifTrue: [ ^ self ].
 	RwInvalidClassCategoryConventionErrorNotification
 		signalWithClassDefinition: aClassDefinition
