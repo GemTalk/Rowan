@@ -4203,6 +4203,123 @@ RwRowanSample9Test >> testIssue777_02 [
 					ifFalse: [ self deny: (value isKindOf: Symbol) ] ] ] ]
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue830 [
+	"spec_0082 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/830"
+
+	| loadSpec projectName loadedProject packageName1 packageName2 class method |
+	loadSpec := self _loadSpecNamed: 'spec_0082'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"setup"
+	packageName1 := projectName, '-Core'.
+	packageName2 := projectName, '-Extensions'.
+
+false ifTrue: [
+"case1: protocol begins with a '*' and DOES map to an existing package in project 
+		using RowanHybrid package convention"
+
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	method := class
+		compileMethod: 'issue830'
+		dictionaries: Rowan image symbolList
+		category: '*', packageName2 asLowercase
+		environmentId: 0.
+	self assert: method rowanPackageName equals: packageName2.
+	loadedProject unload.
+].
+
+false ifTrue: [
+"case2: protocol begins with a '*' and DOES NOT map to an existing package and  
+		package of class in package with Rowan package convention "
+
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: loadedProject packageConvention equals: 'Rowan'.
+	method := class
+		compileMethod: 'issue830'
+		dictionaries: Rowan image symbolList
+		category: '*not-a-package-name'
+		environmentId: 0.
+	self assert: method rowanPackageName equals: class rowanPackageName.
+	loadedProject unload.
+].
+
+true ifTrue: [
+"**PASSES**"
+"case3: protocol begins with a '*' and DOES NOT map to an existing package 
+		but currentTopazPackageName maps to a package using Rowan package 
+		convention"
+
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: loadedProject packageConvention equals: 'Rowan'.
+	[
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+		method := class
+			compileMethod: 'issue830'
+			dictionaries: Rowan image symbolList
+			category: '*not-a-package-name'
+			environmentId: 0.
+		self assert: method rowanPackageName equals: packageName2.
+		loadedProject unload ] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ].
+].
+
+true ifTrue: [
+"**PASSES**"
+"case4a: protocol DOES NOT begin with a '*'; currentTopazPackageName not set; 
+		the class is not packaged, the method is not packaged"
+
+	[
+	class := Object
+		subclass: projectName, 'ClassXXX'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: (Rowan globalNamed: self _sampleSymbolDictionaryName1)
+		options: #().
+	self assert: Rowan gemstoneTools topaz currentTopazPackageName equals: nil.
+	self assert: class rowanPackageName equals: Rowan unpackagedName.
+	method := class
+		compileMethod: 'issue830'
+		dictionaries: Rowan image symbolList
+		category: 'accessing'
+		environmentId: 0.
+	self assert: method rowanPackageName equals: class rowanPackageName.
+	] ensure: [ 
+		class ifNotNil: [ 
+			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ] ].
+
+true ifTrue: [
+"case4b: protocol DOES NOT begin with a '*'; currentTopazPackageName not set; 
+		the method is added to package of class"
+
+	loadSpec := self _loadSpecNamed: 'spec_0082'.
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: Rowan gemstoneTools topaz currentTopazPackageName equals: nil.
+	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	self assert: class rowanPackageName equals: packageName1.
+	method := class
+		compileMethod: 'issue830'
+		dictionaries: Rowan image symbolList
+		category: 'accessing'
+		environmentId: 0.
+	self assert: method rowanPackageName equals: class rowanPackageName.
+	loadedProject unload ].
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
