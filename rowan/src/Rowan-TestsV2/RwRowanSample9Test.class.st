@@ -643,6 +643,12 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	self assert: exceptions isEmpty
 ]
 
+{ #category : 'running' }
+RwRowanSample9Test >> tearDown [
+	super tearDown.
+	Rowan gemstoneTools topaz currentTopazPackageName: nil
+]
+
 { #category : 'audit tests' }
 RwRowanSample9Test >> testAuditMethodsNotIdentical [
 	"RwAuditMethodDetail with #'methodsNotIdentical' reason for instance and class side methods"
@@ -3764,6 +3770,64 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 	self assert: (audit := project audit) isEmpty.
 
 "watch out ... jadeite won't bhave well with class and symbol dictionary of same name ... but that's okay"
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue557 [
+	"https://github.com/GemTalk/Rowan/issues/557"
+
+	| loadSpec projectName loadedProject packageName1 packageName2 class method |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"setup"
+	packageName1 := projectName, '-Core'.
+	packageName2 := projectName, '-Extensions'.
+
+#(case1 case2 case3 case4a case4b case4c case4d) do: [:case | UserGlobals removeKey: case ifAbsent: [] ].
+
+"case3b: existing method is NOT in a package. Method source changed and moved to package."
+	[
+		Rowan image newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+		class := Object
+			subclass: projectName, 'ClassXXX'
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			inDictionary: (Rowan globalNamed: self _sampleSymbolDictionaryName1)
+			options: #().
+		self assert: Rowan gemstoneTools topaz currentTopazPackageName equals: nil.
+		self assert: class rowanPackageName equals: Rowan unpackagedName.
+UserGlobals at: #case4a put: nil.
+		method := class
+			compileMethod: 'issue830'
+			dictionaries: Rowan image symbolList
+			category: 'accessing'
+			environmentId: 0.
+UserGlobals removeKey: #case4a.
+		self assert: method rowanPackageName equals: Rowan unpackagedName.
+
+		loadedProject := loadSpec resolve load first.
+
+UserGlobals at: #case3 put: nil.
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+		method := class
+			compileMethod: 'issue830 "hello"'
+			dictionaries: Rowan image symbolList
+			category: 'accessing'
+			environmentId: 0.
+UserGlobals removeKey: #case3.
+		self assert: method rowanPackageName equals: packageName2.
+	] ensure: [ 
+		class ifNotNil: [ 
+			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name.
+			Rowan gemstoneTools topaz currentTopazPackageName: nil.
+		loadedProject unload ] ].
 ]
 
 { #category : 'tests' }
