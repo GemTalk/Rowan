@@ -26,22 +26,25 @@ protocol := categ asString.
 							packageName := theMethod rowanPackageName.
 							packageName = Rowan unpackagedName
 								ifTrue: [ 
-									"method not already, packaged, check to see if the the 
+									"method not already, packaged, check to see if the 
 										currentTopazPackageName has been set, if so package the method
 										using the topaz package name"
 									Rowan gemstoneTools topaz currentTopazPackageName
 										ifNotNil: [ :topazPackageName | packageName := topazPackageName ] ].
 							packageName ~= Rowan unpackagedName
 								ifTrue: [ 
-									"The original method was packaged (or topaz package name set), so 
-										preserve the packaging"
+									"The original method was packaged (or currentTopazPackageName set), so 
+										preserve the packaging" 
 UserGlobals at: #case3 ifAbsent: [ self halt ].
 									^ self
 										rwCompileMethod: sourceString
 										dictionaries: symList
 										category: categ
-										packageName: packageName ].
-self halt. ]
+										packageName: packageName ]
+							ifFalse: [ 
+								"The original method is unpackaged, so compile method and do not package"
+UserGlobals at: #case4c ifAbsent: [ self halt ].
+						^ unpackagedBlock value ] ]
 						ifNil: [ 
 							"new method"
 							"https://github.com/GemTalk/Rowan/issues/830"
@@ -49,29 +52,29 @@ self halt. ]
 								ifTrue: [ 
 									^ (Rowan image loadedHybridPackageNamed: protocol ifAbsent: [  ])
 										ifNil: [ 
+											"The *protocol does not map to an existing package"
 											| packageName packageConvention |
-											"If the protocol begins with a '*' but does not map to an existing 
-												package and the package of the class follows the Rowan convention, 
-												then the method is added to the package of the class. If the class is 
-												not packaged, then the method is added to the given protocol, otherwise 
-												it is an error."
 											packageName := self rowanPackageName.
+											packageName = Rowan unpackagedName
+												ifTrue: [ 
+													"the class is not packaged, and protocol does not map to an existing 
+														package ... so we'll treat this as an unpackaged method."
+UserGlobals at: #case4d ifAbsent: [ self halt ].
+													^ unpackagedBlock value ].
 											(packageConvention := (Rowan image loadedPackageNamed: packageName)
 												loadedProject packageConvention) = 'Rowan'
 												ifTrue: [ 
+													"If the protocol begins with a '*' but does not map to an existing 
+														package and the package of the class follows the Rowan convention, 
+														then the method is added to the package of the class. If the class is 
+														not packaged, then the method is added to the given protocol, otherwise 
+														it is an error."
 UserGlobals at: #case2 ifAbsent: [ self halt ].
 													^ self
 														rwCompileMethod: sourceString
 														dictionaries: symList
 														category: categ
 														packageName: packageName ].
-											packageName = Rowan unpackagedName
-												ifTrue: [ 
-													"the class is not packaged, and protocol does not map to an existing 
-														package ... so we'll treat this as an unpackaged method."
-self halt.
-													^ unpackagedBlock value ].
-self halt.
 											self
 												error:
 													'The method category ' , protocol printString
@@ -100,11 +103,11 @@ UserGlobals at: #case1 ifAbsent: [ self halt ].
 												ifTrue: [ 
 													"the class is not packaged, so just add an unpackaged method to the 
 														unpackaged class"
-self halt.
+UserGlobals at: #case4a ifAbsent: [ self halt ].
 													^ unpackagedBlock value ]
 												ifFalse: [ 
 													"the class is packaged, so add the method to the package of the class"
-self halt.
+UserGlobals at: #case4b ifAbsent: [ self halt ].
 													^ self
 														rwCompileMethod: sourceString
 														dictionaries: symList
