@@ -4209,7 +4209,7 @@ RwRowanSample9Test >> testIssue830 [
 
 	"https://github.com/GemTalk/Rowan/issues/830"
 
-	| loadSpec projectName loadedProject packageName1 packageName2 class method |
+	| loadSpec projectName loadedProject packageName1 packageName2 class method audit |
 	loadSpec := self _loadSpecNamed: 'spec_0082'.
 
 	projectName := loadSpec projectName.
@@ -4221,62 +4221,69 @@ RwRowanSample9Test >> testIssue830 [
 	packageName1 := projectName, '-Core'.
 	packageName2 := projectName, '-Extensions'.
 
-false ifTrue: [
+#(case1 case2 case3) do: [:case | UserGlobals removeKey: case ifAbsent: [] ].
 "case1: protocol begins with a '*' and DOES map to an existing package in project 
-		using RowanHybrid package convention"
+		using RowanHybrid package convention ... ignore currentTopazPackageName"
 
 	loadedProject := loadSpec resolve load first.
 	class := Rowan globalNamed: projectName, 'Class1'.
 	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	Rowan gemstoneTools topaz currentTopazPackageName: packageName1.
+UserGlobals at: #case1 put: nil.
 	method := class
 		compileMethod: 'issue830'
 		dictionaries: Rowan image symbolList
 		category: '*', packageName2 asLowercase
 		environmentId: 0.
+UserGlobals removeKey: #case1.
 	self assert: method rowanPackageName equals: packageName2.
+	self assert: (audit := loadedProject audit) isEmpty.
 	loadedProject unload.
-].
 
-false ifTrue: [
 "case2: protocol begins with a '*' and DOES NOT map to an existing package and  
-		package of class in package with Rowan package convention "
+		package of class in package with Rowan package convention. Ignore 
+		currentTopazPackageName."
 
 	loadSpec := self _loadSpecNamed: 'spec_0057'.
 	loadedProject := loadSpec resolve load first.
 	class := Rowan globalNamed: projectName, 'Class1'.
 	self assert: loadedProject packageConvention equals: 'Rowan'.
-	method := class
-		compileMethod: 'issue830'
-		dictionaries: Rowan image symbolList
-		category: '*not-a-package-name'
-		environmentId: 0.
-	self assert: method rowanPackageName equals: class rowanPackageName.
-	loadedProject unload.
-].
-
-true ifTrue: [
-"**PASSES**"
-"case3: protocol begins with a '*' and DOES NOT map to an existing package 
-		but currentTopazPackageName maps to a package using Rowan package 
-		convention"
-
-	loadSpec := self _loadSpecNamed: 'spec_0057'.
-	loadedProject := loadSpec resolve load first.
-	class := Rowan globalNamed: projectName, 'Class1'.
-	self assert: loadedProject packageConvention equals: 'Rowan'.
+	self assert: class rowanPackageName equals: packageName1.
 	[
 		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+UserGlobals at: #case2 put: nil.
 		method := class
 			compileMethod: 'issue830'
 			dictionaries: Rowan image symbolList
 			category: '*not-a-package-name'
-			environmentId: 0.
-		self assert: method rowanPackageName equals: packageName2.
-		loadedProject unload ] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ].
-].
+			environmentId: 0 ] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ].
+UserGlobals removeKey: #case2.
+	self assert: method rowanPackageName equals: class rowanPackageName.
+	self assert: (audit := loadedProject audit) isEmpty.
+	loadedProject unload.
 
-true ifTrue: [
-"**PASSES**"
+"case3: protocol begins with a '*' and maps to an existing package and existing method. Method source changed and package preserved."
+
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: loadedProject packageConvention equals: 'Rowan'.
+	self assert: (class class compiledMethodAt: #bar) rowanPackageName equals: packageName2.
+	self assert: (class class categoryOfSelector: #bar) equals: #accessing.
+UserGlobals at: #case3 put: nil.
+		method := class class
+			compileMethod: 'bar ^ ''barf'''
+			dictionaries: Rowan image symbolList
+			category: 'butter'
+			environmentId: 0.
+UserGlobals removeKey: #case3.
+	self assert: method rowanPackageName equals: packageName2.
+	self assert: (audit := loadedProject audit) isEmpty.
+	self assert: method sourceString equals:  'bar ^ ''barf'''.
+	self assert: (class class categoryOfSelector: #bar) equals: #butter.
+	loadedProject unload.
+
+false ifTrue: [
 "case4a: protocol DOES NOT begin with a '*'; currentTopazPackageName not set; 
 		the class is not packaged, the method is not packaged"
 
@@ -4301,7 +4308,7 @@ true ifTrue: [
 		class ifNotNil: [ 
 			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ] ].
 
-true ifTrue: [
+false ifTrue: [
 "case4b: protocol DOES NOT begin with a '*'; currentTopazPackageName not set; 
 		the method is added to package of class"
 
