@@ -3774,6 +3774,8 @@ RwRowanSample9Test >> testIssue515_RowanSample2 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue557 [
+	"extracted from RwRowanSample9Test>>testIssue830 (chunk commented out) ... so when this bug is fixed uncomment the chunk in RwRowanSample9Test>>testIssue830"
+
 	"https://github.com/GemTalk/Rowan/issues/557"
 
 	| loadSpec projectName loadedProject packageName1 packageName2 class method |
@@ -3788,8 +3790,6 @@ RwRowanSample9Test >> testIssue557 [
 	packageName1 := projectName, '-Core'.
 	packageName2 := projectName, '-Extensions'.
 
-#(case1 case2 case3 case4a case4b case4c case4d) do: [:case | UserGlobals removeKey: case ifAbsent: [] ].
-
 "case3b: existing method is NOT in a package. Method source changed and moved to package."
 	[
 		Rowan image newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
@@ -3803,25 +3803,21 @@ RwRowanSample9Test >> testIssue557 [
 			options: #().
 		self assert: Rowan gemstoneTools topaz currentTopazPackageName equals: nil.
 		self assert: class rowanPackageName equals: Rowan unpackagedName.
-UserGlobals at: #case4a put: nil.
 		method := class
 			compileMethod: 'issue830'
 			dictionaries: Rowan image symbolList
 			category: 'accessing'
 			environmentId: 0.
-UserGlobals removeKey: #case4a.
 		self assert: method rowanPackageName equals: Rowan unpackagedName.
 
 		loadedProject := loadSpec resolve load first.
 
-UserGlobals at: #case3 put: nil.
 		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
 		method := class
 			compileMethod: 'issue830 "hello"'
 			dictionaries: Rowan image symbolList
 			category: 'accessing'
 			environmentId: 0.
-UserGlobals removeKey: #case3.
 		self assert: method rowanPackageName equals: packageName2.
 	] ensure: [ 
 		class ifNotNil: [ 
@@ -4286,7 +4282,7 @@ RwRowanSample9Test >> testIssue830 [
 	packageName1 := projectName, '-Core'.
 	packageName2 := projectName, '-Extensions'.
 
-#(case1 case2 case3 case4a case4b case4c case4d) do: [:case | UserGlobals removeKey: case ifAbsent: [] ].
+#(case1 case2a case2b case3 case4a case4b case4c case4d case5a case5b) do: [:case | UserGlobals removeKey: case ifAbsent: [] ].
 
 "case1: protocol begins with a '*' and DOES map to an existing package in project 
 		using RowanHybrid package convention ... ignore currentTopazPackageName"
@@ -4305,7 +4301,7 @@ UserGlobals removeKey: #case1.
 	self assert: (audit := loadedProject audit) isEmpty.
 	loadedProject unload.
 
-"case2: protocol begins with a '*' and DOES NOT map to an existing package and  
+"case2a: protocol begins with a '*' and DOES NOT map to an existing package and  
 		package of class in package with Rowan package convention. Ignore 
 		currentTopazPackageName."
 	loadSpec := self _loadSpecNamed: 'spec_0057'.
@@ -4315,14 +4311,43 @@ UserGlobals removeKey: #case1.
 	self assert: class rowanPackageName equals: packageName1.
 	[
 		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
-UserGlobals at: #case2 put: nil.
+UserGlobals at: #case2a put: nil.
 		method := class
 			compileMethod: 'issue830'
 			dictionaries: Rowan image symbolList
 			category: '*not-a-package-name'
 			environmentId: 0 ] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ].
-UserGlobals removeKey: #case2.
+UserGlobals removeKey: #case2a.
 	self assert: method rowanPackageName equals: class rowanPackageName.
+	self assert: (audit := loadedProject audit) isEmpty.
+	loadedProject unload.
+
+"case2b: protocol begins with a '*' and DOES NOT map to an existing package and  
+		package of class in package with Rowan package convention. Ignore 
+		currentTopazPackageName."
+	loadSpec := self _loadSpecNamed: 'spec_0082'.
+	loadedProject := loadSpec resolve load first.
+	class := Rowan globalNamed: projectName, 'Class1'.
+	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
+	self assert: class rowanPackageName equals: packageName1.
+	[
+		| hitExpectedError |
+		hitExpectedError := false.
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+UserGlobals at: #case2b put: nil.
+		[
+			method := class
+				compileMethod: 'issue830'
+				dictionaries: Rowan image symbolList
+				category: '*not-a-package-name'
+				environmentId: 0 ] 
+			on: Error 
+			do: [:ex | 
+				self assert: ex description equals: 'UserDefinedError: The method category ''*not-a-package-name'' does not map to a known package and you may not add an unpackaged method to a class that is packaged (RowanSample9-Core),'.
+				hitExpectedError := true .
+				nil].
+		self assert: hitExpectedError description: 'Expected to hit an error' ] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ].
+UserGlobals removeKey: #case2b.
 	self assert: (audit := loadedProject audit) isEmpty.
 	loadedProject unload.
 
@@ -4346,6 +4371,8 @@ UserGlobals removeKey: #case3.
 	self assert: (audit := loadedProject audit) isEmpty.
 	loadedProject unload.
 
+false ifTrue: [ 
+"victim of https://github.com/GemTalk/Rowan/issues/557 (see RwRowanSample9Test>testIssue557)"
 "case3b: existing method is NOT in a package. Method source changed and moved to package."
 	[
 		class := Object
@@ -4383,6 +4410,7 @@ UserGlobals removeKey: #case3.
 		class ifNotNil: [ 
 			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name.
 			Rowan gemstoneTools topaz currentTopazPackageName: nil ] ].
+].
 
 "case4a: protocol DOES NOT begin with a '*'; currentTopazPackageName not set; 
 		the class is not packaged, the method is not packaged"
@@ -4484,6 +4512,67 @@ UserGlobals at: #case4d put: nil.
 		environmentId: 0.
 UserGlobals removeKey: #case4d.
 	self assert: method rowanPackageName equals: class rowanPackageName.
+	] ensure: [ 
+		class ifNotNil: [ 
+			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ].
+
+"case5a: protocol DOES NOT begin with a '*'; currentTopazPackageName IS set and the 
+		package convention is NOT Rowan"
+	[
+UserGlobals at: #case5a put: nil.
+		class := Object
+			subclass: projectName, 'ClassXXX'
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			inDictionary: (Rowan globalNamed: self _sampleSymbolDictionaryName1)
+			options: #().
+		loadSpec := self _loadSpecNamed: 'spec_0082'.
+		loadedProject := loadSpec resolve load first.
+		self assert: loadedProject packageConvention ~= 'Rowan'.
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+		self assert: class rowanPackageName equals: Rowan unpackagedName.
+		method := class
+			compileMethod: 'issue830'
+			dictionaries: Rowan image symbolList
+			category: 'accessing'
+			environmentId: 0.
+UserGlobals removeKey: #case5a.
+		self assert: method rowanPackageName equals: class rowanPackageName.
+		self assert: (audit := loadedProject audit) isEmpty.
+		loadedProject unload.
+	] ensure: [ 
+		Rowan gemstoneTools topaz currentTopazPackageName: nil.
+		class ifNotNil: [ 
+			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ].
+
+"case5b: protocol DOES NOT begin with a '*'; currentTopazPackageName IS set and the 
+		package convention is Rowan"
+	[
+UserGlobals at: #case5b put: nil.
+		class := Object
+			subclass: projectName, 'ClassXXX'
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			inDictionary: (Rowan globalNamed: self _sampleSymbolDictionaryName1)
+			options: #().
+		loadSpec := self _loadSpecNamed: 'spec_0057'.
+		loadedProject := loadSpec resolve load first.
+		self assert: loadedProject packageConvention = 'Rowan'.
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName2.
+		self assert: class rowanPackageName equals: Rowan unpackagedName.
+		method := class
+			compileMethod: 'issue830'
+			dictionaries: Rowan image symbolList
+			category: 'accessing'
+			environmentId: 0.
+UserGlobals removeKey: #case5b.
+		self assert: method rowanPackageName equals: Rowan gemstoneTools topaz currentTopazPackageName.
+		self assert: (audit := loadedProject audit) isEmpty.
+		loadedProject unload.
 	] ensure: [ 
 		class ifNotNil: [ 
 			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ].

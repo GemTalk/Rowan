@@ -3,6 +3,7 @@ Extension { #name : 'Behavior' }
 { #category : '*rowan-gemstone-kernel-stubs-36x' }
 Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList category: categ environmentId: environmentId ifUnpackagedDo: unpackagedBlock [
 	"for now, we will only check for Rowan packaging if we are working in environment 0"
+
 	environmentId == 0
 		ifTrue: [ 
 			| meth |
@@ -12,10 +13,9 @@ Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: sy
 				using: symList
 				environmentId: environmentId.
 			meth class == GsNMethod
-				ifTrue: [
-| protocol |
-protocol := categ asString. 
-					"successful  parse of method, so let's see if the method is already packaged"
+				ifTrue: [ 
+					| protocol |
+					protocol := categ asString.	"successful  parse of method, so let's see if the method is already packaged"
 					(self
 						compiledMethodAt: meth selector
 						environmentId: environmentId
@@ -34,17 +34,15 @@ protocol := categ asString.
 							packageName ~= Rowan unpackagedName
 								ifTrue: [ 
 									"The original method was packaged (or currentTopazPackageName set), so 
-										preserve the packaging" 
-UserGlobals at: #case3 ifAbsent: [ self halt ].
+										preserve the packaging"
 									^ self
 										rwCompileMethod: sourceString
 										dictionaries: symList
 										category: categ
 										packageName: packageName ]
-							ifFalse: [ 
-								"The original method is unpackaged, so compile method and do not package"
-UserGlobals at: #case4c ifAbsent: [ self halt ].
-						^ unpackagedBlock value ] ]
+								ifFalse: [ 
+									"The original method is unpackaged, so compile method and do not package"
+									^ unpackagedBlock value ] ]
 						ifNil: [ 
 							"new method"
 							"https://github.com/GemTalk/Rowan/issues/830"
@@ -52,14 +50,12 @@ UserGlobals at: #case4c ifAbsent: [ self halt ].
 								ifTrue: [ 
 									^ (Rowan image loadedHybridPackageNamed: protocol ifAbsent: [  ])
 										ifNil: [ 
-											"The *protocol does not map to an existing package"
-											| packageName packageConvention |
+											| packageName "The *protocol does not map to an existing package" packageConvention |
 											packageName := self rowanPackageName.
 											packageName = Rowan unpackagedName
 												ifTrue: [ 
 													"the class is not packaged, and protocol does not map to an existing 
 														package ... so we'll treat this as an unpackaged method."
-UserGlobals at: #case4d ifAbsent: [ self halt ].
 													^ unpackagedBlock value ].
 											(packageConvention := (Rowan image loadedPackageNamed: packageName)
 												loadedProject packageConvention) = 'Rowan'
@@ -69,7 +65,6 @@ UserGlobals at: #case4d ifAbsent: [ self halt ].
 														then the method is added to the package of the class. If the class is 
 														not packaged, then the method is added to the given protocol, otherwise 
 														it is an error."
-UserGlobals at: #case2 ifAbsent: [ self halt ].
 													^ self
 														rwCompileMethod: sourceString
 														dictionaries: symList
@@ -85,7 +80,6 @@ UserGlobals at: #case2 ifAbsent: [ self halt ].
 											"If the protocol begins with a '*' and maps to an existing package 
 												(Rowan, Monticello or RowanHybrid convention), then the method is put 
 												into that package."
-UserGlobals at: #case1 ifAbsent: [ self halt ].
 											^ self
 												rwCompileMethod: sourceString
 												dictionaries: symList
@@ -103,11 +97,9 @@ UserGlobals at: #case1 ifAbsent: [ self halt ].
 												ifTrue: [ 
 													"the class is not packaged, so just add an unpackaged method to the 
 														unpackaged class"
-UserGlobals at: #case4a ifAbsent: [ self halt ].
 													^ unpackagedBlock value ]
 												ifFalse: [ 
 													"the class is packaged, so add the method to the package of the class"
-UserGlobals at: #case4b ifAbsent: [ self halt ].
 													^ self
 														rwCompileMethod: sourceString
 														dictionaries: symList
@@ -115,19 +107,20 @@ UserGlobals at: #case4b ifAbsent: [ self halt ].
 														packageName: packageName ] ]
 										ifNotNil: [ :packageName | 
 											"if protocol does not begin with a '* and the currentTopazPackageName is set"
-											(Rowan loadedPackageNamed: packageName) loadedProject
+											(Rowan image loadedPackageNamed: packageName) loadedProject
 												packageConvention = 'Rowan'
 												ifTrue: [ 
 													"If the currentTopazPackageName maps to a package that follows the 
 														Rowan convention, then the method is put into that package, as 
 														long as item 1 does not apply."
-self halt.
 													^ self
 														rwCompileMethod: sourceString
 														dictionaries: symList
 														category: categ
-														packageName: packageName ] ] ] ] ] ].
-self halt.
+														packageName: packageName ]
+												ifFalse: [ 
+													"RowanHybrid or Monticello package convention; class unpackaged; method unpackaged"
+													^ unpackagedBlock value ] ] ] ] ] ].
 	^ unpackagedBlock value
 ]
 
