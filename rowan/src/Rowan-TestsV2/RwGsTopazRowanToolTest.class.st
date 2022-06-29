@@ -454,9 +454,9 @@ RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
 
 { #category : 'tonel support' }
 RwGsTopazRowanToolTest >> testTopazReadTonelFile [
-	"load spec_0001 and then checkout spec_0009 and read 
-		rowan/src/RowanSample9-Extensions/RowanSample9Class1.extension.st, which adds a class
-		method #bar"
+	"load spec_0001 and then checkout spec_0059 and read 
+		rowan/src/RowanSample9-Core-Alt1/RowanSample9Class1.extension.st, which adds a
+		method #alt1 in category alternates"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
@@ -483,15 +483,15 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 
-"read tonel file from spec_0009"
-	project checkout: 'spec_0009'.
-	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Extensions' / (className, '.extension.st')) pathString.
+"read tonel file from spec_0059"
+	project checkout: 'spec_0059'.
+	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Core-Alt1' / (className, '.extension.st')) pathString.
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
 	self assert: (class new perform: #foo) = 1.
-	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
-	self assert: (class perform: #bar) = 'bar'
+	self assert: (class compiledMethodAt: #alt1 otherwise: nil) notNil.
+	self assert: (class new perform: #alt1) = 'alt1'
 ]
 
 { #category : 'project support' }

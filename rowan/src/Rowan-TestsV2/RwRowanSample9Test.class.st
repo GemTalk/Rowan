@@ -4698,6 +4698,54 @@ RwRowanSample9Test >> testIssue830_5b [
 			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name ] ].
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue830_5c [
+	"Test coverage for the method 
+		Behavior >> _rwCompileMethodForConditionalPackaging:symbolList:category:environmentId:ifUnpackagedDo:"
+
+	"https://github.com/GemTalk/Rowan/issues/830"
+
+	| loadSpec projectName loadedProject packageName1 packageName2 class method audit |
+	loadSpec := self _loadSpecNamed: 'spec_0082'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"setup"
+	packageName1 := projectName, '-Core'.
+	packageName2 := projectName, '-Extensions'.
+
+"case5c: protocol DOES NOT begin with a '*'; currentTopazPackageName IS set and the 
+		package convention is NOT Rowan, BUT the packageName matches the packageName 
+		of the class"
+	[
+		Rowan image newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1.
+		loadedProject := loadSpec resolve load first.
+		self assert: loadedProject packageConvention ~= 'Rowan'.
+		class := Object
+			rwSubclass: projectName, 'ClassXXX'
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: packageName1
+			options: #().
+		Rowan gemstoneTools topaz currentTopazPackageName: packageName1.
+		self assert: class rowanPackageName equals: packageName1.
+		method := class
+			compileMethod: 'issue830'
+			dictionaries: Rowan image symbolList
+			category: 'accessing'
+			environmentId: 0.
+		self assert: method rowanPackageName equals: class rowanPackageName.
+		self assert: (audit := loadedProject audit) isEmpty.
+		loadedProject unload.
+	] ensure: [ 
+		Rowan gemstoneTools topaz currentTopazPackageName: nil ].
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"

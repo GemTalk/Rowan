@@ -1004,12 +1004,16 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 	classMethod := theClass class
 		compileMethod: 'bar ^''bar'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.
@@ -1155,12 +1159,16 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_C [
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 	classMethod := theClass class
 		compileMethod: 'bar ^''bar'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.

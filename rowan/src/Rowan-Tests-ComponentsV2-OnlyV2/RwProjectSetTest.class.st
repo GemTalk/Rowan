@@ -184,17 +184,29 @@ RwProjectSetTest >> testProjectAdoptTool [
 	theClass
 		compileMethod: 'instanceFoo ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'instanceExtensionBar ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames2 at: 2).
+			category: ('*', (packageNames2 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 	theClass class
 		compileMethod: 'classFoo ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'classExtensionBar ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames2 at: 2).
+			category: ('*', (packageNames2 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 
 	symDict2 := Rowan globalNamed: self _symbolDictionaryName2.
 	theClass := Object subclass: (classNames2 at: 1)
@@ -210,17 +222,29 @@ RwProjectSetTest >> testProjectAdoptTool [
 	theClass
 		compileMethod: 'instanceBar ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'instanceExtensionFoo ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames1 at: 2).
+			category: ('*', (packageNames1 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 	theClass class
 		compileMethod: 'classBar ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'classExtensionFoo ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames1 at: 2).
+			category: ('*', (packageNames1 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 
 	"adopt the class structure using the project definitions"
 	projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
@@ -422,17 +446,29 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 	theClass
 		compileMethod: 'instanceFoo ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'instanceExtensionBar ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames2 at: 2).
+			category: ('*', (packageNames2 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 	theClass class
 		compileMethod: 'classFoo ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'classExtensionBar ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames2 at: 2).
+			category: ('*', (packageNames2 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 
 	symDict2 := Rowan globalNamed: self _symbolDictionaryName2.
 	theClass := Object subclass: (classNames2 at: 1)
@@ -448,17 +484,29 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 	theClass
 		compileMethod: 'instanceBar ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'instanceExtensionFoo ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames1 at: 2).
+			category: ('*', (packageNames1 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 	theClass class
 		compileMethod: 'classBar ^true'
 			dictionaries: symbolList
-			category: 'accessing';
+			category: #'accessing'
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0;
 		compileMethod: 'classExtensionFoo ^true'
 			dictionaries: symbolList
-			category: '*', (packageNames1 at: 2).
+			category: ('*', (packageNames1 at: 2)) asSymbol
+			intoMethodDict: nil
+			intoCategories: nil
+			environmentId: 0.
 
 	"adopt the class structure using the project definitions"
 	projectTools adopt adoptProjectSetDefinition: projectSetDefinition.

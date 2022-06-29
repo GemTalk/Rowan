@@ -455,7 +455,9 @@ RwUnmanagedClassesV2Test >> testMoveManagedClass_01 [
 	unmanagedMethod := managedClass
 		compileMethod: 'foo ^1'
 		dictionaries: Rowan image symbolList
-		category: 'unmanaged'
+		category: #'unmanaged'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 	managedMethod := managedClass
 		rwCompileMethod: 'bar ^2'
@@ -1131,7 +1133,11 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
 RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 	"File in a managed class and unmanaged methods (includes removeAllMethods)"
 
-	| className managedClass project projectName packageName symbolDictionary stream audit details |
+	"As of https://github.com/GemTalk/Rowan/issues/830, it is not possible to add unmanaged 
+		methods to a managed class ... the 'unmanaged methods' will be packaged in the package 
+		of the class"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	symbolDictionary := Rowan image
@@ -1170,23 +1176,23 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 	self assert: managedClass rowanPackageName = packageName.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = packageName.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'bar') rowanPackageName = Rowan unpackagedName.
-	self deny: (audit := project audit) isEmpty.
-	self assert: ((audit at: packageName) at: className) size = 2.
-	details := ((audit at: packageName) at: className)
-		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo').
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>bar')
+			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName.
+	self assert: (audit := project audit) isEmpty.
+
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 	"File in a managed class and unmanaged methods (without removeAllMethods)"
 
-	| className managedClass project projectName packageName symbolDictionary stream audit details |
+	"As of https://github.com/GemTalk/Rowan/issues/830, it is not possible to add unmanaged 
+		methods to a managed class ... the 'unmanaged methods' will be packaged in the package 
+		of the class"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	symbolDictionary := Rowan image
@@ -1227,23 +1233,23 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 	self assert: managedClass rowanPackageName = packageName.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = packageName.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'bar') rowanPackageName = Rowan unpackagedName.
-	self deny: (audit := project audit) isEmpty.
-	self assert: ((audit at: packageName) at: className) size = 2.
-	details := ((audit at: packageName) at: className)
-		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo').
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>bar')
+			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName.
+	self assert: (audit := project audit) isEmpty.
+
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	"File in a managed class with a managed method and an unmanaged method (without removeAllMethods)"
 
-	| className managedClass project projectName packageName symbolDictionary stream audit details managedMethod x |
+	"As of https://github.com/GemTalk/Rowan/issues/830, it is not possible to add unmanaged 
+		methods to a managed class ... the 'unmanaged methods' will be packaged in the package 
+		of the class"
+
+	| className managedClass project projectName packageName symbolDictionary stream audit managedMethod x |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	symbolDictionary := Rowan image
@@ -1291,7 +1297,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	self assert: managedClass rowanPackageName = packageName.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = packageName.
 	self
 		assert:
 			(x := (Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
@@ -1301,18 +1307,18 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	self
 		assert:
 			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
-	self deny: (audit := project audit) isEmpty.
-	self assert: ((audit at: packageName) at: className) size = 1.
-	details := ((audit at: packageName) at: className)
-		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo')
+	self assert: (audit := project audit) isEmpty.
 ]
 
 { #category : 'tests' }
 RwUnmanagedClassesV2Test >> testUnmanagedFilein_05 [
 	"File in a managed class with a managed method, an extension method and an unmanaged method (without removeAllMethods)"
 
-	| className managedClass project projectName packageName1 packageName2 symbolDictionary stream audit details fileinString |
+	"As of https://github.com/GemTalk/Rowan/issues/830, it is not possible to add unmanaged 
+		methods to a managed class ... the 'unmanaged methods' will be packaged in the package 
+		of the class"
+
+	| className managedClass project projectName packageName1 packageName2 symbolDictionary stream audit fileinString |
 	projectName := 'PackagedClass_project'.
 	packageName1 := projectName , '-Core'.
 	packageName2 := projectName , '-Extensions'.
@@ -1375,7 +1381,7 @@ baz ^3
 	self assert: managedClass rowanPackageName = packageName1.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
+			(managedClass compiledMethodAt: #'foo') rowanPackageName = packageName1.
 	self
 		assert:
 			((Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
@@ -1391,12 +1397,7 @@ baz ^3
 	self
 		assert:
 			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
-	self deny: (audit := project audit) isEmpty.
-	self assert: (audit at: packageName2 ifAbsent: [  ]) isNil.
-	self assert: ((audit at: packageName1) at: className) size = 1.
-	details := ((audit at: packageName1) at: className)
-		collect: [ :each | each message ].
-	self assert: (details includes: 'Missing loaded method: UnmanagedTestClass>>foo')
+	self assert: (audit := project audit) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -1427,7 +1428,9 @@ RwUnmanagedClassesV2Test >> testUnpackageManagedClass_01 [
 	unmanagedMethod := managedClass
 		compileMethod: 'foo ^1'
 		dictionaries: Rowan image symbolList
-		category: 'unmanaged'
+		category: #'unmanaged'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 	managedMethod := managedClass
 		rwCompileMethod: 'bar ^2'
