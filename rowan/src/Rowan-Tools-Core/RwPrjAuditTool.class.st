@@ -17,7 +17,7 @@ RwPrjAuditTool >> auditAllForUser: aUserId [
 { #category : 'other' }
 RwPrjAuditTool >> auditAllForUser: aUserId on: logStreamOrNil [
 	| res |
-	res := RwAuditReport for: self on: logStreamOrNil.
+	res := RwAuditReport for: nil on: logStreamOrNil.
 	(Rowan image _loadedProjectRegistryForUserId: aUserId)
 		keysAndValuesDo: [ :prjName :aLoadedProject | 
 			(self auditForProject: aLoadedProject on: logStreamOrNil)
