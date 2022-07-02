@@ -28,11 +28,11 @@ EXAMPLES
   $basename -h -- -l -I $GEMSTONE/data/.topazini
 
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston Core \
-            --projectsHome=$GS_HOME/share/repos
+            --projectsHome=$GS_HOME/shared/repos
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --projectsHome=$GS_HOME/share/repos
+            --projectsHome=$GS_HOME/shared/repos
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --projectsHome=$GS_HOME/share/repos -- -l -I $GEMSTONE/data/.topazini
+            --projectsHome=$GS_HOME/shared/repos -- -l -I $GEMSTONE/data/.topazini
 -----
 %
 doit

@@ -82,7 +82,7 @@ EXAMPLES
   $basename --projectName=MyProject -D
   $basename --projectName=MyProject --defaultSymbolDictName=UserGlobals \
             --packageConvention=RowanHybrid --packageFormat=filetree \
-            --projectsHome=$GS_HOME/share/repos --repositoryType=disk
+            --projectsHome=$GS_HOME/shared/repos --repositoryType=disk
 -----
 %
 doit
