@@ -2,6 +2,7 @@
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+SuperDoitOptionalOptionWithNoArg long: 'strict'.
 }
 %
 usage
@@ -22,17 +23,23 @@ OPTIONS
                        This is the directory where the project will be loaded
                        from. By default, projects are loaded from 
                        $ROWAN_PROJECTS_HOME.
+  --strict             load spec will be loaded using #resolveStrict, which forces
+                       the checkout branch to match the the branch specified in
+                       the revision field of the load spec.
 
 EXAMPLES
   $basename -h
   $basename -h -- -l -I $GEMSTONE/data/.topazini
 
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --projectsHome=$GS_HOME/shared/repos -- -l -I $GEMSTONE/data/.topazini
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston Core \
-            --projectsHome=$GS_HOME/share/repos
+            --projectsHome=$GS_HOME/shared/repos
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --projectsHome=$GS_HOME/share/repos
-  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --projectsHome=$GS_HOME/share/repos -- -l -I $GEMSTONE/data/.topazini
+            --projectsHome=$GS_HOME/shared/repos
+
+  $basename file:$GS_HOME/shared/repos/RowanSample9/specs/spec_0082.ston \
+            --strict --projectsHome=$GS_HOME/shared/repos
 -----
 %
 doit
@@ -47,6 +54,8 @@ doit
 		yourself.
 	args size > 0
 		ifTrue: [ spec componentNames: args ].
+	self strict
+		ifTrue: [ spec resolveStrict ].
 	spec resolve load.
 	^ System commit
 %
