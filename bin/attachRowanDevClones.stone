@@ -1,6 +1,8 @@
 #!/usr/bin/env superdoit_stone
 options
 {
+	SuperDoitOptionalOptionWithRequiredArg long: 'archbase'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
   SuperDoitOptionalOptionWithNoArg long: 'tests'.
   SuperDoitOptionalOptionWithNoArg long: 'gemstoneBaseImage'.
 }
@@ -64,11 +66,15 @@ doit
 		space; space; space; nextPutAll: self basename; lf;
 		nextPutAll: '================='; lf;
 		yourself.
+	self archbase
+		ifNotNil: [:value | System gemEnvironmentVariable: 'ARCHBASE' put: value ].
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHome.
 	self attachRowanProjects.
 	self gemstoneBaseImage
 		ifTrue: [ self attachGemstoneBaseImage ].
 	self tests
-		ifTrue: [ self loadTests ].
+		ifTrue: [ self loadTests ]
+		ifFalse: [ (Rowan projectNamed: 'Rowan') loadedLoadSpecifications load ].
 	System commit.
 	self stdout nextPutAll: '...finished :: ', self basename; lf.
 	^ self noResult
