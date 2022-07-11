@@ -1,4 +1,10 @@
 #!/usr/bin/env superdoit_stone
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'archBase'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
 usage
 -----
 USAGE 
@@ -17,21 +23,31 @@ OPTIONS
   -D, --debug                bring up topaz debugger in the event of a script error
 
 EXAMPLES
+  $basename -h
   $basename --help -- -L -I .topazini
-  $basename -- -L -I .topazini
+  $basename --projectsHome=$GS_HOME/shared/repos --archBase=/home/dhenrich/work/j_36x -- -L -I .topazini
+  $basename --projectsHome=$GS_HOME/shared/repos -- -L -I .topazini
+  $basename --projectsHome=$GS_HOME/shared/repos --archBase=/home/dhenrich/work/j_36x
+  $basename --projectsHome=$GS_HOME/shared/repos
 -----
 %
 doit
 	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
-	(System gemEnvironmentVariable: 'ARCHBASE')
-		ifNotNil: [
-		 	(Rowan projectNamed: 'gemstoneBaseImage') 
-				gitRepositoryRoot: '$ARCHBASE/image'.
-			self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString ].
-	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
-		ifNil: [ self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
-	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
+	(self archBase
+		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
+		ifNotNil: [:value | value ])
+			ifNotNil: [:value |
+				System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString.
+				self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString.
+		 		(Rowan projectNamed: 'gemstoneBaseImage') 
+					gitRepositoryRoot: '$ARCHBASE/image' ].
+	self projectsHome
+		ifNotNil: [:value |
+			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value asFileReference pathString.
+			self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString ]
+		ifNil: [ 
+			self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
 	(Rowan projectNamed: 'Rowan') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
 	(Rowan projectNamed: 'RowanClientServices') 
