@@ -67,14 +67,14 @@ doit
 		nextPutAll: '================='; lf;
 		yourself.
 	self archbase
-		ifNotNil: [:value | System gemEnvironmentVariable: 'ARCHBASE' put: value ].
-	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHome.
+		ifNotNil: [:value | System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString ].
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHome asFileReference pathString.
 	self attachRowanProjects.
 	self gemstoneBaseImage
 		ifTrue: [ self attachGemstoneBaseImage ].
 	self tests
 		ifTrue: [ self loadTests ]
-		ifFalse: [ (Rowan projectNamed: 'Rowan') loadedLoadSpecifications load ].
+		ifFalse: [ (Rowan projectNamed: 'Rowan') reload ].
 	System commit.
 	self stdout nextPutAll: '...finished :: ', self basename; lf.
 	^ self noResult
