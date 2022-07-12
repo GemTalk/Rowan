@@ -87,8 +87,10 @@ EXAMPLES
 %
 doit
 	| definedProject |
+	(Rowan version < '3.0.0' asRwSemanticVersionNumber)
+		ifTrue: [ self error: 'This script needs to be run against a Rowan v3 solo extent' ].
 	definedProject := (Rowan newProjectNamed: self projectName)
-		addTopLevelComponentNamed: self componentName;
+		addLoadComponentNamed: self componentName;
 		packageConvention: self packageConvention;
 		gemstoneSetDefaultSymbolDictNameTo: self defaultSymbolDictName;
 		repoType: self repositoryType asSymbol;	
@@ -96,6 +98,6 @@ doit
 		projectsHome: self projectsHome;
 		yourself.
 	(self projectsHome asFileReference / self projectName / 'rowan') ensureDeleteAll.
-	definedProject resolve write.
+	definedProject resolveProject write.
 	^ self noResult
 %
