@@ -209,6 +209,15 @@ runTests
 		self _processTestResults: res suite: suite deprecationErrors: deprecationErrors.
 %
 method
+_clearSuperDoitTransientSymbolDict
+	"The superDoit transient symbol dictionary can interfere with some test ... now that the script is
+		running, it is no longer useful"
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	symbolList remove: (symbolList objectNamed: SuperDoitCommandParser transientSymbolDictionaryName).
+%	
+method
 rowanTestSuite
 	self handleAlmostOutOfMemory.
 	self legacyUnicode
@@ -219,6 +228,7 @@ rowanTestSuite
 	self runTests.
 %
 doit
+	self _clearSuperDoitTransientSymbolDict.
 	self stdout 
 		nextPutAll: '================='; lf;
 		space; space; space; nextPutAll: self basename; lf;
