@@ -30,7 +30,7 @@ EXAMPLES
   $basename --help
   $basename --projectsHome=$ROWAN_PROJECTS_HOME -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
   $basename --projectsHome=$GS_HOME/shared/repos -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
-
+  $basename --projectsHome=/home/dhenrich/work/m_37x_externals_st
 -----
 %
 doit
