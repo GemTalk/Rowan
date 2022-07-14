@@ -46,7 +46,7 @@ RwAbstractRepositoryDefinitionV2 >> gitRepositoryRoot: repositoryRootPathString 
 	| urlString |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'git repository root must be a string' ].
-	urlString := 'file:' , repositoryRootPathString.
+	urlString := 'file:' , repositoryRootPathString, '/', aRelativeRepositoryRoot.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
 		projectsHome: self projectsHome

@@ -44,7 +44,7 @@ attachRowanProjects
 		| project |
 		project := Rowan projectNamed: projectName.
 		project
-			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan/', project relativeRepositoryRoot
+			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan/'
 				projectsHome: '$ROWAN_PROJECTS_HOME' 
 		].
 	(Rowan projectNamed: 'RowanClientServices')
