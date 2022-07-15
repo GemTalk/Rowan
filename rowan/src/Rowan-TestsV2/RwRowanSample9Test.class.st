@@ -6471,6 +6471,117 @@ RwRowanSample9Test >> testIssue822 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue838 [
+	"load spec_0073, clone spec_001 using alias (different name on disk), 
+		use gitRepository:projectsHome: to point RowanSample9 project at
+		spec_001 checkout; load spec_0073 and see what happens"
+
+	"https://github.com/dalehenrich/Rowan/issues/838"
+
+	| loadSpec_0073 loadSpec_0001 projectName resolvedProject_0073 resolvedProject_0001 loadedProjects projectNames |
+	loadSpec_0073 := self _loadSpecNamed: 'spec_0073'.
+	loadSpec_0001 := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec_0073 projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve projects - clone projects"
+	resolvedProject_0073 := loadSpec_0073 
+		projectAlias: projectName, '0073';
+		resolveProject.
+		
+	resolvedProject_0001 := loadSpec_0001
+		projectAlias: projectName, '0001';
+		resolveProject.
+
+"load project_0073"
+	loadedProjects := resolvedProject_0073 loadProjectSet.
+self halt.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue840_01 [
+	"clone spec_0073 standard load for a project with embedded projects"
+
+	"https://github.com/dalehenrich/Rowan/issues/840"
+
+	| loadSpec projectName projectNames projectsHome loadSpecs embeddedPrefix |
+	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
+	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve projects - expected"
+	loadSpecs := loadSpec
+		projectsHome: projectsHome;
+		resolve.
+
+"validate"
+	embeddedPrefix := (projectsHome / projectName) pathString.
+	self 
+		assert: 
+			(loadSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec projectName) pathString; 
+				at: projectName, '_1' put: embeddedPrefix, '/rowan_1'; 
+				at: projectName, '_2' put: embeddedPrefix, '/rowan_2'; 
+				at: projectName, '_3' put: embeddedPrefix, '/rowan_3'; 
+				yourself)
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue840_02 [
+	"clone spec_0073 using a project alias for the primary project ... alias should be propagated to all embedded projects"
+
+	"https://github.com/dalehenrich/Rowan/issues/840"
+
+	| loadSpec projectName projectNames projectsHome loadSpecs embeddedPrefix |
+	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
+	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve projects - expected"
+	loadSpecs := loadSpec
+		projectsHome: projectsHome;
+		projectAlias: projectName, '0073';
+		resolve.
+
+"validate"
+	embeddedPrefix := (projectsHome / loadSpec projectAlias) pathString.
+	self 
+		assert: 
+			(loadSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec projectAlias) pathString; 
+				at: projectName, '_1' put: embeddedPrefix, '/rowan_1'; 
+				at: projectName, '_2' put: embeddedPrefix, '/rowan_2'; 
+				at: projectName, '_3' put: embeddedPrefix, '/rowan_3'; 
+				yourself)
+"The primary project ends up creating a new git checkout using the project alias, but the embedded projects use the standard download ... I think that this might actually be correct?"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 
