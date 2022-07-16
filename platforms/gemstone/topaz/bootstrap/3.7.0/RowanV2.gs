@@ -75904,7 +75904,7 @@ gitRepositoryRoot: repositoryRootPathString relativeRepositoryRoot: aRelativeRep
 	| urlString |
 	repositoryRootPathString isString
 		ifFalse: [ self error: 'git repository root must be a string' ].
-	urlString := 'file:' , repositoryRootPathString.
+	urlString := 'file:' , repositoryRootPathString, '/', aRelativeRepositoryRoot.
 	^ RwGitRepositoryDefinitionV2
 		newNamed: self name
 		projectsHome: self projectsHome
@@ -89922,7 +89922,12 @@ readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platfo
 				do: [ :loadSpec | 
 					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theResolvedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
+					loadSpec relativeRepositoryRoot
+						ifNotNil: [ :relRoot | 
+							"using an embedded project, if projectAlia"
+							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
+						resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 
@@ -91349,6 +91354,13 @@ method: RwLoadSpecificationV2
 svnUrl: anUrlString
 	gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	svnUrl := anUrlString
+%
+
+category: 'embedded projects'
+method: RwLoadSpecificationV2
+updateEmbeddedProjectLoadSpec: embeddedLoadSpec
+	projectAlias ~= nil
+		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ]
 %
 
 category: 'accessing'

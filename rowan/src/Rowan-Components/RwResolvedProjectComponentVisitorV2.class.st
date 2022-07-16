@@ -102,7 +102,12 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: resolved
 				do: [ :loadSpec | 
 					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theResolvedProject := (loadSpec projectsHome: pp projectsHome) resolveProject.
+					loadSpec relativeRepositoryRoot
+						ifNotNil: [ :relRoot | 
+							"using an embedded project, if projectAlia"
+							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
+						resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 

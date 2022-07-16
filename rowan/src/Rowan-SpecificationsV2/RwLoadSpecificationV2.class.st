@@ -786,6 +786,12 @@ RwLoadSpecificationV2 >> svnUrl: anUrlString [
 	svnUrl := anUrlString
 ]
 
+{ #category : 'embedded projects' }
+RwLoadSpecificationV2 >> updateEmbeddedProjectLoadSpec: embeddedLoadSpec [
+	projectAlias ~= nil
+		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ]
+]
+
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> versionPrefix [
 	^ versionPrefix

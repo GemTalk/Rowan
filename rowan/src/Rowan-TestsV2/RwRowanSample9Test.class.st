@@ -6505,7 +6505,9 @@ self halt.
 
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue840_01 [
-	"clone spec_0073 standard load for a project with embedded projects"
+	"clone spec_0073 standard load for a project with embedded projects ... 
+		confirms that standard load works correctly as prelude to doing a load 
+		of an embedded project using a project alias"
 
 	"https://github.com/dalehenrich/Rowan/issues/840"
 
