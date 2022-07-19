@@ -789,7 +789,17 @@ RwLoadSpecificationV2 >> svnUrl: anUrlString [
 { #category : 'embedded projects' }
 RwLoadSpecificationV2 >> updateEmbeddedProjectLoadSpec: embeddedLoadSpec [
 	projectAlias ~= nil
-		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ]
+		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ].
+	self gitUrl
+		ifNotNil: [ :urlString | 
+			| url |
+			url := urlString asRwUrl.
+			embeddedLoadSpec
+				gitUrl:
+					'file:'
+						,
+							(url pathString asFileReference / embeddedLoadSpec relativeRepositoryRoot)
+								pathString ]
 ]
 
 { #category : 'accessing' }

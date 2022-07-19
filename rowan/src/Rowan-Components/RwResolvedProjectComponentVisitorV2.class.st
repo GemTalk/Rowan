@@ -24,7 +24,8 @@ RwResolvedProjectComponentVisitorV2 class >> _updateLoadSpecWithRepositoryRoot: 
 
 	"https://github.com/GemTalk/Rowan/issues/724"
 
-	theLoadSpec projectsHome = theLoadedProject projectsHome
+	(theLoadSpec relativeRepositoryRoot isEmpty
+		and: [ theLoadSpec projectsHome = theLoadedProject projectsHome ])
 		ifTrue: [ theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ]
 ]
 
@@ -101,10 +102,10 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: resolved
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject |
-					"derive resolved project from the load spec"
+					"derive resolved project from the load spec ... project load specs are read from the rown/projects directory"
 					loadSpec relativeRepositoryRoot
 						ifNotNil: [ :relRoot | 
-							"using an embedded project, if projectAlia"
+							"using an embedded project"
 							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
 					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
 						resolveProject.

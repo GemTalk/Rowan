@@ -10484,7 +10484,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample9_embedded_1'.
 
-	{'RowanSample9_0052' . 'RowanSample9_0053'} 
+	{ 'RowanSample9_0074' . 'RowanSample9_0075' } 
 		do: [:repoName | 
 			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
@@ -10522,17 +10522,17 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 		loadedProjects: loadedProjects 
 		expectedProjectNames: projectNames.
 
-"load project1 from spec_0075 checkout: changing repository root of loaded project"
+"load project1 from spec_0075 checkout: changing repository root of loaded project ... embedded project should be adjusted as well"
 	project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString.
 	loadedProjects := project1 reload.
 
 "Validate"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
+	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
 	self 
 		_standard_validate: resolvedProject1 
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
 	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
 	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
 	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.

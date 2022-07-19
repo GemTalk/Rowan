@@ -89921,10 +89921,10 @@ readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platfo
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject |
-					"derive resolved project from the load spec"
+					"derive resolved project from the load spec ... project load specs are read from the rown/projects directory"
 					loadSpec relativeRepositoryRoot
 						ifNotNil: [ :relRoot | 
-							"using an embedded project, if projectAlia"
+							"using an embedded project"
 							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
 					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
 						resolveProject.
@@ -90139,7 +90139,8 @@ _updateLoadSpecWithRepositoryRoot: theLoadSpec fromLoadedProject: theLoadedProje
 
 	"https://github.com/GemTalk/Rowan/issues/724"
 
-	theLoadSpec projectsHome = theLoadedProject projectsHome
+	(theLoadSpec relativeRepositoryRoot isEmpty
+		and: [ theLoadSpec projectsHome = theLoadedProject projectsHome ])
 		ifTrue: [ theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ]
 %
 
@@ -91360,7 +91361,17 @@ category: 'embedded projects'
 method: RwLoadSpecificationV2
 updateEmbeddedProjectLoadSpec: embeddedLoadSpec
 	projectAlias ~= nil
-		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ]
+		ifTrue: [ embeddedLoadSpec projectAlias: projectAlias ].
+	self gitUrl
+		ifNotNil: [ :urlString | 
+			| url |
+			url := urlString asRwUrl.
+			embeddedLoadSpec
+				gitUrl:
+					'file:'
+						,
+							(url pathString asFileReference / embeddedLoadSpec relativeRepositoryRoot)
+								pathString ]
 %
 
 category: 'accessing'
