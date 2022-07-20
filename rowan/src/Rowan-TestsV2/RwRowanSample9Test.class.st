@@ -4062,7 +4062,7 @@ RwRowanSample9Test >> testIssue700_0 [
 	"https://github.com/GemTalk/Rowan/issues/700"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
-		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome |
+		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome loadSpecs |
 	projectName := 'RowanSample9'.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
@@ -4100,14 +4100,16 @@ RwRowanSample9Test >> testIssue700_0 [
 	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
 	self assert: requiredRepositoryRoot exists.
 
-"update gitRepositoryRoot"
-	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString projectsHome: requiredProjectsHome.
-
-"validate"
-	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
+"update gitUrl"
+	requiredLoadSpec 
+		gitUrl: 'file:', requiredRepositoryRoot pathString;
+		projectsHome: requiredProjectsHome;
+		yourself.
 
 "load"
-	loadedProjects := project reload.
+	loadSpecs := project loadedLoadSpecifications.
+	loadSpecs addLoadSpec: requiredLoadSpec.
+	loadedProjects := loadSpecs load.
 
 "validate"
 	self assert: requiredProject repositoryRoot equals: requiredRepositoryRoot.
@@ -4177,16 +4179,14 @@ RwRowanSample9Test >> testIssue700_1 [
 	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
 	self assert: requiredRepositoryRoot exists.
 
-"update gitRepositoryRoot"
-	requiredProject gitRepositoryRoot: requiredRepositoryRoot pathString projectsHome: requiredProjectsHome.
-
-"validate"
-	self assert: requiredProject repositoryRoot = requiredRepositoryRoot.
-
-"change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
+"update gitRepositoryRoot; change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
 	loadSpecs := project loadedLoadSpecifications.
 	(loadSpecs specForProjectNamed: requiredProjectName)
-		removeCustomConditionalAttributes: #('mytests').
+		removeCustomConditionalAttributes: #('mytests');
+		gitUrl: 'file:', requiredRepositoryRoot pathString;
+		 projectsHome: requiredProjectsHome;
+		yourself.
+
 
 "load"
 	loadedProjects := loadSpecs load.
@@ -4934,6 +4934,8 @@ RwRowanSample9Test >> testIssue714_3 [
 RwRowanSample9Test >> testIssue715_01 [
 	"getting down to brass tacks for rules and usage of #loadedLoadSpecifications"
 
+	"requiredLoadSpecs load -- load as defined by load spec edits"
+
 	"https://github.com/GemTalk/Rowan/issues/715"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
@@ -5038,6 +5040,8 @@ RwRowanSample9Test >> testIssue715_01 [
 RwRowanSample9Test >> testIssue715_02 [
 	"#reload should reread packages for project (and required projects) from disk, using the loaded load specs, and load into image"
 
+	"project reload -- reuse primary project load spec, reread required specs and packages from disk"
+
 	"https://github.com/GemTalk/Rowan/issues/715"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
@@ -5073,7 +5077,7 @@ RwRowanSample9Test >> testIssue715_02 [
 "take loaded load specs for required projects and remove 'tests' attributue for every project except requiredProjectName1"
 	requiredLoadSpecs := project loadedLoadSpecifications.
 	requiredLoadSpecs do: [:ls |
-		ls projectName = requiredProjectName1 
+		ls projectName = projectName 
 			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
 
 "load requiredLoadSpecs"
@@ -5081,11 +5085,11 @@ RwRowanSample9Test >> testIssue715_02 [
 
 "validate"
 	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
+		lp projectName = projectName
 			ifTrue: [ self deny: lp testSuite tests isEmpty]
 			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
 
-"reload project - reload packages of all projects, but expect the same set of packages to be loaded"
+"reload project - preserve primary load spec, reload required load specs"
 	loadedProjects := project reload.
 
 "validate"
@@ -5094,10 +5098,7 @@ RwRowanSample9Test >> testIssue715_02 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
+	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty ].
 ] ensure: [ 
 "clean up"
 	projectNames do: [:pn | 
@@ -5109,6 +5110,8 @@ RwRowanSample9Test >> testIssue715_02 [
 { #category : 'tests' }
 RwRowanSample9Test >> testIssue715_03 [
 	"#revert should reread packages from disk for the specified project, using the loaded load spec, and load into image"
+
+	"project revert -- reread packages from disk using loaded specs"
 
 	"https://github.com/GemTalk/Rowan/issues/715"
 
@@ -5157,7 +5160,7 @@ RwRowanSample9Test >> testIssue715_03 [
 			ifTrue: [ self deny: lp testSuite tests isEmpty]
 			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
 
-"reload project - expect exactly same results as initial load (all tests loaded)"
+"revert project - expect to match loaded specs"
 	loadedProjects := project revert.
 
 "validate"
@@ -10389,7 +10392,7 @@ RwRowanSample9Test >> testSwitchRepository [
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
 		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot commitId |
+	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot commitId loadedSpecs |
 	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
@@ -10423,7 +10426,11 @@ RwRowanSample9Test >> testSwitchRepository [
 
 "reload project1 from spec_0003 checkout: changing repository root of loaded project"
 	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
-	loadedProjects := (project1 gitRepositoryRoot: gitRepositoryRoot) reload.
+
+	loadedSpecs := project1 loadedLoadSpecifications.
+	(loadedSpecs specForProjectNamed: project1 name)
+		gitUrl: 'file:', gitRepositoryRoot.
+	loadedProjects := loadedSpecs load.
 
 "Validate"
 	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.

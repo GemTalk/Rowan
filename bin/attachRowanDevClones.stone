@@ -34,31 +34,48 @@ method
 attachGemstoneBaseImage
 	(System gemEnvironmentVariable: 'ARCHBASE')
 		ifNotNil: [
-		(Rowan projectNamed: 'gemstoneBaseImage') 
-			gitRepositoryRoot: '$ARCHBASE/image'
-				projectsHome: '$ROWAN_PROJECTS_HOME' ].
+			| loadSpecs | 
+			loadSpecs := (Rowan projectNamed: 'gemstoneBaseImage') loadedLoadSpecifications.
+			loadSpecs do: [:loadSpec |
+				loadSpec
+					gitUrl: 'file:', ('$ARCHBASE/image' asFileReference pathString);
+					projectsHome: '$ROWAN_PROJECTS_HOME';
+					yourself ].
+			loadSpecs load ].
 %
 method
 attachRowanProjects
-	{'Rowan' . 'Cypress' . 'FileSystemGs' . 'STON'} do: [:projectName |
-		| project |
-		project := Rowan projectNamed: projectName.
-		project
-			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan/'
-				projectsHome: '$ROWAN_PROJECTS_HOME' 
-		].
-	(Rowan projectNamed: 'RowanClientServices')
-			gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'
-				projectsHome: '$ROWAN_PROJECTS_HOME'.
-%
-method
-loadTests
-	| loadSpecs |
-	"load tests for Rowan and all of it's required projects"
-	loadSpecs := (Rowan projectNamed: 'Rowan') loadedLoadSpecifications.
+	| rowanProject loadSpecs |
+	rowanProject := Rowan projectNamed: 'Rowan'.
+	loadSpecs := rowanProject loadedLoadSpecifications.
 	loadSpecs do: [:loadSpec |
-		loadSpec addCustomConditionalAttributes: #('tests' 'testsV2') ].
-	loadSpecs load.
+		| relRoot |
+		relRoot := loadSpec relativeRepositoryRoot.
+		loadSpec specName = 'RowanClientServices'
+			ifTrue: [
+				relRoot isEmpty
+					ifTrue: [ 
+						loadSpec
+							gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/RowanClientServices' asFileReference) pathString) ]
+					ifFalse: [ 
+						loadSpec
+							gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/RowanClientServices' asFileReference / relRoot) pathString) ].
+				loadSpec projectsHome: '$ROWAN_PROJECTS_HOME' ]
+			ifFalse: [
+				"embedded Rowan project" 
+				relRoot isEmpty
+					ifTrue: [ 
+						loadSpec
+							gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/Rowan' asFileReference) pathString) ]
+					ifFalse: [ 
+						loadSpec
+							gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/Rowan' asFileReference / relRoot) pathString) ].
+				loadSpec projectsHome: '$ROWAN_PROJECTS_HOME';
+					yourself ].
+		self tests ifTrue: [
+			loadSpec addCustomConditionalAttributes: #('tests' 'testsV2')
+		] ].
+	loadSpecs load. 
 %
 doit
 	self stdout 
@@ -72,9 +89,6 @@ doit
 	self attachRowanProjects.
 	self gemstoneBaseImage
 		ifTrue: [ self attachGemstoneBaseImage ].
-	self tests
-		ifTrue: [ self loadTests ]
-		ifFalse: [ (Rowan projectNamed: 'Rowan') reload ].
 	System commit.
 	self stdout nextPutAll: '...finished :: ', self basename; lf.
 	^ self noResult

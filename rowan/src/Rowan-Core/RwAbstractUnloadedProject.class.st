@@ -154,6 +154,11 @@ RwAbstractUnloadedProject >> packages: aPackageDictionary [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> projectVersion: aStringOrVersion [
+	^ self _concreteProject projectVersion: aStringOrVersion
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> relativeRepositoryRoot: aRelativePathString [
 	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 

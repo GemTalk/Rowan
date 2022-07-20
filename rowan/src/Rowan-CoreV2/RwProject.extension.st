@@ -1,18 +1,6 @@
 Extension { #name : 'RwProject' }
 
 { #category : '*rowan-corev2' }
-RwProject >> _diskRepositoryRoot: repositoryRootPathString [
-	self _loadedProject diskRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	self _loadedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> addNewPackageNamed: packageName inSybolDictionaryNamed: symbolDictionaryName toComponentNamed: componentName [
 	Rowan image
 		loadedPackageNamed: packageName
@@ -50,57 +38,9 @@ RwProject >> addNewPackageNamed: packageName toComponentNamed: componentName [
 ]
 
 { #category : '*rowan-corev2' }
-RwProject >> diskRepositoryRoot: repositoryRootPathString [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _diskRepositoryRoot: repositoryRootPathString.
-	self projectsHome: nil
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _diskRepositoryRoot: repositoryRootPathString.
-	self projectsHome: aProjectHomeReferenceOrString
-]
-
-{ #category : '*rowan-corev2' }
 RwProject >> exportLoadSpecification [
 	^ self _loadedProject asDefinition exportLoadSpecification
 ]
-
-{ #category : '*rowan-corev2' }
-RwProject >> gitRepositoryRoot: repositoryRootPathString [
-	"repositoryRootPathString must be string, because we want any env vars to be late bound"
-
-	self _concreteProject gitRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'git repository root must be a string' ].
-	self projectsHome: aProjectHomeReferenceOrString.
-	self gitRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
-	self projectsHome: nil
-]
-
-{ #category : '*rowan-corev2' }
-RwProject >> readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId [
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
-	self projectsHome: aProjectHomeReferenceOrString
-]
-
 
 { #category : '*rowan-corev2' }
 RwProject >> removePackageNamed: packageName [

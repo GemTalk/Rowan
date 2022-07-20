@@ -443,18 +443,11 @@ RwProject >> projectUrl [
 { #category : 'actions' }
 RwProject >> reload [
 	"
-		Load the receiver AND required projects using the loaded load specs.
+		Load the receiver AND required projects using the primary project's loadSpec, while rereading all required projects from disk.
 		Use resolve, in case there have been significant changes on disk
 	"
 
-	| resolvedSpecs loadedSpecs |
-	resolvedSpecs := self loadSpecification resolve.
-	loadedSpecs := self loadedLoadSpecifications.
-	resolvedSpecs projectNames
-		do: [ :pn | 
-			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :ls | resolvedSpecs addLoadSpec: ls ] ].
-	^ resolvedSpecs load
+	^ self loadSpecification resolve load
 ]
 
 { #category : 'actions' }
@@ -529,7 +522,7 @@ RwProject >> unload [
 
 { #category : 'accessing' }
 RwProject >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
-	"preserve the current repositoryRoot in the loadSpec"
+	"preserve the current repositoryRoot in aLoadSpec ... aLoadSpec should not explicitly attached to loaded project"
 
 	self _loadedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
 ]

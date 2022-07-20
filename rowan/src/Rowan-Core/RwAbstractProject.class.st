@@ -146,11 +146,6 @@ RwAbstractProject >> projectVersion [
 ]
 
 { #category : 'accessing' }
-RwAbstractProject >> projectVersion: aStringOrVersion [
-	^ self _concreteProject projectVersion: aStringOrVersion
-]
-
-{ #category : 'accessing' }
 RwAbstractProject >> relativeRepositoryRoot [
 	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 

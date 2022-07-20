@@ -35,12 +35,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAt
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-
-	self resolvedProject _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-]
-
 { #category : 'private' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> _requiredProjectNamesForLoadedProject: visitedSet [
 	^ self handle _requiredProjectNamesForLoadedProject: visitedSet
@@ -239,13 +233,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: 
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> gitRepositoryRoot: repositoryRootPathString [
-	"repositoryRootPathString must be string, because we want any env vars to be late bound"
-
-	self resolvedProject gitRepositoryRoot: repositoryRootPathString
-]
-
-{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> gitRoot [
 	^ self resolvedProject gitRoot
 ]
@@ -398,11 +385,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectVersion [
 	^ self resolvedProject projectVersion
 ]
 
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> projectVersion: aStringOrVersion [
-	^ self resolvedProject projectVersion: aStringOrVersion
-]
-
 { #category : 'comparing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForCompare [
 	| props|
@@ -434,13 +416,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> read [
 	"
 
 	^ self asDefinition read
-]
-
-{ #category : 'actions' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	self resolvedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId
 ]
 
 { #category : 'accessing' }
@@ -570,9 +545,9 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> updateLoadedCommitId [
 	self resolvedProject updateLoadedCommitId
 ]
 
-{ #category : 'queries' }
+{ #category : 'actions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
-	"preserve the current repositoryRoot in the loadSpec"
+	"preserve the current repositoryRoot in aLoadSpec ... aLoadSpec should not explicitly attached to loaded project"
 
 	self resolvedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
 ]
