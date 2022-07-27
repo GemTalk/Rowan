@@ -18,6 +18,57 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'read load specs' }
+RwResolvedProjectComponentVisitorV2 class >> _readProjectsForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes intoProjectSet: intoProjectSet [
+	| entitySetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
+	entitySetDefinition := intoProjectSet
+		ifTrue: [ RwProjectSetDefinition new ]
+		ifFalse: [ RwLoadSpecSet new ].
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {resolvedProject}.
+	processedProjects := Dictionary new.
+	[ projectVisitorQueue isEmpty ]
+		whileFalse: [ 
+			| pp |
+			pp := projectVisitorQueue removeFirst.
+
+			visitor := self
+				readLoadSpecForProject: pp
+				platformConditionalAttributes: platformConditionalAttributes.
+
+			processedProjects at: pp projectName put: pp.
+
+			projectVisitedQueue
+				addLast:
+					{visitor.
+					pp}.
+
+			visitor projectLoadSpecs
+				do: [ :loadSpec | 
+					| theResolvedProject |
+					"derive resolved project from the load spec ... project load specs are read from the rowan/projects directory"
+					loadSpec relativeRepositoryRoot isEmpty
+						ifFalse: [ 
+							"using an embedded project"
+							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
+						resolveProject.
+					processedProjects
+						at: theResolvedProject projectName
+						ifAbsent: [ 
+							"required project has not been processed, add to the project visitor queue"
+							projectVisitorQueue addLast: theResolvedProject ] ] ].
+	projectVisitedQueue
+		do: [ :visitedArray | 
+			| theResolvedProject theLoadSpec |
+			theResolvedProject := visitedArray at: 2.
+			theLoadSpec := theResolvedProject loadSpecification copy.
+			intoProjectSet
+				ifTrue: [ entitySetDefinition addProject: theLoadSpec read ]
+				ifFalse: [ entitySetDefinition addLoadSpec: theLoadSpec ] ].
+	^ entitySetDefinition
+]
+
 { #category : 'instance creation' }
 RwResolvedProjectComponentVisitorV2 class >> new [
 
@@ -67,49 +118,10 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: resolved
 
 { #category : 'read load specs' }
 RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes [
-	| loadSpecSet visitor projectVisitorQueue projectVisitedQueue processedProjects |
-	loadSpecSet := RwLoadSpecSet new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {resolvedProject}.
-	processedProjects := Dictionary new.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| pp |
-			pp := projectVisitorQueue removeFirst.
-
-			visitor := self
-				readLoadSpecForProject: pp
-				platformConditionalAttributes: platformConditionalAttributes.
-
-			processedProjects at: pp projectName put: pp.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					pp}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject |
-					"derive resolved project from the load spec ... project load specs are read from the rown/projects directory"
-					loadSpec relativeRepositoryRoot isEmpty
-						ifFalse: [ 
-							"using an embedded project"
-							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
-					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
-						resolveProject.
-					processedProjects
-						at: theResolvedProject projectName
-						ifAbsent: [ 
-							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theResolvedProject ] ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| theResolvedProject theLoadSpec |
-			theResolvedProject := visitedArray at: 2.
-			theLoadSpec := theResolvedProject loadSpecification copy.
-			loadSpecSet addLoadSpec: theLoadSpec ].
-	^ loadSpecSet
+	^ self
+		_readProjectsForProject: resolvedProject
+		platformConditionalAttributes: platformConditionalAttributes
+		intoProjectSet: false
 ]
 
 { #category : 'reading' }
@@ -133,45 +145,10 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectForProject: aResolvedPro
 
 { #category : 'read load specs' }
 RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedProject platformConditionalAttributes: platformConditionalAttributes [
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue processedProjects |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {resolvedProject}.
-	processedProjects := Dictionary new.
-	[ projectVisitorQueue isEmpty ]
-		whileFalse: [ 
-			| pp |
-			pp := projectVisitorQueue removeFirst.
-
-			visitor := self
-				readLoadSpecForProject: pp
-				platformConditionalAttributes: platformConditionalAttributes.
-
-			processedProjects at: pp projectName put: pp.
-
-			projectVisitedQueue
-				addLast:
-					{visitor.
-					pp}.
-
-			visitor projectLoadSpecs
-				do: [ :loadSpec | 
-					| theResolvedProject |
-					"derive resolved project from the load spec"
-					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
-						resolveProject.
-					processedProjects
-						at: theResolvedProject projectName
-						ifAbsent: [ 
-							"required project has not been processed, add to the project visitor queue"
-							projectVisitorQueue addLast: theResolvedProject ] ] ].
-	projectVisitedQueue
-		do: [ :visitedArray | 
-			| theResolvedProject theLoadSpec |
-			theResolvedProject := visitedArray at: 2.
-			theLoadSpec := theResolvedProject loadSpecification copy.
-			projectSetDefinition addProject: theLoadSpec read ].
-	^ projectSetDefinition
+	^ self
+		_readProjectsForProject: resolvedProject
+		platformConditionalAttributes: platformConditionalAttributes
+		intoProjectSet: true
 ]
 
 { #category : 'reading' }

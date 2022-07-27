@@ -6680,12 +6680,10 @@ RwRowanSample9Test >> testIssue840_02 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue842 [
-	"load spec_0073 using project alias (0073A), clone/resolve spec_0073 using project alias (0073B), 
-		use gitUrl: and projectsHome: to point spec_00073A project at
-		spec_0073B checkout and load ... all repositories should point at 0073B"
+RwRowanSample9Test >> testIssue840_03 [
+	"load spec_0073 using a project alias and validate that the gitRoot is correct for the embedded project"
 
-	"https://github.com/dalehenrich/Rowan/issues/842"
+	"https://github.com/dalehenrich/Rowan/issues/840"
 
 	| loadSpec_0073A loadedProjects projectsHome project loadedSpecs projectName primary embedded embeddedProjectName |
 	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
@@ -6705,8 +6703,8 @@ RwRowanSample9Test >> testIssue842 [
 				(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
 
-"load spec_0078"
-	loadedProjects := loadSpec_0073A	load.		"loaded project"
+"load spec_0078A"
+	loadedProjects := loadSpec_0073A load.		"loaded project"
 
 "extract the loaded specs"
 	projectName := loadSpec_0073A projectName.
@@ -6729,6 +6727,37 @@ RwRowanSample9Test >> testIssue842 [
 	self 
 		assert: (loadedProjects projectNamed: embeddedProjectName) gitRoot pathString
 		equals: (loadedSpecs specForProjectNamed: projectName) gitUrl asRwUrl pathString.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue840_03_a [
+	"scratch test to isolate the toxic expression"
+
+	"https://github.com/dalehenrich/Rowan/issues/840"
+
+	| loadSpec_0073A projectsHome projectDefinition projectSetDefinition loadSpecs |
+	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+	projectsHome ensureDeleteAll.
+
+	loadSpec_0073A
+		projectsHome: projectsHome;
+		projectAlias: loadSpec_0073A projectName, '0073A';
+		yourself.
+
+	{ loadSpec_0073A projectName }
+		do: [:baseName |
+			| projectNames |
+			projectNames := { baseName . baseName, '_1' . baseName, '_2' .  baseName, '_3'}.
+			projectNames do: [:pn | 
+				(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
+
+""
+	projectDefinition := loadSpec_0073A read.
+	projectSetDefinition := projectDefinition readProjectSet: projectDefinition customConditionalAttributes.
+	loadSpecs := projectDefinition readLoadSpecSet: projectDefinition customConditionalAttributes.
+self halt.
 ]
 
 { #category : 'tests' }
