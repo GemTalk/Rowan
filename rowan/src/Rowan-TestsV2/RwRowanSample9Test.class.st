@@ -6474,36 +6474,76 @@ RwRowanSample9Test >> testIssue822 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9Test >> testIssue838 [
-	"load spec_0073, clone spec_001 using alias (different name on disk), 
-		use gitRepository:projectsHome: to point RowanSample9 project at
-		spec_001 checkout; load spec_0073 and see what happens"
+RwRowanSample9Test >> testIssue838_01 [
+	"load spec_0001 using project alias, clone/resolve spec_0002 using project alias, 
+		switch git repository of spec_0001 project to point at at spec_0002 checkout,
+		load project and repository should point at spec_0002"
 
 	"https://github.com/dalehenrich/Rowan/issues/838"
 
-	| loadSpec_0073 loadSpec_0001 projectName resolvedProject_0073 resolvedProject_0001 loadedProjects projectNames |
-	loadSpec_0073 := self _loadSpecNamed: 'spec_0073'.
-	loadSpec_0001 := self _loadSpecNamed: 'spec_0001'.
+	| loadSpec_0001 loadSpec_0002 loadedProjects projectNames projectsHome project
+		loadedSpecs projectName resolvedSpecs newLoadedSpecs |
+	loadSpec_0001 := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0001.ston').
+	loadSpec_0002 := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0002.ston').
+	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+	projectsHome ensureDeleteAll.
 
-	projectName := loadSpec_0073 projectName.
-	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
+	loadSpec_0001
+		projectsHome: projectsHome;
+		projectAlias: loadSpec_0001 projectName, '0001';
+		yourself.
+
+	loadSpec_0002
+		projectsHome: projectsHome;
+		projectAlias: loadSpec_0002 projectName, '0002';
+		yourself.
+
+	projectNames := { loadSpec_0001 projectName . loadSpec_0002 projectName }.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-"resolve projects - clone projects"
-	resolvedProject_0073 := loadSpec_0073 
-		projectAlias: projectName, '0073';
-		resolveProject.
-		
-	resolvedProject_0001 := loadSpec_0001
-		projectAlias: projectName, '0001';
-		resolveProject.
+"load spec_0078"
+	loadedProjects := loadSpec_0001	load.		"loaded project"
+	resolvedSpecs := loadSpec_0002 resolve. 	"clone project"
 
-"load project_0073"
-	loadedProjects := resolvedProject_0073 loadProjectSet.
-self halt.
+"change spec_0001 to point at spec_0002 checkout"
+	projectName := loadSpec_0001 projectName.
+	project := loadedProjects projectNamed: projectName.
+	loadedSpecs := project  loadedLoadSpecifications.
+	(loadedSpecs specForProjectNamed: projectName)
+		gitUrl: (resolvedSpecs specForProjectNamed: projectName) gitUrl.
+	loadedProjects := loadedSpecs load.
+
+"validate"
+	newLoadedSpecs := project  loadedLoadSpecifications.
+	self 
+		assert: 
+			(newLoadedSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0002 projectAlias) pathString; 
+				yourself)
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue838_02 [
+	"load spec_0073 using project alias (0073A), clone/resolve spec_0073 using project alias (0073B), 
+		use gitRepository:projectsHome: to point spec_00073A project at
+		spec_0073B checkout and load ... all repositories should point at 0073B"
+
+	"https://github.com/dalehenrich/Rowan/issues/838"
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue838_03 [
+	"load spec_0073 using project alias (0073A), clone/resolve spec_0073 using project alias (0073B), 
+		use gitRepository:projectsHome: to point one of the embedded projects at
+		spec_0073B checkout and load ... validate ... reload primary project ... boom?"
+
+	"https://github.com/dalehenrich/Rowan/issues/838"
 ]
 
 { #category : 'tests' }
@@ -6518,6 +6558,7 @@ RwRowanSample9Test >> testIssue840_01 [
 	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
 	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+	projectsHome ensureDeleteAll.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
@@ -6556,6 +6597,7 @@ RwRowanSample9Test >> testIssue840_02 [
 	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
 	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+	projectsHome ensureDeleteAll.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.

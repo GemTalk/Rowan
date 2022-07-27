@@ -1,0 +1,21 @@
+RwLoadSpecificationV2 {
+	#specName : 'RowanSample9_spec_0001',
+	#projectName : 'RowanSample9',
+	#gitUrl : 'https://git@github.com/dalehenrich/RowanSample9',
+	#revision : 'spec_0001',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#customConditionalAttributes : [
+		'tests'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'RowanSample9_1'
+			}
+		}
+	},
+	#comment : 'Bare bones package structure -Core and -Tests'
+}

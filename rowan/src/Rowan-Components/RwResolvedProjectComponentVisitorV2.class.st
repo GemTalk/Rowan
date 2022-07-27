@@ -18,17 +18,6 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'private' }
-RwResolvedProjectComponentVisitorV2 class >> _updateLoadSpecWithRepositoryRoot: theLoadSpec fromLoadedProject: theLoadedProject [
-	"preserve the repository root of the loaded project IFF the the load speca and loaded project share the same projectsHome"
-
-	"https://github.com/GemTalk/Rowan/issues/724"
-
-	(theLoadSpec relativeRepositoryRoot isEmpty
-		and: [ theLoadSpec projectsHome = theLoadedProject projectsHome ])
-		ifTrue: [ theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ]
-]
-
 { #category : 'instance creation' }
 RwResolvedProjectComponentVisitorV2 class >> new [
 
@@ -116,19 +105,9 @@ RwResolvedProjectComponentVisitorV2 class >> readLoadSpecSetForProject: resolved
 							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theResolvedProject := pp.
+			| theResolvedProject theLoadSpec |
+			theResolvedProject := visitedArray at: 2.
 			theLoadSpec := theResolvedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					self
-						_updateLoadSpecWithRepositoryRoot: theLoadSpec
-						fromLoadedProject: theLoadedProject ].
 			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 ]
@@ -179,7 +158,8 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedP
 				do: [ :loadSpec | 
 					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theResolvedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
+						resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 
@@ -187,19 +167,9 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedP
 							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theResolvedProject := pp.
+			| theResolvedProject theLoadSpec |
+			theResolvedProject := visitedArray at: 2.
 			theLoadSpec := theResolvedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					self
-						_updateLoadSpecWithRepositoryRoot: theLoadSpec
-						fromLoadedProject: theLoadedProject ].
 			projectSetDefinition addProject: theLoadSpec read ].
 	^ projectSetDefinition
 ]

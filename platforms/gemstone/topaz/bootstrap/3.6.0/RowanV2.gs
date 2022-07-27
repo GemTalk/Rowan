@@ -49667,12 +49667,6 @@ projectVersion
 
 category: 'accessing'
 method: RwAbstractProject
-projectVersion: aStringOrVersion
-	^ self _concreteProject projectVersion: aStringOrVersion
-%
-
-category: 'accessing'
-method: RwAbstractProject
 relativeRepositoryRoot
 	"return the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 
@@ -49835,6 +49829,12 @@ category: 'actions'
 method: RwAbstractUnloadedProject
 packages: aPackageDictionary
 	self _concreteProject packages: aPackageDictionary
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+projectVersion: aStringOrVersion
+	^ self _concreteProject projectVersion: aStringOrVersion
 %
 
 category: 'accessing'
@@ -51775,18 +51775,11 @@ category: 'actions'
 method: RwProject
 reload
 	"
-		Load the receiver AND required projects using the loaded load specs.
+		Load the receiver AND required projects using the primary project's loadSpec, while rereading all required projects from disk.
 		Use resolve, in case there have been significant changes on disk
 	"
 
-	| resolvedSpecs loadedSpecs |
-	resolvedSpecs := self loadSpecification resolve.
-	loadedSpecs := self loadedLoadSpecifications.
-	resolvedSpecs projectNames
-		do: [ :pn | 
-			(loadedSpecs specForProjectNamed: pn ifAbsent: [  ])
-				ifNotNil: [ :ls | resolvedSpecs addLoadSpec: ls ] ].
-	^ resolvedSpecs load
+	^ self loadSpecification resolve load
 %
 
 category: 'actions'
@@ -51870,7 +51863,7 @@ unload
 category: 'accessing'
 method: RwProject
 updateLoadSpecWithRepositoryRoot: aLoadSpec
-	"preserve the current repositoryRoot in the loadSpec"
+	"preserve the current repositoryRoot in aLoadSpec ... aLoadSpec should not explicitly attached to loaded project"
 
 	self _loadedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
 %
@@ -86850,14 +86843,6 @@ gemstoneSymbolDictNameForPackageNamed: packageName
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-gitRepositoryRoot: repositoryRootPathString
-	"repositoryRootPathString must be string, because we want any env vars to be late bound"
-
-	self resolvedProject gitRepositoryRoot: repositoryRootPathString
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
 gitRoot
 	^ self resolvedProject gitRoot
 %
@@ -87031,12 +87016,6 @@ projectVersion
 	^ self resolvedProject projectVersion
 %
 
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-projectVersion: aStringOrVersion
-	^ self resolvedProject projectVersion: aStringOrVersion
-%
-
 category: 'comparing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 propertiesForCompare
@@ -87071,14 +87050,6 @@ read
 	"
 
 	^ self asDefinition read
-%
-
-category: 'actions'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	self resolvedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId
 %
 
 category: 'accessing'
@@ -87222,10 +87193,10 @@ updateLoadedCommitId
 	self resolvedProject updateLoadedCommitId
 %
 
-category: 'queries'
+category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 updateLoadSpecWithRepositoryRoot: aLoadSpec
-	"preserve the current repositoryRoot in the loadSpec"
+	"preserve the current repositoryRoot in aLoadSpec ... aLoadSpec should not explicitly attached to loaded project"
 
 	self resolvedProject updateLoadSpecWithRepositoryRoot: aLoadSpec
 %
@@ -87262,13 +87233,6 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
-%
-
-category: 'accessing'
-method: RwGsLoadedSymbolDictResolvedProjectV2
-_readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-
-	self resolvedProject _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
 %
 
 category: 'private'
@@ -89922,8 +89886,8 @@ readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platfo
 				do: [ :loadSpec | 
 					| theResolvedProject |
 					"derive resolved project from the load spec ... project load specs are read from the rown/projects directory"
-					loadSpec relativeRepositoryRoot
-						ifNotNil: [ :relRoot | 
+					loadSpec relativeRepositoryRoot isEmpty
+						ifFalse: [ 
 							"using an embedded project"
 							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
 					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
@@ -89935,19 +89899,9 @@ readLoadSpecSetForProject: resolvedProject platformConditionalAttributes: platfo
 							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theResolvedProject := pp.
+			| theResolvedProject theLoadSpec |
+			theResolvedProject := visitedArray at: 2.
 			theLoadSpec := theResolvedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					self
-						_updateLoadSpecWithRepositoryRoot: theLoadSpec
-						fromLoadedProject: theLoadedProject ].
 			loadSpecSet addLoadSpec: theLoadSpec ].
 	^ loadSpecSet
 %
@@ -90000,7 +89954,8 @@ readProjectSetForProject: resolvedProject platformConditionalAttributes: platfor
 				do: [ :loadSpec | 
 					| theResolvedProject |
 					"derive resolved project from the load spec"
-					theResolvedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
+					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
+						resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 
@@ -90008,19 +89963,9 @@ readProjectSetForProject: resolvedProject platformConditionalAttributes: platfor
 							projectVisitorQueue addLast: theResolvedProject ] ] ].
 	projectVisitedQueue
 		do: [ :visitedArray | 
-			| pp theVisitor theResolvedProject theLoadSpec theLoadedProject |
-			theVisitor := visitedArray at: 1.
-			pp := visitedArray at: 2.
-			theResolvedProject := pp.
+			| theResolvedProject theLoadSpec |
+			theResolvedProject := visitedArray at: 2.
 			theLoadSpec := theResolvedProject loadSpecification copy.
-			(theLoadedProject := Rowan
-				projectNamed: theLoadSpec projectName
-				ifAbsent: [  ])
-				ifNotNil: [ 
-					"project is loaded, so we need to preserve repository root"
-					self
-						_updateLoadSpecWithRepositoryRoot: theLoadSpec
-						fromLoadedProject: theLoadedProject ].
 			projectSetDefinition addProject: theLoadSpec read ].
 	^ projectSetDefinition
 %
@@ -90130,18 +90075,6 @@ requiredProjectNamesForProject: resolvedProject
 			pp := visitedArray at: 2.
 			requiredProjectNames add: pp projectName ].
 	^ requiredProjectNames
-%
-
-category: 'private'
-classmethod: RwResolvedProjectComponentVisitorV2
-_updateLoadSpecWithRepositoryRoot: theLoadSpec fromLoadedProject: theLoadedProject
-	"preserve the repository root of the loaded project IFF the the load speca and loaded project share the same projectsHome"
-
-	"https://github.com/GemTalk/Rowan/issues/724"
-
-	(theLoadSpec relativeRepositoryRoot isEmpty
-		and: [ theLoadSpec projectsHome = theLoadedProject projectsHome ])
-		ifTrue: [ theLoadedProject updateLoadSpecWithRepositoryRoot: theLoadSpec ]
 %
 
 !		Instance methods for 'RwResolvedProjectComponentVisitorV2'
@@ -101251,24 +101184,6 @@ addNewPackageNamed: packageName toComponentNamed: componentName
 
 category: '*rowan-corev2'
 method: RwProject
-diskRepositoryRoot: repositoryRootPathString
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _diskRepositoryRoot: repositoryRootPathString.
-	self projectsHome: nil
-%
-
-category: '*rowan-corev2'
-method: RwProject
-diskRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _diskRepositoryRoot: repositoryRootPathString.
-	self projectsHome: aProjectHomeReferenceOrString
-%
-
-category: '*rowan-corev2'
-method: RwProject
 exportLoadSpecification
 	^ self _loadedProject asDefinition exportLoadSpecification
 %
@@ -101301,41 +101216,6 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeClassInitializers: excludeClassInitializers
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 		usingPackageNamesMap: packageNamesMap
-%
-
-category: '*rowan-corev2'
-method: RwProject
-gitRepositoryRoot: repositoryRootPathString
-	"repositoryRootPathString must be string, because we want any env vars to be late bound"
-
-	self _concreteProject gitRepositoryRoot: repositoryRootPathString
-%
-
-category: '*rowan-corev2'
-method: RwProject
-gitRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'git repository root must be a string' ].
-	self projectsHome: aProjectHomeReferenceOrString.
-	self gitRepositoryRoot: repositoryRootPathString
-%
-
-category: '*rowan-corev2'
-method: RwProject
-readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
-	self projectsHome: nil
-%
-
-category: '*rowan-corev2'
-method: RwProject
-readOnlyRepositoryRoot: repositoryRootPathString projectsHome: aProjectHomeReferenceOrString commitId: commitId
-	repositoryRootPathString isString
-		ifFalse: [ self error: 'readOnly repository root must be a string' ].
-	self _readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId.
-	self projectsHome: aProjectHomeReferenceOrString
 %
 
 category: '*rowan-corev2'
@@ -101389,20 +101269,6 @@ requiredProjectSet
 							requiredProjectSet addProject: project asDefinition.
 							requiredProjectNames addAll: project requiredProjectNames ] ] ].
 	^ requiredProjectSet
-%
-
-category: '*rowan-corev2'
-method: RwProject
-_diskRepositoryRoot: repositoryRootPathString
-	self _loadedProject diskRepositoryRoot: repositoryRootPathString
-%
-
-category: '*rowan-corev2'
-method: RwProject
-_readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	self _loadedProject
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId
 %
 
 ! Class extensions for 'RwProjectDefinition'
