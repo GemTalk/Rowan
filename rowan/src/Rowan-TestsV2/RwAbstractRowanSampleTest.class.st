@@ -169,6 +169,22 @@ RwAbstractRowanSampleTest >> _standard_validate_loadedProjects: loadedProjects [
 ]
 
 { #category : 'private' }
+RwAbstractRowanSampleTest >> _standard_validate_loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
+	| testResult audit |
+	"validate"
+	self assert: loadedProjects size = expectedProjectNames size.
+	self
+		assert: (loadedProjects collect: [ :each | each name ]) sort
+		equals: expectedProjectNames sort.
+	loadedProjects
+		do: [ :project | 
+			self assert: (audit := project audit) isEmpty.
+			testResult := project testSuite run.
+			self deny: testResult hasErrors.
+			self deny: testResult hasFailures ]
+]
+
+{ #category : 'private' }
 RwAbstractRowanSampleTest >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
 	| loadedProjectDefinition x |
 	"validate"

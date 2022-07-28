@@ -10615,7 +10615,7 @@ RwRowanSample9Test >> testSwitchRepository [
 	resolvedSpecs_0002 := loadSpec_0002 resolve.
 	resolvedSpecs_0003 := loadSpec_0003 resolve.
 
-"load project1"
+"load spec_0002"
 	loadedProjects := resolvedSpecs_0002 load.
 	project := Rowan projectNamed: loadSpec_0002 projectName.
 
@@ -10628,7 +10628,7 @@ RwRowanSample9Test >> testSwitchRepository [
 
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
 
-"reload project from spec_0003 checkout: changing gitUrl of loaded project"
+"load project from spec_0003 checkout: changing gitUrl of loaded project"
 	loadedSpecs := project loadedLoadSpecifications.
 	(loadedSpecs specForProjectNamed: project name)
 		gitUrl: resolvedSpec_0003 gitUrl.
@@ -10679,65 +10679,60 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 
 	"spec_0074 and spec_0075 have embedded projects"
 
-	| projectName  loadSpec1 loadSpec2 projectNames resolvedProjectSet1 
-		resolvedProjectSet2 project1 loadedProjects resolvedProject1 resolvedProject2 
-		requiredProjectName requiredProject1 |
+	| projectNames projectName loadSpec_0074 loadSpec_0075 loadedSpecs resolvedProjectSet_0074 
+		resolvedProjectSet_0075  loadedProjects  requiredProjectName requiredProject1 project |
 	
-	projectName := 'RowanSample9'.
-	requiredProjectName := 'RowanSample9_embedded_1'.
-
-	{ 'RowanSample9_0074' . 'RowanSample9_0075' } 
-		do: [:repoName | 
-			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
-
-	loadSpec1 := (self _loadSpecNamed: 'spec_0074')
+	loadSpec_0074 := (self _loadSpecNamed: 'spec_0074')
 		projectAlias: 'RowanSample9_0074';
 		yourself.
-	loadSpec2 := (self _loadSpecNamed: 'spec_0075')
+	loadSpec_0075 := (self _loadSpecNamed: 'spec_0075')
 		projectAlias: 'RowanSample9_0075';
 		yourself.
 
-	projectNames := {projectName . requiredProjectName }.
+	projectName := 'RowanSample9'.
+	requiredProjectName := 'RowanSample9_embedded_1'.
+
+	projectNames := {loadSpec_0074 projectName. requiredProjectName}.
+
+	projectNames
+		do: [:repoName | 
+			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].		
 
-"resolve projects"
-	resolvedProjectSet1 := loadSpec1 readProjectSet.
-	resolvedProject1 := resolvedProjectSet1 projectNamed: projectName.
 
-	resolvedProjectSet2 := loadSpec2 readProjectSet.	"only used to extract target repositoryRoot ... load of spec_0075 will happen via using spec_0075 repositoryRoot"
-	resolvedProject2 := resolvedProjectSet2 projectNamed: projectName.
+"resolve projects (clone)"
+	resolvedProjectSet_0074 := loadSpec_0074 readProjectSet.
+	resolvedProjectSet_0075 := loadSpec_0075 readProjectSet.	"only used to clone as target repo"
 
-"validate"
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
-
-"load project1 from spec_0074"
-	loadedProjects := resolvedProjectSet1 load.
-	project1 := Rowan projectNamed: projectName.
+"load spec_0074"
+	loadedProjects := resolvedProjectSet_0074 load.
+	project := Rowan projectNamed: projectName.
 	requiredProject1 := Rowan projectNamed: requiredProjectName.
 
 "validate"
 	self 
-		_standard_validate: resolvedProject1 
-		loadedProjects: loadedProjects 
+		_standard_validate_loadedProjects: loadedProjects 
 		expectedProjectNames: projectNames.
+	self assert: (resolvedProjectSet_0074 projectNamed: project name) gitUrl equals: project gitUrl.
 
 "load project1 from spec_0075 checkout: changing repository root of loaded project ... embedded project should be adjusted as well"
-	project1 gitRepositoryRoot: resolvedProject2 repositoryRoot pathString.
-	loadedProjects := project1 reload.
+	loadedSpecs := project loadedLoadSpecifications.
+	loadedSpecs namesAndEntitiesDo: [:pName :spec |
+		spec
+			gitUrl: (resolvedProjectSet_0075 projectNamed: pName) gitUrl ].
+	loadedProjects := loadedSpecs load.
 
 "Validate"
 	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
 	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
 	self 
-		_standard_validate: resolvedProject1 
-		loadedProjects: loadedProjects
+		_standard_validate_loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
+	self assert: project asDefinition repositoryRoot equals: project repositoryRoot.
+	self assert: (resolvedProjectSet_0075 projectNamed: project name) gitUrl equals: project gitUrl.
 ]
 
 { #category : 'tests' }
