@@ -6582,9 +6582,9 @@ RwRowanSample9Test >> testIssue838_02 [
 		equals: 
 			(Dictionary new 
 				at: projectName put: (projectsHome / loadSpec_0073B projectAlias) pathString; 
-				at: projectName put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
-				at: projectName put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
-				at: projectName put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
+				at: projectName, '_1' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
+				at: projectName, '_2' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
+				at: projectName, '_3' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
 				yourself)
 ]
 
@@ -6685,7 +6685,7 @@ RwRowanSample9Test >> testIssue840_03 [
 
 	"https://github.com/dalehenrich/Rowan/issues/840"
 
-	| loadSpec_0073A loadedProjects projectsHome project loadedSpecs projectName primary embedded embeddedProjectName |
+	| loadSpec_0073A loadedProjects projectsHome project loadedSpecs projectName primary embedded embeddedProjectName embeddedPrefix |
 	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
@@ -6723,41 +6723,24 @@ RwRowanSample9Test >> testIssue840_03 [
 		equals: (embedded := (loadedProjects projectNamed: embeddedProjectName) gitRoot pathString).
 
 "validate embedded load spec gitUrl"
+	embeddedPrefix := (projectsHome / loadSpec_0073A projectAlias) pathString.
+	self 
+		assert: 
+			(loadedSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0073A projectAlias) pathString; 
+				at: projectName, '_1' put: embeddedPrefix, '/rowan_1'; 
+				at: projectName, '_2' put: embeddedPrefix, '/rowan_2'; 
+				at: projectName, '_3' put: embeddedPrefix, '/rowan_3'; 
+				yourself).
+false ifTrue: [ 
 	projectName := 'RowanSample9_1'.
 	self 
 		assert: (loadedProjects projectNamed: embeddedProjectName) gitRoot pathString
 		equals: (loadedSpecs specForProjectNamed: projectName) gitUrl asRwUrl pathString.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue840_03_a [
-	"scratch test to isolate the toxic expression"
-
-	"https://github.com/dalehenrich/Rowan/issues/840"
-
-	| loadSpec_0073A projectsHome projectDefinition projectSetDefinition loadSpecs |
-	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
-	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
-	projectsHome ensureDeleteAll.
-
-	loadSpec_0073A
-		projectsHome: projectsHome;
-		projectAlias: loadSpec_0073A projectName, '0073A';
-		yourself.
-
-	{ loadSpec_0073A projectName }
-		do: [:baseName |
-			| projectNames |
-			projectNames := { baseName . baseName, '_1' . baseName, '_2' .  baseName, '_3'}.
-			projectNames do: [:pn | 
-				(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
-
-""
-	projectDefinition := loadSpec_0073A read.
-	projectSetDefinition := projectDefinition readProjectSet: projectDefinition customConditionalAttributes.
-	loadSpecs := projectDefinition readLoadSpecSet: projectDefinition customConditionalAttributes.
-self halt.
+ ]
 ]
 
 { #category : 'tests' }

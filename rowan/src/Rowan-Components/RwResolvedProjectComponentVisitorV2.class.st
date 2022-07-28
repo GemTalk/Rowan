@@ -184,7 +184,11 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedP
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
 					| theResolvedProject theLoadSpec |
-					"derive resolved project from the load spec; using projects home of parent project"
+					"derive resolved project from the load spec ... project load specs are read from the rowan/projects directory"
+					loadSpec relativeRepositoryRoot isEmpty
+						ifFalse: [ 
+							"using an embedded project"
+							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
 					theResolvedProject := (loadSpec projectsHome: rp projectsHome) resolveProject.
 					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
