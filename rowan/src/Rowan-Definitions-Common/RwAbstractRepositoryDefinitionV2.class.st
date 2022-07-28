@@ -27,6 +27,18 @@ RwAbstractRepositoryDefinitionV2 >> = anObject [
 ]
 
 { #category : 'actions' }
+RwAbstractRepositoryDefinitionV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
+	| urlString repo |
+	urlString := 'file:' , self repositoryRoot pathString.
+	repo := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	repo commitId: aCommitId.
+	^ repo
+]
+
+{ #category : 'actions' }
 RwAbstractRepositoryDefinitionV2 >> checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2 [
 	"noop"
 ]
@@ -91,18 +103,6 @@ RwAbstractRepositoryDefinitionV2 >> projectsHome [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> projectsHome: aFileReference [
 	projectsHome := aFileReference
-]
-
-{ #category : 'actions' }
-RwAbstractRepositoryDefinitionV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	| urlString repo |
-	urlString := 'file:' , repositoryRootPathString.
-	repo := RwReadOnlyDiskRepositoryDefinitionV2
-		newNamed: self name
-		projectsHome: self projectsHome
-		repositoryUrl: urlString.
-	repo commitId: commitId.
-	^ repo
 ]
 
 { #category : 'accessing' }

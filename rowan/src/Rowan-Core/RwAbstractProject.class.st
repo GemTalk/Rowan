@@ -27,6 +27,11 @@ RwAbstractProject >> defined [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> diskUrl [
+	^ self _concreteProject diskUrl
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> gemstoneDefaultMethodEnv [
 	^ self _concreteProject gemstoneDefaultMethodEnv
 ]
@@ -153,6 +158,11 @@ RwAbstractProject >> projectsHome: aProjectHomeReferenceOrString [
 { #category : 'accessing' }
 RwAbstractProject >> projectVersion [
 	^ self _concreteProject projectVersion
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> readonlyDiskUrl [
+	^ self _concreteProject readonlyDiskUrl
 ]
 
 { #category : 'accessing' }

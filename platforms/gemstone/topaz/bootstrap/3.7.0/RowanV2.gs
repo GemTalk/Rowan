@@ -49527,6 +49527,12 @@ defined
 
 category: 'accessing'
 method: RwAbstractProject
+diskUrl
+	^ self _concreteProject diskUrl
+%
+
+category: 'accessing'
+method: RwAbstractProject
 gemstoneDefaultMethodEnv
 	^ self _concreteProject gemstoneDefaultMethodEnv
 %
@@ -49675,6 +49681,12 @@ category: 'accessing'
 method: RwAbstractProject
 projectVersion
 	^ self _concreteProject projectVersion
+%
+
+category: 'accessing'
+method: RwAbstractProject
+readonlyDiskUrl
+	^ self _concreteProject readonlyDiskUrl
 %
 
 category: 'accessing'
@@ -49847,6 +49859,12 @@ category: 'accessing'
 method: RwAbstractUnloadedProject
 projectVersion: aStringOrVersion
 	^ self _concreteProject projectVersion: aStringOrVersion
+%
+
+category: 'accessing'
+method: RwAbstractUnloadedProject
+readonlyDiskUrl: aString
+	self _concreteProject readonlyDiskUrl: aString
 %
 
 category: 'accessing'
@@ -51425,6 +51443,14 @@ method: RwProject
 asDefinition
 
 	^ self _loadedProject asDefinition
+%
+
+category: 'repository conversion'
+method: RwProject
+asReadOnlyRepositoryWithCommitId: aCommitId
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	self _concreteProject asReadOnlyRepositoryWithCommitId: aCommitId
 %
 
 category: 'actions'
@@ -67186,6 +67212,20 @@ asDefinition
   ^ self
 %
 
+category: '-- loader compat --'
+method: RwResolvedProjectV2
+asReadOnlyRepositoryWithCommitId: aCommitId
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	| loadSpec |
+	loadSpec := self loadSpecification.
+	projectRepository := self _projectRepository asReadOnlyRepositoryWithCommitId: aCommitId.
+	self updateLoadSpecWithRepositoryRoot: loadSpec.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: aCommitId ]
+%
+
 category: 'actions'
 method: RwResolvedProjectV2
 checkout: aCommittish
@@ -67792,18 +67832,16 @@ readLoadSpecSet: platformConditionalAttributes
 		platformConditionalAttributes: platformConditionalAttributes
 %
 
-category: '-- loader compat --'
+category: 'load specification'
 method: RwResolvedProjectV2
-readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	| loadSpec |
-	loadSpec := self loadSpecification.
-	projectRepository := self _projectRepository
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId.
-	self updateLoadSpecWithRepositoryRoot: loadSpec.
+readonlyDiskUrl
+	^ self loadSpecification readonlyDiskUrl
+%
 
-	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
-		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
+category: 'load specification'
+method: RwResolvedProjectV2
+readonlyDiskUrl: anUrlString
+	self loadSpecification readonlyDiskUrl: anUrlString
 %
 
 category: 'project definition'
@@ -75870,6 +75908,19 @@ method: RwAbstractRepositoryDefinitionV2
 
 category: 'actions'
 method: RwAbstractRepositoryDefinitionV2
+asReadOnlyRepositoryWithCommitId: aCommitId
+	| urlString repo |
+	urlString := 'file:' , self repositoryRoot pathString.
+	repo := RwReadOnlyDiskRepositoryDefinitionV2
+		newNamed: self name
+		projectsHome: self projectsHome
+		repositoryUrl: urlString.
+	repo commitId: aCommitId.
+	^ repo
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinitionV2
 checkAndUpdateRepositoryRevision: aRwProjectLoadSpecificationV2
 	"noop"
 %
@@ -75942,19 +75993,6 @@ category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 projectsHome: aFileReference
 	projectsHome := aFileReference
-%
-
-category: 'actions'
-method: RwAbstractRepositoryDefinitionV2
-readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId
-	| urlString repo |
-	urlString := 'file:' , repositoryRootPathString.
-	repo := RwReadOnlyDiskRepositoryDefinitionV2
-		newNamed: self name
-		projectsHome: self projectsHome
-		repositoryUrl: urlString.
-	repo commitId: commitId.
-	^ repo
 %
 
 category: 'accessing'
@@ -76601,6 +76639,12 @@ updateLoadSpecWithRepositoryRoot: aLoadSpec
 
 !		Instance methods for 'RwReadOnlyDiskRepositoryDefinitionV2'
 
+category: 'actions'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+asReadOnlyRepositoryWithCommitId: aCommitId
+	self commitId: aCommitId
+%
+
 category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 commitId
@@ -76611,14 +76655,6 @@ category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 commitId: aString
 	commitId := aString
-%
-
-category: 'actions'
-method: RwReadOnlyDiskRepositoryDefinitionV2
-readOnlyRepositoryRoot: repositoryRootPathString commitId: aString
-	self
-		repositoryUrl: 'file:' , repositoryRootPathString;
-		commitId: aString
 %
 
 category: 'accessing'
@@ -86751,6 +86787,14 @@ asDefinition
 	^ resolvedProject
 %
 
+category: 'repositoryConversion'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+asReadOnlyRepositoryWithCommitId: aCommitId
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	self resolvedProject asReadOnlyRepositoryWithCommitId: aCommitId
+%
+
 category: 'testing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 canCommit
@@ -86832,6 +86876,12 @@ category: 'actions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 diskRepositoryRoot: repositoryRootPathString
 	self resolvedProject diskRepositoryRoot: repositoryRootPathString
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+diskUrl
+	^ self resolvedProject diskUrl
 %
 
 category: 'accessing'
@@ -87063,6 +87113,12 @@ read
 	"
 
 	^ self asDefinition read
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+readonlyDiskUrl
+	^ self resolvedProject readonlyDiskUrl
 %
 
 category: 'accessing'

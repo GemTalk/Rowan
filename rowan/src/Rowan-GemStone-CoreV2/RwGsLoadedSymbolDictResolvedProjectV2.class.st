@@ -149,6 +149,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 	^ resolvedProject
 ]
 
+{ #category : 'repositoryConversion' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	self resolvedProject asReadOnlyRepositoryWithCommitId: aCommitId
+]
+
 { #category : 'testing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> canCommit [
 
@@ -218,6 +225,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> customConditionalAttributes [
 { #category : 'actions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> diskRepositoryRoot: repositoryRootPathString [
 	self resolvedProject diskRepositoryRoot: repositoryRootPathString
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> diskUrl [
+	^ self resolvedProject diskUrl
 ]
 
 { #category : 'accessing' }
@@ -421,6 +433,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> read [
 	"
 
 	^ self asDefinition read
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> readonlyDiskUrl [
+	^ self resolvedProject readonlyDiskUrl
 ]
 
 { #category : 'accessing' }

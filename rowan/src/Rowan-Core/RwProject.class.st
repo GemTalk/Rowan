@@ -139,6 +139,13 @@ RwProject >> asDefinition [
 	^ self _loadedProject asDefinition
 ]
 
+{ #category : 'repository conversion' }
+RwProject >> asReadOnlyRepositoryWithCommitId: aCommitId [
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	self _concreteProject asReadOnlyRepositoryWithCommitId: aCommitId
+]
+
 { #category : 'actions' }
 RwProject >> audit [
 	"run audit on the receiver"

@@ -158,6 +158,17 @@ RwAbstractRowanSampleTest >> _standard_resolve_load_validate: projectSpec [
 ]
 
 { #category : 'private' }
+RwAbstractRowanSampleTest >> _standard_validate_loadedProjects: loadedProjects [
+	| audit |
+	"validate"
+	self assert: loadedProjects size = 1.
+	loadedProjects
+		do: [ :project | 
+			self assert: (audit := project audit) isEmpty.
+			self _runTestSuiteForProject: project ]
+]
+
+{ #category : 'private' }
 RwAbstractRowanSampleTest >> _standard_validate: resolvedProject loadedProjects: loadedProjects [
 	| loadedProjectDefinition x |
 	"validate"

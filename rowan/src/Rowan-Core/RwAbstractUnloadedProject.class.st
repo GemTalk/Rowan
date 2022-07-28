@@ -159,6 +159,11 @@ RwAbstractUnloadedProject >> projectVersion: aStringOrVersion [
 ]
 
 { #category : 'accessing' }
+RwAbstractUnloadedProject >> readonlyDiskUrl: aString [
+	self _concreteProject readonlyDiskUrl: aString
+]
+
+{ #category : 'accessing' }
 RwAbstractUnloadedProject >> relativeRepositoryRoot: aRelativePathString [
 	"specify the repository root relative to the git repository root ... not applicable to non-git (svn, etc.) repositories"
 

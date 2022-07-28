@@ -6721,7 +6721,6 @@ RwRowanSample9Test >> testIssue840_02 [
 				at: projectName, '_2' put: embeddedPrefix, '/rowan_2'; 
 				at: projectName, '_3' put: embeddedPrefix, '/rowan_3'; 
 				yourself)
-"The primary project ends up creating a new git checkout using the project alias, but the embedded projects use the standard download ... I think that this might actually be correct?"
 ]
 
 { #category : 'tests' }
@@ -10594,15 +10593,15 @@ RwRowanSample9Test >> testSwitchRepository [
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
 		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec1 loadSpec2 projectNames resolvedProject1 resolvedProject2 project1 loadedProjects gitRepositoryRoot commitId loadedSpecs |
-	loadSpec1 := (self _loadSpecNamed: 'spec_0002')
+	| loadSpec_0002 loadSpec_0003 projectNames resolvedSpecs_0002 resolvedSpecs_0003 resolvedSpec_0002 resolvedSpec_0003 project loadedProjects commitId loadedSpecs |
+	loadSpec_0002 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
-	loadSpec2 := (self _loadSpecNamed: 'spec_0003')
+	loadSpec_0003 := (self _loadSpecNamed: 'spec_0003')
 		projectAlias: 'RowanSample9_0003';
 		yourself.
 
-	projectNames := {loadSpec1 projectName. loadSpec2 projectName}.
+	projectNames := {loadSpec_0002 projectName. loadSpec_0003 projectName}.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -10612,72 +10611,66 @@ RwRowanSample9Test >> testSwitchRepository [
 		do: [:repoName | 
 			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
 
-"resolve projects"
-	resolvedProject1 := loadSpec1 resolveProject.
-	resolvedProject2 := loadSpec2 resolveProject.
-
-"validate"
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+"resolve specs (clone)"
+	resolvedSpecs_0002 := loadSpec_0002 resolve.
+	resolvedSpecs_0003 := loadSpec_0003 resolve.
 
 "load project1"
-	loadedProjects := resolvedProject1 load.
-	project1 := Rowan projectNamed: loadSpec1 projectName.
+	loadedProjects := resolvedSpecs_0002 load.
+	project := Rowan projectNamed: loadSpec_0002 projectName.
 
 "validate"
-	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
+	self _standard_validate_loadedProjects: loadedProjects.
 
-"reload project1 from spec_0003 checkout: changing repository root of loaded project"
-	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
+"validate"
+	resolvedSpec_0002 := resolvedSpecs_0002 specForProjectNamed: project name.
+	resolvedSpec_0003 := resolvedSpecs_0003 specForProjectNamed: project name.
 
-	loadedSpecs := project1 loadedLoadSpecifications.
-	(loadedSpecs specForProjectNamed: project1 name)
-		gitUrl: 'file:', gitRepositoryRoot.
+	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
+
+"reload project from spec_0003 checkout: changing gitUrl of loaded project"
+	loadedSpecs := project loadedLoadSpecifications.
+	(loadedSpecs specForProjectNamed: project name)
+		gitUrl: resolvedSpec_0003 gitUrl.
 	loadedProjects := loadedSpecs load.
 
 "Validate"
-	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self _standard_validate_loadedProjects: loadedProjects.
+	self assert: project asDefinition repositoryRoot = project repositoryRoot.
+	self assert: resolvedSpec_0003 gitUrl equals: project gitUrl.
+	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self assert: project1 loadSpecification gitUrl equals: 'file:', gitRepositoryRoot.
+	self assert: project loadSpecification gitUrl equals: resolvedSpec_0003 gitUrl.
 
 "reload project1 from spec_0003 checkout: using readOnlyRepository:commitId: to define root of loaded project"
-	commitId := project1 commitId.
-	gitRepositoryRoot := resolvedProject2 repositoryRoot pathString.
-	project1 readOnlyRepositoryRoot: gitRepositoryRoot commitId: commitId.
-	self assert: project1 commitId equals: commitId.
+	commitId := project commitId.
+	project asReadOnlyRepositoryWithCommitId: commitId.
+	self assert: project commitId equals: commitId.
 
 "reload"
-	loadedProjects := project1 reload.
+	loadedProjects := project reload.
 
 "Validate"
-	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self _standard_validate_loadedProjects: loadedProjects.
+	self assert: project asDefinition repositoryRoot = project repositoryRoot.
+	self assert: resolvedSpec_0003 gitUrl equals: project readonlyDiskUrl.
+	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self assert: project1 loadSpecification readonlyDiskUrl equals: 'file:', gitRepositoryRoot. 
-	self deny: project1 commitId equals: commitId.	"commitId is not expected to survive reload"
+	self deny: project commitId equals: commitId.	"commitId is not expected to survive reload"
 
-"reload project1 from spec_0003 checkout: using diskRepositoryRoot: to define root of loaded project"
-	project1 diskRepositoryRoot: gitRepositoryRoot.
-	self assert: project1 commitId equals: ''.	"no commitId preservation"
-
-"reload"
-	loadedProjects := project1 reload.
+"reload project1 from spec_0003 checkout: using diskUrl: to define root of loaded project"
+	loadedSpecs := project loadedLoadSpecifications.
+	(loadedSpecs specForProjectNamed: project name)
+		diskUrl: resolvedSpec_0003 gitUrl.
+	loadedProjects := loadedSpecs load.
 
 "Validate"
-	self _standard_validate: resolvedProject1 loadedProjects: loadedProjects.
-	self assert: project1 asDefinition repositoryRoot = project1 repositoryRoot.
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self deny: resolvedProject2 repositoryRoot = resolvedProject1 repositoryRoot.
+	self _standard_validate_loadedProjects: loadedProjects.
+	self assert: project asDefinition repositoryRoot = project repositoryRoot.
+	self assert: resolvedSpec_0003 gitUrl equals: project diskUrl.
+	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 diskUrl.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
-	self assert: resolvedProject2 repositoryRoot equals: project1 repositoryRoot.
-	self assert: project1 loadSpecification diskUrl equals: 'file:', gitRepositoryRoot. 
-	self assert: project1 commitId equals: ''.	"no commitId preservation"
+	self assert: project loadSpecification diskUrl equals: resolvedSpec_0003 gitUrl.
 ]
 
 { #category : 'tests' }

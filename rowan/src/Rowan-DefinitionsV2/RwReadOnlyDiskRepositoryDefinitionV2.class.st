@@ -14,6 +14,11 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> _sessionTempsKey [
 		ifNil: [ sesstionTempsKey := ('rwReadOnlyRepositoryKey_' , self asOop printString) asSymbol ]
 ]
 
+{ #category : 'actions' }
+RwReadOnlyDiskRepositoryDefinitionV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
+	self commitId: aCommitId
+]
+
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> commitId [
 	^ commitId ifNil: [ '' ]
@@ -22,13 +27,6 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> commitId [
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> commitId: aString [
 	commitId := aString
-]
-
-{ #category : 'actions' }
-RwReadOnlyDiskRepositoryDefinitionV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: aString [
-	self
-		repositoryUrl: 'file:' , repositoryRootPathString;
-		commitId: aString
 ]
 
 { #category : 'accessing' }

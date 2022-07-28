@@ -627,6 +627,19 @@ RwResolvedProjectV2 >> asDefinition [
   ^ self
 ]
 
+{ #category : '-- loader compat --' }
+RwResolvedProjectV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
+	"convert the existing repository definition to readonly ... no change to repository root"
+
+	| loadSpec |
+	loadSpec := self loadSpecification.
+	projectRepository := self _projectRepository asReadOnlyRepositoryWithCommitId: aCommitId.
+	self updateLoadSpecWithRepositoryRoot: loadSpec.
+
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: aCommitId ]
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
@@ -1166,17 +1179,14 @@ RwResolvedProjectV2 >> readLoadSpecSet: platformConditionalAttributes [
 		platformConditionalAttributes: platformConditionalAttributes
 ]
 
-{ #category : '-- loader compat --' }
-RwResolvedProjectV2 >> readOnlyRepositoryRoot: repositoryRootPathString commitId: commitId [
-	| loadSpec |
-	loadSpec := self loadSpecification.
-	projectRepository := self _projectRepository
-		readOnlyRepositoryRoot: repositoryRootPathString
-		commitId: commitId.
-	self updateLoadSpecWithRepositoryRoot: loadSpec.
+{ #category : 'load specification' }
+RwResolvedProjectV2 >> readonlyDiskUrl [
+	^ self loadSpecification readonlyDiskUrl
+]
 
-	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
-		ifTrue: [ self _projectSpecification loadedCommitId: commitId ]
+{ #category : 'load specification' }
+RwResolvedProjectV2 >> readonlyDiskUrl: anUrlString [
+	self loadSpecification readonlyDiskUrl: anUrlString
 ]
 
 { #category : 'project definition' }
