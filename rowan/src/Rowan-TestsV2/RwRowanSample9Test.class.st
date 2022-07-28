@@ -6544,8 +6544,8 @@ RwRowanSample9Test >> testIssue838_02 [
 
 	"https://github.com/dalehenrich/Rowan/issues/838"
 
-	| loadSpec_0073A loadSpec_0073B loadedProjects projectsHome project
-		loadedSpecs projectName resolvedSpecs newLoadedSpecs |
+	| loadSpec_0073A loadSpec_0073B loadedProjects projectsHome project loadedSpecs projectName resolvedSpecs 
+		newLoadedSpecs expected0073A expected0073B |
 	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
 	loadSpec_0073B := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
@@ -6569,16 +6569,51 @@ RwRowanSample9Test >> testIssue838_02 [
 				(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
 
+"clone spec_0073B"
+	resolvedSpecs := loadSpec_0073B resolve. 	
+
 "load spec_0078"
-	loadedProjects := loadSpec_0073A	load.		"loaded project"
-	resolvedSpecs := loadSpec_0073B resolve. 	"clone project"
+	loadedProjects := loadSpec_0073A	load.
+
+"validate"
+	projectName := loadSpec_0073A projectName.
+	expected0073A :=  Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0073A projectAlias) pathString; 
+				at: projectName, '_1' put: (projectsHome / loadSpec_0073A projectAlias / 'rowan_1') pathString; 
+				at: projectName, '_2' put: (projectsHome / loadSpec_0073A projectAlias / 'rowan_2') pathString; 
+				at: projectName, '_3' put: (projectsHome / loadSpec_0073A projectAlias / 'rowan_3') pathString; 
+				yourself.
+	self 
+		assert: 
+			(loadedProjects collect: [:proj | 
+				proj gitUrl asRwUrl pathString]) 
+		equals: expected0073A.
 
 "change spec_0073A to point at spec_0073B checkout"
-	projectName := loadSpec_0073A projectName.
+	projectName := loadSpec_0073B projectName.
 	project := loadedProjects projectNamed: projectName.
 	loadedSpecs := project  loadedLoadSpecifications.
-	(loadedSpecs specForProjectNamed: projectName)
-		gitUrl: (resolvedSpecs specForProjectNamed: projectName) gitUrl.
+	loadedSpecs namesAndEntitiesDo: [:pName :ls |
+		ls gitUrl: (resolvedSpecs specForProjectNamed: pName) gitUrl ].
+"validate"
+	expected0073B := Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0073B projectAlias) pathString; 
+				at: projectName, '_1' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
+				at: projectName, '_2' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
+				at: projectName, '_3' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
+				yourself.
+	self 
+		assert: 
+			(resolvedSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: expected0073B.
+	self 
+		assert: 
+			(loadedSpecs collect: [:ls | 
+				ls gitUrl asRwUrl pathString]) 
+		equals: expected0073B.
+
+"load"
 	loadedProjects := loadedSpecs load.
 
 "validate"
@@ -6586,25 +6621,13 @@ RwRowanSample9Test >> testIssue838_02 [
 		assert: 
 			(loadedProjects collect: [:proj | 
 				proj gitUrl asRwUrl pathString]) 
-		equals: 
-			(Dictionary new 
-				at: projectName put: (projectsHome / loadSpec_0073B projectAlias) pathString; 
-				at: projectName, '_1' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
-				at: projectName, '_2' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
-				at: projectName, '_3' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
-				yourself).
+		equals: expected0073B.
 	newLoadedSpecs := project  loadedLoadSpecifications.
 	self 
 		assert: 
 			(newLoadedSpecs collect: [:ls | 
 				ls gitUrl asRwUrl pathString]) 
-		equals: 
-			(Dictionary new 
-				at: projectName put: (projectsHome / loadSpec_0073B projectAlias) pathString; 
-				at: projectName, '_1' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
-				at: projectName, '_2' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
-				at: projectName, '_3' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
-				yourself)
+		equals: expected0073B
 ]
 
 { #category : 'tests' }
@@ -6614,6 +6637,9 @@ RwRowanSample9Test >> testIssue838_03 [
 		spec_0073B checkout and load ... validate ... reload primary project ... boom?"
 
 	"https://github.com/dalehenrich/Rowan/issues/838"
+
+
+self error: 'not yet implemented'
 ]
 
 { #category : 'tests' }

@@ -76753,6 +76753,13 @@ keys
 	^ definitions keys
 %
 
+category: 'enumerating'
+method: RwDefinitionSetDefinition
+namesAndDefinitions: aBlock
+
+	^ self definitions keysAndValuesDo: aBlock
+%
+
 category: 'copying'
 method: RwDefinitionSetDefinition
 postCopy
@@ -78739,6 +78746,12 @@ method: RwEntitySet
 initialize
 
 	entities := Dictionary new
+%
+
+category: 'enumeration'
+method: RwEntitySet
+namesAndEntitiesDo: aBlock
+	entities keysAndValuesDo: aBlock
 %
 
 category: 'enumeration'

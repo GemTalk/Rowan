@@ -84,6 +84,11 @@ RwEntitySet >> initialize [
 ]
 
 { #category : 'enumeration' }
+RwEntitySet >> namesAndEntitiesDo: aBlock [
+	entities keysAndValuesDo: aBlock
+]
+
+{ #category : 'enumeration' }
 RwEntitySet >> select: aBlock [
 	^ entities select: aBlock
 ]

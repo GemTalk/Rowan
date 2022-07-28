@@ -83,6 +83,12 @@ RwDefinitionSetDefinition >> keys [
 	^ definitions keys
 ]
 
+{ #category : 'enumerating' }
+RwDefinitionSetDefinition >> namesAndDefinitions: aBlock [
+
+	^ self definitions keysAndValuesDo: aBlock
+]
+
 { #category : 'copying' }
 RwDefinitionSetDefinition >> postCopy [
 
