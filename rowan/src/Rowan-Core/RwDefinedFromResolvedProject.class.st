@@ -80,11 +80,6 @@ RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath logClassCreation: 
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
-{ #category : 'accessing' }
-RwDefinedFromResolvedProject >> gitRoot [
-	^ self _concreteProject gitRoot
-]
-
 { #category : 'transitions' }
 RwDefinedFromResolvedProject >> loadProjectSet [
 	"

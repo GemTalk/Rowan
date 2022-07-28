@@ -97,6 +97,16 @@ RwAbstractProject >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: pack
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> gitRoot [
+	^ self _concreteProject gitRoot
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> gitUrl [
+	^ self _concreteProject gitUrl
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> loadSpecification [
 	^ self _concreteProject loadSpecification
 ]

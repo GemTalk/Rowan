@@ -237,6 +237,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gitRoot [
 	^ self resolvedProject gitRoot
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gitUrl [
+	^ self resolvedProject gitUrl
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> initializeForResolvedProject: aResolvedProject [
 	self initializeForName: aResolvedProject projectName.

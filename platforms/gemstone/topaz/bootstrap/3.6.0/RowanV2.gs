@@ -49609,6 +49609,18 @@ gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: user
 
 category: 'accessing'
 method: RwAbstractProject
+gitRoot
+	^ self _concreteProject gitRoot
+%
+
+category: 'accessing'
+method: RwAbstractProject
+gitUrl
+	^ self _concreteProject gitUrl
+%
+
+category: 'accessing'
+method: RwAbstractProject
 loadSpecification
 	^ self _concreteProject loadSpecification
 %
@@ -49796,7 +49808,7 @@ gemstoneSetUseSessionMethodsForExtensionsForUser: userId to: aBool forPackageNam
 category: 'accessing'
 method: RwAbstractUnloadedProject
 gitUrl: aString
-	self loadSpecification gitUrl: aString
+	self _concreteProject gitUrl: aString
 %
 
 category: 'transitions'
@@ -50677,12 +50689,6 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 %
 
-category: 'accessing'
-method: RwDefinedFromResolvedProject
-gitRoot
-	^ self _concreteProject gitRoot
-%
-
 category: 'transitions'
 method: RwDefinedFromResolvedProject
 loadProjectSet
@@ -51085,12 +51091,6 @@ exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassIni
 		logClassCreation: logClassCreation
 		excludeClassInitializers: excludeClassInitializers
 		excludeRemoveAllMethods: excludeRemoveAllMethods
-%
-
-category: 'accessing'
-method: RwResolvedProject
-gitRoot
-	^ self _concreteProject gitRoot
 %
 
 category: 'accessing'
@@ -51609,12 +51609,6 @@ gitPushRemote: remoteName branch: branchName
 		gitpushIn: self repositoryRoot pathString
 		remote: remoteName
 		branch: branchName
-%
-
-category: 'accessing'
-method: RwProject
-gitRoot
-	^ self _concreteProject gitRoot
 %
 
 category: 'git support'
@@ -86845,6 +86839,12 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 gitRoot
 	^ self resolvedProject gitRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+gitUrl
+	^ self resolvedProject gitUrl
 %
 
 category: 'initialization'

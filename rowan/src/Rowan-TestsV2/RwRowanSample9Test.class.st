@@ -6497,7 +6497,6 @@ RwRowanSample9Test >> testIssue838_01 [
 		projectsHome: projectsHome;
 		projectAlias: loadSpec_0002 projectName, '0002';
 		yourself.
-
 	projectNames := { loadSpec_0001 projectName . loadSpec_0002 projectName }.
 
 	projectNames do: [:pn | 
@@ -6517,6 +6516,15 @@ RwRowanSample9Test >> testIssue838_01 [
 	loadedProjects := loadedSpecs load.
 
 "validate"
+	self 
+		assert: 
+			(loadedProjects collect: [:proj | 
+				proj gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0002 projectAlias) pathString; 
+				yourself).
+
 	newLoadedSpecs := project  loadedLoadSpecifications.
 	self 
 		assert: 
@@ -6574,6 +6582,17 @@ RwRowanSample9Test >> testIssue838_02 [
 	loadedProjects := loadedSpecs load.
 
 "validate"
+	self 
+		assert: 
+			(loadedProjects collect: [:proj | 
+				proj gitUrl asRwUrl pathString]) 
+		equals: 
+			(Dictionary new 
+				at: projectName put: (projectsHome / loadSpec_0073B projectAlias) pathString; 
+				at: projectName, '_1' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_1') pathString; 
+				at: projectName, '_2' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_2') pathString; 
+				at: projectName, '_3' put: (projectsHome / loadSpec_0073B projectAlias / 'rowan_3') pathString; 
+				yourself).
 	newLoadedSpecs := project  loadedLoadSpecifications.
 	self 
 		assert: 

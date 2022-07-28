@@ -122,7 +122,7 @@ RwAbstractUnloadedProject >> gemstoneSetUseSessionMethodsForExtensionsForUser: u
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> gitUrl: aString [
-	self loadSpecification gitUrl: aString
+	self _concreteProject gitUrl: aString
 ]
 
 { #category : 'transitions' }

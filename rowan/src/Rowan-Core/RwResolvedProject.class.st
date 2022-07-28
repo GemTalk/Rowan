@@ -248,11 +248,6 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 ]
 
 { #category : 'accessing' }
-RwResolvedProject >> gitRoot [
-	^ self _concreteProject gitRoot
-]
-
-{ #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
 	^ self _concreteProject packagesRoot
 ]
