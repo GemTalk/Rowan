@@ -29,6 +29,11 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> commitId: aString [
 	commitId := aString
 ]
 
+{ #category : 'testing' }
+RwReadOnlyDiskRepositoryDefinitionV2 >> isReadOnly [
+	^ true
+]
+
 { #category : 'accessing' }
 RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 	"Root directory of the project. The componentsPath, specsPath, and projectsPath are specified relative to the repository root."
@@ -36,7 +41,7 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 	^ repositoryRoot
 		ifNil: [ 
 			repositoryUrl
-				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+				ifNil: [ self error: 'For a read only repository, the repositoryUrl must be defined' ]
 				ifNotNil: [ :urlString | 
 					^ (SessionTemps current
 						at: self _sessionTempsKey
@@ -45,7 +50,7 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryRoot [
 							url := urlString asRwUrl.
 							url scheme = 'file'
 								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
+									[ self error: 'For a read only repository, the reposityUrl must be a file: url' ].
 										url pathString ]) asFileReference ] ]
 ]
 
@@ -64,5 +69,5 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryUrl: urlString [
 RwReadOnlyDiskRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec readonlyDiskUrl: self repositoryUrl
+	aLoadSpec readOnlyDiskUrl: self repositoryUrl
 ]

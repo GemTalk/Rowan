@@ -141,7 +141,7 @@ RwProject >> asDefinition [
 
 { #category : 'repository conversion' }
 RwProject >> asReadOnlyRepositoryWithCommitId: aCommitId [
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	self _concreteProject asReadOnlyRepositoryWithCommitId: aCommitId
 ]
@@ -182,6 +182,12 @@ RwProject >> commit: message [
 RwProject >> commitId [
 
 	^ self _loadedProject commitId
+]
+
+{ #category : 'querying' }
+RwProject >> commitId: aString [
+
+	^ self _loadedProject commitId: aString
 ]
 
 { #category : 'querying' }

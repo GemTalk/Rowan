@@ -151,7 +151,7 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> asDefinition [
 
 { #category : 'repositoryConversion' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	self resolvedProject asReadOnlyRepositoryWithCommitId: aCommitId
 ]
@@ -177,6 +177,12 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> comment [
 RwGsLoadedSymbolDictResolvedProjectV2 >> commitId [
 
 	^ self resolvedProject commitId
+]
+
+{ #category : 'queries' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> commitId: aString [
+
+	^ self resolvedProject commitId: aString
 ]
 
 { #category : 'commit log' }
@@ -436,8 +442,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> read [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictResolvedProjectV2 >> readonlyDiskUrl [
-	^ self resolvedProject readonlyDiskUrl
+RwGsLoadedSymbolDictResolvedProjectV2 >> readOnlyDiskUrl [
+	^ self resolvedProject readOnlyDiskUrl
 ]
 
 { #category : 'accessing' }

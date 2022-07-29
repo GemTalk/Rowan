@@ -426,7 +426,7 @@ RwLoadSpecificationV2Test >> testOnlyOneRepositoryUrl [
 				assert:
 					(x := ex description)
 						=
-							'Error: Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set'.
+							'Error: Only one of (gitUrl diskUrl mercurialUrl readOnlyDiskUrl svnUrl) must be be set'.
 			hitError := true ].
 	self assert: hitError
 ]

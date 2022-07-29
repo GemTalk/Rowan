@@ -159,8 +159,8 @@ RwAbstractUnloadedProject >> projectVersion: aStringOrVersion [
 ]
 
 { #category : 'accessing' }
-RwAbstractUnloadedProject >> readonlyDiskUrl: aString [
-	self _concreteProject readonlyDiskUrl: aString
+RwAbstractUnloadedProject >> readOnlyDiskUrl: aString [
+	self _concreteProject readOnlyDiskUrl: aString
 ]
 
 { #category : 'accessing' }

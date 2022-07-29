@@ -76,6 +76,11 @@ RwAbstractRepositoryDefinitionV2 >> hash [
 	^ hashValue
 ]
 
+{ #category : 'testing' }
+RwAbstractRepositoryDefinitionV2 >> isReadOnly [
+	^ false
+]
+
 { #category : 'accessing' }
 RwAbstractRepositoryDefinitionV2 >> key [
 

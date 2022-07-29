@@ -10759,7 +10759,7 @@ RwRowanSample9Test >> testSwitchRepository [
 "Validate"
 	self _standard_validate_loadedProjects: loadedProjects.
 	self assert: project asDefinition repositoryRoot = project repositoryRoot.
-	self assert: resolvedSpec_0003 gitUrl equals: project readonlyDiskUrl.
+	self assert: resolvedSpec_0003 gitUrl equals: project readOnlyDiskUrl.
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
 	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
 	self deny: project commitId equals: commitId.	"commitId is not expected to survive reload"

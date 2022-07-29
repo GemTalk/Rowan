@@ -629,7 +629,7 @@ RwResolvedProjectV2 >> asDefinition [
 
 { #category : '-- loader compat --' }
 RwResolvedProjectV2 >> asReadOnlyRepositoryWithCommitId: aCommitId [
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	| loadSpec |
 	loadSpec := self loadSpecification.
@@ -658,6 +658,15 @@ RwResolvedProjectV2 >> comment: aString [
 { #category : 'querying' }
 RwResolvedProjectV2 >> commitId [
 	^ self _projectRepository commitId
+]
+
+{ #category : 'querying' }
+RwResolvedProjectV2 >> commitId: aString [
+	self _projectRepository isReadOnly
+		ifFalse: [ self error: 'Can only set commit id for read only repositories' ].
+	self _projectRepository commitId: aString.
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: aString ]
 ]
 
 { #category : 'querying' }
@@ -1180,13 +1189,13 @@ RwResolvedProjectV2 >> readLoadSpecSet: platformConditionalAttributes [
 ]
 
 { #category : 'load specification' }
-RwResolvedProjectV2 >> readonlyDiskUrl [
-	^ self loadSpecification readonlyDiskUrl
+RwResolvedProjectV2 >> readOnlyDiskUrl [
+	^ self loadSpecification readOnlyDiskUrl
 ]
 
 { #category : 'load specification' }
-RwResolvedProjectV2 >> readonlyDiskUrl: anUrlString [
-	self loadSpecification readonlyDiskUrl: anUrlString
+RwResolvedProjectV2 >> readOnlyDiskUrl: anUrlString [
+	self loadSpecification readOnlyDiskUrl: anUrlString
 ]
 
 { #category : 'project definition' }

@@ -161,8 +161,8 @@ RwAbstractProject >> projectVersion [
 ]
 
 { #category : 'accessing' }
-RwAbstractProject >> readonlyDiskUrl [
-	^ self _concreteProject readonlyDiskUrl
+RwAbstractProject >> readOnlyDiskUrl [
+	^ self _concreteProject readOnlyDiskUrl
 ]
 
 { #category : 'accessing' }

@@ -62,7 +62,7 @@ RwAbstractResolvedProjectV2 >> _projectRepository [
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											self loadSpecification readonlyDiskUrl
+											self loadSpecification readOnlyDiskUrl
 												ifNotNil: [ :urlString | 
 													RwReadOnlyDiskRepositoryDefinitionV2
 														newNamed: self projectAlias

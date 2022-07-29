@@ -133,10 +133,10 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl projectsHome: projectsHom
 ]
 
 { #category : 'instance creation' }
-RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString [
+RwResolvedProject class >> projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString [
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
-		readonlyDiskUrl: urlString;
+		readOnlyDiskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
 	resolvedProject := loadSpec resolveProject.

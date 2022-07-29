@@ -49685,8 +49685,8 @@ projectVersion
 
 category: 'accessing'
 method: RwAbstractProject
-readonlyDiskUrl
-	^ self _concreteProject readonlyDiskUrl
+readOnlyDiskUrl
+	^ self _concreteProject readOnlyDiskUrl
 %
 
 category: 'accessing'
@@ -49863,8 +49863,8 @@ projectVersion: aStringOrVersion
 
 category: 'accessing'
 method: RwAbstractUnloadedProject
-readonlyDiskUrl: aString
-	self _concreteProject readonlyDiskUrl: aString
+readOnlyDiskUrl: aString
+	self _concreteProject readOnlyDiskUrl: aString
 %
 
 category: 'accessing'
@@ -50986,10 +50986,10 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: 'instance creation'
 classmethod: RwResolvedProject
-projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString
 	| loadSpec resolvedProject |
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
-		readonlyDiskUrl: urlString;
+		readOnlyDiskUrl: urlString;
 		projectsHome: urlString asRwUrl pathString asFileReference parent;
 		yourself.
 	resolvedProject := loadSpec resolveProject.
@@ -51448,7 +51448,7 @@ asDefinition
 category: 'repository conversion'
 method: RwProject
 asReadOnlyRepositoryWithCommitId: aCommitId
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	self _concreteProject asReadOnlyRepositoryWithCommitId: aCommitId
 %
@@ -51495,6 +51495,13 @@ method: RwProject
 commitId
 
 	^ self _loadedProject commitId
+%
+
+category: 'querying'
+method: RwProject
+commitId: aString
+
+	^ self _loadedProject commitId: aString
 %
 
 category: 'querying'
@@ -66468,7 +66475,7 @@ _projectRepository
 												projectsHome: self projectsHome
 												repositoryUrl: urlString ]
 										ifNil: [ 
-											self loadSpecification readonlyDiskUrl
+											self loadSpecification readOnlyDiskUrl
 												ifNotNil: [ :urlString | 
 													RwReadOnlyDiskRepositoryDefinitionV2
 														newNamed: self projectAlias
@@ -67215,7 +67222,7 @@ asDefinition
 category: '-- loader compat --'
 method: RwResolvedProjectV2
 asReadOnlyRepositoryWithCommitId: aCommitId
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	| loadSpec |
 	loadSpec := self loadSpecification.
@@ -67248,6 +67255,16 @@ category: 'querying'
 method: RwResolvedProjectV2
 commitId
 	^ self _projectRepository commitId
+%
+
+category: 'querying'
+method: RwResolvedProjectV2
+commitId: aString
+	self _projectRepository isReadOnly
+		ifFalse: [ self error: 'Can only set commit id for read only repositories' ].
+	self _projectRepository commitId: aString.
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+		ifTrue: [ self _projectSpecification loadedCommitId: aString ]
 %
 
 category: 'querying'
@@ -67834,14 +67851,14 @@ readLoadSpecSet: platformConditionalAttributes
 
 category: 'load specification'
 method: RwResolvedProjectV2
-readonlyDiskUrl
-	^ self loadSpecification readonlyDiskUrl
+readOnlyDiskUrl
+	^ self loadSpecification readOnlyDiskUrl
 %
 
 category: 'load specification'
 method: RwResolvedProjectV2
-readonlyDiskUrl: anUrlString
-	self loadSpecification readonlyDiskUrl: anUrlString
+readOnlyDiskUrl: anUrlString
+	self loadSpecification readOnlyDiskUrl: anUrlString
 %
 
 category: 'project definition'
@@ -75961,6 +75978,12 @@ hash
 	^ hashValue
 %
 
+category: 'testing'
+method: RwAbstractRepositoryDefinitionV2
+isReadOnly
+	^ false
+%
+
 category: 'accessing'
 method: RwAbstractRepositoryDefinitionV2
 key
@@ -76657,6 +76680,12 @@ commitId: aString
 	commitId := aString
 %
 
+category: 'testing'
+method: RwReadOnlyDiskRepositoryDefinitionV2
+isReadOnly
+	^ true
+%
+
 category: 'accessing'
 method: RwReadOnlyDiskRepositoryDefinitionV2
 repositoryRoot
@@ -76665,7 +76694,7 @@ repositoryRoot
 	^ repositoryRoot
 		ifNil: [ 
 			repositoryUrl
-				ifNil: [ self error: 'For a readonly repository, the repositoryUrl must be defined' ]
+				ifNil: [ self error: 'For a read only repository, the repositoryUrl must be defined' ]
 				ifNotNil: [ :urlString | 
 					^ (SessionTemps current
 						at: self _sessionTempsKey
@@ -76674,7 +76703,7 @@ repositoryRoot
 							url := urlString asRwUrl.
 							url scheme = 'file'
 								ifFalse:
-									[ self error: 'For a readonly repository, the reposityUrl must be a file: url' ].
+									[ self error: 'For a read only repository, the reposityUrl must be a file: url' ].
 										url pathString ]) asFileReference ] ]
 %
 
@@ -76696,7 +76725,7 @@ method: RwReadOnlyDiskRepositoryDefinitionV2
 updateLoadSpecWithRepositoryRoot: aLoadSpec
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec readonlyDiskUrl: self repositoryUrl
+	aLoadSpec readOnlyDiskUrl: self repositoryUrl
 %
 
 category: 'private'
@@ -86790,7 +86819,7 @@ asDefinition
 category: 'repositoryConversion'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 asReadOnlyRepositoryWithCommitId: aCommitId
-	"convert the existing repository definition to readonly ... no change to repository root"
+	"convert the existing repository definition to read only ... no change to repository root"
 
 	self resolvedProject asReadOnlyRepositoryWithCommitId: aCommitId
 %
@@ -86820,6 +86849,13 @@ method: RwGsLoadedSymbolDictResolvedProjectV2
 commitId
 
 	^ self resolvedProject commitId
+%
+
+category: 'queries'
+method: RwGsLoadedSymbolDictResolvedProjectV2
+commitId: aString
+
+	^ self resolvedProject commitId: aString
 %
 
 category: 'commit log'
@@ -87117,8 +87153,8 @@ read
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictResolvedProjectV2
-readonlyDiskUrl
-	^ self resolvedProject readonlyDiskUrl
+readOnlyDiskUrl
+	^ self resolvedProject readOnlyDiskUrl
 %
 
 category: 'accessing'
@@ -90646,7 +90682,7 @@ method: RwLoadSpecificationV2
 																		and: [ 
 																			self diskUrl = anObject diskUrl
 																				and: [ 
-																					self readonlyDiskUrl = anObject readonlyDiskUrl
+																					self readOnlyDiskUrl = anObject readOnlyDiskUrl
 																						and: [ 
 																							self mercurialUrl = anObject mercurialUrl
 																								and: [ 
@@ -90924,7 +90960,7 @@ hash
 	hashValue := hashValue bitXor: self projectSpecFile hash.
 	hashValue := hashValue bitXor: self gitUrl hash.
 	hashValue := hashValue bitXor: self diskUrl hash.
-	hashValue := hashValue bitXor: self readonlyDiskUrl hash.
+	hashValue := hashValue bitXor: self readOnlyDiskUrl hash.
 	hashValue := hashValue bitXor: self mercurialUrl hash.
 	hashValue := hashValue bitXor: self svnUrl hash.
 	hashValue := hashValue bitXor: self revision hash.
@@ -91120,7 +91156,7 @@ projectUrl
 		ifNil: [ 
 			self svnUrl
 				ifNotNil: [ :urlString | urlString ]
-				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readonlyDiskUrl ]] ] ]
+				ifNil: [ self mercurialUrl ifNotNil: [ :urlString | urlString ] ifNil: [ self diskUrl ifNil: [ self readOnlyDiskUrl ]] ] ]
 %
 
 category: 'actions'
@@ -91149,13 +91185,13 @@ read: platformConditionalAttributes
 
 category: 'accessing'
 method: RwLoadSpecificationV2
-readonlyDiskUrl
+readOnlyDiskUrl
 	^ readonlyDiskUrl
 %
 
 category: 'accessing'
 method: RwLoadSpecificationV2
-readonlyDiskUrl: anUrlString
+readOnlyDiskUrl: anUrlString
 	revision := gitUrl := diskUrl := mercurialUrl := readonlyDiskUrl := svnUrl := nil.
 	readonlyDiskUrl := anUrlString
 %
@@ -91420,11 +91456,11 @@ _validate
 						signal:
 							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
 	repoUrls := {}.
-	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readonlyDiskUrl)
+	#(#'gitUrl' #'diskUrl' #'mercurialUrl' #'svnUrl' #readOnlyDiskUrl)
 		do: [ :messageName | (self perform: messageName) ifNotNil: [ repoUrls add: messageName asString ] ].
 	repoUrls size > 1
-		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readonlyDiskUrl svnUrl) must be be set' ].
-	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readonlyDiskUrl']])
+		ifTrue: [ Error signal: 'Only one of (gitUrl diskUrl mercurialUrl readOnlyDiskUrl svnUrl) must be be set' ].
+	(repoUrls size = 0 or: [ (repoUrls includes: 'diskUrl') or: [repoUrls includes: 'readOnlyDiskUrl']])
 		ifTrue: [ 
 			self revision
 				ifNotNil: [ :rev | 
@@ -98555,8 +98591,8 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: '*rowan-coreV2'
 classmethod: Rowan
-projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
-	^ self platform projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString
+	^ self platform projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString
 %
 
 category: '*rowan-gemstone-core'
@@ -100972,8 +101008,8 @@ projectFromUrl: loadSpecUrl projectsHome: projectsHome customConditionalAttribut
 
 category: '*rowan-corev2'
 method: RwPlatform
-projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
-	^ RwResolvedProject projectFromUrl: loadSpecUrl readonlyDiskUrl: urlString
+projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString
+	^ RwResolvedProject projectFromUrl: loadSpecUrl readOnlyDiskUrl: urlString
 %
 
 category: '*rowan-core'
@@ -101038,14 +101074,14 @@ adoptProjectFromUrl: specUrl projectsHome: projectsHome
 
 category: '*rowan-tools-corev2'
 method: RwPrjAdoptTool
-adoptProjectFromUrl: specUrl readonlyDiskUrl: diskUrl projectsHome: projectsHome
+adoptProjectFromUrl: specUrl readOnlyDiskUrl: diskUrl projectsHome: projectsHome
 	"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
 
 	| loadSpec projectSetDefinition |
 	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
-		readonlyDiskUrl: diskUrl;
+		readOnlyDiskUrl: diskUrl;
 		projectsHome: projectsHome;
 		readProjectSet.
 
