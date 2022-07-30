@@ -22,15 +22,21 @@ EXAMPLES
 -----
 %
 doit
-	| attributes |
+	| loadSpecs |
+	self stdout 
+		nextPutAll: '================='; lf;
+		space; space; space; nextPutAll: self basename; lf;
+		nextPutAll: '================='; lf;
+		yourself.
 	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
+	loadSpecs := (Rowan projectNamed: 'gemstoneBaseImage') loadedLoadSpecifications.
 	(System gemEnvironmentVariable: 'ARCHBASE')
 		ifNotNil: [
-		 	(Rowan projectNamed: 'gemstoneBaseImage') 
-				gitRepositoryRoot: '$ARCHBASE/image' ].
-	attributes :=  Rowan platformConditionalAttributes, #('filein3' 'filein4' 'x509' 'ANSI_PortableStreams').
-	(Rowan projectNamed: 'gemstoneBaseImage')
-		loadProjectSet:attributes.
-	^ System commit
+			loadSpecs do: [:loadSpec |
+				loadSpec gitUrl: 'file:$ARCHBASE/image' ] ].
+	loadSpecs load.
+	System commit.
+	self stdout nextPutAll: '...finished :: ', self basename; lf.
+	^ self noResult
 %

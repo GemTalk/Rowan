@@ -204,24 +204,31 @@ loadProjectSpecs
 	rowanProjectsSandbox asFileReference ensureCreateDirectory.
 	warnings := {}.
 	[ 
-		| definedProject loadSpecs |
+		| loadSpecs rowanProject |
 		self preDoitSpecLoad: [:loadSpec |
 			loadSpec projectsHome: externalsStBase ].
-		{'Rowan' . 'Cypress' . 'FileSystemGs' . 'STON'} do: [:projectName |
-			| project |
-			project := Rowan projectNamed: projectName.
-			project 
-				gitRepositoryRoot: externalsStBase, '/Rowan'
-					 projectsHome: externalsStBase ].
-		(Rowan projectNamed: 'RowanClientServices') 
-			gitRepositoryRoot: externalsStBase, '/RowanClientServices'
-				projectsHome: externalsStBase.
-
-		"load tests for Rowan and all of it's required projects"
-		loadSpecs := (Rowan projectNamed: 'Rowan') loadedLoadSpecifications.
+		rowanProject := Rowan projectNamed: 'Rowan'.
+		loadSpecs := rowanProject loadedLoadSpecifications.
 		loadSpecs do: [:loadSpec |
-			loadSpec addCustomConditionalAttributes: #('tests' 'testsV2')
-		].
+			loadSpec specName = 'RowanClientServices'
+				ifTrue: [
+					loadSpec
+						gitUrl: 'file:', externalsStBase, '/RowanClientServices' ]
+				ifFalse: [
+					"embedded Rowan project" 
+					| relRoot |
+					relRoot := loadSpec relativeRepositoryRoot.
+					relRoot isEmpty
+						ifTrue: [ 
+							loadSpec
+								gitUrl: 'file:', externalsStBase, '/Rowan' ]
+						ifFalse: [ 
+							loadSpec
+								gitUrl: 'file:', externalsStBase, '/Rowan/', relRoot ] ].
+			loadSpec
+				projectsHome: '$ROWAN_PROJECTS_HOME';
+				addCustomConditionalAttributes: #('tests' 'testsV2');
+				yourself ].
 		loadSpecs load.
 		System commit.
 	]
