@@ -1,0 +1,19 @@
+RwLoadSpecificationV2 {
+	#projectName : 'RowanV12Upgrade',
+	#projectAlias: 'Rowan',
+	#gitUrl : 'git@git.gemtalksystems.com:Rowan',
+	#revision : 'masterV3.0',
+	#relativeRepositoryRoot : 'upgrade/projectsHome/RowanV12Upgrade',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : ''
+}

@@ -1,0 +1,12 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'projectComponents/RowanV12Upgrade',
+	#condition : 'common',
+	#projectNames : [ 
+		'RowanV12Upgrade'
+	],
+	#componentNames : [
+		'Rowan'
+	],
+	#packageNames : [ ],
+	#comment : '$ARCHBASE/externals_st/Rowan/upgrade/projectsHome/RowanV12Upgrade'
+}
