@@ -1,0 +1,14 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'projectComponents/ROWAN_UPGRADE',
+	#condition : 'common',
+	#projectNames : [ 
+		'RowanUpgrade'
+	],
+	#componentNames : [
+		'Rowan',
+		'projectComponents/RowanUpgrade',
+		'projectComponents/RowanV12Upgrade'
+	],
+	#packageNames : [ ],
+	#comment : 'shortcut component for RowanUpgrade and RowanV12Upgrade'
+}
