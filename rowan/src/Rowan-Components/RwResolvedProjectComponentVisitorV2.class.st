@@ -45,14 +45,16 @@ RwResolvedProjectComponentVisitorV2 class >> _readProjectsForProject: resolvedPr
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject |
+					| theResolvedProject projectsHome |
 					"derive resolved project from the load spec ... project load specs are read from the rowan/projects directory"
+					projectsHome := (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+						ifNil: [ pp projectsHome ].
+
 					loadSpec relativeRepositoryRoot isEmpty
 						ifFalse: [ 
 							"using an embedded project"
 							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
-					theResolvedProject := (loadSpec projectsHome: pp projectsHome)
-						resolveProject.
+					theResolvedProject := (loadSpec projectsHome: projectsHome) resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 
@@ -183,13 +185,15 @@ RwResolvedProjectComponentVisitorV2 class >> readProjectSetForProject: resolvedP
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject theLoadSpec |
+					| theResolvedProject theLoadSpec projectsHome |
 					"derive resolved project from the load spec ... project load specs are read from the rowan/projects directory"
 					loadSpec relativeRepositoryRoot isEmpty
 						ifFalse: [ 
 							"using an embedded project"
 							resolvedProject loadSpecification updateEmbeddedProjectLoadSpec: loadSpec ].
-					theResolvedProject := (loadSpec projectsHome: rp projectsHome) resolveProject.
+					projectsHome := (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+						ifNil: [ rp projectsHome ].
+					theResolvedProject := (loadSpec projectsHome: projectsHome) resolveProject.
 					theLoadSpec := loadSpec.
 					(processedProjects at: theResolvedProject projectName ifAbsent: [  ])
 						ifNil: [ 
@@ -243,9 +247,11 @@ RwResolvedProjectComponentVisitorV2 class >> requiredProjectNamesForProject: res
 
 			visitor projectLoadSpecs
 				do: [ :loadSpec | 
-					| theResolvedProject |
+					| theResolvedProject projectsHome |
 					"derive resolved project from the load spec"
-					theResolvedProject :=  (loadSpec projectsHome: pp projectsHome) resolveProject.
+					projectsHome := (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+						ifNil: [ pp projectsHome ].
+					theResolvedProject := (loadSpec projectsHome: projectsHome) resolveProject.
 					processedProjects
 						at: theResolvedProject projectName
 						ifAbsent: [ 
