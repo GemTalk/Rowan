@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwAbstractRowanSampleTest',
 	#superclass : 'RwAbstractV2Test',
+	#instVars : [
+		'preserveRowanProjectsHome'
+	],
 	#category : 'Rowan-TestsV2'
 }
 
@@ -257,4 +260,19 @@ RwAbstractRowanSampleTest >> _validate: resolvedProject loadedProjects: loadedPr
 			self
 				assert:
 					loadedProjectDefinition class = resolvedProject projectDefinition class ]
+]
+
+{ #category : 'running' }
+RwAbstractRowanSampleTest >> setUp [
+	| projectsHome |
+	super setUp.
+	projectsHome := self _testRowanProjectsSandbox.
+	preserveRowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: projectsHome pathString.
+]
+
+{ #category : 'running' }
+RwAbstractRowanSampleTest >> tearDown [
+	super tearDown.
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: preserveRowanProjectsHome.
 ]

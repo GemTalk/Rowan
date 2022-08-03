@@ -4,8 +4,37 @@ Set of tests that can be compiled and run as a non-SystemUser user. That means a
 Class {
 	#name : 'RwDataCuratorTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'preserveRowanProjectsHome'
+	],
 	#category : 'Rowan-DataCurator-Tests'
 }
+
+{ #category : 'private' }
+RwDataCuratorTest >> _testRowanProjectsSandbox [
+	"working repository for use as ROWAN_PROJECTS_HOME for tests"
+
+	| rowanProject |
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_SANDBOX')
+		ifNotNil: [ :sandboxPath | ^ sandboxPath asFileReference ].
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ rowanProject repositoryRoot / 'test/testRepositories/repos/'
+]
+
+{ #category : 'running' }
+RwDataCuratorTest >> setUp [
+	| projectsHome |
+	super setUp.
+	projectsHome := self _testRowanProjectsSandbox.
+	preserveRowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: projectsHome pathString.
+]
+
+{ #category : 'running' }
+RwDataCuratorTest >> tearDown [
+	super tearDown.
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: preserveRowanProjectsHome.
+]
 
 { #category : 'tests' }
 RwDataCuratorTest >> testCreateProjects [
