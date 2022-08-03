@@ -104,6 +104,19 @@ RwLoadSpecificationV2 {
 ]
 %
 method
+removeSuperDoitTransientSymbolDictionary
+	"SuperDoit_transientSymbolDictionary interferes with some tests, if present"
+
+	(Rowan globalNamed: 'SuperDoitCommandParser')
+		ifNotNil: [ :superDoitCommandParserClass |
+			| session symbolList |
+			session := GsCurrentSession currentSession.
+			symbolList := session symbolList.
+			symbolList 
+				remove: (symbolList objectNamed: superDoitCommandParserClass transientSymbolDictionaryName)
+				ifAbsent: [] ].
+%
+method
 testStatusStream
 	testStatusStream ifNotNil: [ ^ testStatusStream].
 	self resultDir asFileReference ensureCreateDirectory.
@@ -273,6 +286,7 @@ buildTestSuite: testSuiteName
 method
 runTestSuite: testSuiteName
 	| systemTestSuite |
+	self removeSuperDoitTransientSymbolDictionary.
 	systemTestSuite := self buildTestSuite: testSuiteName.
 	self debugSuite
 		ifTrue: [
