@@ -206,6 +206,7 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 			theLoadedProject handle
 				_projectComponents: projectDef _projectComponents copy.
 			theLoadedProject handle _loadSpecification: projectDef loadSpecification copy.
+			theLoadedProject handle _projectSpecification: projectDef _projectSpecification copy.
 			theLoadedProject handle
 				_projectRepository: projectDef _projectRepository copy.
 			theLoadedProject handle
