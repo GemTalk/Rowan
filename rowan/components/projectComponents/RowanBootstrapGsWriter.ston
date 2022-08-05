@@ -1,0 +1,12 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'projectComponents/RowanBootstrapGsWriter',
+	#condition : 'common',
+	#projectNames : [ 
+		'RowanBootstrapGsWriter'
+	],
+	#componentNames : [
+		'Rowan'
+	],
+	#packageNames : [ ],
+	#comment : '$ARCHBASE/externals_st/Rowan/platforms/projectsHome/RowanBootstrapGsWriter'
+}

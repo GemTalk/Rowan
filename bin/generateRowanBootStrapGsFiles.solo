@@ -1,0 +1,184 @@
+#!/usr/bin/env superdoit_solo
+#
+options
+{
+	SuperDoitRequiredOptionWithRequiredArg long: 'projectsHome'.
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] --projectsHome=<<RowanClientServices-parent-dir> \
+            [--  -C 'GEM_SOLO_EXTENT=<path-to-RowanV3-extent>' ]
+
+DESCRIPTION
+  Generate Rowan bootstrap .gs files. ROWAN_PROJECTS_HOME references the parent 
+  of the target RowanClientServices checkout.
+
+OPTIONS
+  <path-to-RowanV3-extent>
+                  path to an extent0.rowan.dbf with Rowan v3 installed
+  -h, --help      display usage message
+  -D, --debug     bring up topaz debugger in the event of a script error
+  --projectsHome=<Rowan-parent-dir>
+                  (REQUIRED) parent dir of Rowan checkout to generate the .gs 
+                  files.
+
+EXAMPLES
+  $basename --help
+  $basename --projectsHome=$ROWAN_PROJECTS_HOME -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
+  $basename --projectsHome=$GS_HOME/shared/repos -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
+  $basename --projectsHome=/home/dhenrich/work/m_37x_externals_st
+-----
+%
+SPECS
+[
+RwLoadSpecificationV2 {
+	#projectName : 'RowanBootstrapGsWriter',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}
+]
+%
+method
+platformConditionalAttributesFor: gsVersion
+	^ {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		gsVersion.	
+		}	
+%
+method
+specialCaseDict: gsVersion
+	"the special case dictionary defines the packages to be included in separate .gs files"
+	(gsVersion >= '3.7.0' asRwGemStoneVersionNumber)
+		ifTrue: [
+			^ Dictionary new
+				at: 'Rowan' 
+					put: 
+						{
+							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
+							('tonel' -> 
+								{ 
+									'Rowan-Tonel-Core' .
+									'Rowan-Tonel-GemStone-Kernel-32-5' .
+									'Rowan-Tonel-GemStone-Kernel' .
+								}) .
+						}; 
+				at: 'STON' 
+					put: 
+						{
+							('tonel' -> 
+								{ 
+									'STON-Core' .
+									'STON-GemStone-Kernel'.
+									'STON-GemStoneBase' .
+									'STON-GemStoneCommon' .
+									'STON-GemStone-Kernel36x' .
+								}) .
+						}; 
+			yourself ].
+	(gsVersion >= '3.6.0' asRwGemStoneVersionNumber)
+		ifTrue: [
+			^ Dictionary new
+				at: 'Rowan' 
+					put: 
+						{
+							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
+							('tonel' -> 
+								{ 
+									'Rowan-Tonel-Core' .
+									'Rowan-Tonel-GemStone-Kernel-32-5' .
+									'Rowan-Tonel-GemStone-Kernel' .
+								}) .
+						}; 
+				at: 'STON' 
+					put: 
+						{
+							('tonel' -> 
+								{ 
+									'STON-Core' .
+									'STON-GemStone-Kernel'.
+									'STON-GemStone-Kernel32x'.
+									'STON-GemStoneBase' .
+									'STON-GemStoneCommon' .
+									'STON-GemStone-Kernel36x' .
+								}) .
+						}; 
+			yourself ].
+	(gsVersion <= '3.6.1' asRwGemStoneVersionNumber)
+		ifTrue: [
+			^ Dictionary new
+				at: 'Rowan' 
+					put: 
+						{
+							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
+							('tonel' -> 
+								{ 
+									'Rowan-Tonel-Core' .
+									'Rowan-Tonel-GemStone-Kernel-32-5' .
+									'Rowan-Tonel-GemStone-Kernel' .
+								}) .
+						}; 
+				at: 'STON' 
+					put: 
+						{
+							('tonel' -> 
+								{ 
+									'STON-Core' .
+									'STON-GemStone-Kernel'.
+									'STON-GemStoneBase' .
+									'STON-GemStoneCommon' .
+									'STON-GemStone-Kernel36x' .
+								}) .
+						}; 
+				yourself ].
+	self error: 'Unknown version ', gsVersion printString, ' for special case dictionary'
+%
+method
+writeBootstrapFileForProject: projectName gsFileName: gsFileName specialCaseDict: specialCaseDict excludedProjectNames: excludedProjectNames gsVersion: gsVersion
+	| theRepositoryRoot |
+	theRepositoryRoot := ('$ROWAN_PROJECTS_HOME/', projectName, '/platforms/gemstone/topaz/bootstrap/', gsVersion printString) asFileReference.
+	theRepositoryRoot ensureCreateDirectory.
+	((self globalNamed: 'RowanBootstrapGsWriter')
+		logStream: self stdout)
+			write: 'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/', projectName, '.ston'   
+			projectsHome: self projectsHome 
+			platformConditionalAttributes: (self platformConditionalAttributesFor: gsVersion)
+			theRepositoryRoot: theRepositoryRoot
+			gsFileName: gsFileName 
+			excludedProjectNames: excludedProjectNames
+			specialCaseDict: specialCaseDict 
+			logCreation: true.
+%	
+doit
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHome. 
+	self preDoitSpecLoad: [:loadSpec |
+		loadSpec
+			projectsHome: self projectsHome asFileReference / 'Rowan/platforms/projectsHome';
+			yourself ].
+	{
+		'3.6.0' asRwGemStoneVersionNumber.
+		'3.6.1' asRwGemStoneVersionNumber.
+		'3.7.0' asRwGemStoneVersionNumber.
+	}
+		do: [:gsVersion |
+			self 
+				writeBootstrapFileForProject: 'Rowan'
+				gsFileName: 'RowanV3'
+				specialCaseDict: (self specialCaseDict: gsVersion)
+				excludedProjectNames: {'RowanClientServices'}
+				gsVersion: gsVersion ].
+	^ self noResult
+%

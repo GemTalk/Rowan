@@ -1,0 +1,15 @@
+RwLoadSpecificationV2 {
+	#projectName : 'RowanBootstrapGsWriter',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}

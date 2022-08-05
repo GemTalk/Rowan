@@ -1,0 +1,18 @@
+RwLoadSpecificationV2 {
+	#projectName : 'RowanBootstrapGsWriter',
+	#gitUrl : 'git@git.gemtalksystems.com:Rowan',
+	#revision : 'masterV3.0',
+	#relativeRepositoryRoot : 'platforms/projectsHome/RowanBootstrapGsWriter',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}
