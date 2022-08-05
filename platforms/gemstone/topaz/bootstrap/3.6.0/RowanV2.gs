@@ -52076,6 +52076,18 @@ isClientClass
 	^true
 %
 
+category: 'testing'
+classmethod: RowanService
+isRowanClientServicesVersionSupported: lowerLimit
+	"return a two element arg showing if the version is supported and the version"
+
+	| low high version |
+	low := RwSemanticVersionNumber fromString: lowerLimit.
+	high := low copy incrementMinorVersion.
+	version := RwSemanticVersionNumber fromString: RowanService version.
+	^ low <= version and: [ version <= high ]
+%
+
 category: 'rsr'
 classmethod: RowanService
 isServerClass
@@ -52134,10 +52146,16 @@ templateClassName
 category: 'accessing'
 classmethod: RowanService
 version
-  "change this method carefully and only at Jadeite release boundaries.
-	Failure to do so will prevent logins"
+	^ '3.0.0'
+%
 
-  ^ 3200
+category: 'accessing'
+classmethod: RowanService
+versionRangeHigh: lowRange
+	| low high |
+	low := RwSemanticVersionNumber fromString: lowRange.
+	high := low incrementMinorVersion.
+	^high printString
 %
 
 !		Instance methods for 'RowanService'
@@ -52609,13 +52627,6 @@ servicePerform: commandSymbol withArguments: collection shouldUpdate: possiblyUp
 	Therefore, if the command is #update, don't run it here"
 
 	shouldUpdate := possiblyUpdate.	"let the command decide if an update is actually needed"
-	SessionTemps current
-		at: #'versionsVerified'
-		ifAbsent: [ 
-			SessionTemps current at: #'versionsVerified' put: false.
-			self
-				inform:
-					'Version mismatch failure. Client version is older than server version.' ].
 	super perform: commandSymbol withArguments: collection.
 	shouldUpdate
 		ifTrue: [ self update ]
@@ -53044,28 +53055,6 @@ disableMethodBreaks: methodServices
       methodService
         organizer: organizer;
         disableMethodBreaks ]
-%
-
-category: 'client commands'
-method: RowanAnsweringService
-doClientAndServerVersionsMatch: clientVersion
-  "Not to be sent through services so return an answer directly.
-	Sent immediately after Jadeite login"
-
-  SessionTemps current at: #'versionsVerified' put: false.
-  clientVersion = RowanService version
-    ifTrue: [ 
-      answer := true.
-      SessionTemps current at: #'versionsVerified' put: true ]
-    ifFalse: [ 
-      answer := clientVersion > RowanService version
-        ifTrue: [ 
-          'Client (' , clientVersion printString , ') is more recent than server ('
-            , RowanService version printString , ')' ]
-        ifFalse: [ 
-          'Server (' , RowanService version printString , ') is more recent than client ('
-            , clientVersion printString , ')' ] ].
-  ^ answer
 %
 
 category: 'client commands'
@@ -53632,7 +53621,7 @@ readmeContents
 
 category: 'client commands'
 method: RowanFileService
-writeReadme: contents
+write: contents
 	| file |
 	file := GsFile openWriteOnServer: path.
 	[ file nextPutAll: contents ]
@@ -59393,6 +59382,28 @@ componentServicesFor: theRwProject
 	^ componentDictionary
 %
 
+category: 'client commands'
+method: RowanProjectService
+createProjectComponent: componentName symDict: defaultSymbolDictName convention: packageConvention format: packageFormat projectsHome: projectsHome type: repositoryType
+	| definedProject resolvedProject |
+	Rowan version < '3.0.0' asRwSemanticVersionNumber
+		ifTrue: [ self error: 'This script needs to be run against a Rowan v3 solo extent' ].
+	definedProject := (Rowan newProjectNamed: name)
+		addLoadComponentNamed: componentName;
+		packageConvention: packageConvention;
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		repoType: repositoryType asSymbol;
+		packageFormat: packageFormat;
+		projectsHome: projectsHome;
+		yourself.
+	(projectsHome asFileReference / name / 'rowan')
+		ensureDeleteAll.
+	resolvedProject := definedProject resolveProject.
+	resolvedProject write.
+	resolvedProject loadAsDefined.
+	RowanBrowserService new updateProjects
+%
+
 category: 'examples'
 method: RowanProjectService
 createProjectNamed: projectName 
@@ -59450,6 +59461,20 @@ initializePackageGroups
 						forPackageGroupNamed: theName
 						loadedProject: self rwProject ]).
 	wasUpdated := true.
+%
+
+category: 'client commands'
+method: RowanProjectService
+installProjectFromFile: path projectsHome: projectsHomePath componentNames: componentNames resolveStrict: strict
+	| spec browserService |
+	spec := (RwSpecification fromUrl: path)
+		projectsHome: projectsHomePath;
+		yourself.
+	spec componentNames: componentNames.
+	strict
+		ifTrue: [ spec resolveStrict ].
+	spec resolve load.
+	browserService := RowanBrowserService new updateProjects.
 %
 
 category: 'rowan'
