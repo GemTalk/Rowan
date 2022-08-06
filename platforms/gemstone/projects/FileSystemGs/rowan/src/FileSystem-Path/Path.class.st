@@ -269,6 +269,13 @@ Path >> asResolvedBy: anObject [
 	^ anObject resolvePath: self
 ]
 
+{ #category : 'printing' }
+Path >> asString [
+	"used by topaz stack display"
+
+	^ self printString
+]
+
 { #category : 'accessing' }
 Path >> base [
 	^self basenameWithoutExtension 

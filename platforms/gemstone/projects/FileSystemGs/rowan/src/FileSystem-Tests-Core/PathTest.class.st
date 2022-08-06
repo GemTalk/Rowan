@@ -69,6 +69,23 @@ PathTest >> testAsReference [
 ]
 
 { #category : 'tests' }
+PathTest >> testAsString [
+	| root absolute relative |
+	root := Path root.
+	absolute := Path root / 'some-directory' / 'some-file'.
+	relative := absolute relativeToReference: Path root asFileReference.
+	self assert: root asString equals: 'Path root'.
+	self assert: absolute isAbsolute.
+	self
+		assert: absolute asString
+		equals: 'Path / ''some-directory'' / ''some-file'''.
+	self assert: relative isRelative.
+	self
+		assert: relative asString
+		equals: 'Path * ''some-directory'' / ''some-file'''
+]
+
+{ #category : 'tests' }
 PathTest >> testBasename [
 	| path |
 	path := Path * 'plonk' / 'griffle'.

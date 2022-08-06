@@ -31141,6 +31141,14 @@ asResolvedBy: anObject
 	^ anObject resolvePath: self
 %
 
+category: 'printing'
+method: Path
+asString
+	"used by topaz stack display"
+
+	^ self printString
+%
+
 category: 'accessing'
 method: Path
 base
@@ -31612,17 +31620,6 @@ from: aString delimiter: aDelimiterCharater
 %
 
 !		Instance methods for 'AbsolutePath'
-
-category: 'printing'
-method: AbsolutePath
-asString
-  "used by topaz stack display"
-  | str sz |
-  str := '/' copy .
-  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
-  str add: (self at: sz ).
-  ^ str
-%
 
 category: 'testing'
 method: AbsolutePath
