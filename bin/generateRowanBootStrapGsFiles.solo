@@ -26,8 +26,8 @@ OPTIONS
 
 EXAMPLES
   $basename --help
-  $basename --projectsHome=$ROWAN_PROJECTS_HOME -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
-  $basename --projectsHome=$GS_HOME/shared/repos -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
+  $basename --projectsHome=$ROWAN_PROJECTS_HOME -- -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
+  $basename --projectsHome=$GS_HOME/shared/repos -- -C 'GEM_SOLO_EXTENT=$GEMSTONE/bin/extent0.rowan.dbf'
   $basename --projectsHome=/home/dhenrich/work/m_37x_externals_st
 -----
 %
@@ -163,6 +163,8 @@ writeBootstrapFileForProject: projectName gsFileName: gsFileName specialCaseDict
 			logCreation: true.
 %	
 doit
+	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
 	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHome. 
 	self preDoitSpecLoad: [:loadSpec |
 		loadSpec
