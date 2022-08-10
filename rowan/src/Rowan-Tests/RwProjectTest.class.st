@@ -92,12 +92,12 @@ RwProjectTest >> testDiskProjectApi [
 	remote := resolvedProject remote.
 	self
 		assert: resolvedProject packageNames asArray sort
-		equals: {'ExampleProject-Core'. 'ExampleProject-Tests'}.
+		equals: {'ExampleProject-Core'. 'ExampleProject-Tests'} sort.
 	packagesRoot := resolvedProject packagesRoot.
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadAsDefined projectNamed: projectName.
+	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
@@ -115,7 +115,7 @@ RwProjectTest >> testDiskProjectApi [
 		equals: platformConditionalAttributes.
 	self
 		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
-		equals: nil.
+		equals: { 'common' . 'gemstone' . 'gemstone-kernel' . '3.7.0' asRwGemStoneVersionNumber}.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
 		assert:
@@ -126,7 +126,7 @@ RwProjectTest >> testDiskProjectApi [
 	self assert: loadedProject remote equals: remote.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals: {'ExampleProject-Core' . 'ExampleProject-Tests'} sort.
+		equals: {'ExampleProject-Core' }.
 	self assert: loadedProject packagesRoot equals: packagesRoot.
 	self assert: loadedProject projectsRoot equals: projectsRoot.
 	self assert: loadedProject revision equals: revision
@@ -184,12 +184,12 @@ RwProjectTest >> testGitProjectApi [
 		assert: resolvedProject packageNames asArray sort
 		equals:
 			{'ExampleProject-Core'.
-			'ExampleProject-Tests'}.
+			'ExampleProject-Tests'} sort.
 	packagesRoot := resolvedProject packagesRoot.
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadAsDefined projectNamed: projectName.
+	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
 	loadedProject checkout: 'master'.
 	self assert: commitId equals: loadedProject commitId.
 	self assert: ((loadedProject commitLog: 1) includesString: 'initial commit').
@@ -201,7 +201,7 @@ RwProjectTest >> testGitProjectApi [
 	self assert: loadedProject packageConvention equals: 'RowanHybrid'.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals: {'ExampleProject-Core'}.
+		equals: {'ExampleProject-Core' } sort.
 
 	loadedProject reload.	"when a project is loaded FROM DISK, the loadedCommitId is set"
 	self assert: loadedProject loadedCommitId equals: commitId.
