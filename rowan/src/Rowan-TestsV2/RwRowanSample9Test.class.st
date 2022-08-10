@@ -4926,8 +4926,8 @@ RwRowanSample9Test >> testIssue714_3 [
 		assert: (Rowan projectNamed: projectName1) gitRoot 
 		equals: (self _testRowanProjectsSandbox / projectName1).
 	self 
-		assert: (Rowan projectNamed: projectName) gitRoot 
-		equals: (Rowan projectNamed: projectName2) gitRoot.
+		assert: (GsFile serverRealPath: ((Rowan projectNamed: projectName) gitRoot pathString))
+		equals: (GsFile serverRealPath: ((Rowan projectNamed: projectName2) gitRoot pathString)).
 ]
 
 { #category : 'tests' }

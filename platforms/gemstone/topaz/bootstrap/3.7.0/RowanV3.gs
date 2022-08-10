@@ -44485,16 +44485,6 @@ loadAsDefined
 
 category: 'transitions'
 method: RwResolvedFromDefinedProject
-loadFromSpec
-	"
-		The project is loaded as defined on disk and the in-memory project definition is ignored.
-	"
-
-	^ self _concreteProject loadSpecification resolveProject load
-%
-
-category: 'transitions'
-method: RwResolvedFromDefinedProject
 loadProjectSet
 	"
 		refresh the contents of the receiver from disk and create a project set that includes project definitions of

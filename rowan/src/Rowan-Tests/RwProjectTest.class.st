@@ -97,7 +97,7 @@ RwProjectTest >> testDiskProjectApi [
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
+	loadedProject := resolvedProject loadAsDefined projectNamed: projectName.
 	self assert: componentsRoot equals: loadedProject componentsRoot.
 	self
 		assert: loadedProject gemstoneDefaultSymbolDictName
@@ -115,7 +115,7 @@ RwProjectTest >> testDiskProjectApi [
 		equals: platformConditionalAttributes.
 	self
 		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
-		equals: platformConditionalAttributes.
+		equals: nil.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
 		assert:
@@ -126,7 +126,7 @@ RwProjectTest >> testDiskProjectApi [
 	self assert: loadedProject remote equals: remote.
 	self
 		assert: loadedProject packageNames asArray sort
-		equals: {'ExampleProject-Core'}.
+		equals: {'ExampleProject-Core' . 'ExampleProject-Tests'} sort.
 	self assert: loadedProject packagesRoot equals: packagesRoot.
 	self assert: loadedProject projectsRoot equals: projectsRoot.
 	self assert: loadedProject revision equals: revision
@@ -189,7 +189,7 @@ RwProjectTest >> testGitProjectApi [
 	projectsRoot := resolvedProject projectsRoot.
 	revision := resolvedProject revision.
 
-	loadedProject := resolvedProject loadFromSpec projectNamed: projectName.
+	loadedProject := resolvedProject loadAsDefined projectNamed: projectName.
 	loadedProject checkout: 'master'.
 	self assert: commitId equals: loadedProject commitId.
 	self assert: ((loadedProject commitLog: 1) includesString: 'initial commit').
