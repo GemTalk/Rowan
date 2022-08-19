@@ -1,0 +1,51 @@
+#!/usr/bin/env superdoit_solo
+# Standard options are always present unless customoptions section is used
+#
+#options
+#{
+#  SuperDoitOptionalOptionWithNoArg long: 'help' short: 'h'.
+#  SuperDoitOptionalOptionWithNoArg long: 'debug' short: 'D'.
+#}
+#%
+# Example options section
+#
+#options
+#{
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg'.
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
+#
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' default: 'default'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'default'.
+#
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required'.
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
+#}
+#%
+#
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D]
+
+DESCRIPTION
+  <put your description here>
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help
+  $basename -D
+  $basename  
+-----
+%
+doit
+	'/home/dhenrich/_homes/rogue/_home/shared/repos/Plantis/rowan/specs/Plantis.ston' asFileReference
+		readStreamDo: [:stream |
+			| bufferedStream |
+			bufferedStream := ZnBufferedReadStream on:  stream.
+			^ STON fromStream: bufferedStream ].
+	^ self noResult
+%

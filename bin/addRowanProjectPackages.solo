@@ -37,13 +37,13 @@ EXAMPLES
 
   createRowanProject.solo --projectName=MyProject --projectsHome=$GS_HOME/share/repos
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            MyProject-Core
+             --projectsHome=$GS_HOME/share/repos MyProject-Core
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
             --componentName=Tests \
-            MyProject-Tests
+             --projectsHome=$GS_HOME/share/repos MyProject-Tests
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
             --packageSymbolDictName=UserGlobals \
-            MyProject-UserGlobals-Core
+             --projectsHome=$GS_HOME/share/repos MyProject-UserGlobals-Core
 
 -----
 %
@@ -60,7 +60,7 @@ doit
 	loadSpec
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	self packageSymbolDictName
 		ifNotNil: [:symbolDictName |
 			packages do: [:packageName |

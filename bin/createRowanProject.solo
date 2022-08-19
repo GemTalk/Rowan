@@ -4,7 +4,7 @@ options
 SuperDoitRequiredOptionWithRequiredArg long: 'projectName'.
 
 SuperDoitOptionalOptionWithRequiredArg long: 'componentName' default: 'Core'.
-SuperDoitOptionalOptionWithRequiredArg long: 'defaultSymbolDictName' default: 'Globals'.
+SuperDoitOptionalOptionWithRequiredArg long: 'defaultSymbolDictName' default: 'UserGlobals'.
 SuperDoitOptionalOptionWithRequiredArg long: 'packageConvention' default: 'RowanHybrid'.
 SuperDoitOptionalOptionWithRequiredArg long: 'packageFormat' default: 'tonel'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
@@ -53,7 +53,7 @@ OPTIONS
                        The name of the default symbol dictionary for the project.
                        When packages are loaded, unless otherwise specified the 
                        classes will be created in the default symbol dictionary.
-                       The default symbol dictionary name is Globals.
+                       The default symbol dictionary name is UserGlobals.
   --packageConvention=<package-convention>
                        Rowan currently supports three package conventions: Rowan
                        RowanHybrid, and Monticello. If you are using Jadeite to 
@@ -80,9 +80,9 @@ EXAMPLES
   $basename -h
   $basename --projectName=MyProject
   $basename --projectName=MyProject -D
-  $basename --projectName=MyProject --defaultSymbolDictName=UserGlobals \
+  $basename --projectName=MyProject --defaultSymbolDictName=Globals \
             --packageConvention=RowanHybrid --packageFormat=filetree \
-            --projectsHome=$GS_HOME/share/repos --repositoryType=disk
+            --projectsHome=$GS_HOME/shared/repos --repositoryType=disk
 -----
 %
 doit
