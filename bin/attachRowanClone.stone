@@ -1,0 +1,73 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] [<OPTIONS>] [-- -I <path-to-.topazini>]
+
+DESCRIPTION
+  Attach the Rowan project in the stone to a local git clone of the Rowan projct 
+  (https://github.com/GemTalk/Rowan). Once the Rowan project is attached the 
+  stone, the Rowan project will be loaded from the git repository.
+
+OPTIONS
+  -h, --help       display usage message
+  -D, --debug      bring up topaz debugger in the event of a script error
+  --projectsHome=<path-to-rowan_projects-home>
+                   If the env var ROWAN_PROJECTS_HOME is not already defined, then
+                   ROWAN_PROJECTS_HOME will be defined using <path-to-rowan_projects-home>.
+
+EXAMPLES
+  $basename --help
+  $basename -D
+  $basename 
+  $basename --projectsHome=$GS_HOME/shared/repos
+-----
+%
+method
+attachRowanProjects: projectsHome
+	| rowanProject loadSpecs |
+	rowanProject := Rowan projectNamed: 'Rowan'.
+	loadSpecs := rowanProject loadedLoadSpecifications.
+	loadSpecs do: [:loadSpec |
+		| relRoot |
+		relRoot := loadSpec relativeRepositoryRoot.
+		loadSpec specName = 'RowanClientServices'
+			ifTrue: [ 
+				loadSpec 
+					projectsHome: projectsHome;
+					gitUrl: 'file:', ((projectsHome, '/RowanClientServices') asFileReference pathString);
+					yourself  ]
+			ifFalse: [
+				loadSpec specName = 'Rowan'
+					ifTrue: [ 
+						loadSpec 
+							projectsHome: projectsHome;
+							gitUrl: 'file:', ((projectsHome, '/Rowan') asFileReference pathString);
+							yourself  ]
+					ifFalse: [
+						"embedded Rowan project" 
+						loadSpec
+							gitUrl: 'file:', (((projectsHome, '/Rowan') asFileReference / relRoot) pathString);
+							projectsHome: projectsHome;
+							yourself ] ] ].
+	loadSpecs load. 
+%
+doit
+	| projectsHome |
+	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
+	self projectsHome
+		ifNil: [ 
+			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNotNil: [:value | projectsHome := value asFileReference pathString ]
+				ifNil: [ self error: 'ROWAN_PROJECTS_HOME must be defined, either via existing env var ROWAN_PROJECTS_HOME or --projectsHome' ] ]
+		ifNotNil: [:value | projectsHome := value asFileReference pathString ].
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: projectsHome.
+	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', projectsHome.
+	self attachRowanProjects: projectsHome.
+	^ System commit
+%
