@@ -1,28 +1,29 @@
 #!/usr/bin/env superdoit_solo
 # Standard options are always present unless customoptions section is used
 #
-#options
-#{
-#  SuperDoitOptionalOptionWithNoArg long: 'help' short: 'h'.
-#  SuperDoitOptionalOptionWithNoArg long: 'debug' short: 'D'.
-#}
-#%
-# Example options section
-#
-#options
-#{
-#	SuperDoitOptionalOptionWithNoArg long: 'noarg'.
-#	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
-#
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' default: 'default'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'default'.
-#
-#	SuperDoitRequiredOptionWithRequiredArg long: 'required'.
-#	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
-#}
-#%
+#RwSimpleProjectSpecification {
+#	#specName : 'Plantis',
+#	#version : '0.2.0',
+#	#platformSpec : {
+#		'gemstone' : RwGemStoneSpecification {
+#			#packageNameToPlatformPropertiesMap : { }
+#		}
+#	},
+# 	#configsPath : 'rowan/configs',
+# 	#specsPath : 'rowan/specs',
+#	  #repoSpec : RwGitRepositorySpecification {
+# 	 	#committish : 'master',
+# 		#committishType : 'branch'
+#	 },
+#	 #repoPath : 'rowan/src',
+#	 #comment : '',
+#	 #defaultConfigurationNames : [
+#	 	'Default'
+#	 ],
+#	 #defaultGroupNames : [
+#	 	'default'
+#	 ]
+# }
 #
 usage
 -----
@@ -41,8 +42,36 @@ EXAMPLES
   $basename  
 -----
 %
+specs
+[
+RwLoadSpecificationV2 {
+	#projectName : 'RowanV12Metadata',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}]
+%
+method
+loadV12Metadata
+	self preDoitSpecLoad: [:spec |
+		spec projectsHome: '/home/dhenrich/_homes/rogue/_home/shared/repos/Rowan/upgrade/projectsHome'
+	].
+%
 doit
-	'/home/dhenrich/_homes/rogue/_home/shared/repos/Plantis/rowan/specs/Plantis.ston' asFileReference
+	| plantisHome plantisRoot |
+	self loadV12Metadata.
+	plantisHome := '/home/dhenrich/_homes/rogue/_home/shared/repos' asFileReference.
+	plantisRoot := plantisHome / 'Plantis'.
+	(plantisRoot / 'rowan/specs/Plantis.ston')
 		readStreamDo: [:stream |
 			| bufferedStream |
 			bufferedStream := ZnBufferedReadStream on:  stream.
