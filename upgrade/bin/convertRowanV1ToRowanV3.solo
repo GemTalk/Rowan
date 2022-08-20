@@ -66,15 +66,30 @@ loadV12Metadata
 		spec projectsHome: '/home/dhenrich/_homes/rogue/_home/shared/repos/Rowan/upgrade/projectsHome'
 	].
 %
-doit
-	| plantisHome plantisRoot |
-	self loadV12Metadata.
-	plantisHome := '/home/dhenrich/_homes/rogue/_home/shared/repos' asFileReference.
-	plantisRoot := plantisHome / 'Plantis'.
+method
+readProjectSpecification: plantisRoot
 	(plantisRoot / 'rowan/specs/Plantis.ston')
 		readStreamDo: [:stream |
 			| bufferedStream |
 			bufferedStream := ZnBufferedReadStream on:  stream.
 			^ STON fromStream: bufferedStream ].
-	^ self noResult
+%
+doit
+	| plantisHome plantisRoot projectSpec configurationNames groupNames configDirectory platformAttributes configs |
+	self loadV12Metadata.
+	plantisHome := '/home/dhenrich/_homes/rogue/_home/shared/repos' asFileReference.
+	plantisRoot := plantisHome / 'Plantis'.
+	projectSpec := self readProjectSpecification: plantisRoot.
+
+	configurationNames := projectSpec loadedConfigurationNames.
+	(configurationNames isNil or: [ configurationNames isEmpty ])
+		ifTrue: [ configurationNames := projectSpec defaultConfigurationNames ].
+	configurationNames ifNil: [ self halt: 'read all package names' ].
+	groupNames := projectSpec defaultGroupNames.
+	configDirectory := plantisRoot pathString , '/' , projectSpec configsPath , '/'.
+	platformAttributes := Rowan platformConditionalAttributes.
+	configs := configurationNames collect: [:configName | 
+		(Rowan globalNamed: 'RwAbstractProjectConfiguration') 
+			_readStonFrom: (configDirectory asFileReference / configName , 'ston') readStream ].
+	^ { configurationNames . groupNames . configDirectory . platformAttributes collect: [:each | each asString ] . configs }
 %
