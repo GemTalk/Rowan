@@ -1,30 +1,11 @@
 #!/usr/bin/env superdoit_solo
-# Standard options are always present unless customoptions section is used
-#
-#RwSimpleProjectSpecification {
-#	#specName : 'Plantis',
-#	#version : '0.2.0',
-#	#platformSpec : {
-#		'gemstone' : RwGemStoneSpecification {
-#			#packageNameToPlatformPropertiesMap : { }
-#		}
-#	},
-# 	#configsPath : 'rowan/configs',
-# 	#specsPath : 'rowan/specs',
-#	  #repoSpec : RwGitRepositorySpecification {
-# 	 	#committish : 'master',
-# 		#committishType : 'branch'
-#	 },
-#	 #repoPath : 'rowan/src',
-#	 #comment : '',
-#	 #defaultConfigurationNames : [
-#	 	'Default'
-#	 ],
-#	 #defaultGroupNames : [
-#	 	'default'
-#	 ]
-# }
-#
+options
+{
+	SuperDoitRequiredOptionWithRequiredArg long: 'rowanRoot'.
+	SuperDoitRequiredOptionWithRequiredArg long: 'projectRootPath'.
+	SuperDoitRequiredOptionWithRequiredArg long: 'specPath'.
+}
+%
 usage
 -----
 USAGE $basename [--help | -h] [--debug | -D]
@@ -37,9 +18,17 @@ OPTIONS
   -D, --debug                bring up topaz debugger in the event of a script error
 
 EXAMPLES
-  $basename --help
+  obasename --help
   $basename -D
-  $basename  
+  $basename  --rowanRoot=/home/dhenrich/work/m_37x_externals_st/Rowan \
+             --projectRootPath=/home/dhenrich/_homes/rogue/_home/shared/repos/Plantis \
+             --specPath=/home/dhenrich/_homes/rogue/_home/shared/repos/Plantis/rowan/specs/Plantis.ston
+  $basename  --rowanRoot=/home/dhenrich/work/m_37x_externals_st/Rowan \
+             --projectRootPath=/home/dhenrich/junk/Rowan \
+             --specPath=/home/dhenrich/junk/Rowan/rowan/specs/Rowan.ston
+  $basename  --rowanRoot=/home/dhenrich/work/m_37x_externals_st/Rowan \
+             --projectRootPath=/home/dhenrich/_homes/rogue/_home/server/stones/dbo_anon_3215/git/dbo_anon/Project_DBOMain \
+             --specPath=/home/dhenrich/_homes/rogue/_home/server/stones/dbo_anon_3215/git/dbo_anon/Project_DBOMain/rowan/specs/Project_DBOMain.ston
 -----
 %
 instvars
@@ -65,71 +54,22 @@ RwLoadSpecificationV2 {
 }]
 %
 method
+readProjectSpecification: specPath
+	specPath asFileReference readStreamDo: [:stream |
+		| bufferedStream |
+		bufferedStream := ZnBufferedReadStream on:  stream.
+		^ STON fromStream: bufferedStream ].
+%
+method
 loadV12Metadata
 	self preDoitSpecLoad: [:spec |
-		spec projectsHome: '/home/dhenrich/_homes/rogue/_home/shared/repos/Rowan/upgrade/projectsHome'
+		spec projectsHome: self rowanRoot, '/upgrade/projectsHome'
 	].
 %
-method
-readProjectSpecification: plantisRoot
-	(plantisRoot / 'rowan/specs/Plantis.ston')
-		readStreamDo: [:stream |
-			| bufferedStream |
-			bufferedStream := ZnBufferedReadStream on:  stream.
-			^ STON fromStream: bufferedStream ].
-%
-method
-_matchPlatformAttributes: platformPatternMatcher
-
-	platformAttributes do: [:anObject |
-		(platformPatternMatcher match: anObject) ifTrue: [ ^true ] ].
-	^false
-%
-method
-_platformAttributeMatchIn: platformMatchersList
-
-	platformMatchersList do: [:platformPatternMatcher |
-		(self _matchPlatformAttributes: platformPatternMatcher) 
-			ifTrue: [ ^true ] ].
-	^false
-%
-method
-visitConditionalPackageMapSpecs: aProjectLoadConfiguration
-	| currentUserId |
-	currentUserId := Rowan image currentUserId.
-	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :thePackageMapSpecsMap | 
-		(self _platformAttributeMatchIn: {platformMatcher})
-			ifTrue: [
-				(thePackageMapSpecsMap 
-					at: currentUserId 
-					ifAbsent: [ 
-						"<allusers> is preferred, but for the alpha, there are outstanding configs that use <default>"
-						thePackageMapSpecsMap at: 'default'  
-							ifAbsent: [ thePackageMapSpecsMap at: 'allusers'  ifAbsent: [] ] ])
-								ifNotNil: [:thePackageMapSpecs |
-									(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-										ifNotNil: [:name | packageMapSpecs at: #defaultSymbolDictName put: name ].
-									(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-										ifNotNil: [:boolean | packageMapSpecs at: #defaultUseSessionMethodsForExtensions put: boolean  ].
-									(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-										ifNotNil: [:theMap | 
-											| map |
-											map := packageMapSpecs at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ].
-											theMap keysAndValuesDo: [:thePackageName :thePropMap | 
-												thePropMap keysAndValuesDo: [:thePropertyName :thePropertyValue |
-													| packageMap |
-													packageMap  := map at: thePackageName ifAbsentPut: [ Dictionary new ].
-													(#('symbolDictName' 'userId' 'useSessionMethodsForExtensions' ) includes: thePropertyName)
-														ifTrue: [ packageMap at: thePropertyName put: thePropertyValue  ] 
-														ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
-%
 doit
-	| plantisHome plantisRoot projectSpec configurationNames groupNames configDirectory projectLoadConfigs res visitor projectName |
+	| projectSpec configurationNames groupNames configDirectory projectLoadConfigs res visitor projectName |
 	self loadV12Metadata.
-	plantisHome := '/home/dhenrich/_homes/rogue/_home/shared/repos' asFileReference.
-	projectName := 'Plantis'.
-	plantisRoot := plantisHome / projectName.
-	projectSpec := self readProjectSpecification: plantisRoot.
+	projectSpec := self readProjectSpecification: self specPath.
 "RwPrjReadTool>>readConfigurationsForProjectDefinition:withConfigurations:groupNames:"
 	configurationNames := projectSpec loadedConfigurationNames.
 	(configurationNames isNil or: [ configurationNames isEmpty ])
@@ -137,7 +77,7 @@ doit
 	configurationNames ifNil: [ self halt: 'read all package names' ].
 	groupNames := projectSpec defaultGroupNames.
 "RwPrjReadTool>>_visitConfigurations:forProjectDefinition:withConfigurations:groupNames:"
-	configDirectory := plantisRoot pathString , '/' , projectSpec configsPath , '/'.
+	configDirectory := self projectRootPath  , '/' , projectSpec configsPath , '/'.
 	visitor := (Rowan globalNamed: 'RwProjectLoadConfigurationVisitor') new
 		platformAttributes: Rowan platformConditionalAttributes;
 		groupNames: groupNames;
