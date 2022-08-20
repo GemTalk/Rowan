@@ -124,32 +124,39 @@ visitConditionalPackageMapSpecs: aProjectLoadConfiguration
 														ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
 %
 doit
-	| plantisHome plantisRoot projectSpec configurationNames groupNames configDirectory projectLoadConfigs res |
+	| plantisHome plantisRoot projectSpec configurationNames groupNames configDirectory projectLoadConfigs res visitor projectName |
 	self loadV12Metadata.
 	plantisHome := '/home/dhenrich/_homes/rogue/_home/shared/repos' asFileReference.
-	plantisRoot := plantisHome / 'Plantis'.
+	projectName := 'Plantis'.
+	plantisRoot := plantisHome / projectName.
 	projectSpec := self readProjectSpecification: plantisRoot.
-
+"RwPrjReadTool>>readConfigurationsForProjectDefinition:withConfigurations:groupNames:"
 	configurationNames := projectSpec loadedConfigurationNames.
 	(configurationNames isNil or: [ configurationNames isEmpty ])
 		ifTrue: [ configurationNames := projectSpec defaultConfigurationNames ].
 	configurationNames ifNil: [ self halt: 'read all package names' ].
 	groupNames := projectSpec defaultGroupNames.
+"RwPrjReadTool>>_visitConfigurations:forProjectDefinition:withConfigurations:groupNames:"
 	configDirectory := plantisRoot pathString , '/' , projectSpec configsPath , '/'.
-	platformAttributes := Rowan platformConditionalAttributes.
-	projectLoadConfigs := configurationNames collect: [:configName | 
-		(Rowan globalNamed: 'RwAbstractProjectConfiguration') 
-			_readStonFrom: (configDirectory asFileReference / configName , 'ston') readStream ].
-	packageMapSpecs := Dictionary new.	
-	projectLoadConfigs collect: [:projectLoadConfig |
-		self visitConditionalPackageMapSpecs: projectLoadConfig ].
+	visitor := (Rowan globalNamed: 'RwProjectLoadConfigurationVisitor') new
+		platformAttributes: Rowan platformConditionalAttributes;
+		groupNames: groupNames;
+		configurationBasePath: configDirectory;
+		yourself.
+	configurationNames do: [:configName |
+		| config |
+		config := (Rowan globalNamed: 'RwAbstractProjectConfiguration') _readStonFrom: ( configDirectory, configName , '.ston') asFileReference readStream.
+		config projectName: projectName.
+		visitor visit: config ].
+
 	res := { 
 			configurationNames . 
 			groupNames . 
-			configDirectory . 
-			platformAttributes collect: [:each | each asString ] . 
-			projectLoadConfigs .
+			visitor packageNames asArray.
+			visitor packageMapSpecs .
 		}.
-res halt.
+	^ res
+"
 	^ self noResult
+"
 %
