@@ -107,6 +107,8 @@ createBasicV3ProjectFor: projectRootPath from: v12ProjectSpec
 		projectsPath: 'rowanv3/projects';
 		specsPath: 'rowanv3/specs';
 		projectSpecPath: 'rowanv3';
+		projectSpecFile: 'rowanv3/projects.ston';
+		packageConvention: 'Rowan';
 		specName: v12ProjectSpec specName
 		yourself.
 	url := 'file:', projectRootPath.
@@ -116,25 +118,36 @@ createBasicV3ProjectFor: projectRootPath from: v12ProjectSpec
 	^ definedProject
 %
 method
-createV3ComponentsFrom: configDict in: v3DefinedProject
+createV3ComponentsFrom: configDict in: v3DefinedProject for: v12ProjectSpec
 	| v1TopLevelConfigClass |
 	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.	"active v3 components"
 	v1TopLevelConfigClass := Rowan globalNamed: 'RwProjectLoadConfiguration'.
 	(configDict values select: [:each | each isKindOf: v1TopLevelConfigClass ])
 		do: [:config |
-			| loadComponent |
+			| theComponent |
 			config conditionalPackages keysAndValuesDo: [:platformPatterns :groupMap |
 				| condition |
 				platformPatterns size > 1
 					ifTrue: [ self error: 'multi-entry platformPatterns in ', config name printString, ' not implemented: ', platformPatterns printString ].
 				condition := platformPatterns first.
-				loadComponent := condition = 'common'
+				theComponent := condition = 'common'
 					ifTrue: [
 						v3DefinedProject addLoadComponentNamed: config name comment: config comment ]
-					ifFalse: [ self halt ] ] ]
+					ifFalse: [ 
+						v3DefinedProject 
+							addLoadComponentNamed: config name 
+							comment: config comment.
+						v3DefinedProject 
+							addPlatformSubcomponentNamed: condition, '/', config name 
+							condition: { condition }
+							toComponentNamed: config name ].
+				groupMap keysAndValuesDo: [:groupName :map |
+					(map at: #packageNames ifAbsent: [ ])
+						ifNotNil: [:packageNames |
+							theComponent addPackageNames: packageNames ] ] ] ]
 %
 doit
-	| v12ProjectSpec configs v3DefinedProject |
+	| v12ProjectSpec configs v3DefinedProject v3ResolvedProject |
 	self loadV12Metadata.
 "
 		""DEBUGGING - extract list of package names by reading/resolving the loadSpec""
@@ -157,8 +170,14 @@ doit
 						stream sizeBufferPatch9: confRef size.
 						(Rowan globalNamed: 'RwAbstractProjectConfiguration') _readStonFrom: stream ].
 				configs at: config name put: config ] ].
-	self createV3ComponentsFrom: configs in: v3DefinedProject.
+	self createV3ComponentsFrom: configs in: v3DefinedProject for: v12ProjectSpec.
+	v3ResolvedProject := v3DefinedProject resolveProject.
+	v3ResolvedProject 
+		export;
+		exportLoadSpecification;
+		yourself.
 	^ {
+			v12ProjectSpec .
 			configs .
 			v3DefinedProject .
 		}
