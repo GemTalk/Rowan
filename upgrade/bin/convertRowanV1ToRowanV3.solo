@@ -61,14 +61,8 @@ readProjectSpecification: specPath
 		^ STON fromStream: bufferedStream ].
 %
 method
-loadV12Metadata
-	self preDoitSpecLoad: [:spec |
-		spec projectsHome: self rowanRoot, '/upgrade/projectsHome'
-	].
-%
-doit
-	| projectSpec configurationNames groupNames configDirectory projectLoadConfigs res visitor projectName |
-	self loadV12Metadata.
+resolveProjectSpecification
+	| projectSpec configurationNames groupNames configDirectory res visitor |
 	projectSpec := self readProjectSpecification: self specPath.
 "RwPrjReadTool>>readConfigurationsForProjectDefinition:withConfigurations:groupNames:"
 	configurationNames := projectSpec loadedConfigurationNames.
@@ -86,7 +80,6 @@ doit
 	configurationNames do: [:configName |
 		| config |
 		config := (Rowan globalNamed: 'RwAbstractProjectConfiguration') _readStonFrom: ( configDirectory, configName , '.ston') asFileReference readStream.
-		config projectName: projectName.
 		visitor visit: config ].
 
 	res := { 
@@ -96,7 +89,78 @@ doit
 			visitor packageMapSpecs .
 		}.
 	^ res
+%
+method
+loadV12Metadata
+	self preDoitSpecLoad: [:spec |
+		spec projectsHome: self rowanRoot, '/upgrade/projectsHome'
+	].
+%
+method
+createBasicV3ProjectFor: projectRootPath from: v12ProjectSpec
+	| definedProject rootRef url |
+	rootRef := projectRootPath asFileReference.
+	definedProject := (Rowan newProjectNamed: rootRef basename)
+		projectsHome: rootRef parent;
+		packagesPath: v12ProjectSpec repoPath;
+		componentsPath: 'rowanv3/components';
+		projectsPath: 'rowanv3/projects';
+		specsPath: 'rowanv3/specs';
+		projectSpecPath: 'rowanv3';
+		specName: v12ProjectSpec specName
+		yourself.
+	url := 'file:', projectRootPath.
+	v12ProjectSpec useGit
+		ifTrue: [ definedProject gitUrl: url ]
+		ifFalse: [ definedProject diskUrl: url ].
+	^ definedProject
+%
+method
+createV3ComponentsFrom: configDict in: v3DefinedProject
+	| v1TopLevelConfigClass |
+	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.	"active v3 components"
+	v1TopLevelConfigClass := Rowan globalNamed: 'RwProjectLoadConfiguration'.
+	(configDict values select: [:each | each isKindOf: v1TopLevelConfigClass ])
+		do: [:config |
+			| loadComponent |
+			config conditionalPackages keysAndValuesDo: [:platformPatterns :groupMap |
+				| condition |
+				platformPatterns size > 1
+					ifTrue: [ self error: 'multi-entry platformPatterns in ', config name printString, ' not implemented: ', platformPatterns printString ].
+				condition := platformPatterns first.
+				loadComponent := condition = 'common'
+					ifTrue: [
+						v3DefinedProject addLoadComponentNamed: config name comment: config comment ]
+					ifFalse: [ self halt ] ] ]
+%
+doit
+	| v12ProjectSpec configs v3DefinedProject |
+	self loadV12Metadata.
 "
-	^ self noResult
+		""DEBUGGING - extract list of package names by reading/resolving the loadSpec""
+		^ self resolveProjectSpecification
 "
+	"read project spec from disk"
+	v12ProjectSpec := self readProjectSpecification: self specPath.
+	"create a Rowan v3 project xfer relevant information from v12ProjectSpec"
+	v3DefinedProject := self createBasicV3ProjectFor: self projectRootPath from: v12ProjectSpec.
+	"read configurations and generate Rowan v3 components"
+	configs := Dictionary new.
+	(self projectRootPath, '/', v12ProjectSpec configsPath) asFileReference files do: [:confRef |
+		confRef extension = 'ston'
+			ifTrue: [ 
+				| config |
+				config := confRef 
+					readStreamDo: [:fileStream | 
+						| stream |
+						stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+						stream sizeBufferPatch9: confRef size.
+						(Rowan globalNamed: 'RwAbstractProjectConfiguration') _readStonFrom: stream ].
+				configs at: config name put: config ] ].
+	self createV3ComponentsFrom: configs in: v3DefinedProject.
+	^ {
+			configs .
+			v3DefinedProject .
+		}
+
 %
