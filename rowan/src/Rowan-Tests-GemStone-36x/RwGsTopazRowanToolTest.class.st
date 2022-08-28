@@ -435,7 +435,7 @@ RwGsTopazRowanToolTest >> testTopazLoadProjectFromUrl [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "Create"
-	loadSpecUrl := 'file:', ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0002.ston') pathString.
+	loadSpecUrl := 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0002.ston'.
 	project := Rowan gemstoneTools topaz
 		loadProjectFromUrl: loadSpecUrl
 		projectsHome: projectsHome 

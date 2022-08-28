@@ -6483,8 +6483,8 @@ RwRowanSample9Test >> testIssue838_01 [
 
 	| loadSpec_0001 loadSpec_0002 loadedProjects projectNames projectsHome project
 		loadedSpecs projectName resolvedSpecs newLoadedSpecs |
-	loadSpec_0001 := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0001.ston').
-	loadSpec_0002 := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0002.ston').
+	loadSpec_0001 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0001.ston'.
+	loadSpec_0002 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0002.ston'.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
 
@@ -6546,8 +6546,8 @@ RwRowanSample9Test >> testIssue838_02 [
 
 	| loadSpec_0073A loadSpec_0073B loadedProjects projectsHome project loadedSpecs projectName resolvedSpecs 
 		newLoadedSpecs expected0073A expected0073B |
-	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
-	loadSpec_0073B := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	loadSpec_0073A := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
+	loadSpec_0073B := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
 
@@ -6641,8 +6641,8 @@ RwRowanSample9Test >> testIssue838_03 [
 
 	| loadSpec_0073A loadSpec_0073B loadedProjects projectsHome project loadedSpecs projectName resolvedSpecs 
 		newLoadedSpecs expected0073A expected0073B oldLoadedProjects |
-	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
-	loadSpec_0073B := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	loadSpec_0073A := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
+	loadSpec_0073B := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
 
@@ -6757,7 +6757,7 @@ RwRowanSample9Test >> testIssue840_01 [
 	"https://github.com/dalehenrich/Rowan/issues/840"
 
 	| loadSpec projectName projectNames projectsHome loadSpecs embeddedPrefix |
-	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
@@ -6796,7 +6796,7 @@ RwRowanSample9Test >> testIssue840_02 [
 	"https://github.com/dalehenrich/Rowan/issues/840"
 
 	| loadSpec projectName projectNames projectsHome loadSpecs embeddedPrefix |
-	loadSpec := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	'$ROWAN_PROJECTS_SANDBOX' asFileReference ensureDeleteAllChildren.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
@@ -6836,7 +6836,7 @@ RwRowanSample9Test >> testIssue840_03 [
 	"https://github.com/dalehenrich/Rowan/issues/840"
 
 	| loadSpec_0073A loadedProjects projectsHome project loadedSpecs projectName primary embedded embeddedProjectName embeddedPrefix |
-	loadSpec_0073A := RwSpecification fromFile: ((Rowan image _projectForNonTestProject: 'Rowan') repositoryRoot / 'samples' / 'RowanSample9_spec_0073.ston').
+	loadSpec_0073A := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
 	projectsHome ensureDeleteAll.
 
