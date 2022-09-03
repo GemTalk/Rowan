@@ -276,7 +276,7 @@ method
 buildTestSuite: testSuiteName
 	| systemTestSuite |
 	systemTestSuite := TestSuite named: testSuiteName.
-	{ 'Rowan' . 'STON' . 'Cypress' . 'FileSystemGs' .  'RowanClientServices' }
+	{ 'Rowan' . 'STON' . 'Cypress' . 'FileSystemGs' }
 		do: [:projectName |
 		| testSuite |
 		testSuite := (Rowan projectNamed: projectName) testSuite.
