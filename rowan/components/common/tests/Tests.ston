@@ -4,7 +4,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/tests/platforms/Tests',
-		'common/tests/v2/Tests'
+		'common/tests/v2/Tests',
+		'common/tests/v3/Tests'
 	],
 	#packageNames : [
 		'Rowan-Tests'

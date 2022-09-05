@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/v3/Tests',
+	#condition : 'v3',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-TestsV3'
+	],
+	#comment : 'Organize all v2 tests classes under one component'
+}

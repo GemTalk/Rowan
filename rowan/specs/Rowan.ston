@@ -13,7 +13,8 @@ RwLoadSpecificationV2 {
 		'tonel',
 		'v2',
 		'v2Only',
-		'examples'
+		'examples',
+		'v3'
 	],
 	#platformProperties : {
 		'gemstone' : {
