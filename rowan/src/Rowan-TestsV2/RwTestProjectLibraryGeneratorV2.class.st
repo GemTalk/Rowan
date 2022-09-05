@@ -1,11 +1,12 @@
 "
 | commitComment |
 RwRowanSample9V2Test _clearLoadSpecSessionCache.
-(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9V2') ensureDeleteAll.
+(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
 
 commitComment := ''.
 RwTestProjectLibraryGenerator new
-	projectName: 'RowanSample9V2';
+	projectName: 'RowanSample9';
+	projectAlias: 'RowanSample9';
 	projectUrl: 'git@github.com:dalehenrich/RowanSample9V2.git';
 	preserveRowanSHA: false;
 	primeIndexCardMap;
