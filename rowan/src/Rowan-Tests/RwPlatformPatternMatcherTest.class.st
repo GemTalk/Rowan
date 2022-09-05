@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPlatformPatternMatcherTest',
 	#superclass : 'TestCase',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'private' }

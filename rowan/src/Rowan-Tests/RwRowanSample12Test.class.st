@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRowanSample12Test',
 	#superclass : 'RwAbstractRowanSampleTest',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'private' }

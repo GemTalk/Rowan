@@ -21,7 +21,7 @@ RwRowanSample11TestProjectLibraryGenerator new
 Class {
 	#name : 'RwRowanSample11TestProjectLibraryGenerator',
 	#superclass : 'RwTestProjectLibraryGenerator',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'private' }

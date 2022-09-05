@@ -12,7 +12,7 @@ Class {
 		'gemstoneIssues',
 		'rowanSHA'
 	],
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-Tests'
 }
 
 { #category : 'instance creation' }
