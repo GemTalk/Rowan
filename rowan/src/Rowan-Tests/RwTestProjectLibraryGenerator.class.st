@@ -635,7 +635,7 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0016: resolvedProject [
 	"https://github.com/GemTalk/Rowan/issues/557"
 
 	| className1 packageName1 packageName2 methodDefinition |
-	className1 := 'RowanSample9Class1'.
+	className1 :=  self projectName, 'Class1'.
 	packageName1 := projectName , '-' , 'Extensions1'.
 	packageName2 := projectName , '-' , 'Extensions'.
 
@@ -7226,6 +7226,7 @@ RwTestProjectLibraryGenerator >> primaryProjectName [
 
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> primeIndexCardMap [
+	| indexCardsDir |
 	self preserveRowanSHA
 		ifFalse: [ ^ self ].
 	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
@@ -7233,7 +7234,9 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
 		with: 'git@github.com:dalehenrich/' , projectName, '.git'.
 	indexCardMap := Dictionary new.
-	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
+	indexCardsDir := RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards'.
+	indexCardsDir ensureCreateDirectory.
+	indexCardsDir files
 		do: [ :file | 
 			| indexCard |
 			file
