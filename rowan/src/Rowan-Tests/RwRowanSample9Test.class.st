@@ -7419,7 +7419,7 @@ RwRowanSample9Test >> testSpec_0001_B [
 		repositoryResolutionPolicy: #'strict';
 		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
 
-	(self _testRowanProjectsSandbox / loadSpecification projectNam) ensureDeleteAll.
+	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
 
 
 	resolvedProject := loadSpecification resolveProject.
@@ -7460,11 +7460,11 @@ RwRowanSample9Test >> testSpec_0001_C [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase') notNil.
+	self assert: (Rowan globalNamed: projectName, 'Class1') notNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase') notNil.
 	self 
 		assert: project packageNames asArray sort 
-		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
+		equals: {projectName, '-Core' . projectName, '-Tests'} sort.
 
 "remove Core component and reload"
 	requiredLoadSpecs := (loadedProjects projectNamed: projectName) loadedLoadSpecifications.
@@ -7474,8 +7474,8 @@ RwRowanSample9Test >> testSpec_0001_C [
 	requiredLoadSpecs load.
 
 "validate"
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') isNil.
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase') isNil.
+	self assert: (Rowan globalNamed: projectName, 'Class1') isNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase') isNil.
 	self assert: project packageNames isEmpty.
 ]
 
