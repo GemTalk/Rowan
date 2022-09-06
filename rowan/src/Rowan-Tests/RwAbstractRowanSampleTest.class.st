@@ -16,14 +16,20 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
 		ifTrue: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
-				ifTrue: [ loadSpecification gitUrl: 'https://github.com/dalehenrich/RowanSample9.git' ]
+				ifTrue: [ 
+					loadSpecification
+						gitUrl:
+							'https://github.com/dalehenrich/' , self _rowanSample9ProjectName , '.git' ]
 				ifFalse: [ 
 					(loadSpecification projectUrl includesString: 'RowanSample10')
 						ifTrue: [ loadSpecification gitUrl: 'https://github.com/dalehenrich/RowanSample10.git' ]
 						ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ]
 		ifFalse: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
-				ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample9.git' ]
+				ifTrue: [ 
+					loadSpecification
+						gitUrl:
+							'git@github.com:dalehenrich/' , self _rowanSample9ProjectName , '.git' ]
 				ifFalse: [ 
 					(loadSpecification projectUrl includesString: 'RowanSample10')
 						ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample10.git' ]
@@ -33,13 +39,7 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 								ifFalse: [ 
 									(loadSpecification projectUrl includesString: 'RowanSample12')
 										ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample12.git' ]
-										ifFalse: [ 
-											(loadSpecification projectUrl includesString: 'RowanSample11')
-												ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample11.git' ]
-												ifFalse: [ 
-													(loadSpecification projectUrl includesString: 'RowanSample12')
-														ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample12.git' ]
-														ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ] ] ] ] ]
+										ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ] ] ]
 ]
 
 { #category : 'private' }
@@ -111,6 +111,11 @@ RwAbstractRowanSampleTest class >> _loadSpecNamed: specName [
 				yourself.
 			branchDict at: theSpec revision put: theSpec ].
 	^ theSpec copy
+]
+
+{ #category : 'private' }
+RwAbstractRowanSampleTest class >> _rowanSample9ProjectName [
+	self subclassResponsibility: #'_rowanSample9ProjectName'
 ]
 
 { #category : 'private' }

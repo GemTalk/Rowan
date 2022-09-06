@@ -4,6 +4,16 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'private' }
+RwRowanSample9Test class >> _rowanSample_0000_load_spec [
+	^ (RwSpecification
+		fromUrl:
+			'https://raw.githubusercontent.com/dalehenrich/' , self _rowanSample9ProjectName
+				, '/master/specs/spec_0000.ston')
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself
+]
+
 { #category : 'Testing' }
 RwRowanSample9Test class >> isAbstract [
 	"Override to true if a TestCase subclass is Abstract and should not have
@@ -7362,15 +7372,15 @@ RwRowanSample9Test >> testSpec_0001_A [
 
 	"functional variant of testSpec_0001_B"
 
-	| rowanProject fileUrl loadSpecification resolvedProject |
+	| rowanProject specUrl loadSpecification resolvedProject |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
+	specUrl := 'https://raw.githubusercontent.com/dalehenrich/' , self class _rowanSample9ProjectName
+				, '/master/specs/spec_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: specUrl)
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself.
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
 
 	resolvedProject := loadSpecification resolveProject. "project is read from disk on resolve"
 	resolvedProject
@@ -7384,16 +7394,16 @@ RwRowanSample9Test >> testSpec_0001_B [
 
 	"testSpec_0001_A behavies correctly"
 
-	| rowanProject fileUrl loadSpecification resolvedProject resolvedRepository oldPolicy |
+	| rowanProject specUrl loadSpecification resolvedProject resolvedRepository oldPolicy |
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	loadSpecification := (RwSpecification fromUrl: fileUrl)
+	specUrl := 'https://raw.githubusercontent.com/dalehenrich/' , self class _rowanSample9ProjectName
+				, '/master/specs/spec_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: specUrl)
 		projectsHome: self _testRowanProjectsSandbox;
 		repositoryResolutionPolicy: #'strict';
 		yourself.	"force #strict policy to ensure that the revision is checkout out in the repository"
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
+	(self _testRowanProjectsSandbox / loadSpecification projectNam) ensureDeleteAll.
 
 
 	resolvedProject := loadSpecification resolveProject.

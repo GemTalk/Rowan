@@ -16,11 +16,9 @@ RwRowanSample10Test class >> _loadSpecSessionCacheKey [
 
 { #category : 'private' }
 RwRowanSample10Test class >> _rowanSample_0000_load_spec [
-	| rowanProject fileUrl |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample10_0000.ston'.
-	^ (RwSpecification fromUrl: fileUrl)
+	^ (RwSpecification
+		fromUrl:
+			'https://raw.githubusercontent.com/dalehenrich/RowanSample10/master/specs/spec_0000.ston')
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself
 ]

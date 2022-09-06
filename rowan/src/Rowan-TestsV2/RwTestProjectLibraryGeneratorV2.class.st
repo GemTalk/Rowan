@@ -4,7 +4,7 @@ RwRowanSample9V2Test _clearLoadSpecSessionCache.
 (RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9V2') ensureDeleteAll.
 
 commitComment := ''.
-RwTestProjectLibraryGenerator new
+RwTestProjectLibraryGeneratorV2 new
 	projectName: 'RowanSample9V2';
 	projectUrl: 'git@github.com:dalehenrich/RowanSample9V2.git';
 	preserveRowanSHA: false;
@@ -85,3 +85,8 @@ Class {
 	#superclass : 'RwTestProjectLibraryGenerator',
 	#category : 'Rowan-TestsV2'
 }
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV2 >> primaryProjectName [
+	^ 'RowanSample9V2'
+]

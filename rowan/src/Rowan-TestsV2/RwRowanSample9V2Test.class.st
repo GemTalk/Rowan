@@ -15,10 +15,6 @@ RwRowanSample9V2Test class >> _loadSpecSessionCacheKey [
 ]
 
 { #category : 'private' }
-RwRowanSample9V2Test class >> _rowanSample_0000_load_spec [
-	^ (RwSpecification
-		fromUrl:
-			'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0000.ston')
-		projectsHome: self _testRowanProjectsSandbox;
-		yourself
+RwRowanSample9V2Test class >> _rowanSample9ProjectName [
+	^ 'RowanSample9V2'
 ]

@@ -4,7 +4,7 @@ RwRowanSample9V3Test _clearLoadSpecSessionCache.
 (RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9V3') ensureDeleteAll.
 
 commitComment := ''.
-RwTestProjectLibraryGenerator new
+RwTestProjectLibraryGeneratorV3 new
 	projectName: 'RowanSample9V3';
 	projectUrl: 'git@github.com:dalehenrich/RowanSample9V3.git';
 	preserveRowanSHA: false;
@@ -1688,4 +1688,9 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0078: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> primaryProjectName [
+	^ 'RowanSample9V3'
 ]
