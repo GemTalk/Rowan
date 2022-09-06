@@ -190,19 +190,9 @@ RwAbstractV2Test >> _validateCanonicalRowanSample9ProjectFor: resolvedProject [
 
 { #category : 'private' }
 RwAbstractV2Test >> _validateComponent: component componentNames: componentNames packageNames: packageNames projectNames: projectNames [
-	| x |
-	self
-		assert:
-			(x := component
-				componentNames) asArray sort = componentNames sort.
-	self
-		assert:
-			(x := component
-				packageNames) asArray sort = packageNames sort.
-	self
-		assert:
-			(x := component
-				projectNames) asArray sort = projectNames sort
+	self assert: component componentNames asArray sort equals: componentNames sort.
+	self assert: component packageNames asArray sort equals: packageNames sort.
+	self assert: component projectNames asArray sort equals: projectNames sort
 ]
 
 { #category : 'running' }

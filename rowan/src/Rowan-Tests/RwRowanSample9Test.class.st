@@ -633,13 +633,13 @@ RwRowanSample9Test >> _validateSpec_0017_componentStructure: resolvedProject [
 		_validateComponent: (resolvedProject componentNamed: 'Core')
 			componentNames: { 'tests/Tests'}
 			packageNames:
-				{'RowanSample9-Core'.
-				'RowanSample9-Extensions'.
-				'RowanSample9-Extensions1'}
+				{resolvedProject projectName, '-Core'.
+				resolvedProject projectName, '-Extensions'.
+				resolvedProject projectName, '-Extensions1'}
 			projectNames: {};
 		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
-			packageNames: {'RowanSample9-Tests'}
+			packageNames: {resolvedProject projectName, '-Tests'}
 			projectNames: {};
 		yourself
 ]
@@ -650,12 +650,12 @@ RwRowanSample9Test >> _validateSpec_0021_componentStructure: resolvedProject [
 		_validateComponent: (resolvedProject componentNamed: 'Core')
 			componentNames: {'tests/Tests'}
 			packageNames:
-				{'RowanSample9-Core'.
-				'RowanSample9-Extensions'}
+				{resolvedProject projectName, '-Core'.
+				resolvedProject projectName, '-Extensions'}
 			projectNames: {};
 		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
-			packageNames: {'RowanSample9-Tests'}
+			packageNames: {resolvedProject projectName, '-Tests'}
 			projectNames: {};
 		yourself
 ]
@@ -7996,11 +7996,11 @@ RwRowanSample9Test >> testSpec_0019 [
 				{'subs/Core1'.
 				'subs/Core2'.
 				'tests/Tests'}
-			packageNames: {'RowanSample9-Core'}
+			packageNames: {projectName, '-Core'}
 			projectNames: {};
 		_validateComponent: (resolvedProject componentNamed: 'tests/Tests')
 			componentNames: {}
-			packageNames: {'RowanSample9-Tests'}
+			packageNames: {projectName, '-Tests'}
 			projectNames: {};
 		yourself
 ]
