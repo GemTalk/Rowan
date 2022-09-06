@@ -8229,7 +8229,7 @@ RwRowanSample9Test >> testSpec_0028 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') notNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase1') notNil.
 	loadedProjects := resolvedProject load.
 
 "validate"
@@ -8237,7 +8237,7 @@ RwRowanSample9Test >> testSpec_0028 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase1') isNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase1') isNil.
 ]
 
 { #category : 'tests' }
@@ -8279,12 +8279,12 @@ UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+	{projectName, 'TestCase1' . projectName, 'TestCase2' . projectName, 'TestCase3'} do: [:className |
 		self assert: (Rowan globalNamed: className) notNil ].
 
 	loadedProjects := resolvedProject load.
 
-	#('RowanSample9TestCase1'  'RowanSample9TestCase2'  'RowanSample9TestCase3') do: [:className |
+	{projectName, 'TestCase1' . projectName, 'TestCase2' . projectName, 'TestCase3'} do: [:className |
 		self assert: (Rowan globalNamed: className) isNil ].
 "validate"
 	self
