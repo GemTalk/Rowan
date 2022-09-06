@@ -7554,6 +7554,121 @@ RwRowanSample9Test >> testSpec_0002_to_0003 [
 	self _runTestSuiteForProject: project.
 ]
 
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0003 [
+	"spec_0003 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0003'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0004 [
+	"spec_0004 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0004'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0005 [
+	"spec_0005 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0006 [
+	"spec_0006 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0006'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0007 [
+	"spec_0007 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0007'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testSpec_0008 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
@@ -7666,8 +7781,7 @@ RwRowanSample9Test >> testSpec_0012 [
 	[ loadedProjects := resolvedProject load ] 
 		on: Error 
 		do: [:ex | 
-			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			self assert: ex description equals: ('UserDefinedError: The extension class named ''', projectName, 'Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.').
 			errorHit := true ].
 	self assert: errorHit.
 ]
@@ -7694,8 +7808,7 @@ RwRowanSample9Test >> testSpec_0013 [
 	[ loadedProjects := resolvedProject load ] 
 		on: Error 
 		do: [:ex | 
-			| x |
-			self assert: ( x:=  ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			self assert: ex description equals: ('UserDefinedError: The extension class named ''', projectName, 'Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.').
 			errorHit := true ].
 	self assert: errorHit.
 ]
