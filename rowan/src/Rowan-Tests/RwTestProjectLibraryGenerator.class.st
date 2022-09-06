@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'projectsHome',
 		'projectName',
-		'fullProjectName',
 		'projectUrl',
 		'preserveChangesOnGithub',
 		'indexCardMap',
@@ -3596,18 +3595,10 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _createDefinedProject: aString [
-	| definedProject alias pName |
-	fullProjectName
-		ifNil: [ pName := aString ]
-		ifNotNil: [ 
-			pName := fullProjectName.
-			alias := aString ].
-	definedProject := (Rowan newProjectNamed: pName)
+	^ (Rowan newProjectNamed: aString)
 		projectsHome: self projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
-		yourself.
-	alias ifNotNil: [ definedProject projectAlias: alias ].
-	^ definedProject
+		yourself
 ]
 
 { #category : 'private' }
@@ -3672,7 +3663,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			resolvedRepository gitRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
 					fileStream
-						nextPutAll: '# ' , self fullProjectName , ' - ' , specName;
+						nextPutAll: '# ' , projectName , ' - ' , specName;
 						lf.
 					readmeBlock
 						ifNotNil: [ 
@@ -3724,7 +3715,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 	resolvedRepository gitRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
 			fileStream
-				nextPutAll: '# ' , self fullProjectName;
+				nextPutAll: '# ' , projectName;
 				lf;
 				nextPutAll: self projectReadmeIntro;
 				lf;
@@ -4081,16 +4072,6 @@ RwTestProjectLibraryGenerator >> exportPharoTonelFormatV1For: aRwResolvedProject
 		yourself.
 
 	visitor visit: projectSetModification
-]
-
-{ #category : 'accessing' }
-RwTestProjectLibraryGenerator >> fullProjectName [
-	^ fullProjectName ifNil: [ self projectName ]
-]
-
-{ #category : 'accessing' }
-RwTestProjectLibraryGenerator >> fullProjectName: object [
-	fullProjectName := object
 ]
 
 { #category : 'generators' }
@@ -7240,7 +7221,7 @@ RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> primaryProjectName [
-	^ self fullProjectName
+	^ 'RowanSample9'
 ]
 
 { #category : 'accessing' }
@@ -7251,7 +7232,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	RwAbstractV2Test _testRowanProjectsSandbox ensureCreateDirectory.
 	Rowan projectTools git
 		gitcloneIn: RwAbstractV2Test _testRowanProjectsSandbox pathString
-		with: 'git@github.com:dalehenrich/' , self fullProjectName, '.git ', self projectName.
+		with: 'git@github.com:dalehenrich/' , projectName, '.git'.
 	indexCardMap := Dictionary new.
 	indexCardsDir := RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards'.
 	indexCardsDir ensureCreateDirectory.
@@ -7268,7 +7249,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> projectName [
-	^ projectName
+	^projectName
 ]
 
 { #category : 'accessing' }
