@@ -7367,6 +7367,22 @@ RwRowanSample9Test >> testRowanSample4_primer_504 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testSpec_0000 [
+	"should red from disk without error"
+
+	|  specUrl loadSpecification resolvedProject |
+	specUrl := 'https://raw.githubusercontent.com/dalehenrich/' , self class _rowanSample9ProjectName
+				, '/master/specs/spec_0000.ston'.
+	loadSpecification := (RwSpecification fromUrl: specUrl)
+		projectsHome: self _testRowanProjectsSandbox;
+		yourself.
+
+	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
+
+	resolvedProject := loadSpecification resolveProject. "project is read from disk on resolve"
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testSpec_0001_A [
 	"a UserDefinedError occurred (error 2318), reason:halt, The component 'Core' is undefined"
 
