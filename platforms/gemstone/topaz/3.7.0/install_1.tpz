@@ -31,9 +31,8 @@
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
 
-  symbolList add: RowanKernel.
 
-	#( "#RowanKernel" #RowanLoader #RowanTools #RowanClientServices)
+	#( #RowanKernel #RowanLoader #RowanTools #RowanClientServices)
 		do: [:symbolName | 
 			| newDict size |
 			newDict := SymbolDictionary new
