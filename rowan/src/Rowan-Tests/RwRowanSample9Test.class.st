@@ -23,12 +23,12 @@ RwRowanSample9Test class >> isAbstract [
 ]
 
 { #category : 'audit tests' }
-RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
+RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081: projectName [
 	| className packageName1 packageName2 class |
 "remove compiled methods"
-	className := 'RowanSample9Class1'.
-	packageName1 := 'RowanSample9-Core'.
-	packageName2 := 'RowanSample9-Extensions'.
+	className := projectName, 'Class1'.
+	packageName1 := projectName, '-Core'.
+	packageName2 := projectName, '-Extensions'.
 	class := Rowan globalNamed: className.
 	class removeSelector: #foo4.
 	class removeSelector: #foo5.
@@ -82,13 +82,13 @@ RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _expectedIssue766GsFileContents [
+RwRowanSample9Test >> _expectedIssue766GsFileContents: projectName [
 	^ '! Class Declarations
 ! Generated file, do not Edit
 
 doit
 (IdentityKeyValueDictionary
-	subclass: ''RowanSample9IdentityKeyValueDictionary''
+	subclass: ''', projectName , 'IdentityKeyValueDictionary''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -96,7 +96,7 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-GemStone'';
+		category: ''', projectName , '-GemStone'';
 		comment: ''I am an example class'';
 		immediateInvariant.
 true.
@@ -104,7 +104,7 @@ true.
 
 doit
 (Object
-	subclass: ''RowanSample9Class1''
+	subclass: ''', projectName , 'Class1''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -112,7 +112,7 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-Core'';
+		category: ''', projectName , '-Core'';
 		comment: ''I am an example class'';
 		immediateInvariant.
 true.
@@ -120,7 +120,7 @@ true.
 
 doit
 (TestCase
-	subclass: ''RowanSample9GemStoneTestCase''
+	subclass: ''', projectName , 'GemStoneTestCase''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -128,7 +128,7 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-GemStone-Tests'';
+		category: ''', projectName , '-GemStone-Tests'';
 		comment: ''I test the GemStone class'';
 		immediateInvariant.
 true.
@@ -136,7 +136,7 @@ true.
 
 doit
 (TestCase
-	subclass: ''RowanSample9TestCase''
+	subclass: ''', projectName , 'TestCase''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -144,71 +144,71 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-Tests'';
+		category: ''', projectName , '-Tests'';
 		comment: ''I test the Core class'';
 		immediateInvariant.
 true.
 %
 
-! Class implementation for ''RowanSample9IdentityKeyValueDictionary''
+! Class implementation for ''', projectName , 'IdentityKeyValueDictionary''
 
-!		Class methods for ''RowanSample9IdentityKeyValueDictionary''
+!		Class methods for ''', projectName , 'IdentityKeyValueDictionary''
 
 category: ''accessing''
-classmethod: RowanSample9IdentityKeyValueDictionary
+classmethod: ', projectName , 'IdentityKeyValueDictionary
 bar ^''bar''
 %
 
-!		Instance methods for ''RowanSample9IdentityKeyValueDictionary''
+!		Instance methods for ''', projectName , 'IdentityKeyValueDictionary''
 
 category: ''accessing''
-method: RowanSample9IdentityKeyValueDictionary
+method: ', projectName , 'IdentityKeyValueDictionary
 foo ^1
 %
 
-! Class implementation for ''RowanSample9Class1''
+! Class implementation for ''', projectName , 'Class1''
 
-!		Instance methods for ''RowanSample9Class1''
+!		Instance methods for ''', projectName , 'Class1''
 
 category: ''accessing''
-method: RowanSample9Class1
+method: ', projectName , 'Class1
 foo ^1
 %
 
-! Class implementation for ''RowanSample9GemStoneTestCase''
+! Class implementation for ''', projectName , 'GemStoneTestCase''
 
-!		Instance methods for ''RowanSample9GemStoneTestCase''
+!		Instance methods for ''', projectName , 'GemStoneTestCase''
 
 category: ''tests''
-method: RowanSample9GemStoneTestCase
-test1  self assert: RowanSample9IdentityKeyValueDictionary new foo = 1
+method: ', projectName , 'GemStoneTestCase
+test1  self assert: ', projectName , 'IdentityKeyValueDictionary new foo = 1
 %
 
 category: ''tests''
-method: RowanSample9GemStoneTestCase
-test2  self assert: RowanSample9IdentityKeyValueDictionary bar = ''bar''
+method: ', projectName , 'GemStoneTestCase
+test2  self assert: ', projectName , 'IdentityKeyValueDictionary bar = ''bar''
 %
 
-! Class implementation for ''RowanSample9TestCase''
+! Class implementation for ''', projectName , 'TestCase''
 
-!		Instance methods for ''RowanSample9TestCase''
+!		Instance methods for ''', projectName , 'TestCase''
 
 category: ''tests''
-method: RowanSample9TestCase
-test1  self assert: RowanSample9Class1 new foo = 1
+method: ', projectName , 'TestCase
+test1  self assert: ', projectName , 'Class1 new foo = 1
 %
 
 category: ''tests''
-method: RowanSample9TestCase
-test2  self assert: RowanSample9Class1 bar = ''bar''
+method: ', projectName , 'TestCase
+test2  self assert: ', projectName , 'Class1 bar = ''bar''
 %
 
-! Class extensions for ''RowanSample9Class1''
+! Class extensions for ''', projectName , 'Class1''
 
-!		Class methods for ''RowanSample9Class1''
+!		Class methods for ''', projectName , 'Class1''
 
-category: ''*rowansample9-extensions''
-classmethod: RowanSample9Class1
+category: ''*', projectName asLowercase , '-extensions''
+classmethod: ', projectName , 'Class1
 bar ^''bar''
 %
 
@@ -326,11 +326,6 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _spec0057GsFilein [
-	^ self _spec0057GsFilein: true
-]
-
-{ #category : 'private' }
 RwRowanSample9Test >> _spec0057GsFilein: includeRemoveAll [
 	| filein |
 	filein := 'set compile_env: 0
@@ -425,6 +420,100 @@ test  self assert: RowanSample9Class1 new foo = 1
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _spec0057GsFilein: includeRemoveAll projectName: projectName [
+	| filein |
+	filein := 'set compile_env: 0
+! ------------------- Class definition for ', projectName, 'Class1
+expectvalue /Class
+doit
+Object subclass: ''', projectName, 'Class1''
+  instVarNames: #( ivar1)
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+%
+expectvalue /Class
+doit
+', projectName, 'Class1 comment: 
+''I am an example class''
+%
+expectvalue /Class
+doit
+', projectName, 'Class1 category: ''RowanSample9-Core''
+%
+'.
+	includeRemoveAll
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+! ------------------- Remove existing behavior from ', projectName, 'Class1
+removeAllMethods ', projectName, 'Class1
+removeallclassmethods ', projectName, 'Class1
+' ].
+	filein := filein
+		,
+			'
+set compile_env: 0
+! ------------------- Class methods for ', projectName, 'Class1
+category: ''accessing''
+classmethod: ', projectName, 'Class1
+bar ^''bar''
+%
+! ------------------- Instance methods for ', projectName, 'Class1
+category: ''accessing''
+method: ', projectName, 'Class1
+foo ^1
+%
+
+set compile_env: 0
+! ------------------- Class definition for ', projectName, 'TestCase
+expectvalue /Class
+doit
+TestCase subclass: ''', projectName, 'TestCase''
+  instVarNames: #()
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+%
+expectvalue /Class
+doit
+', projectName, 'TestCase comment: 
+''I test the example class''
+%
+expectvalue /Class
+doit
+', projectName, 'TestCase category: ''', projectName, '-Tests''
+%
+'.
+	includeRemoveAll
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+! ------------------- Remove existing behavior from ', projectName, 'TestCase
+removeAllMethods ', projectName, 'TestCase
+removeAllClassMethods ', projectName, 'TestCase
+' ].
+	filein := filein
+		,
+			'
+set compile_env: 0
+! ------------------- Class methods for ', projectName, 'TestCase
+! ------------------- Instance methods for ', projectName, 'TestCase
+category: ''tests''
+method: ', projectName, 'TestCase
+test  self assert: ', projectName, 'Class1 new foo = 1
+%
+'.
+	^ filein
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _specListProjectNames [
 	^ super _specListProjectNames
 		,
@@ -488,12 +577,11 @@ RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrato
 	^ instanceMap
 ]
 
-{ #category : 'tests' }
-RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
+{ #category : 'private' }
+RwRowanSample9Test >> _testUnmanagedSpec_0057: loadSpec includeRemoveAll: includeRemoveAll  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
 	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects stream |
-	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	| projectName projectNames resolvedProject loadedProjects stream |
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
@@ -514,7 +602,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 		expectedProjectNames: projectNames.
 
 "do filein"
-	stream := (self _spec0057GsFilein: true) readStreamPortable.
+	stream := (self _spec0057GsFilein: true projectName: projectName) readStreamPortable.
 	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
 		setEnableRemoveAll: includeRemoveAll;
 		doFileIn.
@@ -719,11 +807,11 @@ RwRowanSample9Test >> testAuditMethodsNotIdentical [
 	self assert: audit isEmpty.
 
 "remove compiled methods and recompile without packaging"
-	className := 'RowanSample9Class1'.
-	packageName1 := 'RowanSample9-Core'.
-	packageName2 := 'RowanSample9-Extensions'.
+	className := projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extensions'.
 	class := Rowan globalNamed: className.
-	self _auditRemoveAndRecompiledMethods_0081.
+	self _auditRemoveAndRecompiledMethods_0081: projectName.
 
 "audit"
 	audit := project audit.
@@ -768,13 +856,13 @@ RwRowanSample9Test >> testAuditMismatchedMethodCategory [
 	self assert: audit isEmpty.
 
 "rename method categories"
-	className := 'RowanSample9Class1'.
-	packageName1 := 'RowanSample9-Core'.
-	packageName2 := 'RowanSample9-Extensions'.
+	className := projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extensions'.
 	class := Rowan globalNamed: className.
 
-	class renameCategory: '*rowansample9-extensions' to: 'another category'.
-	class class renameCategory: '*rowansample9-extensions' to: 'another category'.
+	class renameCategory: '*', projectName asLowercase, '-extensions' to: 'another category'.
+	class class renameCategory: '*', projectName asLowercase, '-extensions' to: 'another category'.
 
 "audit"
 	audit := project audit.
@@ -818,15 +906,15 @@ RwRowanSample9Test >> testAuditMismatchedMethodCategoryAndMethodsNotIdentical [
 	self assert: audit isEmpty.
 
 "remove compiled methods and recompile without packaging"
-	self _auditRemoveAndRecompiledMethods_0081.
+	self _auditRemoveAndRecompiledMethods_0081: projectName.
 
 "rename method categories"
-	className := 'RowanSample9Class1'.
-	packageName1 := 'RowanSample9-Core'.
-	packageName2 := 'RowanSample9-Extensions'.
+	className := projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extensions'.
 	class := Rowan globalNamed: className.
-	class renameCategory: '*rowansample9-extensions' to: 'another category'.
-	class class renameCategory: '*rowansample9-extensions' to: 'another category'.
+	class renameCategory: '*', projectName asLowercase, '-extensions' to: 'another category'.
+	class class renameCategory: '*', projectName asLowercase, '-extensions' to: 'another category'.
 
 "audit"
 	audit := project audit.
@@ -866,9 +954,9 @@ RwRowanSample9Test >> testAuditMissingCompiledMethod [
 	self assert: audit isEmpty.
 
 "remove compiled methods"
-	className := 'RowanSample9Class1'.
-	packageName1 := 'RowanSample9-Core'.
-	packageName2 := 'RowanSample9-Extensions'.
+	className := projectName , 'Class1'.
+	packageName1 := projectName , '-Core'.
+	packageName2 := projectName , '-Extensions'.
 	class := Rowan globalNamed: className.
 	class removeSelector: #foo.
 	class class  removeSelector: #bar.
@@ -1150,8 +1238,7 @@ RwRowanSample9Test >> testIssue_495_1 [
 	[ loadedProjects := resolvedProject load ]
 		on: Error
 		do: [:ex |
-			| x |
-			self assert: (x := ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			self assert: ex description equals: 'UserDefinedError: The extension class named ''', projectName, 'Class1'' cannot be found in this symbol dictionary (#''RowanSample9_3''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
 			errorHit := true ].
 
 "validate"
@@ -1191,8 +1278,7 @@ RwRowanSample9Test >> testIssue_495_2 [
 	[ loadedProjects := resolvedProject load ]
 		on: Error
 		do: [:ex |
-			| x |
-			self assert: (x := ex description) = 'UserDefinedError: The extension class named ''RowanSample9Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
+			self assert: ex description equals: 'UserDefinedError: The extension class named ''', projectName, 'Class1'' cannot be found in this symbol dictionary (#''RowanSample9_1''). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.'.
 			errorHit := true ].
 
 "validate"
@@ -1501,7 +1587,7 @@ RwRowanSample9Test >> testIssue_549 [
 "remove package RowanSample9-Extensions"
 	project := loadedProjects projectNamed: projectName.
 	resolvedProject2 := project asDefinition.
-	resolvedProject2 removePackageNamed: 'RowanSample9-Extensions'.
+	resolvedProject2 removePackageNamed: projectName, '-Extensions'.
 
 "validation should pass"
 	self assert: resolvedProject2 _validate
@@ -1513,8 +1599,12 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 
 	"https://github.com/dalehenrich/Rowan/issues/549"
 
-	| loadSpec projectName  resolvedProject1 errorHit |
-	loadSpec := self _loadSpecNamed: 'spec_0015'.
+	| loadSpec projectName  resolvedProject1 errorHit projectsHome |
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0015.ston'.
+	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
+	projectsHome ensureDeleteAll.
+
+	loadSpec projectsHome: projectsHome.
 
 	projectName := loadSpec projectName.
 
@@ -1531,10 +1621,9 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 	[resolvedProject1 _validate ] 
 		on: Error
 		do: [:ex | 
-			| x |
-			self assert: (x := ex description) = 'UserDefinedError: Component references package(s) that are not defined
+			self assert: ex description equals: 'UserDefinedError: Component references package(s) that are not defined
 	The following packages are defined, but not referenced in a component:
-		RowanSample9-Extensions
+		', projectName, '-Extensions
 '.
 			errorHit := true].
 	self assert: errorHit
@@ -1610,58 +1699,6 @@ RwRowanSample9Test >> testIssue_568 [
 
 "validate test will validate that preload doit executed"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue_571_1 [
-	"load project with a different projectName and projectAlias"
-
-	"https://github.com/dalehenrich/Rowan/issues/571"
-
-	| loadSpec projectName resolvedProject loadedProjects projectNames newProjectName projectAlias expectedProjectNames |
-[
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
-	projectName := loadSpec projectName.
-	projectAlias := projectName, '_alias'.
-	newProjectName := projectName, '_new'.
-	projectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
-	expectedProjectNames := {newProjectName. projectName, '_1' . projectName, '_2' .  projectName, '_3' . }.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-	projectName := newProjectName.
-
-	loadSpec
-		projectName: projectName;
-		projectAlias: projectAlias.
-
-	(self _testRowanProjectsSandbox / projectAlias) ensureDeleteAll.
-	self deny: (self _testRowanProjectsSandbox / projectAlias) exists.
-
-"resolve project"
-	resolvedProject := loadSpec resolveProject.
-
-"validate"
-	self assert: (self _testRowanProjectsSandbox / projectAlias) exists.
-	self assert: resolvedProject repositoryRoot basename = projectAlias.
-
-"load project"
-	loadedProjects := resolvedProject loadProjectSet.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: expectedProjectNames
-] ensure: [
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
 ]
 
 { #category : 'issue 493' }
@@ -1760,7 +1797,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict [
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
-	className1 := 'RowanSample9Class1'.
+	className1 := projectName, 'Class1'.
 
 	className1 := projectName , 'Class1'.
 	className2 :=  projectName , 'IdentityKeyValueDictionary'.
@@ -1859,7 +1896,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_1 [
 
 	"using default symbol dict name"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class |
 	loadSpec := self _loadSpecNamed: 'spec_0002'.
 
 	projectName := loadSpec projectName.
@@ -1876,7 +1913,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_1 [
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	className := 'RowanSample9Class1'.
+	className := projectName , 'Class1'.
 
 "validate"
 	self
@@ -1902,7 +1939,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_1 [
 
 	class := Rowan globalNamed: className.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
+	self assert: (ar first at: 1) name equals: self _sampleSymbolDictionaryName2.
 ]
 
 { #category : 'issue 185' }
@@ -1924,7 +1961,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_2 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	packageName := 'RowanSample9-Core'.
+	packageName := projectName , '-Core'.
 
 "resolve project"
 	resolvedProject := loadSpec resolveProject.
@@ -1933,7 +1970,7 @@ RwRowanSample9Test >> testIssue185_move_class_to_symbolDict_2 [
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.
 	loadedProjects := resolvedProject load.
 	project := loadedProjects  projectNamed: projectName.
-	className := 'RowanSample9Class1'.
+	className := projectName , 'Class1'.
 
 "validate"
 	self
@@ -2523,12 +2560,14 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 	| primerProjectName projectName symDictName1 symDictName2 symDict theClass instanceMethod classMethod symbolList resolvedProject 
 		primerPackageName1 primerPackageName2 loadedPrimerProject componentName loadSpec primerResolvedProject audit |
 
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+	projectName := loadSpec projectName.
+
 	primerProjectName := 'PrimerSample9'.
 	symDictName1 := self _symbolDictionaryName1.
 	symDictName2 := self _symbolDictionaryName2.
 	primerPackageName1 := primerProjectName, '-', symDictName1.
 	primerPackageName2 := primerProjectName, '-', symDictName2.
-	projectName := 'RowanSample9'.
 	symbolList := Rowan image symbolList.
 	componentName := 'Core'.
 
@@ -2539,7 +2578,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 
 	"Create classes in a couple of symbol dictionaries"
 	symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName1.
-	theClass := Object subclass: 'RowanSample9Class1'
+	theClass := Object subclass: projectName, 'Class1'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
@@ -2554,7 +2593,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 
 	symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName2.
 	theClass := IdentityKeyValueDictionary
-		subclass: 'RowanSample9IdentityKeyValueDictionary'
+		subclass: projectName, 'IdentityKeyValueDictionary'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
@@ -2597,7 +2636,6 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
 	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
 
-	loadSpec := self _loadSpecNamed: 'spec_0002'.
 	resolvedProject := loadSpec resolveStrict.
 
 	resolvedProject load.
@@ -2634,15 +2672,17 @@ RwRowanSample9Test >> testIssue230 [
 	| primerProjectName projectName symDictName1 symDictName2 symDict theClass instanceMethod classMethod symbolList resolvedProject 
 		primerPackageName1 primerPackageName2 loadedPrimerProject componentName loadSpec primerResolvedProject audit className class newClass |
 
+	loadSpec := self _loadSpecNamed: 'spec_0002'.
+	projectName := loadSpec projectName.
+
 	primerProjectName := 'PrimerSample9'.
 	symDictName1 := self _symbolDictionaryName1.
 	symDictName2 := self _symbolDictionaryName2.
 	primerPackageName1 := primerProjectName, '-', symDictName1.
 	primerPackageName2 := primerProjectName, '-', symDictName2.
-	projectName := 'RowanSample9'.
 	symbolList := Rowan image symbolList.
 	componentName := 'Core'.
-	className := 'RowanSample9Class1'.
+	className := projectName, 'Class1'.
 
 	{ primerProjectName. projectName} 
 		do: [:pn | 
@@ -2666,7 +2706,7 @@ RwRowanSample9Test >> testIssue230 [
 
 	symDict := Rowan image newOrExistingSymbolDictionaryNamed: symDictName2.
 	theClass := IdentityKeyValueDictionary
-		subclass: 'RowanSample9IdentityKeyValueDictionary'
+		subclass: projectName, 'IdentityKeyValueDictionary'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
@@ -2709,7 +2749,6 @@ RwRowanSample9Test >> testIssue230 [
 	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
 	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
 
-	loadSpec := self _loadSpecNamed: 'spec_0002'.
 	resolvedProject := loadSpec resolveStrict.
 
 	class := Rowan globalNamed: className.
@@ -3152,7 +3191,7 @@ RwRowanSample9Test >> testIssue460_0 [
 	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 |
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
 
-	projectName := 'RowanSample9'.
+	projectName := loadSpec projectName.
 	projectNames := {projectName . projectName, '_295'}.
 
 	packageName6 := projectName , '-' , 'NewPackage'.
@@ -3263,7 +3302,7 @@ RwRowanSample9Test >> testIssue460_1 [
 	| projectName projectNames loadSpec loadedProjects resolvedProject packageName1 packageName2 packageName3 packageName4 packageName5 packageName6 packageName7 packageName8 x y className6 oldClass6 class6 ar className1 class1 className2 class2 className5 class5 oldClass5 projectName2 resolvedProject2 project oldResolvedProject projectSetDefinition |
 	loadSpec := self _loadSpecNamed: 'spec_0050'.
 
-	projectName := 'RowanSample9'.
+	projectName := loadSpec projectName.
 	projectName2 := projectName, '_295'.
 	projectNames := {projectName . projectName2}.
 
@@ -3692,9 +3731,9 @@ RwRowanSample9Test >> testIssue514 [
 		changedPackageBlock: [:packageModification | 
 			| packageName |
 			packageName := packageModification key.
-			(#('RowanSample1-Extensions' 'RowanSample1-Core' 'RowanSample1-Tests' ) includes: packageName)
+			({projectName , '-Extensions' . projectName , '-Core' . projectName , '-Tests' } includes: packageName)
 				ifTrue: [ 
-					packageName = 'RowanSample1-Extensions'
+					packageName = (projectName , '-Extensions')
 						ifTrue: [ self assert: packageModification classesModification isEmpty ]
 						ifFalse: [ self deny: packageModification classesModification isEmpty ].
 					self assert: packageModification classExtensionsModification isEmpty.
@@ -3704,7 +3743,7 @@ RwRowanSample9Test >> testIssue514 [
 		changedClassBlock: [ :classModification :visitor |
 			| packageName |
 			packageName := visitor currentPackageDefinition key.
-			self assert: (#('RowanSample9-Core' 'RowanSample9-Tests' ) includes: packageName).
+			self assert: ({projectName , '-Core' . projectName , '-Tests' } includes: packageName).
 			self assert: classModification instanceMethodsModification isEmpty.
 			self assert: classModification classMethodsModification isEmpty.
 			propertyModValidationBlock value: classModification propertiesModification ];
@@ -3811,7 +3850,7 @@ RwRowanSample9Test >> testIssue533 [
 	definedProject 
 		gemstoneSetMethodEnvForUser: 'SystemUser' 
 			to: 1
-			forPackageNamed: 'RowanSample9-Core2';
+			forPackageNamed: projectName, '-Core2';
 		gemstoneSetMethodEnvForUser: 'DataCurator' 
 			to: 2
 			forPackageNamed: packageName;
@@ -3832,10 +3871,10 @@ RwRowanSample9Test >> testIssue533 [
 		assert: (definedProject  gemstoneMethodEnvForPackageNamed: packageName forUser: 'DataCurator')
 		equals: 2.	"existing package, entry for DataCurator"
 	self 
-		assert: (definedProject gemstoneMethodEnvForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneMethodEnvForPackageNamed: projectName, '-Core2'  forUser: 'SystemUser')
 		equals: 1.	"existing package, entry for SystemUser"
 	self 
-		assert: (definedProject gemstoneMethodEnvForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneMethodEnvForPackageNamed: projectName, '-Core2X'  forUser: 'SystemUser')
 		equals: (definedProject gemstoneDefaultMethodEnvForUser: 'SystemUser').	"unknown package, should match default"
 ]
 
@@ -3850,7 +3889,7 @@ RwRowanSample9Test >> testIssue571 [
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
-	packageName1 := 'RowanSample9-Specs-V1'.
+	packageName1 := projectName , '-Specs-V1'.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -4023,642 +4062,22 @@ RwRowanSample9Test >> testIssue653 [
 "package groups validation"
 	self
 		assert: (project packageGroupNamed: 'groups/Examples') packageNames sort
-		equals: #( 'RowanSample9-Examples') sort.
+		equals: { projectName , '-Examples'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Loader') packageNames sort
-		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+		equals: { projectName , '-Loader' . projectName , '-Loader-GemStone' . projectName , '-Loader-Pharo'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Projects') packageNames sort
-		equals: #( 'RowanSample9-Core-Projects') sort.
+		equals: { projectName , '-Core-Projects'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Rowan') packageNames sort
-		equals: #( 'RowanSample9-Core-Rowan') sort.
+		equals: { projectName , '-Core-Rowan'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Tests') packageNames sort
-		equals: #( 'RowanSample9-Tests') sort.
+		equals: { projectName , '-Tests'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
-		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue700_0 [
-	"
-		Reproduce original issue
-		---------------------------
-		load  spec_0065, 
-		create a git clone for RowanSample10 in different disk location, 
-		use gitRepositoryRoot: to point to new disk location,
-		confirm that RowanSample10 repositoryRoot points at new disk location
-			and RowanSample10 tests loaded
-		reload RowanSample9
-		confirm that RowanSample10 repositoryRoot points at new disk location
-			and RowanSample10 tests loaded
-	"
-
-	"https://github.com/GemTalk/Rowan/issues/700"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
-		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome loadSpecs |
-	projectName := 'RowanSample9'.
-	requiredProjectName := 'RowanSample10'.
-	projectNames := {projectName . requiredProjectName}.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
-	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
-
-"resolve project"
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
-	resolvedProject := loadSpec resolveProject.
-
-"load project"
-	loadedProjects := resolvedProject load.
-	project := loadedProjects projectNamed: projectName.
-	requiredProject := loadedProjects projectNamed: requiredProjectName.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: project testSuite tests isEmpty.
-	self deny: requiredProject testSuite tests isEmpty.
-
-"clone RowanSample10 in alternate location"
-	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
-	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0002'.
-	requiredLoadSpec projectsHome: requiredProjectsHome.
-	requiredLoadSpec resolveStrict.
-	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
-	self assert: requiredRepositoryRoot exists.
-
-"update gitUrl"
-	requiredLoadSpec 
-		gitUrl: 'file:', requiredRepositoryRoot pathString;
-		projectsHome: requiredProjectsHome;
-		yourself.
-
-"load"
-	loadSpecs := project loadedLoadSpecifications.
-	loadSpecs addLoadSpec: requiredLoadSpec.
-	loadedProjects := loadSpecs load.
-
-"validate"
-	self assert: requiredProject repositoryRoot equals: requiredRepositoryRoot.
-	self assert: loadedProjects size equals: 2.
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: project testSuite tests isEmpty.
-	self deny: requiredProject testSuite tests isEmpty
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue700_1 [
-	"
-		Confirm that a change to custom conditional attributes prior to reload is honored
-		---------------------------
-		load  spec_0065, 
-		create a git clone for RowanSample10 in different disk location, 
-		use gitRepositoryRoot: to point to new disk location,
-		load
-		confirm that RowanSample10 repositoryRoot points at new disk location
-			and that RowanSample10 tests are loaded
-		--> change the customConditionalProjectAttributes for loaded RowanSample10
-		reload RowanSample9
-		confirm that RowanSample10 tests are not loaded
-	"
-
-	"https://github.com/GemTalk/Rowan/issues/700"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
-		requiredProjectName requiredRepositoryRoot requiredProjectsHome requiredLoadSpec loadSpecs |
-	projectName := 'RowanSample9'.
-	requiredProjectName := 'RowanSample10'.
-	projectNames := {projectName . requiredProjectName}.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
-	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
-
-"resolve project"
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
-	resolvedProject := loadSpec resolveProject.
-
-"load project"
-	loadedProjects := resolvedProject load.
-	project := loadedProjects projectNamed: projectName.
-	requiredProject := loadedProjects projectNamed: requiredProjectName.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: project testSuite tests isEmpty.
-	self deny: requiredProject testSuite tests isEmpty.
-
-"clone RowanSample10 in alternate location"
-	requiredProjectsHome := self _testRowanProjectsSandbox / 'issue700'.
-	requiredLoadSpec := RwRowanSample10Test _loadSpecNamed: 'spec_0002'.
-	requiredLoadSpec projectsHome: requiredProjectsHome.
-	requiredLoadSpec resolveStrict.
-	requiredRepositoryRoot := requiredProjectsHome / requiredLoadSpec projectName.
-	self assert: requiredRepositoryRoot exists.
-
-"update gitRepositoryRoot; change the conditionalProjectAttributes for loaded RowanSample10 reload RowanSample9"
-	loadSpecs := project loadedLoadSpecifications.
-	(loadSpecs specForProjectNamed: requiredProjectName)
-		removeCustomConditionalAttributes: #('mytests');
-		gitUrl: 'file:', requiredRepositoryRoot pathString;
-		 projectsHome: requiredProjectsHome;
-		yourself.
-
-
-"load"
-	loadedProjects := loadSpecs load.
-
-"validate"
-	self assert: requiredProject repositoryRoot equals: requiredRepositoryRoot.
-	self assert: loadedProjects size equals: 2.
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: project testSuite tests isEmpty.
-	self assert: requiredProject testSuite tests isEmpty.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue701_requiredProjectSet [
-	"Create a project set, based upon a project and it's required projects"
-
-	"https://github.com/GemTalk/Rowan/issues/701"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames requiredProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveProject.
-
-"load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-"create required project set from loaded projects"
-	requiredProjectSet := (Rowan projectNamed: projectName) requiredProjectSet.
-
-"load projects"
-	loadedProjects := requiredProjectSet load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-"unload projects"
-	requiredProjectSet unload.
-
-"validate"
-	requiredProjectSet projectNames do: [:pn | 
-		"all projects in requiredProjectSet are expected to be unloaded"
-		Rowan 
-			projectNamed: pn 
-			ifPresent: [:p | 
-				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue704_1 [
-	"use load to RwProject>>#requiredLoadSpecs and RwLoadSpecSet>>#load to load/unload test packages"
-
-	"https://github.com/GemTalk/Rowan/issues/704"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveProject.
-
-"load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"load project and required projects WITHOUT tests for every project except requiredProjectName1"
-	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls |
-		ls projectName = requiredProjectName1 
-			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
-
-"load project and required projects WITH tests  for every project except requiredProjectName1"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls | 
-		ls projectName = requiredProjectName1 
-			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
-			ifFalse: [ ls addCustomConditionalAttributes: #('tests') ] ].	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp | lp projectName = requiredProjectName1 
-			ifTrue: [ self assert: lp testSuite tests isEmpty]
-			ifFalse: [ self deny: lp testSuite tests isEmpty] ].
-	self
-		_standard_validate: project asDefinition
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue704_2 [
-	"use load to RwProject>>#requiredLoadSpecs and RwLoadSpecSet>>#load to load/unload test packages"
-
-	"https://github.com/GemTalk/Rowan/issues/704"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-"resolve project"
-	resolvedProject := loadSpec resolveProject.
-
-"load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"load project and required projects WITHOUT tests"
-	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs removeCustomConditionalAttributes: #('tests').	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp | self assert: lp testSuite tests isEmpty].
-
-"load project and required projects WITH tests"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs addCustomConditionalAttributes: #('tests').	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-	self
-		_standard_validate: project asDefinition
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue705 [
-	"load Bridge, Child, Parent, Bridge, Parent, Child, Bridge sequentially"
-
-	"https://github.com/GemTalk/Rowan/issues/705"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectNames requiredProjectSet project  projectNamesMap |
-	loadSpec := self _loadSpecNamed: 'spec_0069'.
-
-	projectName := loadSpec projectName.
-	requiredProjectNames :=  { 'RowanSample10' . 'RowanSample11' . 'RowanSample12'}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNamesMap := Dictionary new
-		at: 'Bridge' put: {projectName . 'RowanSample11' . 'RowanSample12' };
-		at: 'Child' put:  {projectName . 'RowanSample10' };
-		at: 'Parent' put:  {projectName . 'RowanSample12' };
-		yourself.
-
-"resolve project from default load spec - prime the pump"
-	resolvedProject := loadSpec resolveProject.
-
-"resolve project based on Bridge load spec"
-	loadSpec := RwSpecification fromFile: resolvedProject specsRoot / 'Bridge', 'ston'.
-	loadSpec projectsHome:  self _testRowanProjectsSandbox.
-
-	resolvedProject := loadSpec resolveProject.
-
-"load Bridge component"
-	loadedProjects := resolvedProject load.
-	project := Rowan projectNamed: projectName.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: (projectNamesMap at: 'Bridge').
-
-"load and validate Child component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Child' 
-		previousRequiredProjectNames: {'RowanSample11' . 'RowanSample12'} 
-		projectNamesMap: projectNamesMap.
-
-"load and validate Parent component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Parent' 
-		previousRequiredProjectNames: {'RowanSample10'} 
-		projectNamesMap: projectNamesMap.
-
-"load and validate Bridge component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Bridge' 
-		previousRequiredProjectNames: {'RowanSample12'} 
-		projectNamesMap: projectNamesMap.
-
-"load and validate Parent component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Parent' 
-		previousRequiredProjectNames: {'RowanSample11' . 'RowanSample12'} 
-		projectNamesMap: projectNamesMap.
-
-"load and validate Child component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Child' 
-		previousRequiredProjectNames: {'RowanSample12'} 
-		projectNamesMap: projectNamesMap.
-
-"load and validate Bridge component"
-	self 
-		_processIssue705: resolvedProject 
-		componentNamed: 'Bridge' 
-		previousRequiredProjectNames: {'RowanSample10'} 
-		projectNamesMap: projectNamesMap.
-
-"unload projects"
-	requiredProjectSet := project requiredProjectSet.
-	requiredProjectSet unload.
-
-"validate"
-	projectNames do: [:pn | 
-		"all projects involved are expected to be unloaded"
-		Rowan 
-			projectNamed: pn 
-			ifPresent: [:p | 
-				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue707_01 [
-	"
-		test loaded project load, revert, and reload (RwProject)
-	"
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec projectName projectNames loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames methodValidationBlock primaryProject |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-"load load spec - load primary project (associated with load  spec) AND required projects"
-	loadedProjects := loadSpec load.
-	primaryProject := Rowan projectNamed: projectName.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"Add a method to a class in each of the required projects"
-	methodValidationBlock := [:className |
-		self assert: (Rowan globalNamed: className) new bar equals: 2 ].
-
-	projectNames do: [:pn |
-		| className |
-		className := pn, 'Class1'.
-		(Rowan globalNamed: pn, 'Class1') 
-			rwCompileMethod: 'bar ^2'
-			category: 'added method' 
-			packageName: pn, '-Core'.
-		methodValidationBlock value: className ].
-
-"validate"
-	projectNames do: [:pn |
-		| className |
-		className := pn, 'Class1'.
-		methodValidationBlock value: className ].
-
-"revert primary project - load only primary project from disk"
-	loadedProjects := primaryProject revert.
-	self assert: loadedProjects size equals: 1.
-	loadedProjects projectNamed: primaryProject name. "no error"
-
-"validate"
-	projectNames do: [:pn |
-		| className |
-		className := pn, 'Class1'.
-		pn = projectName
-			ifTrue: [ self deny: ((Rowan globalNamed: pn, 'Class1') includesSelector: #bar) ]
-			ifFalse: [ methodValidationBlock value: className ] ].
-
-"revert requiredProjectName1"
-	(Rowan projectNamed: requiredProjectName1) revert.
-
-"validate"
-	projectNames do: [:pn |
-		| className |
-		className := pn, 'Class1'.
-		({projectName . requiredProjectName1} includes: pn)
-			ifTrue: [ self deny: ((Rowan globalNamed: pn, 'Class1') includesSelector: #bar) ]
-			ifFalse: [ methodValidationBlock value: className ] ].
-
-"reload primary project AND required projects from disk"
-	loadedProjects := primaryProject reload.
-	self assert: loadedProjects size equals: projectNames size.
-	loadedProjects projectNamed: primaryProject name. "no error"
-
-"validate"
-	projectNames do: [:pn |
-		| className |
-		className := pn, 'Class1'.
-		self deny: ((Rowan globalNamed: pn, 'Class1') includesSelector: #bar) ].
-
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue711_1 [
-	"
-		In fileinrowan.topaz we read the Kernel component using a set of custom 
-		attributes that are not part of the load spec. In the current implementation, 
-		the conditional attributes are stored in the 
-		_Project_Definition_CustomConditionalAttributes property of the loaded project
-		(not in the load spec), but when the loaded project is reloaded, we revert
-		to using the attributes in the load spec ...
-
-		This test is expected to validate the new api that will be used in fileinrowan.topaz
-		to replace the use of RwResolvedProjectV2 >> 	
-		readProjectComponentNames:customConditionalAttributes: (which is slated to
-		be removed).
-	"
-
-	"https://github.com/GemTalk/Rowan/issues/711"
-
-	| loadSpec projectName projectNames loadSpecs loadedProjects project |
-	loadSpec := self _loadSpecNamed: 'spec_0070'.
-
-	projectName := loadSpec projectName.
-	projectNames := {projectName }.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve project"
-	loadSpecs := loadSpec resolve.
-
-"initial load"
-	loadedProjects := loadSpecs load.
-	project := loadedProjects projectNamed: projectName.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
-
-"update the projects using tests, attr1 and attr2"
-	loadSpecs := project loadedLoadSpecifications.
-	(loadSpecs specForProjectNamed: projectName)
-		componentNames: #( 'Core');
-		addCustomConditionalAttributes: #('attr1' 'attr2' 'tests').
-
-"and load"
-	loadSpecs load.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
-
-"reload ... should be exactly the same as load"
-	project reload.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+		equals: { projectName , '-Core' . projectName , '-Core-Projects'} sort.
 ]
 
 { #category : 'tests' }
@@ -4703,7 +4122,7 @@ RwRowanSample9Test >> testIssue711_2 [
 	pharoProject := pharoSpec read: pharoPlatformAttributes.
 
 "validate"
-	self assert: pharoProject packageNames asArray sort equals: { 'RowanSample9-Core' . 'RowanSample9-Definitions' . 'RowanSample9-Definitions-Pharo' . 'RowanSample9-Definitions-Pharo-Tests' . 'RowanSample9-Definitions-Tests' . 'RowanSample9-Specs' . 'RowanSample9-Specs-Tests' . 'RowanSample9-Tests'} sort.
+	self assert: pharoProject packageNames asArray sort equals: { projectName , '-Core' . projectName , '-Definitions' . projectName , '-Definitions-Pharo' . projectName , '-Definitions-Pharo-Tests' . projectName , '-Definitions-Tests' . projectName , '-Specs' . projectName , '-Specs-Tests' . projectName , '-Tests'} sort.
 
 "load ... and expect one Warning and an error"
 	warningCount := 0.
@@ -4722,7 +4141,7 @@ RwRowanSample9Test >> testIssue711_2 [
 		ifNil: [ self assert: false description: 'Expected Warning not signalled' ].
 	warningCount = 1
 		ifFalse: [  self assert: false description: 'Expected only a single Warning not ', warningCount printString ].
-	expectedMessage := 'the project ''RowanSample9'' was read from disk with platform conditional attributes (anArray( ''common'', ''pharo'')) that is not compatible with the platform conditional attributes for the current image (anArray( ''common'', ''gemstone'', ''gemstone-kernel'', ', gsVersionString, ')) so the project may have compile errors when loaded.'.
+	expectedMessage := 'the project ''', projectName , ''' was read from disk with platform conditional attributes (anArray( ''common'', ''pharo'')) that is not compatible with the platform conditional attributes for the current image (anArray( ''common'', ''gemstone'', ''gemstone-kernel'', ', gsVersionString, ')) so the project may have compile errors when loaded.'.
 	self 
 		assert: warningMessage 
 		equals: expectedMessage. "Warning signalled, but expected message did not match'"
@@ -4731,530 +4150,6 @@ RwRowanSample9Test >> testIssue711_2 [
 	expectedMessage := ''.
 	self 
 		assert: (errorMessage beginsWith: 'a CompileError occurred (error 1001), undefined symbol  PluggableDictionary,'). "Error signalled, but expected message did not match"
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue714_1 [
-	"use the non-primary load spec to clone and load an 'embedded' project"
-
-	"https://github.com/dalehenrich/Rowan/issues/714"
-
-	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
-
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
-	projectName := loadSpec projectName.
-	projectName1 := projectName, '_1'.
-	projectName2 := projectName, '_2'.
-	projectName3 := projectName, '_3'.
-	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"use resolveProject so we can extract the gitRoot for two reasons:
-	1. read the original load spec from one of the 'embedded' projects
-	2. delete the git repository so that we can verify that the the 
-		'embedded' project load spec will properly clone the project
-"
-	resolvedProject := loadSpec resolveProject.
-	gitRoot := resolvedProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
-	gitRoot ensureDeleteAll.
-
-"load (resolve(clone)/load) projectName1"
-	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
-	loadedProjects := loadSpec1 load.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: { projectName1 }.
-
-	loadedProjects do: [:theProject |
-		| theProjectName |
-		self deny: theProject testSuite tests isEmpty.
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
-		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue714_2 [
-	"use the non-primary load spec to clone and load an 'embedded' project; THEN
-		use the primary load spec to load the primary project (which requires the 
-		'embedded' project"
-
-	"https://github.com/dalehenrich/Rowan/issues/714"
-
-	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
-
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
-	projectName := loadSpec projectName.
-	projectName1 := projectName, '_1'.
-	projectName2 := projectName, '_2'.
-	projectName3 := projectName, '_3'.
-	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"use resolveProject so we can extract the gitRoot for two reasons:
-	1. read the original load spec from one of the 'embedded' projects
-	2. delete the git repository so that we can verify that the the 
-		'embedded' project load spec will properly clone the project
-"
-	resolvedProject := loadSpec resolveProject.
-	gitRoot := resolvedProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
-	gitRoot ensureDeleteAll.
-
-"load (resolveProject(clone)/load) projectName1"
-	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
-	loadedProjects := loadSpec1 load.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: { projectName1 }.
-
-	loadedProjects do: [:theProject |
-		| theProjectName |
-		self deny: theProject testSuite tests isEmpty.
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
-		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
-
-"load primary project (projectName)"
-	loadedProjects := loadSpec load.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-	loadedProjects do: [:theProject |
-		| theProjectName |
-		self deny: theProject testSuite tests isEmpty.
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
-		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue714_3 [
-	"split the 'embedded projects for spec_0025 across two git checkouts"
-
-	"https://github.com/dalehenrich/Rowan/issues/714"
-
-	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 loadSpecSet gitRoot loadedProjects |
-
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'RowanSample9_1') ensureDeleteAll.
-
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
-	projectName := loadSpec projectName.
-	projectName1 := projectName, '_1'.
-	projectName2 := projectName, '_2'.
-	projectName3 := projectName, '_3'.
-	projectNames := {projectName. projectName1 . projectName2 .  projectName3 . }.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve the loadSpec ... clone project and create a loadSpecSet"
-	loadSpecSet := loadSpec resolve.
-
-"use resolveProject so we can grab the gitRoot (without actually loading the project)
-	and use the gitRoot to read a loadSpec for one of the embedded projects"
-	gitRoot := loadSpec resolveProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
-
-"prepare loadSpec1 so that when it is processed it will clone it's own project and be 
-	loaded from the new clone"
-	loadSpec1 
-		projectsHome: self _testRowanProjectsSandbox;
-		projectAlias: projectName1;
-		yourself.
-
-"load loadSpec using loadSpec1 (should clone along the way)"
-	loadedProjects := loadSpecSet 
-		addLoadSpec: loadSpec1;
-		load.
-
-"validate"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-	loadedProjects do: [:theProject |
-		| theProjectName |
-		self deny: theProject testSuite tests isEmpty.
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: (Rowan globalNamed: theProjectName, 'Class1') notNil.
-		self assert: (Rowan globalNamed: theProjectName, 'TestCase') notNil ].
-
-"confirm that projectName2 is loaded from a different git repository" 
-	self 
-		deny: (Rowan projectNamed: projectName) gitRoot 
-		equals: (Rowan projectNamed: projectName1) gitRoot.
-	self 
-		assert: (Rowan projectNamed: projectName1) gitRoot 
-		equals: (self _testRowanProjectsSandbox / projectName1).
-	self 
-		assert: (GsFile serverRealPath: ((Rowan projectNamed: projectName) gitRoot pathString))
-		equals: (GsFile serverRealPath: ((Rowan projectNamed: projectName2) gitRoot pathString)).
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue715_01 [
-	"getting down to brass tacks for rules and usage of #loadedLoadSpecifications"
-
-	"requiredLoadSpecs load -- load as defined by load spec edits"
-
-	"https://github.com/GemTalk/Rowan/issues/715"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-[
-"resolve project"
-	resolvedProject := loadSpec read.
-
-"load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"every project includes 'tests' by default"
-	project := Rowan projectNamed: projectName.
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls | 
-		self assert: (ls customConditionalAttributes includes: 'tests') ].
-
-"take loaded load specs for required projects and remove 'tests' attributue for every project except requiredProjectName1"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls |
-		ls projectName = requiredProjectName1 
-			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
-
-"confirm that the changes have been made as expected"
-	requiredLoadSpecs do: [:ls | 
-		ls projectName = requiredProjectName1 
-			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
-			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
-
-"confirm that the load spec for loaded projects match expectations"
-	loadedProjects do: [:p | | ls |
-		ls := p loadSpecification.
-		self assert: (requiredLoadSpecs specForProjectNamed: p name) = ls.
-		ls projectName = requiredProjectName1 
-			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
-			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
-
-"load specs from the loaded projects (i.e., no resolve and no read from disk)"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-"confirm that the load spec for loaded projects match loaded state (not disk state)"
-	requiredLoadSpecs do: [:ls | 
-		ls projectName = requiredProjectName1 
-			ifTrue: [ self assert: (ls customConditionalAttributes includes: 'tests') ]
-			ifFalse: [ self deny: (ls customConditionalAttributes includes: 'tests') ] ].
-
-"load project and required projects WITH tests  for every project except requiredProjectName1"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls | 
-		ls projectName = requiredProjectName1 
-			ifTrue: [ ls removeCustomConditionalAttributes: #('tests') ]
-			ifFalse: [ ls addCustomConditionalAttributes: #('tests') ] ].	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp | lp projectName = requiredProjectName1 
-			ifTrue: [ self assert: lp testSuite tests isEmpty]
-			ifFalse: [ self deny: lp testSuite tests isEmpty] ].
-	self
-		_standard_validate: project asDefinition
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-] ensure: [
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue715_02 [
-	"#reload should reread packages for project (and required projects) from disk, using the loaded load specs, and load into image"
-
-	"project reload -- reuse primary project load spec, reread required specs and packages from disk"
-
-	"https://github.com/GemTalk/Rowan/issues/715"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-[
-"resolve project" 
-	resolvedProject := loadSpec read.
-
-"load project - matches what is on disk"
-	loadedProjects := resolvedProject load.
-	project := Rowan projectNamed: projectName.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"take loaded load specs for required projects and remove 'tests' attributue for every project except requiredProjectName1"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls |
-		ls projectName = projectName 
-			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
-
-"load requiredLoadSpecs"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp |
-		lp projectName = projectName
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
-
-"reload project - preserve primary load spec, reload required load specs"
-	loadedProjects := project reload.
-
-"validate"
-	self
-		_standard_validate: project asDefinition
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty ].
-] ensure: [ 
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue715_03 [
-	"#revert should reread packages from disk for the specified project, using the loaded load spec, and load into image"
-
-	"project revert -- reread packages from disk using loaded specs"
-
-	"https://github.com/GemTalk/Rowan/issues/715"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects requiredProjectName1 requiredProjectName2 requiredProjectName3 requiredProjectNames project requiredLoadSpecs |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-
-	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
-	requiredProjectName2 := 'RowanSample11'.
-	requiredProjectName3 := 'RowanSample12'.
-	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
-	projectNames := {projectName }, requiredProjectNames.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	requiredProjectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-[
-"resolve project"
-	resolvedProject := loadSpec read.
-
-"load project - matches what is on disk"
-	loadedProjects := resolvedProject load.
-	project := Rowan projectNamed: projectName.
-
-"validate"
-	self
-		_standard_validate: resolvedProject
-		loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	loadedProjects do: [:lp | self deny: lp testSuite tests isEmpty].
-
-"take loaded load specs for required projects from disk and remove 'tests' attributue for every project except requiredProjectName1"
-	requiredLoadSpecs := project loadedLoadSpecifications.
-	requiredLoadSpecs do: [:ls |
-		ls projectName = requiredProjectName1 
-			ifFalse: [ ls removeCustomConditionalAttributes: #('tests') ] ].	
-
-"load project"
-	loadedProjects := requiredLoadSpecs load.
-
-"validate"
-	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
-
-"revert project - expect to match loaded specs"
-	loadedProjects := project revert.
-
-"validate"
-	self
-		_standard_validate: project asDefinition
-		loadedProjects: loadedProjects
-		expectedProjectNames: {project projectName}.
-
-	loadedProjects do: [:lp |
-		lp projectName = requiredProjectName1 
-			ifTrue: [ self deny: lp testSuite tests isEmpty]
-			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
-] ensure: [
-"clean up"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue724 [
-	"https://github.com/GemTalk/Rowan/issues/724"
-
-	"The original bug occurred while trying to read Rowan v1.2.10 packages, using Rowan v3.0.
-		The bug occurs if you are reading a project from disk that is already loaded in the image AND
-		the directory structure of an embedded project being read is different from the directory 
-		structure of the loaded embedded project. 
-	To emulate that I am using two projects with identical package/class structure (RowantSample9 
-		spec_0053 and spec_0072) but different directory structures. The primary load specs are 
-		identical.
-	The simplest test case is to start with a standard clone spec_0072; read the load spec for spec_0072
-		from disk (load spec A) and make a copy (load spec B); delete the standard clone, because
-		we don't want the standard clone to be available (both spec A and spec B must have mutually
-		exclusive project homes)."
-
-	| loadSpec loadSpecA loadSpecB projectsHome projectsHomeA projectsHomeB projectName projectNames requiredProjectName loadSpecs loadedProjects projectDefinitionSet |
-	loadSpec := self _loadSpecNamed: 'spec_0072'. "clone the repo"
-
-	requiredProjectName := 'RowanSample9_embedded_1'.
-	projectName := loadSpec projectName.
-	projectNames := {projectName . requiredProjectName}.
-
-	projectsHome := self _testRowanProjectsSandbox.
-
-"read load spec A from disk and make load spec B copy"
-	loadSpecA := RwLoadSpecificationV2 fromFile: projectsHome/ loadSpec projectName / 'rowan' / 'specs' / 'spec_0072.ston'.
-	loadSpecB := loadSpecA copy.
-
-"get rid of standard project and nuke remnants of A and B"
-	(projectsHome / loadSpec projectName) ensureDeleteAll.
-
-	(self _testRowanProjectsSandbox / 'issue_724_a') ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'issue_724_b') ensureDeleteAll.
-
-"clean up any remnants of loaded projects"
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"clone (resolve) and load spec_0053 using a clone of the project and load spec A"
-	projectsHomeA := self _testRowanProjectsSandbox / 'issue_724_a'.
-	projectsHomeA ensureCreateDirectory.
-	loadSpecA projectsHome: projectsHomeA.
-	loadSpecA revision: 'spec_0075'.
-	loadSpecs := loadSpecA resolve.
-	loadedProjects := loadSpecs load.
-
-"confirm that spec_0053 loaded cleanly"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
-	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
-
-"clone (resolve) and load spec_0072 using a clone of the project and load spec B"
-
-	projectsHomeB := self _testRowanProjectsSandbox / 'issue_724_b'.
-	projectsHomeB ensureCreateDirectory.
-
-	loadSpecB projectsHome: projectsHomeB.
-	self deny: (projectsHomeB / loadSpecB projectName) exists.
-	loadSpecs := loadSpecB resolve.
-	self assert: (projectsHomeB / loadSpecB projectName) exists.
-
-	projectsHomeA ensureDeleteAll. "eliminate the directory that load spec A originated from"
-	projectDefinitionSet := loadSpecs read.
-
-"load"
-	loadedProjects := projectDefinitionSet load.
-
-"confirm that spec_0072 loaded cleanly"
-	self
-		_standard_validateLoadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self deny: (loadedProjects projectNamed: projectName) testSuite tests isEmpty.
-	self deny: (loadedProjects projectNamed: requiredProjectName) testSuite tests isEmpty.
 ]
 
 { #category : 'tests' }
@@ -5282,14 +4177,14 @@ RwRowanSample9Test >> testIssue743_0 [
 		self deny: packagesModification isEmpty.
 		elementsModified := packagesModification elementsModified.
 		self assert: elementsModified size = 1.
-		packageModification := elementsModified at: 'RowanSample9-Core'.
+		packageModification := elementsModified at: projectName, '-Core'.
 		self assert: packageModification propertiesModification isEmpty.
 		self assert: packageModification classExtensionsModification isEmpty.
 		classesModification := packageModification classesModification.
 		self deny: classesModification isEmpty.
 		elementsModified := classesModification elementsModified.
 		self assert: elementsModified size = 1.
-		classModification := elementsModified at: 'RowanSample9Class1'.
+		classModification := elementsModified at: projectName, 'Class1'.
 		self assert: classModification instanceMethodsModification isEmpty.
 		self assert: classModification classMethodsModification isEmpty.
 		propertiesModification := classModification propertiesModification.
@@ -5310,7 +4205,7 @@ RwRowanSample9Test >> testIssue743_0 [
 "validate"
 	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName, 'Class1'.
 	self assert: class category equals: class rwCategory.
 	oldCategory := class category.
 
@@ -5362,14 +4257,14 @@ RwRowanSample9Test >> testIssue743_1 [
 		self deny: packagesModification isEmpty.
 		elementsModified := packagesModification elementsModified.
 		self assert: elementsModified size = 1.
-		packageModification := elementsModified at: 'RowanSample9-Core'.
+		packageModification := elementsModified at: projectName, '-Core'.
 		self assert: packageModification propertiesModification isEmpty.
 		self assert: packageModification classExtensionsModification isEmpty.
 		classesModification := packageModification classesModification.
 		self deny: classesModification isEmpty.
 		elementsModified := classesModification elementsModified.
 		self assert: elementsModified size = 1.
-		classModification := elementsModified at: 'RowanSample9Class1'.
+		classModification := elementsModified at: projectName, 'Class1'.
 		self deny: classModification instanceMethodsModification isEmpty.
 		elementsModified :=  classModification instanceMethodsModification elementsModified.
 		methodModification := elementsModified at: #instanceFoo.
@@ -5390,7 +4285,7 @@ RwRowanSample9Test >> testIssue743_1 [
 "validate"
 	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName, 'Class1'.
 
 	[	
 		Rowan gemstoneTools topaz currentTopazPackageName: class rowanPackageName.
@@ -5436,11 +4331,11 @@ RwRowanSample9Test >> testIssue752_01 [
 	"https://github.com/GemTalk/Rowan/issues/752"
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
+	projectName1 := loadSpec1 projectName.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
-	projectName1 := loadSpec1 projectName.
 	projectName2 := loadSpec2 projectName.
 
   {projectName1 . projectName2 }
@@ -5451,7 +4346,7 @@ RwRowanSample9Test >> testIssue752_01 [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5500,7 +4395,7 @@ RwRowanSample9Test >> testIssue752_02a [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
@@ -5515,7 +4410,7 @@ RwRowanSample9Test >> testIssue752_02a [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5562,7 +4457,7 @@ RwRowanSample9Test >> testIssue752_02b1 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
@@ -5577,7 +4472,7 @@ RwRowanSample9Test >> testIssue752_02b1 [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5623,7 +4518,7 @@ RwRowanSample9Test >> testIssue752_02b2 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
@@ -5638,7 +4533,7 @@ RwRowanSample9Test >> testIssue752_02b2 [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5683,7 +4578,7 @@ RwRowanSample9Test >> testIssue752_03 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
@@ -5698,7 +4593,7 @@ RwRowanSample9Test >> testIssue752_03 [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5745,7 +4640,7 @@ RwRowanSample9Test >> testIssue752_04 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 exceptionSeen
 		projectSetDefinition projectDef |
-	loadSpec1 := self _loadSpecNamed: 'spec_0005'.
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
 		yourself.
@@ -5760,7 +4655,7 @@ RwRowanSample9Test >> testIssue752_04 [
 	className := projectName1 , 'Class1'.
 
 "load project1"
-	projects := loadSpec1 load.
+	projects := loadSpec1 resolveStrict load.
 	project1 := projects projectNamed: projectName1.
 
 "validate"
@@ -5811,8 +4706,8 @@ RwRowanSample9Test >> testIssue761 [
 "read project"
 	definedProject := resolvedProject read.
 
-	methodDef := ((definedProject packageNamed: 'RowanSample9-Extensions')
-		classExtensionDefinitionNamed: 'RowanSample9Class1') classMethodDefinitions at:#bar.
+	methodDef := ((definedProject packageNamed: projectName, '-Extensions')
+		classExtensionDefinitionNamed: projectName, 'Class1') classMethodDefinitions at:#bar.
 	methodDef source: 'bar "modified method" ^''bar'''.
 
 "write project without error"
@@ -5857,7 +4752,7 @@ RwRowanSample9Test >> testIssue766 [
 	visitor visit: projectSetModification.
 
 	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
-	self assert: stream contents equals: self _expectedIssue766GsFileContents
+	self assert: stream contents equals: (self _expectedIssue766GsFileContents: projectName)
 ]
 
 { #category : 'tests' }
@@ -6025,22 +4920,22 @@ RwRowanSample9Test >> testIssue780 [
 "package groups validation"
 	self
 		assert: (definedProject packageGroupNamed: 'groups/Examples') packageNames sort
-		equals: #( 'RowanSample9-Examples') sort.
+		equals: { projectName, '-Examples'} sort.
 	self
 		assert: (definedProject packageGroupNamed: 'groups/Loader') packageNames sort
-		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+		equals: { projectName, '-Loader' . projectName, '-Loader-GemStone' . projectName, '-Loader-Pharo'} sort.
 	self
 		assert: (definedProject packageGroupNamed: 'groups/Projects') packageNames sort
-		equals: #( 'RowanSample9-Core-Projects') sort.
+		equals: { projectName, '-Core-Projects'} sort.
 	self
 		assert: (definedProject packageGroupNamed: 'groups/Rowan') packageNames sort
-		equals: #( 'RowanSample9-Core-Rowan') sort.
+		equals: { projectName, '-Core-Rowan'} sort.
 	self
 		assert: (definedProject packageGroupNamed: 'groups/Tests') packageNames sort
-		equals: #( 'RowanSample9-Tests') sort.
+		equals: { projectName, '-Tests'} sort.
 	self
 		assert: (definedProject packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
-		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
+		equals: { projectName, '-Core' . projectName, '-Core-Projects'} sort.
 ]
 
 { #category : 'tests' }
@@ -6088,22 +4983,22 @@ RwRowanSample9Test >> testIssue781 [
 "package groups validation"
 	self
 		assert: (project packageGroupNamed: 'groups/Examples') packageNames sort
-		equals: #( 'RowanSample9-Examples') sort.
+		equals: { projectName, '-Examples'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Loader') packageNames sort
-		equals: #( 'RowanSample9-Loader' 'RowanSample9-Loader-GemStone' 'RowanSample9-Loader-Pharo') sort.
+		equals: { projectName, '-Loader' . projectName, '-Loader-GemStone' . projectName, '-Loader-Pharo'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Projects') packageNames sort
-		equals: #( 'RowanSample9-Core-Projects') sort.
+		equals: { projectName, '-Core-Projects'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Rowan') packageNames sort
-		equals: #( 'RowanSample9-Core-Rowan') sort.
+		equals: { projectName, '-Core-Rowan'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/Tests') packageNames sort
-		equals: #( 'RowanSample9-Tests') sort.
+		equals: { projectName, '-Tests'} sort.
 	self
 		assert: (project packageGroupNamed: 'groups/WorkGroup_dkh') packageNames sort
-		equals: #( 'RowanSample9-Core' 'RowanSample9-Core-Projects') sort.
+		equals: { projectName, '-Core' . projectName, '-Core-Projects'} sort.
 ]
 
 { #category : 'tests' }
@@ -6316,10 +5211,10 @@ RwRowanSample9Test >> testIssue809_01 [
 
 "validate"
 	self 
-		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2')
+		assert: (loadedProject gemstoneSymbolDictNameForPackageNamed: projectName, '-Core2')
 		equals: 'RowanSample9_3'.
 	self 
-		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2')
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: projectName, '-Core2')
 		equals: 'RowanSample9_3'.
 ]
 
@@ -6352,7 +5247,7 @@ RwRowanSample9Test >> testIssue809_02 [
 	definedProject 
 		gemstoneSetUseSessionMethodsForExtensionsForUser: 'SystemUser' 
 			to: true
-			forPackageNamed: 'RowanSample9-Core2';
+			forPackageNamed: projectName, '-Core2';
 		gemstoneSetUseSessionMethodsForExtensionsForUser: 'DataCurator' 
 			to: true
 			forPackageNamed: packageName;
@@ -6373,10 +5268,10 @@ RwRowanSample9Test >> testIssue809_02 [
 		assert: (definedProject  gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName forUser: 'DataCurator')
 		equals: true.	"existing package, entry for DataCurator"
 	self 
-		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: projectName, '-Core2'  forUser: 'SystemUser')
 		equals: true.	"existing package, entry for SystemUser"
 	self 
-		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneUseSessionMethodsForExtensionsForPackageNamed: projectName, '-Core2X'  forUser: 'SystemUser')
 		equals: (definedProject gemstoneDefaultUseSessionMethodsForExtensionsForUser: 'SystemUser').	"unknown package, should match default"
 ]
 
@@ -6409,7 +5304,7 @@ RwRowanSample9Test >> testIssue809_03 [
 	definedProject 
 		gemstoneSetSymbolDictNameForUser: 'SystemUser' 
 			to: 'SystemUserDict' 
-			forPackageNamed: 'RowanSample9-Core2';
+			forPackageNamed: projectName, '-Core2';
 		gemstoneSetSymbolDictNameForUser: 'DataCurator' 
 			to: 'DataCuratorDict' 
 			forPackageNamed: packageName;
@@ -6430,10 +5325,10 @@ RwRowanSample9Test >> testIssue809_03 [
 		assert: (definedProject  gemstoneSymbolDictNameForPackageNamed: packageName forUser: 'DataCurator')
 		equals: 'DataCuratorDict'.	"existing package, entry for DataCurator"
 	self 
-		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: projectName, '-Core2'  forUser: 'SystemUser')
 		equals: 'SystemUserDict'.	"existing package, entry for SystemUser"
 	self 
-		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: 'RowanSample9-Core2X'  forUser: 'SystemUser')
+		assert: (definedProject gemstoneSymbolDictNameForPackageNamed: projectName, '-Core2X'  forUser: 'SystemUser')
 		equals: (definedProject gemstoneDefaultSymbolDictNameForUser: 'SystemUser').	"unknown package, should match default"
 ]
 
@@ -6888,283 +5783,6 @@ false ifTrue: [
 		assert: (loadedProjects projectNamed: embeddedProjectName) gitRoot pathString
 		equals: (loadedSpecs specForProjectNamed: projectName) gitUrl asRwUrl pathString.
  ]
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_read_01 [
-	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec repoDir loadSpecs projectName platformConditionalAttributes projectSetDefinition embeddedProjectName projectDef classDef |
-	loadSpec := self _loadSpecNamed: 'spec_0078'.
-	projectName := loadSpec projectName.
-	embeddedProjectName := projectName, '_embedded_1'.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-"read"
-	platformConditionalAttributes := { 'common' . 'gemstone' . '2.4.0' asRwGemStoneVersionNumber }.
-	loadSpecs := loadSpec resolve: platformConditionalAttributes.
-	projectSetDefinition := loadSpecs read: platformConditionalAttributes.
-
-"validate"
-	projectDef := projectSetDefinition projectNamed: projectName.
-	self assert: 
-		(projectDef packageNamed: 'RowanSample9-GemStone3x-Core' ifAbsent: []) isNil.
-	self assert: 
-		((projectDef packageNamed: 'RowanSample9-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9GemStone24xClass1' ifAbsent: []) notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9TestCase' ifAbsent: [].
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9GemStone24xClass1').
-	self assert: (projectDef packageNamed: 'RowanSample9-GemStone3x-Tests' ifAbsent: []) isNil.
-
-	projectDef := projectSetDefinition projectNamed: embeddedProjectName.
-	self assert: (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9_embedded_1GemStone24xClass1' ifAbsent: [].
-	self assert: classDef notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9_embedded_1TestCase' ifAbsent: [].
-	self assert: classDef notNil.
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9_embedded_1GemStone24xClass1').
-	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_resolve_01 [
-	"RowanSample9:spec_0001 ... self contained project" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec repoDir theSpec loadSpecs projectName readProjectSet theProject |
-	loadSpec := self _loadSpecNamed: 'spec_0001'.
-	projectName := loadSpec projectName.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-	{ projectName } do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve"
-	loadSpecs := loadSpec resolve.
-
-"validate"
-	self assert: loadSpecs projectNames asArray equals: { projectName}.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
-	loadSpecs do: [:aSpec |
-		self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', repoDir pathString ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray equals: { projectName}.
-	theProject := readProjectSet projectNamed: projectName.
-	self 
-		assert: theProject packageNames asArray sort 
-		equals: {'RowanSample9-Core' . 'RowanSample9-Tests'} sort.
-	self assert: ((theProject packageNamed: 'RowanSample9-Core') classDefinitionNamed: 'RowanSample9Class1' ifAbsent: []) notNil.
-	self assert: ((theProject packageNamed: 'RowanSample9-Tests') classDefinitionNamed: 'RowanSample9TestCase' ifAbsent: []) notNil.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_resolve_02 [
-	"RowanSample9:spec_0073 ... project with 3 required (embedded) projects" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0073'.
-	projectName := loadSpec projectName.
-	requiredProjectNames := { 'RowanSample9_3' . 'RowanSample9_1' . 'RowanSample9_2' }.
-
-	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
-	repoDir ensureDeleteAll.
-
-	({ projectName}, requiredProjectNames) do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve"
-	loadSpecs := loadSpec resolve.
-
-"validate"
-	self assert: loadSpecs projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: repoDir exists.
-	self assert: theSpec projectUrl equals: 'file:', repoDir pathString.
-	self assert: theSpec gitUrl equals: 'file:', repoDir pathString.
-	loadSpecs do: [:aSpec |
-		aSpec specName = 'spec_0073'
-			ifTrue: [
-				self assert: aSpec projectUrl equals: 'file:', repoDir pathString.
-				self assert: aSpec gitUrl equals: 'file:', repoDir pathString ]
-			ifFalse: [ 
-				self assert: aSpec projectUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot.
-				self assert: aSpec gitUrl equals: 'file:', repoDir pathString, '/', aSpec relativeRepositoryRoot ] ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: ({ projectName}, requiredProjectNames) sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_resolve_03 [
-	"RowanSample9:spec_0066 ... project with 3 required (external) projects" 
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0066'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve"
-	loadSpecs := loadSpec resolve.
-
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_resolve_04 [
-	"RowanSample9:spec_0067 ... project with 3 required (external) projects - linear chain of required projects"
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0067'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve"
-	loadSpecs := loadSpec resolve.
-
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testLoadSpec_resolve_05 [
-	"RowanSample9:spec_0068 ... project with 3 required (external) projects - recursive chain of required projects"
-
-	"https://github.com/GemTalk/Rowan/issues/707"
-
-	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
-	loadSpec := self _loadSpecNamed: 'spec_0068'.
-	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
-
-	projectNames do: [:pn |
-		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-"resolve"
-	loadSpecs := loadSpec resolve.
-
-"validate"
-	theSpec :=  (loadSpecs specForProjectNamed: projectName).
-	self assert: theSpec ~~ loadSpec.
-	self assert: loadSpecs projectNames asArray sort equals: projectNames sort.
-	loadSpecs do: [:aSpec |
-		| projectDir |
-		projectDir := self _testRowanProjectsSandbox / aSpec projectName.
-		self assert: projectDir exists.
-		self assert: aSpec projectUrl equals: 'file:', projectDir pathString.
-		self assert: aSpec gitUrl equals: 'file:', projectDir pathString ].
-
-"read"
-	readProjectSet := loadSpecs read.
-	self assert: readProjectSet projectNames asArray sort equals: projectNames sort.
-	readProjectSet do: [:theProject |
-		| theProjectName |
-		theProjectName := theProject projectName.
-		self 
-			assert: theProject packageNames asArray sort 
-			equals: {theProjectName, '-Core' . theProjectName, '-Tests'} sort.
-		self assert: ((theProject packageNamed: theProjectName, '-Core') 
-			classDefinitionNamed: theProjectName, 'Class1' ifAbsent: []) notNil.
-		self assert: ((theProject packageNamed: theProjectName, '-Tests') 
-			classDefinitionNamed: theProjectName, 'TestCase' ifAbsent: []) notNil ].
 ]
 
 { #category : 'issue 493' }
@@ -9741,7 +8359,7 @@ RwRowanSample9Test >> testSwitchRepository [
 		Confirm that projectsHome and repositoryRoot stay in sync as we excercise the various APIs for 
 		manipulating projectsHome and repositoryRoot."
 
-	| loadSpec_0002 loadSpec_0003 projectNames resolvedSpecs_0002 resolvedSpecs_0003 resolvedSpec_0002 resolvedSpec_0003 project loadedProjects commitId loadedSpecs |
+	| loadSpec_0002 loadSpec_0003 projectName projectNames resolvedSpecs_0002 resolvedSpecs_0003 resolvedSpec_0002 resolvedSpec_0003 project loadedProjects commitId loadedSpecs |
 	loadSpec_0002 := (self _loadSpecNamed: 'spec_0002')
 		projectAlias: 'RowanSample9_0002';
 		yourself.
@@ -9749,7 +8367,9 @@ RwRowanSample9Test >> testSwitchRepository [
 		projectAlias: 'RowanSample9_0003';
 		yourself.
 
-	projectNames := {loadSpec_0002 projectName. loadSpec_0003 projectName}.
+	projectName := loadSpec_0002 projectName.
+	self assert: projectName equals: loadSpec_0003 projectName.
+	projectNames := { projectName }.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -9765,20 +8385,20 @@ RwRowanSample9Test >> testSwitchRepository [
 
 "load spec_0002"
 	loadedProjects := resolvedSpecs_0002 load.
-	project := Rowan projectNamed: loadSpec_0002 projectName.
+	project := Rowan projectNamed: projectName.
 
 "validate"
 	self _standard_validate_loadedProjects: loadedProjects.
 
 "validate"
-	resolvedSpec_0002 := resolvedSpecs_0002 specForProjectNamed: project name.
-	resolvedSpec_0003 := resolvedSpecs_0003 specForProjectNamed: project name.
+	resolvedSpec_0002 := resolvedSpecs_0002 specForProjectNamed: projectName.
+	resolvedSpec_0003 := resolvedSpecs_0003 specForProjectNamed: projectName.
 
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
 
 "load project from spec_0003 checkout: changing gitUrl of loaded project"
 	loadedSpecs := project loadedLoadSpecifications.
-	(loadedSpecs specForProjectNamed: project name)
+	(loadedSpecs specForProjectNamed: projectName)
 		gitUrl: resolvedSpec_0003 gitUrl.
 	loadedProjects := loadedSpecs load.
 
@@ -9787,7 +8407,7 @@ RwRowanSample9Test >> testSwitchRepository [
 	self assert: project asDefinition repositoryRoot = project repositoryRoot.
 	self assert: resolvedSpec_0003 gitUrl equals: project gitUrl.
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: (Rowan globalNamed: projectName, 'Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
 	self assert: project loadSpecification gitUrl equals: resolvedSpec_0003 gitUrl.
 
 "reload project1 from spec_0003 checkout: using readOnlyRepository:commitId: to define root of loaded project"
@@ -9803,7 +8423,7 @@ RwRowanSample9Test >> testSwitchRepository [
 	self assert: project asDefinition repositoryRoot = project repositoryRoot.
 	self assert: resolvedSpec_0003 gitUrl equals: project readOnlyDiskUrl.
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 gitUrl.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: (Rowan globalNamed: projectName, 'Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
 	self deny: project commitId equals: commitId.	"commitId is not expected to survive reload"
 
 "reload project1 from spec_0003 checkout: using diskUrl: to define root of loaded project"
@@ -9817,104 +8437,46 @@ RwRowanSample9Test >> testSwitchRepository [
 	self assert: project asDefinition repositoryRoot = project repositoryRoot.
 	self assert: resolvedSpec_0003 gitUrl equals: project diskUrl.
 	self deny: resolvedSpec_0002 gitUrl = resolvedSpec_0003 diskUrl.
-	self assert: (Rowan globalNamed: 'RowanSample9Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
+	self assert: (Rowan globalNamed: projectName, 'Class1') bar equals: 'bar'.	"bar method not present in spec_0001"
 	self assert: project loadSpecification diskUrl equals: resolvedSpec_0003 gitUrl.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testSwitchRepository_591 [
-	"https://github.com/GemTalk/Rowan/issues/591"
-
-	"spec_0074 and spec_0075 have embedded projects"
-
-	| projectNames projectName loadSpec_0074 loadSpec_0075 loadedSpecs resolvedProjectSet_0074 
-		resolvedProjectSet_0075  loadedProjects  requiredProjectName requiredProject1 project |
-	
-	loadSpec_0074 := (self _loadSpecNamed: 'spec_0074')
-		projectAlias: 'RowanSample9_0074';
-		yourself.
-	loadSpec_0075 := (self _loadSpecNamed: 'spec_0075')
-		projectAlias: 'RowanSample9_0075';
-		yourself.
-
-	projectName := 'RowanSample9'.
-	requiredProjectName := 'RowanSample9_embedded_1'.
-
-	projectNames := {loadSpec_0074 projectName. requiredProjectName}.
-
-	projectNames
-		do: [:repoName | 
-			(self _testRowanProjectsSandbox / repoName) ensureDeleteAll ].
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].		
-
-
-"resolve projects (clone)"
-	resolvedProjectSet_0074 := loadSpec_0074 readProjectSet.
-	resolvedProjectSet_0075 := loadSpec_0075 readProjectSet.	"only used to clone as target repo"
-
-"load spec_0074"
-	loadedProjects := resolvedProjectSet_0074 load.
-	project := Rowan projectNamed: projectName.
-	requiredProject1 := Rowan projectNamed: requiredProjectName.
-
-"validate"
-	self 
-		_standard_validate_loadedProjects: loadedProjects 
-		expectedProjectNames: projectNames.
-	self assert: (resolvedProjectSet_0074 projectNamed: project name) gitUrl equals: project gitUrl.
-
-"load project1 from spec_0075 checkout: changing repository root of loaded project ... embedded project should be adjusted as well"
-	loadedSpecs := project loadedLoadSpecifications.
-	loadedSpecs namesAndEntitiesDo: [:pName :spec |
-		spec
-			gitUrl: (resolvedProjectSet_0075 projectNamed: pName) gitUrl ].
-	loadedProjects := loadedSpecs load.
-
-"Validate"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
-	self 
-		_standard_validate_loadedProjects: loadedProjects
-		expectedProjectNames: projectNames.
-	self assert: project asDefinition repositoryRoot equals: project repositoryRoot.
-	self assert: (resolvedProjectSet_0075 projectNamed: project name) gitUrl equals: project gitUrl.
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
 
-	| loadedProjects project audit packageName1 packageName2 classAudit className1 className2 |
-	packageName1 := 'RowanSample9-Tests'.
-	packageName2 := 'RowanSample9-Core'.
-	className1 := 'RowanSample9TestCase'.
-	className2 := 'RowanSample9Class1'.
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 classAudit className1 className2 |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	projectName := loadSpec projectName.
+
+	packageName1 := projectName, '-Tests'.
+	packageName2 := projectName, '-Core'.
+	className1 := projectName, 'TestCase'.
+	className2 := projectName, 'Class1'.
 
 	loadedProjects := self 
-		_testUnmanagedSpec_0057: true 
+		_testUnmanagedSpec_0057: loadSpec 
+		includeRemoveAll: true 
 		packageName1: packageName1 
 		packageName2: packageName2 
 		className1: className1 
 		className2: className2.
 
 "validate"
-	project := loadedProjects projectNamed: 'RowanSample9'.
+	project := loadedProjects projectNamed: projectName.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
 
 	classAudit := ((audit at: packageName1) at: className1)
 		collect: [ :each | each message ].
 	self assert: classAudit size = 1.
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9TestCase>>test').
+	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'TestCase>>test').
 
 	classAudit := ((audit at: packageName2) at: className2)
 		collect: [ :each | each message ].
 	self assert: classAudit size = 2.
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1>>foo').
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1 class>>bar').
+	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'Class1>>foo').
+	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'Class1 class>>bar').
 
 "run reports"
 	{(Rowan gemstoneTools topaz
@@ -9942,20 +8504,25 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	"based on spec_0057 after loading, do a filein (withOUT removeAllMethods) and run unmanaged report and an audit"
 
-	| loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
-	packageName1 := 'RowanSample9-Tests'.
-	packageName2 := 'RowanSample9-Core'.
-	className1 := 'RowanSample9TestCase'.
-	className2 := 'RowanSample9Class1'.
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	projectName := loadSpec projectName.
 
-	loadedProjects := self
-		_testUnmanagedSpec_0057: false
-		packageName1: packageName1
-		packageName2: packageName2
-		className1: className1
+	packageName1 := projectName, '-Tests'.
+	packageName2 := projectName, '-Core'.
+	className1 := projectName, 'TestCase'.
+	className2 := projectName, 'Class1'.
+
+	loadedProjects := self 
+		_testUnmanagedSpec_0057: loadSpec 
+		includeRemoveAll: false 
+		packageName1: packageName1 
+		packageName2: packageName2 
+		className1: className1 
 		className2: className2.
+
 "validate"
-	project := loadedProjects projectNamed: 'RowanSample9'.
+	project := loadedProjects projectNamed: projectName.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
 "run reports"

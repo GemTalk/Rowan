@@ -80,8 +80,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 
 	"move RowanSample9Class from symbol dictionary RowanSample9_1 to _sampleSymbolDictionaryName2, changing project default symbol dictionary name"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x
-		symDict registry |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class symDict registry |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -98,7 +97,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	className := 'RowanSample9Class1'.
+	className :=projectName , 'Class1'.
 
 "validate"
 	self
@@ -108,7 +107,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 
 	class := Rowan globalNamed: className.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName1.
+	self assert: (ar first at: 1) name equals: self _sampleSymbolDictionaryName1.
 
 
 "load project using symbol dict  _sampleSymbolDictionaryName2"
@@ -119,7 +118,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 "validate"
 	class := Rowan globalNamed: className.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
+	self assert: (ar first at: 1) name equals: self _sampleSymbolDictionaryName2.
 	self
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
@@ -144,8 +143,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 	"move RowanSample9Class from symbol dictionary RowanSample9_1 to _sampleSymbolDictionaryName2, changing project default symbol dictionary name
 		AND changing class version (load spec_0034)"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class x 
-		symDict registry |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class symDict registry |
 UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
@@ -163,7 +161,7 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1.
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	className := 'RowanSample9Class1'.
+	className := projectName , 'Class1'.
 
 "validate"
 	self
@@ -173,7 +171,7 @@ UserGlobals at: #ConditionalHalt put: false.
 
 	class := Rowan globalNamed: className.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (ar first at: 1) name = self _sampleSymbolDictionaryName1.
+	self assert: (ar first at: 1) name equals: self _sampleSymbolDictionaryName1.
 
 	symDict := Rowan globalNamed: self _sampleSymbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
@@ -191,7 +189,7 @@ UserGlobals at: #ConditionalHalt put: false.
 "validate"
 	class := Rowan globalNamed: className.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
-	self assert: (x := (ar first at: 1) name) = self _sampleSymbolDictionaryName2.
+	self assert: (ar first at: 1) name equals: self _sampleSymbolDictionaryName2.
 
 	self
 		_standard_validate: resolvedProject
@@ -227,7 +225,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	packageName := 'RowanSample9-Core'.
+	packageName := projectName, '-Core'.
 
 "resolve project"
 	resolvedProject := loadSpec resolveProject.
@@ -236,7 +234,7 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_3 [
 	resolvedProject gemstoneSetSymbolDictName: self _sampleSymbolDictionaryName1 forPackageNamed: packageName.
 	loadedProjects := resolvedProject load.
 	project := loadedProjects projectNamed: projectName.
-	className := 'RowanSample9Class1'.
+	className := projectName, 'Class1'.
 
 "validate"
 	self

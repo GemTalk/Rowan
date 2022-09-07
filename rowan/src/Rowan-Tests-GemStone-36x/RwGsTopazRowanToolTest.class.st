@@ -37,13 +37,13 @@ RwGsTopazRowanToolTest >> _createTestProjectNamed: projectName [
 ]
 
 { #category : 'private' }
-RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout [
+RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout: projectName [
 ^'! Class Declarations
 ! Generated file, do not Edit
 
 doit
 (Object
-	subclass: ''RowanSample9Class1''
+	subclass: ''', projectName, 'Class1''
 	instVarNames: #( ivar1 )
 	classVars: #()
 	classInstVars: #()
@@ -51,18 +51,18 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-Core'';
+		category: ''', projectName, '-Core'';
 		comment: ''I am an example class'';
 		immediateInvariant.
 true.
 %
 
-removeallmethods RowanSample9Class1
-removeallclassmethods RowanSample9Class1
+removeallmethods ', projectName, 'Class1
+removeallclassmethods ', projectName, 'Class1
 
 doit
 (TestCase
-	subclass: ''RowanSample9TestCase''
+	subclass: ''', projectName, 'TestCase''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -70,31 +70,31 @@ doit
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
 )
-		category: ''RowanSample9-Tests'';
+		category: ''', projectName, '-Tests'';
 		comment: ''I test the example class'';
 		immediateInvariant.
 true.
 %
 
-removeallmethods RowanSample9TestCase
-removeallclassmethods RowanSample9TestCase
+removeallmethods ', projectName, 'TestCase
+removeallclassmethods ', projectName, 'TestCase
 
-! Class implementation for ''RowanSample9Class1''
+! Class implementation for ''', projectName, 'Class1''
 
-!		Instance methods for ''RowanSample9Class1''
+!		Instance methods for ''', projectName, 'Class1''
 
 category: ''accessing''
-method: RowanSample9Class1
+method: ', projectName, 'Class1
 foo ^1
 %
 
-! Class implementation for ''RowanSample9TestCase''
+! Class implementation for ''', projectName, 'TestCase''
 
-!		Instance methods for ''RowanSample9TestCase''
+!		Instance methods for ''', projectName, 'TestCase''
 
 category: ''tests''
-method: RowanSample9TestCase
-test  self assert: RowanSample9Class1 new foo = 1
+method: ', projectName, 'TestCase
+test  self assert: ', projectName, 'Class1 new foo = 1
 %
 
 '
@@ -103,7 +103,7 @@ test  self assert: RowanSample9Class1 new foo = 1
 { #category : 'private' }
 RwGsTopazRowanToolTest >> _loadSpecNamed: specName [
 ""
-	^ RwRowanSample9Test _loadSpecNamed: specName
+	^ RwRowanSample9V2Test _loadSpecNamed: specName
 ]
 
 { #category : 'running' }
@@ -292,7 +292,7 @@ RwGsTopazRowanToolTest >> testTopazExportProjectGsFile [
 
 "validate"
 	gsFileRef readStreamDo: [:fileStream | fileout := fileStream contents ].
-	self assert: fileout equals: self _expected_spec_0001_Fileout.
+	self assert: fileout equals: (self _expected_spec_0001_Fileout: projectName).
 ]
 
 { #category : 'project support' }
@@ -375,7 +375,7 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
-	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+	self assert: (project packageNames) sort = { projectName , '-Core' . projectName , '-Tests'} sort.
 
 "do git push and pull without error"
 	Rowan gemstoneTools topaz
@@ -464,8 +464,8 @@ RwGsTopazRowanToolTest >> testTopazMoveClassToPackage [
 "resolve project"
 	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions1';
 		yourself.
 
 "load project"
@@ -476,10 +476,10 @@ RwGsTopazRowanToolTest >> testTopazMoveClassToPackage [
 	self assert: (audit := project audit)  isEmpty.
 
 "move class"
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName , 'Class1'.
 	Rowan gemstoneTools topaz
 		moveClass: class 
-			toPackageNamed: 'RowanSample9-Extensions';
+			toPackageNamed: projectName , '-Extensions';
 		yourself.
 
 "validate"
@@ -512,10 +512,10 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
 	self assert: project gitShortStatus isEmpty.
 
 "move method"
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName , 'Class1'.
 	method := class compiledMethodAt: #foo.
 	Rowan gemstoneTools topaz
-		moveMethod: method toPackageNamed: 'RowanSample9-Extensions'.
+		moveMethod: method toPackageNamed: projectName , '-Extensions'.
 
 "validate"
 	self assert: (audit := project audit) isEmpty.
@@ -523,7 +523,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_01 [
 "move method"
 	method := class class compiledMethodAt: #bar.
 	Rowan gemstoneTools topaz
-		moveMethod: method toPackageNamed: 'RowanSample9-Core';
+		moveMethod: method toPackageNamed: projectName , '-Core';
 		yourself.
 
 "validate"
@@ -548,8 +548,8 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
 "resolve project"
 	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions1';
 		yourself.
 
 "load project"
@@ -560,10 +560,10 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_02 [
 	self assert: project gitShortStatus isEmpty.
 
 "move method"
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName , 'Class1'.
 	method := class class compiledMethodAt: #bar.
 	Rowan gemstoneTools topaz
-		moveMethod: method toPackageNamed: 'RowanSample9-Extensions';
+		moveMethod: method toPackageNamed: projectName , '-Extensions';
 		yourself.
 
 "validate"
@@ -590,8 +590,8 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 "resolve project"
 	resolvedProject := loadSpec resolveProject.
 	resolvedProject 
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions';
-		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: 'RowanSample9-Extensions1';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions';
+		gemstoneSetSymbolDictName: 'RowanSample9_2' forPackageNamed: projectName , '-Extensions1';
 		yourself.
 
 "load project"
@@ -602,7 +602,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 	self assert: project gitShortStatus isEmpty.
 
 "unpackage class"
-	class := Rowan globalNamed: 'RowanSample9Class1'.
+	class := Rowan globalNamed: projectName , 'Class1'.
 
 	Rowan gemstoneTools topaz unpackageClass: class. "bar is still packaged and foo is not"
 
@@ -612,7 +612,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 "move method"
 	method := class class compiledMethodAt: #bar.
 	Rowan gemstoneTools topaz
-		moveMethod: method toPackageNamed: 'RowanSample9-Extensions';
+		moveMethod: method toPackageNamed: projectName , '-Extensions';
 		yourself.
 
 "validate"
@@ -621,7 +621,7 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 "move method"
 	method := class compiledMethodAt: #foo.
 	Rowan gemstoneTools topaz
-		moveMethod: method toPackageNamed: 'RowanSample9-Extensions1';
+		moveMethod: method toPackageNamed: projectName , '-Extensions1';
 		yourself.
 
 "validate"
@@ -661,7 +661,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 
 "read tonel file from spec_0009"
 	project checkout: 'spec_0009'.
-	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Extensions' / (className, '.extension.st')) pathString.
+	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / (projectName , '-Extensions') / (className, '.extension.st')) pathString.
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
@@ -698,7 +698,7 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
-	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+	self assert: (project packageNames) sort = { projectName , '-Core' . projectName , '-Tests'} sort.
 
 "read tonel file from spec_0011"
 	project checkout: 'spec_0011'.
@@ -709,7 +709,7 @@ RwGsTopazRowanToolTest >> testTopazReloadProject [
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
 	self assert: (class perform: #bar) = 'bar'.
-	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Extensions' 'RowanSample9-Tests') sort.
+	self assert: (project packageNames) sort = { projectName , '-Core' . projectName , '-Extensions' . projectName , '-Tests'} sort.
 ]
 
 { #category : 'project support' }
@@ -740,7 +740,7 @@ RwGsTopazRowanToolTest >> testTopazUnloadProject [
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
-	self assert: (project packageNames) sort = #('RowanSample9-Core' 'RowanSample9-Tests') sort.
+	self assert: (project packageNames) sort = { projectName , '-Core' . projectName , '-Tests'} sort.
 	self assert: (Rowan projectNames includes: projectName).
 
 "unload the project"

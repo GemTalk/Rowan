@@ -3729,7 +3729,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 					fileStream
 						nextPutAll:
 								'### [' , loadSpec specName , '](https://github.com/dalehenrich/'
-										, self primaryProjectName , '/tree/' , loadSpec specName , ')';
+										, self primaryProjectName , '/tree/' , loadSpec revision , ')';
 						lf;
 						nextPutAll: '```';
 						lf;
@@ -4293,6 +4293,7 @@ RwTestProjectLibraryGenerator >> genSpec_0004_b: commitMessage [
 
 	self
 		_finishCommitAndPush: branchName
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
