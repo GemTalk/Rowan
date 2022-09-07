@@ -8381,7 +8381,7 @@ RwRowanSample9Test >> testSpec_0032 [
 	loadedProjects := resolvedProject load.
 
 "validate"
-	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv1Class5' 'RowanSample9Specsv2Class5') do: [:className |
+	{ projectName, 'SpecsSharedClass4' . projectName, 'Specsv1Class5' . projectName, 'Specsv2Class5'} do: [:className |
 		self assert: (Rowan globalNamed: className) notNil ].
 
 	self
@@ -8395,9 +8395,9 @@ RwRowanSample9Test >> testSpec_0032 [
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
-	#('RowanSample9Specsv1Class5' ) do: [:className |
+	{ projectName, 'Specsv1Class5' }do: [:className |
 		self assert: (Rowan globalNamed: className) isNil ].
-	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv2Class5') do: [:className |
+	{ projectName, 'SpecsSharedClass4' . projectName, 'Specsv2Class5'} do: [:className |
 		self assert: (Rowan globalNamed: className) notNil ].
 	self
 		_standard_validate: resolvedProject
@@ -8411,9 +8411,9 @@ RwRowanSample9Test >> testSpec_0032 [
 "load project"
 	loadedProjects := resolvedProject load.
 "validate"
-	#('RowanSample9Specsv2Class5' ) do: [:className |
+	{ projectName, 'Specsv2Class5' } do: [:className |
 		self assert: (Rowan globalNamed: className) isNil ].
-	#('RowanSample9SpecsSharedClass4' 'RowanSample9Specsv1Class5') do: [:className |
+	{ projectName, 'SpecsSharedClass4' . projectName, 'Specsv1Class5'} do: [:className |
 		self assert: (Rowan globalNamed: className) notNil ].
 	self
 		_standard_validate: resolvedProject
