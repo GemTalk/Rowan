@@ -9093,7 +9093,7 @@ RwRowanSample9Test >> testSpec_0059_1 [
 		conditionalAttributes size > 1
 			ifTrue: [
 				"sanity check in case of massive load failure"
-				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 2) asSymbol) ] ].
+				self assert: ((Rowan globalNamed: projectName, 'Class1') selectors includes: (conditionalAttributes at: 2) asSymbol) ] ].
 ]
 
 { #category : 'tests' }
@@ -9130,10 +9130,10 @@ RwRowanSample9Test >> testSpec_0059_2 [
 		(conditionalAttributes at: 3) = 'platformC'
 			ifTrue: [
 				"sanity check in case of massive load failure"
-				self assert: ((Rowan globalNamed: 'RowanSample9TestCase') selectors includes: #testPlatformC) ]
+				self assert: ((Rowan globalNamed: projectName, 'TestCase') selectors includes: #testPlatformC) ]
 			ifFalse: [
 				"sanity check in case of massive load failure"
-				self assert: ((Rowan globalNamed: 'RowanSample9Class1') selectors includes: (conditionalAttributes at: 3) asSymbol) ]].
+				self assert: ((Rowan globalNamed: projectName, 'Class1') selectors includes: (conditionalAttributes at: 3) asSymbol) ]].
 ]
 
 { #category : 'tests' }
