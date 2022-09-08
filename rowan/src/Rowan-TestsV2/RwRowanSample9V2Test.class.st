@@ -16,5 +16,5 @@ RwRowanSample9V2Test class >> _loadSpecSessionCacheKey [
 
 { #category : 'private' }
 RwRowanSample9V2Test class >> _rowanSample9ProjectName [
-	^ 'RowanSample9V2'
+	^ 'RowanSample9'
 ]

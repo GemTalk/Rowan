@@ -105,7 +105,7 @@ loadTests
 			do: [:loadSpec |
 				"ensure that tests are loaded for all projects"
 				| attributes | 
-				attributes := #('tests' 'testsV2').
+				attributes := { 'tests' . 'testsV2' . "'v3' . skip v3 until we've properly generated specs using v3 component classes" }.
 				loadSpec addCustomConditionalAttributes: attributes ].
 		[ requiredLoadSpecs load ]
 			on: CompileWarning do: [:ex |

@@ -13,6 +13,7 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	"skip spec_004, because it makes two changes in a row, so always commits"
 
 	| commitComment |
+self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
@@ -120,6 +121,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
@@ -151,6 +153,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
@@ -182,6 +185,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
+self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
