@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'tests' }
-RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
+RwTestProjectLibraryGeneratorTest >> testLibrarySample9Generator [
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
 		1. hitting errors
 		2. changing any of the disk content"
@@ -13,7 +13,9 @@ RwTestProjectLibraryGeneratorTest >> testLibraryGenerator [
 	"skip spec_004, because it makes two changes in a row, so always commits"
 
 	| commitComment |
-self error: 'expected error for now'.
+true ifTrue: [ 
+	"keep this puppy around until we're sure we don't need it ... RowanSample9 is used in tests, but will be maintained by Rowan v2 code base"
+	^self ].
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
@@ -121,12 +123,11 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
-self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
 			^ self ].
-	RwRowanSample9Test _clearLoadSpecSessionCache.
+	RwRowanSample10Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
 
 	commitComment := 'running RowanSample10 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
@@ -153,12 +154,11 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
-self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
 			^ self ].
-	RwRowanSample9Test _clearLoadSpecSessionCache.
+	RwRowanSample11Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample11') ensureDeleteAll.
 
 	commitComment := 'running RowanSample11 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
@@ -185,12 +185,11 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
 		2. changing any of the disk content"
 
 	| commitComment |
-self error: 'expected error for now'.
 	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
 		ifFalse: [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
 			^ self ].
-	RwRowanSample9Test _clearLoadSpecSessionCache.
+	RwRowanSample12Test _clearLoadSpecSessionCache.
 	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample12') ensureDeleteAll.
 
 	commitComment := 'running RowanSample12 testLibraryGenerator tests ... no changes expected, thus no commits expected'.

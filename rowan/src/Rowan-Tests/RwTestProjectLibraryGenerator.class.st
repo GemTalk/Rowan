@@ -7222,7 +7222,7 @@ RwTestProjectLibraryGenerator >> preserveRowanSHA: aBool [
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> primaryProjectName [
-	^ self subclassResponsibility: #'primaryProjectName'
+	^ 'RowanSample9'
 ]
 
 { #category : 'accessing' }
