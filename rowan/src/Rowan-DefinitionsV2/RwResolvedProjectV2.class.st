@@ -903,6 +903,15 @@ RwResolvedProjectV2 >> initialize [
 	projectComponents := RwResolvedProjectComponentsV2 new
 ]
 
+{ #category : 'initialization' }
+RwResolvedProjectV2 >> initializeV2 [
+	"repository must be explicitly created"
+
+	super initializeV2.
+	projectDefinition := RwProjectDefinition new.
+	projectComponents := RwResolvedProjectComponentsV2 new
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> isEmpty [
 	^ self _projectDefinition isEmpty

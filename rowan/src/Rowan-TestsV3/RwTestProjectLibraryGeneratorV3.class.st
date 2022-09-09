@@ -898,6 +898,11 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0078: resolvedProject embe
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _createNewProject: aString [
+	^ Rowan newProjectNamed: aString
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _genSpecFor_0071: specName definedProject: definedProject addDefinitions: addDefinitionsBlock [
 	"Issue #714, so fiddling with directory structure"
 
@@ -1323,7 +1328,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0072: commitMessage [
 
 	requiredProjectName := projectName , '_embedded_1'.
 	relativeRepositoryRoot := 'embeddedProjects/' , requiredProjectName.
-	embeddedProjectDefinition := (Rowan newProjectNamed: requiredProjectName)
+	embeddedProjectDefinition := (self _createNewProject: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: 'rowan/project.ston';
@@ -1377,7 +1382,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0073: commitMessage [
 		rowanIssues: #(571 714);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -1482,8 +1487,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0075: commitMessage [
 
 	requiredProjectName := projectName , '_embedded_1'.
 	relativeRepositoryRoot := 'embeddedProjects/', requiredProjectName.
-	embeddedProjectDefinition := (Rowan
-		newProjectNamed: requiredProjectName)
+	embeddedProjectDefinition := (self _createNewProject: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: 'rowan/project.ston';
@@ -1542,7 +1546,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0076: commitMessage [
 
 	requiredProjectName := projectName , '_embedded_1'.
 	relativeRepositoryRoot := 'embeddedProjects/', requiredProjectName.
-	embeddedProjectDefinition :=  (Rowan newProjectNamed: requiredProjectName)
+	embeddedProjectDefinition :=  (self _createNewProject: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: 'rowan/project.ston';
@@ -1602,7 +1606,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0077: commitMessage [
 
 	requiredProjectName := projectName , '_embedded_1'.
 	relativeRepositoryRoot := 'embeddedProjects/', requiredProjectName.
-	embeddedProjectDefinition :=  (Rowan newProjectNamed: requiredProjectName)
+	embeddedProjectDefinition :=  (self _createNewProject: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: 'rowan/project.ston';
@@ -1663,7 +1667,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0078: commitMessage [
 	requiredProjectName := projectName , '_embedded_1'.
 	relativeRepositoryRoot := 'embeddedProjects/', requiredProjectName.
 
-	embeddedProjectDefinition :=  (Rowan newProjectNamed: requiredProjectName)
+	embeddedProjectDefinition :=  (self _createNewProject: requiredProjectName)
 		specName: requiredProjectName;
 		projectAlias: projectName;
 		projectSpecFile: 'rowan/project.ston';

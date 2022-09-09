@@ -11,7 +11,7 @@ Rowan class >> newProjectNamed: projectName [
 Rowan class >> newV2ProjectNamed: projectName [
 	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
 
-	^ self platform newProjectNamed: projectName
+	^ self platform newV2ProjectNamed: projectName
 ]
 
 { #category : '*rowan-coreV2' }

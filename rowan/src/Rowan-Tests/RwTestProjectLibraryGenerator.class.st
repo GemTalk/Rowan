@@ -3595,10 +3595,15 @@ RwTestProjectLibraryGenerator >> _createCard: postfix specName: specName title: 
 
 { #category : 'private' }
 RwTestProjectLibraryGenerator >> _createDefinedProject: aString [
-	^ (Rowan newProjectNamed: aString)
+	^ (self _createNewProject: aString)
 		projectsHome: self projectsHome;
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
 		yourself
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGenerator >> _createNewProject: aString [
+	^ Rowan newV2ProjectNamed: aString
 ]
 
 { #category : 'private' }
@@ -5065,7 +5070,7 @@ RwTestProjectLibraryGenerator >> genSpec_0018: commitMessage [
 		rowanIssues: #(553 555);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5111,7 +5116,7 @@ RwTestProjectLibraryGenerator >> genSpec_0019: commitMessage [
 		rowanIssues: #(554);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5161,7 +5166,7 @@ RwTestProjectLibraryGenerator >> genSpec_0020: commitMessage [
 		rowanIssues: #(554);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5211,7 +5216,7 @@ RwTestProjectLibraryGenerator >> genSpec_0021: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5261,7 +5266,7 @@ RwTestProjectLibraryGenerator >> genSpec_0022: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5311,7 +5316,7 @@ RwTestProjectLibraryGenerator >> genSpec_0023: commitMessage [
 		rowanIssues: #(568);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5365,7 +5370,7 @@ RwTestProjectLibraryGenerator >> genSpec_0024: commitMessage [
 		rowanIssues: #(553);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5424,7 +5429,7 @@ RwTestProjectLibraryGenerator >> genSpec_0026: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5477,7 +5482,7 @@ RwTestProjectLibraryGenerator >> genSpec_0027: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5529,7 +5534,7 @@ RwTestProjectLibraryGenerator >> genSpec_0028: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5581,7 +5586,7 @@ RwTestProjectLibraryGenerator >> genSpec_0029: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5633,7 +5638,7 @@ RwTestProjectLibraryGenerator >> genSpec_0030: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5685,7 +5690,7 @@ RwTestProjectLibraryGenerator >> genSpec_0031: commitMessage [
 		rowanIssues: #(573);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5737,7 +5742,7 @@ RwTestProjectLibraryGenerator >> genSpec_0032: commitMessage [
 		rowanIssues: #(573 571);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;
@@ -5787,7 +5792,7 @@ RwTestProjectLibraryGenerator >> genSpec_0033: commitMessage [
 		rowanIssues: #(345 514);
 		yourself.
 
-	definedProject := (Rowan newProjectNamed: projectName)
+	definedProject := (self _createNewProject: projectName)
 		projectsHome: self projectsHome;
 		specName: specName;
 		revision: derivedFrom;

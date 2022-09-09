@@ -52539,6 +52539,16 @@ initialize
 	projectComponents := RwResolvedProjectComponentsV2 new
 %
 
+category: 'initialization'
+method: RwResolvedProjectV2
+initializeV2
+	"repository must be explicitly created"
+
+	super initializeV2.
+	projectDefinition := RwProjectDefinition new.
+	projectComponents := RwResolvedProjectComponentsV2 new
+%
+
 category: 'project definition'
 method: RwResolvedProjectV2
 isEmpty
@@ -83579,7 +83589,7 @@ classmethod: Rowan
 newV2ProjectNamed: projectName
 	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
 
-	^ self platform newProjectNamed: projectName
+	^ self platform newV2ProjectNamed: projectName
 %
 
 category: '*rowan-coreV2'
