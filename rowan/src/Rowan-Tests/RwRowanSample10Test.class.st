@@ -24,6 +24,11 @@ RwRowanSample10Test class >> _rowanSample_0000_load_spec [
 		yourself
 ]
 
+{ #category : 'private' }
+RwRowanSample10Test class >> _rowanSample10ProjectName [
+	^ 'RowanSample10'
+]
+
 { #category : 'Testing' }
 RwRowanSample10Test class >> isAbstract [
 	"Override to true if a TestCase subclass is Abstract and should not have

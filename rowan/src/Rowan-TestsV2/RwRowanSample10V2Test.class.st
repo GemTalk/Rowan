@@ -13,8 +13,3 @@ RwRowanSample10V2Test class >> _gitPullSessionCacheKey [
 RwRowanSample10V2Test class >> _loadSpecSessionCacheKey [
 	^ #'RowanSample10LoadSpecsDict'
 ]
-
-{ #category : 'private' }
-RwRowanSample10V2Test class >> _rowanSample10ProjectName [
-	^ 'RowanSample10'
-]
