@@ -1,3 +1,23 @@
+"
+| commitComment |
+RwRowanSample10V3Test _clearLoadSpecSessionCache.
+(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10V3') ensureDeleteAll.
+
+commitComment := ''.
+RwRowanSample10V3TestProjectLibraryGenerator new
+	projectName: 'RowanSample10V3';
+	projectUrl: 'git@github.com:dalehenrich/RowanSample10V3.git';
+	preserveRowanSHA: false;
+	primeIndexCardMap;
+	preserveChangesOnGithub: false;
+	genSpec_0000: commitComment;
+	genSpec_0001: commitComment;
+	genSpec_0002: commitComment;
+	genSpec_0003: commitComment;
+	genSpec_0004: commitComment;
+	genSpec_0005: commitComment;
+	yourself
+"
 Class {
 	#name : 'RwRowanSample10V3TestProjectLibraryGenerator',
 	#superclass : 'RwTestProjectLibraryGeneratorV3',
@@ -282,7 +302,7 @@ RwRowanSample10V3TestProjectLibraryGenerator >> genSpec_0005: commitMessage [
 
 { #category : 'private' }
 RwRowanSample10V3TestProjectLibraryGenerator >> primaryProjectName [
-	^ 'RowanSample10'
+	^ 'RowanSample10V3'
 ]
 
 { #category : 'accessing' }
