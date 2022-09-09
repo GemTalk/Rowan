@@ -152,8 +152,11 @@ RwAbstractV2Test >> _sampleSymbolDictionaryName4 [
 { #category : 'private' }
 RwAbstractV2Test >> _specListProjectNames [
 	^ {'RowanSample9'.
+	'RowanSample9V2'.
+	'RowanSample9V3'.
 	'RowanSample9_Test'.
 	'RowanSample10'.
+	'RowanSample10V3'.
 	'RowanSample11'}
 ]
 

@@ -140,10 +140,6 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10LibraryGenerator [
 		preserveChangesOnGithub: false;
 		genSpec_0000: commitComment;
 		genSpec_0001: commitComment;
-		genSpec_0002: commitComment;
-		genSpec_0003: commitComment;
-		genSpec_0004: commitComment;
-		genSpec_0005: commitComment;
 		yourself
 ]
 

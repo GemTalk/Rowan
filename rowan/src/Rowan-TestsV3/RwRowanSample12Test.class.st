@@ -1,35 +1,35 @@
 Class {
-	#name : 'RwRowanSample11Test',
+	#name : 'RwRowanSample12Test',
 	#superclass : 'RwAbstractRowanSampleTest',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-TestsV3'
 }
 
 { #category : 'private' }
-RwRowanSample11Test class >> _gitPullSessionCacheKey [
-	^ #'RowanSample11GitBranchDict'
+RwRowanSample12Test class >> _gitPullSessionCacheKey [
+	^ #'RowanSample12GitBranchDict'
 ]
 
 { #category : 'private' }
-RwRowanSample11Test class >> _loadSpecSessionCacheKey [
-	^ #'RowanSample11LoadSpecsDict'
+RwRowanSample12Test class >> _loadSpecSessionCacheKey [
+	^ #'RowanSample12LoadSpecsDict'
 ]
 
 { #category : 'private' }
-RwRowanSample11Test class >> _rowanSample_0000_load_spec [
+RwRowanSample12Test class >> _rowanSample_0000_load_spec [
 	^ (RwSpecification
 		fromUrl:
-			'https://raw.githubusercontent.com/dalehenrich/RowanSample11/master/specs/spec_0000.ston')
+			'https://raw.githubusercontent.com/dalehenrich/RowanSample12/master/specs/spec_0000.ston')
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself
 ]
 
 { #category : 'private' }
-RwRowanSample11Test >> _rowanSample10_0000_load_spec [
+RwRowanSample12Test >> _rowanSample10_0000_load_spec [
 	^ self class _rowanSample_0000_load_spec
 ]
 
 { #category : 'tests' }
-RwRowanSample11Test >> testIndexCards [
+RwRowanSample12Test >> testIndexCards [
 	| projectSpecification indexCards specsDir projectSpecs resolvedProjects |
 	projectSpecification := self _rowanSample10_0000_load_spec.
 	projectSpecification repositoryRoot ensureDeleteAll.
@@ -62,7 +62,7 @@ RwRowanSample11Test >> testIndexCards [
 ]
 
 { #category : 'tests' }
-RwRowanSample11Test >> testSpec_0001 [
+RwRowanSample12Test >> testSpec_0001 [
 	"spec_0001 should load cleanly"
 
 
@@ -85,7 +85,7 @@ RwRowanSample11Test >> testSpec_0001 [
 ]
 
 { #category : 'tests' }
-RwRowanSample11Test >> testSpec_0002 [
+RwRowanSample12Test >> testSpec_0002 [
 	"spec_0002 should load cleanly"
 
 
@@ -108,7 +108,7 @@ RwRowanSample11Test >> testSpec_0002 [
 ]
 
 { #category : 'tests' }
-RwRowanSample11Test >> testSpec_0004 [
+RwRowanSample12Test >> testSpec_0004 [
 	"spec_0004 should load cleanly along with other recursive required projects"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
@@ -119,7 +119,7 @@ RwRowanSample11Test >> testSpec_0004 [
 	projectName := loadSpec projectName.
 	requiredProjectName1 := 'RowanSample9'.
 	requiredProjectName2 := 'RowanSample10'.
-	requiredProjectName3 := 'RowanSample12'.
+	requiredProjectName3 := 'RowanSample11'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
 	projectNames := {projectName }, requiredProjectNames.
 

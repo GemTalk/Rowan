@@ -93,3 +93,34 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
 		genSpec_0081: commitComment;
 		yourself
 ]
+
+{ #category : '*rowan-testsv3' }
+RwTestProjectLibraryGeneratorTest >> testRowanSample10V3LibraryGenerator [
+	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
+		1. hitting errors
+		2. changing any of the disk content"
+
+	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
+	RwRowanSample10Test _clearLoadSpecSessionCache.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
+
+	commitComment := 'running RowanSample10V3 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
+	RwRowanSample10V3TestProjectLibraryGeneratorTester new
+		testCase: self;
+		projectName: 'RowanSample10';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		preserveRowanSHA: true;
+		primeIndexCardMap;
+		preserveChangesOnGithub: false;
+		genSpec_0000: commitComment;
+		genSpec_0001: commitComment;
+		genSpec_0002: commitComment;
+		genSpec_0003: commitComment;
+		genSpec_0004: commitComment;
+		genSpec_0005: commitComment;
+		yourself
+]

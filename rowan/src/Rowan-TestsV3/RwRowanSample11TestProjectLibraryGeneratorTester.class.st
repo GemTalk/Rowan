@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'testCase'
 	],
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-TestsV3'
 }
 
 { #category : 'private' }
