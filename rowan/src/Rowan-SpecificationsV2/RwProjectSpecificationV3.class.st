@@ -32,8 +32,13 @@ RwProjectSpecificationV3 >> hash [
 
 { #category : 'initialization' }
 RwProjectSpecificationV3 >> initialize [
+	"for v3, packageConvention and packageForm is explicit and the default location of the packages directory is the root of the project tree ... keep the Rowan meta data isolated in the rowan directory"
+
 	super initialize.
-	projectVersion := '0.0.0'
+	packagesPath := 'src'.
+	projectVersion := '0.0.0'.
+	packageConvention := 'RowanHybrid'.
+	packageFormat := 'tonel'
 ]
 
 { #category : 'ston' }

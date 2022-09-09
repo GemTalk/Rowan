@@ -13,6 +13,7 @@ RwDefinedProject class >> fromResolvedProject: aResolvedProject [
 
 { #category : 'instance creation' }
 RwDefinedProject class >> newNamed: aName [
+	"Create a new project that uses Rowan v3 project spec and component classes"
 
 	^ self new
 		initializeForName: aName;
@@ -20,11 +21,34 @@ RwDefinedProject class >> newNamed: aName [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwDefinedProject class >> newV2Named: aName [
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ self new
+		initializeForName: aName;
+		_concreteProjectV2;
+		yourself
+]
+
 { #category : 'private' }
 RwDefinedProject >> _concreteProject [
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
 	^ concreteProject
 		ifNil: [ 
 			concreteProject := RwResolvedProjectV2 new
+				projectName: self name;
+				yourself ]
+]
+
+{ #category : 'private' }
+RwDefinedProject >> _concreteProjectV2 [
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ concreteProject
+		ifNil: [ 
+			concreteProject := RwResolvedProjectV2 newV2
 				projectName: self name;
 				yourself ]
 ]

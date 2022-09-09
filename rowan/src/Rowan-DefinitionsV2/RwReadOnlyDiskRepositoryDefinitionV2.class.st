@@ -69,5 +69,7 @@ RwReadOnlyDiskRepositoryDefinitionV2 >> repositoryUrl: urlString [
 RwReadOnlyDiskRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec readOnlyDiskUrl: self repositoryUrl
+	self repositoryUrl
+		ifNil: [ aLoadSpec readOnlyDiskUrl: 'file:' , self repositoryRoot pathString ]
+		ifNotNil: [ :url | aLoadSpec readOnlyDiskUrl: url ]
 ]

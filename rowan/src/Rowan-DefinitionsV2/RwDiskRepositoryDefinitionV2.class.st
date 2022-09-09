@@ -108,5 +108,7 @@ RwDiskRepositoryDefinitionV2 >> resolveRepository [
 RwDiskRepositoryDefinitionV2 >> updateLoadSpecWithRepositoryRoot: aLoadSpec [
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec diskUrl: self repositoryUrl
+	self repositoryUrl
+		ifNil: [ aLoadSpec diskUrl: 'file:' , self repositoryRoot pathString ]
+		ifNotNil: [ :url | aLoadSpec diskUrl: url ]
 ]

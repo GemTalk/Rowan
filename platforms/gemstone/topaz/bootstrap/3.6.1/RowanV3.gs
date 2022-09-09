@@ -43183,10 +43183,22 @@ fromResolvedProject: aResolvedProject
 category: 'instance creation'
 classmethod: RwDefinedProject
 newNamed: aName
+	"Create a new project that uses Rowan v3 project spec and component classes"
 
 	^ self new
 		initializeForName: aName;
 		_concreteProject;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwDefinedProject
+newV2Named: aName
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ self new
+		initializeForName: aName;
+		_concreteProjectV2;
 		yourself
 %
 
@@ -43790,9 +43802,23 @@ specsPath: aString
 category: 'private'
 method: RwDefinedProject
 _concreteProject
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
 	^ concreteProject
 		ifNil: [ 
 			concreteProject := RwResolvedProjectV2 new
+				projectName: self name;
+				yourself ]
+%
+
+category: 'private'
+method: RwDefinedProject
+_concreteProjectV2
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ concreteProject
+		ifNil: [ 
+			concreteProject := RwResolvedProjectV2 newV2
 				projectName: self name;
 				yourself ]
 %
@@ -50912,8 +50938,17 @@ _packageNameFromPackageDir: packageDir ifAbsent: absentBlock
 category: 'instance creation'
 classmethod: RwAbstractResolvedObjectV2
 new
+	"Create a new project that uses Rowan v3 project spec and component classes"
 
 	^ self basicNew initialize
+%
+
+category: 'instance creation'
+classmethod: RwAbstractResolvedObjectV2
+newV2
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ self basicNew initializeV2
 %
 
 !		Instance methods for 'RwAbstractResolvedObjectV2'
@@ -50991,7 +51026,16 @@ groupNames: anArray
 category: 'initialization'
 method: RwAbstractResolvedObjectV2
 initialize
-	"repository must be explicitly created"
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
+	projectSpecification := RwProjectSpecificationV3 new.
+	loadSpecification := RwLoadSpecificationV2 new.
+%
+
+category: 'initialization'
+method: RwAbstractResolvedObjectV2
+initializeV2
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
 
 	projectSpecification := RwProjectSpecificationV2 new.
 	loadSpecification := RwLoadSpecificationV2 new.
@@ -61176,7 +61220,9 @@ method: RwDiskRepositoryDefinitionV2
 updateLoadSpecWithRepositoryRoot: aLoadSpec
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec diskUrl: self repositoryUrl
+	self repositoryUrl
+		ifNil: [ aLoadSpec diskUrl: 'file:' , self repositoryRoot pathString ]
+		ifNotNil: [ :url | aLoadSpec diskUrl: url ]
 %
 
 ! Class implementation for 'RwGitRepositoryDefinitionV2'
@@ -61694,7 +61740,9 @@ method: RwReadOnlyDiskRepositoryDefinitionV2
 updateLoadSpecWithRepositoryRoot: aLoadSpec
 	"preserve the current repositoryRoot in the loadSpec"
 
-	aLoadSpec readOnlyDiskUrl: self repositoryUrl
+	self repositoryUrl
+		ifNil: [ aLoadSpec readOnlyDiskUrl: 'file:' , self repositoryRoot pathString ]
+		ifNotNil: [ :url | aLoadSpec readOnlyDiskUrl: url ]
 %
 
 category: 'private'
@@ -75548,20 +75596,21 @@ excludedInstVars
 category: 'ston'
 method: RwSpecification
 fromSton: stonReader
-	"Decode non-variable classes from a map of their instance variables and values."
-
 	self class isVariable
 		ifTrue: [ self subclassResponsibility ]
 		ifFalse: [ 
 			| instanceVariableNames |
-			"ignore any incoming instance variables that aren't included in instVarNamesInOrderForSton"
-			instanceVariableNames := self instVarNamesInOrderForSton.
+			instanceVariableNames := self class allInstVarNames.
 			stonReader
 				parseMapDo: [ :instVarName :value | 
 					| index |
 					index := instanceVariableNames indexOf: instVarName asSymbol.
 					index > 0
-						ifTrue: [ self instVarAt: index put: value ] ] ]
+						ifTrue: [ 
+							"IGNORE instance variables in ston file that aren't in the receiver"
+							self
+								instVarAt: (instanceVariableNames indexOf: instVarName asSymbol)
+								put: value ] ] ]
 %
 
 category: 'initialization'
@@ -76855,8 +76904,13 @@ hash
 category: 'initialization'
 method: RwProjectSpecificationV3
 initialize
+	"for v3, packageConvention and packageForm is explicit and the default location of the packages directory is the root of the project tree ... keep the Rowan meta data isolated in the rowan directory"
+
 	super initialize.
-	projectVersion := '0.0.0'
+	packagesPath := 'src'.
+	projectVersion := '0.0.0'.
+	packageConvention := 'RowanHybrid'.
+	packageFormat := 'tonel'
 %
 
 category: 'ston'
@@ -83515,6 +83569,16 @@ initialize
 category: '*rowan-coreV2'
 classmethod: Rowan
 newProjectNamed: projectName
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
+	^ self platform newProjectNamed: projectName
+%
+
+category: '*rowan-coreV2'
+classmethod: Rowan
+newV2ProjectNamed: projectName
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
 	^ self platform newProjectNamed: projectName
 %
 
@@ -85738,7 +85802,17 @@ _userPlatformDictionaryForUser: aUserId
 category: '*rowan-corev2'
 method: RwPlatform
 newProjectNamed: projectName
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
 	^ RwDefinedProject newNamed: projectName
+%
+
+category: '*rowan-corev2'
+method: RwPlatform
+newV2ProjectNamed: projectName
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ RwDefinedProject newV2Named: projectName
 %
 
 category: '*rowan-corev2'

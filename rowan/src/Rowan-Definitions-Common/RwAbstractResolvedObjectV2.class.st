@@ -11,8 +11,16 @@ Class {
 
 { #category : 'instance creation' }
 RwAbstractResolvedObjectV2 class >> new [
+	"Create a new project that uses Rowan v3 project spec and component classes"
 
 	^ self basicNew initialize
+]
+
+{ #category : 'instance creation' }
+RwAbstractResolvedObjectV2 class >> newV2 [
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
+	^ self basicNew initializeV2
 ]
 
 { #category : 'private' }
@@ -149,7 +157,15 @@ RwAbstractResolvedObjectV2 >> groupNames: anArray [
 
 { #category : 'initialization' }
 RwAbstractResolvedObjectV2 >> initialize [
-	"repository must be explicitly created"
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
+	projectSpecification := RwProjectSpecificationV3 new.
+	loadSpecification := RwLoadSpecificationV2 new.
+]
+
+{ #category : 'initialization' }
+RwAbstractResolvedObjectV2 >> initializeV2 [
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
 
 	projectSpecification := RwProjectSpecificationV2 new.
 	loadSpecification := RwLoadSpecificationV2 new.

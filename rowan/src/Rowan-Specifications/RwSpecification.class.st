@@ -71,21 +71,21 @@ RwSpecification >> excludedInstVars [
 
 { #category : 'ston' }
 RwSpecification >> fromSton: stonReader [
-	"Decode non-variable classes from a map of their instance variables and values."
-
 	self class isVariable
 		ifTrue: [ self subclassResponsibility ]
 		ifFalse: [ 
 			| instanceVariableNames |
-			"ignore any incoming instance variables that aren't included in instVarNamesInOrderForSton"
-			instanceVariableNames := self instVarNamesInOrderForSton.
+			instanceVariableNames := self class allInstVarNames.
 			stonReader
 				parseMapDo: [ :instVarName :value | 
 					| index |
 					index := instanceVariableNames indexOf: instVarName asSymbol.
 					index > 0
-						ifTrue: [ self instVarAt: index put: value ] ] ]
-
+						ifTrue: [ 
+							"IGNORE instance variables in ston file that aren't in the receiver"
+							self
+								instVarAt: (instanceVariableNames indexOf: instVarName asSymbol)
+								put: value ] ] ]
 ]
 
 { #category : 'initialization' }

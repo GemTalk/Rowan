@@ -5,63 +5,63 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _classExtensionRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _classExtensionRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1.package' / 'Issue361Class1.extension'
+	^ projectDefinition packagesRoot / 'Issue361-Extension1.package' / 'Issue361Class1.extension'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _classMethodRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _classMethodRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'class' / 'method10', 'st'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class3.class' / 'class' / 'method10', 'st'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _classMovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _classMovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class2.class'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class2.class'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _classRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class1.class'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _instanceMethodMovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _instanceMethodMovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
+	^projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _instanceMethodRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _instanceMethodRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _lastClassMethodRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _lastClassMethodRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'class'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class1.class' / 'class'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _lastInstanceMethodMovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _lastInstanceMethodMovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _lastInstanceMethodRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
+	^ projectDefinition packagesRoot / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
 ]
 
 { #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _packageRemovedArtifactFileReference: repositoryRoot [
+RwProjectFiletreeReaderWriterTest >> _packageRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2.package'
+	^ projectDefinition packagesRoot / 'Issue361-Extension2.package'
 ]
 
 { #category : 'private' }
@@ -84,7 +84,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveInstanceClassMethods
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition 
-		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x
 		movedMethod |
 
 	projectName := 'Issue361'.
@@ -100,8 +100,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveInstanceClassMethods
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition resolveProject; export.
 
-	repositoryRoot := writtenProjectDefinition repositoryRoot.
-	self assert: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _instanceMethodMovedArtifactFileReference: writtenProjectDefinition) exists.
 
 "copy and make desired modifications"
 
@@ -132,8 +131,8 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveInstanceClassMethods
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
 
-	self deny: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) exists.
-	self assert: (x := self _instanceMethodMovedArtifactFileReference: repositoryRoot) parent exists.	"instance dir should not be deleted"
+	self deny: (x := self _instanceMethodMovedArtifactFileReference: writtenProjectDefinition) exists.
+	self assert: (x := self _instanceMethodMovedArtifactFileReference: writtenProjectDefinition) parent exists.	"instance dir should not be deleted"
 ]
 
 { #category : 'tests' }
@@ -150,7 +149,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveLastInstanceClassMet
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition 
-		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot movedMethod |
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x movedMethod |
 
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -165,8 +164,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveLastInstanceClassMet
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition resolveProject; export.
 
-	repositoryRoot := writtenProjectDefinition repositoryRoot.
-	self assert: (x := self _lastInstanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _lastInstanceMethodMovedArtifactFileReference: writtenProjectDefinition) exists.
 
 "copy and make desired modifications"
 
@@ -197,7 +195,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_moveLastInstanceClassMet
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
 
-	self deny: (x := self _lastInstanceMethodMovedArtifactFileReference: repositoryRoot) exists.
+	self deny: (x := self _lastInstanceMethodMovedArtifactFileReference: writtenProjectDefinition) exists.
 ]
 
 { #category : 'tests' }
@@ -214,7 +212,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeInstanceClassMetho
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition 
-		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x |
 
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -229,9 +227,8 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeInstanceClassMetho
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition resolveProject; export.
 
-	repositoryRoot := writtenProjectDefinition repositoryRoot.
-	self assert: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) exists.
-	self assert: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _classMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
+	self assert: (x := self _instanceMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
 
 "copy and make desired modifications"
 
@@ -260,10 +257,10 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeInstanceClassMetho
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
 
-	self deny: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) exists.
-	self deny: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
-	self assert: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) parent exists.		"class dir should not be deleted"
-	self assert: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) parent exists.	"instance dir should not be deleted"
+	self deny: (x := self _classMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
+	self deny: (x := self _instanceMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
+	self assert: (x := self _classMethodRemovedArtifactFileReference: writtenProjectDefinition) parent exists.		"class dir should not be deleted"
+	self assert: (x := self _instanceMethodRemovedArtifactFileReference: writtenProjectDefinition) parent exists.	"instance dir should not be deleted"
 ]
 
 { #category : 'tests' }
@@ -280,7 +277,7 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeLastInstanceClassM
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition 
-		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x |
 
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -295,9 +292,8 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeLastInstanceClassM
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition resolveProject; export.
 
-	repositoryRoot := writtenProjectDefinition repositoryRoot.
-	self assert: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
-	self assert: (x := self _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _lastClassMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
+	self assert: (x := self _lastInstanceMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
 
 "copy and make desired modifications"
 
@@ -326,6 +322,6 @@ RwProjectFiletreeReaderWriterTest >> testWriterReader_B_removeLastInstanceClassM
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
 
-	self deny: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
-	self deny: (x := self _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self deny: (x := self _lastClassMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
+	self deny: (x := self _lastInstanceMethodRemovedArtifactFileReference: writtenProjectDefinition) exists.
 ]

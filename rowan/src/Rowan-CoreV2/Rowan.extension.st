@@ -2,6 +2,15 @@ Extension { #name : 'Rowan' }
 
 { #category : '*rowan-coreV2' }
 Rowan class >> newProjectNamed: projectName [
+	"Create a new project that uses Rowan v3 project spec and component classes"
+
+	^ self platform newProjectNamed: projectName
+]
+
+{ #category : '*rowan-coreV2' }
+Rowan class >> newV2ProjectNamed: projectName [
+	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+
 	^ self platform newProjectNamed: projectName
 ]
 

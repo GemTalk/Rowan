@@ -5,27 +5,27 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _classExtensionRemovedArtifactFileReference: repositoryRoot [
+RwProjectTonelReaderWriterTest >> _classExtensionRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
+	^ projectDefinition packagesRoot / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
 ]
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _classMovedArtifactFileReference: repositoryRoot [
+RwProjectTonelReaderWriterTest >> _classMovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class2.class.st'
+	^ projectDefinition packagesRoot / 'Issue361-Core' / 'Issue361Class2.class.st'
 ]
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
+RwProjectTonelReaderWriterTest >> _classRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class1.class.st'
+	^ projectDefinition packagesRoot / 'Issue361-Core' / 'Issue361Class1.class.st'
 ]
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _packageRemovedArtifactFileReference: repositoryRoot [
+RwProjectTonelReaderWriterTest >> _packageRemovedArtifactFileReference: projectDefinition [
 
-	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2'
+	^ projectDefinition packagesRoot / 'Issue361-Extension2'
 ]
 
 { #category : 'private' }
