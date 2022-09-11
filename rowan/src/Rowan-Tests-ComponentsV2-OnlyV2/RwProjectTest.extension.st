@@ -214,34 +214,18 @@ RwProjectTest >> testResolvedProjectAPI [
 	self assert: (resolvedProject2 packageNames includes: packageName1).
 	self assert: (resolvedProject2 packageNames includes: packageName2).
 
-"tests attribute is specified, so packageName2 is read from disk"
+"tests attribute is not specified, so packageName2 is notread from disk"
 	resolvedProject2 := Rowan
 		projectFromUrl: loadSpecUrl
 		projectsHome: resolvedProject1 projectsHome
-		customConditionalAttributes: #('tests')
-		platformConditionalAttributes: #('common').
+		customConditionalAttributes: #().
 
 	self assert: resolvedProject2 class == RwResolvedProject.
 	self assert: (x := resolvedProject2 repositoryRoot) exists.
 	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
 
 	self assert: (resolvedProject2 packageNames includes: packageName1).
-	self assert: (resolvedProject2 packageNames includes: packageName2).
-
-"tests attribute is specified, but Core component not loaded because common attribute is not specified,
-	so packageName1 and packageName2 are NOT read from disk"
-	resolvedProject2 := Rowan
-		projectFromUrl: loadSpecUrl
-		projectsHome: resolvedProject1 projectsHome
-		customConditionalAttributes: #('tests')
-		platformConditionalAttributes: #().
-
-	self assert: resolvedProject2 class == RwResolvedProject.
-	self assert: (x := resolvedProject2 repositoryRoot) exists.
-	self assert: resolvedProject2 useGit == resolvedProject1 useGit.
-
-	self deny: (resolvedProject2 packageNames includes: packageName1).
-	self deny: (resolvedProject2 packageNames includes: packageName2).
+	self deny: (resolvedProject2 packageNames includes: packageName2)
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

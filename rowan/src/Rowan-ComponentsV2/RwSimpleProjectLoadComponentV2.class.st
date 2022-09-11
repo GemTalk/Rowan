@@ -7,11 +7,6 @@ Class {
 	#category : 'Rowan-ComponentsV2'
 }
 
-{ #category : 'ston' }
-RwSimpleProjectLoadComponentV2 >> _stonReplacementClass [
-	^ RwLoadComponent
-]
-
 { #category : 'validation' }
 RwSimpleProjectLoadComponentV2 >> _validatedPackageNames [
 	"answer the validated set of package names"

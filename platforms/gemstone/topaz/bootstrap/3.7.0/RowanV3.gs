@@ -45320,6 +45320,12 @@ newNamed: aName
 		yourself
 %
 
+category: 'accessing'
+classmethod: RwAbstractComponent
+orderedDictionaryClass
+	^ Rowan platform orderedDictionaryClass
+%
+
 category: 'version pattern matching'
 classmethod: RwAbstractComponent
 _platformPatternMatcherFor: pattern
@@ -46245,35 +46251,6 @@ conditionalPropertyMatchers
 	^ Dictionary new
 		at: {(RwUnconditionalPlatformAttributeMatcher new)} put: {};
 		yourself
-%
-
-category: 'ston'
-method: RwLoadComponent
-fromSton: stonReader
-	"Decode non-variable classes from a map of their instance variables and values.
-	Override to customize and add a matching #toSton: (see implementors)."
-
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
-		ifTrue: [ 
-			self class isVariable
-				ifTrue: [ self subclassResponsibility ]
-				ifFalse: [ 
-					| instanceVariableNames |
-					instanceVariableNames := self class allInstVarNames.
-					stonReader
-						parseMapDo: [ :instVarName :value | 
-							(self class == RwLoadComponent and: [ instVarName = #'condition' ])
-								ifTrue: [
-									"we're skipping the condition instvar, assuming that #fromSton: has been forwarded from RwSimpleProjectLoadComponent 
-										and condition instance var isn't supported in RwLoadComponent"
-									value ~= 'common'
-										ifTrue: [ 
-											"if the value is not common, then we'll throw an error, since we should not have top level components with conditions"
-											self
-												error:
-													'condition instance variable is ignored for RwLoadComponent instances is convert component to a subcomponent' ] ]
-								ifFalse: [ self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ] ] ]
-		ifFalse: [ super fromSton: stonReader ]
 %
 
 category: 'comparing'
@@ -51850,7 +51827,7 @@ addLoadComponentNamed: aComponentName comment: aString
 		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
 	self loadSpecification addComponentNamed: aComponentName.
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ ^ self _projectComponents addLoadComponentNamed: aComponentName comment: aString ]
 		ifFalse: [ 
 			^ self _projectComponents
@@ -52003,7 +51980,7 @@ method: RwResolvedProjectV2
 addPlatformSubcomponentNamed: aComponentName condition: conditionArray comment: aString
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ 
 			^ self _projectComponents
 				addPlatformSubcomponentNamed: aComponentName
@@ -52087,7 +52064,7 @@ addSubcomponentNamed: componentName condition: condition
 category: 'components'
 method: RwResolvedProjectV2
 addSubcomponentNamed: aComponentName condition: condition comment: aString
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ 
 			^ self _projectComponents
 				addSubcomponentNamed: aComponentName
@@ -59318,16 +59295,6 @@ exportToUrl: directoryUrl
 		yourself
 %
 
-category: 'ston'
-method: RwAbstractRowanProjectLoadComponentV2
-fromSton: stonReader
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
-		ifTrue: [ 
-			self _stonReplacementClass
-				ifNotNil: [ :replacementClass | ^ replacementClass new fromSton: stonReader ] ].
-	^ super fromSton: stonReader
-%
-
 category: 'testing'
 method: RwAbstractRowanProjectLoadComponentV2
 hasDoits
@@ -59801,12 +59768,6 @@ category: 'accessing'
 method: RwSimpleProjectLoadComponentV2
 removeProjectNamed: aProjectName
 	self projectNames remove: aProjectName ifAbsent: [  ]
-%
-
-category: 'ston'
-method: RwSimpleProjectLoadComponentV2
-_stonReplacementClass
-	^ RwLoadComponent
 %
 
 category: 'validation'
@@ -76858,6 +76819,13 @@ specsPath: aString
 	specsPath := aString
 %
 
+category: 'v2 vs v3'
+method: RwProjectSpecificationV2
+useV3ComponentClasses
+
+	^ false
+%
+
 category: 'accessing'
 method: RwProjectSpecificationV2
 _repoType
@@ -76945,6 +76913,13 @@ projectVersion: aStringOrVersionOrNil
 		ifNotNil: [ 
 			aStringOrVersionOrNil asRwSemanticVersionNumber.	"expect an error if aStringOrVersion is not a valid semantic version number"
 			projectVersion := aStringOrVersionOrNil asString ]
+%
+
+category: 'v2 vs v3'
+method: RwProjectSpecificationV3
+useV3ComponentClasses
+
+	^ true
 %
 
 ! Class implementation for 'RwUrl'

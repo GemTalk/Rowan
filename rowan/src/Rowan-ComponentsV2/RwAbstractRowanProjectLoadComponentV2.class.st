@@ -510,15 +510,6 @@ RwAbstractRowanProjectLoadComponentV2 >> exportToUrl: directoryUrl [
 		yourself
 ]
 
-{ #category : 'ston' }
-RwAbstractRowanProjectLoadComponentV2 >> fromSton: stonReader [
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
-		ifTrue: [ 
-			self _stonReplacementClass
-				ifNotNil: [ :replacementClass | ^ replacementClass new fromSton: stonReader ] ].
-	^ super fromSton: stonReader
-]
-
 { #category : 'testing' }
 RwAbstractRowanProjectLoadComponentV2 >> hasDoits [
 	^ preloadDoitName notNil or: [ postloadDoitName notNil ]

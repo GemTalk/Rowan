@@ -170,6 +170,11 @@ RwAbstractComponent class >> newNamed: aName [
 		yourself
 ]
 
+{ #category : 'accessing' }
+RwAbstractComponent class >> orderedDictionaryClass [
+	^ Rowan platform orderedDictionaryClass
+]
+
 { #category : 'dispatching' }
 RwAbstractComponent >> _addToResolvedProjectComponents: aRwResolvedProjectComponentsV2 [
 	"dispatch to _addActiveComponent: or _addPackageGroup: as appropriate"

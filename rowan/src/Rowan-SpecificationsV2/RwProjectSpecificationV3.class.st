@@ -61,3 +61,9 @@ RwProjectSpecificationV3 >> projectVersion: aStringOrVersionOrNil [
 			aStringOrVersionOrNil asRwSemanticVersionNumber.	"expect an error if aStringOrVersion is not a valid semantic version number"
 			projectVersion := aStringOrVersionOrNil asString ]
 ]
+
+{ #category : 'v2 vs v3' }
+RwProjectSpecificationV3 >> useV3ComponentClasses [
+
+	^ true
+]

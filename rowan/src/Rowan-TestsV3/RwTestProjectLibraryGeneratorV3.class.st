@@ -1138,8 +1138,6 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title canonicalLoadSpec |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0069'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -1183,8 +1181,7 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
@@ -1197,8 +1194,6 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0070: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0070'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -1233,8 +1228,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0070: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
@@ -1247,8 +1241,6 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0071: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0071'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0000'.
@@ -1289,8 +1281,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0071: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }

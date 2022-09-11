@@ -6867,10 +6867,6 @@ RwRowanSample9Test >> testSpec_0029 [
 	"https://github.com/dalehenrich/Rowan/issues/573"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects |
-[ 
-"Ensure that when we are using the new component classes, we can still load the old component classes"
-UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
-
 	loadSpec := self _loadSpecNamed: 'spec_0029'.
 
 	projectName := loadSpec projectName.
@@ -6909,7 +6905,6 @@ UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-] ensure: [UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: []]
 ]
 
 { #category : 'tests' }

@@ -269,7 +269,7 @@ RwResolvedProjectV2 >> addLoadComponentNamed: aComponentName comment: aString [
 		to the load spec (i.e., it will be loaded when the load spec is loaded)"
 
 	self loadSpecification addComponentNamed: aComponentName.
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ ^ self _projectComponents addLoadComponentNamed: aComponentName comment: aString ]
 		ifFalse: [ 
 			^ self _projectComponents
@@ -414,7 +414,7 @@ RwResolvedProjectV2 >> addPackagesNamed: packageNames toComponentNamed: componen
 RwResolvedProjectV2 >> addPlatformSubcomponentNamed: aComponentName condition: conditionArray comment: aString [
 	"Add the named subcomponent with the given condition to the named project and add the new component to the toComponentName component"
 
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ 
 			^ self _projectComponents
 				addPlatformSubcomponentNamed: aComponentName
@@ -490,7 +490,7 @@ RwResolvedProjectV2 >> addSubcomponentNamed: componentName condition: condition 
 
 { #category : 'components' }
 RwResolvedProjectV2 >> addSubcomponentNamed: aComponentName condition: condition comment: aString [
-	(UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [ false ])
+	self _projectSpecification useV3ComponentClasses
 		ifTrue: [ 
 			^ self _projectComponents
 				addSubcomponentNamed: aComponentName

@@ -287,3 +287,9 @@ RwProjectSpecificationV2 >> specsPath [
 RwProjectSpecificationV2 >> specsPath: aString [
 	specsPath := aString
 ]
+
+{ #category : 'v2 vs v3' }
+RwProjectSpecificationV2 >> useV3ComponentClasses [
+
+	^ false
+]

@@ -6756,8 +6756,6 @@ RwTestProjectLibraryGenerator >> genSpec_0059: commitMessage [
 	"Component api revamp. Start with spec_0001; add 3 conditions: alt1, alt2, alt3; one extension method and test case per condition (see https://github.com/GemTalk/Rowan/issues/653 and https://github.com/GemTalk/Rowan/issues/660)"
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0059'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0001'.
@@ -6792,8 +6790,7 @@ RwTestProjectLibraryGenerator >> genSpec_0059: commitMessage [
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
@@ -6851,8 +6848,6 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title readme |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0061'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
@@ -6897,8 +6892,7 @@ RwTestProjectLibraryGenerator >> genSpec_0061: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		readme: [:stream | self _readmeFor_0061: stream]
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
@@ -6909,8 +6903,6 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0062'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0061'.
@@ -6952,8 +6944,7 @@ RwTestProjectLibraryGenerator >> genSpec_0062: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		readme: [ :stream | self _readmeFor_0061: stream ]
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
@@ -6964,8 +6955,6 @@ RwTestProjectLibraryGenerator >> genSpec_0063: commitMessage [
 		has explicitly changed within the model or the disk format of artefacts."
 
 	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
-	[ 
-	UserGlobals at: #'USE_NEW_COMPONENT_CLASSES' put: true.
 	postfix := '0063'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0061'.
@@ -7007,8 +6996,7 @@ RwTestProjectLibraryGenerator >> genSpec_0063: commitMessage [
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
 		readme: [:stream | self _readmeFor_0061: stream]
-		commitMessage: commitMessage ]
-		ensure: [ UserGlobals removeKey: #'USE_NEW_COMPONENT_CLASSES' ifAbsent: [  ] ]
+		commitMessage: commitMessage
 ]
 
 { #category : 'generators' }
