@@ -211,9 +211,10 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0003: commitMessage [
 
 { #category : 'generators' }
 RwRowanSample11TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
-	"Start with spec_0003; part of recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0003; part of recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
+	"https://github.com/GemTalk/Rowan/issues/861"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -222,7 +223,7 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 	postfix := '0004'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0003'.
-	title := 'Start with spec_0003; part of recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1'.
+	title := 'Start with spec_0003; part of recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1'.
 
 	indexCard := (self
 		_createCard: postfix
@@ -231,7 +232,7 @@ RwRowanSample11TestProjectLibraryGenerator >> genSpec_0004: commitMessage [
 		index: 4
 		derivedFrom: derivedFrom
 		comment: 'recursive required project chain')
-		rowanIssues: #(701);
+		rowanIssues: #(701 861);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;

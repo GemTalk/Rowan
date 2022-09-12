@@ -155,16 +155,16 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0066: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject [
-	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0001 (RowanSample9V3) and spec_0003 (RowanSample10V3, RowanSample11, RowanSample12); linear required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	self
 		_addDefinitionsFor_0067: resolvedProject
-		requiredProjectName: 'RowanSample10'
+		requiredProjectName: 'RowanSample10V3'
 ]
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject requiredProjectName: requiredProjectName [
-	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0001 (RowanSample9V3) and spec_0003 (RowanSample10V3, RowanSample11, RowanSample12); linear required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	^ self
 		_addDefinitionsFor_0067: resolvedProject
@@ -175,7 +175,7 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject requ
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject specName: specName requiredProjectName: requiredProjectName superClassBaseName: superClassBaseName [
-	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0001 (RowanSample9V3) and spec_0003 (RowanSample10V3, RowanSample11, RowanSample12); linear required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	| requiredLoadSpec componentName superclassName packageName className  |
 	resolvedProject projectsRoot ensureCreateDirectory.
@@ -205,14 +205,14 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject spec
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject [
-	"Start with spec_0067 (RowanSample9) and spec_0004 (RowanSample10, RowanSample11, RowanSample12); recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0067 (RowanSample9V3) and spec_0004 (RowanSample10V3, RowanSample11, RowanSample12); recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	| className packageName requiredLoadSpec requiredProjectName componentName |
 	resolvedProject projectsRoot ensureCreateDirectory.
 	packageName := projectName , '-Core'.
 	componentName := 'Core'.
 	className := projectName , 'Class2'.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName := 'RowanSample10V3'.
 
 	requiredLoadSpec := RwLoadSpecificationV2 new
 		specName: requiredProjectName;
@@ -237,7 +237,7 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject requiredProjectName: requiredProjectName [
-	"Start with spec_0067 (RowanSample9) and spec_0004 (RowanSample10, RowanSample11, RowanSample12); recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0003; part of recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	"only expected to be sent from the required projects as the name of the branch is the only change (spec_0004)"
 
@@ -356,14 +356,14 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec1 requiredRevision1 requiredProjectName1 requiredSpecName1 |
 	componentName1 := 'Child'.
 
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredSpecName1 := requiredProjectName1 , '_' , componentName1.
 	requiredRevision1 := 'spec_0001'.
 
 	packageName1 := projectName , '-' , componentName1.
 
 	className1 := projectName , componentName1 , 'Class1'.
-	superclassName1 := 'RowanSample10Class1'.
+	superclassName1 := 'RowanSample10V3Class1'.
 
 	resolvedProject specName: componentName1.
 
@@ -1030,6 +1030,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0067: commitMessage [
 	"Start with spec_0001 (RowanSample9) and spec_0003 (RowanSample10, RowanSample11, RowanSample12); linear required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; class hierarchy runs Object->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
+	"https://github.com/GemTalk/Rowan/issues/861"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -1047,7 +1048,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0067: commitMessage [
 		index: 67
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #(701);
+		rowanIssues: #(701 861);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
@@ -1074,9 +1075,10 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0067: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGeneratorV3 >> genSpec_0068: commitMessage [
-	"Start with spec_0067 (RowanSample9) and spec_0004 (RowanSample10, RowanSample11, RowanSample12); recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1"
+	"Start with spec_0067 (RowanSample9V3) and spec_0004 (RowanSample10V3, RowanSample11, RowanSample12); recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
 	"https://github.com/GemTalk/Rowan/issues/701"
+	"https://github.com/GemTalk/Rowan/issues/861"
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
@@ -1085,16 +1087,16 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0068: commitMessage [
 	postfix := '0068'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0067'.
-	title := 'Start with spec_0067 (RowanSample9) and spec_0004 (RowanSample10, RowanSample11, RowanSample12); recursive required project chain; RowanSample9 requires RowanSample10; RowanSample10 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9; class hierarchy runs RowanSample9Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10Class1>RowanSample9Class1'.
+	title := 'Start with spec_0067 (RowanSample9V3) and spec_0004 (RowanSample10V3, RowanSample11, RowanSample12); recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1'.
 
 	indexCard := (self
 		_createCard: postfix
 		specName: specName
 		title: title
-		index: 67
+		index: 68
 		derivedFrom: derivedFrom
 		comment: '')
-		rowanIssues: #(701);
+		rowanIssues: #(701 861);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;

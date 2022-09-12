@@ -117,8 +117,8 @@ RwRowanSample11Test >> testSpec_0004 [
 	loadSpec := self _loadSpecNamed: 'spec_0004'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample9'.
-	requiredProjectName2 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample9V3'.
+	requiredProjectName2 := 'RowanSample10V3'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
 	projectNames := {projectName }, requiredProjectNames.

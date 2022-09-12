@@ -91,7 +91,7 @@ RwRowanSample9V3Test >> testIssue700_0 [
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
 		requiredProjectName requiredRepositoryRoot requiredLoadSpec requiredProjectsHome loadSpecs |
 	loadSpec := self _loadSpecNamed: 'spec_0065'.
-	projectName := projectName.
+	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
 
@@ -168,7 +168,8 @@ RwRowanSample9V3Test >> testIssue700_1 [
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project requiredProject 
 		requiredProjectName requiredRepositoryRoot requiredProjectsHome requiredLoadSpec loadSpecs |
-	projectName := 'RowanSample9'.
+	loadSpec := self _loadSpecNamed: 'spec_0065'.
+	projectName := loadSpec projectName.
 	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
 
@@ -176,12 +177,10 @@ RwRowanSample9V3Test >> testIssue700_1 [
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
-	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / requiredProjectName) ensureDeleteAll.
 	(self _testRowanProjectsSandbox / 'issue700') ensureDeleteAll.
 
 "resolve project"
-	loadSpec := self _loadSpecNamed: 'spec_0065'.
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
@@ -238,7 +237,7 @@ RwRowanSample9V3Test >> testIssue701_requiredProjectSet [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -296,7 +295,7 @@ RwRowanSample9V3Test >> testIssue704_1 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -372,7 +371,7 @@ RwRowanSample9V3Test >> testIssue704_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -438,7 +437,7 @@ RwRowanSample9V3Test >> testIssue705 [
 	loadSpec := self _loadSpecNamed: 'spec_0069'.
 
 	projectName := loadSpec projectName.
-	requiredProjectNames :=  { 'RowanSample10' . 'RowanSample11' . 'RowanSample12'}.
+	requiredProjectNames :=  { 'RowanSample10V3' . 'RowanSample11' . 'RowanSample12'}.
 	projectNames := {projectName }, requiredProjectNames.
 
 	projectNames do: [:pn | 
@@ -449,7 +448,7 @@ RwRowanSample9V3Test >> testIssue705 [
 
 	projectNamesMap := Dictionary new
 		at: 'Bridge' put: {projectName . 'RowanSample11' . 'RowanSample12' };
-		at: 'Child' put:  {projectName . 'RowanSample10' };
+		at: 'Child' put:  {projectName . 'RowanSample10V3' };
 		at: 'Parent' put:  {projectName . 'RowanSample12' };
 		yourself.
 
@@ -483,7 +482,7 @@ RwRowanSample9V3Test >> testIssue705 [
 	self 
 		_processIssue705: resolvedProject 
 		componentNamed: 'Parent' 
-		previousRequiredProjectNames: {'RowanSample10'} 
+		previousRequiredProjectNames: {'RowanSample10V3'} 
 		projectNamesMap: projectNamesMap.
 
 "load and validate Bridge component"
@@ -511,7 +510,7 @@ RwRowanSample9V3Test >> testIssue705 [
 	self 
 		_processIssue705: resolvedProject 
 		componentNamed: 'Bridge' 
-		previousRequiredProjectNames: {'RowanSample10'} 
+		previousRequiredProjectNames: {'RowanSample10V3'} 
 		projectNamesMap: projectNamesMap.
 
 "unload projects"
@@ -539,7 +538,7 @@ RwRowanSample9V3Test >> testIssue707_01 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -660,8 +659,8 @@ RwRowanSample9V3Test >> testIssue711_1 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+	self assert: (Rowan globalNamed: projectName, 'Class2') equals: nil.
+	self assert: (Rowan globalNamed: projectName, 'Class3') equals: nil.
 
 "update the projects using tests, attr1 and attr2"
 	loadSpecs := project loadedLoadSpecifications.
@@ -676,8 +675,8 @@ RwRowanSample9V3Test >> testIssue711_1 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class2') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class3') equals: nil.
 
 "reload ... should be exactly the same as load"
 	project reload.
@@ -686,8 +685,8 @@ RwRowanSample9V3Test >> testIssue711_1 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class2') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class3') equals: nil.
 ]
 
 { #category : 'tests' }
@@ -896,7 +895,7 @@ RwRowanSample9V3Test >> testIssue715_01 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1002,7 +1001,7 @@ RwRowanSample9V3Test >> testIssue715_02 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1073,7 +1072,7 @@ RwRowanSample9V3Test >> testIssue715_03 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1154,8 +1153,8 @@ RwRowanSample9V3Test >> testIssue724 [
 	| loadSpec loadSpecA loadSpecB projectsHome projectsHomeA projectsHomeB projectName projectNames requiredProjectName loadSpecs loadedProjects projectDefinitionSet |
 	loadSpec := self _loadSpecNamed: 'spec_0072'. "clone the repo"
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectsHome := self _testRowanProjectsSandbox.
@@ -1308,7 +1307,7 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_02 [
 	| loadSpec repoDir theSpec loadSpecs projectName requiredProjectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0073'.
 	projectName := loadSpec projectName.
-	requiredProjectNames := { 'RowanSample9_3' . 'RowanSample9_1' . 'RowanSample9_2' }.
+	requiredProjectNames := { projectName, '_3' . projectName, '_1' . projectName, '_2' }.
 
 	repoDir := self _testRowanProjectsSandbox / loadSpec projectName.
 	repoDir ensureDeleteAll.
@@ -1360,7 +1359,7 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_03 [
 	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0066'.
 	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+	projectNames := { projectName . 'RowanSample10V3' . 'RowanSample11' . 'RowanSample12' }.
 
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
@@ -1407,7 +1406,7 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_04 [
 	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0067'.
 	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+	projectNames := { projectName . 'RowanSample10V3' . 'RowanSample11' . 'RowanSample12' }.
 
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
@@ -1453,7 +1452,7 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_05 [
 	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
+	projectNames := { projectName . 'RowanSample10V3' . 'RowanSample11' . 'RowanSample12' }.
 
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
@@ -1501,7 +1500,7 @@ RwRowanSample9V3Test >> testSpec_0065 [
 	loadSpec := self _loadSpecNamed: 'spec_0065'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName := 'RowanSample10V3'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -1535,7 +1534,7 @@ RwRowanSample9V3Test >> testSpec_0066 [
 	loadSpec := self _loadSpecNamed: 'spec_0066'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1574,7 +1573,7 @@ RwRowanSample9V3Test >> testSpec_0067 [
 	loadSpec := self _loadSpecNamed: 'spec_0067'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1613,7 +1612,7 @@ RwRowanSample9V3Test >> testSpec_0068 [
 	loadSpec := self _loadSpecNamed: 'spec_0068'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
@@ -1708,7 +1707,7 @@ RwRowanSample9V3Test >> testSpec_0069_Child [
 	loadSpec := self _loadSpecNamed: 'spec_0069'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10'.
+	requiredProjectName1 := 'RowanSample10V3'.
 	requiredProjectNames :=  { requiredProjectName1}.
 	projectNames := {projectName }, requiredProjectNames.
 
@@ -1828,8 +1827,8 @@ RwRowanSample9V3Test >> testSpec_0070 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self assert: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+	self assert: (Rowan globalNamed: projectName, 'Class2') equals: nil.
+	self assert: (Rowan globalNamed: projectName, 'Class3') equals: nil.
 
 "add attr1 and attr2"
 	(loadSpecs specForProjectNamed: projectName) addCustomConditionalAttributes: #('attr1' 'attr2').
@@ -1841,8 +1840,8 @@ RwRowanSample9V3Test >> testSpec_0070 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class2') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9Class3') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class2') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class3') equals: nil.
 ]
 
 { #category : 'tests' }
@@ -1871,8 +1870,8 @@ RwRowanSample9V3Test >> testSpec_0071 [
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self deny: (Rowan globalNamed: 'RowanSample9Class1') equals: nil.
-	self deny: (Rowan globalNamed: 'RowanSample9TestCase') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'Class1') equals: nil.
+	self deny: (Rowan globalNamed: projectName, 'TestCase') equals: nil.
 ]
 
 { #category : 'tests' }
