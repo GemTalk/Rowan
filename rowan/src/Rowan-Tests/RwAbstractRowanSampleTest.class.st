@@ -216,7 +216,7 @@ RwAbstractRowanSampleTest >> _standard_validate: resolvedProject loadedProjects:
 RwAbstractRowanSampleTest >> _standard_validate: resolvedProject loadedProjects: loadedProjects expectedProjectNames: expectedProjectNames [
 	| testResult loadedProjectDefinition x |
 	"validate"
-	self assert: loadedProjects size = expectedProjectNames size.
+	self assert: loadedProjects size equals: expectedProjectNames size.
 	self
 		assert: (loadedProjects collect: [ :each | each name ]) sort
 		equals: expectedProjectNames sort.
@@ -231,7 +231,6 @@ RwAbstractRowanSampleTest >> _standard_validate: resolvedProject loadedProjects:
 			self
 				assert:
 					loadedProjectDefinition class = resolvedProject projectDefinition class ]
-
 ]
 
 { #category : 'private' }

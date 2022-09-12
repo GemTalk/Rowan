@@ -106,13 +106,13 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10V3LibraryGenerator [
 			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
 			^ self ].
 	RwRowanSample10Test _clearLoadSpecSessionCache.
-	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10') ensureDeleteAll.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample10V3') ensureDeleteAll.
 
 	commitComment := 'running RowanSample10V3 testLibraryGenerator tests ... no changes expected, thus no commits expected'.
 	RwRowanSample10V3TestProjectLibraryGeneratorTester new
 		testCase: self;
-		projectName: 'RowanSample10';
-		projectUrl: 'git@github.com:dalehenrich/RowanSample10.git';
+		projectName: 'RowanSample10V3';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample10V3.git';
 		preserveRowanSHA: true;
 		primeIndexCardMap;
 		preserveChangesOnGithub: false;

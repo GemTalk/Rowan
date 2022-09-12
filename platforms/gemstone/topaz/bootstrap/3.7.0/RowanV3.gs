@@ -76886,7 +76886,7 @@ initialize
 
 	super initialize.
 	packagesPath := 'src'.
-	projectVersion := '0.0.0'.
+	projectVersion := '1.0.0'.
 	packageConvention := 'RowanHybrid'.
 	packageFormat := 'tonel'
 %
