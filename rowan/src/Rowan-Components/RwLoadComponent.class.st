@@ -30,7 +30,7 @@ RwLoadComponent >> conditionalPropertyMatchers [
 
 { #category : 'comparing' }
 RwLoadComponent >> hash [
-	^ super hash bitXor: self projectNames hash
+	^ super hash bitXor: projectNames hash
 ]
 
 { #category : 'ston' }
@@ -40,5 +40,5 @@ RwLoadComponent >> instVarNamesInOrderForSton [
 
 { #category : 'accessing' }
 RwLoadComponent >> removeProjectNamed: aProjectName [
-	self projectNames remove: aProjectName ifAbsent: [  ]
+	projectNames remove: aProjectName ifAbsent: [  ]
 ]

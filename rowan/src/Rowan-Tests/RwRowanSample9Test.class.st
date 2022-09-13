@@ -6676,7 +6676,7 @@ RwRowanSample9Test >> testSpec_0023_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/568"
 
-	| loadSpec projectName resolvedProject loadedProjects |
+	| loadSpec projectName resolvedProject loadedProjects loadFailed |
 	loadSpec := self _loadSpecNamed: 'spec_0023'.
 
 	projectName := loadSpec projectName.
@@ -6688,10 +6688,13 @@ RwRowanSample9Test >> testSpec_0023_1 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+	loadFailed := false.
+	[loadedProjects := resolvedProject load ] 
+		on: Error
+		do: [:ex |
+			self assert: ex description equals: 'a CompileError occurred (error 1001), undefined symbol  RowanSample9V3Class3'.
+			loadFailed := true ].
+	self assert: loadFailed
 ]
 
 { #category : 'tests' }
@@ -7937,7 +7940,7 @@ RwRowanSample9Test >> testSpec_0064_1 [
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName :=  'RowanSample10'.
 	projectNames := {projectName}.
 	className1 := requiredProjectName , 'Class1'.
 
@@ -7972,7 +7975,7 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName :=  'RowanSample10'.
 	projectNames := {projectName}.
 	className1 := requiredProjectName , 'Class1'.
 
@@ -8030,7 +8033,7 @@ RwRowanSample9Test >> testSpec_0064_3 [
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName :=  'RowanSample10'.
 	projectNames := {projectName}.
 	className1 := requiredProjectName , 'Class1'.
 
@@ -8121,7 +8124,7 @@ RwRowanSample9Test >> testSpec_0064_4 [
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName :=  'RowanSample10'.
 	projectNames := {projectName}.
 	className1 := requiredProjectName , 'Class1'.
 
@@ -8209,7 +8212,7 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	loadSpec := self _loadSpecNamed: 'spec_0064'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10'.
+	requiredProjectName :=  'RowanSample10'.
 	projectNames := {projectName}.
 	className1 := requiredProjectName , 'Class1'.
 

@@ -1235,25 +1235,25 @@ RwRowanSample9V3Test >> testLoadSpec_read_01 [
 "validate"
 	projectDef := projectSetDefinition projectNamed: projectName.
 	self assert: 
-		(projectDef packageNamed: 'RowanSample9-GemStone3x-Core' ifAbsent: []) isNil.
+		(projectDef packageNamed: projectName, '-GemStone3x-Core' ifAbsent: []) isNil.
 	self assert: 
-		((projectDef packageNamed: 'RowanSample9-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9GemStone24xClass1' ifAbsent: []) notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9TestCase' ifAbsent: [].
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9GemStone24xClass1').
-	self assert: (projectDef packageNamed: 'RowanSample9-GemStone3x-Tests' ifAbsent: []) isNil.
+		((projectDef packageNamed: projectName, '-GemStone24x-Core') 
+			classDefinitionNamed: projectName, 'GemStone24xClass1' ifAbsent: []) notNil.
+	classDef := (projectDef packageNamed: projectName, '-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: projectName, 'TestCase' ifAbsent: [].
+	self assert: (classDef instanceMethodDefinitions includesKey: ('test_', projectName, 'GemStone24xClass1') asSymbol).
+	self assert: (projectDef packageNamed:projectName, '-GemStone3x-Tests' ifAbsent: []) isNil.
 
 	projectDef := projectSetDefinition projectNamed: embeddedProjectName.
-	self assert: (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Core') 
-			classDefinitionNamed: 'RowanSample9_embedded_1GemStone24xClass1' ifAbsent: [].
+	self assert: (projectDef packageNamed: projectName, '_embedded_1-GemStone3x-Core' ifAbsent: []) isNil.
+	classDef := (projectDef packageNamed: projectName, '_embedded_1-GemStone24x-Core') 
+			classDefinitionNamed: projectName, '_embedded_1GemStone24xClass1' ifAbsent: [].
 	self assert: classDef notNil.
-	classDef := (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone24x-Tests') 
-			classExtensionDefinitionNamed: 'RowanSample9_embedded_1TestCase' ifAbsent: [].
+	classDef := (projectDef packageNamed: projectName, '_embedded_1-GemStone24x-Tests') 
+			classExtensionDefinitionNamed: projectName, '_embedded_1TestCase' ifAbsent: [].
 	self assert: classDef notNil.
-	self assert: (classDef instanceMethodDefinitions includesKey: #'test_RowanSample9_embedded_1GemStone24xClass1').
-	self assert:  (projectDef packageNamed: 'RowanSample9_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
+	self assert: (classDef instanceMethodDefinitions includesKey: ('test_', projectName, '_embedded_1GemStone24xClass1') asSymbol).
+	self assert:  (projectDef packageNamed: projectName, '_embedded_1-GemStone3x-Tests' ifAbsent: []) isNil.
 ]
 
 { #category : 'tests' }
@@ -1883,8 +1883,8 @@ RwRowanSample9V3Test >> testSpec_0072 [
 	| loadSpec projectName projectNames loadSpecs loadedProjects requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0072'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -1955,7 +1955,7 @@ RwRowanSample9V3Test >> testSpec_0074_1 [
 	loadSpec := self _loadSpecNamed: 'spec_0074'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample9_embedded_1'.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -1994,7 +1994,7 @@ RwRowanSample9V3Test >> testSpec_0074_2 [
 	loadSpec := self _loadSpecNamed: 'spec_0074'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample9_embedded_1'.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2042,7 +2042,7 @@ RwRowanSample9V3Test >> testSpec_0074_3 [
 	loadSpec := self _loadSpecNamed: 'spec_0074'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample9_embedded_1'.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2067,8 +2067,8 @@ RwRowanSample9V3Test >> testSpec_0074_3 [
 	[ (Rowan projectNamed: requiredProjectName) unload ]
 		on: Error do: [:ex |
 			self assert: ex messageText equals: 'Cannot unload projects that are required by other projects that are not being unloaded.
-	the project ''RowanSample9'' requires the following projects that are not being unloaded:
-		RowanSample9_embedded_1
+	the project ''', projectName, ''' requires the following projects that are not being unloaded:
+		', projectName, '_embedded_1
 '.
 			errorHit := true ].
 	self assert: errorHit.
@@ -2081,8 +2081,8 @@ RwRowanSample9V3Test >> testSpec_0075 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0075'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2113,8 +2113,8 @@ RwRowanSample9V3Test >> testSpec_0076_1 [
 	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2133,8 +2133,8 @@ RwRowanSample9V3Test >> testSpec_0076_1 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self deny: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
-	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2146,8 +2146,8 @@ RwRowanSample9V3Test >> testSpec_0076_2 [
 	| loadSpec projectName projectNames loadedProjects requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2171,8 +2171,8 @@ RwRowanSample9V3Test >> testSpec_0076_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2185,8 +2185,8 @@ RwRowanSample9V3Test >> testSpec_0076_3 [
 	| loadSpec projectName projectNames loadedProjects projectDefinitionSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2206,14 +2206,14 @@ RwRowanSample9V3Test >> testSpec_0076_3 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 "gnu attribute present"
-	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
 "tests attribute present"
-	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GnuClass1).
+	self assert: ((Rowan globalNamed: projectName, 'TestCase') includesSelector: ('test_', projectName, 'GnuClass1') asSymbol).
 "gnu attribute not propogated to required projects"
 "tests attribute present by default"
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase') notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  isNil. 
-	self deny: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GnuClass1)
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase') notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  isNil. 
+	self deny: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: ('test__', projectName, '_embedded_1GnuClass1') asSymbol)
 ]
 
 { #category : 'tests' }
@@ -2226,8 +2226,8 @@ RwRowanSample9V3Test >> testSpec_0076_4 [
 	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2251,12 +2251,12 @@ RwRowanSample9V3Test >> testSpec_0076_4 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 "tests attribute still present by default"
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase') notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase') notNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase') notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase') notNil.
 "gnu attribute propogated to required projects"
-	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil.
-	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GnuClass1).
+	self assert: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  notNil.
+	self assert: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: ('test_', projectName, '_embedded_1GnuClass1') asSymbol).
 ]
 
 { #category : 'tests' }
@@ -2269,8 +2269,8 @@ RwRowanSample9V3Test >> testSpec_0076_5 [
 	| loadSpec projectName projectNames loadedProjects projectDefinitionSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2289,14 +2289,14 @@ RwRowanSample9V3Test >> testSpec_0076_5 [
 		_standard_validate: (projectDefinitionSet projectNamed: projectName)
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
 "tests attribute removed"
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase') isNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase') isNil.
 "tests attribute present by default"
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase') notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase') notNil.
 "gnu attribute not propogated to required projects"
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  isNil. 
-	self deny: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GnuClass1)
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  isNil. 
+	self deny: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GnuClass1)
 ]
 
 { #category : 'tests' }
@@ -2309,8 +2309,8 @@ RwRowanSample9V3Test >> testSpec_0076_6 [
 	| loadSpec projectName projectNames loadedProjects requiredLoadSpecSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0076'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2335,11 +2335,11 @@ RwRowanSample9V3Test >> testSpec_0076_6 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 "tests attributes not present in either project"
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase') isNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase') isNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase') isNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase') isNil.
 "gnu attribute present in both projects"
-	self assert: (Rowan globalNamed: 'RowanSample9GnuClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GnuClass1')  notNil
+	self assert: (Rowan globalNamed: projectName, 'GnuClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GnuClass1')  notNil
 ]
 
 { #category : 'tests' }
@@ -2351,8 +2351,8 @@ RwRowanSample9V3Test >> testSpec_0077_1 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0077'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2371,8 +2371,8 @@ RwRowanSample9V3Test >> testSpec_0077_1 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self deny: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
-	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2384,8 +2384,8 @@ RwRowanSample9V3Test >> testSpec_0077_2 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0077'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2407,8 +2407,8 @@ RwRowanSample9V3Test >> testSpec_0077_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2421,8 +2421,8 @@ RwRowanSample9V3Test >> testSpec_0077_3 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0077'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2444,12 +2444,12 @@ RwRowanSample9V3Test >> testSpec_0077_3 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase')  notNil.
-	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone24xClass1).
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase')  notNil.
-	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone24xClass1).
+	self assert: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase')  notNil.
+	self assert: ((Rowan globalNamed: projectName, 'TestCase') includesSelector: ('test_', projectName, 'GemStone24xClass1') asSymbol).
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase')  notNil.
+	self assert: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: ('test_', projectName, '_embedded_1GemStone24xClass1') asSymbol).
 ]
 
 { #category : 'tests' }
@@ -2461,8 +2461,8 @@ RwRowanSample9V3Test >> testSpec_0078_1 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName |
 	loadSpec := self _loadSpecNamed: 'spec_0078'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2481,11 +2481,11 @@ RwRowanSample9V3Test >> testSpec_0078_1 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
-	self deny: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GemStone3xClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
 
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
-	self deny: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone3xClass1')  notNil.
+	self deny: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2497,8 +2497,8 @@ RwRowanSample9V3Test >> testSpec_0078_2 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0078'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2520,11 +2520,11 @@ RwRowanSample9V3Test >> testSpec_0078_2 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
 
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
 ]
 
 { #category : 'tests' }
@@ -2539,8 +2539,8 @@ RwRowanSample9V3Test >> testSpec_0078_3 [
 	| loadSpec projectName projectNames loadedProjects resolvedProjectSet requiredProjectName requiredLoadSpecSet |
 	loadSpec := self _loadSpecNamed: 'spec_0078'.
 
-	requiredProjectName := 'RowanSample9_embedded_1'.
 	projectName := loadSpec projectName.
+	requiredProjectName := projectName, '_embedded_1'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -2562,16 +2562,16 @@ RwRowanSample9V3Test >> testSpec_0078_3 [
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone3xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9GemStone24xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9TestCase')  notNil.
-	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone24xClass1).
-	self assert: ((Rowan globalNamed: 'RowanSample9TestCase') includesSelector: #test_RowanSample9GemStone3xClass1).
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone3xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1GemStone24xClass1')  notNil.
-	self assert: (Rowan globalNamed: 'RowanSample9_embedded_1TestCase')  notNil.
-	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone24xClass1).
-	self assert: ((Rowan globalNamed: 'RowanSample9_embedded_1TestCase') includesSelector: #test_RowanSample9_embedded_1GemStone3xClass1).
+	self assert: (Rowan globalNamed: projectName, 'GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, 'TestCase')  notNil.
+	self assert: ((Rowan globalNamed: projectName, 'TestCase') includesSelector: ('test_', projectName, 'GemStone24xClass1') asSymbol).
+	self assert: ((Rowan globalNamed: projectName, 'TestCase') includesSelector: ('test_', projectName, 'GemStone3xClass1') asSymbol).
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone3xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1GemStone24xClass1')  notNil.
+	self assert: (Rowan globalNamed: projectName, '_embedded_1TestCase')  notNil.
+	self assert: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: ('test_', projectName, '_embedded_1GemStone24xClass1') asSymbol).
+	self assert: ((Rowan globalNamed: projectName, '_embedded_1TestCase') includesSelector: ('test_', projectName, '_embedded_1GemStone3xClass1') asSymbol).
 ]
 
 { #category : 'tests' }
@@ -2583,15 +2583,16 @@ RwRowanSample9V3Test >> testSwitchRepository_591 [
 	| projectNames projectName loadSpec_0074 loadSpec_0075 loadedSpecs resolvedProjectSet_0074 
 		resolvedProjectSet_0075  loadedProjects  requiredProjectName requiredProject1 project |
 	
-	loadSpec_0074 := (self _loadSpecNamed: 'spec_0074')
-		projectAlias: 'RowanSample9_0074';
+	loadSpec_0074 := self _loadSpecNamed: 'spec_0074'.
+	projectName := loadSpec_0074 projectName.
+	loadSpec_0074
+		projectAlias: projectName, '_0074';
 		yourself.
 	loadSpec_0075 := (self _loadSpecNamed: 'spec_0075')
-		projectAlias: 'RowanSample9_0075';
+		projectAlias: projectName, '_0075';
 		yourself.
 
-	projectName := 'RowanSample9'.
-	requiredProjectName := 'RowanSample9_embedded_1'.
+	requiredProjectName := projectName, '_embedded_1'.
 
 	projectNames := {loadSpec_0074 projectName. requiredProjectName}.
 
@@ -2627,8 +2628,8 @@ RwRowanSample9V3Test >> testSwitchRepository_591 [
 	loadedProjects := loadedSpecs load.
 
 "Validate"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
-	self assert: ((Rowan globalNamed: 'RowanSample9Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
+	self assert: ((Rowan globalNamed: projectName, 'Class1') new perform: #ivar1) isNil.	"ivar1 method not present in spec_0074"
+	self assert: ((Rowan globalNamed: projectName, 'Class1') new perform: #ivar1_embedded) isNil.	"ivar1_embedded method not present in spec_0074"
 	self 
 		_standard_validate_loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.

@@ -46256,7 +46256,7 @@ conditionalPropertyMatchers
 category: 'comparing'
 method: RwLoadComponent
 hash
-	^ super hash bitXor: self projectNames hash
+	^ super hash bitXor: projectNames hash
 %
 
 category: 'ston'
@@ -46268,7 +46268,7 @@ instVarNamesInOrderForSton
 category: 'accessing'
 method: RwLoadComponent
 removeProjectNamed: aProjectName
-	self projectNames remove: aProjectName ifAbsent: [  ]
+	projectNames remove: aProjectName ifAbsent: [  ]
 %
 
 ! Class implementation for 'RwSubcomponent'
