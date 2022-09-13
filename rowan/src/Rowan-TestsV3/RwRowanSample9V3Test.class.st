@@ -697,11 +697,11 @@ RwRowanSample9V3Test >> testIssue714_1 [
 
 	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
 	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
 	projectName := loadSpec projectName.
+
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
 	projectName1 := projectName, '_1'.
 	projectName2 := projectName, '_2'.
 	projectName3 := projectName, '_3'.
@@ -718,7 +718,7 @@ RwRowanSample9V3Test >> testIssue714_1 [
 "
 	resolvedProject := loadSpec resolveProject.
 	gitRoot := resolvedProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / (projectName, '_1.ston').
 	gitRoot ensureDeleteAll.
 
 "load (resolve(clone)/load) projectName1"
@@ -751,11 +751,11 @@ RwRowanSample9V3Test >> testIssue714_2 [
 
 	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 resolvedProject gitRoot loadedProjects |
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-
 	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
 	projectName := loadSpec projectName.
+
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
 	projectName1 := projectName, '_1'.
 	projectName2 := projectName, '_2'.
 	projectName3 := projectName, '_3'.
@@ -772,7 +772,7 @@ RwRowanSample9V3Test >> testIssue714_2 [
 "
 	resolvedProject := loadSpec resolveProject.
 	gitRoot := resolvedProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / (projectName, '_1.ston').
 	gitRoot ensureDeleteAll.
 
 "load (resolveProject(clone)/load) projectName1"
@@ -821,12 +821,12 @@ RwRowanSample9V3Test >> testIssue714_3 [
 
 	| loadSpec loadSpec1 projectName projectNames projectName1 projectName2 projectName3 loadSpecSet gitRoot loadedProjects |
 
-	(self _testRowanProjectsSandbox / 'RowanSample9') ensureDeleteAll.
-	(self _testRowanProjectsSandbox / 'RowanSample9_1') ensureDeleteAll.
-
 	loadSpec := self _loadSpecNamed: 'spec_0073'.
-
 	projectName := loadSpec projectName.
+
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+	(self _testRowanProjectsSandbox / (projectName, '_1')) ensureDeleteAll.
+
 	projectName1 := projectName, '_1'.
 	projectName2 := projectName, '_2'.
 	projectName3 := projectName, '_3'.
@@ -842,7 +842,7 @@ RwRowanSample9V3Test >> testIssue714_3 [
 "use resolveProject so we can grab the gitRoot (without actually loading the project)
 	and use the gitRoot to read a loadSpec for one of the embedded projects"
 	gitRoot := loadSpec resolveProject gitRoot.
-	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / 'RowanSample9_1.ston'.
+	loadSpec1 := RwLoadSpecificationV2 fromFile: gitRoot / 'rowan_1' / 'specs' / (projectName, '_1.ston').
 
 "prepare loadSpec1 so that when it is processed it will clone it's own project and be 
 	loaded from the new clone"

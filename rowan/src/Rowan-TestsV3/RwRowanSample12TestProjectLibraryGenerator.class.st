@@ -76,7 +76,7 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedP
 		addProjectNamed: requiredSpecName.
 	((resolvedProject packageNamed: packageName)
 		addClassNamed: className
-		super: 'AbstractRowanSample9ParentClass1'
+		super: 'Abstract', requiredProjectName, 'ParentClass1'
 		instvars: #()
 		category: packageName
 		comment: 'I am an example class')
@@ -120,7 +120,7 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0006: resolvedP
 		addProjectNamed: requiredSpecName.
 	((resolvedProject packageNamed: packageName)
 		addClassNamed: className
-		super: 'AbstractRowanSample9BridgeClass1'
+		super: 'Abstract', requiredProjectName, 'BridgeClass1'
 		instvars: #()
 		category: packageName
 		comment: 'I am an example class')
