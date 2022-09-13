@@ -6692,7 +6692,7 @@ RwRowanSample9Test >> testSpec_0023_1 [
 	[loadedProjects := resolvedProject load ] 
 		on: Error
 		do: [:ex |
-			self assert: ex description equals: 'a CompileError occurred (error 1001), undefined symbol  RowanSample9V3Class3'.
+			self assert: ex description equals: 'a CompileError occurred (error 1001), undefined symbol  ', projectName, 'Class3'.
 			loadFailed := true ].
 	self assert: loadFailed
 ]

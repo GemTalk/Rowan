@@ -29,6 +29,11 @@ Class {
 
 { #category : 'private' }
 RwRowanSample10V3TestProjectLibraryGeneratorTester >> _doCommitAndPush: commitMessage resolvedRepository: resolvedRepository branchName: branchName [
+	Transcript
+		cr;
+		show: '-- ' , self class name;
+		cr;
+		show: '-- ' , branchName.
 	self testCase
 		deny:
 			(super

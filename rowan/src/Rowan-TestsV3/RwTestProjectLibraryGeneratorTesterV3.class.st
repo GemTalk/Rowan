@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorTesterV3 >> _createNewProject: aString [
+	^ Rowan newProjectNamed: aString
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorTesterV3 >> primaryProjectName [
 	^ 'RowanSample9V3'
 ]

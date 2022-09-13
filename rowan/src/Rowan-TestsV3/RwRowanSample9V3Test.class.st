@@ -1359,7 +1359,7 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_03 [
 	| loadSpec theSpec loadSpecs projectName projectNames readProjectSet |
 	loadSpec := self _loadSpecNamed: 'spec_0066'.
 	projectName := loadSpec projectName.
-	projectNames := { projectName . 'RowanSample10V3' . 'RowanSample11' . 'RowanSample12' }.
+	projectNames := { projectName . 'RowanSample10' . 'RowanSample11' . 'RowanSample12' }.
 
 	projectNames do: [:pn |
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
@@ -1500,7 +1500,7 @@ RwRowanSample9V3Test >> testSpec_0065 [
 	loadSpec := self _loadSpecNamed: 'spec_0065'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName := 'RowanSample10V3'.
+	requiredProjectName := 'RowanSample10'.
 	projectNames := {projectName . requiredProjectName}.
 
 	projectNames do: [:pn | 
@@ -1534,7 +1534,7 @@ RwRowanSample9V3Test >> testSpec_0066 [
 	loadSpec := self _loadSpecNamed: 'spec_0066'.
 
 	projectName := loadSpec projectName.
-	requiredProjectName1 := 'RowanSample10V3'.
+	requiredProjectName1 := 'RowanSample10'.
 	requiredProjectName2 := 'RowanSample11'.
 	requiredProjectName3 := 'RowanSample12'.
 	requiredProjectNames :=  { requiredProjectName1 . requiredProjectName2 . requiredProjectName3}.
