@@ -2621,7 +2621,7 @@ RwRowanSample9Test >> testIssue230 [
 	"based on RowanSample9>>testIssue208_adopt_load"
 
 	| primerProjectName projectName symDictName1 symDictName2 symDict theClass instanceMethod classMethod symbolList resolvedProject 
-		primerPackageName1 primerPackageName2 loadedPrimerProject componentName loadSpec primerResolvedProject audit className class newClass |
+		primerPackageName1 primerPackageName2 loadedPrimerProject componentName loadSpec primerResolvedProject audit className class newClass loadedProjects project |
 
 	primerProjectName := 'PrimerSample9'.
 	symDictName1 := self _symbolDictionaryName1.
@@ -2688,7 +2688,10 @@ RwRowanSample9Test >> testIssue230 [
 		gemstoneSetSymbolDictName: symDictName2 forPackageNamed: primerPackageName2;
 		yourself.
 
-	primerResolvedProject resolve; load.
+	loadedProjects := primerResolvedProject resolve; load.
+	project := loadedProjects first.
+	audit := project audit.
+	self assert: audit isEmpty.
 
 	"Adopt the classes into the primer project"
 	Rowan packageTools adopt
@@ -2702,7 +2705,11 @@ RwRowanSample9Test >> testIssue230 [
 	resolvedProject := loadSpec resolveStrict.
 
 	class := Rowan globalNamed: className.
-	resolvedProject load.
+	loadedProjects := resolvedProject load.
+	project := loadedProjects first.
+	audit := project audit.
+	self assert: audit isEmpty.
+
 	newClass := Rowan globalNamed: className.
 
 "validate that we got a new class version"

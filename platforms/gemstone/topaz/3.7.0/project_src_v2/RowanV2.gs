@@ -39277,8 +39277,7 @@ parseVariableNode
 category: 'accessing'
 method: RBParser
 parseWorkspace
-	| workspaceNode sequenceNode args leftBar rightBar |
-	""
+	| workspaceNode args leftBar rightBar |
 	workspaceNode := self workspaceNodeClass new.
 	(currentToken notNil and: [ currentToken comments notNil ])
 		ifTrue: [ 
@@ -94586,23 +94585,6 @@ addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolStrin
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
-
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			compiledMethod == oldCompiledMethod
-				ifFalse: [ 
-					| src oldSrc "temps for ease of debugging" |
-					(src := compiledMethod sourceString trimWhiteSpace)
-						= (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
-						ifFalse: [ 
-							"only a problem, if the new and old compiled method are not identical"
-							self
-								error:
-									'internal error - Compiled method ' , behavior name asString , '>>'
-										, selector asString
-										,
-											' already exists in method dictionary when new extension method is expected ( package '
-										, packageName , ').' ] ] ].
 
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.

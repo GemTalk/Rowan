@@ -41,23 +41,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			compiledMethod == oldCompiledMethod
-				ifFalse: [ 
-					| src oldSrc "temps for ease of debugging" |
-					(src := compiledMethod sourceString trimWhiteSpace)
-						= (oldSrc := oldCompiledMethod sourceString trimWhiteSpace)
-						ifFalse: [ 
-							"only a problem, if the new and old compiled method are not identical"
-							self
-								error:
-									'internal error - Compiled method ' , behavior name asString , '>>'
-										, selector asString
-										,
-											' already exists in method dictionary when new extension method is expected ( package '
-										, packageName , ').' ] ] ].
-
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
