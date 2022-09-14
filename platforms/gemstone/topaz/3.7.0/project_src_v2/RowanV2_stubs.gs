@@ -110,11 +110,12 @@ _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList catego
 														packageName: packageName ] ]
 										ifNotNil: [ :packageName | 
 											"if protocol does not begin with a '* and the currentTopazPackageName is set"
-											(Rowan image loadedPackageNamed: packageName) loadedProject
-												packageConvention = 'Rowan'
+											((Rowan image loadedPackageNamed: packageName) loadedProject
+												packageConvention = 'Rowan' or: [ packageName = self rowanPackageName ])
 												ifTrue: [ 
 													"If the currentTopazPackageName maps to a package that follows the 
-														Rowan convention, then the method is put into that package, as 
+														Rowan convention or the packageName matches the packageName of
+														the reciever, then the method is put into that package, as 
 														long as item 1 does not apply."
 													^ self
 														rwCompileMethod: sourceString

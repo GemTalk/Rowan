@@ -1195,6 +1195,8 @@ environmentId: object
 category: 'tonel parser interface'
 method: RwTopazTonelReader
 newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+	"for topaz TFILE and TMETHOD commands, compile the method instead of creating a method definition"
+
 	| behavior symbolList |
 	symbolList := GsCurrentSession currentSession symbolList.
 	behavior := symbolList objectNamed: className asSymbol.

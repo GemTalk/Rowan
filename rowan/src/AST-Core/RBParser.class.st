@@ -771,8 +771,7 @@ RBParser >> parseVariableNode [
 
 { #category : 'accessing' }
 RBParser >> parseWorkspace [
-	| workspaceNode sequenceNode args leftBar rightBar |
-	""
+	| workspaceNode args leftBar rightBar |
 	workspaceNode := self workspaceNodeClass new.
 	(currentToken notNil and: [ currentToken comments notNil ])
 		ifTrue: [ 
