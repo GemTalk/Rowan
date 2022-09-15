@@ -1092,6 +1092,9 @@ RwPrjBrowserToolV2 >> moveClassNamed: className toPackage: packageName [
 								, ' already exists in the destination package '
 								, packageName printString ].
 
+			srcClsDef
+				moveToPackageNamed: destinationLoadedPackage name
+				packageConvention: destinationLoadedPackage loadedProject packageConvention.
 			destPackageDef classDefinitions at: className put: srcClsDef.
 
 			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]

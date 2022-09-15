@@ -467,6 +467,42 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassCategoryViolation [
+	| packageTools projectName packageNames className packageName theClass audit reasons resolvedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName := 'Audit-Core'.
+	packageNames := {packageName}.
+	className := 'AuditClass'.
+
+	resolvedProject := self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	self assert: theClass rowanPackageName = packageName.
+
+	theClass category: 'blue'.
+
+	audit := Rowan projectTools audit auditForProjectNamed: projectName.
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self assert: reasons size equals: 1.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(violateClassCategoryConvention) sort.
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassesNotIdentical [
 	"#classesNotIdentical audit error occurs during upgrade when a new version of a class is introduced in a new version of GemStone:
 		1. reproduce condition
