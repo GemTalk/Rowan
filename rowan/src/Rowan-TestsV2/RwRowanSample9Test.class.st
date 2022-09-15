@@ -7765,7 +7765,7 @@ RwRowanSample9Test >> testSwitchRepository_591 [
 RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
 
-	| loadedProjects project audit packageName1 packageName2 classAudit className1 className2 |
+	| loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
 	packageName1 := 'RowanSample9-Tests'.
 	packageName2 := 'RowanSample9-Core'.
 	className1 := 'RowanSample9TestCase'.
@@ -7783,38 +7783,39 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	self _runTestSuiteForProject: project.
 	audit := project audit.
 
-	classAudit := ((audit at: packageName1) at: className1)
-		collect: [ :each | each message ].
-	self assert: classAudit size = 1.
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9TestCase>>test').
-
-	classAudit := ((audit at: packageName2) at: className2)
-		collect: [ :each | each message ].
-	self assert: classAudit size = 2.
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1>>foo').
-	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1 class>>bar').
-
 "run reports"
-	{(Rowan gemstoneTools topaz
+	reports := {(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
 				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
 	(Rowan gemstoneTools topaz
-		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}
+		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}.
+	symbolList := GsSession currentSession symbolList.
+	reports
 		do: [ :details | 
 			details
 				unmanagedMethodsDo: [ :methodDetails :classDetails | 
-					(classDetails at: 'class') name asString = className1
-						ifTrue: [ self assert: (methodDetails at: 'method') selector == #'test' ].
-					(classDetails at: 'class') name asString = className2
-						ifTrue: [ 
-							self
-								assert:
-									((methodDetails at: 'method') selector == #'foo'
-										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
-
+					(#(#'GciErrSType' #'GciLibrary') includes: (classDetails at: 'class') name)
+						ifFalse: [ 
+							| unexpected ar |
+							ar := symbolList dictionariesAndSymbolsOf: (classDetails at: 'class').
+							ar isEmpty
+								ifTrue: [ unexpected := true ]
+								ifFalse: [ 
+									ar
+										do: [ :infoAr | 
+											"ignore superDoit classes - need two for short period of time ... the spelling error fixed in latest superDoit version"
+											unexpected := (#(SuperDoit_trasientSymbolDictionary SuperDoit_transientSymbolDictionary) includes: (infoAr at: 1) name) not ] ].
+							unexpected
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The class ' , (classDetails at: 'class') name asString
+												, ' is unexpectedly unpackaged' ] ] ] ].
+	self assert: audit isEmpty description: 'Unexpected audit failure ... need category: intercept'
 ]
 
 { #category : 'tests' }
