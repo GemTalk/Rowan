@@ -233,23 +233,22 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
 
 { #category : 'private' }
 RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
-
 	| superclass |
-	superclass := aPatchSet 
-		superclassNamed: classDefinition superclassName 
-		ifAbsent: [
+	superclass := aPatchSet
+		superclassNamed: classDefinition superclassName
+		ifAbsent: [ 
 			"https://github.com/GemTalk/Rowan/issues/471"
 			"if we can't look up the class, try accessing the superclass from the class itself"
-			(aPatchSet tempSymbols 
-				at: classDefinition name asSymbol
-				ifAbsent: [ self error: 'Class not found ', classDefinition name printString ]) superClass ].
+			(aPatchSet tempSymbols at: classDefinition name asSymbol ifAbsent: [  ])
+				ifNotNil: [ :cls | cls superClass ] ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'
 				ifFalse: [ 
 					self
 						error:
-							'The class named ' , classDefinition superclassName printString
+							'The declared superclass (' , classDefinition superclassName printString
+								, ') of new class ' , classDefinition name printString
 								, ' does not exist.' ] ].
 	^ self privateCreateClassWithSuperclass: superclass
 ]
