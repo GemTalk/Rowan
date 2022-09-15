@@ -15,7 +15,7 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | loadedMethod ]
+		ifNotNil: [ :loadedMethod | foundBlock value: loadedMethod ]
 		ifNil: [ absentBlock value ]
 ]
 

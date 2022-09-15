@@ -492,6 +492,59 @@ RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrato
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> _testNefariousUnmanagedSpec_0057: includeRemoveAll  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
+	"based on spec_0057 after loading, use nefarious methods to corrupt loaded methods"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolve.
+"load project"
+	loadedProjects := resolvedProject load.
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"with the fix for GemTalk/Rowan#830, have to use nefarious mans to explicitly corrupt packaging"
+	Rowan image 
+		loadedMethod: #foo 
+		inClassNamed: 'RowanSample9Class1' 
+		isMeta: false 
+		ifFound: [:loadedMethod |
+			"nefarious method"
+			loadedMethod unpackageMethod ] 
+		ifAbsent: [ self assert: false description: 'unexpected missing loaded method for RowanSample9Class1>>foo'].
+	Rowan image 
+		loadedMethod: #bar 
+		inClassNamed: 'RowanSample9Class1' 
+		isMeta: true 
+		ifFound: [:loadedMethod |
+			"nefarious method"
+			loadedMethod unpackageMethod ] 
+		ifAbsent: [ self assert: false description: 'unexpected missing loaded method for RowanSample9Class1 class>>bar'].
+	Rowan image 
+		loadedMethod: #test
+		inClassNamed: 'RowanSample9TestCase' 
+		isMeta: false 
+		ifFound: [:loadedMethod |
+			"nefarious method"
+			loadedMethod unpackageMethod ] 
+		ifAbsent: [ self assert: false description: 'unexpected missing loaded method for RowanSample9TestCase>>test'].
+	^ loadedProjects
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
 	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
 
@@ -4381,7 +4434,7 @@ RwRowanSample9Test >> testIssue830_3b [
 
 	"https://github.com/GemTalk/Rowan/issues/830"
 
-	| loadSpec projectName loadedProject packageName1 packageName2 class method |
+	| loadSpec projectName loadedProject packageName1 packageName2 class method audit|
 	loadSpec := self _loadSpecNamed: 'spec_0057'.
 
 	projectName := loadSpec projectName.
@@ -4422,11 +4475,14 @@ RwRowanSample9Test >> testIssue830_3b [
 			category: 'accessing'
 			environmentId: 0.
 		self assert: method rowanPackageName equals: packageName2.
+
+		self assert: (audit := loadedProject audit) isEmpty.
 	] ensure: [ 
 		class ifNotNil: [ 
 			(Rowan globalNamed: self _sampleSymbolDictionaryName1) removeKey: class name.
 			Rowan gemstoneTools topaz currentTopazPackageName: nil.
 			loadedProject unload ] ].
+
 ]
 
 { #category : 'tests' }
@@ -7759,6 +7815,64 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 									((methodDetails at: 'method') selector == #'foo'
 										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
 
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testUnmanagedSpec_0057_01_830 [
+	"based on spec_0057 after loading, do a filein (with removeAllMethods) and reloading methods into class 
+		from filein -- handled correctly with fix for issue #830"
+
+	"https://github.com/GemTalk/Rowan/issues/830"
+
+	| loadedProjects project audit packageName1 packageName2 classAudit className1 className2 |
+	packageName1 := 'RowanSample9-Tests'.
+	packageName2 := 'RowanSample9-Core'.
+	className1 := 'RowanSample9TestCase'.
+	className2 := 'RowanSample9Class1'.
+
+	loadedProjects := self 
+		_testNefariousUnmanagedSpec_0057: true 
+		packageName1: packageName1 
+		packageName2: packageName2 
+		className1: className1 
+		className2: className2.
+
+"validate"
+	project := loadedProjects at: 1.
+	self _runTestSuiteForProject: project.
+	audit := project audit.
+
+	classAudit := ((audit at: packageName1) at: className1)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 1.
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9TestCase>>test').
+
+	classAudit := ((audit at: packageName2) at: className2)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 2.
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1>>foo').
+	self assert: (classAudit includes: 'Missing loaded method: RowanSample9Class1 class>>bar').
+
+"run reports"
+	{(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionary:
+			(Rowan image
+				symbolDictNamed: (project symbolDictNameForPackageNamed: packageName1))).
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}
+		do: [ :details | 
+			details
+				unmanagedMethodsDo: [ :methodDetails :classDetails | 
+					(classDetails at: 'class') name asString = className1
+						ifTrue: [ self assert: (methodDetails at: 'method') selector == #'test' ].
+					(classDetails at: 'class') name asString = className2
+						ifTrue: [ 
+							self
+								assert:
+									((methodDetails at: 'method') selector == #'foo'
+										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
 ]
 
 { #category : 'tests' }

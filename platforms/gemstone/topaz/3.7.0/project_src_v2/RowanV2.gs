@@ -94072,7 +94072,7 @@ loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBloc
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | loadedMethod ]
+		ifNotNil: [ :loadedMethod | foundBlock value: loadedMethod ]
 		ifNil: [ absentBlock value ]
 %
 
