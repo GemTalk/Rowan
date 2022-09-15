@@ -53730,12 +53730,14 @@ auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 	| packageConvention |
 	packageConvention := aLoadedClass loadedProject packageConvention.
 
-	^ packageConvention = 'RowanHybrid'
+	packageConvention = 'RowanHybrid'
 		ifTrue: [ 
-			self
+			^ self
 				auditRowanHybridCategory: category
 				forBehavior: aBehavior
-				loadedClass: aLoadedClass ]
+				loadedClass: aLoadedClass ].
+	packageConvention = 'Monticello'
+		ifTrue: [ self error: 'Monticlello package conventions not yet supported' ]
 %
 
 category: 'audit'
@@ -53887,6 +53889,28 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 						yourself) ].
 	aLoadedClass classCategory
 		= (classProperty := aClass _classCategory ifNil: [ '' ])
+		ifTrue: [ 
+			| packageConvention |
+			"ensure that the class category follows the proper conventions"
+			packageConvention := aLoadedClass loadedProject packageConvention.
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					"class category must match the class package name"
+					(classProperty isEquivalent: aLoadedClass loadedPackage name)
+						ifFalse: [ 
+							self theAuditDetails
+								add:
+									((RwAuditClassPropertyDetail
+										for: aLoadedClass
+										message:
+											'For class ' , aLoadedClass name , ' the class category  (' , classProperty
+												, ') does not follow the ' , packageConvention printString
+												, ' package convention')
+										reason: #'violateClassCategoryConvention';
+										loadedPropertyValue: aLoadedClass classCategory;
+										classPropertyValue: classProperty;
+										class: aClass;
+										yourself) ] ] ]
 		ifFalse: [ 
 			self theAuditDetails
 				add:
@@ -56424,6 +56448,9 @@ moveClassNamed: className toPackage: packageName
 								, ' already exists in the destination package '
 								, packageName printString ].
 
+			srcClsDef
+				moveToPackageNamed: destinationLoadedPackage name
+				packageConvention: destinationLoadedPackage loadedProject packageConvention.
 			destPackageDef classDefinitions at: className put: srcClsDef.
 
 			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
