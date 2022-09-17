@@ -172,24 +172,24 @@ RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 			| packageConvention |
 			"ensure that the class category follows the proper conventions"
 			packageConvention := aLoadedClass loadedProject packageConvention.
-			packageConvention = 'RowanHybrid'
-				ifTrue: [ 
-					"class category must match the class package name"
-					(classProperty isEquivalent: aLoadedClass loadedPackage name)
-						ifFalse: [ 
-							self theAuditDetails
-								add:
-									((RwAuditClassPropertyDetail
-										for: aLoadedClass
-										message:
-											'For class ' , aLoadedClass name , ' the class category  (' , classProperty
-												, ') does not follow the ' , packageConvention printString
-												, ' package convention')
-										reason: #'violateClassCategoryConvention';
-										loadedPropertyValue: aLoadedClass classCategory;
-										classPropertyValue: classProperty;
-										class: aClass;
-										yourself) ] ] ]
+			(Rowan image
+				validClassCategory: classProperty
+				forPackageConvention: packageConvention
+				andPackageNamed: aLoadedClass loadedPackage name)
+				ifFalse: [ 
+					self theAuditDetails
+						add:
+							((RwAuditClassPropertyDetail
+								for: aLoadedClass
+								message:
+									'For class ' , aLoadedClass name , ' the class category (' , classProperty printString
+										, ') does not follow the ' , packageConvention printString
+										, ' package convention')
+								reason: #'violateClassCategoryConvention';
+								loadedPropertyValue: aLoadedClass classCategory;
+								classPropertyValue: classProperty;
+								class: aClass;
+								yourself) ] ]
 		ifFalse: [ 
 			self theAuditDetails
 				add:

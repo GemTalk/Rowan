@@ -16,8 +16,8 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 	loadedProject := loadedPackage loadedProject.
 	className := theClass name asString.
 
-	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
-		asSymbol.
+	packageSymDictName := (loadedProject
+		gemstoneSymbolDictNameForPackageNamed: packageName) asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
@@ -25,6 +25,13 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 	classExtension
 		ifFalse: [ 
 			[ 
+			(Rowan image validClassCategory: theClass category forLoadedPackage: loadedPackage)
+				ifFalse: [ 
+					(RwAdoptClassCategoryPackageConventionViolationErrorNotification
+						classNamed: className classCategory: theClass category
+						packageConvention: loadedProject packageConvention
+						intoPackageNamed: packageName) signal.
+					^ self	"if exception resumed then we'll skip the adopt operation for this class" ].
 			registry
 				addClassAssociation: (theSymbolDictionary associationAt: theClass name)
 				forClass: theClass
@@ -45,8 +52,7 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 						isMeta: false
 						inClassNamed: className
 						isClassExtension: classExtension
-						intoPackageNamed: packageName) signal.
-					"skip adoption of this method"
+						intoPackageNamed: packageName) signal.	"skip adoption of this method"
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
@@ -70,8 +76,7 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 						isMeta: true
 						inClassNamed: className
 						isClassExtension: classExtension
-						intoPackageNamed: packageName) signal.
-					"skip adoption of this method"
+						intoPackageNamed: packageName) signal.	"skip adoption of this method"
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
@@ -147,7 +152,6 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 				intoPackageNamed: packageName) signal.
 			"if exception resumed then we'll skip the adopt operation for this class"
 			^ self ].
-
 	^ self adoptClass: theClass classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName
 ]
 

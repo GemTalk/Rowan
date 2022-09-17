@@ -41,6 +41,7 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 		comment: ''
 		pools: #()
 		type: 'normal'.
+	classDefinition category: packageName1.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
@@ -67,6 +68,7 @@ RwMoveTest >> testProjectSet_move_class_between_existing_packages_and_symbolDict
 	packageDefinition := projectDefinition2 packageNamed: packageName1.
 	packageDefinition removeClassDefinition: classDefinition.
 
+	classDefinition category: packageName2.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -135,6 +137,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 		comment: ''
 		pools: #()
 		type: 'normal'.
+	classDefinition category: packageName1.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
@@ -156,6 +159,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 	packageDefinition := projectDefinition2 packageNamed: packageName1.
 	packageDefinition classDefinitions removeKey: classDefinition key.
 
+	classDefinition category: packageName2.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -209,7 +213,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -240,6 +244,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict [
 			forPackageNamed: packageName2;
 		yourself.
 
+	classDefinition category: packageName2.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -303,7 +308,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -350,6 +355,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 					protocol: 'accessing'
 					source: 'method1 ^2').
 
+	classDefinition category: packageName2.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -412,7 +418,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -455,6 +461,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 
 	classDefinition
+		category: packageName2;
 		updateInstanceMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method1'

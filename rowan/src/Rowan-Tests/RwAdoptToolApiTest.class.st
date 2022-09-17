@@ -564,6 +564,7 @@ RwAdoptToolApiTest >> testAdoptClass [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: packageName.
 
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
@@ -587,6 +588,56 @@ RwAdoptToolApiTest >> testAdoptClass [
 	self assert: theClass rowanProjectName = projectName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
+]
+
+{ #category : 'tests' }
+RwAdoptToolApiTest >> testAdoptClassInvalidCategory [
+	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList expectedFailure |
+	projectName := 'AdoptProject'.
+	packageName := 'Adopt-Core'.
+	packageNames := {packageName}.
+	symDictName := self _symbolDictionaryName2.
+	className := 'AdoptedClass'.
+	symbolList := Rowan image symbolList.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+
+	symDict := Rowan image symbolDictNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass := Object subclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+	classMethod := theClass class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	self assert: theClass rowanProjectName = Rowan unpackagedName.
+	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.
+	self assert: classMethod rowanProjectName = Rowan unpackagedName.
+
+	expectedFailure := false.
+	[ Rowan packageTools adopt adoptClassNamed: className intoPackageNamed: packageName ]
+		on: Error do: [:ex |
+			self assert: ex description equals: 'Error: Unable to adopt the class ''AdoptedClass'' into the package ''Adopt-Core'' as it''s class category violates the RowanHybrid package convention .'.
+			expectedFailure := true ].
+	self assert: expectedFailure
 ]
 
 { #category : 'tests' }
@@ -952,6 +1003,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: packageName1.
 
 	self assert: theClass rowanProjectName = Rowan unpackagedName.
 

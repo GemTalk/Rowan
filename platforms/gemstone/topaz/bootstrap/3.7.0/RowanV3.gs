@@ -875,6 +875,24 @@ removeallclassmethods RwAdoptAuditClassErrorNotification
 
 doit
 (RwAdoptAuditClassErrorNotification
+	subclass: 'RwAdoptClassCategoryPackageConventionViolationErrorNotification'
+	instVarNames: #( category packageConvention )
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #( #logCreation )
+)
+		category: 'Rowan-Tools-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAdoptClassCategoryPackageConventionViolationErrorNotification
+removeallclassmethods RwAdoptClassCategoryPackageConventionViolationErrorNotification
+
+doit
+(RwAdoptAuditClassErrorNotification
 	subclass: 'RwAdoptMissingClassErrorNotification'
 	instVarNames: #()
 	classVars: #()
@@ -890,24 +908,6 @@ true.
 
 removeallmethods RwAdoptMissingClassErrorNotification
 removeallclassmethods RwAdoptMissingClassErrorNotification
-
-doit
-(RwAdoptAuditClassErrorNotification
-	subclass: 'RwAuditClassErrorNotification'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #( #logCreation )
-)
-		category: 'Rowan-Tools-Core';
-		immediateInvariant.
-true.
-%
-
-removeallmethods RwAuditClassErrorNotification
-removeallclassmethods RwAuditClassErrorNotification
 
 doit
 (RwAdoptAuditErrorNotification
@@ -11413,6 +11413,54 @@ methodErrorDo: methodBlock classErrorDo: classBlock
 	classBlock value
 %
 
+! Class implementation for 'RwAdoptClassCategoryPackageConventionViolationErrorNotification'
+
+!		Class methods for 'RwAdoptClassCategoryPackageConventionViolationErrorNotification'
+
+category: 'instance creation'
+classmethod: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+classNamed: className classCategory: aClassCategory packageConvention: packageConvention intoPackageNamed: packageName
+	^ self new
+		className: className;
+		category: aClassCategory;
+		packageConvention: packageConvention;
+		packageName: packageName;
+		yourself
+%
+
+!		Instance methods for 'RwAdoptClassCategoryPackageConventionViolationErrorNotification'
+
+category: 'accessing'
+method: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+category
+	^category
+%
+
+category: 'accessing'
+method: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+category: object
+	category := object
+%
+
+category: 'accessing'
+method: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+packageConvention
+	^packageConvention
+%
+
+category: 'accessing'
+method: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+packageConvention: object
+	packageConvention := object
+%
+
+category: 'private'
+method: RwAdoptClassCategoryPackageConventionViolationErrorNotification
+_errorMessage
+
+	^ 'Unable to adopt the class ', self className printString, ' into the package ', self packageName printString, ' as it''s class category violates the ', self packageConvention, ' package convention .'
+%
+
 ! Class implementation for 'RwAdoptMissingClassErrorNotification'
 
 !		Instance methods for 'RwAdoptMissingClassErrorNotification'
@@ -11426,17 +11474,6 @@ _errorMessage
 		ifTrue: [ ' extension ' ]
 		ifFalse: [ ' ' ].
 	^ 'Unable to adopt the class ', self className printString, ' into the', extensionMessage, 'package ', self packageName printString, ' as it is not present in the current user''s symbol list.'
-%
-
-! Class implementation for 'RwAuditClassErrorNotification'
-
-!		Instance methods for 'RwAuditClassErrorNotification'
-
-category: 'Handling'
-method: RwAuditClassErrorNotification
-defaultAction
-	"record audit error"
-	^ true
 %
 
 ! Class implementation for 'RwAdoptAuditMethodErrorNotification'
@@ -47009,8 +47046,7 @@ projectName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateClassCategory: aClassDefinition  forPackageNamed: packageName
-
+validateClassCategory: aClassDefinition forPackageNamed: packageName
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
 		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
@@ -47019,11 +47055,15 @@ validateClassCategory: aClassDefinition  forPackageNamed: packageName
 
 	"signal an error if the protocol does not conform to the convention for the current project"
 
-	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
-	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
-	"Rowan - no convention ... any old protocol is fine"
+	(Rowan image
+		validClassCategory: aClassDefinition category
+		forPackageConvention: self packageConvention
+		andPackageNamed: packageName)
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: packageConvention
 %
 
 category: 'validation'
@@ -47082,17 +47122,6 @@ _repositoryPropertyDictFor: packagesRoot
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-
-	aClassDefinition category = packageName ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification 
-		signalWithClassDefinition: aClassDefinition 
-			packageName: packageName 
-			packageConvention: 'RowanHybrid'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
 _validateRowanHybridProtocolConvention:  methodDef className: className isMeta: isMeta forPackageNamed:  packageName
 
 	| canonProtocol expectedProtocol protocol |
@@ -47135,17 +47164,6 @@ _validateRowanHybridProtocolConvention:  methodDef className: className isMeta: 
 			isMeta: isMeta 
 			packageName:  packageName
 			packageConvention: 'RowanHybrid'
-%
-
-category: 'validation'
-method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
-	(aClassDefinition category beginsWith: packageName)
-		ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification
-		signalWithClassDefinition: aClassDefinition
-		packageName: packageName
-		packageConvention: 'Monticello'
 %
 
 category: 'validation'
@@ -53893,24 +53911,24 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 			| packageConvention |
 			"ensure that the class category follows the proper conventions"
 			packageConvention := aLoadedClass loadedProject packageConvention.
-			packageConvention = 'RowanHybrid'
-				ifTrue: [ 
-					"class category must match the class package name"
-					(classProperty isEquivalent: aLoadedClass loadedPackage name)
-						ifFalse: [ 
-							self theAuditDetails
-								add:
-									((RwAuditClassPropertyDetail
-										for: aLoadedClass
-										message:
-											'For class ' , aLoadedClass name , ' the class category  (' , classProperty
-												, ') does not follow the ' , packageConvention printString
-												, ' package convention')
-										reason: #'violateClassCategoryConvention';
-										loadedPropertyValue: aLoadedClass classCategory;
-										classPropertyValue: classProperty;
-										class: aClass;
-										yourself) ] ] ]
+			(Rowan image
+				validClassCategory: classProperty
+				forPackageConvention: packageConvention
+				andPackageNamed: aLoadedClass loadedPackage name)
+				ifFalse: [ 
+					self theAuditDetails
+						add:
+							((RwAuditClassPropertyDetail
+								for: aLoadedClass
+								message:
+									'For class ' , aLoadedClass name , ' the class category (' , classProperty printString
+										, ') does not follow the ' , packageConvention printString
+										, ' package convention')
+								reason: #'violateClassCategoryConvention';
+								loadedPropertyValue: aLoadedClass classCategory;
+								classPropertyValue: classProperty;
+								class: aClass;
+								yourself) ] ]
 		ifFalse: [ 
 			self theAuditDetails
 				add:
@@ -54584,8 +54602,8 @@ adoptClass: theClass classExtension: classExtension instanceSelectors: instanceS
 	loadedProject := loadedPackage loadedProject.
 	className := theClass name asString.
 
-	packageSymDictName := (loadedProject gemstoneSymbolDictNameForPackageNamed: packageName)
-		asSymbol.
+	packageSymDictName := (loadedProject
+		gemstoneSymbolDictNameForPackageNamed: packageName) asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
@@ -54593,6 +54611,13 @@ adoptClass: theClass classExtension: classExtension instanceSelectors: instanceS
 	classExtension
 		ifFalse: [ 
 			[ 
+			(Rowan image validClassCategory: theClass category forLoadedPackage: loadedPackage)
+				ifFalse: [ 
+					(RwAdoptClassCategoryPackageConventionViolationErrorNotification
+						classNamed: className classCategory: theClass category
+						packageConvention: loadedProject packageConvention
+						intoPackageNamed: packageName) signal.
+					^ self	"if exception resumed then we'll skip the adopt operation for this class" ].
 			registry
 				addClassAssociation: (theSymbolDictionary associationAt: theClass name)
 				forClass: theClass
@@ -54613,8 +54638,7 @@ adoptClass: theClass classExtension: classExtension instanceSelectors: instanceS
 						isMeta: false
 						inClassNamed: className
 						isClassExtension: classExtension
-						intoPackageNamed: packageName) signal.
-					"skip adoption of this method"
+						intoPackageNamed: packageName) signal.	"skip adoption of this method"
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
@@ -54638,8 +54662,7 @@ adoptClass: theClass classExtension: classExtension instanceSelectors: instanceS
 						isMeta: true
 						inClassNamed: className
 						isClassExtension: classExtension
-						intoPackageNamed: packageName) signal.
-					"skip adoption of this method"
+						intoPackageNamed: packageName) signal.	"skip adoption of this method"
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
@@ -54718,7 +54741,6 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 				intoPackageNamed: packageName) signal.
 			"if exception resumed then we'll skip the adopt operation for this class"
 			^ self ].
-
 	^ self adoptClass: theClass classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName
 %
 
@@ -55458,7 +55480,6 @@ auditForProjectsNamed: aCol on: logStreamOrNil
 category: 'class browsing'
 method: RwPrjBrowserToolV2
 addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray
-
 	| loadedPackage loadedProject loadedClass theOptions theConstraints |
 	loadedPackage := self
 		_loadedPackageNamed: packageName
@@ -55467,18 +55488,27 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 	anArrayOfPoolDicts isEmpty
 		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
 	loadedClass := self _loadedClassNamed: className ifAbsent: [  ].
-	theOptions := optionsArray collect: [:each | each asString ].
+	theOptions := optionsArray collect: [ :each | each asString ].
 	(constraintsArray isKindOf: Array)
-		ifTrue: [
+		ifTrue: [ 
 			theConstraints := {}.
-			constraintsArray do: [:ar |
-				(ar isKindOf: Array)
-					ifTrue: [ theConstraints add: { (ar at: 1) asString . (ar at: 2) name asString } ]
-					ifFalse: [ theConstraints add: ar name asString ] ] ]
-		ifFalse: [
-			theConstraints := constraintsArray
-				ifNil: [ #() ]
-				ifNotNil: [ constraintsArray ]].
+			constraintsArray
+				do: [ :ar | 
+					(ar isKindOf: Array)
+						ifTrue: [ 
+							theConstraints
+								add:
+									{((ar at: 1) asString).
+									((ar at: 2) name asString)} ]
+						ifFalse: [ theConstraints add: ar name asString ] ] ]
+		ifFalse: [ theConstraints := constraintsArray ifNil: [ #() ] ifNotNil: [ constraintsArray ] ].
+	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , category printString , ' for class ' , className printString
+						, 'does not follow ' , loadedProject packageConvention
+						, ' package convention' ].
 	loadedClass
 		ifNil: [ 
 			| classDef |
@@ -55508,7 +55538,8 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 						superclassName: superclassName;
 						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
 						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
-						classInstVarNames: (anArrayOfClassInstVars collect: [ :each | each asString ]);
+						classInstVarNames:
+								(anArrayOfClassInstVars collect: [ :each | each asString ]);
 						gs_options: theOptions;
 						gs_constraints: theConstraints;
 						category: category;
@@ -64381,6 +64412,49 @@ symbolList
 	"Answer the current session (transient) symbol list"
 
 	^ GsCurrentSession currentSession symbolList
+%
+
+category: 'validation'
+classmethod: RwGsImage
+validClassCategory: aClassCategory forClass: aClass
+	| loadedClass |
+	loadedClass := self
+		loadedClassForClass: aClass
+		ifAbsent: [ 
+			"no loaded class, no validation needed"
+			^ true ].
+	^ self
+		validClassCategory: aClassCategory
+		forLoadedPackage: loadedClass loadedPackage
+%
+
+category: 'validation'
+classmethod: RwGsImage
+validClassCategory: aClassCategory forLoadedPackage: loadedPackage
+	^ self
+		validClassCategory: aClassCategory
+		forPackageConvention: loadedPackage loadedProject packageConvention
+		andPackageNamed: loadedPackage name
+%
+
+category: 'validation'
+classmethod: RwGsImage
+validClassCategory: aClassCategory forPackageConvention: packageConvention andPackageNamed: packageName
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ ^ aClassCategory asString = packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ ^ packageName at: 1 equals: aClassCategory asString ].
+	^ true	"Rowan - no convention ... any old category is fine"
+%
+
+category: 'validation'
+classmethod: RwGsImage
+validClassCategory: aClassCategory forPackageNamed: packageName
+	| loadedPackage |
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ self error: 'No loaded package named ' , packageName printString , ' found' ].
+	^ self validClassCategory: aClassCategory forLoadedPackage: loadedPackage
 %
 
 category: 'private'

@@ -402,3 +402,42 @@ RwGsImage class >> symbolList [
 
 	^ GsCurrentSession currentSession symbolList
 ]
+
+{ #category : 'validation' }
+RwGsImage class >> validClassCategory: aClassCategory forClass: aClass [
+	| loadedClass |
+	loadedClass := self
+		loadedClassForClass: aClass
+		ifAbsent: [ 
+			"no loaded class, no validation needed"
+			^ true ].
+	^ self
+		validClassCategory: aClassCategory
+		forLoadedPackage: loadedClass loadedPackage
+]
+
+{ #category : 'validation' }
+RwGsImage class >> validClassCategory: aClassCategory forLoadedPackage: loadedPackage [
+	^ self
+		validClassCategory: aClassCategory
+		forPackageConvention: loadedPackage loadedProject packageConvention
+		andPackageNamed: loadedPackage name
+]
+
+{ #category : 'validation' }
+RwGsImage class >> validClassCategory: aClassCategory forPackageConvention: packageConvention andPackageNamed: packageName [
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ ^ aClassCategory asString = packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ ^ packageName at: 1 equals: aClassCategory asString ].
+	^ true	"Rowan - no convention ... any old category is fine"
+]
+
+{ #category : 'validation' }
+RwGsImage class >> validClassCategory: aClassCategory forPackageNamed: packageName [
+	| loadedPackage |
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ self error: 'No loaded package named ' , packageName printString , ' found' ].
+	^ self validClassCategory: aClassCategory forLoadedPackage: loadedPackage
+]

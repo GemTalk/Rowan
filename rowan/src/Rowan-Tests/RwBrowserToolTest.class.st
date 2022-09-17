@@ -386,6 +386,7 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 				'This is a simple project used to work out a "classic" class browser-style API'.
 
 		classDefinition := self _standardClassDefinition: (classNames at: index).
+		classDefinition category: (classPackageNames at: index).
 
 		projectTools edit
 			addClass: classDefinition
@@ -397,7 +398,6 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 	[ projectTools load loadProjectSetDefinition: projectSetDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
-
 ]
 
 { #category : 'private' }
@@ -474,6 +474,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
 	classDefinition := self _simpleClassDefinition: className.
+	classDefinition category: packageName.
 
 	projectTools edit
 		addClass: classDefinition
@@ -500,6 +501,7 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
 	classDefinition := self _standardClassDefinition: className.
+	classDefinition category: packageName.
 
 	projectTools edit
 		addClass: classDefinition

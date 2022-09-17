@@ -60,6 +60,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		comment: 'just a class'
 		pools: #()
 		type: 'normal'.
+	classDefinition category: packageName2.
 	browserTool createClass: classDefinition inPackageNamed: packageName2.	"new class className2"
 
 	browserTool

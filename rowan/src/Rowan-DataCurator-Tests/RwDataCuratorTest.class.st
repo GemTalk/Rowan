@@ -57,7 +57,7 @@ RwDataCuratorTest >> testCreateProjects [
 	((projectDef addPackageNamed: packageName toComponentNamed: componentName)
 		addClassNamed: className
 		super: 'Object'
-		category: '*' , packageName asLowercase)
+		category: packageName)
 		addInstanceMethod: 'foo ^ 1'
 		protocol: 'accessing'.
 	projectDef load.

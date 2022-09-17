@@ -121,7 +121,6 @@ RwPrjBrowserToolV2 >> _rowanSymbolDictionaryNames [
 
 { #category : 'class browsing' }
 RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray [
-
 	| loadedPackage loadedProject loadedClass theOptions theConstraints |
 	loadedPackage := self
 		_loadedPackageNamed: packageName
@@ -130,18 +129,27 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 	anArrayOfPoolDicts isEmpty
 		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
 	loadedClass := self _loadedClassNamed: className ifAbsent: [  ].
-	theOptions := optionsArray collect: [:each | each asString ].
+	theOptions := optionsArray collect: [ :each | each asString ].
 	(constraintsArray isKindOf: Array)
-		ifTrue: [
+		ifTrue: [ 
 			theConstraints := {}.
-			constraintsArray do: [:ar |
-				(ar isKindOf: Array)
-					ifTrue: [ theConstraints add: { (ar at: 1) asString . (ar at: 2) name asString } ]
-					ifFalse: [ theConstraints add: ar name asString ] ] ]
-		ifFalse: [
-			theConstraints := constraintsArray
-				ifNil: [ #() ]
-				ifNotNil: [ constraintsArray ]].
+			constraintsArray
+				do: [ :ar | 
+					(ar isKindOf: Array)
+						ifTrue: [ 
+							theConstraints
+								add:
+									{((ar at: 1) asString).
+									((ar at: 2) name asString)} ]
+						ifFalse: [ theConstraints add: ar name asString ] ] ]
+		ifFalse: [ theConstraints := constraintsArray ifNil: [ #() ] ifNotNil: [ constraintsArray ] ].
+	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , category printString , ' for class ' , className printString
+						, 'does not follow ' , loadedProject packageConvention
+						, ' package convention' ].
 	loadedClass
 		ifNil: [ 
 			| classDef |
@@ -171,7 +179,8 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 						superclassName: superclassName;
 						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
 						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
-						classInstVarNames: (anArrayOfClassInstVars collect: [ :each | each asString ]);
+						classInstVarNames:
+								(anArrayOfClassInstVars collect: [ :each | each asString ]);
 						gs_options: theOptions;
 						gs_constraints: theConstraints;
 						category: category;
