@@ -688,7 +688,7 @@ RwProjectAuditToolTest >> testClassVars [
 		instvars: #('ivar1' 'ivar2')
 		classinstvars: #('civar1' 'civar2')
 		classvars: #('Cvar1' 'Cvar2')
-		category: 'Simple Things'
+		category: packageName
 		comment: 'I am a Simple class with various vars'
 		pools: #()
 		type: 'normal'.

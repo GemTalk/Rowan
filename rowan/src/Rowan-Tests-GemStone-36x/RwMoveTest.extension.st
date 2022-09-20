@@ -540,7 +540,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -587,6 +587,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 	packageDefinition := projectDefinition2 packageNamed: packageName1.
 	packageDefinition classDefinitions removeKey: classDefinition key.
 
+	classDefinition category: packageName2.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -652,7 +653,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -709,6 +710,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 		yourself.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
+	classDefinition category: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
@@ -783,7 +785,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -814,6 +816,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -873,7 +876,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -913,6 +916,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
@@ -978,7 +982,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1027,6 +1031,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -1086,7 +1091,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1137,6 +1142,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 					source: 'method2 ^2').
 
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -1333,7 +1339,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1360,6 +1366,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages [
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -1415,7 +1422,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1451,6 +1458,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -1515,7 +1523,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1571,6 +1579,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName3.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
 	(classExtensionDefinition
@@ -1637,7 +1646,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1703,6 +1712,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName3.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
 	(classExtensionDefinition instanceMethodDefinitions at: #ext1)
@@ -1776,7 +1786,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1831,6 +1841,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName3.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
 	(classExtensionDefinition
@@ -1895,7 +1906,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -1959,6 +1970,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName3.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
 	(classExtensionDefinition instanceMethodDefinitions at: #ext1)
@@ -2032,7 +2044,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2068,6 +2080,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -2122,7 +2135,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2169,6 +2182,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	packageDefinition removeClassNamed: classDefinition name.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2236,7 +2250,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2271,6 +2285,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -2325,7 +2340,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2370,6 +2385,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2438,7 +2454,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2483,6 +2499,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2539,7 +2556,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2593,6 +2610,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 					source: 'method2 ^2').
 
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2731,7 +2749,7 @@ RwMoveTest >> testProjectSet_rename_package [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2755,6 +2773,7 @@ RwMoveTest >> testProjectSet_rename_package [
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
@@ -2806,7 +2825,7 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2855,6 +2874,7 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	classDefinition
 		removeInstanceMethod: #method2;
@@ -2927,7 +2947,7 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2978,6 +2998,7 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 	classDefinition
 		removeInstanceMethod: #method2;

@@ -47,7 +47,7 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: nil
+			category: packageName
 			comment: 'I am a ', className, ' class'
 			pools: #()
 			type: 'normal'.
@@ -85,7 +85,7 @@ RwRowanIssue188Test >> _createNewClassAndReferenceMethodsInSingleLoad: projectNa
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName
 		comment: ''
 		pools: #()
 		type: 'normal'.

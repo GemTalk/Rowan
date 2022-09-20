@@ -2248,7 +2248,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2272,6 +2272,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 		yourself.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
@@ -2316,7 +2317,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2350,6 +2351,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2405,7 +2407,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -2438,6 +2440,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+	classDefinition category: packageName2.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2820,6 +2823,7 @@ RwRowanProjectIssuesTest >> testIssue198A [
 	theSubclassDefinition := packageDefinition1 classDefinitions at: className2.
 	packageDefinition1 classDefinitions removeKey: theSubclassDefinition key.
 	packageDefinition2 classDefinitions at: theSubclassDefinition key put: theSubclassDefinition.	"move subclass to different package"
+	theSubclassDefinition category: packageName2.
 
 	projectDefinition load.
 
@@ -2896,6 +2900,7 @@ RwRowanProjectIssuesTest >> testIssue198B [
 	theSubclassDefinition := packageDefinition1 classDefinitions at: className2.
 	packageDefinition1 classDefinitions removeKey: theSubclassDefinition key.
 	packageDefinition2 classDefinitions at: theSubclassDefinition key put: theSubclassDefinition.	"move subclass to different package"
+	theSubclassDefinition category: packageName2.
 
 	theReferenceClassDefinition := packageDefinition1 classDefinitions at: className3.
 	theReferenceClassDefinition addInstanceMethodDefinition: 
@@ -6579,7 +6584,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6594,7 +6599,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #(ivar1 ivar5)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6682,7 +6687,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6697,7 +6702,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #(ivar1 ivar5)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6783,7 +6788,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6798,7 +6803,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6825,7 +6830,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #(ivar1 ivar5)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6918,7 +6923,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6933,7 +6938,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #(ivar4 ivar6)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -6960,7 +6965,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			instvars: #(ivar1 ivar5 ivar3)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7054,7 +7059,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 			instvars: #(ivar0)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName1
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7069,7 +7074,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category:packageName1
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7161,7 +7166,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #(ivar0)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7176,7 +7181,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7203,7 +7208,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7299,7 +7304,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #(ivar0)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7314,7 +7319,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7341,7 +7346,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7433,7 +7438,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #(ivar0)
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
@@ -7448,7 +7453,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 			instvars: #()
 			classinstvars: #()
 			classvars: #()
-			category: 'category'
+			category: packageName
 			comment: 'comment'
 			pools: #()
 			type: 'normal')
