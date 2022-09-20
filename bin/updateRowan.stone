@@ -192,7 +192,7 @@ doit
 	version := self rowanVersion.
 	version < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0'].
-	version = ('2.3.0' asRwSemanticVersionNumber)
+	version >= ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV230 ].
 	version = ('2.2.0' asRwSemanticVersionNumber)
