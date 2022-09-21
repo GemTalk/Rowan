@@ -4159,7 +4159,7 @@ RwRowanSample9Test >> testIssue743_0 [
 	"https://github.com/GemTalk/Rowan/issues/743"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project audit class category definedProject projectModification packagesModification elementsModified packageModification classesModification classModification propertiesModification propertyModification oldCategory confirmationBlock |
-	loadSpec := self _loadSpecNamed: 'spec_0001'.
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.

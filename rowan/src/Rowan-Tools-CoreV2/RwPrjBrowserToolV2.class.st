@@ -120,6 +120,37 @@ RwPrjBrowserToolV2 >> _rowanSymbolDictionaryNames [
 ]
 
 { #category : 'class browsing' }
+RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray [
+	| loadedPackage |
+	(self _loadedClassNamed: className ifAbsent: [  ])
+		ifNil: [ 
+			"no loaded class, see if the category matches an existing package name"
+			loadedPackage := self
+				_loadedPackageNamed: category
+				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
+		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
+	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , category printString , ' for class ' , className printString
+						, 'does not follow ' , loadedPackage loadedProject packageConvention
+						, ' package convention' ].
+	^ self
+		addOrUpdateClassDefinition: className
+		type: type
+		superclass: superclassName
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: category
+		packageName: loadedPackage name
+		constraints: #()
+		options: optionsArray
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray [
 	| loadedPackage loadedProject loadedClass theOptions theConstraints |
 	loadedPackage := self
@@ -1695,24 +1726,35 @@ RwPrjBrowserToolV2 >> unpackageMethod: methodSelector forClassNamed: className i
 ]
 
 { #category : 'class browsing' }
-RwPrjBrowserToolV2 >> updateClassCategory: aString forClassNamed: className [ 
-
+RwPrjBrowserToolV2 >> updateClassCategory: aString forClassNamed: className [
 	"update the category of the named class"
 
 	| loadedClass projectDefinition packageDefinition classDefinition |
-	loadedClass := Rowan image 
-		loadedClassNamed: className 
-		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify a category for the class ', className printString, '. The modification will not be tracked by Rowan'.
-			"Notification resumed, so continue with add/modify"
+	loadedClass := Rowan image
+		loadedClassNamed: className
+		ifAbsent: [ 
+			RwPerformingUnpackagedEditNotification
+				signal:
+					'Attempt to add or modify a category for the class ' , className printString
+						, '. The modification will not be tracked by Rowan'.	"Notification resumed, so continue with add/modify"
 			^ (Rowan globalNamed: className) category: aString ].
 
 	projectDefinition := loadedClass loadedProject asDefinition.
-	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	packageDefinition := projectDefinition
+		packageNamed: loadedClass loadedPackage name.
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	(Rowan image
+		validClassCategory: aString
+		forLoadedPackage: loadedClass loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , aString printString , ' for class ' , className printString
+						, 'does not follow ' , loadedClass loadedProject packageConvention
+						, ' package convention' ].
 	classDefinition category: aString.
 
-	projectDefinition load.
+	projectDefinition load
 ]
 
 { #category : 'class browsing' }

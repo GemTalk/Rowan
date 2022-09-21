@@ -104,7 +104,6 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 ]
 
@@ -186,7 +185,6 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 ]
 
@@ -256,7 +254,6 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 ]
 

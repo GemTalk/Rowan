@@ -53906,7 +53906,7 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 						class: aClass;
 						yourself) ].
 	aLoadedClass classCategory
-		= (classProperty := aClass _classCategory ifNil: [ '' ])
+		= ((classProperty := aClass _classCategory) ifNil: [ '' ])
 		ifTrue: [ 
 			| packageConvention |
 			"ensure that the class category follows the proper conventions"
@@ -53921,9 +53921,9 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 							((RwAuditClassPropertyDetail
 								for: aLoadedClass
 								message:
-									'For class ' , aLoadedClass name , ' the class category (' , classProperty printString
-										, ') does not follow the ' , packageConvention printString
-										, ' package convention')
+									'For class ' , aLoadedClass name , ' the class category ('
+										, classProperty printString , ') does not follow the '
+										, packageConvention printString , ' package convention')
 								reason: #'violateClassCategoryConvention';
 								loadedPropertyValue: aLoadedClass classCategory;
 								classPropertyValue: classProperty;
@@ -55476,6 +55476,38 @@ auditForProjectsNamed: aCol on: logStreamOrNil
 ! Class implementation for 'RwPrjBrowserToolV2'
 
 !		Instance methods for 'RwPrjBrowserToolV2'
+
+category: 'class browsing'
+method: RwPrjBrowserToolV2
+addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray
+	| loadedPackage |
+	(self _loadedClassNamed: className ifAbsent: [  ])
+		ifNil: [ 
+			"no loaded class, see if the category matches an existing package name"
+			loadedPackage := self
+				_loadedPackageNamed: category
+				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
+		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
+	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , category printString , ' for class ' , className printString
+						, 'does not follow ' , loadedPackage loadedProject packageConvention
+						, ' package convention' ].
+	^ self
+		addOrUpdateClassDefinition: className
+		type: type
+		superclass: superclassName
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: category
+		packageName: loadedPackage name
+		constraints: #()
+		options: optionsArray
+%
 
 category: 'class browsing'
 method: RwPrjBrowserToolV2
@@ -57088,24 +57120,35 @@ unpackageMethod: methodSelector forClassNamed: className isMeta: isMeta
 
 category: 'class browsing'
 method: RwPrjBrowserToolV2
-updateClassCategory: aString forClassNamed: className 
-
+updateClassCategory: aString forClassNamed: className
 	"update the category of the named class"
 
 	| loadedClass projectDefinition packageDefinition classDefinition |
-	loadedClass := Rowan image 
-		loadedClassNamed: className 
-		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify a category for the class ', className printString, '. The modification will not be tracked by Rowan'.
-			"Notification resumed, so continue with add/modify"
+	loadedClass := Rowan image
+		loadedClassNamed: className
+		ifAbsent: [ 
+			RwPerformingUnpackagedEditNotification
+				signal:
+					'Attempt to add or modify a category for the class ' , className printString
+						, '. The modification will not be tracked by Rowan'.	"Notification resumed, so continue with add/modify"
 			^ (Rowan globalNamed: className) category: aString ].
 
 	projectDefinition := loadedClass loadedProject asDefinition.
-	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	packageDefinition := projectDefinition
+		packageNamed: loadedClass loadedPackage name.
 	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	(Rowan image
+		validClassCategory: aString
+		forLoadedPackage: loadedClass loadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , aString printString , ' for class ' , className printString
+						, 'does not follow ' , loadedClass loadedProject packageConvention
+						, ' package convention' ].
 	classDefinition category: aString.
 
-	projectDefinition load.
+	projectDefinition load
 %
 
 category: 'class browsing'
@@ -64440,6 +64483,10 @@ validClassCategory: aClassCategory forLoadedPackage: loadedPackage
 category: 'validation'
 classmethod: RwGsImage
 validClassCategory: aClassCategory forPackageConvention: packageConvention andPackageNamed: packageName
+	aClassCategory
+		ifNil: [ 
+			"setting category to nil is acceptable"
+			^ true ].
 	packageConvention = 'RowanHybrid'
 		ifTrue: [ ^ aClassCategory asString = packageName ].
 	packageConvention = 'Monticello'
@@ -81564,7 +81611,6 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 %
 
@@ -81698,7 +81744,6 @@ rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 %
 
@@ -81769,7 +81814,6 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: aCategoryName
-		packageName: aCategoryName
 		options: optionsArray
 %
 

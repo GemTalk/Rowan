@@ -152,12 +152,19 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
-RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageConvention: packageConventionOrNil packageNames: packageNames root: rootPath [
+	^ self
+		_createLoadedProjectNamed: projectName
+		packageConvention: packageConventionOrNil
+		packageNames: packageNames
+		root: rootPath
+		symbolDictionaryName: self _symbolDictionaryName
+		validate: true
+]
 
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageConvention: packageConventionOrNil packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
 	| projectDefinition project |
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	(rootPath asFileReference / projectName) ensureDeleteAll.
 
@@ -165,10 +172,13 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames:
 		_standardProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: symbolDictionaryName
-		comment: 'Basic project ', projectName printString)
-			packageFormat: 'tonel';
-			projectsHome: rootPath; 
-			yourself.
+		comment: 'Basic project ' , projectName printString)
+		packageFormat: 'tonel';
+		projectsHome: rootPath;
+		yourself.
+
+	packageConventionOrNil
+		ifNotNil: [ :packageConvention | projectDefinition packageConvention: packageConvention ].
 
 	projectDefinition resolveProject.
 
@@ -176,19 +186,19 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames:
 
 	project := RwProject newNamed: projectName.
 
-	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+	validate
+		ifTrue: [ self assert: project isDirty ].	"a project is dirty if it has changes that are not written to disk"
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath validate: validate [
-
-	^ self 
+	^ self
 		_createLoadedProjectNamed: projectName
+		packageConvention: nil
 		packageNames: packageNames
-		root: rootPath 
+		root: rootPath
 		symbolDictionaryName: self _symbolDictionaryName 
 		validate: validate
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -200,9 +210,13 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
-
-	^ self _createLoadedProjectNamed: projectName packageNames: #() root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate
-
+	^ self
+		_createLoadedProjectNamed: projectName
+		packageConvention: nil
+		packageNames: #()
+		root: rootPath
+		symbolDictionaryName: symbolDictionaryName
+		validate: validate
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -210,10 +224,11 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 
 	^ self 
 		_createLoadedProjectNamed: projectName 
+		packageConvention: nil
+		packageNames: #()
 		root: rootPath 
 		symbolDictionaryName: self _symbolDictionaryName 
 		validate: validate
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }

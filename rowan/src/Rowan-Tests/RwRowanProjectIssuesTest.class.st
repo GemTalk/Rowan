@@ -374,3 +374,153 @@ RwRowanProjectIssuesTest >> testIssue582 [
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
 ]
+
+{ #category : 'tests' }
+RwRowanProjectIssuesTest >> testIssue743_create_class_invalid_category_declared [
+	"https://github.com/dalehenrich/Rowan/issues/743"
+
+	| projectName packageName1 className1 theClass1 audit |
+	projectName := 'Issue743_Project'.
+	packageName1 := 'Issue743-Core'.
+	className1 := 'Issue743Class'.
+
+	{
+		{
+			'Rowan'  . 
+			''. 
+		} .
+		{
+			'RowanHybrid' . 
+			'UserDefinedError: Category ''invalid'' for class ''Issue743Class''does not follow RowanHybrid package convention'. 
+		} .
+		{
+			'Monticello' . 
+			'UserDefinedError: Category ''invalid'' for class ''Issue743Class''does not follow Monticello package convention' .
+		} .
+	} 
+		do: [:ar |
+			| project packageConvention errorMessage hitError |
+			packageConvention := ar at: 1.
+			errorMessage := ar at: 2.
+			self
+				_createLoadedProjectNamed: projectName
+				packageConvention: packageConvention
+				packageNames: { packageName1 }
+				root: self _testRowanProjectsSandbox pathString , '/rowanIssuesProject/'.
+			project := Rowan projectNamed: projectName.
+
+			self assert: (audit := project audit) isEmpty.
+
+			hitError := false.
+			[ theClass1 := Object
+				rwSubclass: className1
+				instVarNames: #()
+				classVars: #()
+				classInstVars: #()
+				poolDictionaries: #()
+				category: 'invalid'
+				packageName: packageName1
+				options: #() ] on: Error do: [:ex |
+					self assert: ex description equals: errorMessage.
+					hitError := true ].
+			errorMessage = ''
+				ifTrue: [ self deny: hitError ]
+				ifFalse: [ self assert: hitError ].
+
+			self assert: (audit := project audit) isEmpty.
+
+			project unload ]
+]
+
+{ #category : 'tests' }
+RwRowanProjectIssuesTest >> testIssue743_create_class_no_package_declared [
+	"https://github.com/dalehenrich/Rowan/issues/743"
+
+	| projectName packageName1 className1 theClass1 audit |
+	projectName := 'Issue743_Project'.
+	packageName1 := 'Issue743-Core'.
+	className1 := 'Issue743Class'.
+
+	#('Rowan'  'RowanHybrid' 'Monticello' ) 
+		do: [:packageConvention |
+			| project |
+			self
+				_createLoadedProjectNamed: projectName
+				packageConvention: packageConvention
+				packageNames: { packageName1 }
+				root: self _testRowanProjectsSandbox pathString , '/rowanIssuesProject/'.
+			project := Rowan projectNamed: projectName.
+
+			self assert: (audit := project audit) isEmpty.
+
+			theClass1 := Object
+				rwSubclass: className1
+				instVarNames: #()
+				classVars: #()
+				classInstVars: #()
+				poolDictionaries: #()
+				category: packageName1
+				options: #().
+
+			self assert: (audit := project audit) isEmpty.
+
+			project unload ]
+]
+
+{ #category : 'tests' }
+RwRowanProjectIssuesTest >> testIssue743_set_category_invalid_category_declared [
+	"https://github.com/dalehenrich/Rowan/issues/743"
+
+	| projectName packageName1 className1 theClass1 audit |
+	projectName := 'Issue743_Project'.
+	packageName1 := 'Issue743-Core'.
+	className1 := 'Issue743Class'.
+
+	{
+		{
+			'Rowan'  . 
+			''. 
+		} .
+		{
+			'RowanHybrid' . 
+			'UserDefinedError: Category ''invalid'' for class ''Issue743Class''does not follow RowanHybrid package convention'. 
+		} .
+		{
+			'Monticello' . 
+			'UserDefinedError: Category ''invalid'' for class ''Issue743Class''does not follow Monticello package convention' .
+		} .
+	} 
+		do: [:ar |
+			| project packageConvention errorMessage hitError |
+			packageConvention := ar at: 1.
+			errorMessage := ar at: 2.
+			self
+				_createLoadedProjectNamed: projectName
+				packageConvention: packageConvention
+				packageNames: { packageName1 }
+				root: self _testRowanProjectsSandbox pathString , '/rowanIssuesProject/'.
+			project := Rowan projectNamed: projectName.
+
+			self assert: (audit := project audit) isEmpty.
+
+			hitError := false.
+			theClass1 := Object
+				rwSubclass: className1
+				instVarNames: #()
+				classVars: #()
+				classInstVars: #()
+				poolDictionaries: #()
+				category: nil
+				packageName: packageName1
+				options: #().
+			[ theClass1 category: 'invalid' ] on: Error do: [:ex |
+					self assert: ex description equals: errorMessage.
+					hitError := true ].
+			errorMessage = ''
+				ifTrue: [ self deny: hitError ]
+				ifFalse: [ self assert: hitError ].
+
+			self assert: (audit := project audit) isEmpty.
+
+			project unload ]
+]

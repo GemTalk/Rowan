@@ -426,6 +426,10 @@ RwGsImage class >> validClassCategory: aClassCategory forLoadedPackage: loadedPa
 
 { #category : 'validation' }
 RwGsImage class >> validClassCategory: aClassCategory forPackageConvention: packageConvention andPackageNamed: packageName [
+	aClassCategory
+		ifNil: [ 
+			"setting category to nil is acceptable"
+			^ true ].
 	packageConvention = 'RowanHybrid'
 		ifTrue: [ ^ aClassCategory asString = packageName ].
 	packageConvention = 'Monticello'
