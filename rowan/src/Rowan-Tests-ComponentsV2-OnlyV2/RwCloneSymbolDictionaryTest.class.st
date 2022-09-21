@@ -4,6 +4,12 @@ Class {
 	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
 }
 
+{ #category : 'private' }
+RwCloneSymbolDictionaryTest class >> _symbolDictionaryNames [
+	^ super _symbolDictionaryNames
+		, {((self _symbolDictionaryName2 , '_CLONE') asSymbol)}
+]
+
 { #category : 'Testing' }
 RwCloneSymbolDictionaryTest class >> shouldInheritSelectors [
 
@@ -22,6 +28,9 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 	className := 'SystemDictionaryCloneClass'.
 	symDictName := self _symbolDictionaryName2.
 	clonedSymDictName :=  (symDictName, '_CLONE') asSymbol.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	self 
 		_createLoadedProjectNamed: projectName 
@@ -84,6 +93,9 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	className3 := 'SystemDictionaryCloneClass_3'.
 	symDictName := self _symbolDictionaryName2.
 	clonedSymDictName :=  (symDictName, '_CLONE') asSymbol.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	self 
 		_createLoadedProjectNamed: projectName 
@@ -233,7 +245,10 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 	symDictName := self _symbolDictionaryName2.
 	clonedSymDictName :=  (symDictName, '_CLONE') asSymbol.
 
-	self 
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	self
 		_createLoadedProjectNamed: projectName 
 		root: self _testRowanProjectsSandbox pathString, '/rowanIssuesProject/' 
 		symbolDictionaryName: symDictName 
@@ -294,6 +309,9 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 	className2 := 'SystemDictionaryCloneClass_2'.
 	symDictName := self _symbolDictionaryName2.
 	clonedSymDictName :=  (symDictName, '_CLONE') asSymbol.
+
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 	self 
 		_createLoadedProjectNamed: projectName 

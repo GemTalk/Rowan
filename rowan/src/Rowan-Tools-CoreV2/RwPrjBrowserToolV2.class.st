@@ -121,7 +121,7 @@ RwPrjBrowserToolV2 >> _rowanSymbolDictionaryNames [
 
 { #category : 'class browsing' }
 RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray [
-	| loadedPackage |
+	| loadedPackage packageConvention packageName |
 	(self _loadedClassNamed: className ifAbsent: [  ])
 		ifNil: [ 
 			"no loaded class, see if the category matches an existing package name"
@@ -129,13 +129,28 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 				_loadedPackageNamed: category
 				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
 		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
-	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+	packageConvention := loadedPackage loadedProject packageConvention.
+	packageConvention = 'Rowan'
+		ifTrue: [ packageName := loadedPackage name ]
 		ifFalse: [ 
-			self
-				error:
-					'Category ' , category printString , ' for class ' , className printString
-						, 'does not follow ' , loadedPackage loadedProject packageConvention
-						, ' package convention' ].
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					packageName := (loadedPackage loadedProject loadedPackages
+						at: category
+						ifAbsent: [ 
+							self
+								error:
+									'No package named ' , category printString
+										, ' found (RowanHybrid package convention)' ]) name ]
+				ifFalse: [ 
+					"Monticello"
+					packageName := (loadedPackage loadedProject loadedPackages
+						detect: [ :each | category beginsWith: each name asLowercase ]
+						ifNone: [ 
+							self
+								error:
+									'No package matching ' , category printString
+										, ' found (Monticello package convention)' ]) name ] ].
 	^ self
 		addOrUpdateClassDefinition: className
 		type: type
@@ -145,7 +160,7 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: category
-		packageName: loadedPackage name
+		packageName: packageName
 		constraints: #()
 		options: optionsArray
 ]

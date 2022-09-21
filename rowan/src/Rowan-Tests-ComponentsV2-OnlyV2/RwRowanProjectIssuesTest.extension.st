@@ -222,6 +222,9 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 { #category : '*rowan-tests-componentsv2-onlyv2' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath validate: validate [
 
+	(Rowan image loadedProjectNamed:projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
 	^ self 
 		_createLoadedProjectNamed: projectName 
 		packageConvention: nil
@@ -357,6 +360,7 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 		classInstVars: #()
 		poolDictionaries: #()
 		category: packageName
+		packageName: packageName
 		options: #().
 
 	validate ifTrue: [ 
@@ -364,7 +368,6 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 		self assert: package isDirty ].
 
 	^theClass
-
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
@@ -4767,7 +4770,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		classVars: #() 
 		classInstVars: #() 
 		poolDictionaries: #() 
-		category: 'category' 
+		category: packageName 
 		packageName:  packageName
 		constraints: { { #'ivar1' . Association } . { #'ivar5' . Number } } 
 		options: #().
@@ -4778,7 +4781,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: class1 == newClass1.
 	self assert: oldClass1 ~~ class1.
 	self assert: class1 instVarNames = #(ivar5 ivar1).
-	self assert: class1 category = 'category'.
+	self assert: class1 category = packageName.
 	self assert: class1 comment = 'comment'.
 	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . Association }. }).
 	oldClass2 := class2.
@@ -4901,7 +4904,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		classVars: #() 
 		classInstVars: #() 
 		poolDictionaries: #() 
-		category: 'category' 
+		category: packageName
 		packageName:  packageName
 		constraints: { { #'ivar1' . class2 } . { #'ivar5' . Number } } 
 		options: #().
@@ -4916,7 +4919,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: class1 == newClass1.
 	self assert: oldClass1 ~~ class1.
 	self assert: class1 instVarNames = #(ivar5 ivar1).
-	self assert: class1 category = 'category'.
+	self assert: class1 category = packageName.
 	self assert: class1 comment = 'comment'.
 	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . oldClass2 }. }).
 	self assert: oldClass2 ~~ class2.
@@ -5035,7 +5038,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 		classVars: #() 
 		classInstVars: #() 
 		poolDictionaries: #() 
-		category: 'category' 
+		category: packageName
 		packageName:  packageName
 		constraints: { { #'ivar1' . Number } . { #'ivar5' . Number } } 
 		options: #().
@@ -5050,7 +5053,7 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: class1 == newClass1.
 	self assert: oldClass1 ~~ class1.
 	self assert: class1 instVarNames = #(ivar5 ivar1).
-	self assert: class1 category = 'category'.
+	self assert: class1 category = packageName.
 	self assert: class1 comment = 'comment'.
 	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . Number }. }).
 	self assert: oldClass2 ~~ class2.
@@ -6405,7 +6408,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		classVars: #() 
 		classInstVars: #() 
 		poolDictionaries: #() 
-		category: 'category' 
+		category: packageName 
 		packageName:  packageName
 		constraints: { { 'ivar5' . Number } } 
 		options: #().
@@ -6535,7 +6538,7 @@ RwRowanProjectIssuesTest >> testIssue326_new_version_class_with_subclass_constra
 		classVars: #() 
 		classInstVars: #() 
 		poolDictionaries: #() 
-		category: 'category' 
+		category: packageName 
 		packageName:  packageName
 		constraints: { { 'ivar3' . Association } } 
 		options: #().
@@ -9798,7 +9801,7 @@ RwRowanProjectIssuesTest >> testIssue91 [
 		classVars: #( Cvar1)
 		classInstVars: #( civar1)
 		poolDictionaries: #()
-		category: 'Simple Things'
+		category: 'Issue91-Core'
 		packageName: 'Issue91-Core'
 		constraints: #()
 		options: #().

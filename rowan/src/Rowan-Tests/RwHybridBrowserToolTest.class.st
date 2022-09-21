@@ -141,8 +141,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateA [
 
 	"make sure that we actually evaluate the class creation templates"
 
-	| category normalClass projectName packageNames packageName1 packageName2 browserTool template |
-	category := 'Category'.
+	| normalClass projectName packageNames packageName1 packageName2 browserTool template |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -166,25 +165,25 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateA [
 	template := browserTool
 		classCreationTemplateForSubclassOf: 'Object'
 		className: 'SimpleHybridNormal1'
-		category: category
+		category: packageName1
 		packageName: packageName1.
 	normalClass := template evaluate.
 	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category = category.
+	self assert: normalClass category = packageName1.
 
 	template := browserTool
 		classCreationTemplateForClass: normalClass
 		hybridBrowser: false.
 	normalClass := template evaluate.
 	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category = category.
+	self assert: normalClass category = packageName1.
 
 	template := browserTool
 		classCreationTemplateForClass: normalClass
 		hybridBrowser: true.	" packageName does not equal category, so hyrbridBrowser form cannot be used"
 	normalClass := template evaluate.
 	self assert: normalClass rowanPackageName = packageName1.
-	self assert: normalClass category = category.
+	self assert: normalClass category = packageName1.
 
 	normalClass category: packageName1.	"now we can use hybridBrowser form again"
 	template := browserTool
@@ -202,8 +201,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 
 	"make sure that we actually evaluate the class creation templates"
 
-	| category byteClass variableClass projectName packageNames packageName1 packageName2 browserTool template |
-	category := 'Category'.
+	| byteClass variableClass projectName packageNames packageName1 packageName2 browserTool template |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -230,11 +228,11 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 		classCreationTemplateForSubclassOf: 'Object'
 		className: 'SimpleHybridIndexable1'
 		type: 'variable'
-		category: category
+		category: packageName1
 		packageName: packageName1.
 	variableClass := template evaluate.
 	self assert: variableClass rowanPackageName = packageName1.
-	self assert: variableClass category = category
+	self assert: variableClass category = packageName1
 ]
 
 { #category : 'tests' }
@@ -1609,6 +1607,74 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsD [
 			classInstVars: #()
 			poolDictionaries: #()
 			category: packageName2
+			options: #()
+	] on: Error do: [:ex |
+		self 
+			assert: ex description 
+			equals: 'UserDefinedError: The class SimpleHybrid1 has extension methods for the package HybridC-Extensions, so the class cannot be added to the package HybridC-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		hadError := true ].
+	self assert: hadError description: 'Expected and error'.
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsE [
+	"Create new class version of class in new package ... where the class already has an 
+		extension method for that package. Recompile succeeds, but audit fails ... recompile 
+		should throw the error"
+
+	"https://github.com/GemTalk/Rowan/issues/802"
+
+	| class subclass projectName packageNames packageName1 packageName2 newClassVersion audit hadError |
+	projectName := 'Hybrid Project C'.
+	packageName1 := 'HybridC-Core'.
+	packageName2 := 'HybridC-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+	class := Object
+		rwSubclass: 'SimpleHybrid1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	class rwCompileMethod: 'foo ^''foo''' category: '*' , packageName2 asLowercase.
+	class class rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.
+
+	subclass := class
+		rwSubclass: 'SimpleHybridSubclass1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName2
+		options: #().
+	subclass rwCompileMethod: 'foo1 ^''foo''' category: 'accessing'.
+	subclass class
+		rwCompileMethod: 'foo1 ^''foo'''
+		category: '*' , packageName1 asLowercase.
+
+	audit := (Rowan projectNamed: projectName) audit.
+	self assert: audit isEmpty.	self assert: subclass superClass == class.
+
+	hadError := false.
+	[
+		newClassVersion := Object
+			rwSubclass: 'SimpleHybrid1'
+			instVarNames: #('ivar1')
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: packageName2
+			packageName: packageName2
 			options: #()
 	] on: Error do: [:ex |
 		self 

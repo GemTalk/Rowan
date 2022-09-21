@@ -682,6 +682,7 @@ RwAdoptToolApiTest >> testAdoptClassWithExistingExtensionMethods_1 [
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 	self assert: barMethod rowanPackageName = packageName2.
 
+	theClass category: packageName1.
 	Rowan packageTools adopt 
 		adoptClassNamed: className 
 		intoPackageNamed: packageName1.
@@ -689,7 +690,6 @@ RwAdoptToolApiTest >> testAdoptClassWithExistingExtensionMethods_1 [
 	self assert: theClass rowanProjectName = projectName.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests' }
@@ -1293,6 +1293,8 @@ RwAdoptToolApiTest >> testAdoptSymbolDictionary_1 [
 		inDictionary: symDict
 		options: #().
 
+	theClass category: packageName.
+
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -1319,7 +1321,6 @@ RwAdoptToolApiTest >> testAdoptSymbolDictionary_1 [
 	self assert: theClass rowanPackageName = packageName.
 	self assert: instanceMethod rowanPackageName = packageName.
 	self assert: classMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
@@ -1381,6 +1382,8 @@ RwAdoptToolApiTest >> testAdoptSymbolDictionary_2 [
 		inDictionary: symDict
 		options: #().
 
+	theClass category: packageName2.
+
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -1407,7 +1410,6 @@ RwAdoptToolApiTest >> testAdoptSymbolDictionary_2 [
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: instanceMethod rowanPackageName = packageName2.
 	self assert: classMethod rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests' }
@@ -1441,6 +1443,8 @@ RwAdoptToolApiTest >> testAdoptSymbolList_1 [
 		inDictionary: symDict
 		options: #().
 
+	theClass category: packageName.
+
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -1472,7 +1476,6 @@ RwAdoptToolApiTest >> testAdoptSymbolList_1 [
 	self assert: theClass rowanPackageName = packageName.
 	self assert: instanceMethod rowanPackageName = packageName.
 	self assert: classMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
@@ -1506,6 +1509,8 @@ RwAdoptToolApiTest >> testAdoptSymbolList_2 [
 		inDictionary: symDict
 		options: #().
 
+	theClass category: packageName.
+
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -1537,5 +1542,4 @@ RwAdoptToolApiTest >> testAdoptSymbolList_2 [
 	self assert: theClass rowanPackageName = packageName.
 	self assert: instanceMethod rowanPackageName = packageName.
 	self assert: classMethod rowanPackageName = packageName.
-
 ]

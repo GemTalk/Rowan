@@ -491,15 +491,14 @@ RwProjectAuditToolTest >> testClassCategoryViolation [
 		options: #().
 	self assert: theClass rowanPackageName = packageName.
 
-	theClass category: 'blue'.
+	theClass _category: 'blue'. "cheat to bypass category: validation"
 
 	audit := Rowan projectTools audit auditForProjectNamed: projectName.
 	self deny: audit isEmpty.
 	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
-	self assert: reasons size equals: 1.
 	self
 		assert: reasons asSet asArray sort
-		equals: #(violateClassCategoryConvention) sort.
+		equals: #(violateClassCategoryConvention differentCategory) sort.
 ]
 
 { #category : 'tests' }

@@ -53820,7 +53820,7 @@ method: RwClsAuditTool
 auditLoadedClassProperties: aLoadedClass forClass: aClass
 	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| aDict superclassName classProperty varNames |
+	| aDict superclassName classProperty varNames packageConvention |
 	superclassName := aClass superclass
 		ifNil: [ 'nil' ]
 		ifNotNil: [ :superCls | superCls name ].
@@ -53905,30 +53905,28 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 						classPropertyValue: aClass rwComment;
 						class: aClass;
 						yourself) ].
-	aLoadedClass classCategory
-		= ((classProperty := aClass _classCategory) ifNil: [ '' ])
-		ifTrue: [ 
-			| packageConvention |
-			"ensure that the class category follows the proper conventions"
-			packageConvention := aLoadedClass loadedProject packageConvention.
-			(Rowan image
-				validClassCategory: classProperty
-				forPackageConvention: packageConvention
-				andPackageNamed: aLoadedClass loadedPackage name)
-				ifFalse: [ 
-					self theAuditDetails
-						add:
-							((RwAuditClassPropertyDetail
-								for: aLoadedClass
-								message:
-									'For class ' , aLoadedClass name , ' the class category ('
-										, classProperty printString , ') does not follow the '
-										, packageConvention printString , ' package convention')
-								reason: #'violateClassCategoryConvention';
-								loadedPropertyValue: aLoadedClass classCategory;
-								classPropertyValue: classProperty;
-								class: aClass;
-								yourself) ] ]
+	classProperty := aClass _classCategory.
+	packageConvention := aLoadedClass loadedProject packageConvention.
+	(Rowan image
+		validClassCategory: classProperty
+		forPackageConvention: packageConvention
+		andPackageNamed: aLoadedClass loadedPackage name)
+		ifFalse: [ 
+			"the class category violates the package convention"
+			self theAuditDetails
+				add:
+					((RwAuditClassPropertyDetail
+						for: aLoadedClass
+						message:
+							'For class ' , aLoadedClass name , ' the class category ('
+								, classProperty printString , ') does not follow the '
+								, packageConvention printString , ' package convention')
+						reason: #'violateClassCategoryConvention';
+						loadedPropertyValue: aLoadedClass classCategory;
+						classPropertyValue: classProperty;
+						class: aClass;
+						yourself) ].
+	aLoadedClass classCategory = classProperty
 		ifFalse: [ 
 			self theAuditDetails
 				add:
@@ -55480,7 +55478,7 @@ auditForProjectsNamed: aCol on: logStreamOrNil
 category: 'class browsing'
 method: RwPrjBrowserToolV2
 addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray
-	| loadedPackage |
+	| loadedPackage packageConvention packageName |
 	(self _loadedClassNamed: className ifAbsent: [  ])
 		ifNil: [ 
 			"no loaded class, see if the category matches an existing package name"
@@ -55488,13 +55486,28 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 				_loadedPackageNamed: category
 				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
 		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
-	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+	packageConvention := loadedPackage loadedProject packageConvention.
+	packageConvention = 'Rowan'
+		ifTrue: [ packageName := loadedPackage name ]
 		ifFalse: [ 
-			self
-				error:
-					'Category ' , category printString , ' for class ' , className printString
-						, 'does not follow ' , loadedPackage loadedProject packageConvention
-						, ' package convention' ].
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					packageName := (loadedPackage loadedProject loadedPackages
+						at: category
+						ifAbsent: [ 
+							self
+								error:
+									'No package named ' , category printString
+										, ' found (RowanHybrid package convention)' ]) name ]
+				ifFalse: [ 
+					"Monticello"
+					packageName := (loadedPackage loadedProject loadedPackages
+						detect: [ :each | category beginsWith: each name asLowercase ]
+						ifNone: [ 
+							self
+								error:
+									'No package matching ' , category printString
+										, ' found (Monticello package convention)' ]) name ] ].
 	^ self
 		addOrUpdateClassDefinition: className
 		type: type
@@ -55504,7 +55517,7 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
 		category: category
-		packageName: loadedPackage name
+		packageName: packageName
 		constraints: #()
 		options: optionsArray
 %

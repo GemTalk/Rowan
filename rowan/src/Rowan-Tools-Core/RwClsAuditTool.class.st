@@ -81,7 +81,7 @@ RwClsAuditTool >> auditGlobalFor: aLoadedClass [
 RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| aDict superclassName classProperty varNames |
+	| aDict superclassName classProperty varNames packageConvention |
 	superclassName := aClass superclass
 		ifNil: [ 'nil' ]
 		ifNotNil: [ :superCls | superCls name ].
@@ -166,30 +166,28 @@ RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 						classPropertyValue: aClass rwComment;
 						class: aClass;
 						yourself) ].
-	aLoadedClass classCategory
-		= ((classProperty := aClass _classCategory) ifNil: [ '' ])
-		ifTrue: [ 
-			| packageConvention |
-			"ensure that the class category follows the proper conventions"
-			packageConvention := aLoadedClass loadedProject packageConvention.
-			(Rowan image
-				validClassCategory: classProperty
-				forPackageConvention: packageConvention
-				andPackageNamed: aLoadedClass loadedPackage name)
-				ifFalse: [ 
-					self theAuditDetails
-						add:
-							((RwAuditClassPropertyDetail
-								for: aLoadedClass
-								message:
-									'For class ' , aLoadedClass name , ' the class category ('
-										, classProperty printString , ') does not follow the '
-										, packageConvention printString , ' package convention')
-								reason: #'violateClassCategoryConvention';
-								loadedPropertyValue: aLoadedClass classCategory;
-								classPropertyValue: classProperty;
-								class: aClass;
-								yourself) ] ]
+	classProperty := aClass _classCategory.
+	packageConvention := aLoadedClass loadedProject packageConvention.
+	(Rowan image
+		validClassCategory: classProperty
+		forPackageConvention: packageConvention
+		andPackageNamed: aLoadedClass loadedPackage name)
+		ifFalse: [ 
+			"the class category violates the package convention"
+			self theAuditDetails
+				add:
+					((RwAuditClassPropertyDetail
+						for: aLoadedClass
+						message:
+							'For class ' , aLoadedClass name , ' the class category ('
+								, classProperty printString , ') does not follow the '
+								, packageConvention printString , ' package convention')
+						reason: #'violateClassCategoryConvention';
+						loadedPropertyValue: aLoadedClass classCategory;
+						classPropertyValue: classProperty;
+						class: aClass;
+						yourself) ].
+	aLoadedClass classCategory = classProperty
 		ifFalse: [ 
 			self theAuditDetails
 				add:

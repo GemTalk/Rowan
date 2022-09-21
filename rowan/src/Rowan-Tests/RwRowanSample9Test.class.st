@@ -2585,6 +2585,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: primerPackageName1.
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -2600,6 +2601,7 @@ RwRowanSample9Test >> testIssue208_adopt_load [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: primerPackageName2.
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -2698,6 +2700,7 @@ RwRowanSample9Test >> testIssue230 [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().	"new class version will e created after load of spec_0002"
+	theClass category: primerPackageName1.
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
@@ -2713,6 +2716,7 @@ RwRowanSample9Test >> testIssue230 [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: primerPackageName2.
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
