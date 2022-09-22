@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 12,
 		"failures" : 11,
-		"passed" : 1586,
-		"summary" : "1609 Tests with 11 Failures, 12 Errors and 0 DeprecationWarnings in 1873.54s",
-		"tests" : 1609,
-		"time" : 1873.543
+		"passed" : 1592,
+		"summary" : "1615 Tests with 11 Failures, 12 Errors and 0 DeprecationWarnings in 2019.97s",
+		"tests" : 1615,
+		"time" : 2019.975
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2874,6 +2874,12 @@
 		{
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
+			"selector" : "testAdoptClassInvalidCategory",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
 			"selector" : "testAdoptClassWithExistingExtensionMethods_1",
 			"time" : "0"
 		},
@@ -3834,6 +3840,12 @@
 		{
 			"className" : "RwHybridBrowserToolTest",
 			"status" : "passed",
+			"selector" : "testHybridNewClassVersionWithSubclassesAndMethodsE",
+			"time" : "0"
+		},
+		{
+			"className" : "RwHybridBrowserToolTest",
+			"status" : "passed",
 			"selector" : "testHybridNewClassVersionWithSubclassesB",
 			"time" : "0"
 		},
@@ -4249,6 +4261,12 @@
 			"className" : "RwProjectAuditToolTest",
 			"status" : "passed",
 			"selector" : "testClassBadExtensionName",
+			"time" : "0"
+		},
+		{
+			"className" : "RwProjectAuditToolTest",
+			"status" : "passed",
+			"selector" : "testClassCategoryViolation",
 			"time" : "0"
 		},
 		{
@@ -5467,6 +5485,24 @@
 			"className" : "RwRowanProjectIssuesTest",
 			"status" : "passed",
 			"selector" : "testIssue72_updateMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanProjectIssuesTest",
+			"status" : "passed",
+			"selector" : "testIssue743_create_class_invalid_category_declared",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanProjectIssuesTest",
+			"status" : "passed",
+			"selector" : "testIssue743_create_class_no_package_declared",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanProjectIssuesTest",
+			"status" : "passed",
+			"selector" : "testIssue743_set_category_invalid_category_declared",
 			"time" : "0"
 		},
 		{
@@ -9670,5 +9706,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-13T17:25:18.055665-07:00"
+	"timeStamp" : "2022-09-21T18:31:04.773049-07:00"
 }
