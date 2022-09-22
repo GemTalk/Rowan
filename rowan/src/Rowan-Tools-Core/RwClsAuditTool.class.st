@@ -81,7 +81,7 @@ RwClsAuditTool >> auditGlobalFor: aLoadedClass [
 RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| aDict superclassName classProperty varNames packageConvention |
+	| aDict superclassName classProperty classCategoryValue varNames packageConvention |
 	superclassName := aClass superclass
 		ifNil: [ 'nil' ]
 		ifNotNil: [ :superCls | superCls name ].
@@ -187,7 +187,7 @@ RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 						classPropertyValue: classProperty;
 						class: aClass;
 						yourself) ].
-	aLoadedClass classCategory = classProperty
+	aLoadedClass classCategory = (classCategoryValue := classProperty ifNil: [ '' ])
 		ifFalse: [ 
 			self theAuditDetails
 				add:
@@ -195,7 +195,7 @@ RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 						for: aLoadedClass
 						message:
 							'For class ' , aLoadedClass name
-								, ' class category has changed in compiled class (' , classProperty
+								, ' class category has changed in compiled class (' , classCategoryValue 
 								, ') v loaded class (' , aLoadedClass classCategory , ')')
 						reason: #'differentCategory';
 						loadedPropertyValue: aLoadedClass classCategory;

@@ -53820,7 +53820,7 @@ method: RwClsAuditTool
 auditLoadedClassProperties: aLoadedClass forClass: aClass
 	"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
-	| aDict superclassName classProperty varNames packageConvention |
+	| aDict superclassName classProperty classCategoryValue varNames packageConvention |
 	superclassName := aClass superclass
 		ifNil: [ 'nil' ]
 		ifNotNil: [ :superCls | superCls name ].
@@ -53926,7 +53926,7 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 						classPropertyValue: classProperty;
 						class: aClass;
 						yourself) ].
-	aLoadedClass classCategory = classProperty
+	aLoadedClass classCategory = (classCategoryValue := classProperty ifNil: [ '' ])
 		ifFalse: [ 
 			self theAuditDetails
 				add:
@@ -53934,7 +53934,7 @@ auditLoadedClassProperties: aLoadedClass forClass: aClass
 						for: aLoadedClass
 						message:
 							'For class ' , aLoadedClass name
-								, ' class category has changed in compiled class (' , classProperty
+								, ' class category has changed in compiled class (' , classCategoryValue 
 								, ') v loaded class (' , aLoadedClass classCategory , ')')
 						reason: #'differentCategory';
 						loadedPropertyValue: aLoadedClass classCategory;
@@ -55502,7 +55502,7 @@ addOrUpdateClassDefinition: className type: type superclass: superclassName inst
 				ifFalse: [ 
 					"Monticello"
 					packageName := (loadedPackage loadedProject loadedPackages
-						detect: [ :each | category beginsWith: each name asLowercase ]
+						detect: [ :each | category beginsWith: each name ]
 						ifNone: [ 
 							self
 								error:

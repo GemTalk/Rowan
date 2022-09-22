@@ -145,7 +145,7 @@ RwPrjBrowserToolV2 >> addOrUpdateClassDefinition: className type: type superclas
 				ifFalse: [ 
 					"Monticello"
 					packageName := (loadedPackage loadedProject loadedPackages
-						detect: [ :each | category beginsWith: each name asLowercase ]
+						detect: [ :each | category beginsWith: each name ]
 						ifNone: [ 
 							self
 								error:
