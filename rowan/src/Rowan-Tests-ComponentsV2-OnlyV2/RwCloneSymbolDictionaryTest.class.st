@@ -4,11 +4,29 @@ Class {
 	#category : 'Rowan-Tests-ComponentsV2-OnlyV2'
 }
 
+{ #category : 'private' }
+RwCloneSymbolDictionaryTest class >> _clonedLoaderSymbolDictionaryName [
+	^ #'RowanLoader_cloned'
+]
+
+{ #category : 'private' }
+RwCloneSymbolDictionaryTest class >> _symbolDictionaryNames [
+	^ super _symbolDictionaryNames
+		,
+			{((self _symbolDictionaryName2 , '_CLONE') asSymbol).
+			(self _clonedLoaderSymbolDictionaryName)}
+]
+
 { #category : 'Testing' }
 RwCloneSymbolDictionaryTest class >> shouldInheritSelectors [
 
 	^false
 
+]
+
+{ #category : 'private' }
+RwCloneSymbolDictionaryTest >> _clonedLoaderSymbolDictionaryName [
+	^ self class _clonedLoaderSymbolDictionaryName
 ]
 
 { #category : 'tests' }
@@ -214,11 +232,10 @@ RwCloneSymbolDictionaryTest >> testRowanLoaderSystemDictionaryClone [
 
 	| rowanLoaderSymbolDict clonedSymDictName clonedSymbolDict |
 	rowanLoaderSymbolDict := Rowan globalNamed: 'RowanLoader'.
-	clonedSymDictName := #'RowanLoader_cloned'.
+	clonedSymDictName := self _clonedLoaderSymbolDictionaryName.
 	clonedSymbolDict := rowanLoaderSymbolDict 
 		_rowanCloneSymbolDictionaryNamed: clonedSymDictName 
 		symbolList: GsCurrentSession currentSession symbolList.
-
 ]
 
 { #category : 'tests' }

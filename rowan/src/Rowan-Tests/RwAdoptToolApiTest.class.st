@@ -577,8 +577,8 @@ RwAdoptToolApiTest >> testAdopt_issue481_F [
 ]
 
 { #category : 'tests' }
-RwAdoptToolApiTest >> testAdoptClass [
-	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList |
+RwAdoptToolApiTest >> testAdoptClass_01 [
+	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList audit |
 	projectName := 'AdoptProject'.
 	packageName := 'Adopt-Core'.
 	packageNames := {packageName}.
@@ -625,6 +625,63 @@ RwAdoptToolApiTest >> testAdoptClass [
 	self assert: theClass rowanProjectName = projectName.
 	self assert: instanceMethod rowanProjectName = projectName.
 	self assert: classMethod rowanProjectName = projectName.
+
+	self assert: ((Rowan image loadedPackageNamed: packageName) loadedClassForClass: theClass ifAbsent: []) notNil.
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty
+]
+
+{ #category : 'tests' }
+RwAdoptToolApiTest >> testAdoptClass_02 [
+	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList audit |
+	projectName := 'AdoptProject'.
+	packageName := 'Adopt-Core'.
+	packageNames := {packageName}.
+	symDictName := self _symbolDictionaryName2.
+	className := 'AdoptedClass'.
+	symbolList := Rowan image symbolList.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+
+	symDict := Rowan image symbolDictNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass := Object subclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+	classMethod := theClass class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	self assert: theClass rowanProjectName = Rowan unpackagedName.
+	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.
+	self assert: classMethod rowanProjectName = Rowan unpackagedName.
+
+	Rowan packageTools adopt 
+		adoptClass: theClass 
+		intoPackageNamed: packageName.
+
+	self assert: theClass rowanProjectName = projectName.
+	self assert: instanceMethod rowanProjectName = projectName.
+	self assert: classMethod rowanProjectName = projectName.
+
+	self assert: ((Rowan image loadedPackageNamed: packageName) loadedClassForClass: theClass ifAbsent: []) notNil.
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty
 ]
 
 { #category : 'tests' }
