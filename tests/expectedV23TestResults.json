@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 23,
 		"failures" : 14,
-		"passed" : 1405,
-		"summary" : "1442 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 384.82s",
-		"tests" : 1442,
-		"time" : 384.821
+		"passed" : 1406,
+		"summary" : "1443 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 322.65s",
+		"tests" : 1443,
+		"time" : 322.652
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -3360,13 +3360,19 @@
 		{
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
-			"selector" : "testAdoptClass",
+			"selector" : "testAdoptClassWithExistingExtensionMethods_1",
 			"time" : "0"
 		},
 		{
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
-			"selector" : "testAdoptClassWithExistingExtensionMethods_1",
+			"selector" : "testAdoptClass_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptClass_02",
 			"time" : "0"
 		},
 		{
@@ -8668,5 +8674,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-22T18:33:53.919999-07:00"
+	"timeStamp" : "2022-09-25T12:26:24.093054-07:00"
 }
