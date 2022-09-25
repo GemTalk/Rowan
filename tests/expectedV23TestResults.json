@@ -9,9 +9,9 @@
 		"errors" : 23,
 		"failures" : 14,
 		"passed" : 1405,
-		"summary" : "1442 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 392.49s",
+		"summary" : "1442 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 384.82s",
 		"tests" : 1442,
-		"time" : 392.492
+		"time" : 384.821
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -8668,5 +8668,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-14T18:18:53.845649-07:00"
+	"timeStamp" : "2022-09-22T18:33:53.919999-07:00"
 }
