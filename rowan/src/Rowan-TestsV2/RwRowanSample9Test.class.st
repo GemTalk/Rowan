@@ -4853,6 +4853,10 @@ RwRowanSample9Test >> testNoMigration_bitbucket [
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
 	| loadSpec instanceMap |
+	true
+		ifTrue: [
+			"bitbucket access started hanging (from web browser and command line) today (Sun 25 Sep 2022 12:16:22 PM PDT)"
+			^ self ].
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0034' 
 		projectName: 'RowanSample9' 
