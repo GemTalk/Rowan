@@ -250,6 +250,14 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 	self assert: project gitShortStatus isEmpty.
 
 "export project components and packages"
+	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+		ifTrue: [ 
+			"since we've made changes to the load spec (not dhenrich), 
+				we shouldn't write it as the test will fail the empty 
+				gitShortStatus test"
+			"https://github.com/GemTalk/Rowan/issues/805"
+			Rowan gemstoneTools topaz
+				exportLoadSpecificationForProject: projectName].
 	Rowan gemstoneTools topaz
 		exportComponentsForProject: projectName;
 		exportPackagesForProject: projectName;
@@ -630,9 +638,9 @@ RwGsTopazRowanToolTest >> testTopazMoveMethodToPackage_03 [
 
 { #category : 'tonel support' }
 RwGsTopazRowanToolTest >> testTopazReadTonelFile [
-	"load spec_0001 and then checkout spec_0009 and read 
-		rowan/src/RowanSample9-Extensions/RowanSample9Class1.extension.st, which adds a class
-		method #bar"
+	"load spec_0001 and then checkout spec_0059 and read 
+		rowan/src/RowanSample9-Core-Alt1/RowanSample9Class1.extension.st, which adds a
+		method #alt1 in category alternates"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
@@ -666,8 +674,8 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.
 	self assert: (class new perform: #foo) = 1.
-	self assert: (class class compiledMethodAt: #bar otherwise: nil) notNil.
-	self assert: (class perform: #bar) = 'bar'
+	self assert: (class compiledMethodAt: #alt1 otherwise: nil) notNil.
+	self assert: (class new perform: #alt1) = 'alt1'
 ]
 
 { #category : 'project support' }

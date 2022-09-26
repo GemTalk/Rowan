@@ -166,13 +166,17 @@ RwBrowserToolTest >> _issue481_projectDefinition: projectName  packageName1: pac
 	instanceMethod1 := theClass1
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	classMethod1 := theClass1 class
 		compileMethod: 'bar ^''bar'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	Rowan packageTools adopt 
@@ -195,13 +199,17 @@ RwBrowserToolTest >> _issue481_projectDefinition: projectName  packageName1: pac
 	instanceMethod2 := theClass2
 		compileMethod: 'foo ^''foo'''
 		dictionaries: symbolList
-		category: '*', packageName2 asLowercase
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	classMethod2 := theClass2 class
 		compileMethod: 'bar ^''bar'''
 		dictionaries: symbolList
-		category: '*', packageName2 asLowercase
+		category: ('*', packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 	Rowan packageTools adopt 

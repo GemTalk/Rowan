@@ -17,7 +17,8 @@ _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList catego
 				environmentId: environmentId.
 			meth class == GsNMethod
 				ifTrue: [ 
-					"successful  parse of method, so let's see if the method is already pacakged"
+					| protocol |
+					protocol := categ asString.	"successful  parse of method, so let's see if the method is already packaged"
 					(self
 						compiledMethodAt: meth selector
 						environmentId: environmentId
@@ -28,30 +29,102 @@ _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList catego
 							packageName := theMethod rowanPackageName.
 							packageName = Rowan unpackagedName
 								ifTrue: [ 
-									"method not already, packaged, check to see if the the 
+									"method not already, packaged, check to see if the 
 										currentTopazPackageName has been set, if so package the method
 										using the topaz package name"
 									Rowan gemstoneTools topaz currentTopazPackageName
 										ifNotNil: [ :topazPackageName | packageName := topazPackageName ] ].
 							packageName ~= Rowan unpackagedName
 								ifTrue: [ 
-									"The original method was packaged (or topaz package name set), so 
+									"The original method was packaged (or currentTopazPackageName set), so 
 										preserve the packaging"
 									^ self
 										rwCompileMethod: sourceString
 										dictionaries: symList
 										category: categ
-										packageName: packageName ] ]
+										packageName: packageName ]
+								ifFalse: [ 
+									"The original method is unpackaged, so compile method and do not package"
+									^ unpackagedBlock value ] ]
 						ifNil: [ 
-							"no existing method, but if current topaz package name is set, we'll compile the 
-								new method in that package"
-							Rowan gemstoneTools topaz currentTopazPackageName
-								ifNotNil: [ :packageName | 
-									^ self
-										rwCompileMethod: sourceString
-										dictionaries: symList
-										category: categ
-										packageName: packageName ] ] ] ].
+							"new method"
+							"https://github.com/GemTalk/Rowan/issues/830"
+							(protocol beginsWith: '*')
+								ifTrue: [ 
+									^ (Rowan image loadedHybridPackageNamed: protocol ifAbsent: [  ])
+										ifNil: [ 
+											| packageName "The *protocol does not map to an existing package" packageConvention |
+											packageName := self rowanPackageName.
+											packageName = Rowan unpackagedName
+												ifTrue: [ 
+													"the class is not packaged, and protocol does not map to an existing 
+														package ... so we'll treat this as an unpackaged method."
+													^ unpackagedBlock value ].
+											(packageConvention := (Rowan image loadedPackageNamed: packageName)
+												loadedProject packageConvention) = 'Rowan'
+												ifTrue: [ 
+													"If the protocol begins with a '*' but does not map to an existing 
+														package and the package of the class follows the Rowan convention, 
+														then the method is added to the package of the class. If the class is 
+														not packaged, then the method is added to the given protocol, otherwise 
+														it is an error."
+													^ self
+														rwCompileMethod: sourceString
+														dictionaries: symList
+														category: categ
+														packageName: packageName ].
+											self
+												error:
+													'The method category ' , protocol printString
+														,
+															' does not map to a known package and you may not add an unpackaged method to a class that is packaged ('
+														, packageName , '),' ]
+										ifNotNil: [ :hybridLoadedPackage | 
+											"If the protocol begins with a '*' and maps to an existing package 
+												(Rowan, Monticello or RowanHybrid convention), then the method is put 
+												into that package."
+											^ self
+												rwCompileMethod: sourceString
+												dictionaries: symList
+												category: categ
+												packageName: hybridLoadedPackage name ] ]
+								ifFalse: [ 
+									"protocol DOES NOT begin with '*'"
+									Rowan gemstoneTools topaz currentTopazPackageName
+										ifNil: [ 
+											| packageName |
+											"Protocol does not begin with a '* and the currentTopazPackageName is NOT 
+												set"
+											packageName := self rowanPackageName.
+											packageName = Rowan unpackagedName
+												ifTrue: [ 
+													"the class is not packaged, so just add an unpackaged method to the 
+														unpackaged class"
+													^ unpackagedBlock value ]
+												ifFalse: [ 
+													"the class is packaged, so add the method to the package of the class"
+													^ self
+														rwCompileMethod: sourceString
+														dictionaries: symList
+														category: categ
+														packageName: packageName ] ]
+										ifNotNil: [ :packageName | 
+											"if protocol does not begin with a '* and the currentTopazPackageName is set"
+											((Rowan image loadedPackageNamed: packageName) loadedProject
+												packageConvention = 'Rowan' or: [ packageName = self rowanPackageName ])
+												ifTrue: [ 
+													"If the currentTopazPackageName maps to a package that follows the 
+														Rowan convention or the packageName matches the packageName of
+														the reciever, then the method is put into that package, as 
+														long as item 1 does not apply."
+													^ self
+														rwCompileMethod: sourceString
+														dictionaries: symList
+														category: categ
+														packageName: packageName ]
+												ifFalse: [ 
+													"RowanHybrid or Monticello package convention; class unpackaged; method unpackaged"
+													^ unpackagedBlock value ] ] ] ] ] ].
 	^ unpackagedBlock value
 %
 

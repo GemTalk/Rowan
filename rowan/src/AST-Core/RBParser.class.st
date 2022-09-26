@@ -94,6 +94,20 @@ RBParser class >> parseRewriteMethod: aString onError: aBlock [
 	^RBPatternParser parseMethod: aString onError: aBlock
 ]
 
+{ #category : 'accessing' }
+RBParser class >> parseWorkspace: aString [
+	^ self parseWorkspace: aString onError: nil
+]
+
+{ #category : 'accessing' }
+RBParser class >> parseWorkspace: aString onError: aBlock [
+	| parser |
+	parser := self new.
+	parser errorBlock: aBlock.
+	parser initializeParserWith: aString.
+	^ parser parseWorkspace: aString
+]
+
 { #category : 'private' }
 RBParser >> addCommentsTo: aNode [
 	aNode comments: aNode comments , comments.
@@ -755,6 +769,98 @@ RBParser >> parseVariableNode [
 	^self parsePrimitiveIdentifier
 ]
 
+{ #category : 'accessing' }
+RBParser >> parseWorkspace [
+	| workspaceNode args leftBar rightBar |
+	workspaceNode := self workspaceNodeClass new.
+	(currentToken notNil and: [ currentToken comments notNil ])
+		ifTrue: [ 
+			comments addAll: currentToken comments.
+			currentToken comments: nil ].
+	self addCommentsTo: workspaceNode.
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary
+		ifTrue: [ 
+			currentToken value = #'|'
+				ifTrue: [ 
+					leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [ currentToken value = #'|' ])
+						ifFalse: [ self parserError: '''|'' expected' ].
+					rightBar := currentToken start.
+					self step ]
+				ifFalse: [ 
+					currentToken value = #'||'
+						ifTrue: [ 
+							rightBar := (leftBar := currentToken start) + 1.
+							self step ] ] ].
+	workspaceNode
+		body:
+			(self
+				parseWorkspaceStatementList: workspaceNode
+				into:
+					(self sequenceNodeClass leftBar: leftBar temporaries: args rightBar: rightBar)).
+	^ workspaceNode
+]
+
+{ #category : 'accessing' }
+RBParser >> parseWorkspace: aString [
+	| node |
+	node := self parseWorkspace.
+	self atEnd
+		ifFalse: [ self parserError: 'Unknown input at end' ].
+	node source: aString.
+	^ node
+]
+
+{ #category : 'accessing' }
+RBParser >> parseWorkspaceStatementList: workspaceNode into: aSequenceNode [
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: aSequenceNode.
+	[ currentToken isSpecial and: [ currentToken value = $. ] ]
+		whileTrue: [ 
+			periods add: currentToken start.
+			self step ].
+	[ 
+	self atEnd
+		or: [ currentToken isSpecial and: [ '])}' includes: currentToken value ] ] ]
+		whileFalse: [ 
+			return
+				ifTrue: [ self parserError: 'End of statement list encounted' ].
+			(currentToken isSpecial and: [ currentToken value = $^ ])
+				ifTrue: [ 
+					returnPosition := currentToken start.
+					self step.
+					node := self returnNodeClass
+						return: returnPosition
+						value: self parseAssignment.
+					statements add: node.
+					return := true ]
+				ifFalse: [ 
+					node := self parseAssignment.
+					statements add: node ].
+			(currentToken isSpecial and: [ currentToken value = $. ])
+				ifTrue: [ 
+					periods add: currentToken start.
+					self step.
+					self addCommentsTo: node ]
+				ifFalse: [ return := true ].
+			[ currentToken isSpecial and: [ currentToken value = $. ] ]
+				whileTrue: [ 
+					periods add: currentToken start.
+					self step ] ].
+	self addCommentsTo: workspaceNode.
+	aSequenceNode
+		statements: statements;
+		periods: periods.
+	^ aSequenceNode
+]
+
 { #category : 'private' }
 RBParser >> patchLiteralArrayToken [
 	(currentToken isIdentifier and: 
@@ -886,4 +992,9 @@ RBParser >> step [
 { #category : 'private-classes' }
 RBParser >> variableNodeClass [
 	^ RBVariableNode
+]
+
+{ #category : 'private-classes' }
+RBParser >> workspaceNodeClass [
+	^ RBWorkspaceNode
 ]

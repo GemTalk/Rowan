@@ -466,6 +466,14 @@ RBConfigurableFormatter >> acceptVariableNode: aVariableNode [
 	codeStream nextPutAll: aVariableNode name
 ]
 
+{ #category : 'visitor-double dispatching' }
+RBConfigurableFormatter >> acceptWorkspaceNode: aWorkspaceNode [
+	self
+		indentAround: [ 
+			self formatMethodCommentFor: aWorkspaceNode.
+			self visitNode: aWorkspaceNode body ]
+]
+
 { #category : 'private' }
 RBConfigurableFormatter >> addNewLinesBeforeStatementStartingAt: anInteger [ 
 	| newLines |
