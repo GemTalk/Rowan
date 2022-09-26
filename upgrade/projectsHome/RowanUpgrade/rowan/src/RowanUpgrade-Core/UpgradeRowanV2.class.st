@@ -133,7 +133,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				adoptClass: (Rowan globalNamed: 'AwsError')
 				intoPackageNamed: 'Filein3B' ].
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
-		and: [ self upgradeFrom asRwGemStoneVersionNumber <= '3.6.3' asRwGemStoneVersionNumber ])
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.3' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"old version of GsHostProcess made obsolete and a new version of GsHostProcess added"
 			Rowan packageTools adopt
