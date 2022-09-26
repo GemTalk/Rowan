@@ -1,7 +1,6 @@
 #!/usr/bin/env superdoit_stone
 options
 {
-SuperDoitOptionalOptionWithRequiredArg long: 'archBase'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 }
 %
@@ -25,10 +24,8 @@ OPTIONS
 EXAMPLES
   $basename -h
   $basename --help -- -L -I .topazini
-  $basename --projectsHome=$GS_HOME/shared/repos --archBase=/home/dhenrich/work/j_36x -- -L -I .topazini
-  $basename --projectsHome=$GS_HOME/shared/repos -- -L -I .topazini
-  $basename --projectsHome=$GS_HOME/shared/repos --archBase=/home/dhenrich/work/j_36x
-  $basename --projectsHome=$GS_HOME/shared/repos
+  $basename --projectsHome=$GS_HOME/shared/repos 
+  $basename --projectsHome=$GS_HOME/shared/repos --projects_home=$GS_HOME/shared/repos
 -----
 %
 doit
