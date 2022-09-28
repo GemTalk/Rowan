@@ -35,7 +35,7 @@ OPTIONS
 
 EXAMPLES
   $basename --help -- -L -I .topazini
-  $basename  -- -L -I .topazini
+  $basename /home/dhenrich/work/m_37x/fast50/gs/product
 -----
 %
 instvars
@@ -188,24 +188,42 @@ updateRowanV230
 method
 updateRowanV300
 	"Rowan v3.0.0 update - GemStone 3.7.0 ... need to use the latest version of Rowan v3.0"
-	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
+	| loadSpecs rowanRepositoryRoot rowanProject rowanClientServicesRepositoryRoot projectsHome |
 	self stdout nextPutAll: 'Start updating Rowan v3.0 to Rowan v3.0'; lf.
-	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
+	projectsHome := self productTreeRoot / 'upgrade' / 'projects'.
+	rowanRepositoryRoot := projectsHome / 'Rowan'.
+	rowanClientServicesRepositoryRoot := projectsHome / 'RowanClientServices'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
-	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
-	rowanProject
-		readOnlyRepositoryRoot: rowanRepositoryRoot pathString 
-		projectsHome: rowanRepositoryRoot parent 
-		commitId: commitId.
-	commitId := self extractCommitIdFrom: self productTreeRoot for: 'RowanClientServices'.
-	rowanClientServicesRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'RowanClientServices'.
-	rowanClientServicesProject := Rowan projectNamed: 'RowanClientServices'.
-	rowanClientServicesProject
-		readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString 
-		projectsHome: rowanClientServicesRepositoryRoot parent 
-		commitId: commitId.
+	loadSpecs := rowanProject loadedLoadSpecifications.
+	loadSpecs do: [:loadSpec |
+		| relRoot |
+		relRoot := loadSpec relativeRepositoryRoot.
+		loadSpec specName = 'RowanClientServices'
+			ifTrue: [
+				loadSpec 
+					projectsHome: projectsHome;
+					readOnlyDiskUrl: 'file:', ((projectsHome / 'RowanClientServices') pathString);
+					yourself  ]
+			ifFalse: [
+				loadSpec specName = 'Rowan'
+					ifTrue: [ 
+						loadSpec 
+							projectsHome: projectsHome;
+							readOnlyDiskUrl: 'file:', ((projectsHome / 'Rowan') pathString);
+							yourself  ]
+					ifFalse: [
+						"embedded Rowan project" 
+						loadSpec
+							readOnlyDiskUrl: 'file:', (((projectsHome / 'Rowan') / relRoot) pathString);
+							projectsHome: rowanRepositoryRoot parent;
+							yourself ] ] ].
+	loadSpecs load do: [:loadedProject |
+		| projectName commitId |
+		projectName := loadedProject name.
+		(#( 'Cypress' 'FileSystemGs' 'STON') includes: projectName) ifTrue: [ projectName := 'Rowan' ]. 
+		commitId := self extractCommitIdFrom: self productTreeRoot for: projectName.
+		loadedProject commitId: commitId ].
 	self stdout nextPutAll: '	load Rowan v3.0.0'; lf.
-	rowanProject reload.
 	^ System commit
 %
 doit

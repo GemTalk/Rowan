@@ -70,6 +70,47 @@ RwUnmanagedClassesV2Test >> _removeUnmanagedClass [
 ]
 
 { #category : 'private' }
+RwUnmanagedClassesV2Test >> _simpleGsFilein_foo_UnManaged: className instVarNames: instVarNamesString symbolDictionaryName: symbolDictionaryName [
+	^ 'expectvalue /String
+run
+(Object subclass: ''' , className
+		,
+			'''
+  instVarNames: ' , instVarNamesString
+		,
+			'
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: ' , symbolDictionaryName
+		,
+			'
+  options:#() ) definition
+%
+set class ' , className
+		,
+			'
+removeallmethods
+removeallclassmethods
+set category accessing
+
+run
+', className, '
+		compileMethod: ''foo ^1''
+		dictionaries: Rowan image symbolList
+		category: #''accessing''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+%
+
+method
+bar ^2
+%
+'
+]
+
+{ #category : 'private' }
 RwUnmanagedClassesV2Test >> _simpleGsFilein: className instVarNames: instVarNamesString symbolDictionaryName: symbolDictionaryName [
 	^ 'expectvalue /String
 run
@@ -100,6 +141,49 @@ foo ^1
 
 method
 bar ^2
+%
+'
+]
+
+{ #category : 'private' }
+RwUnmanagedClassesV2Test >> _simpleGsFileinUnManagedMethods: className instVarNames: instVarNamesString symbolDictionaryName: symbolDictionaryName [
+	^ 'expectvalue /String
+run
+(Object subclass: ''' , className
+		,
+			'''
+  instVarNames: ' , instVarNamesString
+		,
+			'
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: ' , symbolDictionaryName
+		,
+			'
+  options:#() ) definition
+%
+set class ' , className
+		,
+			'
+removeallmethods
+removeallclassmethods
+
+run
+', className, '
+		compileMethod: ''foo ^1''
+		dictionaries: Rowan image symbolList
+		category: #''accessing''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+', className, '
+		compileMethod: ''bar ^2''
+		dictionaries: Rowan image symbolList
+		category: #''accessing''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 %
 '
 ]
@@ -455,7 +539,9 @@ RwUnmanagedClassesV2Test >> testMoveManagedClass_01 [
 	unmanagedMethod := managedClass
 		compileMethod: 'foo ^1'
 		dictionaries: Rowan image symbolList
-		category: 'unmanaged'
+		category: #'unmanaged'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 	managedMethod := managedClass
 		rwCompileMethod: 'bar ^2'
@@ -1147,7 +1233,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 	stream := ReadStreamPortable
 		on:
 			(self
-				_simpleGsFilein: className
+				_simpleGsFileinUnManagedMethods: className
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString).
 
@@ -1202,7 +1288,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 	stream := ReadStreamPortable
 		on:
 			(self
-				_simpleGsFilein: className
+				_simpleGsFileinUnManagedMethods: className
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString).
 
@@ -1259,7 +1345,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	stream := ReadStreamPortable
 		on:
 			(self
-				_simpleGsFilein: className
+				_simpleGsFilein_foo_UnManaged: className
 				instVarNames: '#(#xxx)'
 				symbolDictionaryName: symbolDictionary name asString).
 
@@ -1280,6 +1366,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 		packageName: packageName.
 
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
+	self assert: managedMethod rowanPackageName equals: packageName.
 
 	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
 		setEnableRemoveAll: false;
@@ -1294,10 +1381,10 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 			(managedClass compiledMethodAt: #'foo') rowanPackageName = Rowan unpackagedName.
 	self
 		assert:
-			(x := (Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
+			(x := (managedClass compiledMethodAt: #'bar') rowanPackageName) = packageName.
 	self
 		assert:
-			(x := (managedClass compiledMethodAt: #'bar') rowanPackageName) = packageName.
+			(x := (Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
 	self
 		assert:
 			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
@@ -1329,7 +1416,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_05 [
 		symbolDictionaryName: symbolDictionary name.
 
 	fileinString := (self
-		_simpleGsFilein: className
+		_simpleGsFilein_foo_UnManaged: className
 		instVarNames: '#(#xxx)'
 		symbolDictionaryName: symbolDictionary name asString)
 		,
@@ -1427,7 +1514,9 @@ RwUnmanagedClassesV2Test >> testUnpackageManagedClass_01 [
 	unmanagedMethod := managedClass
 		compileMethod: 'foo ^1'
 		dictionaries: Rowan image symbolList
-		category: 'unmanaged'
+		category: #'unmanaged'
+	   intoMethodDict: nil
+	   intoCategories: nil
 		environmentId: 0.
 	managedMethod := managedClass
 		rwCompileMethod: 'bar ^2'

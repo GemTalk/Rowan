@@ -35,7 +35,10 @@ RwProjectFiletreeTonelTopazReaderWriterTest >> testWriterReader_A [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
-	writtenProjectDefinition create.
+	writtenProjectDefinition 
+		resolveProject; 
+		export; "exposes https://github.com/GemTalk/Rowan/issues/834 ... empty topaz 'packages' need to be created ... or ???"
+		exportLoadSpecification.
 
 	readProjectDefinition := writtenProjectDefinition copy.
 	readProjectSetDefinition := readProjectDefinition readProjectSet.

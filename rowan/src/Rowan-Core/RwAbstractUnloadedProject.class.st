@@ -140,7 +140,7 @@ RwAbstractUnloadedProject >> load [
 
 { #category : 'accessing' }
 RwAbstractUnloadedProject >> packageConvention [
-	^ self _resolvedProject packageConvention
+	^ self _concreteProject packageConvention
 ]
 
 { #category : 'accessing' }

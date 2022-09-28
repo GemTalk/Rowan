@@ -86,7 +86,7 @@ RwExampleComponentRefactoringTool >> forProjectNamed: projectName componentNamed
 		named: missingComponentName.
 	components at: missingComponentName put: missingComponent packageNames.
 	missingComponent ].
-	definedProject _resolvedProject
+	definedProject _concreteProject
 		allComponentsIn: componentName
 		matchBlock: [ :ignored | true ]
 		notFound: notFoundBlock

@@ -21,7 +21,7 @@ RwAdoptClassCategoryPackageConventionViolationErrorNotification class >> classNa
 { #category : 'private' }
 RwAdoptClassCategoryPackageConventionViolationErrorNotification >> _errorMessage [
 
-	^ 'Unable to adopt the class ', self className printString, ' into the package ', self packageName printString, ' as it''s class category violates the ', self packageConvention, ' package convention .'
+	^ 'Unable to adopt the class ', self className printString, ' into the package ', self packageName printString, ' as it''s class category ', self category printString, ' violates the ', self packageConvention, ' package convention .'
 ]
 
 { #category : 'accessing' }

@@ -2,19 +2,27 @@
 options
 {
 	SuperDoitRequiredOptionWithRequiredArg long: 'expected'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome'.
 }
 %
 usage
 -----
-USAGE $basename [--help | -h] [--debug | -D] --expected=<expected-results-json> <test-results-json>
+USAGE $basename [--help | -h] [--debug | -D] [--projecstHome=<rowan-projects-home> \
+                --expected=<expected-results-json> <test-results-json>
 
 DESCRIPTION
   Print differences between the <test-results-json> produced by 
   rowanUnitTest.solo and the <expected-results-json>.
 
 OPTIONS
-  -h, --help                 display usage message
-  -D, --debug                bring up topaz debugger in the event of a script error
+  -h, --help     display usage message
+  -D, --debug    bring up topaz debugger in the event of a script error
+  --expected=<expected-results-json>
+                 Path to the expected testResults.json file.
+  --projectsHome=<rowan-projects-home>
+                 Path to the directory that contains a clone of GsTestStats or
+                 the directory where the GsTestStats project will be cloned. If
+                 not specified, the env var ROWAN_PRJECTS_HOME must be defined.
 
 EXAMPLES
   $basename --help
@@ -22,6 +30,9 @@ EXAMPLES
   $basename --debug
   $basename -D
   $basename --expected=expectedTestResults.json testResults.json
+  $basename --expected=/home/dhenrich/work/m_37x_externals_st/Rowan/tests/expectedV30TestResults.json \
+            --projectsHome=/home/dhenrich/work/m_37x_externals_st \
+            testResults.json
 -----
 %
 specs
@@ -43,6 +54,11 @@ RwLoadSpecificationV2 {
 doit
 	| expectedSample mySample |
 	self positionalArgs size < 1 ifTrue: [ self error: 'Missing required positional argument <testResults.json>'].
+	self projectsHome
+		ifNil: [
+			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNil: [ self error: 'ROWAN_PROJECTS_HOME env var or --projectsHome option must be defined' ] ]
+		ifNotNil: [:value | System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value ].
 	self preDoitSpecLoad.
 	expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: self expected.
 	mySample := (self globalNamed: 'GsTestSuiteSample') fromJson: (self positionalArgs at: 1).

@@ -151,7 +151,9 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_A [
 	(Rowan globalNamed: className1)
 		compileMethod: 'foobar ^''foobar'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 "audit - audit errors expected"
@@ -207,7 +209,9 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_B [
 	(Rowan globalNamed: className1) class
 		compileMethod: 'foobar ^''foobar'''
 		dictionaries: symbolList
-		category: 'accessing'
+		category: #'accessing'
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 "audit - audit errors expected"
@@ -262,7 +266,9 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_C [
 	(Rowan globalNamed: className2)
 		compileMethod: 'foobar ^''foobar'''
 		dictionaries: symbolList
-		category: '*' , packageName2 asLowercase
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 "audit - audit errors expected"
@@ -320,7 +326,9 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_D [
 	(Rowan globalNamed: className2) class
 		compileMethod: 'foobar ^''foobar'''
 		dictionaries: symbolList
-		category: '*' , packageName2 asLowercase
+		category: ('*' , packageName2 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
 		environmentId: 0.
 
 "audit - audit errors expected"
@@ -881,8 +889,11 @@ RwProjectAuditToolTest >> testMissingMethods [
 	 
 	fooMethod := theClass class
 		compileMethod: 'new ^super new'
-		dictionaries: #()
-		category: 'Instance Creation'.
+		dictionaries: SymbolList new
+		category: #'Instance Creation'
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
 
 	theClass compileMissingAccessingMethods. "this should add: #bar #bar:"
 
@@ -892,8 +903,7 @@ RwProjectAuditToolTest >> testMissingMethods [
 			loadedClassMethodsDo: [:cMethod | "do nothing"].
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
-	self assert: ((x at: packageName) at: className) size = 3
-
+	self assert: ((x at: packageName) at: className) size = 1
 ]
 
 { #category : 'tests' }

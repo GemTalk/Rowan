@@ -226,9 +226,9 @@ RwGsTopazRowanToolTest >> testTopazCreateProject_git [
 
 { #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazExportProject [
-	"load spec_0009 and then export the components, load spec, and packages .... there should be no changes"
+	"load spec_0009 and then export the components, and packages .... there should be no changes"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project  |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project x |
 	loadSpec := self _loadSpecNamed: 'spec_0009'.
 
 	projectName := loadSpec projectName.
@@ -250,21 +250,18 @@ RwGsTopazRowanToolTest >> testTopazExportProject [
 	self assert: project gitShortStatus isEmpty.
 
 "export project components and packages"
-	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+	false
 		ifTrue: [ 
-			"since we've made changes to the load spec (not dhenrich), 
-				we shouldn't write it as the test will fail the empty 
-				gitShortStatus test"
-			"https://github.com/GemTalk/Rowan/issues/805"
+			"the load spec is modified to record the gitUrl of the project (now, in v3), so we will not export the load spec"
 			Rowan gemstoneTools topaz
-				exportLoadSpecificationForProject: projectName].
+				exportLoadSpecificationForProject: projectName ].
 	Rowan gemstoneTools topaz
 		exportComponentsForProject: projectName;
 		exportPackagesForProject: projectName;
 		yourself.
 
 "validate"
-	self assert: project gitShortStatus isEmpty
+	self assert: (x := project gitShortStatus) isEmpty
 ]
 
 { #category : 'project support' }
@@ -655,7 +652,7 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
-	resolvedProject := loadSpec resolveProject.
+	resolvedProject := loadSpec resolve.
 
 "load project"
 	loadedProjects := resolvedProject load.
@@ -667,9 +664,9 @@ RwGsTopazRowanToolTest >> testTopazReadTonelFile [
 	self assert: (class new perform: #foo) = 1.
 	self assert: (class class compiledMethodAt: #bar otherwise: nil) isNil.
 
-"read tonel file from spec_0009"
-	project checkout: 'spec_0009'.
-	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / (projectName , '-Extensions') / (className, '.extension.st')) pathString.
+"read tonel file from spec_0059"
+	project checkout: 'spec_0059'.
+	RwTopazTonelReader topazReadTonelFile: (project repositoryRoot / 'rowan' / 'src' / 'RowanSample9-Core-Alt1' / (className, '.extension.st')) pathString.
 
 "validate"
 	self assert: (class compiledMethodAt: #foo otherwise: nil) notNil.

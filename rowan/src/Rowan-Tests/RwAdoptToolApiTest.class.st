@@ -619,6 +619,7 @@ RwAdoptToolApiTest >> testAdoptClass_02 [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #().
+	theClass category: packageName.
 
 	instanceMethod := theClass
 		compileMethod: 'foo ^''foo'''

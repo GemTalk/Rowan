@@ -71,7 +71,7 @@ RwRowanCrooked9Test >> testIssue820 [
 	"https://github.com/GemTalk/Rowan/issues/820"
 
 	| loadSpec projectName rowanSample9Project crookedProjectName crookedSourceProjectName rowanProjectsSandbox |
-	loadSpec := RwRowanSample9Test _loadSpecNamed: 'spec_0082'.
+	loadSpec := RwRowanSample9V2Test _loadSpecNamed: 'spec_0082'.
 	projectName := loadSpec projectName.
 	crookedProjectName := 'RowanCrooked9_gen'.
 	crookedSourceProjectName := 'RowanCrooked9'.
