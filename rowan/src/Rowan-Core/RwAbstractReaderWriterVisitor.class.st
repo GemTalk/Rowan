@@ -40,6 +40,116 @@ RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot 
 	^ self _readObjectFrom: propertiesFile
 ]
 
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
+	aClassDefinition category = packageName
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'RowanHybrid'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> _validateRowanHybridProtocolConventionClassDefinition: classDefinition methodDefinition: methodDef className: className isMeta: isMeta forPackageNamed: packageName [
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
+	(protocol at: 1) = $*
+		ifTrue: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'RowanHybrid'.
+					^ self ] ]
+		ifFalse: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol does not start with $* which is correct"
+					^ self ] ].	
+	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'RowanHybrid'.
+			^ self ].
+	canonProtocol := protocol asLowercase.
+	expectedProtocol := '*' , packageName asLowercase.
+	canonProtocol = expectedProtocol
+		ifTrue: [ ^ self ].	
+	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'RowanHybrid'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
+	(aClassDefinition category notNil
+		and: [ aClassDefinition category beginsWith: packageName ])
+		ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification
+		signalWithClassDefinition: aClassDefinition
+		packageName: packageName
+		packageConvention: 'Monticello'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> _validateRowanMonticelloProtocolConventionClassDefinition: classDefinition methodDefinition: methodDef className: className isMeta: isMeta forPackageNamed: packageName [
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
+	(protocol at: 1) = $*
+		ifTrue: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification
+						signalWithMethodDefinition: methodDef
+						className: className
+						isMeta: isMeta
+						packageName: packageName
+						packageConvention: 'Monticello'.
+					^ self ] ]
+		ifFalse: [ 
+			classDefinition
+				ifNotNil: [ 
+					"protocol does not start with $* as expected"
+					^ self ] ].
+	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [ 
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				packageName: packageName
+				packageConvention: 'Monticello'.
+			^ self ].
+	canonProtocol := protocol asLowercase.
+	expectedProtocol := '*' , packageName asLowercase.
+	(canonProtocol beginsWith: expectedProtocol)
+		ifTrue: [ ^ self ].	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+		className: className
+		isMeta: isMeta
+		packageName: packageName
+		packageConvention: 'Monticello'
+]
+
 { #category : 'accessing' }
 RwAbstractReaderWriterVisitor class >> tonelClassLabel [
 	^ 'Class'
@@ -48,6 +158,58 @@ RwAbstractReaderWriterVisitor class >> tonelClassLabel [
 { #category : 'accessing' }
 RwAbstractReaderWriterVisitor class >> tonelExtensionLabel [
 	^ 'Extension'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> validatePackageConvention: packageConvention forClassCategory: aClassDefinition inPackageNamed: packageName [
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	"signal an error if the class category does not conform to the convention for the current project"
+
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ 
+			^ self
+				_validateRowanHybridClassCategoryConvention: aClassDefinition
+				forPackageNamed: packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ 
+			^ self
+				_validateRowanMonticelloClassCategoryConvention: aClassDefinition
+				forPackageNamed: packageName ].
+	"Rowan - no convention ... any old class category is fine"
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor class >> validatePackageConvention: packageConvention forClassDefinition: classDefinition forMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed: packageName [
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	"signal an error if the protocol does not conform to the convention for the current project"
+
+	packageConvention = 'RowanHybrid'
+		ifTrue: [ 
+			^ self
+				_validateRowanHybridProtocolConventionClassDefinition: classDefinition
+				methodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				forPackageNamed: packageName ].
+	packageConvention = 'Monticello'
+		ifTrue: [ 
+			^ self
+				_validateRowanMonticelloProtocolConventionClassDefinition: classDefinition
+				methodDefinition: methodDef
+				className: className
+				isMeta: isMeta
+				forPackageNamed: packageName ]
+	"Rowan - no convention ... any old protocol is fine"
 ]
 
 { #category : 'private' }

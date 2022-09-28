@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRowanCrooked9Test',
 	#superclass : 'RwAbstractRowanSampleTest',
-	#category : 'Rowan-TestsV2'
+	#category : 'Rowan-TestsV3'
 }
 
 { #category : 'private' }
@@ -71,7 +71,7 @@ RwRowanCrooked9Test >> testIssue820 [
 	"https://github.com/GemTalk/Rowan/issues/820"
 
 	| loadSpec projectName rowanSample9Project crookedProjectName crookedSourceProjectName rowanProjectsSandbox |
-	loadSpec := RwRowanSample9V2Test _loadSpecNamed: 'spec_0082'.
+	loadSpec := RwRowanSample9V3Test _loadSpecNamed: 'spec_0082'.
 	projectName := loadSpec projectName.
 	crookedProjectName := 'RowanCrooked9_gen'.
 	crookedSourceProjectName := 'RowanCrooked9'.
@@ -102,13 +102,13 @@ RwRowanCrooked9Test >> testIssue820 [
 				repoType: #'git';
 				packageFormat: 'topaz';
 				projectsHome: rowanProjectsSandbox;
-				addTopLevelComponentNamed: 'Core';
+				addLoadComponentNamed: 'Core';
 				yourself.
 			(Rowan globalNamed: 'GsFileinPackager')
 				toPackagesForDefinedProject: definedProject
 				fromServerPath:
 					(rowanProjectsSandbox / crookedSourceProjectName / 'extensions.gs') pathString.
-			resolvedProject := definedProject resolve.
+			resolvedProject := definedProject resolveProject.
 			resolvedProject write ].
 
 	{'Rowan'.

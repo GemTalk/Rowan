@@ -808,13 +808,15 @@ RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: pa
 				lf ].	"write out packages"
 	writerVisitorClass := packageFormat = 'tonel'
 		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
-		ifFalse: [ RwModificationFiletreeWriterVisitorV2 ].
+		ifFalse: [ 
+			packageFormat = 'topaz'
+				ifTrue: [ RwGsModificationTopazPackageWriterVisitorV2 ]
+				ifFalse: [ RwModificationFiletreeWriterVisitorV2 ] ].
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: diskProjectSetDefinition.
-	(visitor := writerVisitorClass new)
-		packagesRoot: packagesRoot .
+	(visitor := writerVisitorClass new) packagesRoot: packagesRoot.
 
 	visitor visit: projectSetModification
 ]
@@ -1222,7 +1224,10 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'topaz'
+				ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+				ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNames: packageNames;
@@ -1244,7 +1249,10 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
-		ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ].
+		ifFalse: [ 
+			format = 'topaz'
+				ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
+				ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
 		packageNamesBlock: packageNamesBlock;

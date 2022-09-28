@@ -92,6 +92,7 @@ RwTestProjectLibraryGeneratorV3 new
 	genSpec_0079: commitComment;
 	genSpec_0080: commitComment;
 	genSpec_0081: commitComment;
+	genSpec_0082: commitComment;
 	yourself
 "
 Class {
@@ -898,6 +899,82 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0078: resolvedProject embe
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0082: resolvedProject [
+	"Start with spec_0001; add classes that use the full complement of class types: normal (inherit from spec_0001); byteSubclass; variable and write out using topaz package format. Spice things up with extension methods for each of the classes."
+
+	"https://github.com/GemTalk/Rowan/issues/820"
+
+	| componentName packageName1 packageName2 packageName3 className1 className2 className3 className4 package1 package2 package3 |
+	componentName := 'Core'.
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	packageName3 := projectName , '-' , 'Extensions'.	"new"
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'ByteClass1'.
+	className3 := projectName , 'IndexableClass1'.
+	className4 := projectName , 'TestCase'.
+
+	resolvedProject addLoadComponentNamed: componentName.
+
+	package1 := resolvedProject
+		addPackageNamed: packageName1
+		toComponentNamed: componentName.
+	package2 := resolvedProject
+		addPackageNamed: packageName2
+		toComponentNamed: componentName.
+	package3 := resolvedProject
+		addPackageNamed: packageName3
+		toComponentNamed: componentName.
+
+	package1 addClassNamed: className1 super: 'Object' category: packageName1.
+	(package1
+		addClassNamed: className2
+		super: 'Object'
+		category: packageName1
+		type: 'byteSubclass')
+		addClassMethod:
+			'with: aValue with: val2 | inst | inst := self new: 2. inst at: 1 put: aValue; at: 2 put: val2. ^inst'
+		protocol: 'instance creation'.
+	(package1
+		addClassNamed: className3
+		super: 'Object'
+		category: packageName1
+		type: 'variable')
+		addClassMethod:
+			'with: aValue | inst | inst := self new: 1. inst at: 1 put: aValue. ^inst'
+		protocol: 'instance creation'.
+
+	package2 addClassNamed: className4 super: 'TestCase' category: packageName2.
+
+	(package3 addClassExtensionNamed: className1)
+		addClassMethod: 'bar ^''bar'''
+		protocol: '*' , packageName3 asLowercase.
+	(package3 addClassExtensionNamed: className2)
+		addClassMethod: 'bar ^''bar'''
+		protocol: '*' , packageName3 asLowercase.
+	(package3 addClassExtensionNamed: className3)
+		addClassMethod: 'bar ^''bar'''
+		protocol: '*' , packageName3 asLowercase.
+
+	((resolvedProject packageNamed: packageName2) classDefinitionNamed: className4)
+		addInstanceMethod: 'test1  self assert: ' , className1 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'test2  self assert: ' , className2 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod: 'test3  self assert: ' , className3 , ' bar = ''bar'''
+			protocol: 'tests';
+		addInstanceMethod:
+				'test4  self assert: ((' , className2 , ' with: 1 with: 255) at: 1) equals: 1'
+			protocol: 'tests';
+		addInstanceMethod:
+				'test5  self assert: ((' , className3 , ' with: #abc) at: 1) equals: #abc'
+			protocol: 'tests';
+		yourself.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _createNewProject: aString [
 	^ Rowan newProjectNamed: aString
 ]
@@ -1677,6 +1754,53 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0078: commitMessage [
 		definedProject: definedProject
 		embeddedProjectDefinition: embeddedProjectDefinition
 		addDefinitions: [ :resolvedProject :embededProject | self _addDefinitionsFor_0078: resolvedProject embeddedProject: embededProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0082: commitMessage [
+	"Start with master; add Core, Extension, and Test packages. Add classes to Core that use the full complement of class types: normal, byteSubclass, and variable. Add extension methods for each of the classes. Add tests for each class. Use topaz package format."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0082'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	title := 'Start with master; add Core, Extension, and Test packages. Add classes to Core that use the full complement of class types: normal, byteSubclass, and variable. Add extension methods for each of the classes. Add tests for each class. Use topaz package format.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 82
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #( 820);
+		yourself.
+	definedProject := (Rowan newProjectNamed: self projectName)
+		projectsHome: self projectsHome;
+		packageFormat: 'topaz';
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		packagesPath: 'src';
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0082: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

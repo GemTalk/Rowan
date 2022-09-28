@@ -176,17 +176,18 @@ RwGsModificationTopazPackageWriterVisitorV2 >> packagesRoot: object [
 
 { #category : 'class writing' }
 RwGsModificationTopazPackageWriterVisitorV2 >> processClass: aClassModification [
-
 	| classDefinition symbolDictName clsName |
 	classDefinition := aClassModification after.
-	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
-   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
+	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: [  ])
+		ifNotNil: [ 
+			self
+				error:
+					'duplicate class definition for ' , clsName printString , ' encountered.' ].
 
-	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
+	symbolDictName := self currentProjectDefinition
+		gemstoneSymbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
-	self classDefinitions at: classDefinition name put: classDefinition.
-
-	"no need to visit any further as the class definition records the instance and class methods"
+	self classDefinitions at: classDefinition name put: classDefinition	"no need to visit any further as the class definition records the instance and class methods"
 ]
 
 { #category : 'class writing' }
