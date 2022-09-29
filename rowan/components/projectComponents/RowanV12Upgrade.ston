@@ -1,7 +1,7 @@
 RwSimpleProjectLoadComponentV2 {
 	#name : 'projectComponents/RowanV12Upgrade',
 	#condition : 'common',
-	#projectNames : [ 
+	#projectNames : [
 		'RowanV12Upgrade'
 	],
 	#componentNames : [

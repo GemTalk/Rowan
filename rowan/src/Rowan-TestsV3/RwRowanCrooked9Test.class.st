@@ -86,7 +86,7 @@ RwRowanCrooked9Test >> testIssue820 [
 
 	rowanSample9Project := loadSpec resolve load.
 
-	self _checkoutBranchNamed: 'spec_0003'.
+	self _checkoutBranchNamed: 'spec_0004'.
 
 	rowanProjectsSandbox := self _testRowanProjectsSandbox.
 	{'Rowan'.
@@ -124,7 +124,7 @@ RwRowanCrooked9Test >> testIssue820 [
 						,
 							(rowanProjectsSandbox / theProjectName / 'rowan' / 'specs' / theProjectName
 								, 'ston') pathString
-				projectsHome: rowanProjectsSandbox) load first.
+				projectsHome: rowanProjectsSandbox) load projectNamed: theProjectName.
 			packageConvention ~= 'Monticello'
 				ifTrue: [ 
 					"audit for Monticello packaage convention not yet supported (https://github.com/GemTalk/Rowan/issues/829)"

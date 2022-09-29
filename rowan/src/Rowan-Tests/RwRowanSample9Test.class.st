@@ -326,100 +326,6 @@ RwRowanSample9Test >> _rowanSample9_0000_load_spec [
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _spec0057GsFilein: includeRemoveAll [
-	| filein |
-	filein := 'set compile_env: 0
-! ------------------- Class definition for RowanSample9Class1
-expectvalue /Class
-doit
-Object subclass: ''RowanSample9Class1''
-  instVarNames: #( ivar1)
-  classVars: #()
-  classInstVars: #()
-  poolDictionaries: #()
-  inDictionary: RowanSample9_1
-  options: #()
-%
-expectvalue /Class
-doit
-RowanSample9Class1 comment: 
-''I am an example class''
-%
-expectvalue /Class
-doit
-RowanSample9Class1 category: ''RowanSample9-Core''
-%
-'.
-	includeRemoveAll
-		ifTrue: [ 
-			filein := filein
-				,
-					'
-! ------------------- Remove existing behavior from RowanSample9Class1
-removeAllMethods RowanSample9Class1
-removeallclassmethods RowanSample9Class1
-' ].
-	filein := filein
-		,
-			'
-set compile_env: 0
-! ------------------- Class methods for RowanSample9Class1
-category: ''accessing''
-classmethod: RowanSample9Class1
-bar ^''bar''
-%
-! ------------------- Instance methods for RowanSample9Class1
-category: ''accessing''
-method: RowanSample9Class1
-foo ^1
-%
-
-set compile_env: 0
-! ------------------- Class definition for RowanSample9TestCase
-expectvalue /Class
-doit
-TestCase subclass: ''RowanSample9TestCase''
-  instVarNames: #()
-  classVars: #()
-  classInstVars: #()
-  poolDictionaries: #()
-  inDictionary: RowanSample9_1
-  options: #()
-%
-expectvalue /Class
-doit
-RowanSample9TestCase comment: 
-''I test the example class''
-%
-expectvalue /Class
-doit
-RowanSample9TestCase category: ''RowanSample9-Tests''
-%
-'.
-	includeRemoveAll
-		ifTrue: [ 
-			filein := filein
-				,
-					'
-! ------------------- Remove existing behavior from RowanSample9TestCase
-removeAllMethods RowanSample9TestCase
-removeAllClassMethods RowanSample9TestCase
-' ].
-	filein := filein
-		,
-			'
-set compile_env: 0
-! ------------------- Class methods for RowanSample9TestCase
-! ------------------- Instance methods for RowanSample9TestCase
-category: ''tests''
-method: RowanSample9TestCase
-test  self assert: RowanSample9Class1 new foo = 1
-%
-'.
-	^ filein
-]
-
-{ #category : 'private' }
 RwRowanSample9Test >> _spec0057GsFilein: includeRemoveAll projectName: projectName [
 	| filein |
 	filein := 'set compile_env: 0
@@ -514,6 +420,114 @@ test  self assert: ', projectName, 'Class1 new foo = 1
 ]
 
 { #category : 'private' }
+RwRowanSample9Test >> _spec0057GsFileinUnManagedMethods: includeRemoveAll projectName: projectName [
+	| filein |
+	filein := 'set compile_env: 0
+! ------------------- Class definition for ', projectName, 'Class1
+expectvalue /Class
+doit
+Object subclass: ''', projectName, 'Class1''
+  instVarNames: #( ivar1)
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+%
+expectvalue /Class
+doit
+', projectName, 'Class1 comment: 
+''I am an example class''
+%
+expectvalue /Class
+doit
+', projectName, 'Class1 category: ''RowanSample9-Core''
+%
+'.
+	includeRemoveAll
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+! ------------------- Remove existing behavior from ', projectName, 'Class1
+removeAllMethods ', projectName, 'Class1
+removeallclassmethods ', projectName, 'Class1
+' ].
+	filein := filein
+		,
+			'
+set compile_env: 0
+! ------------------- Class methods for ', projectName, 'Class1
+run
+',  projectName, 'Class1 class
+		compileMethod: ''bar ^''''bar''''''
+		dictionaries: Rowan image symbolList
+		category: #''accessing''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+',  projectName, 'Class1
+		compileMethod: ''foo ^1''
+		dictionaries: Rowan image symbolList
+		category: #''accessing''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+%
+
+set compile_env: 0
+! ------------------- Class definition for ', projectName, 'TestCase
+expectvalue /Class
+doit
+TestCase subclass: ''', projectName, 'TestCase''
+  instVarNames: #()
+  classVars: #()
+  classInstVars: #()
+  poolDictionaries: #()
+  inDictionary: RowanSample9_1
+  options: #()
+%
+expectvalue /Class
+doit
+', projectName, 'TestCase comment: 
+''I test the example class''
+%
+expectvalue /Class
+doit
+', projectName, 'TestCase category: ''', projectName, '-Tests''
+%
+'.
+	includeRemoveAll
+		ifTrue: [ 
+			filein := filein
+				,
+					'
+! ------------------- Remove existing behavior from ', projectName, 'TestCase
+removeAllMethods ', projectName, 'TestCase
+removeAllClassMethods ', projectName, 'TestCase
+' ].
+	filein := filein
+		,
+			'
+set compile_env: 0
+! ------------------- Class methods for ', projectName, 'TestCase
+! ------------------- Instance methods for ', projectName, 'TestCase
+
+
+run
+',  projectName, 'TestCase
+		compileMethod: ''test  self assert: ', projectName, 'Class1 new foo = 1''
+		dictionaries: Rowan image symbolList
+		category: #''tests''
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+%
+'.
+	^ filein
+]
+
+{ #category : 'private' }
 RwRowanSample9Test >> _specListProjectNames [
 	^ super _specListProjectNames
 		,
@@ -578,7 +592,7 @@ RwRowanSample9Test >> _testMigration: loadSpec instanceMigrator: instanceMigrato
 ]
 
 { #category : 'private' }
-RwRowanSample9Test >> _testUnmanagedSpec_0057: loadSpec includeRemoveAll: includeRemoveAll  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
+RwRowanSample9Test >> _testUnmanagedSpec_0057: loadSpec useStandardMethodFilein: useStandardMethodFilein  removeAllMethods: removeAllMethods packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 [
 	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
 
 	| projectName projectNames resolvedProject loadedProjects stream |
@@ -602,9 +616,11 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: loadSpec includeRemoveAll: includ
 		expectedProjectNames: projectNames.
 
 "do filein"
-	stream := (self _spec0057GsFilein: true projectName: projectName) readStreamPortable.
+	stream := useStandardMethodFilein 
+		ifTrue: [  (self _spec0057GsFilein: removeAllMethods projectName: projectName) readStreamPortable ]
+		ifFalse: [ (self _spec0057GsFileinUnManagedMethods: removeAllMethods projectName: projectName) readStreamPortable ].
 	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
-		setEnableRemoveAll: includeRemoveAll;
+		setEnableRemoveAll: true;
 		doFileIn.
 	^ loadedProjects
 ]
@@ -8445,9 +8461,12 @@ RwRowanSample9Test >> testSwitchRepository [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
-	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged report and an audit"
+	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged 
+		report and an audit. When we remove methods, we remove the methods and compile new
+		methods bypassing Rowan (non-standard filein format), creating audit errors and ending up 
+		with unpackaged methods"
 
-	| loadSpec projectName loadedProjects project audit packageName1 packageName2 classAudit className1 className2 |
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 |
 	loadSpec := self _loadSpecNamed: 'spec_0057'.
 	projectName := loadSpec projectName.
 
@@ -8458,7 +8477,8 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 
 	loadedProjects := self 
 		_testUnmanagedSpec_0057: loadSpec 
-		includeRemoveAll: true 
+		useStandardMethodFilein: true
+		removeAllMethods: true
 		packageName1: packageName1 
 		packageName2: packageName2 
 		className1: className1 
@@ -8468,45 +8488,31 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	project := loadedProjects projectNamed: projectName.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
-
-	classAudit := ((audit at: packageName1) at: className1)
-		collect: [ :each | each message ].
-	self assert: classAudit size = 1.
-	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'TestCase>>test').
-
-	classAudit := ((audit at: packageName2) at: className2)
-		collect: [ :each | each message ].
-	self assert: classAudit size = 2.
-	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'Class1>>foo').
-	self assert: (classAudit includes: 'Missing loaded method: ', projectName, 'Class1 class>>bar').
+	self assert: audit isEmpty. "empty audit"
 
 "run reports"
-	{(Rowan gemstoneTools topaz
-		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
+	{
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList) .
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
-				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))).
+				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))) .
 	(Rowan gemstoneTools topaz
-		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}
+		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1)) .
+	}
 		do: [ :details | 
 			details
-				unmanagedMethodsDo: [ :methodDetails :classDetails | 
-					(classDetails at: 'class') name asString = className1
-						ifTrue: [ self assert: (methodDetails at: 'method') selector == #'test' ].
-					(classDetails at: 'class') name asString = className2
-						ifTrue: [ 
-							self
-								assert:
-									((methodDetails at: 'method') selector == #'foo'
-										or: [ (methodDetails at: 'method') selector == #'bar' ]) ] ] ]
+				unmanagedMethodsDo: [
+				"no unpackaged methods"
+				self assert: false details: 'Unexpected unmanaged class or methods' ] ]
 ]
 
 { #category : 'tests' }
 RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	"based on spec_0057 after loading, do a filein (withOUT removeAllMethods) and run unmanaged report and an audit"
 
-	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 reports symbolList |
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 classAudit |
 	loadSpec := self _loadSpecNamed: 'spec_0057'.
 	projectName := loadSpec projectName.
 
@@ -8517,7 +8523,8 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 
 	loadedProjects := self 
 		_testUnmanagedSpec_0057: loadSpec 
-		includeRemoveAll: false 
+		useStandardMethodFilein: false "force unpackaged methods"
+		removeAllMethods: true
 		packageName1: packageName1 
 		packageName2: packageName2 
 		className1: className1 
@@ -8527,41 +8534,105 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_02 [
 	project := loadedProjects projectNamed: projectName.
 	self _runTestSuiteForProject: project.
 	audit := project audit.
+
+	classAudit := ((audit at: packageName2) at: className2)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 2.
+	self assert: (classAudit includes: 'Missing loaded method: ', className2, '>>foo').
+	self assert: (classAudit includes: 'Missing loaded method: ', className2, ' class>>bar').
+
+	classAudit := ((audit at: packageName1) at: className1)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 1.
+	self assert: (classAudit includes: 'Missing loaded method: ', className1, '>>test').
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testUnmanagedSpec_0057_03 [
+	"based on spec_0057 after loading, do a filein (with removeAllMethods) and run unmanaged 
+		report and an audit. When we remove methods, we remove the methods and compile new
+		methods bypassing Rowan (non-standard filein format), creating audit errors and ending up 
+		with unpackaged methods"
+
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	projectName := loadSpec projectName.
+
+	packageName1 := projectName, '-Tests'.
+	packageName2 := projectName, '-Core'.
+	className1 := projectName, 'TestCase'.
+	className2 := projectName, 'Class1'.
+
+	loadedProjects := self 
+		_testUnmanagedSpec_0057: loadSpec 
+		useStandardMethodFilein: true
+		removeAllMethods: false
+		packageName1: packageName1 
+		packageName2: packageName2 
+		className1: className1 
+		className2: className2.
+
+"validate"
+	project := loadedProjects projectNamed: projectName.
+	self _runTestSuiteForProject: project.
+	audit := project audit.
+	self assert: audit isEmpty. "empty audit"
+
 "run reports"
-	reports := {(Rowan gemstoneTools topaz
-		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
+	{
+	(Rowan gemstoneTools topaz
+		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList) .
 	(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionary:
 			(Rowan image
-				symbolDictNamed:
-					(project gemstoneSymbolDictNameForPackageNamed: packageName1))).
+				symbolDictNamed: (project gemstoneSymbolDictNameForPackageNamed: packageName1))) .
 	(Rowan gemstoneTools topaz
-		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1))}.
-	symbolList := GsSession currentSession symbolList.
-	reports
+		unmanagedClassesAndMethodsReportForClass: (Rowan globalNamed: className1)) .
+	}
 		do: [ :details | 
 			details
-				unmanagedMethodsDo: [ :methodDetails :classDetails | 
-					(#(#'GciErrSType' #'GciLibrary') includes: (classDetails at: 'class') name)
-						ifFalse: [ 
-							| unexpected ar |
-							ar := symbolList dictionariesAndSymbolsOf: (classDetails at: 'class').
-							ar isEmpty
-								ifTrue: [ unexpected := true ]
-								ifFalse: [ 
-									ar
-										do: [ :infoAr | 
-											"ignore superDoit classes"
-											unexpected := (infoAr at: 1) name
-												~= #'SuperDoit_trasientSymbolDictionary' ] ].
-							unexpected
-								ifTrue: [ 
-									self
-										assert: false
-										description:
-											'The class ' , (classDetails at: 'class') name asString
-												, ' is unexpectedly unpackaged' ] ] ] ].
-	self
-		assert: audit isEmpty
-		description: 'Unexpected audit failure ... need category: intercept'
+				unmanagedMethodsDo: [ 
+				"no unpackaged methods"
+				self assert: false details: 'Unexpected unmanaged class or methods' ] ]
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testUnmanagedSpec_0057_04 [
+	"based on spec_0057 after loading, do a filein leaving the original packaged methods intact, but forcing unpackaged methods to be created by bypassing the Rowan methods"
+
+	| loadSpec projectName loadedProjects project audit packageName1 packageName2 className1 className2 classAudit |
+	loadSpec := self _loadSpecNamed: 'spec_0057'.
+	projectName := loadSpec projectName.
+
+	packageName1 := projectName, '-Tests'.
+	packageName2 := projectName, '-Core'.
+	className1 := projectName, 'TestCase'.
+	className2 := projectName, 'Class1'.
+
+	loadedProjects := self 
+		_testUnmanagedSpec_0057: loadSpec 
+		useStandardMethodFilein: false
+		removeAllMethods: false
+		packageName1: packageName1 
+		packageName2: packageName2 
+		className1: className1 
+		className2: className2.
+
+"validate"
+	project := loadedProjects projectNamed: projectName.
+	self _runTestSuiteForProject: project.
+	audit := project audit.
+
+	classAudit := ((audit at: packageName2) at: className2)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 3.
+	self assert: (classAudit includes: 'Missing loaded method: ', className2, '>>foo').
+	self assert: (classAudit includes: 'Missing loaded method: ', className2, ' class>>bar').
+	self assert: (classAudit includes: 'Compiled method is not identical to loaded method: ', className2, '>>foo').
+
+	classAudit := ((audit at: packageName1) at: className1)
+		collect: [ :each | each message ].
+	self assert: classAudit size = 2.
+	self assert: (classAudit includes: 'Missing loaded method: ', className1, '>>test').
+	self assert: (classAudit includes: 'Compiled method is not identical to loaded method: ', className1, '>>test').
 ]

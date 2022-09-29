@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 12,
 		"failures" : 11,
-		"passed" : 1592,
-		"summary" : "1615 Tests with 11 Failures, 12 Errors and 0 DeprecationWarnings in 2019.97s",
-		"tests" : 1615,
-		"time" : 2019.975
+		"passed" : 1599,
+		"summary" : "1622 Tests with 11 Failures, 12 Errors and 0 DeprecationWarnings in 1786.59s",
+		"tests" : 1622,
+		"time" : 1786.594
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2868,12 +2868,6 @@
 		{
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
-			"selector" : "testAdoptClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwAdoptToolApiTest",
-			"status" : "passed",
 			"selector" : "testAdoptClassInvalidCategory",
 			"time" : "0"
 		},
@@ -2881,6 +2875,18 @@
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
 			"selector" : "testAdoptClassWithExistingExtensionMethods_1",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptClass_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptClass_02",
 			"time" : "0"
 		},
 		{
@@ -4708,6 +4714,12 @@
 			"time" : "0"
 		},
 		{
+			"className" : "RwProjectTopazReaderWriterTest",
+			"status" : "passed",
+			"selector" : "testWriterReader_A",
+			"time" : "0"
+		},
+		{
 			"className" : "RwProjectTopazWriterTestV2",
 			"status" : "passed",
 			"selector" : "testGsTopazWriter_A",
@@ -4819,6 +4831,12 @@
 			"className" : "RwResolvedProjectV2Test",
 			"status" : "passed",
 			"selector" : "testCreateNewGitProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue820",
 			"time" : "0"
 		},
 		{
@@ -6616,6 +6634,18 @@
 			"time" : "0"
 		},
 		{
+			"className" : "RwRowanSample9V2Test",
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V2Test",
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_04",
+			"time" : "0"
+		},
+		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testAuditMethodsNotIdentical",
@@ -7933,6 +7963,18 @@
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testUnmanagedSpec_0057_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testUnmanagedSpec_0057_04",
 			"time" : "0"
 		},
 		{
@@ -9706,5 +9748,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-21T18:31:04.773049-07:00"
+	"timeStamp" : "2022-09-28T18:11:21.583828-07:00"
 }

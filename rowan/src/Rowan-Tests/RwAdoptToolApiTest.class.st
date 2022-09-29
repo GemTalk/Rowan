@@ -693,7 +693,7 @@ RwAdoptToolApiTest >> testAdoptClassInvalidCategory [
 	expectedFailure := false.
 	[ Rowan packageTools adopt adoptClassNamed: className intoPackageNamed: packageName ]
 		on: Error do: [:ex |
-			self assert: ex description equals: 'Error: Unable to adopt the class ''AdoptedClass'' into the package ''Adopt-Core'' as it''s class category violates the RowanHybrid package convention .'.
+			self assert: ex description equals: 'Error: Unable to adopt the class ''AdoptedClass'' into the package ''Adopt-Core'' as it''s class category ''Kernel'' violates the RowanHybrid package convention .'.
 			expectedFailure := true ].
 	self assert: expectedFailure
 ]
