@@ -119,6 +119,7 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> deletedClass: aClassModification [
 		lf;
 		nextPutAll: 'removeallclassmethods ';
 		nextPutAll: classDefinition name;
+		lf;
 		lf
 ]
 
