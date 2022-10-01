@@ -1,0 +1,64 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+SuperDoitRequiredOptionWithRequiredArg long: 'from'.
+SuperDoitRequiredOptionWithRequiredArg long: 'to'.
+}
+%
+usage
+-----
+USAGE 
+  $basename --from=
+
+DESCRIPTION
+  
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help
+  $basename -D
+  $basename --from=/home/dhenrich/_homes/rogue/_home/shared/downloads/products/GemStone64Bit3.6.5-x86_64.Linux \
+            --to=/home/dhenrich/_homes/rogue/_home/shared/downloads/products/GemStone64Bit3.7.0_l-x86_64.Linux \
+            365to370delta.tpz
+-----
+%
+method
+gemstoneVersionForProductTree: productTreePath
+	| stream  |
+	stream := (productTreePath asFileReference / 'version.txt') contents readStream.
+	stream nextLine.
+	^ (stream upTo: Character space) asRwGemStoneVersionNumber.
+%
+method
+loadSpecFor: productTreePath version: version
+	| gemstoneBaseImage spec projectsHome |
+	"so far there is no variance to gemstoneBaseImage load spec path based on version"
+	projectsHome := productTreePath asFileReference / 'upgrade' / 'projects'.
+	spec := RwSpecification fromFile: (projectsHome / 'gemstoneBaseImage' / 'rowan' / 'specs' / 'gemstoneBaseImage.ston').
+	spec projectsHome: projectsHome.
+	^ spec
+%
+doit
+	| deltaFile fromProjectSetDefinition toProjectSetDefinition projectSetModification fromGemStoneVersion toGemStoneVersion |
+
+	(Rowan version >= (RwSemanticVersionNumber fromString: '2.4.0'))
+		ifFalse: [ self error: 'This script should be run with Rowan v3.0 or later'].
+
+	deltaFile := self positionalArgs at: 1.
+
+	fromGemStoneVersion := self gemstoneVersionForProductTree: self from.
+	toGemStoneVersion := self gemstoneVersionForProductTree: self to.
+
+	fromProjectSetDefinition := (self loadSpecFor: self from version: fromGemStoneVersion) resolveProjectSet.
+	toProjectSetDefinition := (self loadSpecFor: self to version: toGemStoneVersion) resolveProjectSet.
+
+	projectSetModification := fromProjectSetDefinition
+		compareAgainstBase: toProjectSetDefinition.
+	visitor := RwGsModificationTopazDeltaWriterVisitorV2 new
+		deltaFile: deltaFile;
+		yourself.
+	^ true
+%

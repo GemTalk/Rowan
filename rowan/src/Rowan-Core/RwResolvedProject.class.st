@@ -141,6 +141,11 @@ RwResolvedProject class >> projectFromUrl: loadSpecUrl readonlyDiskUrl: urlStrin
 		yourself
 ]
 
+{ #category : 'properties' }
+RwResolvedProject >> checkout: revision [
+	^ self _resolvedProject checkout: revision
+]
+
 { #category : 'accessing' }
 RwResolvedProject >> componentsRoot [
 	^ self _resolvedProject componentsRoot
