@@ -2,9 +2,10 @@ Class {
 	#name : 'RwGsModificationTopazDeltaWriterVisitorV2',
 	#superclass : 'RwAbstractGsModificationTopazWriterVisitorV2',
 	#instVars : [
-		'deltaFile',
-		'deltaFileStream',
-		'repositoryRootPath'
+		'repositoryRootPath',
+		'topazFileNameMap',
+		'currentFileName',
+		'deltaFilenameMap'
 	],
 	#category : 'Rowan-GemStone-CoreV2'
 }
@@ -15,30 +16,58 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> _currentClassName [
 	^ self currentClassExtension name
 ]
 
+{ #category : 'private' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> _fileNameForPackageName: packageName [
+	self topazFileNameMap
+		keysAndValuesDo: [ :fileName :packageNameSet | 
+			(packageNameSet includes: packageName)
+				ifTrue: [ ^ fileName ] ].
+	self error: 'No filename found for ' , packageName printString
+]
+
 { #category : 'private exporting' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> _setBufferedStreamFor: filename [
 
 	^ self _setBufferedStreamFor: filename extension: self filenameExtension
 ]
 
+{ #category : 'private' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> _topazFileNameMap: resolvedProject [
+	| gemStoneRowanPackageNames filein4PackageNames combinedPackageNames |
+	gemStoneRowanPackageNames := #('GemStone-Rowan-Extensions-Tools' 'GemStone-Rowan-Tools').
+	filein4PackageNames := #('Filein4-CompilerClasses' 'Filein4-ObsoleteClasses' 'Filein4Rowan').
+	combinedPackageNames := gemStoneRowanPackageNames , filein4PackageNames.
+	topazFileNameMap := Dictionary new
+		at: 'Filein4' put: filein4PackageNames asSet;
+		at: 'GemStone-Rowan' put: gemStoneRowanPackageNames asSet;
+		yourself.
+	resolvedProject packageNames
+		do: [ :packageName | 
+			(combinedPackageNames includes: packageName)
+				ifFalse: [ 
+					"write one package per file, except for the GemStone-Rowan and Filein4 packages. NOTE: GemStone-Rowan written out separately below"
+					(topazFileNameMap at: packageName ifAbsentPut: [ {} ]) add: packageName ] ]
+]
+
 { #category : 'actions' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> addedMethod: aMethodModification [
-	| methodDefinition source |
+	| methodDefinition source theStream |
+	theStream := self bufferedStream.
 	methodDefinition := aMethodModification after.
-	bufferedStream
+	theStream
 		nextPutAll: 'category: ' , methodDefinition protocol;
 		lf.
 	aMethodModification isMeta
-		ifTrue: [ bufferedStream nextPutAll: 'classmethod:  ' ]
-		ifFalse: [ bufferedStream nextPutAll: 'method: ' ].
-	bufferedStream
+		ifTrue: [ theStream nextPutAll: 'classmethod:  ' ]
+		ifFalse: [ theStream nextPutAll: 'method: ' ].
+	theStream
 		nextPutAll: self _currentClassName;
 		lf.
 	source := methodDefinition source.
-	bufferedStream nextPutAll: source.
+	theStream nextPutAll: source.
 	source last = Character lf
-		ifFalse: [ bufferedStream lf ].
-	bufferedStream
+		ifFalse: [ theStream lf ].
+	theStream
 		nextPutAll: '%';
 		lf
 ]
@@ -46,6 +75,25 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> addedMethod: aMethodModification [
 { #category : 'actions' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> addedMethodExtension: aMethodExtensionModification [
 	self addedMethod: aMethodExtensionModification
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> bufferedStream [
+	| packageName fileName |
+	packageName := currentPackageDefinition name.
+	fileName := self _fileNameForPackageName: packageName.
+	deltaFilenameMap ifNil: [ deltaFilenameMap := Dictionary new ].
+	bufferedStream := deltaFilenameMap
+		at: fileName
+		ifAbsentPut: [ 
+			self _setBufferedStreamFor: fileName extension: self filenameExtension.
+			bufferedStream
+				nextPutAll: '! BEGIN delta file ' , fileName , '.' , self filenameExtension;
+				lf;
+				nextPutAll: self topazFileHeader;
+				lf.
+			bufferedStream ].
+	^ bufferedStream
 ]
 
 { #category : 'actions' }
@@ -62,9 +110,10 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> changedMethodExtension: aMethodExte
 RwGsModificationTopazDeltaWriterVisitorV2 >> deletedClass: aClassModification [
 	"deleted classes are handled directly by upgradeImage ... remove all Methods for now"
 
-	| classDefinition |
+	| classDefinition theStream |
+	theStream := self bufferedStream.
 	classDefinition := aClassModification before.
-	bufferedStream
+	theStream
 		nextPutAll: 'removeallmethods ';
 		nextPutAll: classDefinition name;
 		lf;
@@ -80,16 +129,17 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> deletedClassExtension: aClassExtens
 
 { #category : 'actions' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> deletedMethod: aMethodModification [
-	| methodDefinition |
+	| methodDefinition theStream |
+	theStream := self bufferedStream.
 	methodDefinition := aMethodModification before.
-	bufferedStream
+	theStream
 		nextPutAll: 'run';
 		lf;
 		nextPutAll: self _currentClassName;
 		space.
 	aMethodModification isMeta
-		ifTrue: [ bufferedStream nextPutAll: 'class ' ].
-	bufferedStream
+		ifTrue: [ theStream nextPutAll: 'class ' ].
+	theStream
 		nextPutAll: 'removeSelector: #''' , methodDefinition selector, '''';
 		lf;
 		nextPutAll: '%';
@@ -101,20 +151,17 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> deletedMethodExtension: aMethodExte
 	self deletedMethod: aMethodExtensionModification
 ]
 
-{ #category : 'accessing' }
-RwGsModificationTopazDeltaWriterVisitorV2 >> deltaFile [
-	^deltaFile
-]
+{ #category : 'exporting' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> export [
+	"close the files now that we're done"
 
-{ #category : 'accessing' }
-RwGsModificationTopazDeltaWriterVisitorV2 >> deltaFile: object [
-	deltaFile := object
-]
-
-{ #category : 'accessing' }
-RwGsModificationTopazDeltaWriterVisitorV2 >> filenameExtension [
-
-	^ filenameExtension ifNil: ['tpz' ]
+	deltaFilenameMap
+		keysAndValuesDo: [ :fileName :stream | 
+			stream
+				nextPutAll: '! END delta file ' , fileName , '.' , self filenameExtension;
+				lf;
+				flush;
+				close ]
 ]
 
 { #category : 'class writing' }
@@ -135,15 +182,8 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> processClassExtension: aClassExtens
 
 { #category : 'project writing' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> processProject: aProjectModification [
-	[ 
-	self _setBufferedStreamFor: self deltaFile.
-	self bufferedStream nextPutAll: self topazFileHeader.
-	super processProject: aProjectModification.
-	self bufferedStream nextPutAll: self topazFileFooter ]
-		ensure: [ 
-			self bufferedStream
-				flush;
-				close ]
+	self _topazFileNameMap: aProjectModification after.
+	super processProject: aProjectModification
 ]
 
 { #category : 'accessing' }
@@ -157,6 +197,11 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> repositoryRootPath: aStringOrFileRe
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> topazFileNameMap [
+	^topazFileNameMap
 ]
 
 { #category : 'visiting' }

@@ -100,10 +100,11 @@ RwGsModificationTopazPackageWriterVisitorV2 >> _setBufferedStreamFor: filename [
 
 { #category : 'private exporting' }
 RwGsModificationTopazPackageWriterVisitorV2 >> _setBufferedStreamFor: filename extension: extension [
-
-	| encodedStream |
-	encodedStream := (self packagesRoot / filename, extension) writeStreamEncoded: 'utf8'.
-	bufferedStream := ZnBufferedWriteStream on: encodedStream
+	bufferedStream := FileStreamPortable
+		write: (self packagesRoot / filename , extension) pathString
+		mode: #'append'
+		check: false
+		type: #serverText
 ]
 
 { #category : 'private exporting' }
