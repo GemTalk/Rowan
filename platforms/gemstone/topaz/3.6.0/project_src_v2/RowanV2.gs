@@ -58681,15 +58681,25 @@ _validateRowanMonticelloProtocolConventionClassDefinition: classDefinition metho
 category: 'accessing'
 method: RwAbstractReaderWriterVisitor
 currentClassDefinition
+	^currentClassDefinition
+%
 
-	^ currentClassDefinition
+category: 'accessing'
+method: RwAbstractReaderWriterVisitor
+currentClassDefinition: object
+	currentClassDefinition := object
 %
 
 category: 'accessing'
 method: RwAbstractReaderWriterVisitor
 currentClassExtension
+	^currentClassExtension
+%
 
-	^ currentClassExtension
+category: 'accessing'
+method: RwAbstractReaderWriterVisitor
+currentClassExtension: object
+	currentClassExtension := object
 %
 
 category: 'accessing'
@@ -58851,7 +58861,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 addedClass: aClassModification
 
-	currentClassDefinition := aClassModification after.
+	self currentClassDefinition: aClassModification after.
 
 	self processClass: aClassModification
 %
@@ -58860,7 +58870,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 addedClassExtension: aClassExtensionModification
 
-	currentClassExtension := aClassExtensionModification after.
+	self currentClassExtension: aClassExtensionModification after.
 
 	self processClassExtension: aClassExtensionModification
 %
@@ -58884,7 +58894,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 changedClass: aClassModification
 
-	currentClassDefinition := aClassModification after.
+	self currentClassDefinition: aClassModification after.
 
 	self processClass: aClassModification
 %
@@ -58893,7 +58903,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 changedClassExtension: aClassExtensionModification
 
-	currentClassExtension := aClassExtensionModification after.
+	self currentClassExtension: aClassExtensionModification after.
 
 	self processClassExtension: aClassExtensionModification
 %
@@ -59408,6 +59418,20 @@ changedMethodExtension: aMethodExtensionModification
 	self addedMethodExtension: aMethodExtensionModification
 %
 
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+currentClassDefinition: object
+	currentClassExtension := nil.
+	currentClassDefinition := object
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+currentClassExtension: object
+	currentClassDefinition := nil.
+	currentClassExtension := object
+%
+
 category: 'actions'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 deletedClass: aClassModification
@@ -59456,6 +59480,18 @@ category: 'actions'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 deletedMethodExtension: aMethodExtensionModification
 	self deletedMethod: aMethodExtensionModification
+%
+
+category: 'actions'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+deletedPackage: aPackageModification
+	aPackageModification before name = 'Filein1D-ObsoleteClasses'
+		ifTrue: [ 
+			"expected"
+			^ self ].
+	self
+		error:
+			'Unexpected package deletion: ' , aPackageModification before name printString
 %
 
 category: 'exporting'

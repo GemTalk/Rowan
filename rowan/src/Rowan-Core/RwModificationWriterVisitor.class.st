@@ -65,7 +65,7 @@ RwModificationWriterVisitor >> _newLine [
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
 
-	currentClassDefinition := aClassModification after.
+	self currentClassDefinition: aClassModification after.
 
 	self processClass: aClassModification
 ]
@@ -73,7 +73,7 @@ RwModificationWriterVisitor >> addedClass: aClassModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClassExtension: aClassExtensionModification [
 
-	currentClassExtension := aClassExtensionModification after.
+	self currentClassExtension: aClassExtensionModification after.
 
 	self processClassExtension: aClassExtensionModification
 ]
@@ -94,7 +94,7 @@ RwModificationWriterVisitor >> addedProject: aProjectModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClass: aClassModification [
 
-	currentClassDefinition := aClassModification after.
+	self currentClassDefinition: aClassModification after.
 
 	self processClass: aClassModification
 ]
@@ -102,7 +102,7 @@ RwModificationWriterVisitor >> changedClass: aClassModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClassExtension: aClassExtensionModification [
 
-	currentClassExtension := aClassExtensionModification after.
+	self currentClassExtension: aClassExtensionModification after.
 
 	self processClassExtension: aClassExtensionModification
 ]

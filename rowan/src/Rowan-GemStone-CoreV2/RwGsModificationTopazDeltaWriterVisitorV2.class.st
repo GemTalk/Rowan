@@ -106,6 +106,18 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> changedMethodExtension: aMethodExte
 	self addedMethodExtension: aMethodExtensionModification
 ]
 
+{ #category : 'accessing' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> currentClassDefinition: object [
+	currentClassExtension := nil.
+	currentClassDefinition := object
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> currentClassExtension: object [
+	currentClassDefinition := nil.
+	currentClassExtension := object
+]
+
 { #category : 'actions' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> deletedClass: aClassModification [
 	"deleted classes are handled directly by upgradeImage ... remove all Methods for now"
@@ -150,6 +162,17 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> deletedMethod: aMethodModification 
 { #category : 'actions' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> deletedMethodExtension: aMethodExtensionModification [
 	self deletedMethod: aMethodExtensionModification
+]
+
+{ #category : 'actions' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> deletedPackage: aPackageModification [
+	aPackageModification before name = 'Filein1D-ObsoleteClasses'
+		ifTrue: [ 
+			"expected"
+			^ self ].
+	self
+		error:
+			'Unexpected package deletion: ' , aPackageModification before name printString
 ]
 
 { #category : 'exporting' }

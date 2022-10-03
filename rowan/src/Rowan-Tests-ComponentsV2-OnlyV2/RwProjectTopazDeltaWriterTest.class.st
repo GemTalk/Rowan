@@ -13,13 +13,16 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 	projectName := 'gemstoneBaseImage'.
 	projectsHome := self _testRowanProjectsSandbox.
 
-	customConditionalAttributes := {'common'.
-	'gemstone'.
-	'bootstraponly'.
-	'compilerClasses'.
-	'filein3'.
-	'filein4'.
-	'obsoleteClasses'}.
+	customConditionalAttributes := 
+	{
+		'common'.
+		'gemstone'.
+		'compilerClasses'.
+		'filein3'.
+		'filein4'.
+		'obsoleteClasses'.
+		'upgradeImage'.
+	}.
 
 	loadSpecTo := (RwSpecification fromUrl: 'file:///home/dhenrich/_homes/rogue/_home/shared/downloads/products/GemStone64Bit3.7.0_l-x86_64.Linux/upgrade/projects/gemstoneBaseImage/rowan/specs/gemstoneBaseImage.ston')
 		customConditionalAttributes: customConditionalAttributes;
@@ -33,15 +36,17 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 			'/home/dhenrich/_homes/rogue/_home/shared/downloads/products/GemStone64Bit3.6.5-x86_64.Linux/' .
 			'upgrade/projects/gemstoneBaseImage/' .
 			'rowan/specs/gemstoneBaseImage.ston' .
+			{  'filein3' . 'filein4' . 'x509' . 'ANSI_PortableStreams' } .
 		}
 	} do: [:ar |
-		| gemstoneVersion productTreeRoot repositoryRoot gemstoneSpec |
+		| gemstoneVersion productTreeRoot repositoryRoot gemstoneSpec fromCustomConditionalAttributes |
 		gemstoneVersion := ar at: 1.
 		productTreeRoot := ar at: 2.
 		repositoryRoot := ar at: 3.
 		gemstoneSpec := ar at: 4.
+		fromCustomConditionalAttributes := ar at: 5.
 		loadSpecFrom := (RwSpecification fromUrl: 'file://', productTreeRoot, '/', repositoryRoot, '/', gemstoneSpec)
-			customConditionalAttributes: customConditionalAttributes;
+			customConditionalAttributes: fromCustomConditionalAttributes;
 			diskUrl: 'file://', productTreeRoot, '/', repositoryRoot;
 			yourself.
 
@@ -54,8 +59,8 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 		toProjectSetDefinition := loadSpecTo resolve readProjectSet: customConditionalAttributes.
 
 	"create projectSetModification"
-		projectSetModification := fromProjectSetDefinition
-			compareAgainstBase: toProjectSetDefinition.
+		projectSetModification := toProjectSetDefinition
+			compareAgainstBase: fromProjectSetDefinition.
 
 		deltaRoot := ('/home/dhenrich/work/l_37x/slow50/bootstrap/deltas/' , gemstoneVersion)asFileReference.
 		deltaRoot ensureCreateDirectory.

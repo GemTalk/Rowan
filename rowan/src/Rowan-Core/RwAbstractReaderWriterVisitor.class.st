@@ -244,14 +244,22 @@ RwAbstractReaderWriterVisitor >> _repositoryPropertyDictFor: packagesRoot [
 
 { #category : 'accessing' }
 RwAbstractReaderWriterVisitor >> currentClassDefinition [
+	^currentClassDefinition
+]
 
-	^ currentClassDefinition
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> currentClassDefinition: object [
+	currentClassDefinition := object
 ]
 
 { #category : 'accessing' }
 RwAbstractReaderWriterVisitor >> currentClassExtension [
+	^currentClassExtension
+]
 
-	^ currentClassExtension
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> currentClassExtension: object [
+	currentClassExtension := object
 ]
 
 { #category : 'accessing' }
