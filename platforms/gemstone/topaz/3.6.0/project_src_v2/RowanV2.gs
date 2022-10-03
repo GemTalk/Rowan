@@ -59354,6 +59354,28 @@ _setBufferedStreamFor: filename extension: extension
 
 ! Class implementation for 'RwGsModificationTopazDeltaWriterVisitorV2'
 
+!		Class methods for 'RwGsModificationTopazDeltaWriterVisitorV2'
+
+category: '_private'
+classmethod: RwGsModificationTopazDeltaWriterVisitorV2
+_topazFileNameMap: resolvedProject
+	| gemStoneRowanPackageNames filein4PackageNames combinedPackageNames topazFileNameMap |
+	gemStoneRowanPackageNames := #('GemStone-Rowan-Extensions-Tools' 'GemStone-Rowan-Tools').
+	filein4PackageNames := #('Filein4-CompilerClasses' 'Filein4-ObsoleteClasses' 'Filein4Rowan').
+	combinedPackageNames := gemStoneRowanPackageNames , filein4PackageNames.
+	topazFileNameMap := Dictionary new
+		at: 'Filein4' put: filein4PackageNames asSet;
+		at: 'GemStone-Rowan' put: gemStoneRowanPackageNames asSet;
+		yourself.
+	resolvedProject packageNames
+		do: [ :packageName | 
+			(combinedPackageNames includes: packageName)
+				ifFalse: [ 
+					"write one package per file, except for the GemStone-Rowan and Filein4 packages. NOTE: GemStone-Rowan written out separately below"
+					(topazFileNameMap at: packageName ifAbsentPut: [ {} ]) add: packageName ] ].
+	^ topazFileNameMap
+%
+
 !		Instance methods for 'RwGsModificationTopazDeltaWriterVisitorV2'
 
 category: 'actions'
@@ -59619,20 +59641,7 @@ _setBufferedStreamFor: filename
 category: 'private'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 _topazFileNameMap: resolvedProject
-	| gemStoneRowanPackageNames filein4PackageNames combinedPackageNames |
-	gemStoneRowanPackageNames := #('GemStone-Rowan-Extensions-Tools' 'GemStone-Rowan-Tools').
-	filein4PackageNames := #('Filein4-CompilerClasses' 'Filein4-ObsoleteClasses' 'Filein4Rowan').
-	combinedPackageNames := gemStoneRowanPackageNames , filein4PackageNames.
-	topazFileNameMap := Dictionary new
-		at: 'Filein4' put: filein4PackageNames asSet;
-		at: 'GemStone-Rowan' put: gemStoneRowanPackageNames asSet;
-		yourself.
-	resolvedProject packageNames
-		do: [ :packageName | 
-			(combinedPackageNames includes: packageName)
-				ifFalse: [ 
-					"write one package per file, except for the GemStone-Rowan and Filein4 packages. NOTE: GemStone-Rowan written out separately below"
-					(topazFileNameMap at: packageName ifAbsentPut: [ {} ]) add: packageName ] ]
+	topazFileNameMap := self class _topazFileNameMap: resolvedProject
 %
 
 ! Class implementation for 'RwGsModificationTopazPackageWriterVisitorV2'
