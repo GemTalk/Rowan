@@ -2,6 +2,8 @@ Extension { #name : 'RwProjectSetDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
 RwProjectSetDefinition >> compareAgainstBase: aDefinition [
+	"return a project set modification sufficient to transform aDefinition into the reciever"
+
 	| result |
 	result := RwProjectSetModification new.
 	self

@@ -71232,8 +71232,7 @@ asDefinition
 category: 'comparing'
 method: RwDefinition
 compareAgainstBase: aDefinition
-	"Diff myself for changes against the given base definition. 
-	Answer a Modification, which might be empty if there are no changes."
+	"return a modification sufficient to transform aDefinition into the reciever"
 
 	self subclassResponsibility
 %
@@ -95326,6 +95325,7 @@ fromCypressMethod: cypMethodDef
 category: '*rowan-core-definitions-extensions'
 method: RwMethodDefinition
 compareAgainstBase: aDefinition 
+	"return a method modification sufficient to transform aDefinition into the reciever"
 
 	| modification |
 	modification := RwMethodModification before: aDefinition after: self.
@@ -95435,6 +95435,7 @@ methodEnv
 category: '*rowan-core-definitions-extensions'
 method: RwPackageDefinition
 compareAgainstBase: aDefinition
+	"return a package modification sufficient to transform aDefinition into the reciever"
 
 	| modification classesModification classExtensionsModification |
 	modification := RwPackageModification before: aDefinition after: self.
@@ -95541,6 +95542,7 @@ movePackage: classesWithNewVersions
 category: '*rowan-core-definitions-extensions'
 method: RwPackageSetDefinition
 compareAgainstBase: aDefinition
+	"return a package set modification sufficient to transform aDefinition into the reciever"
 
 	| result |
 	result := RwPackageSetModification new.
@@ -96316,6 +96318,8 @@ componentsWithDoits
 category: '*rowan-core-definitions-extensions'
 method: RwProjectSetDefinition
 compareAgainstBase: aDefinition
+	"return a project set modification sufficient to transform aDefinition into the reciever"
+
 	| result |
 	result := RwProjectSetModification new.
 	self
@@ -96432,6 +96436,7 @@ asLoadedSymbolDictProject
 category: '*rowan-core-definitionsv2'
 method: RwResolvedProjectV2
 compareAgainstBase: aDefinition
+	"return a project modification sufficient to transform aDefinition into the reciever"
 
 	| modification packagesModification |
 	modification := RwProjectModification before: aDefinition after: self.
@@ -96450,6 +96455,7 @@ compareAgainstBase: aDefinition
 category: '*rowan-core-definitionsv2'
 method: RwResolvedProjectV2
 compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass
+	"create a projectSetModification sufficient to transform definitions in baseDictionary into the definitions in myDictionary"
 
 	| keys |
 	keys := myDictionary keys copy.

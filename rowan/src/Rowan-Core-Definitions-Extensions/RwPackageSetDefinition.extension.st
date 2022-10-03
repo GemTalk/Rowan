@@ -2,6 +2,7 @@ Extension { #name : 'RwPackageSetDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
 RwPackageSetDefinition >> compareAgainstBase: aDefinition [
+	"return a package set modification sufficient to transform aDefinition into the reciever"
 
 	| result |
 	result := RwPackageSetModification new.
@@ -11,5 +12,4 @@ RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 		into: result
 		elementClass: RwPackageDefinition.
 	^ result
-
 ]

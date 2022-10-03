@@ -52,8 +52,7 @@ RwDefinition >> asDefinition [
 
 { #category : 'comparing' }
 RwDefinition >> compareAgainstBase: aDefinition [
-	"Diff myself for changes against the given base definition. 
-	Answer a Modification, which might be empty if there are no changes."
+	"return a modification sufficient to transform aDefinition into the reciever"
 
 	self subclassResponsibility
 ]

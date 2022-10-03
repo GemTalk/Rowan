@@ -2,6 +2,7 @@ Extension { #name : 'RwResolvedProjectV2' }
 
 { #category : '*rowan-core-definitionsv2' }
 RwResolvedProjectV2 >> compareAgainstBase: aDefinition [
+	"return a project modification sufficient to transform aDefinition into the reciever"
 
 	| modification packagesModification |
 	modification := RwProjectModification before: aDefinition after: self.
@@ -19,6 +20,7 @@ RwResolvedProjectV2 >> compareAgainstBase: aDefinition [
 
 { #category : '*rowan-core-definitionsv2' }
 RwResolvedProjectV2 >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
+	"create a projectSetModification sufficient to transform definitions in baseDictionary into the definitions in myDictionary"
 
 	| keys |
 	keys := myDictionary keys copy.

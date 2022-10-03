@@ -2,6 +2,7 @@ Extension { #name : 'RwPackageDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
 RwPackageDefinition >> compareAgainstBase: aDefinition [
+	"return a package modification sufficient to transform aDefinition into the reciever"
 
 	| modification classesModification classExtensionsModification |
 	modification := RwPackageModification before: aDefinition after: self.

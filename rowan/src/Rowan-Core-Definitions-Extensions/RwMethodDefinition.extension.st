@@ -2,6 +2,7 @@ Extension { #name : 'RwMethodDefinition' }
 
 { #category : '*rowan-core-definitions-extensions' }
 RwMethodDefinition >> compareAgainstBase: aDefinition [ 
+	"return a method modification sufficient to transform aDefinition into the reciever"
 
 	| modification |
 	modification := RwMethodModification before: aDefinition after: self.
@@ -9,7 +10,6 @@ RwMethodDefinition >> compareAgainstBase: aDefinition [
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification: (self compareSourceAgainstBase: aDefinition).
 	^modification
-
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
