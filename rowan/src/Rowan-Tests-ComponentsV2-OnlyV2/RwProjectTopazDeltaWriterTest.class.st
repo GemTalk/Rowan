@@ -39,7 +39,7 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 			{  'filein3' . 'filein4' . 'x509' . 'ANSI_PortableStreams' } .
 		}
 	} do: [:ar |
-		| gemstoneVersion productTreeRoot repositoryRoot gemstoneSpec fromCustomConditionalAttributes |
+		| gemstoneVersion productTreeRoot repositoryRoot gemstoneSpec fromCustomConditionalAttributes topazFileNameMap |
 		gemstoneVersion := ar at: 1.
 		productTreeRoot := ar at: 2.
 		repositoryRoot := ar at: 3.
@@ -58,13 +58,23 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 		fromProjectSetDefinition := loadSpecFrom resolve readProjectSet: customConditionalAttributes.
 		toProjectSetDefinition := loadSpecTo resolve readProjectSet: customConditionalAttributes.
 
+	"create empty files to cover off packages with no modifications"
+		deltaRoot := ('/home/dhenrich/work/l_37x/slow50/bootstrap/deltas/' , gemstoneVersion) asFileReference.
+		deltaRoot ensureCreateDirectory.
+		deltaRoot ensureDeleteAllChildren.
+		topazFileNameMap := RwGsModificationTopazDeltaWriterVisitorV2 _topazFileNameMap: (toProjectSetDefinition projectNamed: projectName).
+	 topazFileNameMap keys 
+		do: [:fileName |
+			(deltaRoot / fileName , 'gs') 
+				writeStreamDo: [:fileStream | 
+					fileStream 
+						nextPutAll:  '! BEGIN delta file ' , fileName , '.gs'; lf;
+						nextPutAll:  '! END delta file ' , fileName , '.gs'; lf ] ].
+
 	"create projectSetModification"
 		projectSetModification := toProjectSetDefinition
 			compareAgainstBase: fromProjectSetDefinition.
 
-		deltaRoot := ('/home/dhenrich/work/l_37x/slow50/bootstrap/deltas/' , gemstoneVersion)asFileReference.
-		deltaRoot ensureCreateDirectory.
-		deltaRoot ensureDeleteAllChildren.
 		visitor := RwGsModificationTopazDeltaWriterVisitorV2 new
 			topazFileHeader: header;
 			repositoryRootPath: deltaRoot;
