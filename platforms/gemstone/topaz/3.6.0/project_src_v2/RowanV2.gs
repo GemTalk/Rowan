@@ -59424,6 +59424,10 @@ bufferedStream
 				lf;
 				nextPutAll: self topazFileHeader;
 				lf.
+			fileName = 'Filein1A'
+				ifTrue: [
+					bufferedStream
+						nextPutAll: 'input $upgradeFileinDir/Filein1A-BootstrapOnly.gs'; lf ].
 			bufferedStream ].
 	^ bufferedStream
 %
@@ -59485,6 +59489,8 @@ deletedMethod: aMethodModification
 	theStream := self bufferedStream.
 	methodDefinition := aMethodModification before.
 	theStream
+		nextPutAll: 'expectvalue true';
+		lf;
 		nextPutAll: 'run';
 		lf;
 		nextPutAll: self _currentClassName;
@@ -59492,7 +59498,9 @@ deletedMethod: aMethodModification
 	aMethodModification isMeta
 		ifTrue: [ theStream nextPutAll: 'class ' ].
 	theStream
-		nextPutAll: 'removeSelector: #''' , methodDefinition selector, '''';
+		nextPutAll: 'removeSelector: #''' , methodDefinition selector, ''' ifAbsent: [].';
+		lf;
+		nextPutAll: 'true';
 		lf;
 		nextPutAll: '%';
 		lf
@@ -59533,8 +59541,7 @@ export
 category: 'class writing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 processClass: aClassModification
-	"we do not process class modifications directly. As a rule, we do not create new class versions,
-		during image filein, but we do need to process class category and method changes"
+	"we do not process class modifications for classes with kernel oop, since they are updated in bom.c"
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self.
