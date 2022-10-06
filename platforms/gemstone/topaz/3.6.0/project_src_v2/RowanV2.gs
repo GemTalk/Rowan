@@ -59697,10 +59697,29 @@ deleteMethodDefinitions
 category: 'exporting'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 export
+	"create a redirection File for Filein1A-BootstrapOnly.gs and Filein3B-BootstrapOnly.gs in the delta directory"
+
+	{'Filein1A-BootstrapOnly'.
+	'Filein3B-BootstrapOnly'}
+		do: [ :bootstrapOnlyFileName | 
+			self
+				_setBufferedStreamFor: bootstrapOnlyFileName
+				extension: self filenameExtension.
+			bufferedStream
+				nextPutAll:
+						'! DELTA redirect file ' , bootstrapOnlyFileName , self filenameExtension;
+				lf;
+				lf;
+				nextPutAll:
+						'input $upgradeFileinDir/../../' , bootstrapOnlyFileName , '.'
+								, self filenameExtension;
+				lf.
+			bufferedStream flush close ].
+
 	self topazFileNameMap keys sort
 		do: [ :filename | 
 			| definitionMap classDefinitionsList classDefinitionsInOrder classDefs |
-			self reportStream
+			bufferedStream
 				nextPutAll: 'Exporting ' , filename;
 				lf;
 				nextPutAll: '--------------------';
@@ -59718,7 +59737,7 @@ export
 			filename = 'Filein1A'
 				ifTrue: [ 
 					bufferedStream
-						nextPutAll: 'input $upgradeFileinDir/Filein1A-BootstrapOnly.gs';
+						nextPutAll: 'input $upgradeFileinDir/../../Filein1A-BootstrapOnly.gs';
 						lf;
 						lf ].
 
@@ -59824,7 +59843,9 @@ exportDeletedMethod: aMethodModification
 	aMethodModification isMeta
 		ifTrue: [ theStream nextPutAll: 'class ' ].
 	theStream
-		nextPutAll: 'removeSelector: #''' , methodDefinition selector, '''';
+		nextPutAll: 'removeSelector: #''' , methodDefinition selector , '''.';
+		lf;
+		nextPutAll: 'true';
 		lf;
 		nextPutAll: '%';
 		lf;
