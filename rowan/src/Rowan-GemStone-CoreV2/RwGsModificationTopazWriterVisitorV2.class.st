@@ -117,16 +117,6 @@ RwGsModificationTopazWriterVisitorV2 >> _stringForVariables: variableList [
 ]
 
 { #category : 'private exporting' }
-RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList [
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
-		separatedBy: [stream space].
-	^stream contents
-]
-
-{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock [
 	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
 	hasInstanceVariables := true.

@@ -50,6 +50,16 @@ RwAbstractGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename 
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 ]
 
+{ #category : 'private exporting' }
+RwAbstractGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList [
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
+		separatedBy: [stream space].
+	^stream contents
+]
+
 { #category : 'accessing' }
 RwAbstractGsModificationTopazWriterVisitorV2 >> bufferedStream [
 

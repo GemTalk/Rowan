@@ -59,7 +59,7 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 		toProjectSetDefinition := loadSpecTo resolve readProjectSet: customConditionalAttributes.
 
 	"create empty files to cover off packages with no modifications"
-		deltaRoot := ('/home/dhenrich/work/l_37x/slow50/bootstrap/deltas/' , gemstoneVersion) asFileReference.
+		deltaRoot := ('/home/dhenrich/junk/generateGs/bootstrap/deltas/' , gemstoneVersion) asFileReference.
 		deltaRoot ensureCreateDirectory.
 		deltaRoot ensureDeleteAllChildren.
 		topazFileNameMap := RwGsModificationTopazDeltaWriterVisitorV2 _topazFileNameMap: (toProjectSetDefinition projectNamed: projectName).
@@ -68,8 +68,7 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 			(deltaRoot / fileName , 'gs') 
 				writeStreamDo: [:fileStream | 
 					fileStream 
-						nextPutAll:  '! BEGIN delta file ' , fileName , '.gs'; lf;
-						nextPutAll:  '! END delta file ' , fileName , '.gs'; lf ] ].
+						nextPutAll:  '! DELTA ' , fileName , '.gs'; lf ] ].
 
 	"create projectSetModification"
 		projectSetModification := toProjectSetDefinition

@@ -6167,8 +6167,26 @@ removeallclassmethods RwAbstractGsModificationTopazWriterVisitorV2
 
 doit
 (RwAbstractGsModificationTopazWriterVisitorV2
+	subclass: 'RwAbstractGsModificationTrackingTopazWriterVisitorV2'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #( #logCreation )
+)
+		category: 'Rowan-GemStone-CoreV2';
+		immediateInvariant.
+true.
+%
+
+removeallmethods RwAbstractGsModificationTrackingTopazWriterVisitorV2
+removeallclassmethods RwAbstractGsModificationTrackingTopazWriterVisitorV2
+
+doit
+(RwAbstractGsModificationTrackingTopazWriterVisitorV2
 	subclass: 'RwGsModificationTopazDeltaWriterVisitorV2'
-	instVarNames: #( repositoryRootPath topazFileNameMap currentFileName deltaFilenameMap )
+	instVarNames: #( repositoryRootPath topazFileNameMap deltaFilenameMap perFileDefinitionsMap addMethodDefinitions deleteMethodDefinitions deleteClassDefinitions classReferenceDefinitions reportStream )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -6184,7 +6202,7 @@ removeallmethods RwGsModificationTopazDeltaWriterVisitorV2
 removeallclassmethods RwGsModificationTopazDeltaWriterVisitorV2
 
 doit
-(RwAbstractGsModificationTopazWriterVisitorV2
+(RwAbstractGsModificationTrackingTopazWriterVisitorV2
 	subclass: 'RwGsModificationTopazPackageWriterVisitorV2'
 	instVarNames: #( packagesRoot )
 	classVars: #(  )
@@ -6193,7 +6211,7 @@ doit
 	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-GemStone-Core-36x';
+		category: 'Rowan-GemStone-CoreV2';
 		immediateInvariant.
 true.
 %
@@ -59352,6 +59370,169 @@ _setBufferedStreamFor: filename extension: extension
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 %
 
+category: 'private exporting'
+method: RwAbstractGsModificationTopazWriterVisitorV2
+_symbolsForVariables: variableList
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
+		separatedBy: [stream space].
+	^stream contents
+%
+
+! Class implementation for 'RwAbstractGsModificationTrackingTopazWriterVisitorV2'
+
+!		Instance methods for 'RwAbstractGsModificationTrackingTopazWriterVisitorV2'
+
+category: 'exporting'
+method: RwAbstractGsModificationTrackingTopazWriterVisitorV2
+exportClassDefinitions: classDefinitionsInOrder
+	| stream |
+	stream := self bufferedStream.
+	classDefinitionsInOrder isEmpty not
+		ifTrue: [ 
+			stream
+				nextPutAll: '! Class Declarations';
+				lf ].
+	classDefinitionsInOrder
+		do: [ :classDef | self _fileOutClassDeclaration: classDef on: stream ]
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTrackingTopazWriterVisitorV2
+_fileOutClassDeclaration: classDefinition on: aStream
+	| optionsString reservedOopString hasClassInstVars |
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(' , classDefinition superclassName;
+		lf.
+	hasClassInstVars := self
+		_writeClassTypeMessage: classDefinition
+		on: aStream
+		hasInstanceVariables: [ 
+			aStream
+				nextPutAll:
+						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
+								, ' )';
+				lf ].
+	optionsString := String new.
+	classDefinition gs_options isEmpty
+		ifFalse: [ 
+			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
+				, ' ' ].
+	self logCreation
+		ifTrue: [ 
+			"for verbose logging during filein and upgrade"
+			optionsString addAll: ' #logCreation ' ].
+	reservedOopString := ''.
+	classDefinition gs_reservedOop isEmpty
+		ifFalse: [ 
+			| strm |
+			strm := WriteStream on: String new.
+			strm
+				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
+				lf.
+			reservedOopString := strm contents ].
+	aStream
+		nextPutAll:
+				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
+						, ' )';
+		lf.
+	hasClassInstVars
+		ifTrue: [ 
+			aStream
+				nextPutAll:
+						'	classInstVars: #( '
+								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+				lf ].
+	aStream
+		nextPutAll: '	poolDictionaries: #()';
+		lf;
+		nextPutAll:
+				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
+		lf;
+		nextPutAll: '	options: #(' , optionsString , ')';
+		lf;
+		nextPutAll: reservedOopString;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		category: ' , classDefinition category printString , ';';
+		lf;
+		yourself.
+	classDefinition comment isEmpty
+		ifFalse: [ 
+			aStream
+				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+				lf;
+				yourself ].
+	aStream
+		nextPutAll: '		immediateInvariant.';
+		lf;
+		nextPutAll: 'true.';
+		lf;
+		nextPutAll: '%';
+		lf;
+		lf.
+	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
+%
+
+category: 'private'
+method: RwAbstractGsModificationTrackingTopazWriterVisitorV2
+_resetState
+	"clear the instance vars and get ready for the next package"
+
+	currentPackageDefinition := currentClassDefinition := currentClassExtension := bufferedStream := classDefinitions := classExtensions := classInitializationDefinitions := classSymbolDictionaryNames := excludeClassInitializers := excludeRemoveAllMethods := nil
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTrackingTopazWriterVisitorV2
+_stringForVariables: variableList
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each]
+		separatedBy: [stream space].
+	^stream contents
+%
+
+category: 'private exporting'
+method: RwAbstractGsModificationTrackingTopazWriterVisitorV2
+_writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
+	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
+	hasInstanceVariables := true.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
+	hasClassInstVars := true.
+	classType := classDefinition subclassType.
+	classType = 'variable'
+		ifTrue: [ 
+			classTypeMessage := hasReservedOop
+				ifTrue: [ '_newKernelIndexableSubclass:' ]
+				ifFalse: [ 'indexableSubclass: ' ] ]
+		ifFalse: [ 
+			classType = 'byteSubclass'
+				ifTrue: [ 
+					classTypeMessage := hasReservedOop
+						ifTrue: [ '_newKernelByteSubclass:' ]
+						ifFalse: [ 'byteSubclass: ' ].
+					hasClassInstVars := hasInstanceVariables := false ]
+				ifFalse: [ 
+					(classType = '' or: [ classType = 'immediate' ])
+						ifTrue: [ 
+							classTypeMessage := hasReservedOop
+								ifTrue: [ '_newKernelSubclass:' ]
+								ifFalse: [ 'subclass: ' ] ]
+						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+	aStream
+		tab;
+		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		lf.
+	hasInstanceVariables
+		ifTrue: [ instanceVariableBlock value ].
+	^ hasClassInstVars
+%
+
 ! Class implementation for 'RwGsModificationTopazDeltaWriterVisitorV2'
 
 !		Class methods for 'RwGsModificationTopazDeltaWriterVisitorV2'
@@ -59381,25 +59562,9 @@ _topazFileNameMap: resolvedProject
 category: 'actions'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 addedMethod: aMethodModification
-	| methodDefinition source theStream |
-	theStream := self bufferedStream.
-	methodDefinition := aMethodModification after.
-	theStream
-		nextPutAll: 'category: ' , methodDefinition protocol;
-		lf.
-	aMethodModification isMeta
-		ifTrue: [ theStream nextPutAll: 'classmethod:  ' ]
-		ifFalse: [ theStream nextPutAll: 'method: ' ].
-	theStream
-		nextPutAll: self _currentClassName;
-		lf.
-	source := methodDefinition source.
-	theStream nextPutAll: source.
-	source last = Character lf
-		ifFalse: [ theStream lf ].
-	theStream
-		nextPutAll: '%';
-		lf
+	(self addMethodDefinitions
+		at: self currentClassOrExtensionDefinition name
+		ifAbsentPut: [ Set new ]) add: aMethodModification
 %
 
 category: 'actions'
@@ -59410,26 +59575,8 @@ addedMethodExtension: aMethodExtensionModification
 
 category: 'accessing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
-bufferedStream
-	| packageName fileName |
-	packageName := currentPackageDefinition name.
-	fileName := self _fileNameForPackageName: packageName.
-	deltaFilenameMap ifNil: [ deltaFilenameMap := Dictionary new ].
-	bufferedStream := deltaFilenameMap
-		at: fileName
-		ifAbsentPut: [ 
-			self _setBufferedStreamFor: fileName extension: self filenameExtension.
-			bufferedStream
-				nextPutAll: '! BEGIN delta file ' , fileName , '.' , self filenameExtension;
-				lf;
-				nextPutAll: self topazFileHeader;
-				lf.
-			fileName = 'Filein1A'
-				ifTrue: [
-					bufferedStream
-						nextPutAll: 'input $upgradeFileinDir/Filein1A-BootstrapOnly.gs'; lf ].
-			bufferedStream ].
-	^ bufferedStream
+addMethodDefinitions
+	^ addMethodDefinitions ifNil: [ addMethodDefinitions := Dictionary new ]
 %
 
 category: 'actions'
@@ -59446,6 +59593,20 @@ changedMethodExtension: aMethodExtensionModification
 
 category: 'accessing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
+classInitializationDefinitions
+	^ classInitializationDefinitions
+		ifNil: [ classInitializationDefinitions := Set new ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+classReferenceDefinitions
+	^ classReferenceDefinitions
+		ifNil: [ classReferenceDefinitions := Dictionary new ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
 currentClassDefinition: object
 	currentClassExtension := nil.
 	currentClassDefinition := object
@@ -59458,22 +59619,41 @@ currentClassExtension: object
 	currentClassExtension := object
 %
 
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+currentClassOrExtensionDefinition
+	^ currentClassExtension ifNil: [ currentClassDefinition ]
+%
+
+category: 'package writing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+definitionsMapFor: filename
+	^ self perFileDefinitionsMap
+		at: filename
+		ifAbsentPut: [ 
+			Dictionary new
+				at: 'classDefinitions' put: Dictionary new;
+				at: 'classReferenceDefinitions' put: Dictionary new;
+				at: 'deleteClassDefinitions' put: Dictionary new;
+				at: 'classInitializationDefinitions' put: Set new;
+				at: 'classSymbolDictionaryNames' put: Dictionary new;
+				at: 'addMethodDefinitions' put: Dictionary new;
+				at: 'deleteMethodDefinitions' put: Dictionary new;
+				yourself ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+deleteClassDefinitions
+	^ deleteClassDefinitions ifNil: [ deleteClassDefinitions := Dictionary new ]
+%
+
 category: 'actions'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 deletedClass: aClassModification
-	"deleted classes are handled directly by upgradeImage ... remove all Methods for now"
-
-	| classDefinition theStream |
-	theStream := self bufferedStream.
-	classDefinition := aClassModification before.
-	theStream
-		nextPutAll: 'removeallmethods ';
-		nextPutAll: classDefinition name;
-		lf;
-		nextPutAll: 'removeallclassmethods ';
-		nextPutAll: classDefinition name;
-		lf;
-		lf
+	(self deleteClassDefinitions
+		at: self currentClassDefinition name
+		ifAbsentPut: [ Set new ]) add: aClassModification
 %
 
 category: 'actions'
@@ -59485,25 +59665,9 @@ deletedClassExtension: aClassExtensionModification
 category: 'actions'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 deletedMethod: aMethodModification
-	| methodDefinition theStream |
-	theStream := self bufferedStream.
-	methodDefinition := aMethodModification before.
-	theStream
-		nextPutAll: 'expectvalue true';
-		lf;
-		nextPutAll: 'run';
-		lf;
-		nextPutAll: self _currentClassName;
-		space.
-	aMethodModification isMeta
-		ifTrue: [ theStream nextPutAll: 'class ' ].
-	theStream
-		nextPutAll: 'removeSelector: #''' , methodDefinition selector, ''' ifAbsent: [].';
-		lf;
-		nextPutAll: 'true';
-		lf;
-		nextPutAll: '%';
-		lf
+	(self deleteMethodDefinitions
+		at: self currentClassOrExtensionDefinition name
+		ifAbsentPut: [ Set new ]) add: aMethodModification
 %
 
 category: 'actions'
@@ -59524,27 +59688,234 @@ deletedPackage: aPackageModification
 			'Unexpected package deletion: ' , aPackageModification before name printString
 %
 
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+deleteMethodDefinitions
+	^ deleteMethodDefinitions ifNil: [ deleteMethodDefinitions := Dictionary new ]
+%
+
 category: 'exporting'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 export
-	"close the files now that we're done"
-
-	deltaFilenameMap
-		keysAndValuesDo: [ :fileName :stream | 
-			stream
-				nextPutAll: '! END delta file ' , fileName , '.' , self filenameExtension;
+	self topazFileNameMap keys sort
+		do: [ :filename | 
+			| definitionMap classDefinitionsList classDefinitionsInOrder classDefs |
+			self reportStream
+				nextPutAll: 'Exporting ' , filename;
 				lf;
-				flush;
-				close ]
+				nextPutAll: '--------------------';
+				lf.
+
+			definitionMap := self definitionsMapFor: filename.
+			classSymbolDictionaryNames := definitionMap at: 'classSymbolDictionaryNames'.
+
+			self _setBufferedStreamFor: filename extension: self filenameExtension.
+			bufferedStream
+				nextPutAll: '! DELTA ' , filename , '.' , self filenameExtension;
+				lf;
+				nextPutAll: self topazFileHeader;
+				lf.
+			filename = 'Filein1A'
+				ifTrue: [ 
+					bufferedStream
+						nextPutAll: 'input $upgradeFileinDir/Filein1A-BootstrapOnly.gs';
+						lf;
+						lf ].
+
+			classDefs := definitionMap at: 'classDefinitions'.
+			classDefinitionsList := classDefs values.
+			classDefinitionsList
+				addAll: (definitionMap at: 'classReferenceDefinitions') values.
+
+			classDefinitionsInOrder := (RowanGsGeneralDependencySorter
+				on: classDefinitionsList
+				dependsOn: [ :candidate | candidate superclassName ]
+				dependent: [ :candidate | candidate name ]) inOrder.
+			self
+				exportClassDefinitions: classDefinitionsInOrder
+				forClassDefinitions: classDefs.
+
+			self
+				exportMethodAdd: (definitionMap at: 'addMethodDefinitions')
+				methodDelete: (definitionMap at: 'deleteMethodDefinitions').
+
+			bufferedStream flush close ].
+	self reportStream flush close
+%
+
+category: 'exporting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+exportAddedMethod: aMethodModification
+	| methodDefinition source theStream |
+	theStream := self bufferedStream.
+	methodDefinition := aMethodModification after.
+	theStream
+		nextPutAll: 'category: ' , methodDefinition protocol;
+		lf.
+	aMethodModification isMeta
+		ifTrue: [ theStream nextPutAll: 'classmethod:  ' ]
+		ifFalse: [ theStream nextPutAll: 'method: ' ].
+	theStream
+		nextPutAll: aMethodModification classDefinition name;
+		lf.
+	source := methodDefinition source.
+	theStream nextPutAll: source.
+	source last = Character lf
+		ifFalse: [ theStream lf ].
+	theStream
+		nextPutAll: '%';
+		lf;
+		flush
+%
+
+category: 'exporting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+exportClassDefinitions: classDefinitionsInOrder forClassDefinitions: classDefs
+	| stream |
+	stream := self bufferedStream.
+	stream
+		nextPutAll: '! Class Changes';
+		lf.
+	self reportStream
+		tab;
+		nextPutAll: 'Exporting Class Changes';
+		lf.
+	classDefinitionsInOrder
+		do: [ :classDef | 
+			(classDefs includesKey: classDef name)
+				ifTrue: [ 
+					self reportStream
+						tab;
+						tab;
+						nextPutAll: classDef name;
+						lf.
+					self _fileOutClassDeclaration: classDef on: stream ] ]
+%
+
+category: 'exporting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+exportDeletedClass: aClassModification
+	"deleted classes are handled directly by upgradeImage ... remove all Methods for now"
+
+	| classDefinition theStream |
+	theStream := self bufferedStream.
+	classDefinition := aClassModification before.
+	theStream
+		nextPutAll: 'removeallmethods ';
+		nextPutAll: classDefinition name;
+		lf;
+		nextPutAll: 'removeallclassmethods ';
+		nextPutAll: classDefinition name;
+		lf;
+		lf
+%
+
+category: 'exporting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+exportDeletedMethod: aMethodModification
+	| methodDefinition theStream |
+	theStream := self bufferedStream.
+	methodDefinition := aMethodModification before.
+	theStream
+		nextPutAll: 'run';
+		lf;
+		nextPutAll: aMethodModification classDefinition name;
+		space.
+	aMethodModification isMeta
+		ifTrue: [ theStream nextPutAll: 'class ' ].
+	theStream
+		nextPutAll: 'removeSelector: #''' , methodDefinition selector, '''';
+		lf;
+		nextPutAll: '%';
+		lf;
+		flush
+%
+
+category: 'exporting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+exportMethodAdd: addMethods methodDelete: deleteMethods
+	| methodMods |
+	self bufferedStream
+		nextPutAll: '! Method Changes';
+		lf.
+	methodMods := Set new.
+	addMethods values do: [ :methodSet | methodMods addAll: methodSet ].
+	self reportStream
+		tab;
+		nextPutAll: 'Changed methods';
+		lf.
+	methodMods
+		do: [ :methodMod | 
+			| className methodDef methodString |
+			methodDef := methodMod after.
+			className := methodMod classDefinition name.
+			methodString := className
+				,
+					(methodMod isMeta
+						ifTrue: [ ' class >> ' ]
+						ifFalse: [ ' >> ' ]) , methodDef selector.
+			self reportStream
+				tab;
+				tab;
+				nextPutAll: methodString;
+				lf.
+			self exportAddedMethod: methodMod ].
+	methodMods := Set new.
+	deleteMethods values do: [ :methodSet | methodMods addAll: methodSet ].
+	self reportStream
+		tab;
+		nextPutAll: 'Deleted methods';
+		lf.
+	methodMods
+		do: [ :methodMod | 
+			| className methodDef methodString |
+			methodDef := methodMod before.
+			className := methodMod classDefinition name.
+			methodString := className
+				,
+					(methodMod isMeta
+						ifTrue: [ ' class >> ' ]
+						ifFalse: [ ' >> ' ]) , methodDef selector.
+			self reportStream
+				tab;
+				tab;
+				nextPutAll: methodString;
+				lf.
+			self exportDeletedMethod: methodMod ]
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+perFileDefinitionsMap
+	^ perFileDefinitionsMap ifNil: [ perFileDefinitionsMap := Dictionary new ]
 %
 
 category: 'class writing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 processClass: aClassModification
-	"we do not process class modifications for classes with kernel oop, since they are updated in bom.c"
+	| classDefinition symbolDictName clsName |
+	"class definition needs to be processed ... if reserved oop is prosent, bom.c manages class changes"
+	classDefinition := aClassModification after.
+	(classDefinition gs_reservedOop isEmpty
+		and: [ 
+			"if no changes to class definition don't write out class definition"
+			aClassModification propertiesModification elementsModified isEmpty not ])
+		ifTrue: [ 
+			(self classDefinitions at: (clsName := classDefinition name) ifAbsent: [  ])
+				ifNotNil: [ 
+					self
+						error:
+							'duplicate class definition for ' , clsName printString , ' encountered.' ].
+			symbolDictName := self currentProjectDefinition
+				symbolDictNameForPackageNamed: self currentPackageDefinition name.
+			self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
+			self classDefinitions at: classDefinition name put: classDefinition ]
+		ifFalse: [ 
+			"record class references for ordering purposes"
+			self classReferenceDefinitions at: classDefinition name put: classDefinition ].
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
-	aClassModification classMethodsModification acceptVisitor: self.
+	aClassModification classMethodsModification acceptVisitor: self
 %
 
 category: 'class extension writing'
@@ -59555,11 +59926,74 @@ processClassExtension: aClassExtensionModification
 	aClassExtensionModification classMethodsModification acceptVisitor: self.
 %
 
+category: 'package writing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+processPackage: aPackageModification
+	| definitionsMap definitionMap |
+	super processPackage: aPackageModification.
+	definitionsMap := self
+		definitionsMapFor:
+			(self _fileNameForPackageName: aPackageModification after name).
+
+	definitionMap := definitionsMap at: 'classDefinitions'.
+	self classDefinitions
+		keysAndValuesDo: [ :className :classDefinition | 
+			(definitionMap at: className ifAbsent: [  ])
+				ifNotNil: [ 
+					self
+						error:
+							'duplicate class definition for ' , className printString , ' encountered.' ].
+			definitionMap at: className put: classDefinition ].
+
+	definitionMap := definitionsMap at: 'classReferenceDefinitions'.
+	self classReferenceDefinitions
+		keysAndValuesDo: [ :className :classDefinition | definitionMap at: className put: classDefinition ].
+
+	definitionMap := definitionsMap at: 'classSymbolDictionaryNames'.
+	self classSymbolDictionaryNames
+		keysAndValuesDo: [ :className :symbolDictName | definitionMap at: className put: symbolDictName ].
+
+	definitionMap := definitionsMap at: 'deleteClassDefinitions'.
+	self deleteClassDefinitions
+		keysAndValuesDo: [ :className :classDefinition | 
+			(definitionMap at: className ifAbsent: [  ])
+				ifNotNil: [ 
+					self
+						error:
+							'duplicate delete class definition for ' , className printString
+								, ' encountered.' ].
+			definitionMap at: className put: classDefinition ].
+
+	(definitionsMap at: 'classInitializationDefinitions')
+		addAll: self classInitializationDefinitions.
+
+	definitionMap := definitionsMap at: 'addMethodDefinitions'.
+	self addMethodDefinitions
+		keysAndValuesDo: [ :className :methodDefs | (definitionMap at: className ifAbsentPut: [ Set new ]) addAll: methodDefs ].
+
+	definitionMap := definitionsMap at: 'deleteMethodDefinitions'.
+	self deleteMethodDefinitions
+		keysAndValuesDo: [ :className :methodDefs | (definitionMap at: className ifAbsentPut: [ Set new ]) addAll: methodDefs ].
+
+	self _resetState
+%
+
 category: 'project writing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 processProject: aProjectModification
 	self _topazFileNameMap: aProjectModification after.
 	super processProject: aProjectModification
+%
+
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+reportStream
+	^ reportStream
+		ifNil: [ 
+			| encodedStream |
+			encodedStream := self repositoryRootPath / 'DeltaReport.txt'
+				writeStreamEncoded: 'utf8'.
+			reportStream := ZnBufferedWriteStream on: encodedStream ]
 %
 
 category: 'accessing'
@@ -59581,6 +60015,27 @@ category: 'accessing'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 topazFileNameMap
 	^topazFileNameMap
+%
+
+category: 'visiting'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+visitClassModification: aClassModification
+	aClassModification isAddition
+		ifTrue: [ ^ self addedClass: aClassModification ].
+	aClassModification isDeletion
+		ifTrue: [ ^ self deletedClass: aClassModification ].
+	(aClassModification instanceMethodsModification isEmpty
+		and: [ aClassModification classMethodsModification isEmpty ])
+		ifTrue: [ 
+			| propertiesModification "no instance or class modifications, check to see if the only Property modification is for 'gs_SymbolDictionary' " elementsModified |
+			propertiesModification := aClassModification propertiesModification.
+			elementsModified := propertiesModification elementsModified.
+			(elementsModified size = 1
+				and: [ (elementsModified at: 'gs_SymbolDictionary' ifAbsent: [  ]) notNil ])
+				ifTrue: [ 
+					"'gs_symbolDictionary' property is not written to disk, so we can skip this class"
+					^ self ] ].
+	^ self changedClass: aClassModification
 %
 
 category: 'visiting'
@@ -59638,6 +60093,15 @@ _fileNameForPackageName: packageName
 	self error: 'No filename found for ' , packageName printString
 %
 
+category: 'private'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+_resetState
+	"clear the instance vars and get ready for the next package"
+
+	super _resetState.
+	addMethodDefinitions := deleteMethodDefinitions := deleteClassDefinitions := nil
+%
+
 category: 'private exporting'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 _setBufferedStreamFor: filename
@@ -59654,20 +60118,6 @@ _topazFileNameMap: resolvedProject
 ! Class implementation for 'RwGsModificationTopazPackageWriterVisitorV2'
 
 !		Instance methods for 'RwGsModificationTopazPackageWriterVisitorV2'
-
-category: 'exporting'
-method: RwGsModificationTopazPackageWriterVisitorV2
-exportClassDefinitions: classDefinitionsInOrder
-	| stream |
-	stream := self bufferedStream.
-	classDefinitionsInOrder isEmpty not
-		ifTrue: [ 
-			stream
-				nextPutAll: '! Class Declarations';
-				lf ].
-	classDefinitionsInOrder
-		do: [ :classDef | self _fileOutClassDeclaration: classDef on: stream ]
-%
 
 category: 'accessing'
 method: RwGsModificationTopazPackageWriterVisitorV2
@@ -59766,93 +60216,6 @@ processPackage: aPackageModification
 
 category: 'private exporting'
 method: RwGsModificationTopazPackageWriterVisitorV2
-_fileOutClassDeclaration: classDefinition on: aStream
-	| optionsString reservedOopString hasClassInstVars |
-	aStream
-		nextPutAll: 'doit';
-		lf;
-		nextPutAll: '(' , classDefinition superclassName;
-		lf.
-	hasClassInstVars := self
-		_writeClassTypeMessage: classDefinition
-		on: aStream
-		hasInstanceVariables: [ 
-			aStream
-				nextPutAll:
-						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
-								, ' )';
-				lf ].
-	optionsString := String new.
-	classDefinition gs_options isEmpty
-		ifFalse: [ 
-			optionsString := ' ' , (self _symbolsForVariables: classDefinition gs_options)
-				, ' ' ].
-	self logCreation
-		ifTrue: [ 
-			"for verbose logging during filein and upgrade"
-			optionsString addAll: ' #logCreation ' ].
-	reservedOopString := ''.
-	classDefinition gs_reservedOop isEmpty
-		ifFalse: [ 
-			| strm |
-			strm := WriteStream on: String new.
-			strm
-				nextPutAll: '	reservedOop: ' , classDefinition gs_reservedOop;
-				lf.
-			reservedOopString := strm contents ].
-	aStream
-		nextPutAll:
-				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
-						, ' )';
-		lf.
-	hasClassInstVars
-		ifTrue: [ 
-			aStream
-				nextPutAll:
-						'	classInstVars: #( '
-								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-				lf ].
-	aStream
-		nextPutAll: '	poolDictionaries: #()';
-		lf;
-		nextPutAll:
-				'	inDictionary: ' , (self classSymbolDictionaryNames at: classDefinition name);
-		lf;
-		nextPutAll: '	options: #(' , optionsString , ')';
-		lf;
-		nextPutAll: reservedOopString;
-		nextPutAll: ')';
-		lf;
-		nextPutAll: '		category: ' , classDefinition category printString , ';';
-		lf;
-		yourself.
-	classDefinition comment isEmpty
-		ifFalse: [ 
-			aStream
-				nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-				lf;
-				yourself ].
-	aStream
-		nextPutAll: '		immediateInvariant.';
-		lf;
-		nextPutAll: 'true.';
-		lf;
-		nextPutAll: '%';
-		lf;
-		lf.
-	self _fileoutRemoveAllMethodsFor: classDefinition name on: aStream
-%
-
-category: 'private'
-method: RwGsModificationTopazPackageWriterVisitorV2
-_resetState
-	"clear the instance vars and get ready for the next package"
-
-	currentPackageDefinition := currentClassDefinition := currentClassExtension := bufferedStream := classDefinitions := classExtensions := classInitializationDefinitions := classSymbolDictionaryNames := excludeClassInitializers := excludeRemoveAllMethods := nil
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazPackageWriterVisitorV2
 _setBufferedStreamFor: filename
 
 	^ self _setBufferedStreamFor: filename extension: self filenameExtension
@@ -59866,53 +60229,6 @@ _setBufferedStreamFor: filename extension: extension
 		mode: #'append'
 		check: false
 		type: #serverText
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazPackageWriterVisitorV2
-_stringForVariables: variableList
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each]
-		separatedBy: [stream space].
-	^stream contents
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazPackageWriterVisitorV2
-_writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock
-	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
-	hasInstanceVariables := true.
-	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
-	hasClassInstVars := true.
-	classType := classDefinition subclassType.
-	classType = 'variable'
-		ifTrue: [ 
-			classTypeMessage := hasReservedOop
-				ifTrue: [ '_newKernelIndexableSubclass:' ]
-				ifFalse: [ 'indexableSubclass: ' ] ]
-		ifFalse: [ 
-			classType = 'byteSubclass'
-				ifTrue: [ 
-					classTypeMessage := hasReservedOop
-						ifTrue: [ '_newKernelByteSubclass:' ]
-						ifFalse: [ 'byteSubclass: ' ].
-					hasClassInstVars := hasInstanceVariables := false ]
-				ifFalse: [ 
-					(classType = '' or: [ classType = 'immediate' ])
-						ifTrue: [ 
-							classTypeMessage := hasReservedOop
-								ifTrue: [ '_newKernelSubclass:' ]
-								ifFalse: [ 'subclass: ' ] ]
-						ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
-	aStream
-		tab;
-		nextPutAll: classTypeMessage , classDefinition name asString printString;
-		lf.
-	hasInstanceVariables
-		ifTrue: [ instanceVariableBlock value ].
-	^ hasClassInstVars
 %
 
 ! Class implementation for 'RwGsModificationTopazWriterVisitorV2'
@@ -60314,17 +60630,6 @@ _stringForVariables: variableList
 	| stream |
 	stream := WriteStreamPortable on: (String new: 100).
 	variableList do: [:each | stream nextPutAll: each]
-		separatedBy: [stream space].
-	^stream contents
-%
-
-category: 'private exporting'
-method: RwGsModificationTopazWriterVisitorV2
-_symbolsForVariables: variableList
-
-	| stream |
-	stream := WriteStreamPortable on: (String new: 100).
-	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
 		separatedBy: [stream space].
 	^stream contents
 %
