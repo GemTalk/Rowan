@@ -59694,6 +59694,12 @@ deleteMethodDefinitions
 	^ deleteMethodDefinitions ifNil: [ deleteMethodDefinitions := Dictionary new ]
 %
 
+category: 'accessing'
+method: RwGsModificationTopazDeltaWriterVisitorV2
+excludeRemoveAllMethods
+	^ excludeRemoveAllMethods ifNil: [ true ]
+%
+
 category: 'exporting'
 method: RwGsModificationTopazDeltaWriterVisitorV2
 export

@@ -185,6 +185,11 @@ RwGsModificationTopazDeltaWriterVisitorV2 >> deleteMethodDefinitions [
 	^ deleteMethodDefinitions ifNil: [ deleteMethodDefinitions := Dictionary new ]
 ]
 
+{ #category : 'accessing' }
+RwGsModificationTopazDeltaWriterVisitorV2 >> excludeRemoveAllMethods [
+	^ excludeRemoveAllMethods ifNil: [ true ]
+]
+
 { #category : 'exporting' }
 RwGsModificationTopazDeltaWriterVisitorV2 >> export [
 	"create a redirection File for Filein1A-BootstrapOnly.gs and Filein3B-BootstrapOnly.gs in the delta directory"
