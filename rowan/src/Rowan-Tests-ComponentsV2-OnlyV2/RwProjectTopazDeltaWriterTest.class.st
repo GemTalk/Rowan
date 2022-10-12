@@ -107,7 +107,6 @@ RwProjectTopazDeltaWriterTest >> testDeltaCreationForGemstoneBaseImage [
 
 fromProjectSetDefinition
 	definitions keysAndValuesDo: [:pName :resolvedProject |
-		|  |
 		resolvedProject packages keysAndValuesDo: [:packageName :packageDef |
 			packageDef classDefinitions keysAndValuesDo: [:className :classDef | 
 				(bootStrapMethodsMap at: className ifAbsent: [])
@@ -129,13 +128,35 @@ fromProjectSetDefinition
 						((methodDefs := classDef classMethodDefinitions) collect: [:each | each selector]) do: [:selector |
 							((methodArray at: 2) includes: selector)
 								ifTrue: [ mDef := methodDefs at: selector. mDef source: mDef source, 'XXX'. (methodArray at: 2) remove: selector ] ] ] ].
+			packageName = 'Filein2A'
+				ifTrue: [
+					(packageDef classDefinitions at: 'InstVarMappingArray' ifAbsent: [])
+						ifNotNil: [:classDef |
+							"Class changes shape across boundary, force all methods to be recompiled"
+							classDef 
+								classMethodDefinitions: Dictionary new;
+								instanceMethodDefinitions: Dictionary new ] ].			
 			packageName = 'Filein3B'
 				ifTrue: [
-					#( #'unsafeTerminate' #'terminateTries:eachTimeoutMs:')
-						do: [:sel |
+					{ { #'unsafeTerminate' .'unsafeTerminate xxx'} . { #'terminateTries:eachTimeoutMs:' . 'terminateTries: a eachTimeoutMs: b xxx' } }
+						do: [:mar |
 								(packageDef classExtensions at: 'GsProcess')
-									addInstanceMethod: sel asString, ' xxx' protocol: 'XXX' .
-								((bootStrapMethodsMap at: 'GsProcess' ifAbsent: []) at: 1) remove: sel ] ] ] ].
+									addInstanceMethod: (mar at: 2) protocol: 'XXX' .
+								((bootStrapMethodsMap at: 'GsProcess' ifAbsent: []) at: 1) remove: (mar at: 1) ].
+					(packageDef classDefinitions at: 'CDeclaration' ifAbsent: [])
+						ifNotNil: [:classDef |
+							"All methods removed from CDeclaration during upgradeImage"
+							classDef 
+								classMethodDefinitions: Dictionary new;
+								instanceMethodDefinitions: Dictionary new ].
+					(packageDef classDefinitions at: 'JsonParser' ifAbsent: [])
+						ifNotNil: [:classDef | 
+							classDef superclassName = 'PPCompositeParser'
+								ifTrue: [ 
+									"JSonParser renamed to JsonPetitParser during upgradeImage"
+									classDef name: 'JsonPetitParser'.
+									packageDef classDefinitions removeKey: 'JsonParser'.
+									packageDef classDefinitions at: classDef name put: classDef ] ] ] ] ].
 
 bootStrapMethodsMap keysAndValuesDo: [:className :methodArray | 
 	(methodArray at: 1) isEmpty ifFalse: [ self halt ].
@@ -143,7 +164,8 @@ bootStrapMethodsMap keysAndValuesDo: [:className :methodArray |
 
 	"create projectSetModification"
 		projectSetModification := toProjectSetDefinition
-			compareAgainstBase: fromProjectSetDefinition.
+			compareAgainstBaseForLoader: fromProjectSetDefinition.
+projectSetModification halt.
 
 		visitor := RwGsModificationTopazDeltaWriterVisitorV2 new
 			topazFileHeader: header;
