@@ -34,6 +34,7 @@ RwGsProjectAdditionPatchV2 >> createLoadedProject [
 		ifAbsent: [ nil ].
 	existingLoadedProject
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a project that exists.' ].
+	projectDefinition _validate. "make sure that the projectDefinition is well defined BEFORE adding to loaded projects (https://github.com/GemTalk/Rowan/issues/845)"
 	newLoadedProject := projectDefinition asLoadedSymbolDictProject.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties

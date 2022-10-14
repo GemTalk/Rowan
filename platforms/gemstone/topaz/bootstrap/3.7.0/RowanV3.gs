@@ -57502,7 +57502,13 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 												, '  must not match class package name (' , classPackageName , ')' ] ]
 						ifFalse: [ 
 							"the project associated with the hybridPackageName _is NOT_ using the `RowanHybrid` package convention - questionable use of hybrid convention in a non-hybrid project"
-							hybridLoadedProject := nil ] ] ].
+							Warning
+								signal:
+									'The package convention for this project ('
+										, hybridLoadedProject name printString
+										,
+											') is ''Rowan'' and a leading $* in the category is not used to denote a target package for any methods placed in this category'.
+							couldBeHybrid := false ] ] ].
 	methodDef := RwMethodDefinition
 		newForSource: methodSource
 		protocol: hybridPackageName.
@@ -70863,6 +70869,7 @@ createLoadedProject
 		ifAbsent: [ nil ].
 	existingLoadedProject
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a project that exists.' ].
+	projectDefinition _validate. "make sure that the projectDefinition is well defined BEFORE adding to loaded projects (https://github.com/GemTalk/Rowan/issues/845)"
 	newLoadedProject := projectDefinition asLoadedSymbolDictProject.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties
