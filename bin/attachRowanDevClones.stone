@@ -1,6 +1,7 @@
 #!/usr/bin/env superdoit_stone
 options
 {
+SuperDoitOptionalOptionWithRequiredArg long: 'archBase'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 }
 %
@@ -25,35 +26,76 @@ EXAMPLES
   $basename -h
   $basename --help -- -L -I .topazini
   $basename --projectsHome=$GS_HOME/shared/repos 
-  $basename --projectsHome=$GS_HOME/shared/repos --projects_home=$GS_HOME/shared/repos
+  $basename --projectsHome=/home/dhenrich/work/m_37x_externals_st --archBase=/home/dhenrich/work/m_37x
 -----
 %
+method
+attachRowanProjects
+	| rowanProject loadSpecs gitUrl |
+	rowanProject := Rowan projectNamed: 'Rowan'.
+	gitUrl := rowanProject loadSpecification gitUrl.
+	(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
+		ifTrue: [ 
+			"already attached"
+			^ self ].
+	loadSpecs := rowanProject loadedLoadSpecifications.
+	loadSpecs do: [:loadSpec |
+		| relRoot |
+		relRoot := loadSpec relativeRepositoryRoot.
+		loadSpec specName = 'RowanClientServices'
+			ifTrue: [
+				loadSpec gitUrl
+						ifNil: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString) ].
+				loadSpec projectsHome: '$ROWAN_PROJECTS_HOME'.
+				loadSpec resolve ]
+			ifFalse: [
+				loadSpec specName = 'Rowan'
+					ifTrue: [
+						loadSpec gitUrl
+							ifNil: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString) ].
+						loadSpec 
+							projectsHome: '$ROWAN_PROJECTS_HOME';
+							addCustomConditionalAttributes: #('tests' 'testsV2').
+						loadSpec resolve ]
+					ifFalse: [
+						"embedded Rowan project" 
+						relRoot isEmpty
+							ifTrue: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString)  ]
+							ifFalse: [ 
+								loadSpec
+									gitUrl: 'file:', ((('$ROWAN_PROJECTS_HOME/Rowan') asFileReference / relRoot) pathString) ].
+						loadSpec projectsHome: '$ROWAN_PROJECTS_HOME';
+							yourself ] ] ].
+	loadSpecs load. 
+%
 doit
-	(Rowan version >= (RwSemanticVersionNumber fromString: '2.2.0'))
-		ifFalse: [ self error: 'This script should be run in Rowan v2.2 or later'].
-	(self archBase
-		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
-		ifNotNil: [:value | value ])
-			ifNotNil: [:value |
-				System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString.
-				self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString.
-		 		(Rowan projectNamed: 'gemstoneBaseImage') 
-					gitRepositoryRoot: '$ARCHBASE/image' ].
+	| rowanProject loadSpecs gitUrl |
+	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
+		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
 	self projectsHome
 		ifNotNil: [:value |
 			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value asFileReference pathString.
 			self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString ]
 		ifNil: [ 
 			self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
-	(Rowan projectNamed: 'Rowan') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
-	(Rowan projectNamed: 'RowanClientServices') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
-	(Rowan projectNamed: 'Rowan')
-		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
-	(Rowan projectNamed: 'RowanClientServices')
-		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
-	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	(self archBase
+		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
+		ifNotNil: [:value | value ])
+		ifNotNil: [:value |
+			"attach gemstoneBaseImage project"
+			| loadSpec |
+			System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString.
+			self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString.
+		 	loadSpec := (Rowan projectNamed: 'gemstoneBaseImage') loadSpecification.
+			gitUrl := loadSpec gitUrl.
+			(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
+					ifTrue: [ "already attached ... noop" ] 
+					ifFalse: [
+						loadSpec
+							gitUrl: 'file:', ('$ARCHBASE' asFileReference pathString);
+							projectSpecFile: 'image/rowan/project_attached.ston';
+							addCustomConditionalAttributes: #('tests');
+							load  ] ].
+	self attachRowanProjects.
 	^ System commit
 %
