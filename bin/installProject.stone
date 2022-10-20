@@ -35,6 +35,11 @@ EXAMPLES
             --projectsHome=$GS_HOME/shared/repos -- -l -I $GEMSTONE/data/.topazini
 -----
 %
+method
+specificationClass
+	^ (Rowan globalNamed: 'RwSpecification')
+			ifNil: [ (AllUsers userWithId: 'SystemUser' ifAbsent: []) objectNamed: 'RwSpecification' ]
+%
 doit
 	| spec args |
 	args := self positionalArgs.
@@ -42,7 +47,7 @@ doit
 		ifTrue: [
 			self usage. 
 			self error: 'missing positional <spec-url> argument' ].
-	spec := (RwSpecification fromUrl: args removeFirst)
+	spec := (self specificationClass fromUrl: args removeFirst)
 		projectsHome: self projectsHome;
 		yourself.
 	args size > 0
