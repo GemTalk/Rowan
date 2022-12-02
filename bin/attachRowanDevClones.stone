@@ -57,5 +57,9 @@ doit
 		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
 	(Rowan projectNamed: 'Rowan')
 		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	(Rowan projectNamed: 'FileSystemGs') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/FileSystemGs'.
+	(Rowan projectNamed: 'FileSystemGs')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' ).
 	^ System commit
 %
