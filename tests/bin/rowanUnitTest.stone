@@ -104,13 +104,25 @@ RwLoadSpecificationV2 {
 ]
 %
 method
+writeAppendStreamFor: aFileReference
+	"Answer a binary write stream on aFileReference ... only needed until writeAppendStream method added to FileReference (https://github.com/GemTalk/FileSystemGs/issues/70)"
+
+	| fileDescriptor optionsForAppend |
+	(aFileReference exists and: [aFileReference isFile not])
+		ifTrue: [^FsFileRequired signalWith: aFileReference].
+	optionsForAppend := aFileReference fileOpeningOptionsClass writeOnly append.
+	aFileReference exists ifFalse: [ aFileReference createFile ].
+	fileDescriptor := aFileReference openOptions: optionsForAppend.
+	^ ZnCharacterWriteStream
+			on: (ZnBufferedWriteStream on: fileDescriptor binaryWriteStream)
+			encoding: 'utf8'
+%
+method
 testStatusStream
-	testStatusStream ifNotNil: [ ^ testStatusStream].
+	testStatusStream ifNotNil: [ ^ testStatusStream ].
 	self resultDir asFileReference ensureCreateDirectory.
 	(self resultDir, '/teststatus.txt') asFileReference ensureCreateFile.
-	testStatusStream  := File 
-			open: (self resultDir, '/teststatus.txt') asFileReference pathString 
-			writable: #append.
+	testStatusStream := self writeAppendStreamFor: (self resultDir, '/teststatus.txt') asFileReference.
 	^ testStatusStream
 %
 method
@@ -138,9 +150,7 @@ method
 writeTestDone: detailedTestStatus explanation: explanation
 	"write $resultsDir/testdone.txt"
 	| stream |
-	stream := File 
-			open: (self resultDir, '/testdone.txt') asFileReference pathString 
-			writable: #append.
+	stream := self writeAppendStreamFor: (self resultDir, '/testdone.txt') asFileReference.
 	stream 
 		lf; nextPutAll: 'TEST STATUS:: ', detailedTestStatus; lf.
 	explanation isEmpty
@@ -250,7 +260,7 @@ method
 buildTestSuite: testSuiteName
 	| systemTestSuite |
 	systemTestSuite := TestSuite named: testSuiteName.
-	{ 'Rowan' . 'STON' . 'Cypress' . 'FileSystemGs' .  'RowanClientServices' }
+	{ 'Rowan' . 'STON' . 'Cypress' . 'RowanClientServices' }
 		do: [:projectName |
 		| testSuite |
 		testSuite := (Rowan projectNamed: projectName) testSuite.
