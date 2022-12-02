@@ -7,7 +7,7 @@
 
 expectvalue true
 run
-	| projectSetModification visitor topazFileNameMap repositoryRoot packageCreateTool projectLoadTool platformConditionalAttributes360 auditFailures gsFileName repositoryRoot360 platformConditionalAttributes370 repositoryRoot370 |
+	| projectSetModification visitor topazFileNameMap repositoryRoot packageCreateTool projectLoadTool auditFailures gsFileName platformConditionalAttributes370 repositoryRoot370 |
 
 false ifTrue: [ 
 	Rowan projectTools trace startTracing 
@@ -19,21 +19,10 @@ false ifTrue: [
 		'gemstone-kernel'.
 		'3.7.0' asRwGemStoneVersionNumber.	"want to read 3.7.0 packages"
 	}.
-	platformConditionalAttributes360 := {
-		'common'.
-		'gemstone'.
-		'gemstone-kernel'.
-		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
-	}.
 	repositoryRoot370 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.7.0/project_src_v2' asFileReference.
 	repositoryRoot370 ensureCreateDirectory.
 false ifTrue: [ 
 	repositoryRoot370 deleteAllChildren.
- ].
-	repositoryRoot360 := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.6.0/project_src_v2' asFileReference.
-	repositoryRoot360 ensureCreateDirectory.
-false ifTrue: [ 
-	repositoryRoot360 deleteAllChildren.
  ].
 	{
 		{
@@ -41,39 +30,6 @@ false ifTrue: [
 			'$ROWAN_PROJECTS_HOME'.
 			platformConditionalAttributes370.
 			repositoryRoot370.
-			'RowanV2'.
-			(Dictionary new 
-				at: 'Rowan' 
-					put: 
-						{
-							('stubs' -> {'Rowan-GemStone-Kernel-Stubs-36x' }) .
-							('tonel' -> 
-								{ 
-									'Rowan-Tonel-Core' .
-									'Rowan-Tonel-GemStone-Kernel-32x' .
-									'Rowan-Tonel-GemStone-Kernel-32-5' .
-									'Rowan-Tonel-GemStone-Kernel' .
-								}) .
-						}; 
-				at: 'STON' 
-					put: 
-						{
-							('tonel' -> 
-								{ 
-									'STON-Core' .
-									'STON-GemStone-Kernel'.
-									'STON-GemStoneBase' .
-									'STON-GemStoneCommon' .
-									'STON-GemStone-Kernel36x' .
-								}) .
-						}; 
-				yourself).
-			true.
-		}.		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'.
-			'$ROWAN_PROJECTS_HOME'.
-			platformConditionalAttributes360.
-			repositoryRoot360.
 			'RowanV2'.
 			(Dictionary new 
 				at: 'Rowan' 

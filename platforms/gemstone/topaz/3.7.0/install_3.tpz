@@ -24,7 +24,7 @@
   set u SystemUser p swordfish
   login
 
-# Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+# Install Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
 	"install_3.tpz"
