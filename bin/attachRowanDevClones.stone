@@ -12,11 +12,12 @@ USAGE
 
 DESCRIPTION
   Attach the standard Rowan development projects in the stone to git clones:
-    gemstoneBaseImage to $ARCHBASE/image, if ARCHBASE env var defined
-    Rowan             to $ROWAN_PROJECTS_HOME/Rowan
+    gemstoneBaseImage   to $ARCHBASE/image, if ARCHBASE env var defined
+    Rowan               to $ROWAN_PROJECTS_HOME/Rowan
     RowanClientServices to $ROWAN_PROJECTS_HOME/RowanClientServices
+    FileSystemGs        to $ROWAN_PROJECTS_HOME/FileSystemGs
     
-  and reload Rowan, including tests.
+  and reload all projects, including tests.
 
 OPTIONS
   -h, --help                 display usage message
