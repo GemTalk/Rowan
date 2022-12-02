@@ -49,14 +49,16 @@ doit
 			self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
 	(Rowan projectNamed: 'Rowan') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/Rowan'.
-	(Rowan projectNamed: 'RowanClientServices') 
-		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
 	(Rowan projectNamed: 'Rowan')
 		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
 	(Rowan projectNamed: 'RowanClientServices')
 		_loadedProject resolvedProject projectsHome: '$ROWAN_PROJECTS_HOME'.
 	(Rowan projectNamed: 'Rowan')
 		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+	(Rowan projectNamed: 'RowanClientServices') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
+	(Rowan projectNamed: 'RowanClientServices')
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' ).
 	(Rowan projectNamed: 'FileSystemGs') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/FileSystemGs'.
 	(Rowan projectNamed: 'FileSystemGs')
