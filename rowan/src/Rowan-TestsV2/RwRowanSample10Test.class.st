@@ -60,8 +60,7 @@ RwRowanSample10Test >> testIndexCards [
 
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
-			projectSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: projectSpec resolve ]
+			projectSpec projectsHome: self _testRowanProjectsSandbox ]
 ]
 
 { #category : 'tests' }

@@ -1024,8 +1024,7 @@ RwRowanSample9Test >> testIndexCards [
 
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
-			projectSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: projectSpec resolve ]
+			projectSpec projectsHome: self _testRowanProjectsSandbox ]
 ]
 
 { #category : 'tests' }
@@ -1088,7 +1087,7 @@ RwRowanSample9Test >> testIssue_446 [
 		loads a different component ... needed to consolidate spec_004 
 		creation"
 
-	| project1 project2 projectName projectsHome resolvedProject stonString |
+	| project1 project2 projectName projectsHome resolvedProject |
 	projectName := 'RowanSample9_testbed'.
 	projectsHome := self _testRowanProjectsSandbox.
 
@@ -1123,7 +1122,6 @@ RwRowanSample9Test >> testIssue_446 [
 		componentNames: #('Core2');
 		yourself.
 
-	stonString := STON toStringPretty: resolvedProject.
 	false
 		ifTrue: [ self halt ]
 ]
