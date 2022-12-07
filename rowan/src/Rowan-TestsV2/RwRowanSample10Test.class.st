@@ -40,12 +40,7 @@ RwRowanSample10Test >> testIndexCards [
 	projectSpecification resolveStrict.
 
 	indexCards := (projectSpecification repositoryRoot / 'indexCards') files
-		collect: [ :file | 
-			file
-				readStreamDo: [ :fileStream | 
-					| stream |
-					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-					STON fromStream: stream ] ].
+		collect: [ :file | file readStreamDo: [ :fileStream | STON fromStream: fileStream ] ].
 
 	indexCards := indexCards sort: [ :a :b | a index <= b index ].
 
@@ -53,14 +48,10 @@ RwRowanSample10Test >> testIndexCards [
 	projectSpecs := indexCards
 		collect: [ :indexCard | 
 			specsDir / indexCard specName , 'ston'
-				readStreamDo: [ :fileStream | 
-					| stream |
-					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-					STON fromStream: stream ] ].
+				readStreamDo: [ :fileStream | STON fromStream: fileStream ] ].
 
 	resolvedProjects := projectSpecs
-		collect: [ :projectSpec | 
-			projectSpec projectsHome: self _testRowanProjectsSandbox ]
+		collect: [ :projectSpec | projectSpec projectsHome: self _testRowanProjectsSandbox ]
 ]
 
 { #category : 'tests' }

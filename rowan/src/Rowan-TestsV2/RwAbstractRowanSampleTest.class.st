@@ -65,9 +65,8 @@ RwAbstractRowanSampleTest class >> _loadSpecNamed: specName [
 				do: [ :file | 
 					file
 						readStreamDo: [ :fileStream | 
-							| stream spec |
-							stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-							spec := STON fromStream: stream.
+							| spec |
+							spec := STON fromStream: fileStream.
 							self _adjustSpecForIssue805: spec.
 							dict at: spec specName put: spec ] ].
 			dict at: specName ].

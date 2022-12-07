@@ -18,10 +18,7 @@ Class {
 { #category : 'instance creation' }
 RwTestProjectLibraryIndexCard class >> fromFile: filePath [
 	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ STON fromStream: stream ]
+		readStreamDo: [ :fileStream | ^ STON fromStream: fileStream ]
 ]
 
 { #category : 'accessing' }

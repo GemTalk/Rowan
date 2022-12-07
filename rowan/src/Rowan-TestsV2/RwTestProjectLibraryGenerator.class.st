@@ -7268,11 +7268,7 @@ RwTestProjectLibraryGenerator >> primeIndexCardMap [
 	(RwAbstractV2Test _testRowanProjectsSandbox / projectName / 'indexCards') files
 		do: [ :file | 
 			| indexCard |
-			file
-				readStreamDo: [ :fileStream | 
-					| stream |
-					stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-					indexCard := STON fromStream: stream ].
+			file readStreamDo: [ :fileStream | indexCard := STON fromStream: fileStream ].
 			indexCardMap at: indexCard name put: indexCard rowanSHA ]
 ]
 

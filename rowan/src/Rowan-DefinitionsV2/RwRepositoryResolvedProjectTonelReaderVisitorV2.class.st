@@ -207,18 +207,16 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream | | stream |
+	fileReference readStreamDo: [:fileStream |
 		[ | definitions |
-		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		  definitions := (RwTonelParser on: stream forReader: self) start.
+		  definitions := (RwTonelParser on: fileStream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
     ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
-      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex addText: (self class lineNumberStringForOffset: fileStream position fileName: fileReference fullName).
       ex pass .
     ].
   ].
@@ -230,13 +228,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 	fileReference := file asFileReference.
 	fileReference
 		readStreamDo: [ :fileStream | 
-			| stream |
 			[ 
 			| definitions clsDef projectDef |
-			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			stream := ZnBufferedReadStream on: fileStream.
-			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
-			definitions := (RwTonelParser on: stream forReader: self) start.
+			definitions := (RwTonelParser on: fileStream forReader: self) start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
@@ -256,7 +250,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 					ex
 						addText:
 							(self class
-								lineNumberStringForOffset: stream position
+								lineNumberStringForOffset: fileStream position
 								fileName: fileReference fullName).
 					ex pass ] ]
 ]

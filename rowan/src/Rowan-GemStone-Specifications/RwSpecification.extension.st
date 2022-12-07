@@ -4,9 +4,8 @@ Extension { #name : 'RwSpecification' }
 RwSpecification class >> fromFile: filePath [
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
-			| stream spec |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			spec := (STON fromStream: stream)
+			| spec |
+			spec := (STON fromStream: fileStream)
 				initializeForImport;
 				yourself.
 			Rowan projectTools trace
