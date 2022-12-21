@@ -379,7 +379,7 @@ UpgradeRowanV2 >> errorMessages [
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> gemstoneBaseProjectNames [
-	^ {'gemstoneBaseImage'}
+	^ #( 'gemstoneBaseImage' 'FileSystemGs' )
 ]
 
 { #category : 'repair' }
@@ -1002,7 +1002,7 @@ UpgradeRowanV2 >> repairSummary [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanProjectNames [
-	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
+	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress')
 ]
 
 { #category : 'upgrade rowan' }
