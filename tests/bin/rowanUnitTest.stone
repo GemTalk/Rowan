@@ -227,6 +227,8 @@ loadProjectSpecs
 			_loadedProject resolvedProject projectsHome: externalsStBase.
 		(Rowan projectNamed: 'Rowan')
 			loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').	
+		(Rowan projectNamed: 'RowanClientServices')
+			loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' 'testsV2').
 		System commit.
 	]
 		on: CompileWarning

@@ -59,7 +59,7 @@ doit
 	(Rowan projectNamed: 'RowanClientServices') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/RowanClientServices'.
 	(Rowan projectNamed: 'RowanClientServices')
-		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' ).
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' 'testsV2').
 	(Rowan projectNamed: 'FileSystemGs') 
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/FileSystemGs'.
 	(Rowan projectNamed: 'FileSystemGs')

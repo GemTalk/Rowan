@@ -52988,18 +52988,16 @@ readClassExtensionFile: file inPackage: packageName
 
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream | | stream |
+	fileReference readStreamDo: [:fileStream |
 		[ | definitions |
-		  stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		  stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
-		  definitions := (RwTonelParser on: stream forReader: self) start.
+		  definitions := (RwTonelParser on: fileStream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
     ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
-      ex addText: (self class lineNumberStringForOffset: stream position fileName: fileReference fullName).
+      ex addText: (self class lineNumberStringForOffset: fileStream position fileName: fileReference fullName).
       ex pass .
     ].
   ].
@@ -53012,13 +53010,9 @@ readClassFile: file inPackage: packageName
 	fileReference := file asFileReference.
 	fileReference
 		readStreamDo: [ :fileStream | 
-			| stream |
 			[ 
 			| definitions clsDef projectDef |
-			"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			stream := ZnBufferedReadStream on: fileStream.
-			stream sizeBuffer: fileReference size.	"part of workaround for GemTalk/FileSystemGs#9"
-			definitions := (RwTonelParser on: stream forReader: self) start.
+			definitions := (RwTonelParser on: fileStream forReader: self) start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
@@ -53038,7 +53032,7 @@ readClassFile: file inPackage: packageName
 					ex
 						addText:
 							(self class
-								lineNumberStringForOffset: stream position
+								lineNumberStringForOffset: fileStream position
 								fileName: fileReference fullName).
 					ex pass ] ]
 %
@@ -80744,11 +80738,7 @@ category: '*rowan-gemstone-componentsv2'
 classmethod: RwAbstractRowanProjectLoadComponentV2
 fromFile: filePath
 	filePath asFileReference
-		readStreamDo: [ :fileStream | 
-			| stream |
-			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ self _readStonFrom: stream ]
+		readStreamDo: [ :fileStream | ^ self _readStonFrom: fileStream ]
 %
 
 category: '*rowan-gemstone-componentsv2'
@@ -83605,9 +83595,8 @@ classmethod: RwSpecification
 fromFile: filePath
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
-			| stream spec |
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			spec := (STON fromStream: stream)
+			| spec |
+			spec := (STON fromStream: fileStream)
 				initializeForImport;
 				yourself.
 			Rowan projectTools trace
@@ -83779,6 +83768,21 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 			"do not leave clone in the symbol list"
 			symbolList remove: clonedSymDict ifAbsent: [] ].
 	^ clonedSymDict
+%
+
+! Class extensions for 'SystemResolver'
+
+!		Instance methods for 'SystemResolver'
+
+category: '*rowan-components-kernel'
+method: SystemResolver
+rowanProjectsHome
+
+	"Answer the path to $ROWAN_PROJECTS_HOME"
+
+	^ (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+		ifNil: [ self error: '$ROWAN_PROJECTS_HOME not defined' ]
+		ifNotNil: [:str | self  resolveString: str ]
 %
 
 ! Class extensions for 'UndefinedObject'

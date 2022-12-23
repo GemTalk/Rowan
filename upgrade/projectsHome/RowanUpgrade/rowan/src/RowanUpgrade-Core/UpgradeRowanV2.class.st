@@ -742,6 +742,20 @@ UpgradeRowanV2 >> repairMissingCompiledMethod: methodSpec inClassNamed: classNam
 		ifTrue: [ loadedClass loadedClassMethods at: selector ]
 		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
 	loadedClass removeLoadedMethod: loadedMethod.
+	(loadedClass name = 'FileLocator'
+		and: [ isMeta and: [ selector == #'rowanProjectsHome' ] ])
+		ifTrue: [ 
+			| theBehavior |
+			"The method is sent while reloading Rowan, so we need to patch this puppy and rely on the reload step to properly implement it if changed"
+			theBehavior := (self globalNamed: 'FileLocator') class.
+			theBehavior
+				rwCompileExtensionMethod:
+					'rowanProjectsHome
+	"Answer the path to $ROWAN_PROJECTS_HOME"
+
+	^ self origin: #rowanProjectsHome'
+				category: '*', packageName asLowercase
+				packageName: packageName ].
 	self
 		logMessage:
 			'  Repair missing compiled method: ' , loadedClass name
@@ -1115,7 +1129,10 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 UpgradeRowanV2 >> step_4_reloadRowan [
 	"Reload the Rowan project to repair those audit failures repaired by a reload"
 
+	| rowanVersion |
+	rowanVersion := Rowan version.
 	self logMessage: 'reload Rowan'.
+	self logMessage: '	original Rowan version: ', rowanVersion printString.
 	self reloadRowan.
 	self commit
 ]
