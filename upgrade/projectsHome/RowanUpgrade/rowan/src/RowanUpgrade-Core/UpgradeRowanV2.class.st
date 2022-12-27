@@ -91,6 +91,70 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 												((methodsNotIdenticalMap at: auditDetail behavior) at: auditDetail selector) ] ] ] ]
 ]
 
+{ #category : 'repair' }
+UpgradeRowanV2 >> _repairFileLocator_rowanProjectsHome [
+	"The method is sent while reloading Rowan, so we need to patch this 
+		puppy and rely on the reload step to properly implement it if changed ... 
+		removed when FileLocator's methods are removed during filein"
+
+	| theBehavior className packageName selector |
+	self logMessage: '_repairFileLocator_rowanProjectsHome [0]'.
+	className := 'FileLocator'.
+	selector := #'rowanProjectsHome'.
+	packageName := 'Rowan-Components-Kernel'.
+	theBehavior := (self globalNamed: className) class.
+	self logMessage: '_repairFileLocator_rowanProjectsHome [1]'.
+	(self globalNamed: 'Rowan') image
+		loadedMethod: selector
+		inClassNamed: className
+		isMeta: true
+		ifFound: [ :loadedMethod | 
+			| loadedPackage |
+			self logMessage: '_repairFileLocator_rowanProjectsHome [2]'.
+			loadedPackage := (self globalNamed: 'Rowan') image
+				loadedPackageNamed: packageName.
+			(loadedPackage classOrExtensionForClassNamed: className ifAbsent: [  ])
+				ifNil: [ 
+					"unexpected"
+					self logMessage: 'UNEXPECTED _repairFileLocator_rowanProjectsHome [5]' ]
+				ifNotNil: [ :loadedClass | 
+					self logMessage: '_repairFileLocator_rowanProjectsHome [3]'.
+					loadedClass removeLoadedMethod: loadedMethod ].
+			self logMessage: '_repairFileLocator_rowanProjectsHome [4]' ]
+		ifAbsent: [ 
+			| loadedPackage loadedClass |
+			"treat as a missing compiled method"
+			self logMessage: '_repairFileLocator_rowanProjectsHome [6]'.
+			loadedPackage := (self globalNamed: 'Rowan') image
+				loadedPackageNamed: packageName.
+			loadedClass := loadedPackage
+				classOrExtensionForClassNamed: className
+				ifAbsent: [ 
+					self
+						error:
+							'  Could not repair missing compiled method: ' , loadedClass name , ' class >>'
+								, selector , ' for package ' , packageName
+								, ' (No loaded extension class found for ' , className printString
+								, ' in package ' , packageName , ')' ].
+			(loadedClass loadedClassMethods at: selector ifAbsent: [  ])
+				ifNotNil: [ :loadedMethod | 
+					self logMessage: '_repairFileLocator_rowanProjectsHome [7]'.
+					loadedClass removeLoadedMethod: loadedMethod ].
+			self logMessage: '_repairFileLocator_rowanProjectsHome [8]' ].
+	self logMessage: '_repairFileLocator_rowanProjectsHome [9]'.
+	theBehavior
+		rwCompileExtensionMethod:
+			'rowanProjectsHome
+	"Answer the path to $ROWAN_PROJECTS_HOME"
+
+	^ self origin: #rowanProjectsHome'
+		category: '*rowan-components-kernel'
+		packageName: 'Rowan-Components-Kernel'.
+	self
+		logMessage:
+			'Compile extension method ''FileLocator class >> rowanProjectsHome'' in package ''Rowan-Components-Kernel'''
+]
+
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
@@ -621,6 +685,11 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 		ifTrue: [ loadedPackage loadedClasses removeKey: className ]
 		ifFalse: [ loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
 	Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName.	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+	(loadedClass name = 'FileLocator')
+		ifTrue: [
+			"expected when upgrading from pre-3.7.0 ... FileLocator class HAS changed shape"
+			self _repairFileLocator_rowanProjectsHome.
+ ].
 	self
 		logMessage:
 			'  Repair classes not identical: ' , loadedClass name , ' for package '
@@ -745,17 +814,8 @@ UpgradeRowanV2 >> repairMissingCompiledMethod: methodSpec inClassNamed: classNam
 	(loadedClass name = 'FileLocator'
 		and: [ isMeta and: [ selector == #'rowanProjectsHome' ] ])
 		ifTrue: [ 
-			| theBehavior |
-			"The method is sent while reloading Rowan, so we need to patch this puppy and rely on the reload step to properly implement it if changed"
-			theBehavior := (self globalNamed: 'FileLocator') class.
-			theBehavior
-				rwCompileExtensionMethod:
-					'rowanProjectsHome
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ self origin: #rowanProjectsHome'
-				category: '*', packageName asLowercase
-				packageName: packageName ].
+			"expected in 3.7.0"
+			self _repairFileLocator_rowanProjectsHome ].
 	self
 		logMessage:
 			'  Repair missing compiled method: ' , loadedClass name
