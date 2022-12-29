@@ -70957,22 +70957,35 @@ category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 unregisterLoadedClass: loadedClass forClass: aClass
 	| lc |
-	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey) == loadedClass
-		ifFalse: [ self error: 'Loaded class for ', aClass name printString, ' not found. Found ', lc printString, ' instead.' ].
-	aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassKey
+	(lc := aClass theNonMetaClass _extraDictAt: self _loadedClassKey)
+		== loadedClass
+		ifFalse: [ 
+			lc
+				ifNil: [ 
+					"class is already unregistered"
+					^ self ].
+			self
+				error:
+					'Loaded class for ' , aClass name printString , ' not found. Found '
+						, lc printString , ' instead.' ].
+	aClass theNonMetaClass _extraDictRemoveKey: self _loadedClassKey
 %
 
 category: 'class - registration'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
 	(aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey)
-		ifNil: [ self error: 'Loaded class extension for ', aClass name printString, ' not found' ]
-		ifNotNil: [:aSet |
-			aSet 
-				remove: loadedClassExtension 
-				ifAbsent: [ "if the class extension has already been removed we are okay" ].
+		ifNil: [ 
+			"class extension is already unregistered"
+			^ self ]
+		ifNotNil: [ :aSet | 
+			aSet
+				remove: loadedClassExtension
+				ifAbsent: [ 
+					"if the class extension has already been removed we are okay"
+					 ].
 			aSet isEmpty
-				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
+				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey: self _loadedClassExtensionKey ] ]
 %
 
 category: 'class - patch api'
