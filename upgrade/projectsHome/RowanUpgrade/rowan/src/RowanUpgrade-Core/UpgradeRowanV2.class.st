@@ -146,7 +146,8 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, JsonParser,
 				ReadByteStream, SshSocketError are new classes in 3.7.0 that need 
 				to be adopted (along with all of their methods) before reloading 
-				GemStone packages."
+				GemStone packages.
+			New version of InstVarMappingArray so it needs to be adopted ..."
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
@@ -168,6 +169,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
 				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'InstVarMappingArray')
+				intoPackageNamed: 'Filein2A'.
 
 			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
 
