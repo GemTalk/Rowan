@@ -10,7 +10,7 @@ Class {
 		'onDoitBlock',
 		'packageConvention'
 	],
-	#category : 'Rowan-GemStone-Kernel-36x'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

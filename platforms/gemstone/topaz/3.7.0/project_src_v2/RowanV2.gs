@@ -96,10 +96,10 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanKernel
 	options: #( #logCreation )
 )
-		category: 'Rowan-GemStone-Kernel-36x';
+		category: 'Rowan-GemStone-Core';
 		immediateInvariant.
 true.
 %
@@ -55707,7 +55707,9 @@ auditGlobalFor: aLoadedClassExtension
 								for: aLoadedClassExtension
 								reason: #'classesNotIdentical'
 								message:
-									'Installed class is not identical to the loaded class: '
+									'Installed class extension class in package '
+										, aLoadedClassExtension packageName printString
+										, ' is not identical to the loaded class: '
 										, aLoadedClassExtension name).
 					^ false ] ].
 	^ true
@@ -56236,13 +56238,11 @@ adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageN
 
 category: 'smalltalk api'
 method: RwPkgAdoptTool
-adoptMethod: methodSelector protocol: protocolString inClassNamed: className  isMeta: isMeta intoPackageNamed: packageName
-
+adoptMethod: methodSelector protocol: protocolString inClassNamed: className isMeta: isMeta intoPackageNamed: packageName
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior theCompiledMethod |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -56260,22 +56260,27 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
 
 	theCompiledMethod rowanProjectName = Rowan unpackagedName
-		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
+		ifFalse: [ 
+			self
+				error:
+					'The method ' , className printString , '>>' , methodSelector asString
+						, ' is already packaged in '
+						, theCompiledMethod rowanPackageName printString , ' ... no need to adopt' ].
 
-	theClass  rowanPackageName ~= packageName
+	theClass rowanPackageName ~= packageName
 		ifTrue: [ 
 			registry
-				addExtensionCompiledMethod: theCompiledMethod 
-				for: theBehavior 
-				protocol: protocolString 
+				addExtensionCompiledMethod: theCompiledMethod
+				for: theBehavior
+				protocol: protocolString
 				toPackageNamed: packageName ]
 		ifFalse: [ 
 			registry
-				adoptCompiledMethod: theCompiledMethod 
+				adoptCompiledMethod: theCompiledMethod
 				classExtension: false
-				for: theBehavior 
+				for: theBehavior
 				protocol: protocolString
-				toPackageNamed: packageName ].
+				toPackageNamed: packageName ]
 %
 
 category: 'smalltalk api'
@@ -80048,7 +80053,7 @@ rbStoreOn: aStream
 
 !		Class methods for 'FileLocator'
 
-category: '*rowan-components-kernel'
+category: '*rowan-gemstone-components-kernel'
 classmethod: FileLocator
 rowanProjectsHome
 	"Answer the path to $ROWAN_PROJECTS_HOME"
@@ -83774,7 +83779,7 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
 !		Instance methods for 'SystemResolver'
 
-category: '*rowan-components-kernel'
+category: '*rowan-gemstone-components-kernel'
 method: SystemResolver
 rowanProjectsHome
 
@@ -83888,17 +83893,6 @@ defaultAction
   response == false
     ifTrue: [ self halt: 'Debugging: ' , self description ].
   ^ Processor activeProcess terminate
-%
-
-! Class extensions for 'ZnBufferedReadStream'
-
-!		Instance methods for 'ZnBufferedReadStream'
-
-category: '*rowan-components-kernel'
-method: ZnBufferedReadStream
-buffer
-
-	^ buffer
 %
 
 ! Class Initialization

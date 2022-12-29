@@ -206,13 +206,11 @@ RwPkgAdoptTool >> adoptMethod: methodSelector inClassNamed: className  isMeta: i
 ]
 
 { #category : 'smalltalk api' }
-RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNamed: className  isMeta: isMeta intoPackageNamed: packageName [
-
+RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNamed: className isMeta: isMeta intoPackageNamed: packageName [
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior theCompiledMethod |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -230,22 +228,27 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
 
 	theCompiledMethod rowanProjectName = Rowan unpackagedName
-		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
+		ifFalse: [ 
+			self
+				error:
+					'The method ' , className printString , '>>' , methodSelector asString
+						, ' is already packaged in '
+						, theCompiledMethod rowanPackageName printString , ' ... no need to adopt' ].
 
-	theClass  rowanPackageName ~= packageName
+	theClass rowanPackageName ~= packageName
 		ifTrue: [ 
 			registry
-				addExtensionCompiledMethod: theCompiledMethod 
-				for: theBehavior 
-				protocol: protocolString 
+				addExtensionCompiledMethod: theCompiledMethod
+				for: theBehavior
+				protocol: protocolString
 				toPackageNamed: packageName ]
 		ifFalse: [ 
 			registry
-				adoptCompiledMethod: theCompiledMethod 
+				adoptCompiledMethod: theCompiledMethod
 				classExtension: false
-				for: theBehavior 
+				for: theBehavior
 				protocol: protocolString
-				toPackageNamed: packageName ].
+				toPackageNamed: packageName ]
 ]
 
 { #category : 'smalltalk api' }

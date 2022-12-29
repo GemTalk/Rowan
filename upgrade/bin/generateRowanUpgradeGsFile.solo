@@ -28,7 +28,7 @@ EXAMPLES
 doit
 	| loadSpecUrl loadSpec theProjectSetDefinition theRepositoryRoot topazFileNameMap 
 		projectSetModification visitor resolvedProject customConditionalAttributes 
-		xProjectSetDefinition gsFileName theGsFile |
+		gsFileName theGsFile projectDefinition thePackages |
 	loadSpecUrl := 'file:', self projectsHome, '/Rowan/rowan/specs/Rowan.ston'.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	customConditionalAttributes := {
@@ -36,46 +36,30 @@ doit
 		'gemstone'.
 		'gemstone-kernel'.
 		'upgrade' .
-		'3.6.0' asRwGemStoneVersionNumber.	"want to read 3.6.0 packages"
+		'3.7.0' asRwGemStoneVersionNumber.	"want to read 3.7.0 packages"
 	}.
 	loadSpec 
 		customConditionalAttributes: customConditionalAttributes;
 		componentNames: { 'Upgrade' };
 		yourself.
-	theRepositoryRoot := (self archbase, '/examples/rowanV2') asFileReference.
+	theRepositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/upgrade' asFileReference.
 	theRepositoryRoot ensureCreateDirectory.
 	resolvedProject := loadSpec
 			projectsHome: self projectsHome;
 			resolve.
 
-	"UGLY hack PART 1: because embedded projects ignore conditionals IF the project is loaded in the
-		image .... WHAT WAS I THINKING ... at least it is fixed in v3.0"
-	xProjectSetDefinition :=  resolvedProject readProjectSet: customConditionalAttributes.
-
-	theProjectSetDefinition := RwProjectSetDefinition new.
-	theProjectSetDefinition 
-		addProject: (xProjectSetDefinition projectNamed: 'FileSystemGs');
-		addProject: (resolvedProject read: customConditionalAttributes);
-		yourself.
+	theProjectSetDefinition :=  resolvedProject readProjectSet: customConditionalAttributes.
 	
 	gsFileName := 'UpgradeRowanV2'.
 	topazFileNameMap := Dictionary new
 		at: gsFileName put: Set new;
 		yourself.
 	GsFile gciLogServer: 'Creating UpgradeRowanV2.gs:'.
-	theProjectSetDefinition keys do: [:projectName |
-		| projectDefinition thePackages |
-		projectDefinition := theProjectSetDefinition projectNamed: projectName.
-		projectName = 'Rowan'
-			ifTrue: [ thePackages := projectDefinition packageNames ].
-		projectName = 'FileSystemGs'
-			ifTrue: [ 
-				"UGLY hack PART@ 2: brute force grab the packages from the component"
-				thePackages := (projectDefinition componentNamed: 'Gemstone35-') packageNames ].
-
-		thePackages do: [:packageName |
-			(topazFileNameMap at: gsFileName) add: packageName.
-			GsFile gciLogServer: '	', packageName ] ].
+	projectDefinition := theProjectSetDefinition projectNamed: 'Rowan'.
+	thePackages := projectDefinition packageNames.
+	thePackages do: [:packageName |
+		(topazFileNameMap at: gsFileName) add: packageName.
+		GsFile gciLogServer: '	', packageName ].
 
 	projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new

@@ -31,7 +31,8 @@ Class {
 		'auditErrors',
 		'projectsHome',
 		'skip',
-		'shouldCommit'
+		'shouldCommit',
+		'originalRowanVersion'
 	],
 	#category : 'RowanUpgrade-Core'
 }
@@ -89,70 +90,6 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 										at: #'methodsNotIdenticalDetail'
 											put:
 												((methodsNotIdenticalMap at: auditDetail behavior) at: auditDetail selector) ] ] ] ]
-]
-
-{ #category : 'repair' }
-UpgradeRowanV2 >> _repairFileLocator_rowanProjectsHome [
-	"The method is sent while reloading Rowan, so we need to patch this 
-		puppy and rely on the reload step to properly implement it if changed ... 
-		removed when FileLocator's methods are removed during filein"
-
-	| theBehavior className packageName selector |
-	self logMessage: '_repairFileLocator_rowanProjectsHome [0]'.
-	className := 'FileLocator'.
-	selector := #'rowanProjectsHome'.
-	packageName := 'Rowan-Components-Kernel'.
-	theBehavior := (self globalNamed: className) class.
-	self logMessage: '_repairFileLocator_rowanProjectsHome [1]'.
-	(self globalNamed: 'Rowan') image
-		loadedMethod: selector
-		inClassNamed: className
-		isMeta: true
-		ifFound: [ :loadedMethod | 
-			| loadedPackage |
-			self logMessage: '_repairFileLocator_rowanProjectsHome [2]'.
-			loadedPackage := (self globalNamed: 'Rowan') image
-				loadedPackageNamed: packageName.
-			(loadedPackage classOrExtensionForClassNamed: className ifAbsent: [  ])
-				ifNil: [ 
-					"unexpected"
-					self logMessage: 'UNEXPECTED _repairFileLocator_rowanProjectsHome [5]' ]
-				ifNotNil: [ :loadedClass | 
-					self logMessage: '_repairFileLocator_rowanProjectsHome [3]'.
-					loadedClass removeLoadedMethod: loadedMethod ].
-			self logMessage: '_repairFileLocator_rowanProjectsHome [4]' ]
-		ifAbsent: [ 
-			| loadedPackage loadedClass |
-			"treat as a missing compiled method"
-			self logMessage: '_repairFileLocator_rowanProjectsHome [6]'.
-			loadedPackage := (self globalNamed: 'Rowan') image
-				loadedPackageNamed: packageName.
-			loadedClass := loadedPackage
-				classOrExtensionForClassNamed: className
-				ifAbsent: [ 
-					self
-						error:
-							'  Could not repair missing compiled method: ' , loadedClass name , ' class >>'
-								, selector , ' for package ' , packageName
-								, ' (No loaded extension class found for ' , className printString
-								, ' in package ' , packageName , ')' ].
-			(loadedClass loadedClassMethods at: selector ifAbsent: [  ])
-				ifNotNil: [ :loadedMethod | 
-					self logMessage: '_repairFileLocator_rowanProjectsHome [7]'.
-					loadedClass removeLoadedMethod: loadedMethod ].
-			self logMessage: '_repairFileLocator_rowanProjectsHome [8]' ].
-	self logMessage: '_repairFileLocator_rowanProjectsHome [9]'.
-	theBehavior
-		rwCompileExtensionMethod:
-			'rowanProjectsHome
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ self origin: #rowanProjectsHome'
-		category: '*rowan-components-kernel'
-		packageName: 'Rowan-Components-Kernel'.
-	self
-		logMessage:
-			'Compile extension method ''FileLocator class >> rowanProjectsHome'' in package ''Rowan-Components-Kernel'''
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
@@ -230,7 +167,44 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'UnPackaged-Globals'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
-				intoPackageNamed: 'Filein3B' ]
+				intoPackageNamed: 'Filein3B'.
+
+			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown old project adopt new project (which is present in base)"
+			Rowan packageTools disown
+				disownMethod: #'asPath'
+				inClassNamed: 'String'
+				isMeta: false.
+			Rowan projectTools adopt
+				adoptProjectFromUrl:
+					'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
+				readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'
+				projectsHome: '$GEMSTONE/upgrade/projects' ]
+]
+
+{ #category : 'upgrade rowan' }
+UpgradeRowanV2 >> adoptRowan [
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"FileLocator class >> rowanProjectsHome and SystemResolver >> rowanProjectsHome have been moved from FileSystemGs to Rowan"
+			Rowan packageTools disown
+				disownMethod: #'rowanProjectsHome'
+					inClassNamed: 'FileLocator'
+					isMeta: true;
+				disownMethod: #'rowanProjectsHome'
+					inClassNamed: 'SystemResolver'
+					isMeta: false;
+				yourself.
+			Rowan packageTools adopt
+				adoptMethod: #'rowanProjectsHome'
+					inClassNamed: 'SystemResolver'
+					isMeta: false
+					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
+				adoptMethod: #'rowanProjectsHome'
+					inClassNamed: 'FileLocator'
+					isMeta: true
+					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
+				yourself ]
 ]
 
 { #category : 'upgrade' }
@@ -571,6 +545,16 @@ UpgradeRowanV2 >> moveCypressClassesToGlobals: cypressClassNames [
 ]
 
 { #category : 'accessing' }
+UpgradeRowanV2 >> originalRowanVersion [
+	^originalRowanVersion
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV2 >> originalRowanVersion: object [
+	originalRowanVersion := object
+]
+
+{ #category : 'accessing' }
 UpgradeRowanV2 >> projectsHome [
 	^ projectsHome ifNil: [ projectsHome := '$ROWAN_PROJECTS_HOME' ]
 ]
@@ -603,6 +587,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
+	self adoptRowan.
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
@@ -660,7 +645,7 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 
 { #category : 'repair' }
 UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageName [
-	| loadedClass loadedPackage theClass |
+	| loadedClass loadedPackage theClass isClassExtension |
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
 	loadedClass := loadedPackage
@@ -672,28 +657,52 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 						, packageName , ' (No loaded class or loaded extension class found for '
 						, className printString , ' in package ' , packageName , ')' ].
 	theClass := Rowan globalNamed: className.
-	loadedClass handle ~~ theClass
-		ifFalse: [ 
-			"confirm the audit issue -- classes not identical"
+	(loadedClass handle ~~ theClass and: [ theClass classHistory size > 1 ])
+		ifTrue: [ 
+			"handle MAY be a previous version of the class"
+			1 to: loadedClass handle classHistory size - 1 do: [ :idx | 
+				loadedClass handle == (theClass classHistory at: idx)
+					ifTrue: [ 
+						"repair by splicing in the current version of the class ... a later load should patch method discrepancies"
+						loadedClass handle: theClass.
+						self
+							logMessage:
+								'	Repair classes not identical: ' , loadedClass name
+									, ' however handle is previous version of class (' , idx printString
+									, ') for package ' , packageName.
+						repairedCount := self repairedCount + 1.
+						^ self ] ].
 			self
 				error:
 					'Invalid method audit details for repair of classesNotIdentical. The class named '
 						, className printString
-						, ' does match the handle for the loaded class in package '
-						, packageName printString ].
+						, ' DOES match the handle for the loaded class in package '
+						, packageName printString ]
+		ifFalse: [ 
+			loadedClass handle ~~ theClass
+				ifFalse: [ 
+					"confirm the audit issue -- classes are identical"
+					self
+						error:
+							'Invalid method audit details for repair of classesNotIdentical. The class named '
+								, className printString
+								, ' DOES match the handle for the loaded class in package '
+								, packageName printString ] ].
 	(loadedPackage loadedClasses includesKey: className)
-		ifTrue: [ loadedPackage loadedClasses removeKey: className ]
-		ifFalse: [ loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
+		ifTrue: [ 
+			isClassExtension := false.
+			loadedPackage loadedClasses removeKey: className ]
+		ifFalse: [ 
+			isClassExtension := true.
+			loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
 	Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName.	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
-	(loadedClass name = 'FileLocator')
-		ifTrue: [
-			"expected when upgrading from pre-3.7.0 ... FileLocator class HAS changed shape"
-			self _repairFileLocator_rowanProjectsHome.
- ].
 	self
 		logMessage:
-			'  Repair classes not identical: ' , loadedClass name , ' for package '
-				, packageName.
+			'  Repair classes not identical: ' , loadedClass name
+				,
+					(isClassExtension
+						ifTrue: [ ' extension' ]
+						ifFalse: [ '' ]) , ' for package ' , packageName.
 	repairedCount := self repairedCount + 1.
 ]
 
@@ -811,11 +820,6 @@ UpgradeRowanV2 >> repairMissingCompiledMethod: methodSpec inClassNamed: classNam
 		ifTrue: [ loadedClass loadedClassMethods at: selector ]
 		ifFalse: [ loadedClass loadedInstanceMethods at: selector ].
 	loadedClass removeLoadedMethod: loadedMethod.
-	(loadedClass name = 'FileLocator'
-		and: [ isMeta and: [ selector == #'rowanProjectsHome' ] ])
-		ifTrue: [ 
-			"expected in 3.7.0"
-			self _repairFileLocator_rowanProjectsHome ].
 	self
 		logMessage:
 			'  Repair missing compiled method: ' , loadedClass name
@@ -1191,8 +1195,7 @@ UpgradeRowanV2 >> step_4_reloadRowan [
 
 	| rowanVersion |
 	rowanVersion := Rowan version.
-	self logMessage: 'reload Rowan'.
-	self logMessage: '	original Rowan version: ', rowanVersion printString.
+	self logMessage: 'reload Rowan upgrading from ', self originalRowanVersion printString, ' to ', rowanVersion printString.
 	self reloadRowan.
 	self commit
 ]

@@ -126,7 +126,7 @@ method
 updateRowanV220
 	"Rowan v2.2.0 update - GemStone 3.6.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.2.0 to Rowan v2.3.0'; lf.
+	self stdout nextPutAll: 'Start updating Rowan v2.x to Rowan v2.5.0'; lf.
 	self rowanV220_patch.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.

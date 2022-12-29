@@ -74,21 +74,20 @@ RwLoadSpecificationV2 {
 ]
 %
 doit
-	| rowanClass upgrader |
+	| rowanClass upgrader originalRowanVersion |
 	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
 		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
 	(rowanClass respondsTo: #versionString)
 		ifFalse: [ 
 			"Rowan version older than Rowan v2.3.0"
 			self error: 'Rowan version must be at least v2.3.0 to finish upgrade. Use $GEMSTONE/rowan/bin/updateRowan.stone to upgrade Rowan prior to running this script' ].
-	((self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
+	(originalRowanVersion := (self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
 			>= ((self globalNamed: 'RwSemanticVersionNumber') fromString: '2.3.0')
 		ifFalse: [
 			self
 				error:
 					'Upgrade for Rowan v' , rowanClass versionString
 						, ' is not supported. No Rowan upgrade performed.' ].
-
 	self preDoitSpecLoad: [:loadSpec |
 		"we don't want the UpgradeRowan project to persisted in the image ... load into transient
 			symbol dictionary"
@@ -101,6 +100,7 @@ doit
 	upgrader := (self globalNamed: 'UpgradeRowanV2') new.
 	upgrader
 		upgradeFrom: self upgradeFrom;
+		originalRowanVersion: originalRowanVersion;
 		shouldCommit: self commit.
 	self rowanRepair
 		ifTrue: [ upgrader step_1_repairRowanAuditFailures ].

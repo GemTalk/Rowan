@@ -1,6 +1,6 @@
 Extension { #name : 'SystemResolver' }
 
-{ #category : '*rowan-components-kernel' }
+{ #category : '*rowan-gemstone-components-kernel' }
 SystemResolver >> rowanProjectsHome [
 
 	"Answer the path to $ROWAN_PROJECTS_HOME"
