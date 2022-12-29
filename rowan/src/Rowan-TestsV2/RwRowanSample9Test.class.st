@@ -571,7 +571,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 
 "do filein"
 	stream := (self _spec0057GsFilein: true) readStreamPortable.
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
 		setEnableRemoveAll: includeRemoveAll;
 		doFileIn.
 	^ loadedProjects

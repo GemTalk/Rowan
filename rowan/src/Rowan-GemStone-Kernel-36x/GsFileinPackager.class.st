@@ -18,11 +18,9 @@ GsFileinPackager class >> toPackage: packageName fromServerPath: aString package
 	| fileStream gsFilein |
 	fileStream := FileStreamPortable read: aString type: #'serverText'.
 	[ 
-	gsFilein := self new
-		fileStream: fileStream;
+	(gsFilein := self newFromStream: fileStream)
 		packageConvention: packageConvention;
-		setSession: nil;
-		yourself.
+		setSession: nil .
 	aZeroOneOrTwoArgBlockOrNil
 		ifNotNil: [ gsFilein onDoitBlock: aZeroOneOrTwoArgBlockOrNil ].
 	gsFilein currentPackage: packageName.
@@ -88,18 +86,15 @@ GsFileinPackager class >> toPackagesForDefinedProject: definedProject packageNam
 { #category : 'instance creation' }
 GsFileinPackager class >> toPackagesForDefinedProject: definedProject packageNameToComponentNameMap: packageNameToComponentNameMap defaultComponentName: defaultComponentName fromStream: aStream onDoitBlock: aZeroOneOrTwoArgBlockOrNil [
 	|  gsFilein |
-	gsFilein := self new
-		fileStream: aStream;
+	(gsFilein := self newFromStream: aStream)
 		setSession: nil;
-		setEnableRemoveAll: false;
-		yourself.
+		setEnableRemoveAll: false.
 	aZeroOneOrTwoArgBlockOrNil
 		ifNotNil: [ gsFilein onDoitBlock: aZeroOneOrTwoArgBlockOrNil ].
 	gsFilein 
 		definedProject: definedProject;
 		defaultComponentName: defaultComponentName;
-		packageNameToComponentNameMap: packageNameToComponentNameMap;
-		yourself.
+		packageNameToComponentNameMap: packageNameToComponentNameMap .
 	gsFilein doFileIn
 ]
 
@@ -141,17 +136,18 @@ GsFileinPackager >> abortTransaction [
 
 { #category : 'processing' }
 GsFileinPackager >> classMethod [
-	currentClass ifNil: [ self error: 'current class not defined' ].
+  | className |
+	(className := self currentClass) ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
 			| classDef methodDef |
 			methodDef := ((classDef := packageDef
-				classDefinitionNamed: currentClass
+				classDefinitionNamed: className
 				ifAbsent: [  ])
 				ifNil: [ 
 					packageDef
-						classExtensionDefinitionNamed: currentClass
-						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
+						classExtensionDefinitionNamed: className
+						ifAbsent: [ packageDef addClassExtensionNamed: className ] ])
 				addClassMethod: self nextChunk
 				protocol: category.
 			[ 
@@ -159,22 +155,21 @@ GsFileinPackager >> classMethod [
 				validatePackageConvention: self packageConvention
 				forClassDefinition: classDef
 				forMethodDefinitionProtocol: methodDef
-				className: currentClass
+				className: className
 				isMeta: true
 				forPackageNamed: packageDef name ]
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
 					self _correctMethodProtocolFor: methodDef ] ]
-		ifNil: [ self compileMethodIn: currentClass , ' class' ]
+		ifNil: [ super classMethod ]
 ]
 
 { #category : 'processing' }
 GsFileinPackager >> classMethod: aString [
 
-	aString ifNotNil:[ currentClass := aString ].
+	aString ifNotNil:[ self currentClass: aString ].
 	self classMethod.
-
 ]
 
 { #category : 'processing' }
@@ -448,17 +443,18 @@ GsFileinPackager >> isSupportedClassCreationSelector: sel [
 
 { #category : 'processing' }
 GsFileinPackager >> method [
-	currentClass ifNil: [ self error: 'current class not defined' ].
+  | className |
+	(className := self currentClass) ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
 			| classDef methodDef |
 			methodDef := ((classDef := packageDef
-				classDefinitionNamed: currentClass
+				classDefinitionNamed: className
 				ifAbsent: [  ])
 				ifNil: [ 
 					packageDef
-						classExtensionDefinitionNamed: currentClass
-						ifAbsent: [ packageDef addClassExtensionNamed: currentClass ] ])
+						classExtensionDefinitionNamed: className
+						ifAbsent: [ packageDef addClassExtensionNamed: className ] ])
 				addInstanceMethod: self nextChunk
 				protocol: category.
 			[ 
@@ -466,22 +462,20 @@ GsFileinPackager >> method [
 				validatePackageConvention: self packageConvention
 				forClassDefinition: classDef
 				forMethodDefinitionProtocol: methodDef
-				className: currentClass
+				className: className
 				isMeta: false
 				forPackageNamed: packageDef name ]
 				on: RwInvalidMethodProtocolConventionErrorNotification
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
 					self _correctMethodProtocolFor: methodDef ] ]
-		ifNil: [ self compileMethodIn: currentClass ]
+		ifNil: [ super method ]
 ]
 
 { #category : 'processing' }
 GsFileinPackager >> method: aString [
-
-	aString ifNotNil:[ currentClass := aString ].
+	aString ifNotNil:[ self currentClass: aString ].
 	self method.
-
 ]
 
 { #category : 'accessing' }
