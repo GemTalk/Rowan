@@ -183,6 +183,33 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				projectsHome: '$GEMSTONE/upgrade/projects' ]
 ]
 
+{ #category : 'upgrade rowan' }
+UpgradeRowanV2 >> adoptRowan [
+	"classes that are new relative to original Rowan version"
+
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"FileLocator class >> rowanProjectsHome and SystemResolver >> rowanProjectsHome moved 
+				from FileSystemGs to Rowan during upgradeImage (i.e., not packaged)"
+
+			Rowan packageTools disown
+				disownMethod: #'rowanProjectsHome'
+					inClassNamed: 'SystemResolver'
+					isMeta: false;
+				yourself.
+			Rowan packageTools adopt
+				adoptMethod: #'rowanProjectsHome'
+					inClassNamed: 'SystemResolver'
+					isMeta: false
+					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
+				adoptMethod: #'rowanProjectsHome'
+					inClassNamed: 'FileLocator'
+					isMeta: true
+					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
+				yourself ]
+]
+
 { #category : 'upgrade' }
 UpgradeRowanV2 >> auditForProjectsNamed: theProjectNames [
 	audit := KeyValueDictionary new.
@@ -563,6 +590,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
+	self adoptRowan.
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"

@@ -97,7 +97,7 @@ RwPkgDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
 
 	theCompiledMethod rowanProjectName = Rowan unpackagedName
-		ifTrue: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is not packaged ... no need to disown' ].
+		ifTrue: [ self error: 'The method ', theBehavior printString, '>>', methodSelector asString, ' is not packaged ... no need to disown' ].
 
 	packageName := theCompiledMethod rowanPackageName.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.

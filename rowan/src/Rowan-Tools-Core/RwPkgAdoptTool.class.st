@@ -231,7 +231,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 		ifFalse: [ 
 			self
 				error:
-					'The method ' , className printString , '>>' , methodSelector asString
+					'The method ' , theBehavior printString , '>>' , methodSelector asString
 						, ' is already packaged in '
 						, theCompiledMethod rowanPackageName printString , ' ... no need to adopt' ].
 
