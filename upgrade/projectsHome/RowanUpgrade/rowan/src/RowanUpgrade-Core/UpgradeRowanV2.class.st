@@ -169,16 +169,26 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
 				intoPackageNamed: 'Filein3B'.
 
-			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown old project adopt new project (which is present in base)"
+			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
+
 			Rowan packageTools disown
 				disownMethod: #'asPath'
 				inClassNamed: 'String'
 				isMeta: false.
-			Rowan projectTools adopt
-				adoptProjectFromUrl:
-					'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
-				readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/upgrade/projects' ]
+
+			self adoptGemstoneBaseProjectSet ]
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV2 >> adoptGemstoneBaseProjectSet [
+	| resolvedProject projectSetDefinition |
+	resolvedProject := Rowan
+		projectFromUrl:
+			'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
+		readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addProject: resolvedProject _resolvedProject.
+	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'upgrade' }
