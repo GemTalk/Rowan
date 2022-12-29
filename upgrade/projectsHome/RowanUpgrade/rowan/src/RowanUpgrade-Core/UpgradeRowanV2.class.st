@@ -176,19 +176,11 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				inClassNamed: 'String'
 				isMeta: false.
 
-			self adoptGemstoneBaseProjectSet ]
-]
-
-{ #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> adoptGemstoneBaseProjectSet [
-	| resolvedProject projectSetDefinition |
-	resolvedProject := Rowan
-		projectFromUrl:
-			'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
-		readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'.
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addProject: resolvedProject _resolvedProject.
-	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition
+			Rowan projectTools adopt
+				adoptProjectFromUrl:
+					'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
+				readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'
+				projectsHome: '$GEMSTONE/upgrade/projects' ]
 ]
 
 { #category : 'upgrade' }
