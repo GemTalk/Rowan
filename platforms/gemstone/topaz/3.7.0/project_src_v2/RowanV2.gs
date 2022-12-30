@@ -11311,6 +11311,14 @@ _correctMethodProtocolFor: methodDef
 						, self packageConvention printString ]
 %
 
+category: 'private'
+method: GsFileinPackager
+_setClass: aString
+	"GsFileinPackager does not use currentClassObj, since we're building definitions not classes"
+
+	currentClassName := aString
+%
+
 ! Class implementation for 'RwGemStoneVersionNumber'
 
 !		Class methods for 'RwGemStoneVersionNumber'
