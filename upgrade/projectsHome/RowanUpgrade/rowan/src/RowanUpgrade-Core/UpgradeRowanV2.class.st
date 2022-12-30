@@ -113,6 +113,26 @@ UpgradeRowanV2 >> _disownFileLocator_370 [
 			'Cannot repair FileLocator reference in loaded Rowan-GemStone-Components-Kernel package'
 ]
 
+{ #category : 'private' }
+UpgradeRowanV2 >> _obsoleteFileSystemClasses [
+	#('FastUUIDGenerator' 'WindowsResolver' 'WindowsStore' 'WindowsStoreTest' 'DeleteVisitor' 'DeleteVisitor' 'CopyVisitor' 'CopyVisitorTest' 'File' 'PostorderGuide' 'PostorderGuideTest' 'MemoryWriteStream' 'FileHandle' 'FileHandleTest' 'SelectVisitor' 'SelectVisitorTest' 'FileSystemDirectoryEntry' 'UUID' 'CollectVisitor' 'CollectVisitorTest' 'AbstractEnumerationVisitor' 'AbstractEnumerationVisitorTest' 'FileSystemVisitor' 
+'BreadthFirstGuide' 'BreadthFirstGuideTest' 'FileSystemGuide' 'PreorderGuide' 'PreorderGuideTest' 'MacStore' 'ResolutionRequest' 'AbstractBinaryFileStream' 'BinaryFileStream'
+'InteractiveResolver' 'InteractiveResolverTest')
+		do: [ :className | 
+			(Rowan globalNamed: className)
+				ifNotNil: [ :oldCls | 
+					| newClassName |
+					newClassName := ('Obsolete' , className) asSymbol.
+					ObsoleteClasses at: newClassName put: oldCls.
+					oldCls removeAllMethods.
+					oldCls class removeAllMethods.
+					oldCls _unsafeAt: 11 put: newClassName.	"change name"
+					Globals removeKey: className asSymbol.
+					self
+						logMessage:
+							'added ' , className , ' to ObsoleteClasses as ' , newClassName asString ] ]
+]
+
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
@@ -205,7 +225,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				adoptProjectFromUrl:
 					'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
 				readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/upgrade/projects' ]
+				projectsHome: '$GEMSTONE/upgrade/projects'.
+
+			self _obsoleteFileSystemClasses	"FastUUIDGenerator, WindowsResolver, WindowsStore, and and a host of classes have been removed" ]
 ]
 
 { #category : 'upgrade rowan' }
