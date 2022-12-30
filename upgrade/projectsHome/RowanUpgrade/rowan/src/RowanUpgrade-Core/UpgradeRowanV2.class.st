@@ -96,6 +96,41 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 UpgradeRowanV2 >> _disownFileLocator_370 [
 	"New version of FileLocator moved from Rowan to new base project FileSystemGs and 'FileSystem-Core'  package. There is an orphan extension method for older version of class in Rowan-GemStone-Components-Kernel package. Perform surgery to remove reference to old version of class extension from Rowan-GemStone-Components-Kernel."
 
+	| packageName className loadedClassExt classHistory |
+	classHistory := FileLocator classHistory.
+	packageName := 'Rowan-GemStone-Components-Kernel'.
+	className := #'FileLocator'.
+	loadedClassExt := (Rowan image loadedPackageNamed: packageName)
+		loadedClassExtensions at: 'FileLocator'.
+	classHistory
+		do: [ :classVersion | 
+			classVersion == loadedClassExt handle
+				ifTrue: [ 
+					loadedClassExt handle: FileLocator.
+					^ self ] ].
+	self
+		error:
+			'Cannot repair FileLocator reference in loaded Rowan-GemStone-Components-Kernel package'
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV2 >> _disownFileLocator_370_0 [
+	"New version of FileLocator in base and need to remove the package meta data for older versions of class."
+
+	| fileLocatorClass classHistory |
+	fileLocatorClass := Rowan globalNamed: 'FileLocator'.
+	classHistory := fileLocatorClass classHistory.
+	1 to: classHistory size - 1 do: [ :idx | 
+		| fileLocatorClassVersion |
+		"make sure that the older versions of FileLocator are not packaged"
+		fileLocatorClassVersion := classHistory at: idx.
+		Rowan packageTools disown disownClass: fileLocatorClassVersion ]
+]
+
+{ #category : 'upgrade rowan' }
+UpgradeRowanV2 >> _disownFileLocator_370_1 [
+	"New version of FileLocator moved from Rowan to new base project FileSystemGs and 'FileSystem-Core'  package. There is an orphan extension method for older version of class in Rowan-GemStone-Components-Kernel package. Perform surgery to remove reference to old version of class extension from Rowan-GemStone-Components-Kernel."
+
 	| packageName loadedPackage loadedProject packageSymDictName theSymbolDictionary registryInstance theClass className class registryImpl classHistory loadedClassExts |
 	self logMessage: ' _disownFileLocator_370 [0]'.
 	packageName := 'Rowan-GemStone-Components-Kernel'.
@@ -136,20 +171,6 @@ UpgradeRowanV2 >> _disownFileLocator_370 [
 			registryImpl unregisterLoadedClassExtension: loadedClassExt forClass: class.
 			self logMessage: ' _disownFileLocator_370 [7]' ].
 	self logMessage: ' _disownFileLocator_370 [8]'
-]
-
-{ #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> _disownFileLocator_370_0 [
-	"New version of FileLocator in base and need to remove the package meta data for older versions of class."
-
-	| fileLocatorClass classHistory |
-	fileLocatorClass := Rowan globalNamed: 'FileLocator'.
-	classHistory := fileLocatorClass classHistory.
-	1 to: classHistory size - 1 do: [ :idx | 
-		| fileLocatorClassVersion |
-		"make sure that the older versions of FileLocator are not packaged"
-		fileLocatorClassVersion := classHistory at: idx.
-		Rowan packageTools disown disownClass: fileLocatorClassVersion ]
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
