@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone36/Core',
+	#condition : [
+		'gs3.6.x'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Core-36'
+	],
+	#comment : 'Core gs3.6.x  packages '
+}
