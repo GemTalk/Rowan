@@ -126,7 +126,7 @@ method
 updateRowanV220
 	"Rowan v2.2.0 update - GemStone 3.6.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.2.0 to Rowan v2.3.0'; lf.
+	self stdout nextPutAll: 'Start updating Rowan v2.2.0 to Rowan v2.3.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	self rowanV220_patch.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
@@ -158,7 +158,7 @@ method
 updateRowanV230
 	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan v2.3'; lf.
+	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan v2.3 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
 	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
@@ -175,6 +175,8 @@ updateRowanV230
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
 	self stdout nextPutAll: '	load Rowan v2.3'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
+self stdout nextPutAll: '[DEBUG] platform conditional attributes: ', Rowan platformConditionalAttributes printString; lf.
+self stdout nextPutAll: '[DEBUG] project platform conditional attributes: ', (Rowan projectNamed: 'Rowan') projectDefinitionPlatformConditionalAttributes printString; lf.
 	(Rowan projectNamed: 'Rowan')
 		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
