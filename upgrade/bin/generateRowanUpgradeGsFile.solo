@@ -42,7 +42,7 @@ doit
 		customConditionalAttributes: customConditionalAttributes;
 		componentNames: { 'Upgrade' };
 		yourself.
-	theRepositoryRoot := self projectsHome, '/Rowan/upgrade' asFileReference.
+	theRepositoryRoot := (self projectsHome, '/Rowan/upgrade') asFileReference.
 	theRepositoryRoot ensureCreateDirectory.
 	resolvedProject := loadSpec
 			projectsHome: self projectsHome;
