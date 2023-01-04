@@ -1,4 +1,3 @@
-! Copyright (C) GemTalk Systems 1986-2022.  All Rights Reserved.
 ! Class extensions for 'AbstractDictionary'
 
 !		Instance methods for 'AbstractDictionary'
@@ -487,7 +486,25 @@ self _validatePrivilege ifTrue:[
 
 ! Class extensions for 'ByteArray'
 
+!		Class methods for 'ByteArray'
+
+category: '*filesystem-gemstone-kernel'
+classmethod: ByteArray
+readHexFrom: aString
+  "Create a byte array from a hexadecimal representation"
+
+  ^ (self new: aString size // 2) readHexFrom: aString readStream
+%
+
 !		Instance methods for 'ByteArray'
+
+category: '*filesystem-gemstone-kernel'
+method: ByteArray
+asString
+  "Convert to a String with Characters for each byte"
+
+  ^ String withBytes: self
+%
 
 category: '*rowan-gemstone-kernel'
 method: ByteArray
@@ -501,9 +518,87 @@ byteArrayMap
 	^ map
 %
 
+category: '*filesystem-gemstone-kernel'
+method: ByteArray
+decodeWith: encoding
+	"Produce a String that decodes the receiver, using a specified encoding.
+	Encoding is either a ZnCharacterEncoder instance or an identifier for one."
+	
+	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] decodeWith: #utf8"
+	
+	^ encoding asZnCharacterEncoder decodeBytes: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: ByteArray
+utf8Decoded
+	"Produce a String decoding the receiver using UTF-8,
+	the recommended encoding for Strings, unless you know what you are doing."
+
+	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded"
+	
+	^ self decodeFromUTF8
+%
+
+! Class extensions for 'Character'
+
+!		Class methods for 'Character'
+
+category: '*filesystem-gemstone-kernel'
+classmethod: Character
+digitValue: x 
+	"Answer the Character whose digit value is x. For example,
+	 answer $9 for x=9, $0 for x=0, $A for x=10, $Z for x=35."
+
+	| n |
+	n := x asInteger.
+	^self withValue: (n < 10 ifTrue: [n + 48] ifFalse: [n + 55])
+%
+
 ! Class extensions for 'CharacterCollection'
 
+!		Class methods for 'CharacterCollection'
+
+category: '*filesystem-gemstone-kernel'
+classmethod: CharacterCollection
+crlf
+	"Answer a string containing a carriage return and a linefeed."
+
+	^ self with: Character cr with: Character lf
+%
+
 !		Instance methods for 'CharacterCollection'
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+asFileReference
+
+	^ FileSystem disk referenceTo: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+asPath
+	"convert myself to a path"
+	"Examples:
+		'.' asPath
+		'~/Desktop' asPath
+		'/home/foo' asPath
+		'../../foo.bar' asPath"
+	^ FileSystem disk resolve: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+asPathWith: anObject 
+	^ anObject pathFromString: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+asResolvedBy: aFileSystem
+	^ aFileSystem resolveString: self
+%
 
 category: '*rowan-gemstone-components-kernel'
 method: CharacterCollection
@@ -535,6 +630,28 @@ asRwUrl
 	""
 
 	^ RwUrl fromString: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+asZnCharacterEncoder
+	"Return a ZnCharacterEncoder instance using the receiver as identifier"
+	
+	" 'UTF-8' asZnCharacterEncoder "
+	
+	((self select: [ :each | each isAlphaNumeric ]) asLowercase) = 'utf8' ifFalse: [ self error: 'Only utf8 encoding supported'].
+	^ ZnUTF8Encoder new
+%
+
+category: '*filesystem-gemstone-kernel'
+method: CharacterCollection
+encodeWith: encoding
+	"Produce a ByteArray that encodes the receiver, using a specified encoding.
+	Encoding is either a ZnCharacterEncoder instance or an identifier for one."
+	
+	" 'Les élèves français' encodeWith: #utf8 "
+	
+	^ encoding asZnCharacterEncoder encodeString: self
 %
 
 category: '*rowan-gemstone-url'
@@ -1310,6 +1427,44 @@ _rwSortedConstraints
 ^constraintArray
 %
 
+! Class extensions for 'Collection'
+
+!		Instance methods for 'Collection'
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+difference: aCollection
+  "Answer the set theoretic difference of two collections."
+
+  ^ self reject: [ :each | aCollection includes: each ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+ifEmpty: aBlock
+  self size == 0
+    ifTrue: [ ^ aBlock value ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Collection
+isEmptyOrNil
+  "Answer whether the receiver contains any elements, or is nil.  Useful in numerous situations where one wishes the same reaction to an empty collection or to nil"
+
+  ^ self size == 0
+%
+
+! Class extensions for 'GsFile'
+
+!		Class methods for 'GsFile'
+
+category: '*filesystem-gemstone-kernel-35x'
+classmethod: GsFile
+_contentsOfServerDirectory: aPathName expandPath: aBoolean
+
+	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
+%
+
 ! Class extensions for 'GsFileIn'
 
 !		Instance methods for 'GsFileIn'
@@ -1378,6 +1533,41 @@ rowanProjectName
 
 !		Instance methods for 'Integer'
 
+category: '*filesystem-gemstone-kernel'
+method: Integer
+<< shiftAmount
+	"left shift"
+	
+	shiftAmount < 0 ifTrue: [self error: 'negative arg'].
+	^ self bitShift: shiftAmount
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+>> shiftAmount
+	"right shift"
+	
+	shiftAmount < 0 ifTrue: [self error: 'negative arg'].
+	^ self bitShift: 0 - shiftAmount
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Integer
+digitAt: n
+	"Answer the value of an apparent byte-indexable field in the receiver,
+	 analogous to the large integers, which are organized as bytes."
+
+	n = 1
+		ifTrue: [ 
+			"Negate carefully in case the receiver is SmallInteger minVal"
+			^ self < 0
+				ifTrue: [ -256 - self bitAnd: 255 ]
+				ifFalse: [ self bitAnd: 255 ] ].
+	^ self < 0
+		ifTrue: [ (-256 - self bitShift: -8) + 1 digitAt: n - 1 ]
+		ifFalse: [ (self bitShift: 8 - (n bitShift: 3)) bitAnd: 255 ]
+%
+
 category: '*rowan-gemstone-components-kernel'
 method: Integer
 rwSemanticIntegerLessThanSelf: anInteger
@@ -1434,6 +1624,15 @@ stonOn: stonWriter
 
 !		Instance methods for 'Object'
 
+category: '*filesystem-gemstone-kernel'
+method: Object
+flag: aSymbol
+
+	"Send this message, with a relevant symbol as argument, to flag a message for subsequent retrieval.  For example, you might put the following line in a number of messages:
+	self flag: #returnHereUrgently
+	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."
+%
+
 category: '*rowan-gemstone-components-kernel'
 method: Object
 rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
@@ -1469,6 +1668,118 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
     error: 'Invalid semantic verson component - should be String or Integer.'
 %
 
+category: '*filesystem-gemstone-kernel'
+method: Object
+split: aSequenceableCollection
+	"Split the argument using the receiver as a separator."
+	"optimized version for single delimiters"
+	"($/ split: '/foo/bar')>>>#('' 'foo' 'bar') asOrderedCollection"
+	"([:c| c isSeparator] split: 'aa bb cc dd')>>> #('aa' 'bb' 'cc' 'dd') asOrderedCollection"
+		
+	| result |
+	result := OrderedCollection new: (aSequenceableCollection size / 2) asInteger.
+	self split: aSequenceableCollection do: [ :item |
+		result add: item ].
+	^ result
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Object
+split: aSequenceableCollection do: aBlock
+	"optimized version for single delimiters:
+	Example:
+		$/ split: '/foo/bar' indicesDo: [ :item | ]"
+	self split: aSequenceableCollection indicesDo: [ :start :end | 
+		aBlock value: (aSequenceableCollection copyFrom: start to: end) ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: Object
+split: aSequenceableCollection indicesDo: aBlock
+	"Perform an action specified as aBlock (with a start and end argument) to each of the indices of the receiver element that have been identified by splitting the receiver using the splitter argument. optimized version for single delimiters."
+	
+	"(String streamContents: [:s | Character space split: 'Pharo is cool'  indicesDo: [ :start :end | s << 's:' << start asString << ' ' << 'e:' << end asString << ' ' ]]) >>> 's:1 e:5 s:7 e:8 s:10 e:13 '"
+		
+		
+		
+	|  position oldPosition |
+	
+	position := 1.
+	oldPosition := position.
+	
+	position := aSequenceableCollection indexOf: self startingAt: position.
+	[ position > 0 ] whileTrue: [
+		aBlock value: oldPosition value: position - 1.
+		position := position + 1.
+		oldPosition := position.
+		position := aSequenceableCollection indexOf: self startingAt: position.
+	].
+
+	aBlock value: oldPosition value: aSequenceableCollection size.
+%
+
+! Class extensions for 'PositionableStreamPortable'
+
+!		Instance methods for 'PositionableStreamPortable'
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStreamPortable
+isBinary
+	"Return true if the receiver is a binary byte stream"
+	^collection class == ByteArray
+%
+
+category: '*filesystem-gemstone-kernel'
+method: PositionableStreamPortable
+nextInto: aCollection
+	"Read the next elements of the receiver into aCollection.
+	Return aCollection or a partial copy if less than aCollection
+	size elements have been read."
+	^self next: aCollection size into: aCollection startingAt: 1.
+%
+
+! Class extensions for 'ReadStreamPortable'
+
+!		Instance methods for 'ReadStreamPortable'
+
+category: '*filesystem-gemstone-kernel'
+method: ReadStreamPortable
+readInto: aCollection startingAt: startIndex count: n
+	"Read n objects into the given collection. 
+	Return number of elements that have been read."
+	
+	| max |
+	max := (readLimit - position) min: n.
+	aCollection 
+		replaceFrom: startIndex 
+		to: startIndex + max - 1
+		with: collection
+		startingAt: position + 1.
+	position := position + max.
+	^ max
+%
+
+! Class extensions for 'ReadWriteStreamPortable'
+
+!		Instance methods for 'ReadWriteStreamPortable'
+
+category: '*filesystem-gemstone-kernel'
+method: ReadWriteStreamPortable
+readInto: aCollection startingAt: startIndex count: n
+	"Read n objects into the given collection. 
+	Return number of elements that have been read."
+	
+	| max |
+	max := (readLimit - position) min: n.
+	aCollection 
+		replaceFrom: startIndex 
+		to: startIndex + max - 1
+		with: collection
+		startingAt: position + 1.
+	position := position + max.
+	^ max
+%
+
 ! Class extensions for 'SequenceableCollection'
 
 !		Class methods for 'SequenceableCollection'
@@ -1487,6 +1798,45 @@ new: size withAll: value
 
 !		Instance methods for 'SequenceableCollection'
 
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+allButFirst
+  "Answer a copy of the receiver containing all but the first
+	element. Raise an error if there are not enough elements."
+
+  ^ self allButFirst: 1
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+allButFirst: n
+	"Answer a copy of the receiver containing all but the first n
+	elements. Raise an error if there are not enough elements."
+
+	^ self copyFrom: n + 1 to: self size
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyAfterLast: anElement
+	"Answer a copy of the receiver from after the last occurence
+	of anElement up to the end. If no such element exists, answer 
+	an empty copy."
+
+	^ self allButFirst: (self lastIndexOf: anElement ifAbsent: [^ self copyEmpty])
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyLast: n
+	"Answer the last n elements of the receiver.  
+	Raise an error if there are not enough elements."
+
+	| size |
+	size := self size.
+	^ self copyFrom: size - n + 1 to: size
+%
+
 category: '*rowan-gemstone-kernel'
 method: SequenceableCollection
 copyUpTo: anObject
@@ -1499,6 +1849,114 @@ copyUpTo: anObject
 	idx == 0
 		ifTrue: [ ^ self copy ]
 		ifFalse: [ ^ self copyFrom: 1 to: idx - 1 ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyUpToLast: anElement
+  "Answer a copy of the receiver from index 1 to the last occurrence of 
+	anElement, not including anElement."
+
+	| n |
+	n :=  (self lastIndexOf: anElement ifAbsent: [ ^ self copy ]) - 1.
+  ^ self copyFrom: 1 to: n
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+copyWithFirst: newElement 
+	"Answer a copy of the receiver that is 1 bigger than the receiver with newElement as the first element."
+
+	| newIC |
+	newIC := self species new: self size + 1.
+	newIC 
+		replaceFrom: 2
+		to: self size + 1
+		with: self
+		startingAt: 1.
+	newIC at: 1 put: newElement.
+	^ newIC
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+grownBy: length
+	"Answer a copy of receiver collection with size grown by length"
+
+	| newCollection size |
+	size := self size.
+	newCollection := self species new: size + length.
+	newCollection replaceFrom: 1 to: size with: self startingAt: 1.
+	^ newCollection
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+lastIndexOf: anElement ifAbsent: exceptionBlock
+  "Answer the index of the last occurence of anElement within the  
+	receiver. If the receiver does not contain anElement, answer the
+	result of evaluating the argument, exceptionBlock."
+
+  ^ self lastIndexOf: anElement startingAt: self size ifAbsent: exceptionBlock
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+lastIndexOf: anElement startingAt: lastIndex ifAbsent: exceptionBlock
+  "Answer the index of the last occurence of anElement within the  
+	receiver. If the receiver does not contain anElement, answer the
+	result of evaluating the argument, exceptionBlock."
+
+  lastIndex to: 1 by: -1 do: [ :index | 
+    (self at: index) = anElement
+      ifTrue: [ ^ index ] ].
+  ^ exceptionBlock ~~ nil
+    ifTrue: [ exceptionBlock value ]
+    ifFalse: [ 0 ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+readStreamPortable
+
+	^ ReadStreamPortable on: self
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+replaceAll: oldObject with: newObject
+  "Replace all occurences of oldObject with newObject"
+
+  | index |
+  index := self indexOf: oldObject startingAt: 1 ifAbsent: [ 0 ].
+  [ index = 0 ]
+    whileFalse: [ 
+      self at: index put: newObject.
+      index := self indexOf: oldObject startingAt: index + 1 ifAbsent: [ 0 ] ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: SequenceableCollection
+reversed
+	"Answer a copy of the receiver with element order reversed."
+	"Example: 'frog' reversed"
+
+	| n result src |
+	n := self size.
+	result := self species new: n.
+	src := n + 1.
+	1 to: n do: [:i | result at: i put: (self at: (src := src - 1))].
+	^ result
+%
+
+! Class extensions for 'Stream'
+
+!		Instance methods for 'Stream'
+
+category: '*filesystem-gemstone-kernel'
+method: Stream
+isBinary
+	^false
 %
 
 ! Class extensions for 'SymbolDictionary'
@@ -1575,9 +2033,69 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 	^ clonedSymDict
 %
 
+! Class extensions for 'TestAsserter'
+
+!		Instance methods for 'TestAsserter'
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+assertCollection: actual equals: expected
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		assert: expected = actual
+		description: [ self comparingCollectionBetween: actual and: expected ]
+%
+
+category: '*filesystem-gemstone-kernel'
+method: TestAsserter
+comparingCollectionBetween: left and: right
+	| additionalLeft additionalRight sortBlock|
+	
+	"use a very slow sort block"
+	sortBlock := [ :a :b | a asString <= b asString ].
+	additionalLeft := (left difference: right) sort: sortBlock.
+	additionalRight := (right difference: left) sort: sortBlock. 
+	
+	^ String streamContents: [:stream |
+		stream
+			nextPutAll: 'Given Collections do not match. Got '; lf;
+			tab; nextPutAll: 'left := '; print: left; nextPut: $.; lf;
+			nextPutAll: ' instead of ';
+			tab; nextPutAll: ' right :='; print: right; nextPut: $.; lf.
+		left size = right size
+			ifFalse: [ 
+				stream 
+					nextPutAll: 'Collection size does not match: left='; 
+					print: left size;
+					nextPutAll: ' vs. right=';
+					print: right size; lf ].
+		additionalLeft isEmpty
+			ifFalse: [ 
+				stream 
+					nextPutAll: 'Got ';
+					print: additionalLeft size;
+					nextPutAll: ' additional element(s) in the left collection: ';
+					tab; print: additionalLeft  ].
+		additionalRight isEmpty
+			ifFalse: [ 
+				stream 
+					nextPutAll: 'Got ';
+					print: additionalRight size;
+					nextPutAll: ' additional element(s) in the right collection: ';
+					tab; print: additionalRight  ]]
+%
+
 ! Class extensions for 'UndefinedObject'
 
 !		Instance methods for 'UndefinedObject'
+
+category: '*filesystem-gemstone-kernel'
+method: UndefinedObject
+isEmptyOrNil
+  "Answer whether the receiver contains any elements, or is nil.  Useful in numerous situations where one wishes the same reaction to an empty collection or to nil"
+
+  ^ true
+%
 
 category: '*rowan-gemstone-kernel'
 method: UndefinedObject
@@ -1646,6 +2164,18 @@ options: optionsArray
       theClass _unsafeAt: superClassOffset put: nil.
       theClass class _unsafeAt: superClassOffset put: Object class superClass].
   ^theClass
+%
+
+! Class extensions for 'Utf8'
+
+!		Instance methods for 'Utf8'
+
+category: '*filesystem-gemstone-kernel'
+method: Utf8
+asByteArray
+	^ ByteArray streamContents: [ :stream |
+		self do: [ :each |
+			stream nextPut: each ] ]
 %
 
 

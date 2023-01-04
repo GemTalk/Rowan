@@ -50,7 +50,7 @@ doit
 
 	"UGLY hack PART 1: because embedded projects ignore conditionals IF the project is loaded in the
 		image .... WHAT WAS I THINKING ... at least it is fixed in v3.0"
-	ProjectSetDefinition :=  resolvedProject readProjectSet: customConditionalAttributes.
+	xProjectSetDefinition :=  resolvedProject readProjectSet: customConditionalAttributes.
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	theProjectSetDefinition 
