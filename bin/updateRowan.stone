@@ -158,7 +158,7 @@ method
 updateRowanV230
 	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.3 to Rowan v2.3'; lf.
+	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan v2.3'; lf.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
 	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
@@ -173,7 +173,7 @@ updateRowanV230
 		projectsHome: rowanClientServicesRepositoryRoot parent;
 		readonlyDiskUrl: 'file://', rowanClientServicesRepositoryRoot pathString.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
-	self stdout nextPutAll: '	load Rowan v2.3.0'; lf.
+	self stdout nextPutAll: '	load Rowan v2.3'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
 	(Rowan projectNamed: 'Rowan')
 		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
@@ -186,22 +186,25 @@ updateRowanV230
 	^ System commit
 %
 doit
-	| version |
 	self positionalArgs size ~= 1
 		ifTrue: [ self error: 'Expected a single positional argument specifying the path to the root directory of a GemStone product tree' ].
-	version := self rowanVersion.
-	version < ('2.0.0' asRwSemanticVersionNumber)
-		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0'].
-	version >= ('2.3.0' asRwSemanticVersionNumber)
+	self rowanVersion.
+	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
+		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
+	rowanVersion >= ('2.4.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			self stdout nextPutAll: 'No need to update ', rowanVersion printString; lf.
+			^ self ].
+	rowanVersion >= ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV230 ].
-	version = ('2.2.0' asRwSemanticVersionNumber)
+	rowanVersion = ('2.2.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV220 ].
-	version = ('2.0.0' asRwSemanticVersionNumber)
+	rowanVersion = ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [
-			self error: 'update from Rowan v', version printString , ' not currently functional'.
+			self error: 'update from Rowan v', rowanVersion printString , ' not currently functional'.
 			^ self updateRowanV200 ].
-	self error: 'update from Rowan v', version printString , ' not supported yet'.
+	self error: 'update from Rowan v', rowanVersion printString , ' not supported yet'.
 %
 
