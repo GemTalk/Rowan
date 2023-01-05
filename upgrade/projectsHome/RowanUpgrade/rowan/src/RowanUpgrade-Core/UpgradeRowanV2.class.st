@@ -1099,7 +1099,23 @@ UpgradeRowanV2 >> skipRepair: auditDetail [
 UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
+	| symbolList |
 self logMessage: 'GsFileIn oop: ', GsFileIn asOop printString, ' Obsolete GsFileIn oop: ', (ObsoleteClasses at: #GsFileIn) asOop printString, ' GsFileinPackager superclass oop: ', GsFileinPackager superclass asOop printString.
+	symbolList := GsSession currentSession symbolList.
+1 to: symbolList size do: [:idx |
+  | aDict |
+  aDict := symbolList at: idx.
+  aDict == nil
+    ifTrue:[ self logMessage: '	', idx printString, '. (nil)' ]
+    ifFalse:[
+      | aSymAssoc |
+      aSymAssoc:= aDict associationsDetect:[:anAssoc | anAssoc value == aDict]
+			ifNone:[ nil ].
+      aSymAssoc == nil
+        ifTrue:[ self logMessage: '	', idx printString, '. (unnamed Dictionary) : class: ', aDict class printString, ' oop: ', aDict asOOp printString.]
+        ifFalse:[ self logMessage: '	', idx printString, '. ', (aSymAssoc key), ' : class: ', aDict class printString, ' oop: ', aDict asOOp printString]
+      ].
+  ].
 
 	self logMessage: ' repair ROWAN audit failures'.
 	self auditForProjectsNamed: self rowanProjectNames.
