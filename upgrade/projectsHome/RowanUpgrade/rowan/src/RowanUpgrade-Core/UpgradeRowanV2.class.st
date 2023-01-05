@@ -1112,8 +1112,8 @@ self logMessage: 'GsFileIn oop: ', GsFileIn asOop printString, ' Obsolete GsFile
       aSymAssoc:= aDict associationsDetect:[:anAssoc | anAssoc value == aDict]
 			ifNone:[ nil ].
       aSymAssoc == nil
-        ifTrue:[ self logMessage: '	', idx printString, '. (unnamed Dictionary) : class: ', aDict class printString, ' oop: ', aDict asOOp printString.]
-        ifFalse:[ self logMessage: '	', idx printString, '. ', (aSymAssoc key), ' : class: ', aDict class printString, ' oop: ', aDict asOOp printString]
+        ifTrue:[ self logMessage: '	', idx printString, '. (unnamed Dictionary) : class: ', aDict class printString, ' oop: ', aDict asOop printString.]
+        ifFalse:[ self logMessage: '	', idx printString, '. ', (aSymAssoc key), ' : class: ', aDict class printString, ' oop: ', aDict asOop printString]
       ].
   ].
 
