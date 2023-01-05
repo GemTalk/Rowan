@@ -634,7 +634,8 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 						, className printString
 						, ' DOES match the handle for the loaded class in package '
 						, packageName printString ]
-		ifFalse: [ 
+		ifFalse: [
+false ifTrue: [ 
 			loadedClass handle ~~ theClass
 				ifFalse: [ 
 					"confirm the audit issue -- classes are identical"
@@ -643,7 +644,7 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 							'Invalid method audit details for repair of classesNotIdentical. The class named '
 								, className printString
 								, ' DOES match the handle for the loaded class in package '
-								, packageName printString ] ].
+								, packageName printString ] ] ].
 	(loadedPackage loadedClasses includesKey: className)
 		ifTrue: [ 
 			isClassExtension := false.
