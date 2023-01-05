@@ -601,7 +601,7 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 
 { #category : 'repair' }
 UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageName [
-	| loadedClass loadedPackage theClass |
+	| loadedClass loadedPackage theClass isClassExtension |
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
 	loadedClass := loadedPackage
@@ -613,23 +613,52 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 						, packageName , ' (No loaded class or loaded extension class found for '
 						, className printString , ' in package ' , packageName , ')' ].
 	theClass := Rowan globalNamed: className.
-	loadedClass handle ~~ theClass
-		ifFalse: [ 
-			"confirm the audit issue -- classes not identical"
+	(loadedClass handle ~~ theClass and: [ theClass classHistory size > 1 ])
+		ifTrue: [ 
+			"handle MAY be a previous version of the class"
+			1 to: loadedClass handle classHistory size - 1 do: [ :idx | 
+				loadedClass handle == (theClass classHistory at: idx)
+					ifTrue: [ 
+						"repair by splicing in the current version of the class ... a later load should patch method discrepancies"
+						loadedClass handle: theClass.
+						self
+							logMessage:
+								'	Repair classes not identical: ' , loadedClass name
+									, ' however handle is previous version of class (' , idx printString
+									, ') for package ' , packageName.
+						repairedCount := self repairedCount + 1.
+						^ self ] ].
 			self
 				error:
 					'Invalid method audit details for repair of classesNotIdentical. The class named '
 						, className printString
-						, ' does match the handle for the loaded class in package '
-						, packageName printString ].
+						, ' DOES match the handle for the loaded class in package '
+						, packageName printString ]
+		ifFalse: [ 
+			loadedClass handle ~~ theClass
+				ifFalse: [ 
+					"confirm the audit issue -- classes are identical"
+					self
+						error:
+							'Invalid method audit details for repair of classesNotIdentical. The class named '
+								, className printString
+								, ' DOES match the handle for the loaded class in package '
+								, packageName printString ] ].
 	(loadedPackage loadedClasses includesKey: className)
-		ifTrue: [ loadedPackage loadedClasses removeKey: className ]
-		ifFalse: [ loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
+		ifTrue: [ 
+			isClassExtension := false.
+			loadedPackage loadedClasses removeKey: className ]
+		ifFalse: [ 
+			isClassExtension := true.
+			loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
 	Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName.	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
 	self
 		logMessage:
-			'  Repair classes not identical: ' , loadedClass name , ' for package '
-				, packageName.
+			'  Repair classes not identical: ' , loadedClass name
+				,
+					(isClassExtension
+						ifTrue: [ ' extension' ]
+						ifFalse: [ '' ]) , ' for package ' , packageName.
 	repairedCount := self repairedCount + 1.
 ]
 
