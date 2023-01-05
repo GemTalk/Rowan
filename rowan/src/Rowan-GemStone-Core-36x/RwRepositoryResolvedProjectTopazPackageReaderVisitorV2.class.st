@@ -39,7 +39,7 @@ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 >> readPackages: packages
 							'--- reading package ' , packageName asString , ' dir ' , packageFile asString.
 					(self packageNamesBlock value: packageName)
 						ifTrue: [ 
-							GsFileinPackager
+							self gsFileinPackagerClass
 								toPackagesForDefinedProject: self currentProjectDefinition
 								componentName:
 									(self currentProjectDefinition componentForPackageNamed: packageName) name

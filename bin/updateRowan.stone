@@ -9,19 +9,13 @@ USAGE
   $basename [--help | -h] [--debug | -D] [OPTIONS] <product-tree-root>
 
 DESCRIPTION
-  Attach the standard Rowan development projects (Rowan and RowanClientServices)
-  to the disk-based, read only project source in a product tree (i.e. $GEMSTONE):
+  Update the version of Rowan to a version that is appropriate for the current
+  version of GemStone. 
 
-    Rowan               to $GEMSTONE/upgrade/projects/Rowan
-    RowanClientServices to $GEMSTONE/upgrade/projects/RowanClientServices
-    
-  Then reload Rowan and RowanClientServices.
-
-	This can be used to re-attach an image to the original versions of Rowan and
-	RowanClientServices after having used 
-  $GEMSTONE/examples/rowanV2/stone/attachRowanDevClones.stone or attach the 
-  image to the repositories associated with a GemStone version to which you plan
-  on upgrading.
+	This script is used as part of the upgrade process to make sure that Rowan
+  is functional enough prior to running upgradeImage so that it can be repaired
+  post upgradeImage, so that it can be used to load the latest version of Rowan
+  used in the image ... 
 
 OPTIONS
 	<product-tree-root>  path to root of product tree ($GEMSTONE). Note that you
