@@ -167,10 +167,6 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'UnPackaged-Globals'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
-				intoPackageNamed: 'Filein3B'.
-
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GsFileIn')
 				intoPackageNamed: 'Filein3B' ]
 ]
 
