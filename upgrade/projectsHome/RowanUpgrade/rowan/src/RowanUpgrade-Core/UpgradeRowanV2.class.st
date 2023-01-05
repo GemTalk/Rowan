@@ -1099,6 +1099,7 @@ UpgradeRowanV2 >> skipRepair: auditDetail [
 UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
+self halt.
 	self logMessage: ' repair ROWAN audit failures'.
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.
