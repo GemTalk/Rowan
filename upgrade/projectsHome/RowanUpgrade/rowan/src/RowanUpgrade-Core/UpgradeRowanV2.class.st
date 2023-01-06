@@ -31,7 +31,8 @@ Class {
 		'auditErrors',
 		'projectsHome',
 		'skip',
-		'shouldCommit'
+		'shouldCommit',
+		'savedTransientSymbolList'
 	],
 	#category : 'RowanUpgrade-Core'
 }
@@ -535,12 +536,20 @@ UpgradeRowanV2 >> reloadCustomer [
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> reloadGemstoneBase [
 	self adoptGemstoneBase.
+false ifTrue: [ 
+	savedTransientSymbolList
+		ifNotNil: [ GsSession currentSession transientSymbolList: savedTransientSymbolList ].
+].
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
 			[ (Rowan projectNamed: projectName) reload ]
 				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+				do: [ :ex | ex resume ] ].
+	savedTransientSymbolList
+		ifNotNil: [ 
+			"reset to original symbolList"
+			GsSession currentSession transientSymbolList: nil ]
 ]
 
 { #category : 'upgrade rowan' }
@@ -718,7 +727,7 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 		we put the symbol dictionary in the transient symbol list and disown
 		the package."
 
-	| loadedPackage symbolDictName sess transientSymbolList symbolDict |
+	| loadedPackage symbolDictName sess symbolDict |
 	loadedPackage := auditDetail owner.
 	symbolDictName := loadedPackage packageSymbolDictionaryName.
 	(#('GsCompilerClasses' 'ObsoleteClasses') includes: symbolDictName)
@@ -731,9 +740,9 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 							' is not in the list of repairable symbol dictionaries (GsCompilerClasses)' ].
 	sess := GsCurrentSession currentSession.
 	sess _transientSymbolList ifNil: [ System refreshTransientSymbolList ].
-	transientSymbolList := sess transientSymbolList.
+	savedTransientSymbolList := sess transientSymbolList.
 	symbolDict := Globals at: symbolDictName asSymbol.
-	transientSymbolList insertObject: symbolDict at: 1.
+	savedTransientSymbolList insertObject: symbolDict at: 1.
 
 	Rowan packageTools disown disownPackageNamed: loadedPackage key
 ]
@@ -1134,6 +1143,7 @@ self logMessage: 'GsFileIn oop: ', GsFileIn asOop printString, ' Obsolete GsFile
 UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 	"Use the gemstoneBaseImage project audit to repair the damaged Rowan metadata"
 
+	| sess |
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
 	self auditForProjectsNamed: self gemstoneBaseProjectNames.
 	self logMessage: ' repairing gemstoneBaseImage audit failures'.
@@ -1142,6 +1152,11 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 			repairedCount := 0.
 			self repairAuditFailures: self gemstoneBaseRepairMap.
 			self commit ].
+	sess := GsSession currentSession.
+	sess _transientSymbolList
+		ifNotNil: [ 
+			"was used in UpgradeRowanV2 >> repairLoadedPackageNotInRegistry so reset to clear any additions that may have been made"
+			sess transientSymbolList: nil ].
 	self
 		logMessage:
 			' gemstoneBaseImage audit repair COMPLETE (' , repairedCount printString

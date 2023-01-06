@@ -1335,8 +1335,7 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromSystem [
 RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ]
-
+	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ifAbsent: [] ]
 ]
 
 { #category : 'private - applying' }
