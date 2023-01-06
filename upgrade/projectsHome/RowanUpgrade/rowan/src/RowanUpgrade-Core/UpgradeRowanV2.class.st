@@ -526,24 +526,49 @@ UpgradeRowanV2 >> projectsHome: aPathString [
 { #category : 'upgrade customer' }
 UpgradeRowanV2 >> reloadCustomer [
 	| customerProjectNames |
-	customerProjectNames := self customerProjectNames reject: [:projectName | projectName = 'UnPackaged' ].
+	customerProjectNames := self customerProjectNames
+		reject: [ :projectName | projectName = 'UnPackaged' ].
 	customerProjectNames
 		do: [ :projectName | 
+			| project platformConditionalAttributes |
 			self logMessage: 'Loading ' , projectName.
-			(self globalNamed: 'Rowan') projectTools load loadProjectNamed: projectName ]
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			[ 
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				platformConditionalAttributes: platformConditionalAttributes ]
+				on: CompileWarning
+				do: [ :ex | ex resume ] ]
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> reloadGemstoneBase [
 	self adoptGemstoneBase.
-false ifTrue: [ 
-	savedTransientSymbolList
-		ifNotNil: [ GsSession currentSession transientSymbolList: savedTransientSymbolList ].
-].
+	false
+		ifTrue: [ 
+			savedTransientSymbolList
+				ifNotNil: [ GsSession currentSession transientSymbolList: savedTransientSymbolList ] ].
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
+			| project platformConditionalAttributes |
+			self logMessage: 'Loading ' , projectName.
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			[ 
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				platformConditionalAttributes: platformConditionalAttributes ]
 				on: CompileWarning
 				do: [ :ex | ex resume ] ].
 	savedTransientSymbolList
@@ -556,8 +581,18 @@ false ifTrue: [
 UpgradeRowanV2 >> reloadRowan [
 	self rowanProjectNames
 		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
+			| project platformConditionalAttributes |
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			[ 
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				platformConditionalAttributes: platformConditionalAttributes ]
 				on: CompileWarning
 				do: [ :ex | ex resume ] ]
 ]
