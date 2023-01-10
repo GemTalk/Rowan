@@ -126,7 +126,7 @@ GsFileinPackager >> _correctMethodProtocolFor: methodDef [
 GsFileinPackager >> _setClass: aString [
 	"GsFileinPackager does not use currentClassObj, since we're building definitions not classes"
 
-	currentClassName := aString
+	self _setCurrentClassName: aString
 ]
 
 { #category : 'processing' }

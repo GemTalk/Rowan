@@ -108,7 +108,7 @@ RwClsExtensionAuditTool >> auditGlobalFor: aLoadedClassExtension [
 								for: aLoadedClassExtension
 								reason: #'classesNotIdentical'
 								message:
-									'Installed class is not identical to the loaded class: '
+									'Installed class extension is not identical to the loaded class: '
 										, aLoadedClassExtension name).
 					^ false ] ].
 	^ true

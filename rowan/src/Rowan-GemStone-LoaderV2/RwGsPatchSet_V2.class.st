@@ -710,9 +710,7 @@ RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationFo
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addMethodMove: aRwMethodMove [
-
 	movedMethods add: aRwMethodMove
-
 ]
 
 { #category : 'building' }

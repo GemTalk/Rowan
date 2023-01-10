@@ -11316,7 +11316,7 @@ method: GsFileinPackager
 _setClass: aString
 	"GsFileinPackager does not use currentClassObj, since we're building definitions not classes"
 
-	currentClassName := aString
+	self _setCurrentClassName: aString
 %
 
 ! Class implementation for 'RwGemStoneVersionNumber'
@@ -65532,7 +65532,7 @@ auditGlobalFor: aLoadedClassExtension
 								for: aLoadedClassExtension
 								reason: #'classesNotIdentical'
 								message:
-									'Installed class is not identical to the loaded class: '
+									'Installed class extension is not identical to the loaded class: '
 										, aLoadedClassExtension name).
 					^ false ] ].
 	^ true
@@ -73995,7 +73995,7 @@ addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModificat
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> true -> oldMethod key
+ 							dictionary at: classModification key -> true -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
 										classDefinitionOrExtension: classModification before
@@ -74008,7 +74008,7 @@ addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModificat
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> false -> oldMethod key
+						dictionary at: classModification key -> false -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
@@ -74308,41 +74308,43 @@ addMethodsAddedByPackageModification: packageModification inProject: projectModi
 category: 'private - moves'
 method: RwProjectSetModification
 addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package inProject: project toDictionary: dictionary
-
-	classesOrExtensionsModification elementsModified do: 
-			[:classModification |
+	classesOrExtensionsModification elementsModified
+		do: [ :classModification | 
 			| classMethodsModification instanceMethodsModification |
 			classMethodsModification := classModification classMethodsModification.
-			instanceMethodsModification := classModification
-						instanceMethodsModification.
-			classMethodsModification elementsModified do: 
-					[:methodModification |
+			instanceMethodsModification := classModification instanceMethodsModification.
+			classMethodsModification elementsModified
+				do: [ :methodModification | 
 					methodModification after key
-						ifNil: 
-							[| oldMethod |
+						ifNil: [ 
+							| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> true -> oldMethod key
-								put: (RwMethodAdditionOrRemoval
+							dictionary
+								at: classModification key -> true -> oldMethod key
+								put:
+									(RwMethodAdditionOrRemoval
 										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification before
 										methodKey: oldMethod key
 										isMeta: true
-										methodsModification: classMethodsModification)]].
-			instanceMethodsModification elementsModified do: 
-					[:methodModification |
+										methodsModification: classMethodsModification) ] ].
+			instanceMethodsModification elementsModified
+				do: [ :methodModification | 
 					methodModification after key
-						ifNil: 
-							[| oldMethod |
+						ifNil: [ 
+							| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> false -> oldMethod key
-								put: (RwMethodAdditionOrRemoval
+							dictionary
+								at: classModification key -> false -> oldMethod key
+								put:
+									(RwMethodAdditionOrRemoval
 										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
 										methodKey: oldMethod key
 										isMeta: false
-										methodsModification: instanceMethodsModification)]]]
+										methodsModification: instanceMethodsModification) ] ] ]
 %
 
 category: 'private - moves'
@@ -74609,11 +74611,9 @@ updateForMethodMoveFrom: removal to: addition isMeta: isMeta
 	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
 		before.
 	newDefinition := (addition methodsModification
-		modificationOf: addition methodKey) after.
-	"Delete the removal and the addition."
+		modificationOf: addition methodKey) after.	"Delete the removal and the addition."
 	removal methodsModification removeModificationOf: removal methodKey.
-	addition methodsModification removeModificationOf: addition methodKey.
-	"Record the move."
+	addition methodsModification removeModificationOf: addition methodKey.	"Record the move."
 	movedMethods
 		add:
 			(RwMethodMove
@@ -74625,8 +74625,7 @@ updateForMethodMoveFrom: removal to: addition isMeta: isMeta
 				packageAfter: addition packageDefinition
 				projectBefore: removal projectDefinition
 				projectAfter: addition projectDefinition
-				isMeta: addition isMeta).
-	"Does the method have other modifications that need to be recorded?"
+				isMeta: addition isMeta).	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
 	methodModification
 		isMeta: isMeta;
@@ -74643,13 +74642,13 @@ updateForMethodMoves
 
 	| methodAdditions methodRemovals |
 	methodAdditions := self findAddedMethods.
-	methodRemovals := self findRemovedMethods.
-	"Any keys that match between added and removed should be considered a move."
-	methodAdditions keysAndValuesDo: 
-			[:key :addition |
+	methodRemovals := self findRemovedMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal
+				ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ]
 %
 
 category: 'private - moves'
@@ -76273,7 +76272,6 @@ addForcingNewClassVersionModification: aRwClassModificationForcingNewClassVersio
 category: 'building'
 method: RwGsPatchSet_V2
 addMethodMove: aRwMethodMove
-
 	movedMethods add: aRwMethodMove
 %
 
@@ -76934,7 +76932,7 @@ method: RwGsPatchSet_V2
 removeDeletedClassesFromTempSymbols
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ]
+	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ifAbsent: [] ]
 %
 
 category: 'private - applying'
@@ -78005,8 +78003,13 @@ addToNewClassesByNameSymbolList: newClassesByNameSymbolList
 category: 'deleting'
 method: RwGsClassDeletionSymbolDictPatchV2
 deleteClassFromSystem
-
-	self symbolDictionaryRegistry deleteClassNamedFromPackage: self className implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+	(Rowan globalNamed: self className)
+		ifNil: [ 
+			"class not present and that is okay"
+			^ self ].
+	self symbolDictionaryRegistry
+		deleteClassNamedFromPackage: self className
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 %
 
 category: 'accessing'
