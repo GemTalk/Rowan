@@ -146,7 +146,8 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				ReadByteStream, SshSocketError are new classes in 3.7.0 that need 
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages.
-			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used"
+			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
+			AbstractCharacter removed from System."
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
@@ -168,6 +169,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
 				intoPackageNamed: 'Filein3B'.
+
+			(Rowan globalNamed: 'AbstractCharacter')
+				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
 					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
@@ -433,6 +437,10 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'missingCompiledMethod' put: #'gemstoneBaseRepairMissingCompiledMethod:';
 		at: #'missingCompiledMethodsForLoadedClassExtension'
 			put: #'gemstoneBaseRepairMissingCompiledMethod:';
+		at: #'missingGemStoneClassForLoadedClass'
+			put: #'gemstoneBaseRepairMissingClassForLoadedClass:';
+		at: #'missingGemStoneClassForLoadedClassExtension'
+			put: #'gemstoneBaseRepairMissingClassForLoadedExtensionClass:';
 		at: #'missingLoadedMethod' put: #'gemstoneBaseRepairMissingLoadedMethod:';
 		at: #'methodsNotIdentical' put: #'gemstoneBaseRepairNonIdenticalMethod:';
 		at: #'differentClassInstVars' put: #'repairedWhenDefinitionsReloaded:';
@@ -440,6 +448,30 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'loadedPackageNotInRegistry' put: #'repairLoadedPackageNotInRegistry:';
 		yourself.
 	^ repairMap
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> gemstoneBaseRepairMissingClassForLoadedClass: auditDetail [
+	"missing class for loaded class (because upgradeImage has removed it) can be repaired by 
+		removing the loaded class"
+
+	self
+		repairMissingClassForLoadedClassNamed:
+			auditDetail owner name asString
+		isMeta: auditDetail owner handle isMeta
+		inPackageNamed: auditDetail owner loadedPackage name
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> gemstoneBaseRepairMissingClassForLoadedExtensionClass: auditDetail [
+	"missing class for extension class (because upgradeImage has removed it) can be repaired by 
+		removing the loaded class extension"
+
+	self
+		repairMissingClassForLoadedExtensionClassNamed:
+			auditDetail owner name asString
+		isMeta: auditDetail owner handle isMeta
+		inPackageNamed: auditDetail owner loadedPackage name
 ]
 
 { #category : 'repair' }
@@ -880,6 +912,56 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 	Rowan packageTools disown disownPackageNamed: loadedPackage key ]
 		ensure: [ sess transientSymbolList: nil ].
 	self logMessage: '  Repair missing loaded package: ' , loadedPackage key.
+	repairedCount := self repairedCount + 1.
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairMissingClassForLoadedClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	| loadedClass loadedPackage |
+	loadedPackage := (self globalNamed: 'Rowan') image
+		loadedPackageNamed: packageName.
+	loadedClass := loadedPackage loadedClasses
+		at: className
+		ifAbsent: [ 
+			self
+				error:
+					'  Could not repair missing loaded class: ' , className
+						,
+							(isMeta
+								ifTrue: [ ' class' ]
+								ifFalse: [ '' ]) , ' for package ' , packageName
+						, ' (No loaded class  found for ' , className printString , ' in package '
+						, packageName , ')' ].
+	loadedPackage removeLoadedClass: loadedClass.
+	self
+		logMessage:
+			'  Repair missing loaded class: ' , loadedClass name , ' for package '
+				, packageName.
+	repairedCount := self repairedCount + 1.
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairMissingClassForLoadedExtensionClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	| loadedClassExtension loadedPackage |
+	loadedPackage := (self globalNamed: 'Rowan') image
+		loadedPackageNamed: packageName.
+	loadedClassExtension := loadedPackage loadedClassExtensions
+		at: className
+		ifAbsent: [ 
+			self
+				error:
+					'  Could not repair missing loaded class extension: ' , className
+						,
+							(isMeta
+								ifTrue: [ ' class' ]
+								ifFalse: [ '' ]) , ' for package ' , packageName
+						, ' (No loaded class extension found for '
+						, className printString , ' in package ' , packageName , ')' ].
+	loadedPackage removeLoadedClassExtension: loadedClassExtension.
+	self
+		logMessage:
+			'  Repair missing loaded class extension: ' , loadedClassExtension name
+				, ' for package ' , packageName.
 	repairedCount := self repairedCount + 1.
 ]
 
