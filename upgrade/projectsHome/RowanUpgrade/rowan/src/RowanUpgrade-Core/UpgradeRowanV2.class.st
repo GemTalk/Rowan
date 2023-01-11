@@ -146,7 +146,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				ReadByteStream, SshSocketError are new classes in 3.7.0 that need 
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages.
-			old version of GsFileIn made obsolete and a new version of GsFileIn added"
+			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used"
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
@@ -168,13 +168,14 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
 				intoPackageNamed: 'Filein3B'.
-
-false ifTrue: [ 
-			Rowan packageTools disown disownClassNamed: 'GsFileIn'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GsFileIn')
-				intoPackageNamed: 'Filein3B' 
-] ]
+			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
+				do: [ :unusedUnPackagedPackageName | 
+					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
+						at: unusedUnPackagedPackageName
+						ifAbsent: [  ])
+						ifNotNil: [ :obsoleteClassesPackage | 
+							(Rowan projectNamed: 'UnPackaged') _loadedProject
+								removeLoadedPackage: obsoleteClassesPackage ] ] ]
 ]
 
 { #category : 'upgrade' }
@@ -871,10 +872,15 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 	symbolDict := Globals at: symbolDictName asSymbol.
 	transientSymList insertObject: symbolDict at: 1.	"needed for disownPackageNamed: to function correctly"
 
-self logMessage: 'inserted symbol dict ', symbolDictName printString, ' into transient symbol list'.
+	self
+		logMessage:
+			'	inserted symbol dict ' , symbolDictName printString
+				, ' into transient symbol list'.
 
 	Rowan packageTools disown disownPackageNamed: loadedPackage key ]
-		ensure: [ sess transientSymbolList: nil ]
+		ensure: [ sess transientSymbolList: nil ].
+	self logMessage: '  Repair missing loaded package: ' , loadedPackage key.
+	repairedCount := self repairedCount + 1.
 ]
 
 { #category : 'repair' }
