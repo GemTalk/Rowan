@@ -147,7 +147,8 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages.
 			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
-			AbstractCharacter removed from System."
+			AbstractCharacter removed from System.
+			New version of GsFileIn ... old version added to ObsoleteClasses."
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
@@ -172,6 +173,11 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			(Rowan globalNamed: 'AbstractCharacter')
 				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
+			((Rowan globalNamed: 'ObsoleteClasses') at: #'GsFileIn' ifAbsent: [  ])
+				ifNotNil: [ :obsoleteGsFileInClass | 
+					obsoleteGsFileInClass
+						_extraDictRemoveKey:
+							RwGsSymbolDictionaryRegistry_ImplementationV2 _loadedClassKey ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
 					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
@@ -933,11 +939,16 @@ UpgradeRowanV2 >> repairMissingClassForLoadedClassNamed: className isMeta: isMet
 						, ' (No loaded class  found for ' , className printString , ' in package '
 						, packageName , ')' ].
 	loadedPackage removeLoadedClass: loadedClass.
+	(ObsoleteClasses at: className asSymbol ifAbsent: [  ])
+		ifNotNil: [ :class | 
+			(self globalNamed: 'RwGsSymbolDictionaryRegistry_ImplementationV2')
+				unregisterLoadedClass: loadedClass
+				forClass: class ].
 	self
 		logMessage:
 			'  Repair missing loaded class: ' , loadedClass name , ' for package '
 				, packageName.
-	repairedCount := self repairedCount + 1.
+	repairedCount := self repairedCount + 1
 ]
 
 { #category : 'repair' }
