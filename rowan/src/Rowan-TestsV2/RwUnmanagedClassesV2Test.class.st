@@ -140,6 +140,7 @@ RwUnmanagedClassesV2Test >> setUp [
 RwUnmanagedClassesV2Test >> tearDown [
 	self _removeUnmanagedClass.
 	super tearDown.
+	Rowan gemstoneTools topaz currentTopazPackageName: nil
 ]
 
 { #category : 'tests' }
