@@ -139,7 +139,7 @@ updateRowanV220
 	self stdout nextPutAll: '	load Rowan v2.3.0'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
 	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'v2Only' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
 	rowanClientServicesProject _loadSpecification 
 		projectsHome: rowanClientServicesRepositoryRoot parent;
@@ -172,7 +172,7 @@ updateRowanV230
 self stdout nextPutAll: '[DEBUG] platform conditional attributes: ', Rowan platformConditionalAttributes printString; lf.
 self stdout nextPutAll: '[DEBUG] project platform conditional attributes: ', (Rowan projectNamed: 'Rowan') projectDefinitionPlatformConditionalAttributes printString; lf.
 	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'v2Only' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
 	rowanClientServicesProject _loadSpecification 
 		projectsHome: rowanClientServicesRepositoryRoot parent;

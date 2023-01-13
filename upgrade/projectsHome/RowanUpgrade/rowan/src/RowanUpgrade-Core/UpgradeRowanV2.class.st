@@ -173,11 +173,12 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			(Rowan globalNamed: 'AbstractCharacter')
 				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
-			((Rowan globalNamed: 'ObsoleteClasses') at: #'GsFileIn' ifAbsent: [  ])
+			((Rowan globalNamed: 'ObsoleteClasses')
+				at: #'ObsoleteGsFileIn'
+				ifAbsent: [  ])
 				ifNotNil: [ :obsoleteGsFileInClass | 
-					obsoleteGsFileInClass
-						_extraDictRemoveKey:
-							RwGsSymbolDictionaryRegistry_ImplementationV2 _loadedClassKey ].
+					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
+						ifTrue: [ Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
 					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
@@ -611,8 +612,24 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				platformConditionalAttributes: platformConditionalAttributes ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+				on: CompileWarning , RwExecuteClassInitializeMethodsAfterLoadNotification
+				do: [ :ex | 
+					(ex isKindOf: CompileWarning)
+						ifTrue: [ ex resume ]
+						ifFalse: [ 
+							(ex isKindOf: RwExecuteClassInitializeMethodsAfterLoadNotification)
+								ifTrue: [ 
+									"skip auto initialization for certain classes"
+									({GsCurrentSession.
+									GsPackagePolicy.
+									Upgrade1B.
+									Upgrade2A.
+									Upgrade2C.
+									Upgrade3Init} includes: ex candidateClass)
+										ifTrue: [ 
+											"skip initialization"
+											ex resume: false ]
+										ifFalse: [ ex resume: true ] ] ] ] ]
 ]
 
 { #category : 'upgrade rowan' }
