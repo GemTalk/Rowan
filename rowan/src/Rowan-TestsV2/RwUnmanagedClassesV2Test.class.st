@@ -140,7 +140,9 @@ RwUnmanagedClassesV2Test >> setUp [
 RwUnmanagedClassesV2Test >> tearDown [
 	self _removeUnmanagedClass.
 	super tearDown.
-	Rowan gemstoneTools topaz currentTopazPackageName: nil
+	Rowan gemstoneTools topaz
+		currentTopazPackageName: nil;
+		currentTopazProjectName: nil
 ]
 
 { #category : 'tests' }
@@ -1365,8 +1367,15 @@ baz ^3
 
 	self assert: (managedClass categoryOfSelector: #'bar') identical: #'managed'.
 	self assert: (managedClass categoryOfSelector: #'baz') identical: #'extension'.
+	self assert: managedClass rowanPackageName equals: packageName1.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'bar') rowanPackageName equals: packageName1.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'baz') rowanPackageName equals: packageName2.
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
+	(GsFileIn newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 

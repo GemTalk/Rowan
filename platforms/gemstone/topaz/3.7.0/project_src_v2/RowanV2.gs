@@ -10808,14 +10808,6 @@ classMethod
 
 category: 'processing'
 method: GsFileinPackager
-classMethod: aString
-
-	aString ifNotNil:[ self currentClass: aString ].
-	self classMethod.
-%
-
-category: 'processing'
-method: GsFileinPackager
 commit
 	^ GsSession isSolo
 		ifFalse: [ super commit ]
@@ -11126,13 +11118,6 @@ method
 					"opportunity to automatically correct method protocol"
 					self _correctMethodProtocolFor: methodDef ] ]
 		ifNil: [ super method ]
-%
-
-category: 'processing'
-method: GsFileinPackager
-method: aString
-	aString ifNotNil:[ self currentClass: aString ].
-	self method.
 %
 
 category: 'accessing'

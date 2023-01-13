@@ -699,7 +699,9 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 { #category : 'running' }
 RwRowanSample9Test >> tearDown [
 	super tearDown.
-	Rowan gemstoneTools topaz currentTopazPackageName: nil
+	Rowan gemstoneTools topaz
+		currentTopazPackageName: nil;
+		currentTopazProjectName: nil
 ]
 
 { #category : 'audit tests' }

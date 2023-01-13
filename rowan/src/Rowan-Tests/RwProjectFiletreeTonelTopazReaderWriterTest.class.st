@@ -18,6 +18,14 @@ RwProjectFiletreeTonelTopazReaderWriterTest >> _repositoryFormat [
 	^ self subclassResponsibility: #_repositoryFormat
 ]
 
+{ #category : 'running' }
+RwProjectFiletreeTonelTopazReaderWriterTest >> tearDown [
+	super tearDown.
+	Rowan gemstoneTools topaz
+		currentTopazPackageName: nil;
+		currentTopazProjectName: nil
+]
+
 { #category : 'tests' }
 RwProjectFiletreeTonelTopazReaderWriterTest >> testWriterReader_A [
 

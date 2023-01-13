@@ -3,8 +3,6 @@ RwPlatformNestedProjectLoadComponentV2 {
 	#condition : [
 		'gs3.[6-]'
 	],
-	#projectNames : [ ],
-	#componentNames : [ ],
 	#packageNames : [
 		'STON-Tests-36x'
 	],
