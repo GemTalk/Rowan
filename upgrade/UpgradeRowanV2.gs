@@ -1,4 +1,4 @@
-! Copyright (C) GemTalk Systems 1986-2022.  All Rights Reserved.
+! Copyright (C) GemTalk Systems 1986-2023.  All Rights Reserved.
 ! Class extensions for 'AbstractDictionary'
 
 !		Instance methods for 'AbstractDictionary'
