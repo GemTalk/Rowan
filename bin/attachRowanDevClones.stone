@@ -36,7 +36,9 @@ attachRowanProjects
 	gitUrl := rowanProject loadSpecification gitUrl.
 	(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
 		ifTrue: [ 
-			"already attached"
+			"project has already been attached ... reload the project"
+			rowanProject reload.
+			self logMessage: 'Rowan project reloaded'.
 			^ self ].
 	loadSpecs := rowanProject loadedLoadSpecifications.
 	loadSpecs do: [:loadSpec |
@@ -67,6 +69,7 @@ attachRowanProjects
 						loadSpec projectsHome: '$ROWAN_PROJECTS_HOME';
 							yourself ] ] ].
 	loadSpecs load. 
+	self logMessage: 'Rowan project attached and reloaded' 
 %
 doit
 	| rowanProject loadSpecs gitUrl |
@@ -81,6 +84,7 @@ doit
 	(self archBase
 		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
 		ifNotNil: [:value | value ])
+		ifNil: [ self logMessage: 'ARCHBASE not set, so gemstoneBaseImage project not attached and not loaded']
 		ifNotNil: [:value |
 			"attach gemstoneBaseImage project"
 			| loadSpec |
@@ -89,13 +93,17 @@ doit
 		 	loadSpec := (Rowan projectNamed: 'gemstoneBaseImage') loadSpecification.
 			gitUrl := loadSpec gitUrl.
 			(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
-					ifTrue: [ "already attached ... noop" ] 
+					ifTrue: [ 
+						"project already attached, so reload"
+						loadSpec load.
+						self logMessage: 'gemstoneBaseImage reloaded' ] 
 					ifFalse: [
 						loadSpec
 							gitUrl: 'file:', ('$ARCHBASE' asFileReference pathString);
 							projectSpecFile: 'image/rowan/project_attached.ston';
 							addCustomConditionalAttributes: #('tests');
-							load  ] ].
+							load.
+						self logMessage: 'gemstoneBaseImage project attached and reloaded' ] ].
 	self attachRowanProjects.
 	^ System commit
 %
