@@ -235,7 +235,10 @@ RwLoadSpecificationV2 >> diskUrl: anUrlString [
 { #category : 'exporting' }
 RwLoadSpecificationV2 >> exportTo: directoryReference [
 	directoryReference / self specName , 'ston'
-		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+		writeStreamDo:
+			[ :fileStream |
+			fileStream truncate.
+			self exportToStream: fileStream ]
 ]
 
 { #category : 'exporting' }

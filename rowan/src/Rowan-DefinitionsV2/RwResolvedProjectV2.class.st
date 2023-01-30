@@ -419,6 +419,7 @@ RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: pa
 	sourceProjectSetDefinition := diskProjectSetDefinition.
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;

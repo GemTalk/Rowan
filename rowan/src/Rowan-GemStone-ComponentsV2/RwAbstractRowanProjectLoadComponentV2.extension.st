@@ -24,6 +24,7 @@ RwAbstractRowanProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 			fileRef
 				writeStreamDo: [ :stream | 
 					| string |
+					stream truncate.
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
@@ -33,6 +34,7 @@ RwAbstractRowanProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 				/ self name , 'ston'
 				writeStreamDo: [ :stream | 
 					| string |
+					stream truncate.
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].

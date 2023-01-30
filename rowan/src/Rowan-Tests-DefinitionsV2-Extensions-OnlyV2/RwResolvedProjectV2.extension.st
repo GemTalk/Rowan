@@ -33,6 +33,7 @@ RwResolvedProjectV2 >> exportPharoTonelFormatV1Packages: diskProjectSetDefinitio
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;

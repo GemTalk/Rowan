@@ -97,7 +97,9 @@ RwProjectSpecificationV2 >> componentsPath: aString [
 RwProjectSpecificationV2 >> exportTo: directoryReference [
 
 	(directoryReference / self projectSpecPath / self specName, 'ston')
-		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+		writeStreamDo: [ :fileStream |
+			fileStream truncate.
+			STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
 { #category : 'comparing' }

@@ -3658,6 +3658,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 		ifNotNil: [ 
 			resolvedRepository repositoryRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
+					fileStream truncate.
 					fileStream
 						nextPutAll: '# ' , projectName , ' - ' , specName;
 						lf;
