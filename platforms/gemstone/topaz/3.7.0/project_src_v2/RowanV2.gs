@@ -92666,6 +92666,31 @@ rowanProjectName
 	^ loadedMethod loadedProject name
 %
 
+category: '*rowan-gemstone-kernel-stubs-37x'
+method: GsNMethod
+_rwRecompileFromSourceIfUnpackagedDo: unpackagedBlock
+	"If the method is packaged, then we need to force a recompile of the method, 
+		since method source is not being changed"
+
+	| packageName |
+	packageName := self rowanPackageName.
+	packageName = Rowan unpackagedName
+		ifFalse: [
+			"method is packaged, so force the method to be recompiled ... remember that the source is identical"
+			| theClass loadedMethod |
+			theClass := self inClass.
+			loadedMethod := Rowan image
+				loadedMethodForMethod: self.
+			Rowan projectTools browser
+				forceRecompileMethod: self sourceString
+				dictionaries: GsCurrentSession currentSession symbolList
+				inProtocol: loadedMethod methodCategory
+				forClassNamed: theClass name asString
+				isMeta: theClass isMeta
+				inPackageNamed: packageName ].
+	^ unpackagedBlock value
+%
+
 ! Class extensions for 'Integer'
 
 !		Class methods for 'Integer'

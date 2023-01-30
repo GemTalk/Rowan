@@ -501,6 +501,16 @@ RwBrowserToolApiTest >> testDeletePackage [
 ]
 
 { #category : 'tests' }
+RwBrowserToolApiTest >> testIssue893 [
+
+	| before after |
+	before := RwSpecification class compiledMethodAt: #fromUrl:.
+	before recompileFromSource.
+	after :=  RwSpecification class compiledMethodAt: #fromUrl:.
+	self deny: before asOop equals: after asOop
+]
+
+{ #category : 'tests' }
 RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 
 	"set up projects and packages for hybrid browser implementation"

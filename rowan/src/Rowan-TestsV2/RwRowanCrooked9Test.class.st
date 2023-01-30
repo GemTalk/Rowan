@@ -23,18 +23,20 @@ RwRowanCrooked9Test class >> _checkoutBranchNamed: branchName [
 	| gitTools branchPulledDict gitRoot repositoryRoot |
 	gitTools := Rowan gitTools.
 	gitRoot := self _testRowanProjectsSandbox.
-	repositoryRoot :=  gitRoot / 'RowanCrooked9'.
+	repositoryRoot := gitRoot / 'RowanCrooked9'.
 	(SessionTemps current at: self _branchSessionCacheKey ifAbsent: [  ])
 		ifNotNil: [ 
 			"repository has been cloned"
 			 ]
 		ifNil: [ 
+			| cloneUrl |
+			cloneUrl := (System gemEnvironmentVariable: 'USER') = 'dhenrich'
+				ifTrue: [ 'git@github.com:dalehenrich/RowanCrooked9.git' ]
+				ifFalse: [ 'https://git@github.com/dalehenrich/RowanCrooked9' ].
 			repositoryRoot exists
 				ifFalse: [ 
 					"clone the project"
-					gitTools
-						gitcloneIn: gitRoot pathString
-						with: 'git@github.com:dalehenrich/RowanCrooked9.git' ] ].
+					gitTools gitcloneIn: gitRoot pathString with: cloneUrl ] ].
 	branchPulledDict := SessionTemps current
 		at: self _gitPullSessionCacheKey
 		ifAbsentPut: [ Dictionary new ].
@@ -48,7 +50,6 @@ RwRowanCrooked9Test class >> _checkoutBranchNamed: branchName [
 				yourself.
 			branchPulledDict at: branchName put: true ].
 	^ branchName
-
 ]
 
 { #category : 'private' }

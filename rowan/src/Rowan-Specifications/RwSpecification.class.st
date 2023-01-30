@@ -9,7 +9,7 @@ RwSpecification class >> _supportedPlatformNames [
 	^ #('gemstone' 'pharo' 'squeak' 'vast')
 ]
 
-{ #category : 'instance creation' }
+{ #category : '(as yet unclassified)' }
 RwSpecification class >> fromUrl: specNameOrUrl [
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
 
