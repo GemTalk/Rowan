@@ -67502,6 +67502,95 @@ exposeRowanToolsSymbolDictionary
 	transient insertObject: dict at: size + 1.
 %
 
+category: 'modification short cuts'
+method: RwPrjBrowserToolV2
+forceRecompileLoadedMethod: loadedMethod dictionaries: symbolList forClassNamed: className isMeta: isMeta
+	"direct creation of the modifications needed to force recompile of the method "
+
+	"https://github.com/GemTalk/Rowan/issues/893"
+
+	| methodDef source methodModification loadedClass classDef classModification instanceMethodsModification classMethodsModification methodModificationClass loadedPackage packageDef packageModification classesModification loadedProject projectDef projectModification packagesModification sourceModification projectSetModification |
+	methodDef := loadedMethod asDefinition.
+	loadedClass := loadedMethod loadedClass.
+	classDef := loadedClass asDefinition.
+
+	methodModificationClass := loadedClass isLoadedClassExtension
+		ifTrue: [ RwExtensionMethodModification ]
+		ifFalse: [ RwMethodModification ].
+	methodModification := methodModificationClass
+		before: methodDef
+		after: methodDef.
+	methodModification
+		classDefinition: classDef;
+		isMeta: isMeta.
+
+	source := methodDef source.
+	sourceModification := RwSourceModification new
+		_addElementModification:
+				(RwPropertyModification key: 'source' oldValue: source newValue: source);
+		yourself.
+	methodModification
+		propertiesModification: RwPropertiesModification new;
+		sourceModification: sourceModification.
+
+	classModification := classDef _modificationClass
+		before: classDef
+		after: classDef.
+	classModification
+		propertiesModification: RwPropertiesModification new;
+		yourself.
+	classModification
+		propertiesModification: RwPropertiesModification new;
+		yourself.
+	instanceMethodsModification := classDef _methodsModificationClass
+		extendedClassName: classDef name.
+	classMethodsModification := classDef _methodsModificationClass
+		extendedClassName: classDef name.
+	isMeta
+		ifTrue: [ instanceMethodsModification _addElementModification: methodModification ]
+		ifFalse: [ classMethodsModification _addElementModification: methodModification ].
+	classModification
+		instanceMethodsModification: instanceMethodsModification;
+		classMethodsModification: classMethodsModification.
+
+	loadedPackage := loadedClass loadedPackage.
+	packageDef := loadedPackage asDefinition.
+	packageModification := RwPackageModification
+		before: packageDef
+		after: packageDef.
+	packageModification propertiesModification: RwPropertiesModification new.
+	classesModification := loadedClass isLoadedClassExtension
+		ifTrue: [ RwClassesModification new ]
+		ifFalse: [ RwClassExtensionsModification new ].
+	classesModification _addElementModification: classModification.
+	loadedClass isLoadedClassExtension
+		ifTrue: [ 
+			packageModification
+				classesModification: RwClassesModification new;
+				classExtensionsModification: classesModification ]
+		ifFalse: [ 
+			packageModification
+				classesModification: classesModification;
+				classExtensionsModification: RwClassExtensionsModification new ].
+
+	loadedProject := loadedPackage loadedProject.
+	projectDef := loadedProject asDefinition.
+	projectModification := RwProjectModification
+		before: projectDef
+		after: projectDef.
+	projectModification propertiesModification: RwPropertiesModification new.
+	packagesModification := RwPackagesModification new.
+	projectModification packagesModification: packagesModification.
+	packagesModification _addElementModification: packageModification.
+
+	projectSetModification := RwProjectSetModification new _addElementModification: projectModification.
+
+	Rowan image
+		applyModification_V2: projectSetModification
+		instanceMigrator: Rowan platform instanceMigrator
+		symbolList: symbolList
+%
+
 category: 'method browsing'
 method: RwPrjBrowserToolV2
 isExtensionMethod: methodSelector forClassNamed: className isMeta: isMeta
@@ -73816,9 +73905,8 @@ new
 category: 'modifications'
 method: RwElementsModification
 addElementModification: aModification
-
 	aModification isEmpty
-		ifFalse: [elementsModified at: aModification key put: aModification]
+		ifFalse: [ self _addElementModification: aModification ]
 %
 
 category: 'Accessing'
@@ -73861,6 +73949,13 @@ method: RwElementsModification
 removeModificationOf: aKey
 
 	elementsModified removeKey: aKey
+%
+
+category: 'modifications'
+method: RwElementsModification
+_addElementModification: aModification
+
+	elementsModified at: aModification key put: aModification
 %
 
 ! Class implementation for 'RwClassesModification'
@@ -74782,13 +74877,8 @@ acceptVisitor: aVisitor
 category: 'modifications'
 method: RwExtensionMethodsModification
 addElementModification: aModification
-
 	aModification isEmpty
-		ifFalse: [ 
-			| anExtensionModification |
-			anExtensionModification := aModification asExtensionMethodModification.
-			anExtensionModification extendedClassName: self extendedClassName.
-			elementsModified at: anExtensionModification key put: anExtensionModification ]
+		ifFalse: [ self _addElementModification: aModification ]
 %
 
 category: 'accessing'
@@ -74803,6 +74893,15 @@ method: RwExtensionMethodsModification
 extendedClassName: anObject
 
 	extendedClassName := anObject
+%
+
+category: 'modifications'
+method: RwExtensionMethodsModification
+_addElementModification: aModification
+	| anExtensionModification |
+	anExtensionModification := aModification asExtensionMethodModification.
+	anExtensionModification extendedClassName: self extendedClassName.
+	elementsModified at: anExtensionModification key put: anExtensionModification
 %
 
 ! Class implementation for 'RwPackagesModification'
@@ -85630,7 +85729,7 @@ _validate: platformConfigurationAttributes
 
 !		Class methods for 'RwSpecification'
 
-category: 'instance creation'
+category: '(as yet unclassified)'
 classmethod: RwSpecification
 fromUrl: specNameOrUrl
 	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
