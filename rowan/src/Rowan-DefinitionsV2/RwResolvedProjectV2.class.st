@@ -460,7 +460,7 @@ RwResolvedProjectV2 >> exportProjects [
 	self projectNames isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+			(self projectsRoot / 'README' , 'md') ensureCreateFile ]
 ]
 
 { #category : 'exporting' }

@@ -3703,6 +3703,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			indexCardDict at: card specName put: card ].
 	resolvedRepository repositoryRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '# ' , projectName;
 				lf;

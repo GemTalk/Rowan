@@ -312,7 +312,7 @@ RwResolvedLoadComponentsV2 >> export: componentsRoot [
 	self components isEmpty
 		ifTrue: [
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+			(componentsRoot /  'README', 'md') ensureCreateFile ]
 ]
 
 { #category : 'gemstone support' }
