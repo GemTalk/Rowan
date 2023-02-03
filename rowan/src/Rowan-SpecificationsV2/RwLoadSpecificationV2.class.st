@@ -493,7 +493,7 @@ RwLoadSpecificationV2 >> projectName: aString [
 RwLoadSpecificationV2 >> projectsHome [
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
-	^ projectsHome ifNil: [FileLocator rowanProjectsHome ]
+	^ projectsHome ifNil: [FileLocator origin: #'ROWAN_PROJECTS_HOME']
 ]
 
 { #category : 'accessing' }
