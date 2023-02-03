@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 23,
 		"failures" : 14,
-		"passed" : 1406,
-		"summary" : "1443 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 322.65s",
-		"tests" : 1443,
-		"time" : 322.652
+		"passed" : 1407,
+		"summary" : "1444 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 261.77s",
+		"tests" : 1444,
+		"time" : 261.766
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -3571,6 +3571,12 @@
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testIssue471_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue893",
 			"time" : "0"
 		},
 		{
@@ -8674,5 +8680,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-25T12:26:24.093054-07:00"
+	"timeStamp" : "2023-02-02T16:40:04.542224-08:00"
 }

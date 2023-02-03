@@ -227,10 +227,8 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> projectUrl [
 
 { #category : 'definitions' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
-
 	| props |
 	props := super propertiesForDefinition.
-self halt.
 	props at: 'projectRef' put: handle copy.
 	^ props
 ]

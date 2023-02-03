@@ -233,11 +233,12 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
 
 	theClass  rowanPackageName ~= packageName
-		ifTrue: [ 
+		ifTrue: [  
 			registry
-				addExtensionCompiledMethod: theCompiledMethod 
+				adoptCompiledMethod: theCompiledMethod 
+				classExtension: true
 				for: theBehavior 
-				protocol: protocolString 
+				protocol: protocolString
 				toPackageNamed: packageName ]
 		ifFalse: [ 
 			registry

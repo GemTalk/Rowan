@@ -178,7 +178,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				ifAbsent: [  ])
 				ifNotNil: [ :obsoleteGsFileInClass | 
 					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
-						ifTrue: [ Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
+						ifTrue: [ 
+							self logMessage: 'Disown ObsoleteClasses'.
+							Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
 					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
@@ -223,6 +225,7 @@ UpgradeRowanV2 >> countAuditErrors [
 UpgradeRowanV2 >> customerProjectNames [
 	^ (self globalNamed: 'Rowan') projectNames
 		removeAllPresent: self rowanProjectNames;
+		removeAllPresent: self gemstoneBaseProjectNames;
 		yourself
 ]
 
@@ -243,6 +246,7 @@ UpgradeRowanV2 >> customerRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'CUSTOMER';
 		at: #'differentMethodCategory' put: #'customerRepairDifferentMethodCategory:';
 		at: #'missingExtensionCategory' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'missingCompiledMethod' put: #'customerRepairMissingCompiledMethod:';
@@ -391,6 +395,54 @@ UpgradeRowanV2 >> cypressClassNames [
 	'CypressDependencySorter'}
 ]
 
+{ #category : 'private' }
+UpgradeRowanV2 >> debugToLog [
+	| defs |
+	defs := (Rowan image loadedPackageNamed: 'Filein4Rowan')
+		classExtensionDefinitions at: 'GsNMethod' ifAbsent: [  ].
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName.
+			self
+				logMessage:
+					'[DEBUG]	[1] gemstoneBaseImage dirty: '
+						, (Rowan projectNamed: 'gemstoneBaseImage') isDirty printString.
+
+			defs
+				ifNotNil: [ 
+					self
+						logMessage:
+							'[DEBUG]	[2] is method definition present in Filein4Rowan: '
+								,
+									(defs instanceMethodDefinitions
+										at: '_rwRecompileFromSourceIfUnpackagedDo:'
+										ifAbsent: [  ]) printString ]
+				ifNil: [ self logMessage: '[DEBUG]	[3] is method definition NOT present in Filein4Rowan ' ] ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT'.
+			self
+				logMessage:
+					'[DEBUG]	[4] gemstoneBaseImage dirty: '
+						, (Rowan projectNamed: 'gemstoneBaseImage') isDirty printString.
+			defs
+				ifNotNil: [ 
+					self
+						logMessage:
+							'[DEBUG]	[5] is method definition present in Filein4Rowan: '
+								,
+									(defs instanceMethodDefinitions
+										at: '_rwRecompileFromSourceIfUnpackagedDo:'
+										ifAbsent: [  ]) printString ]
+				ifNil: [ self logMessage: '[DEBUG]	[6] is method definition NOT present in Filein4Rowan ' ] ]
+]
+
 { #category : 'accessing' }
 UpgradeRowanV2 >> errorMessages [
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
@@ -437,6 +489,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'gemstoneBaseImage';
 		at: #'classesNotIdentical' put: #'gemstoneBaseRepairClassesNotIdentical:';
 		at: #'differentMethodCategory'
 			put: #'gemstoneBaseRepairDifferentMethodCategory:';
@@ -502,6 +555,15 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 		by a new compiled method thus losing the reference the loaded method, 
 		can be repaired by splicing the loaded method into the new compiled method"
 
+	(auditDetail behavior = GsNMethod
+		and: [ auditDetail selector asString = '_rwRecompileFromSourceIfUnpackagedDo:' ])
+		ifTrue: [ 
+			"https://github.com/GemTalk/Rowan/issues/895"
+			self
+				logMessage:
+					'Skipping repair of ' , auditDetail behavior printString , ' >> '
+						, auditDetail selector , ' because .... it''s complicated address in v3.0'.
+			^ self ].
 	self
 		repairMissingLoadedMethod:
 			auditDetail behavior printString , ' >> ' , auditDetail selector
@@ -578,7 +640,7 @@ UpgradeRowanV2 >> reloadCustomer [
 	customerProjectNames
 		do: [ :projectName | 
 			| project platformConditionalAttributes |
-			self logMessage: 'Loading ' , projectName.
+			self logMessage: 'Customer loading ' , projectName.
 			project := Rowan projectNamed: projectName.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
@@ -600,7 +662,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
 			| project platformConditionalAttributes |
-			self logMessage: 'Loading ' , projectName.
+			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
 			project := Rowan projectNamed: projectName.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
@@ -634,9 +696,22 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
-	self rowanProjectNames
+	| theProjectSetDefinition |
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :meth | 
+			meth rowanPackageName = 'Filein4Rowan'
+				ifTrue: [ 
+					self logMessage: 'Disown GsNMethod>>_rwRecompileFromSourceIfUnpackagedDo:'.
+					Rowan packageTools disown
+						disownMethod: #'_rwRecompileFromSourceIfUnpackagedDo:'
+						inClassNamed: 'GsNMethod'
+						isMeta: false ] ].
+	theProjectSetDefinition := RwProjectSetDefinition new.
+	#('Rowan')
 		do: [ :projectName | 
-			| project platformConditionalAttributes |
+			| project platformConditionalAttributes aProjectSet |
 			project := Rowan projectNamed: projectName.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
@@ -644,12 +719,19 @@ UpgradeRowanV2 >> reloadRowan [
 					(attribute isKindOf: RwGemStoneVersionNumber)
 						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
 						ifFalse: [ attribute ] ].
-			[ 
-			Rowan projectTools load
-				loadProjectNamed: projectName
-				platformConditionalAttributes: platformConditionalAttributes ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+			aProjectSet := project _loadedProject asDefinition
+				readProjectSet: platformConditionalAttributes.
+			aProjectSet
+				do: [ :projectDef | theProjectSetDefinition addDefinition: projectDef ] ].
+	[ Rowan projectTools load loadProjectSetDefinition: theProjectSetDefinition ]
+		on: CompileWarning
+		do: [ :ex | ex resume ].
+	self
+		logMessage:
+			'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+				,
+					(GsNMethod compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:')
+						rowanPackageName
 ]
 
 { #category : 'upgrade' }
@@ -696,7 +778,7 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 														ifTrue: [ #'skipRepair:' ]
 														ifFalse: [ self error: 'unrepairable audit error: ' , message printString ] ].
 											self perform: repairSelector with: auditDetail ] ] ] ] ].
-	self repairSummary
+	self repairSummary: (repairMap at: 'label')
 ]
 
 { #category : 'repair' }
@@ -759,7 +841,7 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 		intoPackageNamed: packageName ]
 		on: RwAdoptMissingMethodErrorNotification
 		do: [ :ex | 
-			" if the method does not exist, do not adopt"
+			" if the method does not exist, do not adopt ... should be handled later"
 			self
 				logMessage:
 					'Could not adopt ' , ex className
@@ -1070,7 +1152,7 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 		by a new compiled method thus losing the reference the loaded method, 
 		can be repaired by splicing the loaded method into the new compiled method"
 
-	| loadedClass loadedPackage selector loadedMethod theCompiledMethod theBehavior thePackageName |
+	| loadedClass loadedPackage selector loadedMethod theCompiledMethod theBehavior thePackageName dbg |
 	thePackageName := packageName.
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
@@ -1087,6 +1169,11 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						, ' (No loaded class or loaded extension class found for '
 						, className printString , ')' ].
 	selector := self selectorFromMethodSpec: methodSpec.
+	dbg := selector = #'_rwRecompileFromSourceIfUnpackagedDo:'.
+	dbg ifTrue: [self
+		logMessage:
+			'[DEBUG] repairMissingLoadedMethod for selector ', selector printString, ' [0]  (' , dbg printString
+				, ') target package: ' , packageName].
 	theBehavior := loadedClass handle.
 	isMeta
 		ifTrue: [ theBehavior := theBehavior class ].
@@ -1106,6 +1193,11 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 							(isMeta
 								ifTrue: [ ' class>>' ]
 								ifFalse: [ '>>' ]) , selector , ' found)' ].
+	dbg
+		ifTrue: [ 
+			self
+				logMessage:
+					'[DEBUG] repairMissingLoadedMethod: [1] target package: ' , packageName ].
 	loadedMethod := isMeta
 		ifTrue: [ loadedClass loadedClassMethods at: selector ifAbsent: [  ] ]
 		ifFalse: [ loadedClass loadedInstanceMethods at: selector ifAbsent: [  ] ].
@@ -1115,6 +1207,30 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 				so if there is no loaded method for the selector in the loadedClass associated with
 				given package, then we need to scan the loaded class extensions for this class to
 				find the correct loaded method"
+			dbg
+				ifTrue: [ 
+					self
+						logMessage:
+							'[DEBUG] repairMissingLoadedMethod: [2], compiled method package: '
+								, theCompiledMethod rowanPackageName ].
+			(dbg
+				and: [ 
+					theCompiledMethod rowanPackageName ~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ] ])
+				ifTrue: [ 
+					self
+						logMessage:
+							'  SKIP repair for method: ' , loadedClass name
+								,
+									(isMeta
+										ifTrue: [ ' class' ]
+										ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+								, thePackageName , '. The loadedMethod belongs to a different package '
+								, theCompiledMethod rowanPackageName printString
+								, ' and is expected to be moved.'.
+					^ self ].
+			dbg
+				ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [3]' ].
 			(Rowan image loadedClassExtensionsForClass: theBehavior theNonMetaClass)
 				do: [ :loadedClassExtension | 
 					loadedMethod
@@ -1123,18 +1239,38 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 								ifTrue: [ loadedClassExtension loadedClassMethods at: selector ifAbsent: [  ] ]
 								ifFalse: [ loadedClassExtension loadedInstanceMethods at: selector ifAbsent: [  ] ].
 							thePackageName := loadedClassExtension packageName ] ].
+			dbg
+				ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [4]' ].
 			loadedMethod
 				ifNil: [ 
 					"If we are still unable to find a loaded method, then we assume that this is a 
 						newly added kernel method for this version of GemStone ... adopt the 
 						method into the loadedPackage (any package will do) and expect correction 
 						during post repair load"
+					(theCompiledMethod rowanPackageName
+						~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ])
+						ifTrue: [ 
+							self
+								logMessage:
+									'  SKIP repair for method: ' , loadedClass name
+										,
+											(isMeta
+												ifTrue: [ ' class' ]
+												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+										, thePackageName
+										, '. The loadedMethod belongs to a different package '
+										, theCompiledMethod rowanPackageName printString
+										, ' and is expected to be moved.'.
+							^ self ].
+					dbg
+						ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [5]' ].
 					Rowan packageTools adopt
 						adoptMethod: selector
 						inClassNamed: className
 						isMeta: isMeta
 						intoPackageNamed: packageName.
-					self
+				self
 						logMessage:
 							'  Adopt missing loaded method: ' , loadedClass name
 								,
@@ -1281,8 +1417,8 @@ UpgradeRowanV2 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: classNam
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> repairSummary [
-	self logMessage: 'REPAIR SUMMARY'.
+UpgradeRowanV2 >> repairSummary: label [
+	self logMessage: 'REPAIR SUMMARY for ', label.
 	self
 		logMessage: 'Repaired ' , self repairedCount printString , ' audit failures'.
 	self
@@ -1305,6 +1441,7 @@ UpgradeRowanV2 >> rowanRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'ROWAN';
 		at: #'classesNotIdentical' put: #'gemstoneBaseRepairClassesNotIdentical:';
 		at: #'methodsNotIdentical' put: #'repairNonIdenticalMethod:';
 		at: #'differentMethodCategory' put: #'repairDifferentMethodCategory:';
@@ -1355,23 +1492,18 @@ UpgradeRowanV2 >> skipRepair: auditDetail [
 UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
-	| symbolList |
-	symbolList := GsSession currentSession symbolList.
-1 to: symbolList size do: [:idx |
-  | aDict |
-  aDict := symbolList at: idx.
-  aDict == nil
-    ifTrue:[ self logMessage: '	', idx printString, '. (nil)' ]
-    ifFalse:[
-      | aSymAssoc |
-      aSymAssoc:= aDict associationsDetect:[:anAssoc | anAssoc value == aDict]
-			ifNone:[ nil ].
-      aSymAssoc == nil
-        ifTrue:[ self logMessage: '	', idx printString, '. (unnamed Dictionary) : class: ', aDict class printString, ' oop: ', aDict asOop printString.]
-        ifFalse:[ self logMessage: '	', idx printString, '. ', (aSymAssoc key), ' : class: ', aDict class printString, ' oop: ', aDict asOop printString]
-      ].
-  ].
-
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self logMessage: ' repair ROWAN audit failures'.
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.
@@ -1380,6 +1512,19 @@ UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 			repairedCount := 0.
 			self repairAuditFailures: self rowanRepairMap.
 			self commit ].
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
+
 	self
 		logMessage:
 			' ROWAN audit repair COMPLETE (' , repairedCount printString , ' repairs)'
@@ -1391,6 +1536,18 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 
 	| sess |
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self auditForProjectsNamed: self gemstoneBaseProjectNames.
 	self logMessage: ' repairing gemstoneBaseImage audit failures'.
 	audit isEmpty
@@ -1403,6 +1560,18 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 		ifNotNil: [ 
 			"was used in UpgradeRowanV2 >> repairLoadedPackageNotInRegistry so reset to clear any additions that may have been made"
 			sess transientSymbolList: nil ].
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self
 		logMessage:
 			' gemstoneBaseImage audit repair COMPLETE (' , repairedCount printString
@@ -1414,6 +1583,18 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 	"Use the Rowan project audit to repair any damaged customer metadata, caused by the removal of base extension methods"
 
 	self logMessage: ' repair CUSTOMER audit failures'.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self auditForProjectsNamed: self customerProjectNames.
 	self logMessage: ' repairing CUSTOMER audit failures'.
 	audit isEmpty
@@ -1421,6 +1602,18 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 			repairedCount := 0.
 			self repairAuditFailures: self customerRepairMap.
 			self commit ].
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self
 		logMessage:
 			' CUSTOMER audit repair COMPLETE (' , repairedCount printString , ' repairs)'
@@ -1430,8 +1623,18 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 UpgradeRowanV2 >> step_4_reloadRowan [
 	"Reload the Rowan project to repair those audit failures repaired by a reload"
 
+	self
+		logMessage:
+			'[DEBUG]	[0] gemstoneBaseImage dirty: '
+				, (Rowan projectNamed: 'gemstoneBaseImage') isDirty printString.
+	self debugToLog.
 	self logMessage: 'reload Rowan'.
 	self reloadRowan.
+	self
+		logMessage:
+			'[DEBUG]	[10] gemstoneBaseImage dirty: '
+				, (Rowan projectNamed: 'gemstoneBaseImage') isDirty printString.
+	self debugToLog.
 	self commit
 ]
 
@@ -1439,8 +1642,16 @@ UpgradeRowanV2 >> step_4_reloadRowan [
 UpgradeRowanV2 >> step_5_reloadGemstoneBase [
 	"Reload the gemstoneBaseImage project to repair those audit failures repaired by a reload and to install platform-specific changes"
 
+	self
+		logMessage:
+			'[DEBUG]	[0] gemstoneBaseImage dirty: '
+				, (Rowan projectNamed: 'gemstoneBaseImage') isDirty printString.
+	self debugToLog.
 	self logMessage: 'reload gemstoneBaseImage project'.
 	self reloadGemstoneBase.
+	self debugToLog.
+	self logMessage: 'reload Rowan'.
+	self reloadRowan.
 	self commit
 ]
 
@@ -1449,20 +1660,79 @@ UpgradeRowanV2 >> step_6_reloadCustomer [
 	"Reload the Customer projects to repair those audit failures repaired by a reload and to install platform-specific changes"
 
 	self logMessage: 'reload Customer projects'.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self reloadCustomer.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
 	self commit
 ]
 
 { #category : 'steps' }
 UpgradeRowanV2 >> step_7_finalAudit [
+	| dirtyProjects |
 	self logMessage: 'Final Audit'.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
+
 	self auditForProjectsNamed: (self globalNamed: 'Rowan') projectNames.
 	self countAuditErrors.
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :m | 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+						, m rowanPackageName ]
+		ifNil: [ 
+			self
+				logMessage:
+					'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: NOT PRESENT' ].
+
 	audit isEmpty
 		ifFalse: [ 
 			self
 				error:
-					'Final Audit did not run clean ... repair audit errors before proceeding' ]
+					'Final Audit did not run clean ... repair audit errors before proceeding' ].
+	dirtyProjects := (Rowan projects reject: [ :each | each name = 'UnPackaged' ])
+		select: [ :project | project isDirty ].
+	dirtyProjects isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected Dirty projects: '
+						, (dirtyProjects asArray collect: [ :each | each name ]) printString ]
 ]
 
 { #category : 'accessing' }
@@ -1472,6 +1742,14 @@ UpgradeRowanV2 >> upgradeFrom [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> upgradeFrom: object [
-	upgradeFrom := object
+UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
+	upgradeFrom := gemstoneVersionString.
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.3' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"GsHostProcess has changed shape in 3.7.0, must recompile all methods that reference GsHostProcess"
+			self logMessage: 'Recompiling references to ObsoleteGsHostProcess'.
+			(ClassOrganizer newExcludingGlobals
+				referencesToObject: (ObsoleteClasses at: #'ObsoleteGsHostProcess'))
+				do: [ :aGsNMethod | aGsNMethod recompileFromSource ] ]
 ]

@@ -66084,11 +66084,12 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
 
 	theClass  rowanPackageName ~= packageName
-		ifTrue: [ 
+		ifTrue: [  
 			registry
-				addExtensionCompiledMethod: theCompiledMethod 
+				adoptCompiledMethod: theCompiledMethod 
+				classExtension: true
 				for: theBehavior 
-				protocol: protocolString 
+				protocol: protocolString
 				toPackageNamed: packageName ]
 		ifFalse: [ 
 			registry
@@ -76255,6 +76256,7 @@ category: 'building'
 method: RwGsPatchSet_V2
 addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition
 
+anInstanceMethodDefinition selector asString = '_rwRecompileFromSourceIfUnpackagedDo:' ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
@@ -76271,7 +76273,6 @@ addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefi
 category: 'building'
 method: RwGsPatchSet_V2
 addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition
-
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
@@ -80948,13 +80949,11 @@ _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSyst
 category: 'method - private api'
 classmethod: RwGsSymbolDictionaryRegistry_ImplementationV2
 _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance
-
 	"delete a compiled method from behavior"
 
 	| selector |
 	selector := compiledMethod selector.
 	behavior removeSelector: selector asString environmentId: 0.
-
 	^ registryInstance
 %
 
@@ -83306,10 +83305,8 @@ projectUrl
 category: 'definitions'
 method: RwGsLoadedSymbolDictResolvedProjectV2
 propertiesForDefinition
-
 	| props |
 	props := super propertiesForDefinition.
-self halt.
 	props at: 'projectRef' put: handle copy.
 	^ props
 %
@@ -94802,11 +94799,13 @@ addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPa
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self
-				moveCompiledMethod: compiledMethod
-				toProtocol: protocolString
-				instance: registryInstance ].
+			oldCompiledMethod _rowanPackageInfo
+				ifNotNil: [ 
+					self addRecompiledMethod: compiledMethod instance: registryInstance.
+					^ self
+						moveCompiledMethod: compiledMethod
+						toProtocol: protocolString
+						instance: registryInstance ] ].
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
@@ -94855,7 +94854,8 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
+					'Internal error -- expected an existing compiled method ('
+						, behavior printString , '>>' , selector , ') in the method dictionary' ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
@@ -94869,7 +94869,8 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod  ('
+						, behavior printString , '>>' , selector , ').' ].
 	oldCompiledMethod _rowanPackageInfo: nil.
 
 	loadedMethod handle: newCompiledMethod.
@@ -94894,7 +94895,9 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
+					'Internal error -- expected an existing compiled method  ('
+						, behavior printString , '>>' , selector
+						, ') in the session method method dictionary' ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
@@ -94910,7 +94913,8 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod ('
+						, behavior printString , '>>' , selector , ').' ].
 	oldCompiledMethod _rowanPackageInfo: nil.
 
 	loadedMethod handle: newCompiledMethod.
@@ -94987,12 +94991,14 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
+					'Internal error -- no existing CompileMethod found for patched method ('
+						, behavior printString , '>>' , selector, ')' ].
 	existingCompiledMethod == compiledMethod
 		ifFalse: [ 
 			registryInstance
 				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+					'Internal error - the existingCompiledMethod (' , behavior printString , '>>'
+						, selector , ') is not identical to the compiled method arg' ].
 
 	oldCat := behavior categoryOfSelector: selector environmentId: 0.
 	catSym := newProtocol asSymbol.
@@ -95010,7 +95016,8 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the compiledMethod ('
+						, behavior printString , '>>' , selector , ').' ].
 
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
@@ -95029,7 +95036,8 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+					'Internal error -- no existing LoadedMethod found for deleted method ('
+						, behavior printString , '>>' , compiledMethod selector , ').' ].
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
@@ -95037,7 +95045,9 @@ _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: 
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
+					'Internal error -- attempt to remove a method (' , behavior printString , '>>'
+						, compiledMethod selector
+						, ' ) from a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod.
 	loadedClassOrExtension isLoadedClassExtension

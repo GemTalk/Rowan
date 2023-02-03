@@ -12,7 +12,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+					'Internal error -- no existing LoadedMethod found for deleted method ('
+						, behavior printString , '>>' , compiledMethod selector , ').' ].
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
@@ -20,7 +21,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
+					'Internal error -- attempt to remove a method (' , behavior printString , '>>'
+						, compiledMethod selector
+						, ' ) from a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod.
 	loadedClassOrExtension isLoadedClassExtension
@@ -138,11 +141,13 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			self addRecompiledMethod: compiledMethod instance: registryInstance.
-			^ self
-				moveCompiledMethod: compiledMethod
-				toProtocol: protocolString
-				instance: registryInstance ].
+			oldCompiledMethod _rowanPackageInfo
+				ifNotNil: [ 
+					self addRecompiledMethod: compiledMethod instance: registryInstance.
+					^ self
+						moveCompiledMethod: compiledMethod
+						toProtocol: protocolString
+						instance: registryInstance ] ].
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
@@ -190,7 +195,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
+					'Internal error -- expected an existing compiled method ('
+						, behavior printString , '>>' , selector , ') in the method dictionary' ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
@@ -204,7 +210,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod  ('
+						, behavior printString , '>>' , selector , ').' ].
 	oldCompiledMethod _rowanPackageInfo: nil.
 
 	loadedMethod handle: newCompiledMethod.
@@ -228,7 +235,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
+					'Internal error -- expected an existing compiled method  ('
+						, behavior printString , '>>' , selector
+						, ') in the session method method dictionary' ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
@@ -244,7 +253,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod ('
+						, behavior printString , '>>' , selector , ').' ].
 	oldCompiledMethod _rowanPackageInfo: nil.
 
 	loadedMethod handle: newCompiledMethod.
@@ -319,12 +329,14 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 		ifAbsent: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
+					'Internal error -- no existing CompileMethod found for patched method ('
+						, behavior printString , '>>' , selector, ')' ].
 	existingCompiledMethod == compiledMethod
 		ifFalse: [ 
 			registryInstance
 				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+					'Internal error - the existingCompiledMethod (' , behavior printString , '>>'
+						, selector , ') is not identical to the compiled method arg' ].
 
 	oldCat := behavior categoryOfSelector: selector environmentId: 0.
 	catSym := newProtocol asSymbol.
@@ -342,7 +354,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 		ifNil: [ 
 			registryInstance
 				error:
-					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+					'Internal error -- no existing LoadedMethod found for the compiledMethod ('
+						, behavior printString , '>>' , selector , ').' ].
 
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
