@@ -1745,7 +1745,7 @@ UpgradeRowanV2 >> upgradeFrom [
 UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
 	upgradeFrom := gemstoneVersionString.
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
-		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.3' asRwGemStoneVersionNumber ])
+		and: [ self upgradeFrom asRwGemStoneVersionNumber <= '3.6.3' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"GsHostProcess has changed shape in 3.7.0, must recompile all methods that reference GsHostProcess"
 			self logMessage: 'Recompiling references to ObsoleteGsHostProcess'.
