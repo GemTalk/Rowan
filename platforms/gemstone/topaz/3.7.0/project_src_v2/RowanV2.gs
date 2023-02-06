@@ -50371,6 +50371,7 @@ addedMethod: aMethodModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -50397,6 +50398,7 @@ addedMethodExtension: aMethodExtensionModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -50414,6 +50416,7 @@ addedPackage: aPackageModification
 	self _packageSourceDir ensureCreateDirectory.
 	(self _packageSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< '{'
 			<< self  _newLine
@@ -50456,6 +50459,7 @@ changedMethod: aMethodModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -50570,11 +50574,13 @@ processClass: aClassModification
 
 	(self _classSourceDir /  'README.md')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< (self _commentOf: self currentClassDefinition) ].
 
 	(self _classSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+			aStream truncate.
 			aStream 
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
@@ -50604,6 +50610,7 @@ processClassExtension: aClassExtensionModification
 			self _classExtensionSourceDir ensureCreateDirectory.
 			(self _classExtensionSourceDir /  'properties.json')
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					aStream 
 						<< (self _classExtensionOf: self currentClassExtension)
 						<< self _newLine ].
@@ -50787,6 +50794,7 @@ _filetreePackagePropertyDictFor: aPackageModification
 			"create default properties file"
 			propertiesFile
 				writeStreamDo: [:aStream |
+				aStream truncate.
 				aStream 
 					<< (self _toJSON:
  					(self class orderedDictionaryClass new
@@ -50810,6 +50818,7 @@ _filetreeProjectPropertyDictFor: aProjectModification
 			propertiesFile
 				writeStreamDo: [:aStream |
 				| dict |
+				aStream truncate.
 				dict := (self class orderedDictionaryClass new)
 					at: 'packageExtension' put: '.', self packageExtension;
 					at: 'Metadata' put: self monticelloMetadata;
@@ -50958,6 +50967,7 @@ addedPackage: aPackageModification
 	self _packageSourceDir ensureCreateDirectory.
 	(self _packageSourceDir /  'package.st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< 'Package ' 
 			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
@@ -50999,6 +51009,7 @@ processClass: aClassModification
 
 	self _classSourceFile
 		writeStreamDo: [:aStream |
+			aStream truncate.
 			self _writeClassDefinition: currentClassDefinition on: aStream.
 			self _writeClassSideMethodDefinitions: currentClassDefinition on: aStream.
 			self _writeInstanceSideMethodDefinitions: currentClassDefinition on: aStream ]
@@ -51015,6 +51026,7 @@ processClassExtension: aClassExtensionModification
 		ifFalse: [ 
 			self _classExtensionSourceFile
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					self _writeClassExtension: currentClassExtension on: aStream.
 					self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
 					self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ] ]
@@ -51035,6 +51047,7 @@ processProject: aProjectModification
 	propertiesFile exists
 		ifFalse: [
 			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream truncate.
 				fileStream 
 					nextPutAll: '{ #format : ' , format printString , '}';
 					lf;
@@ -51432,6 +51445,7 @@ addedMethod: aMethodModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -51458,6 +51472,7 @@ addedMethodExtension: aMethodExtensionModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -51475,6 +51490,7 @@ addedPackage: aPackageModification
 	self _packageSourceDir ensureCreateDirectory.
 	(self _packageSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< '{'
 			<< self  _newLine
@@ -51517,6 +51533,7 @@ changedMethod: aMethodModification
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -51631,11 +51648,13 @@ processClass: aClassModification
 
 	(self _classSourceDir /  'README.md')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< (self _commentOf: self currentClassDefinition) ].
 
 	(self _classSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 			aStream 
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
@@ -51665,6 +51684,7 @@ processClassExtension: aClassExtensionModification
 			self _classExtensionSourceDir ensureCreateDirectory.
 			(self _classExtensionSourceDir /  'properties.json')
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					aStream 
 						<< (self _classExtensionOf: self currentClassExtension)
 						<< self _newLine ].
@@ -51848,6 +51868,7 @@ _filetreePackagePropertyDictFor: aPackageModification
 			"create default properties file"
 			propertiesFile
 				writeStreamDo: [:aStream |
+				aStream truncate.
 				aStream 
 					<< (self _toJSON:
  					(self class orderedDictionaryClass new
@@ -51871,6 +51892,7 @@ _filetreeProjectPropertyDictFor: aProjectModification
 			propertiesFile
 				writeStreamDo: [:aStream |
 				| dict |
+				aStream truncate.
 				dict := (self class orderedDictionaryClass new)
 					at: 'packageExtension' put: '.', self packageExtension;
 					at: 'Metadata' put: self monticelloMetadata;
@@ -52028,6 +52050,7 @@ addedPackage: aPackageModification
 	self _packageSourceDir ensureCreateDirectory.
 	self _packageSourceDir / 'package.st'
 		writeStreamDo: [ :aStream | 
+			aStream truncate.
 			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
 				<< self _newLine ].
 
@@ -52067,6 +52090,7 @@ processClass: aClassModification
 
 	self _classSourceFile
 		writeStreamDo: [:aStream |
+			aStream truncate.
 			self _writeClassDefinition: currentClassDefinition on: aStream.
 			self _writeClassSideMethodDefinitions: currentClassDefinition on: aStream.
 			self _writeInstanceSideMethodDefinitions: currentClassDefinition on: aStream ]
@@ -52083,6 +52107,7 @@ processClassExtension: aClassExtensionModification
 		ifFalse: [ 
 			self _classExtensionSourceFile
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					self _writeClassExtension: currentClassExtension on: aStream.
 					self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
 					self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ] ]
@@ -52103,6 +52128,7 @@ processProject: aProjectModification
 	propertiesFile exists
 		ifFalse: [
 			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream truncate.
 				fileStream 
 					nextPutAll: '{ #format : ' , format printString , '}';
 					lf;
@@ -52376,6 +52402,7 @@ addedPackage: aPackageModification
 	self _packageSourceDir ensureCreateDirectory.
 	self _packageSourceDir / 'package.st'
 		writeStreamDo: [ :aStream | 
+			aStream truncate.
 			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
 				<< self _newLine ].
 
@@ -54292,6 +54319,7 @@ exportPackages: diskProjectSetDefinition packagesRoot: packagesRoot packageForma
 	sourceProjectSetDefinition := diskProjectSetDefinition.
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;
@@ -54333,7 +54361,7 @@ exportProjects
 	self projectNames isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+			(self projectsRoot / 'README' , 'md') ensureCreateFile ]
 %
 
 category: 'exporting'
@@ -60389,10 +60417,8 @@ exportDoitsToUrl: directoryUrl
 								ifNotNil: [ :doitString | 
 									| fileRef |
 									fileRef := doitsRoot / doitName , 'st'.
-									fileRef exists
-										ifFalse: [ fileRef ensureCreateFile ].
 									fileRef
-										writeStreamDo: [ :fileStream | fileStream nextPutAll: doitString ] ] ] ] ]
+										writeStreamDo: [ :fileStream | fileStream truncate; nextPutAll: doitString ] ] ] ] ]
 		ifFalse: [ self error: 'unsupported url scheme ' , url schemeName printString ]
 %
 
@@ -75541,7 +75567,7 @@ export: componentsRoot
 	self components isEmpty
 		ifTrue: [
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			(componentsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+			(componentsRoot /  'README', 'md') ensureCreateFile ]
 %
 
 category: 'gemstone support'
@@ -76048,7 +76074,10 @@ category: 'exporting'
 method: RwLoadSpecificationV2
 exportTo: directoryReference
 	directoryReference / self specName , 'ston'
-		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+		writeStreamDo:
+			[ :fileStream |
+			fileStream truncate.
+			self exportToStream: fileStream ]
 %
 
 category: 'exporting'
@@ -76331,7 +76360,7 @@ method: RwLoadSpecificationV2
 projectsHome
 	"projects home specifies the disk location where projects cloned/created by the receiver will be located."
 
-	^ projectsHome ifNil: [FileLocator rowanProjectsHome ]
+	^ projectsHome ifNil: [FileLocator origin: #'ROWAN_PROJECTS_HOME']
 %
 
 category: 'accessing'
@@ -76677,7 +76706,9 @@ method: RwProjectSpecificationV2
 exportTo: directoryReference
 
 	(directoryReference / self projectSpecPath / self specName, 'ston')
-		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+		writeStreamDo: [ :fileStream |
+			fileStream truncate.
+			STON put: self copy initializeForExport onStreamPretty: fileStream ]
 %
 
 category: 'comparing'
@@ -80062,18 +80093,6 @@ rbStoreOn: aStream
   super rbStoreOn: aStream
 %
 
-! Class extensions for 'FileLocator'
-
-!		Class methods for 'FileLocator'
-
-category: '*rowan-gemstone-components-kernel'
-classmethod: FileLocator
-rowanProjectsHome
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ self origin: #rowanProjectsHome
-%
-
 ! Class extensions for 'GsFileIn'
 
 !		Instance methods for 'GsFileIn'
@@ -80781,6 +80800,7 @@ _exportToUrl: directoryUrl
 			fileRef
 				writeStreamDo: [ :stream | 
 					| string |
+					stream truncate.
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
@@ -80790,6 +80810,7 @@ _exportToUrl: directoryUrl
 				/ self name , 'ston'
 				writeStreamDo: [ :stream | 
 					| string |
+					stream truncate.
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
@@ -83455,6 +83476,7 @@ exportPharoTonelFormatV1Packages: diskProjectSetDefinition packagesRoot: package
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;
@@ -83786,21 +83808,6 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 			"do not leave clone in the symbol list"
 			symbolList remove: clonedSymDict ifAbsent: [] ].
 	^ clonedSymDict
-%
-
-! Class extensions for 'SystemResolver'
-
-!		Instance methods for 'SystemResolver'
-
-category: '*rowan-gemstone-components-kernel'
-method: SystemResolver
-rowanProjectsHome
-
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
-		ifNil: [ self error: '$ROWAN_PROJECTS_HOME not defined' ]
-		ifNotNil: [:str | self  resolveString: str ]
 %
 
 ! Class extensions for 'UndefinedObject'
