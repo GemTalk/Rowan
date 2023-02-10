@@ -23,10 +23,15 @@ RwElementsModification class >> new [
 ]
 
 { #category : 'modifications' }
-RwElementsModification >> addElementModification: aModification [
+RwElementsModification >> _addElementModification: aModification [
 
+	elementsModified at: aModification key put: aModification
+]
+
+{ #category : 'modifications' }
+RwElementsModification >> addElementModification: aModification [
 	aModification isEmpty
-		ifFalse: [elementsModified at: aModification key put: aModification]
+		ifFalse: [ self _addElementModification: aModification ]
 ]
 
 { #category : 'Accessing' }

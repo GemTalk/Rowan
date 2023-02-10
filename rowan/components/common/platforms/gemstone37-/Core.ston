@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/platforms/gemstone37-/Core',
+	#condition : [
+		'gs3.[7-]'
+	],
+	#packageNames : [
+		'Rowan-GemStone-Core-37x'
+	],
+	#comment : 'Core gs3.[7-]  packages '
+}

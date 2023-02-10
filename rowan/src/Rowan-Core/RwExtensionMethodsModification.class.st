@@ -15,6 +15,14 @@ RwExtensionMethodsModification class >> extendedClassName: aString [
 		yourself
 ]
 
+{ #category : 'modifications' }
+RwExtensionMethodsModification >> _addElementModification: aModification [
+	| anExtensionModification |
+	anExtensionModification := aModification asExtensionMethodModification.
+	anExtensionModification extendedClassName: self extendedClassName.
+	elementsModified at: anExtensionModification key put: anExtensionModification
+]
+
 { #category : 'visiting' }
 RwExtensionMethodsModification >> acceptVisitor: aVisitor [
 
@@ -23,14 +31,8 @@ RwExtensionMethodsModification >> acceptVisitor: aVisitor [
 
 { #category : 'modifications' }
 RwExtensionMethodsModification >> addElementModification: aModification [
-
 	aModification isEmpty
-		ifFalse: [ 
-			| anExtensionModification |
-			anExtensionModification := aModification asExtensionMethodModification.
-			anExtensionModification extendedClassName: self extendedClassName.
-			elementsModified at: anExtensionModification key put: anExtensionModification ]
-
+		ifFalse: [ self _addElementModification: aModification ]
 ]
 
 { #category : 'accessing' }

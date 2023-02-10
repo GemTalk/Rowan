@@ -604,6 +604,7 @@ RwGsPatchSet_V2 >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass
 { #category : 'building' }
 RwGsPatchSet_V2 >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+anInstanceMethodDefinition selector asString = '_rwRecompileFromSourceIfUnpackagedDo:' ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
@@ -619,7 +620,6 @@ RwGsPatchSet_V2 >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition 
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
@@ -710,9 +710,7 @@ RwGsPatchSet_V2 >> addForcingNewClassVersionModification: aRwClassModificationFo
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addMethodMove: aRwMethodMove [
-
 	movedMethods add: aRwMethodMove
-
 ]
 
 { #category : 'building' }
@@ -1335,8 +1333,7 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromSystem [
 RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ]
-
+	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ifAbsent: [] ]
 ]
 
 { #category : 'private - applying' }

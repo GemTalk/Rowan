@@ -16,11 +16,9 @@ RwRowanSample9Test class >> _loadSpecSessionCacheKey [
 
 { #category : 'private' }
 RwRowanSample9Test class >> _rowanSample_0000_load_spec [
-	| rowanProject fileUrl |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	fileUrl := 'file:' , rowanProject repositoryRootPath
-		, '/test/specs/RowanSample9_0000.ston'.
-	^ (RwSpecification fromUrl: fileUrl)
+	^ (RwSpecification
+		fromUrl:
+			'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0000.ston')
 		projectsHome: self _testRowanProjectsSandbox;
 		yourself
 ]
@@ -571,7 +569,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: includeRemoveAll  packageName1: p
 
 "do filein"
 	stream := (self _spec0057GsFilein: true) readStreamPortable.
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
 		setEnableRemoveAll: includeRemoveAll;
 		doFileIn.
 	^ loadedProjects
@@ -699,7 +697,9 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 { #category : 'running' }
 RwRowanSample9Test >> tearDown [
 	super tearDown.
-	Rowan gemstoneTools topaz currentTopazPackageName: nil
+	Rowan gemstoneTools topaz
+		currentTopazPackageName: nil;
+		currentTopazProjectName: nil
 ]
 
 { #category : 'audit tests' }

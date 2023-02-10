@@ -52,7 +52,6 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 										methodKey: newMethod key
 										isMeta: false
 										methodsModification: instanceMethodsModification)]]]
-
 ]
 
 { #category : 'private - moves' }
@@ -78,42 +77,43 @@ RwProjectSetModification >> addMethodsAddedByPackageModification: packageModific
 
 { #category : 'private - moves' }
 RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package inProject: project toDictionary: dictionary [
-
-	classesOrExtensionsModification elementsModified do: 
-			[:classModification |
+	classesOrExtensionsModification elementsModified
+		do: [ :classModification | 
 			| classMethodsModification instanceMethodsModification |
 			classMethodsModification := classModification classMethodsModification.
-			instanceMethodsModification := classModification
-						instanceMethodsModification.
-			classMethodsModification elementsModified do: 
-					[:methodModification |
+			instanceMethodsModification := classModification instanceMethodsModification.
+			classMethodsModification elementsModified
+				do: [ :methodModification | 
 					methodModification after key
-						ifNil: 
-							[| oldMethod |
+						ifNil: [ 
+							| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> true -> oldMethod key
-								put: (RwMethodAdditionOrRemoval
+							dictionary
+								at: classModification key -> true -> oldMethod key
+								put:
+									(RwMethodAdditionOrRemoval
 										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification before
 										methodKey: oldMethod key
 										isMeta: true
-										methodsModification: classMethodsModification)]].
-			instanceMethodsModification elementsModified do: 
-					[:methodModification |
+										methodsModification: classMethodsModification) ] ].
+			instanceMethodsModification elementsModified
+				do: [ :methodModification | 
 					methodModification after key
-						ifNil: 
-							[| oldMethod |
+						ifNil: [ 
+							| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> false -> oldMethod key
-								put: (RwMethodAdditionOrRemoval
+							dictionary
+								at: classModification key -> false -> oldMethod key
+								put:
+									(RwMethodAdditionOrRemoval
 										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
 										methodKey: oldMethod key
 										isMeta: false
-										methodsModification: instanceMethodsModification)]]]
-
+										methodsModification: instanceMethodsModification) ] ] ]
 ]
 
 { #category : 'private - moves' }
@@ -374,11 +374,9 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition isMeta
 	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
 		before.
 	newDefinition := (addition methodsModification
-		modificationOf: addition methodKey) after.
-	"Delete the removal and the addition."
+		modificationOf: addition methodKey) after.	"Delete the removal and the addition."
 	removal methodsModification removeModificationOf: removal methodKey.
-	addition methodsModification removeModificationOf: addition methodKey.
-	"Record the move."
+	addition methodsModification removeModificationOf: addition methodKey.	"Record the move."
 	movedMethods
 		add:
 			(RwMethodMove
@@ -390,8 +388,7 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition isMeta
 				packageAfter: addition packageDefinition
 				projectBefore: removal projectDefinition
 				projectAfter: addition projectDefinition
-				isMeta: addition isMeta).
-	"Does the method have other modifications that need to be recorded?"
+				isMeta: addition isMeta).	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
 	methodModification
 		isMeta: isMeta;
@@ -407,14 +404,13 @@ RwProjectSetModification >> updateForMethodMoves [
 
 	| methodAdditions methodRemovals |
 	methodAdditions := self findAddedMethods.
-	methodRemovals := self findRemovedMethods.
-	"Any keys that match between added and removed should be considered a move."
-	methodAdditions keysAndValuesDo: 
-			[:key :addition |
+	methodRemovals := self findRemovedMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
-
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal
+				ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value ] ]
 ]
 
 { #category : 'private - moves' }

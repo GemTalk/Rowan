@@ -82,7 +82,7 @@ RwPackageSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> true -> oldMethod key
+ 							dictionary at: classModification key -> true -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
 										classDefinitionOrExtension: classModification before
@@ -95,7 +95,7 @@ RwPackageSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
-							dictionary at: classModification key -> false -> oldMethod key
+						dictionary at: classModification key -> false -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after

@@ -9,19 +9,13 @@ USAGE
   $basename [--help | -h] [--debug | -D] [OPTIONS] <product-tree-root>
 
 DESCRIPTION
-  Attach the standard Rowan development projects (Rowan and RowanClientServices)
-  to the disk-based, read only project source in a product tree (i.e. $GEMSTONE):
+  Update the version of Rowan to a version that is appropriate for the current
+  version of GemStone. 
 
-    Rowan               to $GEMSTONE/upgrade/projects/Rowan
-    RowanClientServices to $GEMSTONE/upgrade/projects/RowanClientServices
-    
-  Then reload Rowan and RowanClientServices.
-
-	This can be used to re-attach an image to the original versions of Rowan and
-	RowanClientServices after having used 
-  $GEMSTONE/examples/rowanV2/stone/attachRowanDevClones.stone or attach the 
-  image to the repositories associated with a GemStone version to which you plan
-  on upgrading.
+	This script is used as part of the upgrade process to make sure that Rowan
+  is functional enough prior to running upgradeImage so that it can be repaired
+  post upgradeImage, so that it can be used to load the latest version of Rowan
+  used in the image ... 
 
 OPTIONS
 	<product-tree-root>  path to root of product tree ($GEMSTONE). Note that you
@@ -126,7 +120,7 @@ method
 updateRowanV220
 	"Rowan v2.2.0 update - GemStone 3.6.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.x to Rowan v2.5.0'; lf.
+	self stdout nextPutAll: 'Start updating Rowan v2.x to Rowan v2.5.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	self rowanV220_patch.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
@@ -145,7 +139,7 @@ updateRowanV220
 	self stdout nextPutAll: '	load Rowan v2.3.0'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
 	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'v2Only' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
 	rowanClientServicesProject _loadSpecification 
 		projectsHome: rowanClientServicesRepositoryRoot parent;
@@ -158,7 +152,7 @@ method
 updateRowanV230
 	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.3 to Rowan v2.3'; lf.
+	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan v2.3 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	rowanRepositoryRoot := self productTreeRoot / 'upgrade' / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
 	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
@@ -173,10 +167,12 @@ updateRowanV230
 		projectsHome: rowanClientServicesRepositoryRoot parent;
 		readonlyDiskUrl: 'file://', rowanClientServicesRepositoryRoot pathString.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
-	self stdout nextPutAll: '	load Rowan v2.3.0'; lf.
+	self stdout nextPutAll: '	load Rowan v2.3'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
+self stdout nextPutAll: '[DEBUG] platform conditional attributes: ', Rowan platformConditionalAttributes printString; lf.
+self stdout nextPutAll: '[DEBUG] project platform conditional attributes: ', (Rowan projectNamed: 'Rowan') projectDefinitionPlatformConditionalAttributes printString; lf.
 	(Rowan projectNamed: 'Rowan')
-		loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').
+		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'v2Only' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
 	rowanClientServicesProject _loadSpecification 
 		projectsHome: rowanClientServicesRepositoryRoot parent;
@@ -186,22 +182,25 @@ updateRowanV230
 	^ System commit
 %
 doit
-	| version |
 	self positionalArgs size ~= 1
 		ifTrue: [ self error: 'Expected a single positional argument specifying the path to the root directory of a GemStone product tree' ].
-	version := self rowanVersion.
-	version < ('2.0.0' asRwSemanticVersionNumber)
-		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0'].
-	version >= ('2.3.0' asRwSemanticVersionNumber)
+	self rowanVersion.
+	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
+		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
+	rowanVersion >= ('2.4.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			self stdout nextPutAll: 'No need to update ', rowanVersion printString; lf.
+			^ self ].
+	rowanVersion >= ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV230 ].
-	version = ('2.2.0' asRwSemanticVersionNumber)
+	rowanVersion = ('2.2.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV220 ].
-	version = ('2.0.0' asRwSemanticVersionNumber)
+	rowanVersion = ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [
-			self error: 'update from Rowan v', version printString , ' not currently functional'.
+			self error: 'update from Rowan v', rowanVersion printString , ' not currently functional'.
 			^ self updateRowanV200 ].
-	self error: 'update from Rowan v', version printString , ' not supported yet'.
+	self error: 'update from Rowan v', rowanVersion printString , ' not supported yet'.
 %
 

@@ -140,6 +140,9 @@ RwUnmanagedClassesV2Test >> setUp [
 RwUnmanagedClassesV2Test >> tearDown [
 	self _removeUnmanagedClass.
 	super tearDown.
+	Rowan gemstoneTools topaz
+		currentTopazPackageName: nil;
+		currentTopazProjectName: nil
 ]
 
 { #category : 'tests' }
@@ -207,7 +210,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_01 [
 						instVarNames: '#(#xxx)'
 						symbolDictionaryName: symbolDictionary name asString).
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
 
 	managedClass := Rowan globalNamed: className.
 	self assert: managedClass notNil.
@@ -276,7 +279,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_02 [
 						instVarNames: '#(#xxx)'
 						symbolDictionaryName: symbolDictionary name asString).
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
 
 
 	self
@@ -298,7 +301,8 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
 	"Package a method in an unpackaged class load a .gs filein using `set package`
 		removeAll disabled"
 
-	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName stream |
+	| className unmanagedClass project projectName packageName symbolDictionary managedMethod 
+    x anotherProject anotherProjectName anotherPackageName aString stream |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	anotherProjectName := 'AnotherPackagedClass_project'.
@@ -335,36 +339,30 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
 	self assert: (Rowan globalNamed: className) notNil.
 	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
 	self assert: (x := managedMethod rowanPackageName) = packageName.
+  aString :=
+			'set package ' , anotherPackageName ,
+'		
+', (self _simpleGsFilein: className
+				instVarNames: '#(#xxx)'
+				symbolDictionaryName: symbolDictionary name asString).
 
-	stream := ReadStreamPortable
-		on:
-			'set package ' , anotherPackageName
-				,
-					'		
-'
-				,
-					(self
-						_simpleGsFilein: className
-						instVarNames: '#(#xxx)'
-						symbolDictionaryName: symbolDictionary name asString).
-
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	stream := ReadStreamPortable on: aString .
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
-
 
 	self
 		_validateAuditResults: project audit;
 		_validateAuditResults: anotherProject audit.
-	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
-	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') equals: 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') equals: 2.
 
 	self
-		assert:
-			(unmanagedClass compiledMethodAt: #'foo') rowanPackageName = anotherPackageName.
+		assert: (unmanagedClass compiledMethodAt: #'foo') rowanPackageName 
+      equals: anotherPackageName.
 	self
-		assert:
-			(x := (unmanagedClass compiledMethodAt: #'bar') rowanPackageName) = packageName
+		assert: (unmanagedClass compiledMethodAt: #'bar') rowanPackageName 
+      equals: anotherPackageName.
 ]
 
 { #category : 'tests' }
@@ -497,7 +495,8 @@ RwUnmanagedClassesV2Test >> testMoveManagedClass_01 [
 RwUnmanagedClassesV2Test >> testMoveManagedMethod_01 [
 	"Move packaged method in unpackaged class to another package"
 
-	| className unmanagedClass project projectName packageName symbolDictionary managedMethod x anotherProject anotherProjectName anotherPackageName |
+	| className unmanagedClass project projectName packageName symbolDictionary managedMethod 
+        x anotherProject anotherProjectName anotherPackageName |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	anotherProjectName := 'AnotherPackagedClass_project'.
@@ -1091,7 +1090,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedClassNewVersion_02 [
 RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
 	"File in an unmanaged class and methods (includes removeAllMethods)"
 
-	| className unmanagedClass project projectName packageName symbolDictionary stream |
+	| className unmanagedClass project projectName packageName symbolDictionary stream aString |
 	projectName := 'PackagedClass_project'.
 	packageName := projectName , '-Core'.
 	symbolDictionary := Rowan image
@@ -1104,14 +1103,13 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
 		packageName: packageName
 		symbolDictionaryName: symbolDictionary name.
 
-	stream := ReadStreamPortable
-		on:
-			(self
+	 aString :=	self
 				_simpleGsFilein: className
 				instVarNames: '#(#xxx)'
-				symbolDictionaryName: symbolDictionary name asString).
+				symbolDictionaryName: symbolDictionary name asString.
+	stream := ReadStreamPortable on: aString .
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
 
 	unmanagedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass notNil.
@@ -1168,7 +1166,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 
 	self assert: managedClass notNil.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream) doFileIn.
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -1223,7 +1221,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 
 	self assert: managedClass notNil.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
@@ -1287,7 +1285,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
@@ -1367,36 +1365,43 @@ baz ^3
 			packageName: packageName2;
 		yourself.
 
-	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
-	self assert: (managedClass categoryOfSelector: #'baz') = #'extension'.
+	self assert: (managedClass categoryOfSelector: #'bar') identical: #'managed'.
+	self assert: (managedClass categoryOfSelector: #'baz') identical: #'extension'.
+	self assert: managedClass rowanPackageName equals: packageName1.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'bar') rowanPackageName equals: packageName1.
+	self
+		assert:
+			(managedClass compiledMethodAt: #'baz') rowanPackageName equals: packageName2.
 
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	(GsFileIn newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
-	self assert: managedClass == (Rowan globalNamed: className).
-	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
-	self assert: ((Rowan globalNamed: className) new perform: #'bar') = 2.
-	self assert: ((Rowan globalNamed: className) new perform: #'baz') = 3.
-	self assert: managedClass rowanPackageName = packageName1.
+	self assert: managedClass identical: (Rowan globalNamed: className).
+	self assert: ((Rowan globalNamed: className) new perform: #'foo') equals: 1.
+	self assert: ((Rowan globalNamed: className) new perform: #'bar') equals: 2.
+	self assert: ((Rowan globalNamed: className) new perform: #'baz') equals: 3.
+	self assert: managedClass rowanPackageName equals: packageName1.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'foo') rowanPackageName = packageName1.
+			(managedClass compiledMethodAt: #'foo') rowanPackageName equals: packageName1.
 	self
 		assert:
-			((Rowan globalNamed: className) categoryOfSelector: #'foo') = #'accessing'.
+			((Rowan globalNamed: className) categoryOfSelector: #'foo') identical: #'accessing'.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName1.
+			(managedClass compiledMethodAt: #'bar') rowanPackageName equals: packageName1.
 	self
 		assert:
-			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
+			((Rowan globalNamed: className) categoryOfSelector: #'bar') identical: #'accessing'.
 	self
 		assert:
-			(managedClass compiledMethodAt: #'baz') rowanPackageName = packageName2.
+			(managedClass compiledMethodAt: #'baz') rowanPackageName equals: packageName2.
 	self
 		assert:
-			((Rowan globalNamed: className) categoryOfSelector: #'bar') = #'accessing'.
+			((Rowan globalNamed: className) categoryOfSelector: #'bar') identical: #'accessing'.
 	self assert: (audit := project audit) isEmpty.
 ]
 

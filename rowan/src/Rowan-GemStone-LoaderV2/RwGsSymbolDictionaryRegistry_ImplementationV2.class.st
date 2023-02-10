@@ -72,15 +72,12 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteClassFromLoadedT
 
 { #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance [
-
 	"delete a compiled method from behavior"
 
 	| selector |
 	selector := compiledMethod selector.
 	behavior removeSelector: selector asString environmentId: 0.
-
 	^ registryInstance
-
 ]
 
 { #category : 'class - registration' }

@@ -233,22 +233,13 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 				error:
 					'The method ' , theBehavior printString , '>>' , methodSelector asString
 						, ' is already packaged in '
-						, theCompiledMethod rowanPackageName printString , ' ... no need to adopt' ].
-
-	theClass rowanPackageName ~= packageName
-		ifTrue: [ 
-			registry
-				addExtensionCompiledMethod: theCompiledMethod
-				for: theBehavior
-				protocol: protocolString
-				toPackageNamed: packageName ]
-		ifFalse: [ 
-			registry
-				adoptCompiledMethod: theCompiledMethod
-				classExtension: false
-				for: theBehavior
-				protocol: protocolString
-				toPackageNamed: packageName ]
+						, theCompiledMethod rowanPackageName printString , ' ... no need to adopt' ].  
+	registry
+		adoptCompiledMethod: theCompiledMethod 
+		classExtension: (theClass rowanPackageName ~= packageName)
+		for: theBehavior 
+		protocol: protocolString
+		toPackageNamed: packageName
 ]
 
 { #category : 'smalltalk api' }

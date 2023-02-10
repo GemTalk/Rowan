@@ -1,21 +1,21 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'gemstone32-5/Tests',
+	#name : 'common/stubs/gemstone37-/Core',
 	#condition : [
-		'gs3.[2-5]'
+		'gs3.[7-]'
 	],
 	#packageNames : [
-		'STON-Tests-32x'
+		'Rowan-GemStone-Kernel-Stubs-37x'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'STON-Tests-32x' : {
+					'Rowan-GemStone-Kernel-Stubs-37x' : {
 						'symbolDictName' : 'Globals'
 					}
 				}
 			}
 		}
 	},
-	#comment : 'Single component for STON project'
+	#comment : 'Stub packages for 3.7.x and beyond'
 }

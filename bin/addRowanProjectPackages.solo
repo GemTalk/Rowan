@@ -3,16 +3,16 @@ options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'componentName' default: 'Core'.
 SuperDoitOptionalOptionWithRequiredArg long: 'packageSymbolDictName'.
-SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+SuperDoitRequiredOptionWithRequiredArg long: 'projectsHome'.
 }
 %
 usage
 -----
 USAGE
-      $basename [--help | -h] [--debug | -D] <spec-url> <package-name>... \
+      $basename [--help | -h] [--debug | -D] --projectsHome=<projects-directory> <spec-url> <package-name>... \
                 [--componentName=<component-name>] \
-                [--packageSymbolDictName=<symbol-dictionary-name>] \
-                [--projectsHome=<projects-directory>] 
+                [--packageSymbolDictName=<symbol-dictionary-name>]
+                 
 
 DESCRIPTION
   Read the project denoted by <spec-url> from disk, and add the packages named
@@ -36,13 +36,13 @@ EXAMPLES
   $basename -h
 
   createRowanProject.solo --projectName=MyProject --projectsHome=$GS_HOME/share/repos
-  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+  $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston --projectsHome=$GS_HOME/share/repos \
             MyProject-Core
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --componentName=Tests \
+            --componentName=Tests  --projectsHome=$GS_HOME/share/repos\
             MyProject-Tests
   $basename file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
-            --packageSymbolDictName=UserGlobals \
+            --packageSymbolDictName=UserGlobals  --projectsHome=$GS_HOME/share/repos \
             MyProject-UserGlobals-Core
 
 -----

@@ -20,8 +20,13 @@ RwGsClassDeletionSymbolDictPatchV2 >> addToNewClassesByNameSymbolList: newClasse
 
 { #category : 'deleting' }
 RwGsClassDeletionSymbolDictPatchV2 >> deleteClassFromSystem [
-
-	self symbolDictionaryRegistry deleteClassNamedFromPackage: self className implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
+	(Rowan globalNamed: self className)
+		ifNil: [ 
+			"class not present and that is okay"
+			^ self ].
+	self symbolDictionaryRegistry
+		deleteClassNamedFromPackage: self className
+		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
 ]
 
 { #category : 'accessing' }
