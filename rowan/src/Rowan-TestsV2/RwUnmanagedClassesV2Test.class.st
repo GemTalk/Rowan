@@ -210,7 +210,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_01 [
 						instVarNames: '#(#xxx)'
 						symbolDictionaryName: symbolDictionary name asString).
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
+	(Rowan globalNamed: 'GsFileIn') fromStream: stream.
 
 	managedClass := Rowan globalNamed: className.
 	self assert: managedClass notNil.
@@ -279,7 +279,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_02 [
 						instVarNames: '#(#xxx)'
 						symbolDictionaryName: symbolDictionary name asString).
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
+	(Rowan globalNamed: 'GsFileIn') fromStream: stream.
 
 
 	self
@@ -347,7 +347,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
 				symbolDictionaryName: symbolDictionary name asString).
 
 	stream := ReadStreamPortable on: aString .
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
@@ -1109,7 +1109,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_01 [
 				symbolDictionaryName: symbolDictionary name asString.
 	stream := ReadStreamPortable on: aString .
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
+	(Rowan globalNamed: 'GsFileIn') fromStream: stream.
 
 	unmanagedClass := Rowan globalNamed: className.
 	self assert: unmanagedClass notNil.
@@ -1166,7 +1166,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 
 	self assert: managedClass notNil.
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream) doFileIn.
+	(Rowan globalNamed: 'GsFileIn') fromStream: stream.
 
 	self assert: managedClass == (Rowan globalNamed: className).
 	self assert: ((Rowan globalNamed: className) new perform: #'foo') = 1.
@@ -1179,7 +1179,6 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_02 [
 		assert:
 			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName.
 	self assert: (audit := project audit) isEmpty.
-
 ]
 
 { #category : 'tests' }
@@ -1221,7 +1220,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 
 	self assert: managedClass notNil.
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
@@ -1236,7 +1235,6 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_03 [
 		assert:
 			(managedClass compiledMethodAt: #'bar') rowanPackageName = packageName.
 	self assert: (audit := project audit) isEmpty.
-
 ]
 
 { #category : 'tests' }
@@ -1285,7 +1283,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 
-	((Rowan globalNamed: 'GsFileIn') fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
