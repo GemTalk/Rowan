@@ -362,7 +362,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
       equals: anotherPackageName.
 	self
 		assert: (unmanagedClass compiledMethodAt: #'bar') rowanPackageName 
-      equals: anotherPackageName.
+      equals: packageName. "method override (no removeall methods) preserves original package"
 ]
 
 { #category : 'tests' }
