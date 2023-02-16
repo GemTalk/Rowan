@@ -188,6 +188,11 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				ReadByteStream, SshSocketError are new classes in 3.7.0 that need 
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages.
+
+			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
+			AbstractCharacter removed from System.
+			New version of GsFileIn ... old version added to ObsoleteClasses.
+
 			New version of InstVarMappingArray so it needs to be adopted ..."
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
@@ -210,9 +215,29 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
 				intoPackageNamed: 'Filein3B'.
+
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'InstVarMappingArray')
 				intoPackageNamed: 'Filein2A'.
+
+			(Rowan globalNamed: 'AbstractCharacter')
+				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
+			((Rowan globalNamed: 'ObsoleteClasses')
+				at: #'ObsoleteGsFileIn'
+				ifAbsent: [  ])
+				ifNotNil: [ :obsoleteGsFileInClass | 
+					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
+						ifTrue: [ 
+							self logMessage: 'Disown ObsoleteClasses'.
+							Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
+			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
+				do: [ :unusedUnPackagedPackageName | 
+					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
+						at: unusedUnPackagedPackageName
+						ifAbsent: [  ])
+						ifNotNil: [ :obsoleteClassesPackage | 
+							(Rowan projectNamed: 'UnPackaged') _loadedProject
+								removeLoadedPackage: obsoleteClassesPackage ] ].
 
 			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
 
@@ -313,6 +338,7 @@ UpgradeRowanV2 >> customerRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'CUSTOMER';
 		at: #'differentMethodCategory' put: #'customerRepairDifferentMethodCategory:';
 		at: #'missingExtensionCategory' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'missingCompiledMethod' put: #'customerRepairMissingCompiledMethod:';
@@ -461,6 +487,11 @@ UpgradeRowanV2 >> cypressClassNames [
 	'CypressDependencySorter'}
 ]
 
+{ #category : 'private' }
+UpgradeRowanV2 >> debugToLog [
+	"convenience method for arranging a conditional halt"
+]
+
 { #category : 'accessing' }
 UpgradeRowanV2 >> errorMessages [
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
@@ -479,9 +510,15 @@ UpgradeRowanV2 >> gemstoneBaseRepairClassesNotIdentical: auditDetail [
 		package ... and when the definition for the new version of the class is loaded the class will be 
 		moved to the correct package"
 
-	self
-		repairClassesNotIdentical: auditDetail loadedClass name
-		inPackageNamed: auditDetail loadedClass loadedPackage name
+	auditDetail loadedClass isLoadedClassExtension
+		ifTrue: [ 
+			self
+				repairClassExtensionsNotIdentical: auditDetail loadedClass name
+				inPackageNamed: auditDetail loadedClass loadedPackage name ]
+		ifFalse: [ 
+			self
+				repairClassesNotIdentical: auditDetail loadedClass name
+				inPackageNamed: auditDetail loadedClass loadedPackage name ]
 ]
 
 { #category : 'repair' }
@@ -501,6 +538,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'gemstoneBaseImage';
 		at: #'classesNotIdentical' put: #'gemstoneBaseRepairClassesNotIdentical:';
 		at: #'differentMethodCategory'
 			put: #'gemstoneBaseRepairDifferentMethodCategory:';
@@ -508,6 +546,10 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'missingCompiledMethod' put: #'gemstoneBaseRepairMissingCompiledMethod:';
 		at: #'missingCompiledMethodsForLoadedClassExtension'
 			put: #'gemstoneBaseRepairMissingCompiledMethod:';
+		at: #'missingGemStoneClassForLoadedClass'
+			put: #'gemstoneBaseRepairMissingClassForLoadedClass:';
+		at: #'missingGemStoneClassForLoadedClassExtension'
+			put: #'gemstoneBaseRepairMissingClassForLoadedExtensionClass:';
 		at: #'missingLoadedMethod' put: #'gemstoneBaseRepairMissingLoadedMethod:';
 		at: #'methodsNotIdentical' put: #'gemstoneBaseRepairNonIdenticalMethod:';
 		at: #'differentClassInstVars' put: #'repairedWhenDefinitionsReloaded:';
@@ -515,6 +557,30 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 		at: #'loadedPackageNotInRegistry' put: #'repairLoadedPackageNotInRegistry:';
 		yourself.
 	^ repairMap
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> gemstoneBaseRepairMissingClassForLoadedClass: auditDetail [
+	"missing class for loaded class (because upgradeImage has removed it) can be repaired by 
+		removing the loaded class"
+
+	self
+		repairMissingClassForLoadedClassNamed:
+			auditDetail owner name asString
+		isMeta: auditDetail owner handle isMeta
+		inPackageNamed: auditDetail owner loadedPackage name
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> gemstoneBaseRepairMissingClassForLoadedExtensionClass: auditDetail [
+	"missing class for extension class (because upgradeImage has removed it) can be repaired by 
+		removing the loaded class extension"
+
+	self
+		repairMissingClassForLoadedExtensionClassNamed:
+			auditDetail owner name asString
+		isMeta: auditDetail owner handle isMeta
+		inPackageNamed: auditDetail owner loadedPackage name
 ]
 
 { #category : 'repair' }
@@ -538,6 +604,15 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 		by a new compiled method thus losing the reference the loaded method, 
 		can be repaired by splicing the loaded method into the new compiled method"
 
+	(auditDetail behavior = GsNMethod
+		and: [ auditDetail selector asString = '_rwRecompileFromSourceIfUnpackagedDo:' ])
+		ifTrue: [ 
+			"https://github.com/GemTalk/Rowan/issues/895"
+			self
+				logMessage:
+					'Skipping repair of ' , auditDetail behavior printString , ' >> '
+						, auditDetail selector , ' because .... it''s complicated address in v3.0'.
+			^ self ].
 	self
 		repairMissingLoadedMethod:
 			auditDetail behavior printString , ' >> ' , auditDetail selector
@@ -619,11 +694,25 @@ UpgradeRowanV2 >> projectsHome: aPathString [
 { #category : 'upgrade customer' }
 UpgradeRowanV2 >> reloadCustomer [
 	| customerProjectNames |
-	customerProjectNames := self customerProjectNames reject: [:projectName | projectName = 'UnPackaged' ].
+	customerProjectNames := self customerProjectNames
+		reject: [ :projectName | projectName = 'UnPackaged' ].
 	customerProjectNames
 		do: [ :projectName | 
-			self logMessage: 'Loading ' , projectName.
-			(self globalNamed: 'Rowan') projectTools load loadProjectNamed: projectName ]
+			| project platformConditionalAttributes |
+			self logMessage: 'Customer loading ' , projectName.
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			[ 
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				platformConditionalAttributes: platformConditionalAttributes ]
+				on: CompileWarning
+				do: [ :ex | ex resume ] ]
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
@@ -631,21 +720,77 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 	self adoptGemstoneBase.
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+			| project platformConditionalAttributes |
+			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			[ 
+			Rowan projectTools load
+				loadProjectNamed: projectName
+				platformConditionalAttributes: platformConditionalAttributes ]
+				on: CompileWarning , RwExecuteClassInitializeMethodsAfterLoadNotification
+				do: [ :ex | 
+					(ex isKindOf: CompileWarning)
+						ifTrue: [ ex resume ]
+						ifFalse: [ 
+							(ex isKindOf: RwExecuteClassInitializeMethodsAfterLoadNotification)
+								ifTrue: [ 
+									"skip auto initialization for certain classes"
+									({GsCurrentSession.
+									GsPackagePolicy.
+									Upgrade1B.
+									Upgrade2A.
+									Upgrade2C.
+									Upgrade3Init} includes: ex candidateClass)
+										ifTrue: [ 
+											"skip initialization"
+											ex resume: false ]
+										ifFalse: [ ex resume: true ] ] ] ] ]
 ]
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
-	self adoptRowan.
-	self rowanProjectNames
+	| theProjectSetDefinition |
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :meth | 
+			meth rowanPackageName = 'Filein4Rowan'
+				ifTrue: [ 
+					self logMessage: 'Disown GsNMethod>>_rwRecompileFromSourceIfUnpackagedDo:'.
+					Rowan packageTools disown
+						disownMethod: #'_rwRecompileFromSourceIfUnpackagedDo:'
+						inClassNamed: 'GsNMethod'
+						isMeta: false ] ].
+	theProjectSetDefinition := RwProjectSetDefinition new.
+	#('Rowan')
 		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+			| project platformConditionalAttributes aProjectSet |
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			aProjectSet := project _loadedProject asDefinition
+				readProjectSet: platformConditionalAttributes.
+			aProjectSet
+				do: [ :projectDef | theProjectSetDefinition addDefinition: projectDef ] ].
+	[ Rowan projectTools load loadProjectSetDefinition: theProjectSetDefinition ]
+		on: CompileWarning
+		do: [ :ex | ex resume ].
+	self
+		logMessage:
+			'[DEBUG] GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: package name:'
+				,
+					(GsNMethod compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:')
+						rowanPackageName
 ]
 
 { #category : 'upgrade' }
@@ -692,16 +837,16 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 														ifTrue: [ #'skipRepair:' ]
 														ifFalse: [ self error: 'unrepairable audit error: ' , message printString ] ].
 											self perform: repairSelector with: auditDetail ] ] ] ] ].
-	self repairSummary
+	self repairSummary: (repairMap at: 'label')
 ]
 
 { #category : 'repair' }
 UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageName [
-	| loadedClass loadedPackage theClass isClassExtension |
+	| loadedClass loadedPackage theClass |
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
-	loadedClass := loadedPackage
-		classOrExtensionForClassNamed: className
+	loadedClass := loadedPackage loadedClasses
+		at: className
 		ifAbsent: [ 
 			self
 				error:
@@ -711,50 +856,142 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 	theClass := Rowan globalNamed: className.
 	(loadedClass handle ~~ theClass and: [ theClass classHistory size > 1 ])
 		ifTrue: [ 
-			"handle MAY be a previous version of the class"
-			1 to: loadedClass handle classHistory size - 1 do: [ :idx | 
-				loadedClass handle == (theClass classHistory at: idx)
-					ifTrue: [ 
-						"repair by splicing in the current version of the class ... a later load should patch method discrepancies"
-						loadedClass handle: theClass.
-						self
-							logMessage:
-								'	Repair classes not identical: ' , loadedClass name
-									, ' however handle is previous version of class (' , idx printString
-									, ') for package ' , packageName.
-						repairedCount := self repairedCount + 1.
-						^ self ] ].
-			self
-				error:
-					'Invalid method audit details for repair of classesNotIdentical. The class named '
-						, className printString
-						, ' DOES match the handle for the loaded class in package '
-						, packageName printString ]
-		ifFalse: [ 
-			loadedClass handle ~~ theClass
-				ifFalse: [ 
-					"confirm the audit issue -- classes are identical"
+			false
+				ifTrue: [ 
+					"handle MAY be a previous version of the class"
+					1 to: loadedClass handle classHistory size - 1 do: [ :idx | 
+						loadedClass handle == (theClass classHistory at: idx)
+							ifTrue: [ 
+								"repair by splicing in the current version of the class ... a later load should patch method discrepancies"
+								loadedClass handle: theClass.
+								self
+									logMessage:
+										'	Repair classes not identical: ' , loadedClass name
+											, ' however handle is previous version of class (' , idx printString
+											, ') for package ' , packageName.
+								repairedCount := self repairedCount + 1.
+								^ self ] ].
 					self
 						error:
 							'Invalid method audit details for repair of classesNotIdentical. The class named '
 								, className printString
 								, ' DOES match the handle for the loaded class in package '
-								, packageName printString ] ].
-	(loadedPackage loadedClasses includesKey: className)
-		ifTrue: [ 
-			isClassExtension := false.
-			loadedPackage loadedClasses removeKey: className ]
+								, packageName printString ] ]
 		ifFalse: [ 
-			isClassExtension := true.
-			loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
-	Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName.	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+			false
+				ifTrue: [ 
+					loadedClass handle ~~ theClass
+						ifFalse: [ 
+							"confirm the audit issue -- classes are identical"
+							self
+								error:
+									'Invalid method audit details for repair of classesNotIdentical. The class named '
+										, className printString
+										, ' DOES match the handle for the loaded class in package '
+										, packageName printString ] ] ].
+	loadedPackage loadedClasses removeKey: className.
+	[ 
+	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+	Rowan packageTools adopt
+		adoptClass: theClass
+		classExtension: false
+		instanceSelectors: loadedClass instanceMethodDefinitions keys
+		classSelectors: loadedClass classMethodDefinitions keys
+		intoPackageNamed: packageName ]
+		on: RwAdoptMissingMethodErrorNotification
+		do: [ :ex | 
+			" if the method does not exist, do not adopt ... should be handled later"
+			self
+				logMessage:
+					'Could not adopt ' , ex className
+						,
+							(ex isMetaclass
+								ifTrue: [ ' class >> ' ]
+								ifFalse: [ ' >> ' ]) , ex selector asString , ' into the package '
+						, packageName printString.
+			ex resume: nil ].
+	loadedClass handle: theClass.
 	self
 		logMessage:
-			'  Repair classes not identical: ' , loadedClass name
-				,
-					(isClassExtension
-						ifTrue: [ ' extension' ]
-						ifFalse: [ '' ]) , ' for package ' , packageName.
+			'  Repair classes not identical: ' , loadedClass name , ' for package '
+				, packageName.
+	repairedCount := self repairedCount + 1.
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairClassExtensionsNotIdentical: className inPackageNamed: packageName [
+	| loadedClass loadedPackage theClass |
+	loadedPackage := (self globalNamed: 'Rowan') image
+		loadedPackageNamed: packageName.
+	loadedClass := loadedPackage loadedClassExtensions
+		at: className
+		ifAbsent: [ 
+			self
+				error:
+					'  Could not repair class extensions not identical: ' , className
+						, ' for package ' , packageName
+						, ' (No loaded class extension class found for ' , className printString
+						, ' in package ' , packageName , ')' ].
+	theClass := Rowan globalNamed: className.
+	(loadedClass handle ~~ theClass and: [ theClass classHistory size > 1 ])
+		ifTrue: [ 
+			false
+				ifTrue: [ 
+					"handle MAY be a previous version of the class"
+					1 to: loadedClass handle classHistory size - 1 do: [ :idx | 
+						loadedClass handle == (theClass classHistory at: idx)
+							ifTrue: [ 
+								"repair by splicing in the current version of the class ... a later load should patch method discrepancies"
+								loadedClass handle: theClass.
+								self
+									logMessage:
+										'	Repair classes not identical: ' , loadedClass name
+											, ' however handle is previous version of class (' , idx printString
+											, ') for package ' , packageName.
+								repairedCount := self repairedCount + 1.
+								^ self ] ].
+					self
+						error:
+							'Invalid method audit details for repair of classesNotIdentical. The class named '
+								, className printString
+								, ' DOES match the handle for the loaded class in package '
+								, packageName printString ] ]
+		ifFalse: [ 
+			false
+				ifTrue: [ 
+					loadedClass handle ~~ theClass
+						ifFalse: [ 
+							"confirm the audit issue -- classes are identical"
+							self
+								error:
+									'Invalid method audit details for repair of classesNotIdentical. The class named '
+										, className printString
+										, ' DOES match the handle for the loaded class in package '
+										, packageName printString ] ] ].
+	loadedClass := loadedPackage loadedClassExtensions removeKey: className.
+	[ 
+	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+	Rowan packageTools adopt
+		adoptClassExtension: theClass
+		instanceSelectors: loadedClass instanceMethodDefinitions keys
+		classSelectors: loadedClass classMethodDefinitions keys
+		intoPackageNamed: packageName ]
+		on: RwAdoptMissingMethodErrorNotification
+		do: [ :ex | 
+			" if the method does not exist, do not adopt"
+			self
+				logMessage:
+					'Could not adopt ' , ex className
+						,
+							(ex isMetaclass
+								ifTrue: [ ' class >> ' ]
+								ifFalse: [ ' >> ' ]) , ex selector asString , ' into the package '
+						, packageName printString.
+			ex resume: nil ].
+	self
+		logMessage:
+			'  Repair class extensions not identical: ' , loadedClass name , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 ]
 
@@ -812,7 +1049,7 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 		we put the symbol dictionary in the transient symbol list and disown
 		the package."
 
-	| loadedPackage symbolDictName sess transientSymbolList symbolDict |
+	| loadedPackage symbolDictName sess symbolDict transientSymList |
 	loadedPackage := auditDetail owner.
 	symbolDictName := loadedPackage packageSymbolDictionaryName.
 	(#('GsCompilerClasses' 'ObsoleteClasses') includes: symbolDictName)
@@ -825,11 +1062,76 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 							' is not in the list of repairable symbol dictionaries (GsCompilerClasses)' ].
 	sess := GsCurrentSession currentSession.
 	sess _transientSymbolList ifNil: [ System refreshTransientSymbolList ].
-	transientSymbolList := sess transientSymbolList.
-	symbolDict := Globals at: symbolDictName asSymbol.
-	transientSymbolList insertObject: symbolDict at: 1.
+	[ 
+	transientSymList := sess transientSymbolList.
 
-	Rowan packageTools disown disownPackageNamed: loadedPackage key
+	symbolDict := Globals at: symbolDictName asSymbol.
+	transientSymList insertObject: symbolDict at: 1.	"needed for disownPackageNamed: to function correctly"
+
+	self
+		logMessage:
+			'	inserted symbol dict ' , symbolDictName printString
+				, ' into transient symbol list'.
+
+	Rowan packageTools disown disownPackageNamed: loadedPackage key ]
+		ensure: [ sess transientSymbolList: nil ].
+	self logMessage: '  Repair missing loaded package: ' , loadedPackage key.
+	repairedCount := self repairedCount + 1.
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairMissingClassForLoadedClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	| loadedClass loadedPackage |
+	loadedPackage := (self globalNamed: 'Rowan') image
+		loadedPackageNamed: packageName.
+	loadedClass := loadedPackage loadedClasses
+		at: className
+		ifAbsent: [ 
+			self
+				error:
+					'  Could not repair missing loaded class: ' , className
+						,
+							(isMeta
+								ifTrue: [ ' class' ]
+								ifFalse: [ '' ]) , ' for package ' , packageName
+						, ' (No loaded class  found for ' , className printString , ' in package '
+						, packageName , ')' ].
+	loadedPackage removeLoadedClass: loadedClass.
+	(ObsoleteClasses at: className asSymbol ifAbsent: [  ])
+		ifNotNil: [ :class | 
+			(self globalNamed: 'RwGsSymbolDictionaryRegistry_ImplementationV2')
+				unregisterLoadedClass: loadedClass
+				forClass: class ].
+	self
+		logMessage:
+			'  Repair missing loaded class: ' , loadedClass name , ' for package '
+				, packageName.
+	repairedCount := self repairedCount + 1
+]
+
+{ #category : 'repair' }
+UpgradeRowanV2 >> repairMissingClassForLoadedExtensionClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+	| loadedClassExtension loadedPackage |
+	loadedPackage := (self globalNamed: 'Rowan') image
+		loadedPackageNamed: packageName.
+	loadedClassExtension := loadedPackage loadedClassExtensions
+		at: className
+		ifAbsent: [ 
+			self
+				error:
+					'  Could not repair missing loaded class extension: ' , className
+						,
+							(isMeta
+								ifTrue: [ ' class' ]
+								ifFalse: [ '' ]) , ' for package ' , packageName
+						, ' (No loaded class extension found for '
+						, className printString , ' in package ' , packageName , ')' ].
+	loadedPackage removeLoadedClassExtension: loadedClassExtension.
+	self
+		logMessage:
+			'  Repair missing loaded class extension: ' , loadedClassExtension name
+				, ' for package ' , packageName.
+	repairedCount := self repairedCount + 1.
 ]
 
 { #category : 'repair' }
@@ -909,7 +1211,7 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 		by a new compiled method thus losing the reference the loaded method, 
 		can be repaired by splicing the loaded method into the new compiled method"
 
-	| loadedClass loadedPackage selector loadedMethod theCompiledMethod theBehavior thePackageName |
+	| loadedClass loadedPackage selector loadedMethod theCompiledMethod theBehavior thePackageName dbg |
 	thePackageName := packageName.
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
@@ -926,6 +1228,11 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						, ' (No loaded class or loaded extension class found for '
 						, className printString , ')' ].
 	selector := self selectorFromMethodSpec: methodSpec.
+	dbg := selector = #'_rwRecompileFromSourceIfUnpackagedDo:'.
+	dbg ifTrue: [self
+		logMessage:
+			'[DEBUG] repairMissingLoadedMethod for selector ', selector printString, ' [0]  (' , dbg printString
+				, ') target package: ' , packageName].
 	theBehavior := loadedClass handle.
 	isMeta
 		ifTrue: [ theBehavior := theBehavior class ].
@@ -945,6 +1252,11 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 							(isMeta
 								ifTrue: [ ' class>>' ]
 								ifFalse: [ '>>' ]) , selector , ' found)' ].
+	dbg
+		ifTrue: [ 
+			self
+				logMessage:
+					'[DEBUG] repairMissingLoadedMethod: [1] target package: ' , packageName ].
 	loadedMethod := isMeta
 		ifTrue: [ loadedClass loadedClassMethods at: selector ifAbsent: [  ] ]
 		ifFalse: [ loadedClass loadedInstanceMethods at: selector ifAbsent: [  ] ].
@@ -954,6 +1266,30 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 				so if there is no loaded method for the selector in the loadedClass associated with
 				given package, then we need to scan the loaded class extensions for this class to
 				find the correct loaded method"
+			dbg
+				ifTrue: [ 
+					self
+						logMessage:
+							'[DEBUG] repairMissingLoadedMethod: [2], compiled method package: '
+								, theCompiledMethod rowanPackageName ].
+			(dbg
+				and: [ 
+					theCompiledMethod rowanPackageName ~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ] ])
+				ifTrue: [ 
+					self
+						logMessage:
+							'  SKIP repair for method: ' , loadedClass name
+								,
+									(isMeta
+										ifTrue: [ ' class' ]
+										ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+								, thePackageName , '. The loadedMethod belongs to a different package '
+								, theCompiledMethod rowanPackageName printString
+								, ' and is expected to be moved.'.
+					^ self ].
+			dbg
+				ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [3]' ].
 			(Rowan image loadedClassExtensionsForClass: theBehavior theNonMetaClass)
 				do: [ :loadedClassExtension | 
 					loadedMethod
@@ -962,18 +1298,38 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 								ifTrue: [ loadedClassExtension loadedClassMethods at: selector ifAbsent: [  ] ]
 								ifFalse: [ loadedClassExtension loadedInstanceMethods at: selector ifAbsent: [  ] ].
 							thePackageName := loadedClassExtension packageName ] ].
+			dbg
+				ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [4]' ].
 			loadedMethod
 				ifNil: [ 
 					"If we are still unable to find a loaded method, then we assume that this is a 
 						newly added kernel method for this version of GemStone ... adopt the 
 						method into the loadedPackage (any package will do) and expect correction 
 						during post repair load"
+					(theCompiledMethod rowanPackageName
+						~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ])
+						ifTrue: [ 
+							self
+								logMessage:
+									'  SKIP repair for method: ' , loadedClass name
+										,
+											(isMeta
+												ifTrue: [ ' class' ]
+												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+										, thePackageName
+										, '. The loadedMethod belongs to a different package '
+										, theCompiledMethod rowanPackageName printString
+										, ' and is expected to be moved.'.
+							^ self ].
+					dbg
+						ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [5]' ].
 					Rowan packageTools adopt
 						adoptMethod: selector
 						inClassNamed: className
 						isMeta: isMeta
 						intoPackageNamed: packageName.
-					self
+				self
 						logMessage:
 							'  Adopt missing loaded method: ' , loadedClass name
 								,
@@ -1130,6 +1486,17 @@ UpgradeRowanV2 >> repairSummary [
 	self logMessage: 'Skipped ' , self skipCount printString , ' audit repairs'
 ]
 
+{ #category : 'upgrade' }
+UpgradeRowanV2 >> repairSummary: label [
+	self logMessage: 'REPAIR SUMMARY for ', label.
+	self
+		logMessage: 'Repaired ' , self repairedCount printString , ' audit failures'.
+	self
+		logMessage:
+			'Repaired ' , self repairedByReload printString , ' by RELOAD audit failures'.
+	self logMessage: 'Skipped ' , self skipCount printString , ' audit repairs'
+]
+
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanProjectNames [
 	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress')
@@ -1144,6 +1511,7 @@ UpgradeRowanV2 >> rowanRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: 'label' put: 'ROWAN';
 		at: #'methodsNotIdentical' put: #'repairNonIdenticalMethod:';
 		at: #'differentMethodCategory' put: #'repairDifferentMethodCategory:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
@@ -1210,6 +1578,7 @@ UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 	"Use the gemstoneBaseImage project audit to repair the damaged Rowan metadata"
 
+	| sess |
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
 	self auditForProjectsNamed: self gemstoneBaseProjectNames.
 	self logMessage: ' repairing gemstoneBaseImage audit failures'.
@@ -1218,6 +1587,11 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 			repairedCount := 0.
 			self repairAuditFailures: self gemstoneBaseRepairMap.
 			self commit ].
+	sess := GsSession currentSession.
+	sess _transientSymbolList
+		ifNotNil: [ 
+			"was used in UpgradeRowanV2 >> repairLoadedPackageNotInRegistry so reset to clear any additions that may have been made"
+			sess transientSymbolList: nil ].
 	self
 		logMessage:
 			' gemstoneBaseImage audit repair COMPLETE (' , repairedCount printString
@@ -1247,8 +1621,14 @@ UpgradeRowanV2 >> step_4_reloadRowan [
 
 	| rowanVersion |
 	rowanVersion := Rowan version.
-	self logMessage: 'reload Rowan upgrading from ', self originalRowanVersion printString, ' to ', rowanVersion printString.
+	self
+		logMessage:
+			'reload Rowan upgrading from ' , self originalRowanVersion printString , ' to '
+				, rowanVersion printString.
+	self logMessage: 'reload Rowan'.
+	self debugToLog.
 	self reloadRowan.
+	self debugToLog.
 	self commit
 ]
 
@@ -1257,7 +1637,11 @@ UpgradeRowanV2 >> step_5_reloadGemstoneBase [
 	"Reload the gemstoneBaseImage project to repair those audit failures repaired by a reload and to install platform-specific changes"
 
 	self logMessage: 'reload gemstoneBaseImage project'.
+	self debugToLog.
 	self reloadGemstoneBase.
+	self logMessage: 'reload Rowan'.
+	self debugToLog.
+	self reloadRowan.
 	self commit
 ]
 
@@ -1272,14 +1656,24 @@ UpgradeRowanV2 >> step_6_reloadCustomer [
 
 { #category : 'steps' }
 UpgradeRowanV2 >> step_7_finalAudit [
+	| dirtyProjects |
 	self logMessage: 'Final Audit'.
 	self auditForProjectsNamed: (self globalNamed: 'Rowan') projectNames.
 	self countAuditErrors.
+
 	audit isEmpty
 		ifFalse: [ 
 			self
 				error:
-					'Final Audit did not run clean ... repair audit errors before proceeding' ]
+					'Final Audit did not run clean ... repair audit errors before proceeding' ].
+	dirtyProjects := (Rowan projects reject: [ :each | each name = 'UnPackaged' ])
+		select: [ :project | project isDirty ].
+	dirtyProjects isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'Unexpected Dirty projects: '
+						, (dirtyProjects asArray collect: [ :each | each name ]) printString ]
 ]
 
 { #category : 'accessing' }
@@ -1289,6 +1683,14 @@ UpgradeRowanV2 >> upgradeFrom [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> upgradeFrom: object [
-	upgradeFrom := object
+UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
+	upgradeFrom := gemstoneVersionString.
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber <= '3.6.3' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"GsHostProcess has changed shape in 3.7.0, must recompile all methods that reference GsHostProcess"
+			self logMessage: 'Recompiling references to ObsoleteGsHostProcess'.
+			(ClassOrganizer newExcludingGlobals
+				referencesToObject: (ObsoleteClasses at: #'ObsoleteGsHostProcess'))
+				do: [ :aGsNMethod | aGsNMethod recompileFromSource ] ]
 ]
