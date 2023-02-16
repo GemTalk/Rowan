@@ -241,10 +241,12 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
 
-			Rowan packageTools disown
-				disownMethod: #'asPath'
-				inClassNamed: 'String'
-				isMeta: false.
+			(String compiledMethodAt: #'asPath' otherwise: nil)
+				ifNotNil: [ 
+					Rowan packageTools disown
+						disownMethod: #'asPath'
+						inClassNamed: 'String'
+						isMeta: false ].
 
 			Rowan projectTools adopt
 				adoptProjectFromUrl:
