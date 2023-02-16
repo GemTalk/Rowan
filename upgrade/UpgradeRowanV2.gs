@@ -1,4 +1,4 @@
-! Copyright (C) GemTalk Systems 1986-2022.  All Rights Reserved.
+! Copyright (C) GemTalk Systems 1986-2023.  All Rights Reserved.
 ! Class extensions for 'AbstractDictionary'
 
 !		Instance methods for 'AbstractDictionary'
@@ -1310,18 +1310,6 @@ _rwSortedConstraints
 ^constraintArray
 %
 
-! Class extensions for 'FileLocator'
-
-!		Class methods for 'FileLocator'
-
-category: '*rowan-gemstone-components-kernel'
-classmethod: FileLocator
-rowanProjectsHome
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ self origin: #rowanProjectsHome
-%
-
 ! Class extensions for 'GsFileIn'
 
 !		Instance methods for 'GsFileIn'
@@ -1585,21 +1573,6 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 			"do not leave clone in the symbol list"
 			symbolList remove: clonedSymDict ifAbsent: [] ].
 	^ clonedSymDict
-%
-
-! Class extensions for 'SystemResolver'
-
-!		Instance methods for 'SystemResolver'
-
-category: '*rowan-gemstone-components-kernel'
-method: SystemResolver
-rowanProjectsHome
-
-	"Answer the path to $ROWAN_PROJECTS_HOME"
-
-	^ (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
-		ifNil: [ self error: '$ROWAN_PROJECTS_HOME not defined' ]
-		ifNotNil: [:str | self  resolveString: str ]
 %
 
 ! Class extensions for 'UndefinedObject'
