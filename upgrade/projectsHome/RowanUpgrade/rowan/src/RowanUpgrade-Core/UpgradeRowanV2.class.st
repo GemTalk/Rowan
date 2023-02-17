@@ -170,7 +170,6 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
 			AbstractCharacter removed from System.
-			New version of GsFileIn ... old version added to ObsoleteClasses.
 
 			New version of InstVarMappingArray so it needs to be adopted ..."
 			Rowan packageTools adopt
@@ -201,14 +200,6 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			(Rowan globalNamed: 'AbstractCharacter')
 				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
-			((Rowan globalNamed: 'ObsoleteClasses')
-				at: #'ObsoleteGsFileIn'
-				ifAbsent: [  ])
-				ifNotNil: [ :obsoleteGsFileInClass | 
-					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
-						ifTrue: [ 
-							self logMessage: 'Disown ObsoleteGsFileIn'.
-							Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
 					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
@@ -1538,6 +1529,20 @@ UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
 	self logMessage: ' repair ROWAN audit failures'.
+
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"New version of GsFileIn ... old version added to ObsoleteClasses during upgradeImage. Cross project impacts, so to the disown now."
+			((Rowan globalNamed: 'ObsoleteClasses')
+				at: #'ObsoleteGsFileIn'
+				ifAbsent: [  ])
+				ifNotNil: [ :obsoleteGsFileInClass | 
+					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
+						ifTrue: [ 
+							self logMessage: 'Disown ObsoleteGsFileIn'.
+							Rowan packageTools disown disownClassAndExtensionMethods: obsoleteGsFileInClass ] ] ].
+
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.
 	audit isEmpty

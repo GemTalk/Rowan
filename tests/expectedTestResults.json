@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 19,
 		"failures" : 11,
-		"passed" : 961,
-		"summary" : "991 Tests with 11 Failures, 19 Errors and 0 DeprecationWarnings in 293.89s",
-		"tests" : 991,
-		"time" : 293.889
+		"passed" : 962,
+		"summary" : "992 Tests with 11 Failures, 19 Errors and 0 DeprecationWarnings in 339.82s",
+		"tests" : 992,
+		"time" : 339.824
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -1423,6 +1423,12 @@
 			"className" : "RwDisownToolApiTest",
 			"status" : "passed",
 			"selector" : "testDisownClass2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwDisownToolApiTest",
+			"status" : "passed",
+			"selector" : "testDisownClassAndExtensionMethods",
 			"time" : "0"
 		},
 		{
@@ -5962,5 +5968,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2023-02-13T21:09:34.175410-08:00"
+	"timeStamp" : "2023-02-17T13:27:47.413530-08:00"
 }

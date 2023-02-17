@@ -33,6 +33,47 @@ RwPkgDisownTool >> disownClass: theClass [
 ]
 
 { #category : 'classes' }
+RwPkgDisownTool >> disownClassAndExtensionMethods: theClass [
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things. Methods that are not in the same package as the class are disowned. "
+
+	"The classes and methods are not removed from the system"
+
+	| packageName loadedPackage loadedProject packageSymDictName theSymbolDictionary registry className |
+	(Rowan image loadedClassExtensionsForClass: theClass)
+		do: [ :loadedClassExtension | 
+			loadedPackage := loadedClassExtension loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+
+			packageSymDictName := loadedProject
+				symbolDictNameForPackageNamed: packageName.
+
+			theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
+
+			registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+			loadedClassExtension disownFromLoaded: registry.	"inline RwGsSymbolDictionaryRegistry_ImplementationV2>>disownClassExtensions:forLoadedPackage:instance: to avoid classname lookup"
+			loadedPackage removeLoadedClassExtension: loadedClassExtension ].
+
+	className := theClass name asString.
+	theClass rowanProjectName = Rowan unpackagedName
+		ifTrue: [ 
+			self
+				error:
+					'The class ' , className printString
+						, ' is not packaged ... cannot disown an unpackaged class' ].
+	packageName := theClass rowanPackageName.
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedProject := loadedPackage loadedProject.
+
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
+
+	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
+
+	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	registry disownClass: theClass
+]
+
+{ #category : 'classes' }
 RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName [
 
 	"Remove the extension methods in the named class for the named package"
