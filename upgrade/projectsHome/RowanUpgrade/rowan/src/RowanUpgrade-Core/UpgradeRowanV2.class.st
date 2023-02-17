@@ -93,27 +93,6 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> _disownFileLocator_370 [
-	"New version of FileLocator moved from Rowan to new base project FileSystemGs and 'FileSystem-Core'  package. There is an orphan extension method for older version of class in Rowan-GemStone-Components-Kernel package. Perform surgery to remove reference to old version of class extension from Rowan-GemStone-Components-Kernel."
-
-	| packageName className loadedClassExt classHistory |
-	classHistory := FileLocator classHistory.
-	packageName := 'Rowan-GemStone-Components-Kernel'.
-	className := #'FileLocator'.
-	loadedClassExt := (Rowan image loadedPackageNamed: packageName)
-		loadedClassExtensions at: 'FileLocator'.
-	classHistory
-		do: [ :classVersion | 
-			classVersion == loadedClassExt handle
-				ifTrue: [ 
-					loadedClassExt handle: FileLocator.
-					^ self ] ].
-	self
-		error:
-			'Cannot repair FileLocator reference in loaded Rowan-GemStone-Components-Kernel package'
-]
-
-{ #category : 'private' }
 UpgradeRowanV2 >> _obsoleteFileSystemClasses [
 	#('FastUUIDGenerator' 'WindowsResolver' 'WindowsStore' 'WindowsStoreTest' 'DeleteVisitor' 'DeleteVisitor' 'CopyVisitor' 'CopyVisitorTest' 'File' 'PostorderGuide' 'PostorderGuideTest' 'MemoryWriteStream' 'FileHandle' 'FileHandleTest' 'SelectVisitor' 'SelectVisitorTest' 'FileSystemDirectoryEntry' 'UUID' 'CollectVisitor' 'CollectVisitorTest' 'AbstractEnumerationVisitor' 'AbstractEnumerationVisitorTest' 'FileSystemVisitor' 
 'BreadthFirstGuide' 'BreadthFirstGuideTest' 'FileSystemGuide' 'PreorderGuide' 'PreorderGuideTest' 'MacStore' 'ResolutionRequest' 'AbstractBinaryFileStream' 'BinaryFileStream'
@@ -228,7 +207,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				ifNotNil: [ :obsoleteGsFileInClass | 
 					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
 						ifTrue: [ 
-							self logMessage: 'Disown ObsoleteClasses'.
+							self logMessage: 'Disown ObsoleteGsFileIn'.
 							Rowan packageTools disown disownClass: obsoleteGsFileInClass ] ].
 			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
 				do: [ :unusedUnPackagedPackageName | 
@@ -261,29 +240,34 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 UpgradeRowanV2 >> adoptRowan [
 	"classes that are new relative to original Rowan version"
 
+	(GsNMethod
+		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
+		otherwise: nil)
+		ifNotNil: [ :meth | 
+			meth rowanPackageName = 'Filein4Rowan'
+				ifTrue: [ 
+					self logMessage: 'Disown GsNMethod>>_rwRecompileFromSourceIfUnpackagedDo:'.
+					Rowan packageTools disown
+						disownMethod: #'_rwRecompileFromSourceIfUnpackagedDo:'
+						inClassNamed: 'GsNMethod'
+						isMeta: false ] ].
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"FileLocator class >> rowanProjectsHome and SystemResolver >> rowanProjectsHome moved 
-				from FileSystemGs to Rowan during upgradeImage (i.e., not packaged)"
-
-			self _disownFileLocator_370.	"New version of FileLocator in base and need to remove the package meta data for older versions of class."
-
-			Rowan packageTools disown
-				disownMethod: #'rowanProjectsHome'
-					inClassNamed: 'SystemResolver'
-					isMeta: false;
-				yourself.
-			Rowan packageTools adopt
-				adoptMethod: #'rowanProjectsHome'
-					inClassNamed: 'SystemResolver'
-					isMeta: false
-					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
-				adoptMethod: #'rowanProjectsHome'
-					inClassNamed: 'FileLocator'
-					isMeta: true
-					intoPackageNamed: 'Rowan-GemStone-Components-Kernel';
-				yourself ]
+			{'currentPackage:'.
+			'currentProject:'.
+			'currentPackage'.
+			'currentProject'}
+				do: [ :selector | 
+					| pn |
+					(pn := ((Rowan globalNamed: 'GsFileIn') compiledMethodAt: selector)
+						rowanPackageName) = Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'GsFileIn'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ]
 ]
 
 { #category : 'upgrade' }
@@ -758,17 +742,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
 	| theProjectSetDefinition |
-	(GsNMethod
-		compiledMethodAt: #'_rwRecompileFromSourceIfUnpackagedDo:'
-		otherwise: nil)
-		ifNotNil: [ :meth | 
-			meth rowanPackageName = 'Filein4Rowan'
-				ifTrue: [ 
-					self logMessage: 'Disown GsNMethod>>_rwRecompileFromSourceIfUnpackagedDo:'.
-					Rowan packageTools disown
-						disownMethod: #'_rwRecompileFromSourceIfUnpackagedDo:'
-						inClassNamed: 'GsNMethod'
-						isMeta: false ] ].
+	self adoptRowan.
 	theProjectSetDefinition := RwProjectSetDefinition new.
 	#('Rowan')
 		do: [ :projectName | 
