@@ -694,6 +694,7 @@ UpgradeRowanV2 >> reloadCustomer [
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> reloadGemstoneBase [
+	self upgradeUnPackagedProject.
 	self adoptGemstoneBase.
 	self gemstoneBaseProjectNames
 		do: [ :projectName | 
@@ -1674,4 +1675,16 @@ UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
 			(ClassOrganizer newExcludingGlobals
 				referencesToObject: (ObsoleteClasses at: #'ObsoleteGsHostProcess'))
 				do: [ :aGsNMethod | aGsNMethod recompileFromSource ] ]
+]
+
+{ #category : 'upgrade UnPackaged' }
+UpgradeRowanV2 >> upgradeUnPackagedProject [
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"The UnPackaged project references an ObsoleteFileLocator for projects home ... 
+				need to patch it with an EnvironmentResolver"
+			self logMessage: 'PATCHING UnPackaged project'.
+			(Rowan projectNamed: 'UnPackaged') _loadedProject handle _projectRepository
+				projectsHome: (FileLocator origin: #'ROWAN_PROJECTS_HOME') ]
 ]
