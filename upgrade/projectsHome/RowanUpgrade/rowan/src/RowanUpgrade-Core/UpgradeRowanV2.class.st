@@ -220,9 +220,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			Rowan projectTools adopt
 				adoptProjectFromUrl:
-					'file:$GEMSTONE/upgrade/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
-				readonlyDiskUrl: 'file:$GEMSTONE/upgrade/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/upgrade/projects'.
+					'file:$GEMSTONE/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
+				readonlyDiskUrl: 'file:$GEMSTONE/projects/FileSystemGs'
+				projectsHome: '$GEMSTONE/projects'.
 
 			self _obsoleteFileSystemClasses	"FastUUIDGenerator, WindowsResolver, WindowsStore, and and a host of classes have been removed" ]
 ]
