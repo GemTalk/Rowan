@@ -112,6 +112,32 @@ UpgradeRowanV2 >> _obsoleteFileSystemClasses [
 							'added ' , className , ' to ObsoleteClasses as ' , newClassName asString ] ]
 ]
 
+{ #category : 'private' }
+UpgradeRowanV2 >> _patch370ProjectRoot: project [
+	"in 3.7.0, the location of base image projects was moved from $GEMSTONE/upgrade/projects to 
+		$GEMSTONE/projects, so if the project is $GEMSTONE in it's repositoryRoot is based on  
+		$GEMSTONE/upgrade/projects, then change the repositoryRoot to use $GEMSTONE/projects"
+
+	| gemstone repositoryRoot |
+	self upgradeFrom asRwGemStoneVersionNumber >= '3.7.0' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			"patch not needed"
+			^ self ].
+	gemstone := '$GEMSTONE' asFileReference.
+	repositoryRoot := project repositoryRoot.
+	((gemstone containsPath: repositoryRoot fullPath)
+		and: [ repositoryRoot parent parent basename = 'upgrade' ])
+		ifTrue: [ 
+			| newRootPath |
+			"original path points to $GEMSTONE/upgrade/projects"
+			newRootPath := (gemstone / 'projects' / project name) pathString.
+			self
+				logMessage:
+					'	patching repository root for ' , project name , ' ' , newRootPath.
+			project _loadedProject resolvedProject diskRepositoryRoot: newRootPath ]
+		ifFalse: [ self logMessage: '	repository root patch not needed for ' , project name ]
+]
+
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
@@ -701,6 +727,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 			| project platformConditionalAttributes |
 			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
 			project := Rowan projectNamed: projectName.
+			self _patch370ProjectRoot: project.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
 					"replace old GemStone version with current GemStone version"
@@ -736,6 +763,10 @@ UpgradeRowanV2 >> reloadRowan [
 	| theProjectSetDefinition |
 	self adoptRowan.
 	theProjectSetDefinition := RwProjectSetDefinition new.
+	self rowanProjectNames
+		do: [ :projectName | 
+			"patch project root for all Rowan projects ... if needed"
+			self _patch370ProjectRoot: (Rowan projectNamed: projectName) ].
 	#('Rowan')
 		do: [ :projectName | 
 			| project platformConditionalAttributes aProjectSet |

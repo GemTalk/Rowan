@@ -109,7 +109,7 @@ writeAppendStreamFor: aFileReference
 
 	| fileDescriptor optionsForAppend |
 	(aFileReference exists and: [aFileReference isFile not])
-		ifTrue: [^FsFileRequired signalWith: aFileReference].
+		ifTrue: [^FileRequired signalWith: aFileReference].
 	optionsForAppend := aFileReference fileOpeningOptionsClass writeOnly append.
 	aFileReference exists ifFalse: [ aFileReference createFile ].
 	fileDescriptor := aFileReference openOptions: optionsForAppend.
