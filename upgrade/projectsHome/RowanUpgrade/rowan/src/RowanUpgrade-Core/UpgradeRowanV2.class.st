@@ -93,26 +93,6 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> _obsoleteFileSystemClasses [
-	#('FastUUIDGenerator' 'WindowsResolver' 'WindowsStore' 'WindowsStoreTest' 'DeleteVisitor' 'DeleteVisitor' 'CopyVisitor' 'CopyVisitorTest' 'File' 'PostorderGuide' 'PostorderGuideTest' 'MemoryWriteStream' 'FileHandle' 'FileHandleTest' 'SelectVisitor' 'SelectVisitorTest' 'FileSystemDirectoryEntry' 'UUID' 'CollectVisitor' 'CollectVisitorTest' 'AbstractEnumerationVisitor' 'AbstractEnumerationVisitorTest' 'FileSystemVisitor' 
-'BreadthFirstGuide' 'BreadthFirstGuideTest' 'FileSystemGuide' 'PreorderGuide' 'PreorderGuideTest' 'MacStore' 'ResolutionRequest' 'AbstractBinaryFileStream' 'BinaryFileStream'
-'InteractiveResolver' 'InteractiveResolverTest')
-		do: [ :className | 
-			(Rowan globalNamed: className)
-				ifNotNil: [ :oldCls | 
-					| newClassName |
-					newClassName := ('Obsolete' , className) asSymbol.
-					ObsoleteClasses at: newClassName put: oldCls.
-					oldCls removeAllMethods.
-					oldCls class removeAllMethods.
-					oldCls _unsafeAt: 11 put: newClassName.	"change name"
-					Globals removeKey: className asSymbol.
-					self
-						logMessage:
-							'added ' , className , ' to ObsoleteClasses as ' , newClassName asString ] ]
-]
-
-{ #category : 'private' }
 UpgradeRowanV2 >> _patch370ProjectRoot: project [
 	"in 3.7.0, the location of base image projects was moved from $GEMSTONE/upgrade/projects to 
 		$GEMSTONE/projects, so if the project is $GEMSTONE in it's repositoryRoot is based on  
@@ -248,9 +228,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				adoptProjectFromUrl:
 					'file:$GEMSTONE/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
 				readonlyDiskUrl: 'file:$GEMSTONE/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/projects'.
-
-			self _obsoleteFileSystemClasses	"FastUUIDGenerator, WindowsResolver, WindowsStore, and and a host of classes have been removed" ]
+				projectsHome: '$GEMSTONE/projects'. ]
 ]
 
 { #category : 'upgrade rowan' }
@@ -1705,7 +1683,27 @@ UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
 			self logMessage: 'Recompiling references to ObsoleteGsHostProcess'.
 			(ClassOrganizer newExcludingGlobals
 				referencesToObject: (ObsoleteClasses at: #'ObsoleteGsHostProcess'))
-				do: [ :aGsNMethod | aGsNMethod recompileFromSource ] ]
+				do: [ :aGsNMethod | aGsNMethod recompileFromSource ] ].
+	self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			| obsoleteClassNames obsoleteClassNames1 obsoleteClassNames2 classOrganizer |
+			"recompile all of the methods that may reference obsolete FileSystem classes"
+			obsoleteClassNames1 := #(#'FastUUIDGenerator' #'WindowsResolver' #'WindowsStore' #'WindowsStoreTest' #'DeleteVisitor' #'DeleteVisitor' #'CopyVisitor' #'CopyVisitorTest' #'File' #'PostorderGuide' #'PostorderGuideTest' #'MemoryWriteStream' #'FileHandle' #'FileHandleTest' #'SelectVisitor' #'SelectVisitorTest' #'FileSystemDirectoryEntry' #'UUID' #'CollectVisitor' #'CollectVisitorTest' #'AbstractEnumerationVisitor' #'AbstractEnumerationVisitorTest' #'FileSystemVisitor' #'BreadthFirstGuide' #'BreadthFirstGuideTest' #'FileSystemGuide' #'PreorderGuide' #'PreorderGuideTest' #'MacStore' #'ResolutionRequest' #'AbstractBinaryFileStream' #'BinaryFileStream' #'InteractiveResolver' #'InteractiveResolverTest').	"classes made obsolete when Kurt's implmentation originally added to base image"
+			obsoleteClassNames2 := #(#'ZnCharacterWriteStream' #'ZnEncodedWriteStream' #'ZnCharacterReadStream' #'ZnEncodedReadStream' #'ZnEncodedStream' #'ZnCharacterReadWriteStream' #'ZnUTF8Encoder' #'ZnCharacterEncoder' #'ZnBufferedWriteStream' #'ZnBufferedReadWriteStream' #'ZnBufferedReadStream' #'UnixStore' #'DiskStore' #'FileSystem' #'FileReference' #'FileLocator' #'AbstractFileReference' #'ZnCharacterEncodingError' #'FileExists' #'DirectoryIsNotEmpty' #'DirectoryExists' #'DirectoryDoesNotExist' #'FileSystemError' #'FileDoesNotExistException' #'FileAlreadyExistsException' #'FileException' #'IllegalName').	"classes made obsolete since original merge"
+			obsoleteClassNames := obsoleteClassNames1 , obsoleteClassNames2.
+			classOrganizer := ClassOrganizer newExcludingGlobals.
+			obsoleteClassNames
+				do: [ :obsoleteClassName | 
+					(ObsoleteClasses at: obsoleteClassName ifAbsent: [  ])
+						ifNil: [ self logMessage: 'ignoring methods referencing ' , obsoleteClassName ]
+						ifNotNil: [ :obsoleteClass | 
+							self logMessage: 'scanning for methods referencing ' , obsoleteClassName.
+							(classOrganizer referencesToObject: obsoleteClass)
+								do: [ :aGsNMethod | 
+									self
+										logMessage:
+											'recompiling ' , aGsNMethod inClass name , ' >> ' , aGsNMethod selector.
+									aGsNMethod recompileFromSource ] ] ] ]
 ]
 
 { #category : 'upgrade UnPackaged' }
