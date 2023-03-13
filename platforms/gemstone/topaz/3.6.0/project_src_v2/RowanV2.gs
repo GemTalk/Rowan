@@ -48517,7 +48517,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-	^ '2.3.0'
+	^ '2.3.1'
 %
 
 ! Class implementation for 'RowanCommandResult'
@@ -61370,7 +61370,7 @@ checkMethodDefinitions: aClassDef
      cls := GemStone_Legacy_Streams at: clsName otherwise: nil.
   ].
   cls ifNil:[   
-    (cls := System myUserProfile resolveSymbol: clsName ) ifNil:[
+    (cls := GsCurrentSession currentSession resolveSymbol: clsName ) ifNil:[
        "creating the class not implemented yet"
        Warning signal:'class ' , clsName , ' not found by name lookup'.
        ^ self "can't check syntax on the methods until class is defined"
@@ -61380,7 +61380,7 @@ checkMethodDefinitions: aClassDef
   methBlk := [ :methDef "a RwMethodDefinition" |
     [
       cls compileMethod: methDef source
-      dictionaries: System myUserProfile symbolList
+      dictionaries: GsCurrentSession currentSession symbolList
       category: methDef protocol asSymbol
       intoMethodDict: fakeMethDict
       intoCategories: nil
@@ -88719,21 +88719,6 @@ method: MemoryWriteStream
 truncate: anInteger 
 	collection truncate: anInteger 
 	
-%
-
-! Class extensions for 'AbstractDictionary'
-
-!		Instance methods for 'AbstractDictionary'
-
-category: '*rowan-gemstone-kernel-36x'
-method: AbstractDictionary
-at: key ifPresent: aBlock
-   "Lookup the given key in the receiver. If it is present, answer the value of 
-    evaluating the given block with the value associated with the key. Otherwise, answer nil."
-
-	| v |
-	v := self at: key ifAbsent: [^ nil].
-	^ aBlock cull: v
 %
 
 ! Class extensions for 'Array'
