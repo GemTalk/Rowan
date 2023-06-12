@@ -190,9 +190,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, JsonParser,
-				ReadByteStream, SshSocketError, AbstractCloudCredentials, AwsCredentials, 
-				AzureCredentials are new classes in 3.7.0 that need to be adopted (along with 
-                all of their methods) before reloading GemStone packages.
+				ReadByteStream, SshSocketError, AbstractCloudCredentials, AzureDataKey, 
+				AzureCredentials, AzureError are new classes in 3.7.0 that need to be adopted 
+				(along with all of their methods) before reloading GemStone packages.
 
 			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
 			AbstractCharacter removed from System.
@@ -201,16 +201,20 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
+AbstractCloudCredentials,
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AbstractCloudCredentials')
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AzureCredentials')
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AzureDataKey')
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AzureError')
+				intoPackageNamed: 'Filein3B'.
 
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AzureCredentials')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AwsCredentials')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AzureCredentials')
-				intoPackageNamed: 'Filein3B'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GsSftpRemoteFile')
 				intoPackageNamed: 'Filein3B'.
