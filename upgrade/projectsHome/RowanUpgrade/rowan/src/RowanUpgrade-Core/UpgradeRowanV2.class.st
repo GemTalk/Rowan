@@ -96,7 +96,7 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 UpgradeRowanV2 >> _obsoleteFileSystemClasses [
 	#('FastUUIDGenerator' 'WindowsResolver' 'WindowsStore' 'WindowsStoreTest' 'DeleteVisitor' 'DeleteVisitor' 'CopyVisitor' 'CopyVisitorTest' 'File' 'PostorderGuide' 'PostorderGuideTest' 'MemoryWriteStream' 'FileHandle' 'FileHandleTest' 'SelectVisitor' 'SelectVisitorTest' 'FileSystemDirectoryEntry' 'UUID' 'CollectVisitor' 'CollectVisitorTest' 'AbstractEnumerationVisitor' 'AbstractEnumerationVisitorTest' 'FileSystemVisitor' 
 'BreadthFirstGuide' 'BreadthFirstGuideTest' 'FileSystemGuide' 'PreorderGuide' 'PreorderGuideTest' 'MacStore' 'ResolutionRequest' 'AbstractBinaryFileStream' 'BinaryFileStream'
-'InteractiveResolver' 'InteractiveResolverTest')
+'InteractiveResolver' 'InteractiveResolverTest' 'IllegalName' 'FileWriteError' 'CannotDeleteFileException')
 		do: [ :className | 
 			(Rowan globalNamed: className)
 				ifNotNil: [ :oldCls | 
@@ -191,7 +191,10 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 		ifTrue: [ 
 			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, JsonParser,
 				ReadByteStream, SshSocketError, AbstractCloudCredentials, AzureDataKey, 
-				AzureCredentials, AzureError are new classes in 3.7.0 that need to be adopted 
+				AzureCredentials, AzureError, Special56bit0, Special56bit1, Special56bit10, 
+				Special56bit11, Special56bit12, Special56bit13, Special56bit14, Special56bit15, 
+				Special56bit2, Special56bit3, Special56bit4, Special56bit5, Special56bit6,
+				Special56bit7, Special56bit8, Special56bit9 are new classes in 3.7.0 that need to be adopted 
 				(along with all of their methods) before reloading GemStone packages.
 
 			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
@@ -199,9 +202,57 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 
 			New version of InstVarMappingArray so it needs to be adopted ..."
 			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit0')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit1')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit2')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit3')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit4')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit5')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit6')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit7')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit8')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit9')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit10')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit11')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit12')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit13')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit14')
+				intoPackageNamed: 'Filein4Rowan'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'Special56bit15')
+				intoPackageNamed: 'Filein4Rowan'.
+
+			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
 				intoPackageNamed: 'Filein4Rowan'.
-AbstractCloudCredentials,
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'AbstractCloudCredentials')
 				intoPackageNamed: 'Filein3B'.

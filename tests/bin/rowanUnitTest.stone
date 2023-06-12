@@ -290,9 +290,14 @@ runTestSuite: testSuiteName
           "debug unexpected test failures"
 					| expectedFailures |
 					expectedFailures := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
-					^(self globalNamed: 'GsTestStatsCITestRunner') 
+					[ ^(self globalNamed: 'GsTestStatsCITestRunner') 
 						debugUnexpectedFailures: systemTestSuite 
-						expectedFailures: expectedFailures ] ]
+						expectedFailures: expectedFailures ] 
+							on: TestFailure 
+							do: [:ex | 
+								self debugGem
+									ifTrue: [ System waitForDebug ]
+									ifFalse: [ ex pass ] ] ] ]
 		ifFalse: [ 
 			"run tests and produce report of test failures"
 			^ (self globalNamed: 'GsTestStatsCITestRunner') runSuite: systemTestSuite ].
