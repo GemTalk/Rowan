@@ -133,7 +133,7 @@ precedence than a smaller set, if all of the preceding identifiers are equal.
 Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 
-BackusNaur Form Grammar for Valid SemVer Versions
+Backus-Naur Form Grammar for Valid SemVer Versions
 --------------------------------------------------
 
     <valid semver> ::= <version core>

@@ -47,16 +47,19 @@ RwAbstractGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename 
 
 	| encodedStream |
 	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
+	encodedStream truncate.
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 ]
 
 { #category : 'accessing' }
 RwAbstractGsModificationTopazWriterVisitorV2 >> bufferedStream [
-
-	^ bufferedStream ifNil: [ 
-		| encodedStream |
-		encodedStream := (self repositoryRootPath / self topazFilename, self filenameExtension) writeStreamEncoded: 'utf8'.
-		bufferedStream := ZnBufferedWriteStream on: encodedStream ]
+	^ bufferedStream
+		ifNil: [ 
+			| encodedStream |
+			encodedStream := self repositoryRootPath / self topazFilename
+				, self filenameExtension writeStreamEncoded: 'utf8'.
+			encodedStream truncate.
+			bufferedStream := ZnBufferedWriteStream on: encodedStream ]
 ]
 
 { #category : 'accessing' }
