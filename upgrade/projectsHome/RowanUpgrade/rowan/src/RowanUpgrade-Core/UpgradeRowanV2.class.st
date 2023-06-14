@@ -93,12 +93,16 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> _obsoleteFileSystemClasses [
-	#('FastUUIDGenerator' 'WindowsResolver' 'WindowsStore' 'WindowsStoreTest' 'DeleteVisitor' 'DeleteVisitor' 'CopyVisitor' 'CopyVisitorTest' 'File' 'PostorderGuide' 'PostorderGuideTest' 'MemoryWriteStream' 'FileHandle' 'FileHandleTest' 'SelectVisitor' 'SelectVisitorTest' 'FileSystemDirectoryEntry' 'UUID' 'CollectVisitor' 'CollectVisitorTest' 'AbstractEnumerationVisitor' 'AbstractEnumerationVisitorTest' 'FileSystemVisitor' 
-'BreadthFirstGuide' 'BreadthFirstGuideTest' 'FileSystemGuide' 'PreorderGuide' 'PreorderGuideTest' 'MacStore' 'ResolutionRequest' 'AbstractBinaryFileStream' 'BinaryFileStream'
-'InteractiveResolver' 'InteractiveResolverTest' 'IllegalName' 'FileWriteError' 'CannotDeleteFileException')
+UpgradeRowanV2 >> _obsoleteFileSystemClasses: obsoleteClassNames [
+	self logMessage: 'Adding obsolete filesystem classes to ObsoleteClasses'.
+	obsoleteClassNames
 		do: [ :className | 
 			(Rowan globalNamed: className)
+				ifNil: [ 
+					self
+						logMessage:
+							'skipped adding ' , className
+								, ' to ObsoleteClasses, not present in upgraded image.' ]
 				ifNotNil: [ :oldCls | 
 					| newClassName |
 					newClassName := ('Obsolete' , className) asSymbol.
@@ -190,7 +194,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
 			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, JsonParser,
-				ReadByteStream, SshSocketError, AbstractCloudCredentials, AzureDataKey, 
+				ReadByteStream, SshSocketError, AbstractCloudCredentials, AbstractCloudKey, AzureDataKey, 
 				AzureCredentials, AzureError, Special56bit0, Special56bit1, Special56bit10, 
 				Special56bit11, Special56bit12, Special56bit13, Special56bit14, Special56bit15, 
 				Special56bit2, Special56bit3, Special56bit4, Special56bit5, Special56bit6,
@@ -255,6 +259,9 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein4Rowan'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'AbstractCloudCredentials')
+				intoPackageNamed: 'Filein3B'.
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'AbstractCloudKey')
 				intoPackageNamed: 'Filein3B'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'AzureCredentials')
@@ -1772,13 +1779,18 @@ UpgradeRowanV2 >> upgradeFrom: gemstoneVersionString [
 	self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		ifTrue: [ 
 			| obsoleteClassNames obsoleteClassNames1 obsoleteClassNames2 classOrganizer |
-			"recompile all of the methods that may reference obsolete FileSystem classes"
-			obsoleteClassNames1 := #(#'FastUUIDGenerator' #'WindowsResolver' #'WindowsStore' #'WindowsStoreTest' #'DeleteVisitor' #'DeleteVisitor' #'CopyVisitor' #'CopyVisitorTest' #'File' #'PostorderGuide' #'PostorderGuideTest' #'MemoryWriteStream' #'FileHandle' #'FileHandleTest' #'SelectVisitor' #'SelectVisitorTest' #'FileSystemDirectoryEntry' #'UUID' #'CollectVisitor' #'CollectVisitorTest' #'AbstractEnumerationVisitor' #'AbstractEnumerationVisitorTest' #'FileSystemVisitor' #'BreadthFirstGuide' #'BreadthFirstGuideTest' #'FileSystemGuide' #'PreorderGuide' #'PreorderGuideTest' #'MacStore' #'ResolutionRequest' #'AbstractBinaryFileStream' #'BinaryFileStream' #'InteractiveResolver' #'InteractiveResolverTest').	"classes made obsolete when Kurt's implmentation originally added to base image"
+			obsoleteClassNames1 := #(#'FastUUIDGenerator' #'WindowsResolver' #'WindowsStore' #'WindowsStoreTest' #'DeleteVisitor' #'DeleteVisitor' #'CopyVisitor' #'CopyVisitorTest' #'File' #'PostorderGuide' #'PostorderGuideTest' #'MemoryWriteStream' #'FileHandle' #'FileHandleTest' #'SelectVisitor' #'SelectVisitorTest' #'FileSystemDirectoryEntry' #'UUID' #'CollectVisitor' #'CollectVisitorTest' #'AbstractEnumerationVisitor' #'AbstractEnumerationVisitorTest' #'FileSystemVisitor' #'BreadthFirstGuide' #'BreadthFirstGuideTest' #'FileSystemGuide' #'PreorderGuide' #'PreorderGuideTest' #'MacStore' #'ResolutionRequest' #'AbstractBinaryFileStream' #'BinaryFileStream' #'InteractiveResolver' #'InteractiveResolverTest').	"classes made obsolete when Kurt's implementation originally added to base image ... "
+			upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber
+				ifTrue: [ 
+					"These classes exist in the pre-upgrade Rowan images prior to 3.7.0 and need to be added to ObsoleteClasses"
+					self _obsoleteFileSystemClasses: obsoleteClassNames1 ].
+
 			obsoleteClassNames2 := #(#'ZnCharacterWriteStream' #'ZnEncodedWriteStream' #'ZnCharacterReadStream' #'ZnEncodedReadStream' #'ZnEncodedStream' #'ZnCharacterReadWriteStream' #'ZnUTF8Encoder' #'ZnCharacterEncoder' #'ZnBufferedWriteStream' #'ZnBufferedReadWriteStream' #'ZnBufferedReadStream' #'UnixStore' #'DiskStore' #'FileSystem' #'FileReference' #'FileLocator' #'AbstractFileReference' #'ZnCharacterEncodingError' #'FileExists' #'DirectoryIsNotEmpty' #'DirectoryExists' #'DirectoryDoesNotExist' #'FileSystemError' #'FileDoesNotExistException' #'FileAlreadyExistsException' #'FileException' #'IllegalName').	"classes made obsolete since original merge"
 			obsoleteClassNames := obsoleteClassNames1 , obsoleteClassNames2.
 			classOrganizer := ClassOrganizer newExcludingGlobals.
 			obsoleteClassNames
 				do: [ :obsoleteClassName | 
+					"recompile all of the methods that may reference obsolete FileSystem classes"
 					(ObsoleteClasses at: obsoleteClassName ifAbsent: [  ])
 						ifNil: [ self logMessage: 'ignoring methods referencing ' , obsoleteClassName ]
 						ifNotNil: [ :obsoleteClass | 
