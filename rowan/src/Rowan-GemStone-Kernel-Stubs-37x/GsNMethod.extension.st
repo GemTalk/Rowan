@@ -8,16 +8,16 @@ GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: unpackagedBlock [
 	| packageName |
 	packageName := self rowanPackageName.
 	packageName = Rowan unpackagedName
-		ifFalse: [
-			"method is packaged, so force the method to be recompiled ... remember that the source is identical"
+		ifFalse: [ 
 			| theClass loadedMethod |
+			"method is packaged, so force the method to be recompiled ... remember that the source is identical"
 			theClass := self inClass.
-			loadedMethod := Rowan image
-				loadedMethodForMethod: self.
+			loadedMethod := Rowan image loadedMethodForMethod: self.
 			Rowan projectTools browser
 				forceRecompileLoadedMethod: loadedMethod
 				dictionaries: GsCurrentSession currentSession symbolList
 				forClassNamed: theClass name asString
-				isMeta: theClass isMeta ].
+				isMeta: theClass isMeta.
+			^ self ].
 	^ unpackagedBlock value
 ]

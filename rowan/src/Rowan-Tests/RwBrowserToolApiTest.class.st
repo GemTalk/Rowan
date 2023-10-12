@@ -502,12 +502,15 @@ RwBrowserToolApiTest >> testDeletePackage [
 
 { #category : 'tests' }
 RwBrowserToolApiTest >> testIssue893 [
-
-	| before after |
-	before := RwSpecification class compiledMethodAt: #fromUrl:.
+	| theBehavior before after categoryBefore categoryAfter |
+	theBehavior := RwSpecification class.
+	before := theBehavior compiledMethodAt: #'fromUrl:'.
+	categoryBefore := theBehavior categoryOfSelector: before selector.
 	before recompileFromSource.
-	after :=  RwSpecification class compiledMethodAt: #fromUrl:.
-	self deny: before asOop equals: after asOop
+	after := theBehavior compiledMethodAt: #'fromUrl:'.
+	self deny: before asOop equals: after asOop.
+	categoryAfter := theBehavior categoryOfSelector: after selector.
+	self assert: categoryBefore equals: categoryAfter
 ]
 
 { #category : 'tests' }
