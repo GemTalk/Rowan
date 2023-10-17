@@ -70,7 +70,7 @@ Behavior >> _rwMoveMethod: aSelector toCategory: categoryName [
 ]
 
 { #category : '*rowan-gemstone-kernel-stubs-36x' }
-Behavior >> _rwRemoveAllMethods: baseMeths enironmentId: envId [
+Behavior >> _rwRemoveAllMethods: baseMeths environmentId: envId [
 	| unpackagedName packagedSels |
 	envId == 0
 		ifFalse: [ 
@@ -84,5 +84,4 @@ Behavior >> _rwRemoveAllMethods: baseMeths enironmentId: envId [
 			meth rowanPackageName ~= unpackagedName
 				ifTrue: [ packagedSels add: sel ] ].
 	packagedSels do: [ :sel | self rwRemoveSelector: sel ]
-
 ]

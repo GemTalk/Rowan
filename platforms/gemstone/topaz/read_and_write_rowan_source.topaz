@@ -1,0 +1,30 @@
+#!/usr/bin/env superdoit_topaz
+#
+#	read project source from rowan/source and then write project source for loaded projects in a 3.5.0 image
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/read_and_write_project_source_350.tpz <gsdevkit-stone-name> -lq
+#
+# If you are not using GsDevKit_home, you can directly run this script as long as
+# 	1. $GEMSTONE is defined
+# 	2. $GEMSTONE/bin is you path
+#	then execute using the following invocation
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz -lq
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+#
+
+ omit pushonly
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+	display oops
+
+  set user SystemUser p swordfish
+  login
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/read_and_write_rowan_source.gs

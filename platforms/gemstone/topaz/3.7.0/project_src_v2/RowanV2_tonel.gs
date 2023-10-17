@@ -1061,6 +1061,27 @@ word: aString
 
 !		Class methods for 'RwTopazTonelReader'
 
+category: 'private'
+classmethod: RwTopazTonelReader
+_lineNumberStringForOffset: offset fileName: fName
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| buf lf lNum gsfile |
+	gsfile := GsFile openReadOnServer: fName.
+	buf := gsfile contents.
+	gsfile close.
+	buf size > offset
+		ifTrue: [ buf size: offset ].
+	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
+	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
+%
+
 category: 'instance creation'
 classmethod: RwTopazTonelReader
 forEnvironmentId: environmentId
@@ -1155,27 +1176,6 @@ topazReadTonelStream: tonelStream envId: envId
 	RwTonelParser
 		parseStream: tonelStream
 		forReader: (self forEnvironmentId: envId)
-%
-
-category: 'private'
-classmethod: RwTopazTonelReader
-_lineNumberStringForOffset: offset fileName: fName
-	| res |
-	res := '  (Unable to determine line number)'.
-	[ 
-	| buf lf lNum gsfile |
-	gsfile := GsFile openReadOnServer: fName.
-	buf := gsfile contents.
-	gsfile close.
-	buf size > offset
-		ifTrue: [ buf size: offset ].
-	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
-	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
-		on: Error
-		do: [ :ex | 
-			"ignore"
-			 ].
-	^ res
 %
 
 !		Instance methods for 'RwTopazTonelReader'

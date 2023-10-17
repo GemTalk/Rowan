@@ -73,7 +73,7 @@ _rwMoveMethod: aSelector toCategory: categoryName
 
 category: '*rowan-gemstone-kernel-stubs-36x'
 method: Behavior
-_rwRemoveAllMethods: baseMeths enironmentId: envId
+_rwRemoveAllMethods: baseMeths environmentId: envId
 	| unpackagedName packagedSels |
 	envId == 0
 		ifFalse: [ 
