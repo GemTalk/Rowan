@@ -25159,7 +25159,6 @@ lookupPath: fullPath
    On Macs and PCs, it is the container of the system volumes."
 
 	| gsFileStat |
-	(GsFile existsOnServer: fullPath) ifFalse: [^ nil ].
 	gsFileStat := GsFile stat: fullPath isLstat: true.
 	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
 	^	{
@@ -28336,21 +28335,25 @@ method: DiskStore
 basicEntry: ignored path: aPath nodesDo: aBlock
 	| pathString intOrArray |
 	pathString := self stringFromPath: aPath.
-	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
-	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
+	intOrArray := GsFile
+		_contentsOfServerDirectory: pathString
+		expandPath: true
+		utf8Results: true.
+	intOrArray _isArray
+		ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
-		do: [:entryPathString |
-			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ | aFile |
-          aFile := File lookupPath: entryPathString .
-          "For now, ignore symLinks which reference a non-existant file."
-          aFile ifNil:[ 
-             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
-                self signalFileDoesNotExist: entryPathString 
-             ]
-          ] ifNotNil:[
-            aBlock value: aFile 
-          ]]]
+		do: [ :entryPathUtf8 | 
+			| entryPathString |
+			entryPathString := entryPathUtf8 asUnicodeString.
+			((entryPathString endsWith: '.') or: [ entryPathString endsWith: '..' ])
+				ifFalse: [ 
+					| aFile |
+					aFile := File lookupPath: entryPathString.	"For now, ignore symLinks which reference a non-existant file."
+					aFile
+						ifNil: [ 
+							(GsFile isSymbolicLink: entryPathString onClient: false)
+								ifFalse: [ self signalFileDoesNotExist: entryPathString ] ]
+						ifNotNil: [ aBlock value: aFile ] ] ]
 %
 
 category: 'public'
@@ -48517,7 +48520,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-	^ '2.3.1'
+	^ '2.3.2'
 %
 
 ! Class implementation for 'RowanCommandResult'
