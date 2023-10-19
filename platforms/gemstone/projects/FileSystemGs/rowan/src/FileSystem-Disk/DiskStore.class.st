@@ -111,25 +111,21 @@ DiskStore >> basicCreationTimeOf: anEntry [
 DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 	| pathString intOrArray |
 	pathString := self stringFromPath: aPath.
-	intOrArray := GsFile
-		_contentsOfServerDirectory: pathString
-		expandPath: true
-		utf8Results: true.
-	intOrArray _isArray
-		ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
+	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
+	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
-		do: [ :entryPathUtf8 | 
-			| entryPathString |
-			entryPathString := entryPathUtf8 asUnicodeString.
-			((entryPathString endsWith: '.') or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ 
-					| aFile |
-					aFile := File lookupPath: entryPathString.	"For now, ignore symLinks which reference a non-existant file."
-					aFile
-						ifNil: [ 
-							(GsFile isSymbolicLink: entryPathString onClient: false)
-								ifFalse: [ self signalFileDoesNotExist: entryPathString ] ]
-						ifNotNil: [ aBlock value: aFile ] ] ]
+		do: [:entryPathString |
+			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
+				ifFalse: [ | aFile |
+          aFile := File lookupPath: entryPathString .
+          "For now, ignore symLinks which reference a non-existant file."
+          aFile ifNil:[ 
+             (GsFile isSymbolicLink: entryPathString onClient: false) ifFalse:[
+                self signalFileDoesNotExist: entryPathString 
+             ]
+          ] ifNotNil:[
+            aBlock value: aFile 
+          ]]]
 ]
 
 { #category : 'public' }
