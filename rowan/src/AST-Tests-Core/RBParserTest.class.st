@@ -24,6 +24,17 @@ RBParserTest >> parseError: each [
 ]
 
 { #category : 'tests' }
+RBParserTest >> testAmbiguity [
+	"this should be two statements ..."
+
+	| tree |
+	tree := RBParser parseExpression: '1. 1'.
+	self assert: tree statements size = 2.
+	self assert: tree periods size = 1.
+	tree statements do: [ :each | each value == 1 ]
+]
+
+{ #category : 'tests' }
 RBParserTest >> testArray [
 	| tree |
 	#(('{}' 0 0) ('{.}' 0 1) ('{..}' 0 2) ('{foo. bar}' 2 1) ('{foo. bar.}' 2 2) ('{foo. bar. .}' 2 3) ('{. foo. bar}' 2 2) ('{foo.. bar}' 2 2)) do: [ :each |
