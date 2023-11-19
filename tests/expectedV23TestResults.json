@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.6.4",
+	"gsVersion" : "3.6.7",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 23,
 		"failures" : 14,
-		"passed" : 1389,
-		"summary" : "1426 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 526.17s",
-		"tests" : 1426,
-		"time" : 526.169
+		"passed" : 1390,
+		"summary" : "1427 Tests with 14 Failures, 23 Errors and 0 DeprecationWarnings in 206.38s",
+		"tests" : 1427,
+		"time" : 206.381
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2407,6 +2407,12 @@
 			"className" : "RBGemStoneNumberParserTest",
 			"status" : "passed",
 			"selector" : "testRadixNumberParser",
+			"time" : "0"
+		},
+		{
+			"className" : "RBParserTest",
+			"status" : "passed",
+			"selector" : "testAmbiguity",
 			"time" : "0"
 		},
 		{
@@ -8572,5 +8578,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-03-09T17:33:13.641435-08:00"
+	"timeStamp" : "2023-11-19T15:43:53.166805-08:00"
 }
