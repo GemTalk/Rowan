@@ -831,7 +831,7 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						during post repair load"
 					(className = 'Behavior' and: [ selector asString = '_rwRemoveAllMethods:environmentId:' ])
 						ifTrue: [
-							"The particular method is unconditionally added during upgradeImage using 
+							"This particular method is unconditionally added during upgradeImage using 
 								the default base image implementation. However, Rowan is expected to override 
 								this method with a Rowan-specific implementation, so will leave this method
 								unpackaged and let Rowan do the repair."
@@ -842,10 +842,8 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 											(isMeta
 												ifTrue: [ ' class' ]
 												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
-										, thePackageName
-										, '. The loadedMethod belongs to a different package '
-										, theCompiledMethod rowanPackageName printString
-										, ' and is expected to be moved.'.
+										, packageName
+										, '. The loadedMethod belongs to Rowan-GemStone-Kernel-Stubs-36x and is expected to be installed during the Rowan pass.'.
 							^ self].
 					(theCompiledMethod rowanPackageName
 						~= (self globalNamed: 'Rowan') unpackagedName
