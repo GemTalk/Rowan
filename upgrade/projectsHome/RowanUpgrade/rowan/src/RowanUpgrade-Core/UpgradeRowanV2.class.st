@@ -829,12 +829,12 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						newly added kernel method for this version of GemStone ... adopt the 
 						method into the loadedPackage (any package will do) and expect correction 
 						during post repair load"
-selector asString = '_rwRemoveAllMethods:environmentId:'
-ifTrue: [ self halt ].
-					(theCompiledMethod rowanPackageName
-						~= (self globalNamed: 'Rowan') unpackagedName
-						and: [ theCompiledMethod rowanPackageName ~= packageName ])
-						ifTrue: [ 
+					(className = 'Behavior' and: [ selector asString = '_rwRemoveAllMethods:environmentId:' ])
+						ifTrue: [
+							"The particular method is unconditionally added during upgradeImage using 
+								the default base image implementation. However, Rowan is expected to override 
+								this method with a Rowan-specific implementation, so will leave this method
+								unpackaged and let Rowan do the repair."
 							self
 								logMessage:
 									'  SKIP repair for method: ' , loadedClass name
@@ -846,6 +846,20 @@ ifTrue: [ self halt ].
 										, '. The loadedMethod belongs to a different package '
 										, theCompiledMethod rowanPackageName printString
 										, ' and is expected to be moved.'.
+							^ self].
+					(theCompiledMethod rowanPackageName
+						~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ])
+						ifTrue: [ 
+							self
+								logMessage:
+									'  SKIP repair for base method (for now): ' , loadedClass name
+										,
+											(isMeta
+												ifTrue: [ ' class' ]
+												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+										, thePackageName
+										, '. The packaging is expected  to be handled when Rowan does it''s processing.'.
 							^ self ].
 					Rowan packageTools adopt
 						adoptMethod: selector
