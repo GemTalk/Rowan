@@ -787,6 +787,8 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						, ' (No loaded class or loaded extension class found for '
 						, className printString , ')' ].
 	selector := self selectorFromMethodSpec: methodSpec.
+selector asString = '_rwRemoveAllMethods:environmentId:'
+ifTrue: [ self halt ].
 	theBehavior := loadedClass handle.
 	isMeta
 		ifTrue: [ theBehavior := theBehavior class ].
