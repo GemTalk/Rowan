@@ -530,6 +530,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
+System waitForDebug.
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
@@ -829,6 +830,22 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						newly added kernel method for this version of GemStone ... adopt the 
 						method into the loadedPackage (any package will do) and expect correction 
 						during post repair load"
+					(theCompiledMethod rowanPackageName
+						~= (self globalNamed: 'Rowan') unpackagedName
+						and: [ theCompiledMethod rowanPackageName ~= packageName ])
+						ifTrue: [ 
+							self
+								logMessage:
+									'  SKIP repair for method: ' , loadedClass name
+										,
+											(isMeta
+												ifTrue: [ ' class' ]
+												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
+										, thePackageName
+										, '. The loadedMethod belongs to a different package '
+										, theCompiledMethod rowanPackageName printString
+										, ' and is expected to be moved.'.
+							^ self ].
 					Rowan packageTools adopt
 						adoptMethod: selector
 						inClassNamed: className
