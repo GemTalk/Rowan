@@ -787,8 +787,6 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 						, ' (No loaded class or loaded extension class found for '
 						, className printString , ')' ].
 	selector := self selectorFromMethodSpec: methodSpec.
-selector asString = '_rwRemoveAllMethods:environmentId:'
-ifTrue: [ self halt ].
 	theBehavior := loadedClass handle.
 	isMeta
 		ifTrue: [ theBehavior := theBehavior class ].
@@ -831,6 +829,8 @@ ifTrue: [ self halt ].
 						newly added kernel method for this version of GemStone ... adopt the 
 						method into the loadedPackage (any package will do) and expect correction 
 						during post repair load"
+selector asString = '_rwRemoveAllMethods:environmentId:'
+ifTrue: [ self halt ].
 					(theCompiledMethod rowanPackageName
 						~= (self globalNamed: 'Rowan') unpackagedName
 						and: [ theCompiledMethod rowanPackageName ~= packageName ])
