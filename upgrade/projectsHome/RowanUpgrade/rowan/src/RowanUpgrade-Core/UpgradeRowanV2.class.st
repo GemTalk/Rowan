@@ -1026,6 +1026,11 @@ UpgradeRowanV2 >> rowanProjectNames [
 	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
 ]
 
+{ #category : 'repair' }
+UpgradeRowanV2 >> rowanRepairedMissingExtensionCatogory: ignoredMethod [
+self halt.
+]
+
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanRepairMap [
 	"List of audit errors that would be expected in Rowan code if methods were 
@@ -1037,6 +1042,7 @@ UpgradeRowanV2 >> rowanRepairMap [
 	repairMap
 		at: #'methodsNotIdentical' put: #'repairNonIdenticalMethod:';
 		at: #'differentMethodCategory' put: #'repairDifferentMethodCategory:';
+		at: #'missingExtensionCategory' put: #'rowanRepairedMissingExtensionCatogory:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'missingCompiledMethod' put: #'repairMissingCompiledMethod:';
 		at: #'missingLoadedMethod' put: #'repairMissingLoadedMethod:';
