@@ -530,7 +530,6 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
-System waitForDebug.
 	self rowanProjectNames
 		do: [ :projectName | 
 			"make sure test group is loaded ... include deprecated packages"
