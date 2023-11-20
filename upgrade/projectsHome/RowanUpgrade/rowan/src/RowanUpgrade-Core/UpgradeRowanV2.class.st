@@ -1026,9 +1026,10 @@ UpgradeRowanV2 >> rowanProjectNames [
 	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
 ]
 
-{ #category : 'repair' }
+{ #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanRepairedMissingExtensionCatogory: ignoredMethod [
-self halt.
+self logMessage: 'Rowan missing extension category: ', ignoredMethod category asString.
+ignoredMethod category = '*rowan-gemstone-kernel-stubs-36x' ifTrue: [ self halt ].
 ]
 
 { #category : 'upgrade rowan' }
