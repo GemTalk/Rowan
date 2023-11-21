@@ -1034,7 +1034,7 @@ UpgradeRowanV2 >> rowanRepairedMissingExtensionCatogory: ignoredMethod [
 		method and the Rowan package."
 
 	| theCategoryName |
-	self gemstoneVersion < '3.6.4' asRwGemStoneVersionNumber
+	self upgradeFrom asRwGemStoneVersionNumber < '3.6.4' asRwGemStoneVersionNumber
 		ifTrue: [ 
 			"this repair is not necessary for 3.6.3 and older versions of GemStone"
 			^ self ].
