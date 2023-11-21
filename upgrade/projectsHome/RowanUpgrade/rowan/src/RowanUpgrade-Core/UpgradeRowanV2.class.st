@@ -1028,8 +1028,16 @@ UpgradeRowanV2 >> rowanProjectNames [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanRepairedMissingExtensionCatogory: ignoredMethod [
-self logMessage: 'Rowan missing extension category: ', ignoredMethod category asString.
-ignoredMethod category = '*rowan-gemstone-kernel-stubs-36x' ifTrue: [ self halt ].
+	| cats theCategoryName |
+	self
+		logMessage:
+			'Rowan missing extension category: ' , ignoredMethod category asString.
+	theCategoryName := '*rowan-gemstone-kernel-stubs-36x'.
+	(ignoredMethod behavior == Behavior
+		and: [ ignoredMethod category = theCategoryName ])
+		ifFalse: [ ^ self repairedWhenDefinitionsReloaded: ignoredMethod ].
+	cats := Behavior _baseCategorys: 0.
+	cats ifNotNil: [ (cats at: theCategoryName) halt ]
 ]
 
 { #category : 'upgrade rowan' }
