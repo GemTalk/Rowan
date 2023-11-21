@@ -1028,16 +1028,26 @@ UpgradeRowanV2 >> rowanProjectNames [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanRepairedMissingExtensionCatogory: ignoredMethod [
-	| cats theCategoryName |
-	self
-		logMessage:
-			'Rowan missing extension category: ' , ignoredMethod category asString.
+	"remove the method Behavior>>_rwRemoveAllMethods:environmentId:, the method will be installed by 
+		Rowan at a later step in the category *rowan-gemstone-kernel-stubs-36x. This is a method that is
+		installed by default during upgradeImage, but when Rowan is loaded we must use the Rowan
+		method and the Rowan package."
+
+	| theCategoryName |
 	theCategoryName := '*rowan-gemstone-kernel-stubs-36x'.
 	(ignoredMethod behavior == Behavior
 		and: [ ignoredMethod category = theCategoryName ])
 		ifFalse: [ ^ self repairedWhenDefinitionsReloaded: ignoredMethod ].
-	cats := Behavior _baseCategorys: 0.
-	cats ifNotNil: [ (cats at: theCategoryName) halt ]
+	self
+		logMessage:
+			'Rowan missing extension category: ' , ignoredMethod category asString
+				,
+					'. Repaired by removing Behavior>>_rwRemoveAllMethods:environmentId: ... method will be added later'.
+	Behavior
+		removeSelector: '_rwRemoveAllMethods:environmentId:'
+		ifAbsent: [ 
+			"not an issue"
+			 ]
 ]
 
 { #category : 'upgrade rowan' }
