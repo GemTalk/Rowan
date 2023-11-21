@@ -11,12 +11,12 @@ usage
   $basename [--help | -h] [--debug | -D] -- ([-r] | -l | -L) -I <path-to-.topazini> [<topaz-command-line-args>]
 
 DESCRIPTION
-  Write a set of .gs files for Rowan v1.2.13 that contains only the code that 
+  Write a set of .gs files for Rowan v1.2.15 that contains only the code that 
   needs to be loaded into the stone after upgradeImage has completed. The 
   bootstrap code will replace the GemStone kernel class extension methods that 
   are removed during upgradeImage.  
 
-	The set of .gs files will be used to upgrade from 3.6.2 to 3.6.2.
+	The set of .gs files will be used to upgrade from 3.6.x to 3.6.7.
 
   This script is expected to be run in a solo extent that has Rowan V3.0 installed.
 
@@ -34,27 +34,29 @@ EXAMPLES
 -----
 %
 doit
-	| projectSetModification visitor repositoryRoot362 topazFileNameMap packageCreateTool projectLoadTool  
-		platformConditionalAttributes362 auditFailures gsFileName  dbo_ROWAN_PROJECTS_HOME |
+	| projectSetModification visitor repositoryRoot367 topazFileNameMap packageCreateTool projectLoadTool  
+		platformConditionalAttributes367 auditFailures gsFileName  dbo_ROWAN_PROJECTS_HOME |
 
 	Rowan version >= '3.0.0' asRwSemanticVersionNumber
 		ifFalse: [ self error: 'This script is expected to be run against a stone with Rowan v3 installed' ].
   self stdout nextPutAll: '--- read and write project source RowanV2'; lf.
-	platformConditionalAttributes362 := {
+	platformConditionalAttributes367 := {
 		'common'.
 		'gemstone'.
 		'gemstone-kernel'.
-		'3.6.2' asRwGemStoneVersionNumber.
+		'3.6.7' asRwGemStoneVersionNumber.
 	}.
-	dbo_ROWAN_PROJECTS_HOME := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/dbo_anon_3215/git'.
-	repositoryRoot362 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2') asFileReference.
-	repositoryRoot362 ensureCreateDirectory.
+	dbo_ROWAN_PROJECTS_HOME := self dirname asFileReference parent parent parent parent parent fullName.
+	repositoryRoot367 := (dbo_ROWAN_PROJECTS_HOME, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.7') asFileReference.
+	self stdout nextPutAll: 'dbo_ROWAN_PROJECTS_HOME=', dbo_ROWAN_PROJECTS_HOME;lf.
+	self stdout nextPutAll: 'repositoryRoot367=', repositoryRoot367 fullName;lf.
+	repositoryRoot367 ensureCreateDirectory.
 	{
 		{
 			'file:',dbo_ROWAN_PROJECTS_HOME, '/Rowan/rowanV3/specs/Rowan.ston'.
 			dbo_ROWAN_PROJECTS_HOME.
-			platformConditionalAttributes362.
-			repositoryRoot362.
+			platformConditionalAttributes367.
+			repositoryRoot367.
 			'RowanV12'.
 			Dictionary new.
 			true.
