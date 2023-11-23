@@ -158,6 +158,18 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: gciLibraryClass
 				intoPackageNamed: 'UnPackaged-Globals' ].
+	self upgradeVersion < '3.7.1' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			| gciErrSTypeClass |
+			"In 3.7.1 the class comment of GciErrSType changed from that of 
+				previous versions. As for GciLibrary, we'll simply disown and adopt
+				the class to ensure that the packaging matches the class in the
+				upgraded image."
+			gciErrSTypeClass := Rowan globalNamed: 'GciErrSType'.
+			Rowan packageTools disown disownClass: gciErrSTypeClass.
+			Rowan packageTools adopt
+				adoptClass: gciErrSTypeClass
+				intoPackageNamed: 'UnPackaged-Globals' ].
 	(self gemstoneVersion >= '3.6.4' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.6.4' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
@@ -320,7 +332,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				adoptProjectFromUrl:
 					'file:$GEMSTONE/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
 				readonlyDiskUrl: 'file:$GEMSTONE/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/projects'. ]
+				projectsHome: '$GEMSTONE/projects' ]
 ]
 
 { #category : 'upgrade rowan' }
