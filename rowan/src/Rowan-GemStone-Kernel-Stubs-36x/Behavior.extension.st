@@ -156,5 +156,4 @@ Behavior >> _rwRemoveAllMethods: baseMeths environmentId: envId [
 			meth rowanPackageName ~= unpackagedName
 				ifTrue: [ packagedSels add: sel ] ].
 	packagedSels do: [ :sel | self rwRemoveSelector: sel ]
-
 ]

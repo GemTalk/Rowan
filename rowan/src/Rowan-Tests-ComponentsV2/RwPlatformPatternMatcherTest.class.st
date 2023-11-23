@@ -115,7 +115,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
 		do: [ :ex | 
-			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStream but either the format is incorrect or the contents of aReadStream are incomplete.'.
+			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStreamPortable but either the format is incorrect or the contents of aReadStreamPortable are incomplete.'.
 			hitExpectedError := true ].
 	self assert: hitExpectedError.
 
@@ -124,7 +124,7 @@ RwPlatformPatternMatcherTest >> testPatternErrors [
 	[ matcher := self _patternMatcherFor: pattern ]
 		on: Error
 		do: [ :ex | 
-			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStream but either the format is incorrect or the contents of aReadStream are incomplete.'.
+			self assert: ex description equals: 'a ImproperOperation occurred (error 2185), reason:rtErrBadFormat, An attempt was made to create an instance of Integer from aReadStreamPortable but either the format is incorrect or the contents of aReadStreamPortable are incomplete.'.
 			hitExpectedError := true ].
 	self assert: hitExpectedError
 ]
