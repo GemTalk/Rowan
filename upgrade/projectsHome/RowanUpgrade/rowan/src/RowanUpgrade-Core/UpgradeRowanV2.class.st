@@ -158,7 +158,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 			Rowan packageTools adopt
 				adoptClass: gciLibraryClass
 				intoPackageNamed: 'UnPackaged-Globals' ].
-	self upgradeVersion < '3.7.1' asRwGemStoneVersionNumber
+	self upgradeFrom < '3.7.1' asRwGemStoneVersionNumber
 		ifTrue: [ 
 			| gciErrSTypeClass |
 			"In 3.7.1 the class comment of GciErrSType changed from that of 
