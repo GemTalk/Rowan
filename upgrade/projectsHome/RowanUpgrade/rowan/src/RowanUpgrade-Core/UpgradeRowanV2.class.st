@@ -817,6 +817,10 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
 						ifFalse: [ attribute ] ].
 			[ 
+			projectName = 'gemstoneBaseImage'
+				ifTrue: [ 
+					(platformConditionalAttributes includes: 'rowanv2')
+						ifFalse: [ platformConditionalAttributes add: 'rowanv2' ] ].
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				platformConditionalAttributes: platformConditionalAttributes ]
