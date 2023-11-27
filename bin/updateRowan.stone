@@ -120,7 +120,7 @@ method
 updateRowanV220
 	"Rowan v2.2.0 update - GemStone 3.6.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan v2.x to Rowan v2.5.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
+	self stdout nextPutAll: 'Start updating Rowan ', self rowanVersion printString, ' to Rowan v2.6.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	self rowanV220_patch.
 	rowanRepositoryRoot := self productTreeRoot / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
@@ -152,7 +152,7 @@ method
 updateRowanV230
 	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
-	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan v2.3 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
+	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan 2.6.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	rowanRepositoryRoot := self productTreeRoot / 'projects' / 'Rowan'.
 	rowanProject := Rowan projectNamed: 'Rowan'.
 	commitId := self extractCommitIdFrom: self productTreeRoot for: 'Rowan'.
@@ -185,11 +185,20 @@ doit
 	self positionalArgs size ~= 1
 		ifTrue: [ self error: 'Expected a single positional argument specifying the path to the root directory of a GemStone product tree' ].
 	self rowanVersion.
+	rowanVersion < ('2.6.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			| componentName |
+			"In GemStone 3.7.1, the code in the Rowan-Tonel-GemStone-Kernel package (Rowan 2.6.0) has been moved
+				to the base image, so we need avoid removing the code in that package, because some of the methods
+				are needed to run this script."
+			componentName := ((Rowan projectNamed: 'Rowan') componentForPackageNamed: 'Rowan-Tonel-GemStone-Kernel') name.
+			Rowan packageTools disown disownPackageNamed: 'Rowan-Tonel-GemStone-Kernel'.
+			(Rowan projectNamed: 'Rowan') addNewPackageNamed: 'Rowan-Tonel-GemStone-Kernel' toComponentNamed: componentName ].
 	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
 	rowanVersion >= ('2.4.0' asRwSemanticVersionNumber)
 		ifTrue: [
-			self stdout nextPutAll: 'No need to update ', rowanVersion printString; lf.
+			self stdout nextPutAll: 'No need to update ', rowanVersion printString, ' for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf; lf.
 			^ self ].
 	rowanVersion >= ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
