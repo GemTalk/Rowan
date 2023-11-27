@@ -810,7 +810,6 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
 			project := Rowan projectNamed: projectName.
 			self _patch370ProjectRoot: project.
-System waitForDebug.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
 					"replace old GemStone version with current GemStone version"
