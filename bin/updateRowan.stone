@@ -150,7 +150,7 @@ updateRowanV220
 %
 method
 updateRowanV230
-	"Rowan v2.3.0 update - GemStone 3.6.4 and 3.7.0 ... need to use the latest version of Rowan v2.3"
+	"Rowan v2.3.0 update - GemStone 3.6.4, 3.6.5, 3.6.6, 3.6.7 and 3.7.0 ... need to use the latest version of Rowan v2.6"
 	| rowanRepositoryRoot rowanProject rowanClientServicesProject rowanClientServicesRepositoryRoot commitId |
 	self stdout nextPutAll: 'Start updating Rowan ', rowanVersion printString, ' to Rowan 2.6.0 for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf.
 	rowanRepositoryRoot := self productTreeRoot / 'projects' / 'Rowan'.
@@ -191,15 +191,19 @@ doit
 			"In GemStone 3.7.1, the code in the Rowan-Tonel-GemStone-Kernel package (Rowan 2.6.0) has been moved
 				to the base image, so we need avoid removing the code in that package, because some of the methods
 				are needed to run this script."
+			self stdout nextPutAll: 'disowning Rowan-Tonel-GemStone-Kernel package'; lf.
 			componentName := ((Rowan projectNamed: 'Rowan') componentForPackageNamed: 'Rowan-Tonel-GemStone-Kernel') name.
 			Rowan packageTools disown disownPackageNamed: 'Rowan-Tonel-GemStone-Kernel'.
 			(Rowan projectNamed: 'Rowan') addNewPackageNamed: 'Rowan-Tonel-GemStone-Kernel' toComponentNamed: componentName ].
 	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
-	rowanVersion >= ('2.4.0' asRwSemanticVersionNumber)
+	rowanVersion >= ('2.6.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			self stdout nextPutAll: 'No need to update ', rowanVersion printString, ' for GemStone ', (System stoneVersionReport at: 'gsVersion'); lf; lf.
 			^ self ].
+	rowanVersion = ('2.4.0' asRwSemanticVersionNumber)
+		ifTrue: [
+			^ self error: 'Unexpected Rowan version: ', rowanVersion printString ].
 	rowanVersion >= ('2.3.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			^ self updateRowanV230 ].
