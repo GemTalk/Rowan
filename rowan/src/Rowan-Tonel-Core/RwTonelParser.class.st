@@ -129,20 +129,20 @@ RwTonelParser >> cleanSelector: aString [
 { #category : 'parsing' }
 RwTonelParser >> comment [
 	| result ch eatNext |
-	result := String new .
+	result := String new writeStreamPortable.
 	eatNext := false.
 	stream next == $" ifFalse: [ RwTonelParseError signal: 'Can''t parse comment' ].	
-	[ stream beforeEnd
+	[ stream atEnd not
 		and: [ 
 				(ch := stream next) ~~ $" 
 				or: [ eatNext := (stream peek == $") ] ] ]
 	whileTrue: [ 
-		result add: ch.
+		result nextPut: ch.
 		eatNext ifTrue: [ 
 			stream skip: 1.
 			eatNext := false ] ].
 	^ self 
-		removeFrom: '"',result ,'"' 
+		removeFrom: '"',result contents,'"' 
 		enclosingStart: $"
 		end: $"
 ]
@@ -454,7 +454,7 @@ RwTonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clea
 
 { #category : 'parsing' }
 RwTonelParser >> separator [
-	[ stream beforeEnd and: [ self isSeparator: stream peek ] ]
+	[ stream atEnd not and: [ self isSeparator: stream peek ] ]
 	whileTrue: [ stream next ].
 	^ nil
 

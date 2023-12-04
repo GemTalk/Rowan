@@ -28,5 +28,5 @@ RwLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : 'Load spec for loading Rowan v2'
+	#comment : 'Load spec for loading Rowan v3'
 }

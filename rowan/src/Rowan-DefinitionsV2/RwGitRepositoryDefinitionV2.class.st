@@ -305,7 +305,7 @@ RwGitRepositoryDefinitionV2 >> repositoryRoot [
 											repRootArray := urlPathString asFileReference asPath segments.
 											index := repRootArray indexOfSubCollection: relRepRootArray.
 											gitRootArray := repRootArray copyFrom: 1 to: index - 1.
-											self gitRoot: Path / (Path withAll: gitRootArray) pathString ].
+											self gitRoot: Path / (AbsolutePath withAll: gitRootArray) pathString ].
 									self repositoryRoot: urlPathString ]
 								ifFalse: [ self repositoryRoot: urlPathString ].
 							^ repositoryRoot ] ].

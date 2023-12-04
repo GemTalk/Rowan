@@ -1,6 +1,6 @@
 Extension { #name : 'Behavior' }
 
-{ #category : '*rowan-gemstone-kernel-stubs-36x' }
+{ #category : '*rowan-gemstone-kernel-stubs-37x' }
 Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: symList category: categ environmentId: environmentId ifUnpackagedDo: unpackagedBlock [
 	"for now, we will only check for Rowan packaging if we are working in environment 0"
 
@@ -125,7 +125,7 @@ Behavior >> _rwCompileMethodForConditionalPackaging: sourceString symbolList: sy
 	^ unpackagedBlock value
 ]
 
-{ #category : '*rowan-gemstone-kernel-stubs-36x' }
+{ #category : '*rowan-gemstone-kernel-stubs-37x' }
 Behavior >> _rwMoveMethod: aSelector toCategory: categoryName [
 	"Move the method into <packageName>, whether or not it has been packaged.
 
@@ -141,7 +141,7 @@ Behavior >> _rwMoveMethod: aSelector toCategory: categoryName [
 
 ]
 
-{ #category : '*rowan-gemstone-kernel-stubs-36x' }
+{ #category : '*rowan-gemstone-kernel-stubs-37x' }
 Behavior >> _rwRemoveAllMethods: baseMeths environmentId: envId [
 	| unpackagedName packagedSels |
 	envId == 0

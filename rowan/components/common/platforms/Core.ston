@@ -9,6 +9,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 		'common/platforms/gemstone35-/Core',
 		'common/platforms/gemstone36-/Core',
 		'common/platforms/gemstone36-/CoreUpgrade',
+		'common/platforms/gemstone37-/Core',
 		'common/platforms/gemstone_gemstoneBase/Core'
 	],
 	#packageNames : [ ],

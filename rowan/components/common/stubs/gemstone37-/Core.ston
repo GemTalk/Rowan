@@ -1,21 +1,21 @@
 RwPlatformNestedProjectLoadComponentV2 {
-	#name : 'common/stubs/gemstone36-/Core',
+	#name : 'common/stubs/gemstone37-/Core',
 	#condition : [
-		'gs3.[6-]'
+		'gs3.[7-]'
 	],
 	#packageNames : [
-		'Rowan-GemStone-Kernel-Stubs-36x'
+		'Rowan-GemStone-Kernel-Stubs-37x'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-GemStone-Kernel-Stubs-36x' : {
+					'Rowan-GemStone-Kernel-Stubs-37x' : {
 						'symbolDictName' : 'Globals'
 					}
 				}
 			}
 		}
 	},
-	#comment : 'Stub packages for 3.6.x and beyond'
+	#comment : 'Stub packages for 3.7.x and beyond'
 }

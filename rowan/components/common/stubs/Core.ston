@@ -3,7 +3,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'stubs',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/stubs/gemstone36-/Core'
+		'common/stubs/gemstone37-/Core'
 	],
 	#packageNames : [ ],
 	#comment : 'Stub packages contain overrides to GemSone kernel methods (found in Filein1A-BootstrapOnly), that cannot be installed until Rowan has been bootstrapped, as they are involved in method compilation.'
