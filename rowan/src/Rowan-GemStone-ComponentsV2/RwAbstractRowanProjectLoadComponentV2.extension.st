@@ -4,10 +4,14 @@ Extension { #name : 'RwAbstractRowanProjectLoadComponentV2' }
 RwAbstractRowanProjectLoadComponentV2 class >> fromFile: filePath [
 	filePath asFileReference
 		readStreamDo: [ :fileStream | 
-			| stream |
 			Rowan projectTools trace trace: '--- reading component ' , filePath asString.
-			stream := ZnBufferedReadStream on: fileStream.	"wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-			^ self _readStonFrom: stream ]
+			[^ self _readStonFrom: fileStream ] 
+				on: STONReaderError
+				do: [:ex |
+					ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 
+						lineNumberStringForOffset: fileStream position 
+						fileName: filePath asFileReference fullName).
+					ex pass ] ]
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }

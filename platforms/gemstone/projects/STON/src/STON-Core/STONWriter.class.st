@@ -94,7 +94,7 @@ STONWriter class >> initializeSTONSimpleSymbolCharacters [
 
 { #category : 'private' }
 STONWriter class >> isSimpleSymbolChar: char [
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includesValue: char
+	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includes: char
 
 ]
 
@@ -308,7 +308,7 @@ STONWriter >> prettyPrintSpace [
 
 { #category : 'initialize-release' }
 STONWriter >> referencePolicy: policy [
-  (#(#'normal' #'ignore' #'error') includesIdentical: policy)
+  (#(#'normal' #'ignore' #'error') includes: policy)
     ifFalse: [ self error: 'Unknown reference policy: ' , policy printString ].
   referencePolicy := policy
 
@@ -322,7 +322,7 @@ STONWriter >> reset [
 
 { #category : 'private' }
 STONWriter >> shortListElementSeparator [
-	writeStream nextPut: $, .
+	writeStream nextPut: $,.
 	self prettyPrintSpace
 
 ]
