@@ -819,8 +819,8 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 			[ 
 			projectName = 'gemstoneBaseImage'
 				ifTrue: [ 
-					(platformConditionalAttributes includes: 'rowanv2')
-						ifFalse: [ platformConditionalAttributes add: 'rowanv2' ] ].
+					(platformConditionalAttributes includes: 'rowan2')
+						ifFalse: [ platformConditionalAttributes add: 'rowan2' ] ].
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				platformConditionalAttributes: platformConditionalAttributes ]
