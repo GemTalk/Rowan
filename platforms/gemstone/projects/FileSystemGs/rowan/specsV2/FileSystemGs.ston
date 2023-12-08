@@ -1,0 +1,29 @@
+RwEmbeddedLoadSpecificationV2 {
+	#specName : 'FileSystemGs',
+	#projectName : 'FileSystemGs',
+	#projectAlias : 'Rowan',
+	#gitUrl : 'https://github.com/GemTalk/Rowan',
+	#revision : 'masterV3.0',
+	#projectSpecFile : 'platforms/gemstone/projects/FileSystemGs/rowan/project.ston',
+	#componentNames : [
+		'Core',
+		'Gemstone32x',
+		'Gemstone32-5',
+		'Gemstone32-6',
+		'Gemstone35-',
+		'Gemstone37-',
+		'Tests'
+	],
+	#customConditionalAttributes : [
+		'tests'
+	],
+	#groupNames : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'FileSystemGs for Rowan ... eventually to be replaced by FileSystemGs project (https://github.com/GemTalk/FileSystemGs)'
+}
