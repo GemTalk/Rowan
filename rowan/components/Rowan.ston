@@ -3,7 +3,6 @@ RwSimpleProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [
 		'Cypress',
-		'RowanClientServices',
 		'STON'
 	],
 	#componentNames : [
