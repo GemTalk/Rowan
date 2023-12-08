@@ -1,0 +1,21 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/tonel/gemstone32-5/Core',
+	#condition : [
+		'gs3.[2-5]'
+	],
+	#packageNames : [
+		'Rowan-Tonel-GemStone-Kernel-32-5'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Tonel-GemStone-Kernel-32-5' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'GemStone specific support methods in support of RwTonelParser and friends'
+}

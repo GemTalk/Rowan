@@ -2,9 +2,13 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#name : 'common/tonel/Core',
 	#condition : 'tonel',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'common/tonel/gemstone/Core',
+		'common/tonel/gemstone32-5/Core',
+		'common/tonel/gemstone32/Core'
+	],
 	#packageNames : [
 		'Rowan-Tonel-Core'
 	],
-	#comment : 'tonel packages contain the RwTonelParser, RwTonelParseError, RwTonelParseRequireMethodCategoryNotification, and RwTopazTonelReader class . These classes are loaded into the base image in support of the tmethod and tfile topaz commands. The tests for these classes are part of the Rowan test suite. These classes are present in the RowanKernel symbol dictionary'
+	#comment : 'tonel packages contain the RwTonelParser, RwTonelParseError, RwTonelParseRequireMethodCategoryNotification, and RwTopazTonelReader class plus supporting kernel methods. These classes are loaded into the base image in support of the tmethod and tfile topaz commands. The tests for these classes are part of the Rowan test suite. These classes are present in the RowanKernel symbol dictionary'
 }
