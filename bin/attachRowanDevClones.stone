@@ -77,10 +77,11 @@ doit
 		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
 	self projectsHome
 		ifNotNil: [:value |
-			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value asFileReference pathString.
-			self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString ]
+			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value asFileReference pathString ]
 		ifNil: [ 
-			self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined' ].
+			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNil: [ self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined, or the --projectsHome option used.' ] ].
+	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
 	(self archBase
 		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
 		ifNotNil: [:value | value ])
