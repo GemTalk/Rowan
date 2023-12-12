@@ -1142,7 +1142,7 @@ RwRowanSample9Test >> testIssue_446 [
 		loads a different component ... needed to consolidate spec_004 
 		creation"
 
-	| project1 project2 projectName projectsHome resolvedProject stonString |
+	| project1 project2 projectName projectsHome resolvedProject |
 	projectName := 'RowanSample9_testbed'.
 	projectsHome := self _testRowanProjectsSandbox.
 
