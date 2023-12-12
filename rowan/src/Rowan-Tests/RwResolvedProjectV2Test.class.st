@@ -8,7 +8,7 @@ Class {
 RwResolvedProjectV2Test >> testBasic [
 	"Create project ... without errors"
 
-	| projectName projectAlias project stonString |
+	| projectName projectAlias project |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	project := RwResolvedProjectV2 new
@@ -28,7 +28,7 @@ RwResolvedProjectV2Test >> testBasic [
 RwResolvedProjectV2Test >> testBasicResolve_1 [
 	"excercise basic functionality"
 
-	| project projectName projectAlias stonString projectsHome expectedRepositoryRoot
+	| project projectName projectAlias projectsHome expectedRepositoryRoot
 		 resolvedProjectSpecification projectSpecification loadSpecification resolvedLoadSpecification|
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
@@ -66,7 +66,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 
 	"no project alias"
 
-	| project projectName stonString projectsHome expectedRepositoryRoot
+	| project projectName projectsHome expectedRepositoryRoot
 		 resolvedProjectSpecification projectSpecification|
 	projectName := 'RowanSample9'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -96,7 +96,7 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 RwResolvedProjectV2Test >> testBasicResolve_git [
 	"Create git repository on resolve"
 
-	| projectName projectsHome resolvedProject expectedRepositoryRoot stonString |
+	| projectName projectsHome resolvedProject expectedRepositoryRoot |
 	projectName := 'RowanSample9'.
 	projectsHome := self _testRowanProjectsSandbox.
 	expectedRepositoryRoot := projectsHome / projectName.
@@ -118,7 +118,7 @@ RwResolvedProjectV2Test >> testBasicResolve_git [
 
 { #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewDiskProject [
-	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject resolvedRepository resolvedRepositoryCopy x |
+	| projectName projectAlias projectSpecification projectsHome projectRoot informed resolvedProject resolvedRepository resolvedRepositoryCopy x |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -166,7 +166,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	"move packages from one component to another, using removePackageNamed:... 
 		and addPackageNamed:... methods for RwResolvedProject. "
 
-	| projectName projectAlias projectSpecification stonString projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray component |
+	| projectName projectAlias projectSpecification projectsHome projectRoot informed resolvedProject packageName componentName1 componentName2 conditionArray component |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
@@ -242,7 +242,7 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 
 { #category : 'tests' }
 RwResolvedProjectV2Test >> testCreateNewGitProject [
-	| projectName projectAlias projectSpecification stonString resolvedProject projectsHome projectRoot resolvedRepository resolvedRepositoryCopy x |
+	| projectName projectAlias projectSpecification resolvedProject projectsHome projectRoot resolvedRepository resolvedRepositoryCopy x |
 	projectName := 'RowanSample9'.
 	projectAlias := projectName , '_Test'.
 	projectsHome := self _testRowanProjectsSandbox.
