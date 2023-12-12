@@ -52,7 +52,7 @@ EXAMPLES
 -----
 %
 input
-	$GEMSTONE/rowan/upgrade/UpgradeRowanV2.gs
+	$GEMSTONE/projects/Rowan/upgrade/UpgradeRowanV2.gs
 %
 specs
 [
@@ -92,7 +92,7 @@ doit
 		"we don't want the UpgradeRowan project to persisted in the image ... load into transient
 			symbol dictionary"
 		loadSpec 
-			projectsHome: '$GEMSTONE/rowan/projectsHome';
+			projectsHome: '$GEMSTONE/projects/Rowan/upgrade/projectsHome';
 			gemstoneSetDefaultSymbolDictNameTo: SuperDoitCommandParser transientSymbolDictionaryName;
 			yourself ].
 	Rowan projectTools disown disownProjectNamed: 'RowanUpgrade'. "remove Rowan metadata and leave class in transient symbol dict"
