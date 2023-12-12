@@ -115,7 +115,7 @@ RwProjectTest >> testDiskProjectApi [
 		equals: platformConditionalAttributes.
 	self
 		assert: loadedProject _projectDefinitionPlatformConditionalAttributes
-		equals: { 'common' . 'gemstone' . 'gemstone-kernel' . '3.7.0' asRwGemStoneVersionNumber}.
+		equals: { 'common' . 'gemstone' . 'gemstone-kernel' . (System gemVersionReport at: 'gsRelease') asRwGemStoneVersionNumber}.
 	self assert: repositoryRoot equals: loadedProject repositoryRoot.
 	self
 		assert:

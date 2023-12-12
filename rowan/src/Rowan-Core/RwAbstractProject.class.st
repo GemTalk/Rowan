@@ -139,6 +139,11 @@ RwAbstractProject >> project [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> projectAlias [
+	^ self loadSpecification projectAlias
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> projectName [
 	^ self name
 ]

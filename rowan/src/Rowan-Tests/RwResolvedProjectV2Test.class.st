@@ -22,7 +22,6 @@ RwResolvedProjectV2Test >> testBasic [
 
 	project resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: project.
-	stonString := STON toStringPretty: project.	"useful to view full structure"
 ]
 
 { #category : 'tests' }
@@ -51,7 +50,6 @@ RwResolvedProjectV2Test >> testBasicResolve_1 [
 	project resolveProject.
 
 	self deny: expectedRepositoryRoot exists.
-	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
 	resolvedLoadSpecification := project loadSpecification.
@@ -88,7 +86,6 @@ RwResolvedProjectV2Test >> testBasicResolve_2 [
 	project resolveProject.
 
 	self deny: expectedRepositoryRoot exists.
-	stonString := STON toStringPretty: project.	"useful in case of error"
 
 	resolvedProjectSpecification := project _projectSpecification.
 	self assert: project packageNames isEmpty.
@@ -114,7 +111,6 @@ RwResolvedProjectV2Test >> testBasicResolve_git [
 		yourself.
 
 	resolvedProject resolveProject.
-	stonString := STON toStringPretty: resolvedProject.
 
 	self assert: expectedRepositoryRoot exists.
 	self assert: (expectedRepositoryRoot / '.git') exists
@@ -140,7 +136,6 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject [
 
 	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	resolvedProject
 		export;
@@ -189,7 +184,6 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 
 	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	resolvedProject
 		export;
@@ -210,12 +204,10 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 	resolvedProject
 		removePackageNamed: packageName
 		fromComponentNamed: componentName1.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 	resolvedProject
 		addPackageNamed: packageName
 			toComponentNamed: componentName2;
 		yourself.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	self
 		deny:
@@ -232,7 +224,6 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName1) name , 'ston'.
-	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		deny:
 			((component packageNames)
@@ -243,7 +234,6 @@ RwResolvedProjectV2Test >> testCreateNewDiskProject_removePackageNamed [
 		fromFile:
 			resolvedProject componentsRoot
 				/ (resolvedProject componentNamed: componentName2) name , 'ston'.
-	stonString := STON toStringPretty: component.	"useful in case of error"
 	self
 		assert:
 			((component packageNames)
@@ -270,7 +260,6 @@ RwResolvedProjectV2Test >> testCreateNewGitProject [
 
 	resolvedProject := projectSpecification resolveProject.
 	self _addCanonicalRowanSample9ProjectDefinitionsTo: resolvedProject.
-	stonString := STON toStringPretty: resolvedProject.	"useful in case of error"
 
 	resolvedProject
 		export;

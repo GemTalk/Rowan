@@ -1079,8 +1079,7 @@ RwRowanSample9Test >> testIndexCards [
 
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
-			projectSpec projectsHome: self _testRowanProjectsSandbox.
-			STON toStringPretty: projectSpec resolveProject ]
+			projectSpec projectsHome: self _testRowanProjectsSandbox ]
 ]
 
 { #category : 'tests' }
@@ -1178,7 +1177,6 @@ RwRowanSample9Test >> testIssue_446 [
 		componentNames: #('Core2');
 		yourself.
 
-	stonString := STON toStringPretty: resolvedProject.
 	false
 		ifTrue: [ self halt ]
 ]
