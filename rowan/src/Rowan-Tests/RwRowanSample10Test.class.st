@@ -72,7 +72,7 @@ RwRowanSample10Test >> testIndexCards [
 
 	resolvedProjects := projectSpecs
 		collect: [ :projectSpec | 
-			projectSpec projectsHome: self _testRowanProjectsSandbox.
+			projectSpec projectsHome: self _testRowanProjectsSandbox ].
 ]
 
 { #category : 'tests' }

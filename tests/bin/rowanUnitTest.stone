@@ -233,10 +233,10 @@ loadProjectSpecs
 		rowanProject := Rowan projectNamed: 'Rowan'.
 		loadSpecs := rowanProject loadedLoadSpecifications.
 		loadSpecs do: [:loadSpec |
-			loadSpec specName = 'RowanClientServices'
+			loadSpec specName = 'Rowan'
 				ifTrue: [
 					loadSpec
-						gitUrl: 'file:', externalsStBase, '/RowanClientServices' ]
+						gitUrl: 'file:', externalsStBase, '/', loadSpec projectAlias ]
 				ifFalse: [
 					"embedded Rowan project" 
 					| relRoot |
@@ -244,7 +244,7 @@ loadProjectSpecs
 					relRoot isEmpty
 						ifTrue: [ 
 							loadSpec
-								gitUrl: 'file:', externalsStBase, '/', rowanProject projectAlias ]
+								gitUrl: 'file:', externalsStBase, '/', loadSpec projectAlias ]
 						ifFalse: [ 
 							loadSpec
 								gitUrl: 'file:', externalsStBase, '/', rowanProject projectAlias, '/', relRoot ] ].

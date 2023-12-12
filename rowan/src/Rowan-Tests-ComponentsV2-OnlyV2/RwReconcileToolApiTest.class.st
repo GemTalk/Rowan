@@ -278,7 +278,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 			self assert: (projectDefinition componentForPackageNamed: packageName) name = componentName.
 			self assert: (projectDefinition gemstoneSymbolDictNameForPackageNamed: packageName) 
 				= 'Globals'].
-	 ((projectsHome / projectName) files 
+	 (projectsHome / projectName) files 
 		do: [:tonelFile | 
 			tonelFile readStreamDo: [:fileStream | classFileString := fileStream contents ].
 			self deny: (classFileString includesString: 'classSide') ]
