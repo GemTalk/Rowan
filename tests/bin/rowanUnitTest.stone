@@ -258,7 +258,9 @@ loadProjectSpecs
 		on: CompileWarning
 		do: [:ex | 
 			(ex description includesString: 'not optimized')
-					ifFalse: [ warnings add: ex asString printString ].
+					ifFalse: [
+						GsFile gciLogServer: 'FATAL COMPILE WARNING ',  ex asString printString.
+						warnings add: ex asString printString ].
 			ex resume ].
 	self isSolo ifFalse: [ System commit "as loaded" ].	
 	self dev_loadProjectsOnly 
@@ -269,6 +271,7 @@ loadProjectSpecs
 					"save copy of script class in image and commit"
 					self persist ].
 			self exitWithStatus: 0].
+false ifTrue: [
  	warnings isEmpty ifFalse: [
 		| warningStatusStream message |
 		warningStatusStream := WriteStream on: String new.
@@ -276,11 +279,13 @@ loadProjectSpecs
 		warnings do: [:warning | self testStatusStream nextPutAll: '	', warning ].
 		self testStatusStream nextPutAll: 'Compile warnings results in test failure'; lf.
 		message := ' fails with compile warnings: ', warnings size printString.
+		self debugGem ifTrue: [ self error: message ].
 		self writeTestStatus: message.
 		self 
 			writeTestDone: message 
 			explanation: 'See teststatus.txt for more details'.
-		self exit: message withStatus: 1 ]. 
+		self exit: message withStatus: 1 ].
+] 
 %
 method
 buildTestSuite: testSuiteName
