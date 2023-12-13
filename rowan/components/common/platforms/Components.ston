@@ -3,7 +3,6 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/platforms/gemstone_gemstoneBase/Components',
 		'common/platforms/gemstone_gemstoneBase/ComponentsUpgrade'
 	],
 	#packageNames : [ ],
