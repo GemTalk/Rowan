@@ -1451,7 +1451,7 @@ baz ^3
 	self assert: (managedClass categoryOfSelector: #'bar') = #'managed'.
 	self assert: (managedClass categoryOfSelector: #'baz') = #'extension'.
 
-	((Rowan globalNamed: 'GsFileIn') newFromStream:: stream)
+	((Rowan globalNamed: 'GsFileIn') newFromStream: stream)
 		setEnableRemoveAll: false;
 		doFileIn.
 
