@@ -5841,39 +5841,6 @@ RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
 ]
 
-{ #category : 'migration tests' }
-RwRowanSample9Test >> testNoMigration_bitbucket [
-
-	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
-
-	| loadSpec instanceMap |
-	loadSpec := self 
-		_migrationLoadSpecNamed:  'spec_0034' 
-		projectName: 'RowanSample9' 
-		projectAlias: 'RowanSample9_No_Migration' 
-		gitUrl: 'git@bitbucket.org:dalehenrich/rowansample9.git'.
-
-	instanceMap := self 
-		_testMigration: loadSpec 
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-"validate migration"
-	instanceMap
-		keysAndValuesDo: [ :instance :assoc | 
-			| ivNames ar oldClass className class |
-			ar := assoc key.
-			oldClass := assoc value.
-			className := ar at: 1.
-			class := Rowan globalNamed: className.
-			self assert: oldClass ~= class.
-			self assert: instance class == oldClass.
-			ivNames := ar at: 2.
-			1 to: ivNames size do: [ :index | 
-				| ivName |
-				ivName := ivNames at: index.
-				self assert: (instance perform: ivName) == ivName ] ]
-]
-
 { #category : 'tests' }
 RwRowanSample9Test >> testReferenceRepositoryDirectory [
 	"Clone RowanSample9, then reference the directory as a plain disk repository, ignoring git"
