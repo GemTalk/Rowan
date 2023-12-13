@@ -217,12 +217,14 @@ RwUnmanagedClassesV2Test >> _validateAuditResults: audit [
 { #category : 'running' }
 RwUnmanagedClassesV2Test >> setUp [
 	super setUp.
-	self _removeUnmanagedClass
+	self _removeUnmanagedClass.
+	Rowan gemstoneTools topaz currentTopazPackageName: nil.
 ]
 
 { #category : 'running' }
 RwUnmanagedClassesV2Test >> tearDown [
 	self _removeUnmanagedClass.
+	Rowan gemstoneTools topaz currentTopazPackageName: nil.
 	super tearDown.
 ]
 

@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.0",
+	"gsVersion" : "3.7.1",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 12,
-		"failures" : 11,
-		"passed" : 1599,
-		"summary" : "1622 Tests with 11 Failures, 12 Errors and 0 DeprecationWarnings in 1786.59s",
-		"tests" : 1622,
-		"time" : 1786.594
+		"errors" : 8,
+		"failures" : 8,
+		"passed" : 1150,
+		"summary" : "1166 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 1383.62s",
+		"tests" : 1166,
+		"time" : 1383.624
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -43,6 +43,12 @@
 			"className" : "RBGemStoneNumberParserTest",
 			"status" : "passed",
 			"selector" : "testRadixNumberParser",
+			"time" : "0"
+		},
+		{
+			"className" : "RBParserTest",
+			"status" : "passed",
+			"selector" : "testAmbiguity",
 			"time" : "0"
 		},
 		{
@@ -2669,12 +2675,6 @@
 		},
 		{
 			"className" : "RwRowanProjectIssuesTest",
-			"status" : "errors",
-			"selector" : "testIssue150_branches",
-			"time" : "0"
-		},
-		{
-			"className" : "RwRowanProjectIssuesTest",
 			"status" : "passed",
 			"selector" : "testIssue185_move_class_to_package",
 			"time" : "0"
@@ -3823,12 +3823,6 @@
 			"className" : "RwRowanSample9V2Test",
 			"status" : "passed",
 			"selector" : "testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493",
-			"time" : "0"
-		},
-		{
-			"className" : "RwRowanSample9V2Test",
-			"status" : "passed",
-			"selector" : "testNoMigration_bitbucket",
 			"time" : "0"
 		},
 		{
@@ -4987,12 +4981,6 @@
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493",
-			"time" : "0"
-		},
-		{
-			"className" : "RwRowanSample9V3Test",
-			"status" : "passed",
-			"selector" : "testNoMigration_bitbucket",
 			"time" : "0"
 		},
 		{
@@ -7024,5 +7012,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2022-09-28T18:11:21.583828-07:00"
+	"timeStamp" : "2023-12-13T10:08:27.423551-08:00"
 }
