@@ -619,7 +619,7 @@ RwRowanSample9Test >> _testUnmanagedSpec_0057: loadSpec useStandardMethodFilein:
 	stream := useStandardMethodFilein 
 		ifTrue: [  (self _spec0057GsFilein: removeAllMethods projectName: projectName) readStreamPortable ]
 		ifFalse: [ (self _spec0057GsFileinUnManagedMethods: removeAllMethods projectName: projectName) readStreamPortable ].
-	((Rowan globalNamed: 'GsFileIn') _fromStream: stream)
+	((Rowan globalNamed: 'GsFileIn') newFromStream: stream)
 		setEnableRemoveAll: true;
 		doFileIn.
 	^ loadedProjects
