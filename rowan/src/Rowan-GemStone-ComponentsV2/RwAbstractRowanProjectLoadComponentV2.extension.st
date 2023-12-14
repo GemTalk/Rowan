@@ -3,7 +3,16 @@ Extension { #name : 'RwAbstractRowanProjectLoadComponentV2' }
 { #category : '*rowan-gemstone-componentsv2' }
 RwAbstractRowanProjectLoadComponentV2 class >> fromFile: filePath [
 	filePath asFileReference
-		readStreamDo: [ :fileStream | ^ self _readStonFrom: fileStream ]
+		readStreamDo: [ :fileStream | 
+			[ ^ self _readStonFrom: fileStream ]
+				on: STONReaderError
+				do: [ :ex | 
+					ex
+						addText:
+							(RwRepositoryResolvedProjectTonelReaderVisitorV2
+								lineNumberStringForOffset: fileStream position
+								fileName: filePath asFileReference fullName).
+					ex pass ] ]
 ]
 
 { #category : '*rowan-gemstone-componentsv2' }

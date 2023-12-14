@@ -18,7 +18,16 @@ Class {
 { #category : 'instance creation' }
 RwTestProjectLibraryIndexCard class >> fromFile: filePath [
 	filePath asFileReference
-		readStreamDo: [ :fileStream | ^ STON fromStream: fileStream ]
+		readStreamDo: [ :fileStream | 
+			[ ^ STON fromStream: fileStream ]
+				on: STONReaderError
+				do: [ :ex | 
+					ex
+						addText:
+							(RwRepositoryResolvedProjectTonelReaderVisitorV2
+								lineNumberStringForOffset: fileStream position
+								fileName: filePath asFileReference fullName).
+					ex pass ] ]
 ]
 
 { #category : 'accessing' }
