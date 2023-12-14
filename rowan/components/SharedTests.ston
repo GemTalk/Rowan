@@ -1,0 +1,10 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'SharedTests',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/tests/platforms/shared/Tests'
+	],
+	#packageNames : [ ],
+	#comment : 'Top-level component for loading shared/Tests packages independent of tests. This component is intended to be used by RowanClientServices to load the shared package WITHOUT loading other Rowan test code.'
+}

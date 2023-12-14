@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/platforms/shared/Tests',
+	#condition : 'shared',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Tests-Shared-GemStone'
+	],
+	#comment : 'Test packages whose code is shared between RowanV3 and RowanClientServicesV3.'
+}

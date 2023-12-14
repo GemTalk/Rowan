@@ -4,7 +4,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#projectNames : [ ],
 	#componentNames : [
 		'common/tests/platforms/gemstone36-/Tests',
-		'common/tests/platforms/gemstone/Tests'
+		'common/tests/platforms/gemstone/Tests',
+		'common/tests/platforms/shared/Tests'
 	],
 	#packageNames : [ ],
 	#comment : ''

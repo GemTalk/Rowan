@@ -14,6 +14,7 @@ RwLoadSpecificationV2 {
 		'v2',
 		'v2Only',
 		'examples',
+		'shared',
 		'v3'
 	],
 	#platformProperties : {
