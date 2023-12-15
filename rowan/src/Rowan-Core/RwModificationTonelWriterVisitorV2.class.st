@@ -242,6 +242,7 @@ RwModificationTonelWriterVisitorV2 >> addedPackage: aPackageModification [
 	self _packageSourceDir ensureCreateDirectory.
 	self _packageSourceDir / 'package.st'
 		writeStreamDo: [ :aStream | 
+			aStream truncate.
 			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
 				<< self _newLine ].
 
@@ -277,6 +278,7 @@ RwModificationTonelWriterVisitorV2 >> processClass: aClassModification [
 
 	self _classSourceFile
 		writeStreamDo: [:aStream |
+			aStream truncate.
 			self _writeClassDefinition: currentClassDefinition on: aStream.
 			self _writeClassSideMethodDefinitions: currentClassDefinition on: aStream.
 			self _writeInstanceSideMethodDefinitions: currentClassDefinition on: aStream ]
@@ -292,6 +294,7 @@ RwModificationTonelWriterVisitorV2 >> processClassExtension: aClassExtensionModi
 		ifFalse: [ 
 			self _classExtensionSourceFile
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					self _writeClassExtension: currentClassExtension on: aStream.
 					self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
 					self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ] ]
@@ -311,6 +314,7 @@ RwModificationTonelWriterVisitorV2 >> processProject: aProjectModification [
 	propertiesFile exists
 		ifFalse: [
 			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream truncate.
 				fileStream 
 					nextPutAll: '{ #format : ' , format printString , '}';
 					lf;

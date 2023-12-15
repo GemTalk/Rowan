@@ -143,6 +143,7 @@ RwModificationFiletreeWriterVisitor >> _filetreePackagePropertyDictFor: aPackage
 			"create default properties file"
 			propertiesFile
 				writeStreamDo: [:aStream |
+				aStream truncate.
 				aStream 
 					<< (self _toJSON:
  					(self class orderedDictionaryClass new
@@ -169,6 +170,7 @@ RwModificationFiletreeWriterVisitor >> _filetreeProjectPropertyDictFor: aProject
 					at: 'packageExtension' put: '.', self packageExtension;
 					at: 'Metadata' put: self monticelloMetadata;
 					yourself.
+				aStream truncate.
 				aStream 
 					<< (self _toJSON: dict )
 					<< self  _newLine ] ].
@@ -294,6 +296,7 @@ RwModificationFiletreeWriterVisitor >> addedMethod: aMethodModification [
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -319,6 +322,7 @@ RwModificationFiletreeWriterVisitor >> addedMethodExtension: aMethodExtensionMod
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -335,6 +339,7 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 	self _packageSourceDir ensureCreateDirectory.
 	(self _packageSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< '{'
 			<< self  _newLine
@@ -376,6 +381,7 @@ RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
 
 	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< methodDefinition protocol
 			<< self _newLine
@@ -480,11 +486,13 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 
 	(self _classSourceDir /  'README.md')
 		writeStreamDo: [:aStream |
+		aStream truncate.
 		aStream 
 			<< (self _commentOf: self currentClassDefinition) ].
 
 	(self _classSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
+			aStream truncate.
 			aStream 
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
@@ -513,6 +521,7 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 			self _classExtensionSourceDir ensureCreateDirectory.
 			(self _classExtensionSourceDir /  'properties.json')
 				writeStreamDo: [:aStream |
+					aStream truncate.
 					aStream 
 						<< (self _classExtensionOf: self currentClassExtension)
 						<< self _newLine ].

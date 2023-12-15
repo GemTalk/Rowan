@@ -33,7 +33,7 @@ RwAbstractRowanProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 				writeStreamDo: [ :stream | 
 					| string |
 					string := STON toStringPretty: self.
-					stream nextPutAll: string.
+					stream truncate; nextPutAll: string.
 					^ self ] ].
 	url schemeName = 'memory'
 		ifTrue: [ 
@@ -42,7 +42,7 @@ RwAbstractRowanProjectLoadComponentV2 >> _exportToUrl: directoryUrl [
 				writeStreamDo: [ :stream | 
 					| string |
 					string := STON toStringPretty: self.
-					stream nextPutAll: string.
+					stream truncate; nextPutAll: string.
 					^ self ] ].
 	^ nil	"otherwise a noop"
 ]

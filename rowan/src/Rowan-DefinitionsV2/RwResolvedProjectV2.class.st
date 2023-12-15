@@ -795,6 +795,7 @@ RwResolvedProjectV2 >> exportPackages: diskProjectSetDefinition packagesRoot: pa
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;
@@ -827,7 +828,7 @@ RwResolvedProjectV2 >> exportProjects [
 	self projectNames isEmpty
 		ifTrue: [ 
 			"add README.md as placeholder to ensure that the directory is preserved by git"
-			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  ] ]
+			self projectsRoot / 'README' , 'md' writeStreamDo: [ :fileStream |  fileStream truncate. ] ]
 ]
 
 { #category : 'exporting' }

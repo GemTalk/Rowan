@@ -89,6 +89,7 @@ RwModificationPharoTonelFormatV1WriterVisitorV2 >> addedPackage: aPackageModific
 	self _packageSourceDir ensureCreateDirectory.
 	self _packageSourceDir / 'package.st'
 		writeStreamDo: [ :aStream | 
+			aStream truncate.
 			aStream << 'Package ' << (self _toSTON: exportedPackageProperties)
 				<< self _newLine ].
 

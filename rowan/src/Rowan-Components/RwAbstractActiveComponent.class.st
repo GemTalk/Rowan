@@ -246,7 +246,7 @@ RwAbstractActiveComponent >> exportDoitsToUrl: directoryUrl [
 									fileRef exists
 										ifFalse: [ fileRef ensureCreateFile ].
 									fileRef
-										writeStreamDo: [ :fileStream | fileStream nextPutAll: doitString ] ] ] ] ]
+										writeStreamDo: [ :fileStream | fileStream truncate; nextPutAll: doitString ] ] ] ] ]
 		ifFalse: [ self error: 'unsupported url scheme ' , url schemeName printString ]
 ]
 

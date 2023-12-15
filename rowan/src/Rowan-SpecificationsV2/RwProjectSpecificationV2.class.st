@@ -100,7 +100,9 @@ RwProjectSpecificationV2 >> exportTo: directoryReference [
 		ifNil: [ directoryReference / self specName , 'ston' ]
 		ifNotNil: [ :path | directoryReference / path / self specName , 'ston' ].
 	filePath
-		writeStreamDo: [ :fileStream | STON put: self copy initializeForExport onStreamPretty: fileStream ]
+		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
+			STON put: self copy initializeForExport onStreamPretty: fileStream ]
 ]
 
 { #category : 'comparing' }
