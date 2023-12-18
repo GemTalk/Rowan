@@ -332,30 +332,20 @@ RwTonelParser >> methodDef: aBlock [
 { #category : 'parsing' }
 RwTonelParser >> methodDefList [
 	| result classMeths meths |
-	self separator. "to arrive to the end of the file in case there are no methods"
-  classMeths := { } .
-  meths := { } .
-	result := { classMeths  . meths  } .
-	[
-		[ stream atEnd ]
-			whileFalse: [ 
-				self methodDef: [:isMeta :mDef |
+	self separator.	"to arrive to the end of the file in case there are no methods"
+	classMeths := {}.
+	meths := {}.
+	result := {classMeths.
+	meths}.
+	[ stream atEnd ]
+		whileFalse: [ 
+			self
+				methodDef: [ :isMeta :mDef | 
 					isMeta
-						ifTrue: [ classMeths add:  mDef ]
-						ifFalse: [ meths add: mDef ].
-					"skip possible spaces at the end"
-					self separator ]
-			] 
-  ] on: Error do:[:ex |
-    ((RwTonelParseError,STONReaderError,STONWriterError) handles: ex) ifTrue:[
-      lastSelectorParsed ifNotNil:[ | str |
-        str := ex details ifNil:[ '' ].
-        ex details: str, ', last method parsed: ', lastSelectorParsed printString
-      ].
-    ].
-    ex pass 
-  ].
-  ^ result
+						ifTrue: [ classMeths add: mDef ]
+						ifFalse: [ meths add: mDef ].	"skip possible spaces at the end"
+					self separator ] ].
+	^ result
 ]
 
 { #category : 'private factory' }
