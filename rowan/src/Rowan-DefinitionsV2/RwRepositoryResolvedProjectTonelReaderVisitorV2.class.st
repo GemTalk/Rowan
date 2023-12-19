@@ -215,7 +215,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
-    ] on: ( STONReaderError , RwTonelParseError) do:[:ex |
+    ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: fileStream position fileName: fileReference fullName).
       ex pass .
     ].
@@ -245,7 +245,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
 			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , RwTonelParseError
+				on: STONReaderError , RwTonelParseError, Error
 				do: [ :ex | 
 					ex
 						addText:

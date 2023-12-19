@@ -3,7 +3,6 @@ RwPlatformNestedProjectLoadComponentV2 {
 	#condition : [
 		'gemstone'
 	],
-	#componentNames : [ ],
 	#packageNames : [
 		'AST-Kernel-Tests-Core',
 		'AST-Tests-Core',

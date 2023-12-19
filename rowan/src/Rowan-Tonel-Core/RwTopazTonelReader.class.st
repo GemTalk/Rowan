@@ -108,8 +108,8 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
     ].
 	  [
       self topazReadTonelStream: stream envId: envId 
-    ] onException: { STONReaderError . RwTonelParseError . Warning }
-		  do: { errBlk . errBlk . warnBlk } .
+    ] onException: { STONReaderError . RwTonelParseError . Error . Warning }
+		  do: { errBlk . errBlk . errBlk . warnBlk } .
   ] ensure:[ 
     warningsEnabled ifFalse:[ Notification disableSignalling]
   ]

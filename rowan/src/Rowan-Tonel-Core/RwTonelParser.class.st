@@ -339,12 +339,21 @@ RwTonelParser >> methodDefList [
 	meths}.
 	[ stream atEnd ]
 		whileFalse: [ 
+			[ 
 			self
 				methodDef: [ :isMeta :mDef | 
 					isMeta
 						ifTrue: [ classMeths add: mDef ]
 						ifFalse: [ meths add: mDef ].	"skip possible spaces at the end"
-					self separator ] ].
+					self separator ] ]
+				on: Error
+				do: [ :ex | 
+					lastSelectorParsed
+						ifNotNil: [ 
+							ex
+								addText:
+									', last method successfully parsed: ' , lastSelectorParsed printString ].
+					ex pass ] ].
 	^ result
 ]
 
