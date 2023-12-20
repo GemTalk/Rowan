@@ -17,18 +17,24 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForMeth
 
 { #category : 'class file reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForOffset: offset fileName: fName [
-  | res |
-  res :='  (Unable to determine line number)' .
-  [ | fRef |
-    fRef := fName asFileReference .
-    fRef readStreamDo:[ :fStream |  | buf lf lNum |
-      buf := fStream contents .
-      buf size > offset ifTrue:[ buf size: offset ].
-      lNum := 1 + (buf occurrencesOf: (lf := Character lf)) .
-      res := '', lf , ' near line ' , lNum asString , lf , ' in file ', fName .
-    ]
-  ] on: Error do:[:ex | "ignore" ].
-  ^ res
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| fRef |
+	fRef := fName asFileReference.
+	fRef
+		readStreamDo: [ :fStream | 
+			| buf lNum |
+			buf := fStream contents.
+			buf size > offset
+				ifTrue: [ buf size: offset ].
+			lNum := 1 + (buf occurrencesOf: Character lf).
+			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
 ]
 
 { #category : 'class file reading' }

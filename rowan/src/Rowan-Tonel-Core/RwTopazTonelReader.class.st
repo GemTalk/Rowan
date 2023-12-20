@@ -21,14 +21,14 @@ RwTopazTonelReader class >> _lineNumberStringForOffset: offset fileName: fName [
 	| res |
 	res := '  (Unable to determine line number)'.
 	[ 
-	| buf lf lNum gsfile |
+	| buf lNum gsfile |
 	gsfile := GsFile openReadOnServer: fName.
 	buf := gsfile contents.
 	gsfile close.
 	buf size > offset
 		ifTrue: [ buf size: offset ].
-	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
-	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
+	lNum := 1 + (buf occurrencesOf: Character lf).
+	res := ' near line ' , lNum asString , ' in file ' , fName ]
 		on: Error
 		do: [ :ex | 
 			"ignore"

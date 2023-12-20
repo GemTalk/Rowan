@@ -180,24 +180,36 @@ RwTonelParser >> extractSelector: aString [
 		Character newPage. 
 		Character cr. 
 		$: } collect:[:x | x codePoint] "
-  separators := #( 32 9 10 12 13 58 ).
-	keywords := { } .
-  sz := aString size .
-  ofs := 0 .
+	[ 
+	separators := #(32 9 10 12 13 58).
+	keywords := {}.
+	sz := aString size.
+	ofs := 0.
 	[ ofs < sz ]
-	whileTrue: [  "no temps in this block to avoid complex block"
-		word := String new .
-		[ofs < sz and: [ (separators includesIdentical: (ch := aString at: (ofs := ofs + 1)) codePoint) == false ] ]
-		  whileTrue: [ word add: ch  ].
-		ch == $: ifTrue: [ word add: ch ]. 
-		trimmedWord := word trimBoth .
-    trimmedWord size ~~ 0 ifTrue:[ keywords add: trimmedWord ] 
-  ].
-	(nKw := keywords size) <= 2 
-    ifTrue:[ res := keywords at: 1 ]
-    ifFalse:[ res := String new .
-             1 to: nKw by: 2 do:[:j | res addAll: (keywords at: j) ]. ].
-  ^ res asSymbol .
+		whileTrue: [ 
+			"no temps in this block to avoid complex block"
+			word := String new.
+			[ 
+			ofs < sz
+				and: [ 
+					(separators includesIdentical: (ch := aString at: (ofs := ofs + 1)) codePoint)
+						== false ] ] whileTrue: [ word add: ch ].
+			ch == $:
+				ifTrue: [ word add: ch ].
+			trimmedWord := word trimBoth.
+			trimmedWord size ~~ 0
+				ifTrue: [ keywords add: trimmedWord ] ].
+
+	(nKw := keywords size) <= 2
+		ifTrue: [ res := keywords at: 1 ]
+		ifFalse: [ 
+			res := String new.
+			1 to: nKw by: 2 do: [ :j | res addAll: (keywords at: j) ] ].
+	^ res asSymbol ]
+		on: Error
+		do: [ :ex | 
+			ex addText: ' while extracting selector '.
+			ex pass ]
 ]
 
 { #category : 'testing' }
@@ -222,16 +234,29 @@ RwTonelParser >> lineEndingSize [
 { #category : 'parsing' }
 RwTonelParser >> metadata [
 	| result ch count |
-	stream peek == ${ ifFalse: [ RwTonelParseError signal: 'Can''t parse metadata' ].	
-	result := String new .
+	(ch := stream peek) == ${
+		ifFalse: [ 
+			Error
+				signal:
+					'Missing method category or class properties. Expected ${, got '
+						, ch printString ].
+	result := String new.
 	count := 0.
 	[ stream atEnd ]
-	whileFalse: [ 
-		ch := stream next.
-		result add: ch.
-		ch == ${ ifTrue: [ count := count +1 ].
-		ch == $} ifTrue: [ count := count -1 ].
-		count == 0 ifTrue: [ ^ STON fromString: result ]].
+		whileFalse: [ 
+			ch := stream next.
+			result add: ch.
+			ch == ${
+				ifTrue: [ count := count + 1 ].
+			ch == $}
+				ifTrue: [ count := count - 1 ].
+			count == 0
+				ifTrue: [ 
+					[ ^ STON fromString: result ]
+						on: STONReaderError
+						do: [ :ex | 
+							ex addText: ', while reading metadata for class or method category'.
+							ex pass ] ] ].
 
 	RwTonelParseError signal: 'Can''t parse metadata'
 ]
@@ -240,7 +265,9 @@ RwTonelParser >> metadata [
 RwTonelParser >> method [
 	| type selector |
 	
+"if there is a single $> then we read until we find the NEXT ONE"
 	type := self untilIncluding: '>>'.
+"if there is no leading $[ we read until we find the NEXT ONE"
 	selector := self cleanSelector: (self untilExcludingChar: $[ ).
 	type := type trimBoth substringsSpace . "substrings: ' ' "
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
@@ -249,7 +276,6 @@ RwTonelParser >> method [
 		type.
 		selector.
 	}
-
 ]
 
 { #category : 'parsing' }
@@ -264,9 +290,8 @@ RwTonelParser >> methodBody [
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
 	| result char prevChar comment string count startPos |
-  startPos := stream position .
-  "startBody := stream peek: 300 ." "uncomment for debugging parse problems"
-	stream peek == $[ ifFalse: [ RwTonelParseError signal: 'Can''t parse method body' ].
+	(char := stream peek) == $[ ifFalse: [ Error signal: 'Missing leading $[ for method body' ].
+	startPos := stream position .
 	result := String new .
 	comment := false.
 	string := false.
@@ -291,9 +316,8 @@ RwTonelParser >> methodBody [
 				end: $]
 				clean: #right ].
 		prevChar := char ].
-
-	RwTonelParseError signal: 'Can''t parse method body'
-
+	stream position: startPos.  "start position is more informative than end position"
+	RwTonelParseError signal: 'Can''t parse method body -- missing selector and/or missing trailing $]'
 ]
 
 { #category : 'parsing' }
@@ -339,21 +363,12 @@ RwTonelParser >> methodDefList [
 	meths}.
 	[ stream atEnd ]
 		whileFalse: [ 
-			[ 
 			self
 				methodDef: [ :isMeta :mDef | 
 					isMeta
 						ifTrue: [ classMeths add: mDef ]
 						ifFalse: [ meths add: mDef ].	"skip possible spaces at the end"
-					self separator ] ]
-				on: Error
-				do: [ :ex | 
-					lastSelectorParsed
-						ifNotNil: [ 
-							ex
-								addText:
-									', last method successfully parsed: ' , lastSelectorParsed printString ].
-					ex pass ] ].
+					self separator ] ].
 	^ result
 ]
 
