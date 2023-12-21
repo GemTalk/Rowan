@@ -11,7 +11,8 @@ Class {
 	#name : 'RwTopazTonelReader',
 	#superclass : 'Object',
 	#instVars : [
-		'environmentId'
+		'environmentId',
+		'theClassName'
 	],
 	#category : 'Rowan-Tonel-Core'
 }
@@ -86,33 +87,48 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
 		Definition/redefinition of the class not implemented yet.
 		For topaz TFILE command"
 
-  | warningsEnabled |
-  warningsEnabled := Notification signallingEnabled .
-  [ 
-	  | gsfile stream errBlk warnBlk |
-    Notification enableSignalling . "compile warnings can be logged"
-	  gsfile := GsFile openReadOnServer: filePath.
-	  gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
-	  stream := ReadStreamPortable on: gsfile contents.
-	  gsfile close.
-		errBlk := [ :ex | 
-         ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
-			   ex pass ].
-    warnBlk := [ :warn| | str | 
-       str := warn asString .
-       ((str subStrings occurrencesOf: 'WARNING:') == 1 
-         and:[ str includesString: 'not optimized']) ifFalse:[
-         GsFile gciLogServer: warn asString . 
-       ].
-       warn resume 
-    ].
-	  [
-      self topazReadTonelStream: stream envId: envId 
-    ] onException: { STONReaderError . RwTonelParseError . Error . Warning }
-		  do: { errBlk . errBlk . errBlk . warnBlk } .
-  ] ensure:[ 
-    warningsEnabled ifFalse:[ Notification disableSignalling]
-  ]
+	| warningsEnabled |
+	warningsEnabled := Notification signallingEnabled.
+	[ 
+	| gsfile stream errBlk warnBlk |
+	Notification enableSignalling.	"compile warnings can be logged"
+	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
+	stream := ReadStreamPortable on: gsfile contents.
+	gsfile close.
+	errBlk := [ :ex | 
+	(ex isKindOf: CompileError)
+		ifTrue: [ 
+			GsFile
+				gciLogServer:
+					'CompileError encountered '
+						, (self _lineNumberStringForOffset: stream position fileName: filePath) ]
+		ifFalse: [ 
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath) ].
+	ex pass ].
+	warnBlk := [ :warn | 
+	| str |
+	str := warn asString.
+	((str subStrings occurrencesOf: 'WARNING:') == 1
+		and: [ str includesString: 'not optimized' ])
+		ifFalse: [ GsFile gciLogServer: warn asString ].
+	warn resume ].
+	[ self topazReadTonelStream: stream envId: envId ]
+		onException:
+			{STONReaderError.
+			RwTonelParseError.
+			Error.
+			Warning}
+		do:
+			{errBlk.
+			errBlk.
+			errBlk.
+			warnBlk} ]
+		ensure: [ 
+			warningsEnabled
+				ifFalse: [ Notification disableSignalling ] ]
 ]
 
 { #category : 'topaz support' }
@@ -142,6 +158,12 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 	| behavior symbolList |
 	symbolList := GsCurrentSession currentSession symbolList.
+	className = self theClassName
+		ifFalse: [ 
+			self
+				error:
+					'The name of the class (', className printString, ') specified for the method ' , selector printString
+						, ' does not match the name of class (', self theClassName printString, ') declared in this tonel class file' ].
 	behavior := symbolList objectNamed: className asSymbol.
 	meta
 		ifTrue: [ behavior := behavior class ].
@@ -154,10 +176,22 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 { #category : 'tonel parser interface' }
 RwTopazTonelReader >> newTypeDefinitionFrom: anArray [
-	"class definition/redefinition not supported"
+	"class definition/redefinition not supported, but we do need to be able to confirm that all of the methods being processed are aimed at the current class"
+
+	self theClassName: (anArray sixth at: #'name') asString
 ]
 
 { #category : 'method definition' }
 RwTopazTonelReader >> offset: anInteger inFile: aFileName [
 	"message sent to method definitions ... avoid MNU"
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName [
+	^theClassName
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName: object [
+	theClassName := object
 ]
