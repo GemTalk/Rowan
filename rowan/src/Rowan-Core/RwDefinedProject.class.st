@@ -350,20 +350,8 @@ RwDefinedProject >> addSubcomponentStructureFor: componentBasename startingAtCom
 ]
 
 { #category : 'accessing' }
-RwDefinedProject >> componentNamed: componentName [
-	^ self _concreteProject componentNamed: componentName
-]
-
-{ #category : 'accessing' }
 RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _concreteProject componentNamed: aComponentName ifAbsent: absentBlock
-]
-
-{ #category : 'accessing' }
-RwDefinedProject >> componentNames [
-	"list of component names from the load specification used to load the project "
-
-	^ self _concreteProject componentNames
 ]
 
 { #category : 'accessing' }

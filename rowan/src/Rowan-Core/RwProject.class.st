@@ -204,18 +204,6 @@ RwProject >> componentForPackageNamed: packageName [
 ]
 
 { #category : 'components' }
-RwProject >> componentNamed: componentName [
-	^ self _loadedComponents componentNamed: componentName
-]
-
-{ #category : 'querying' }
-RwProject >> componentNames [
-	"list of component names from the load specification used to load the project "
-
-	^ self _loadedProject componentNames
-]
-
-{ #category : 'components' }
 RwProject >> componentOrPackageGroupNamed: componentName [
 	^ self _loadedComponents componentOrPackageGroupNamed: componentName
 ]

@@ -16,6 +16,18 @@ RwAbstractProject >> comment [
 ]
 
 { #category : 'accessing' }
+RwAbstractProject >> componentNamed: componentName [
+	^ self _concreteProject componentNamed: componentName
+]
+
+{ #category : 'accessing' }
+RwAbstractProject >> componentNames [
+	"list of component names from the load specification used to load the project "
+
+	^ self _concreteProject componentNames
+]
+
+{ #category : 'accessing' }
 RwAbstractProject >> customConditionalAttributes [
 	"Answer the customConditionalAttributes that would be used to load the project"
 	^ self _concreteProject customConditionalAttributes
