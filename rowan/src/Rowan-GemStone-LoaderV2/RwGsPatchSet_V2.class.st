@@ -604,7 +604,6 @@ RwGsPatchSet_V2 >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass
 { #category : 'building' }
 RwGsPatchSet_V2 >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
-anInstanceMethodDefinition selector asString = '_rwRecompileFromSourceIfUnpackagedDo:' ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
