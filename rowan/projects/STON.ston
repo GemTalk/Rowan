@@ -6,12 +6,9 @@ RwEmbeddedLoadSpecificationV2 {
 	#revision : 'master',
 	#projectSpecFile : 'platforms/gemstone/projects/STON/project.ston',
 	#componentNames : [
-		'Core',
-		'Tests'
+		'Core'
 	],
-	#customConditionalAttributes : [
-		'tests'
-	],
+	#customConditionalAttributes : [ ],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
