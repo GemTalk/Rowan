@@ -152,22 +152,28 @@ RwGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename extensio
 
 { #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _stringForVariables: variableList to: aStream [
-	| trailingSpace |
-	trailingSpace := false.
-	variableList do: [ :each | 
-		trailingSpace := true.
-		aStream nextPut: $ ; nextPutAll: each ].
-	trailingSpace ifTrue: [ aStream nextPut: $ ]
+	| leadingSpace |
+	leadingSpace := false.
+	variableList
+		do: [ :each | 
+			leadingSpace
+				ifTrue: [ aStream nextPut: $  ]
+				ifFalse: [ leadingSpace := true ].
+			aStream nextPutAll: each ]
 ]
 
 { #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _symbolsForVariables: variableList toString: aString [
 	| trailingSpace |
 	trailingSpace := false.
-	variableList do: [ :each | 
-		trailingSpace := true.
-		aString add: $ ; addAll: each asSymbol printString ].
-	trailingSpace ifTrue: [ aString add: $ ]
+	variableList
+		do: [ :each | 
+			trailingSpace := true.
+			aString
+				add: $ ;
+				addAll: each asSymbol printString ].
+	trailingSpace
+		ifTrue: [ aString add: $  ]
 ]
 
 { #category : 'private exporting' }
