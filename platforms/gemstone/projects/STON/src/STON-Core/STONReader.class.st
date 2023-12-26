@@ -247,12 +247,11 @@ STONReader >> parseCharacterHexDigit [
 { #category : 'parsing-internal' }
 STONReader >> parseClass [
 	| className |
-	className := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isClassChar: readStream peek ] ] whileTrue: [ 
-			stream nextPut: readStream next ] ].
+	className := String new.
+	[ readStream atEnd not and: [ self isClassChar: readStream peek ] ]
+		whileTrue: [ className addAll: readStream next ].
 	self consumeWhitespace.
 	^ self lookupClass: className asSymbol
-
 ]
 
 { #category : 'parsing-internal' }
@@ -430,17 +429,15 @@ STONReader >> parseString [
 
 { #category : 'parsing-internal' }
 STONReader >> parseStringInternal [
-  | result delimiter |
-  delimiter := readStream next.
-  (delimiter = $' or: [ delimiter = $" ])
-    ifFalse: [ self error: ''' or " expected' ].
-  result := self
-    stringStreamContents: [ :stream | 
-      [ readStream atEnd or: [ readStream peek = delimiter ] ]
-        whileFalse: [ stream nextPut: self parseCharacter ] ].
-  self expectChar: delimiter.
-  ^ result
-
+	| result delimiter |
+	delimiter := readStream next.
+	(delimiter = $' or: [ delimiter = $" ])
+		ifFalse: [ self error: ''' or " expected' ].
+	result := String new.
+	[ readStream atEnd or: [ readStream peek = delimiter ] ]
+		whileFalse: [ result addAll: self parseCharacter ].
+	self expectChar: delimiter.
+	^ result
 ]
 
 { #category : 'parsing-internal' }
@@ -449,15 +446,14 @@ STONReader >> parseSymbol [
 	self expectChar: $#.
 	readStream peek = $'
 		ifTrue: [ ^ self parseStringInternal asSymbol ].
-	string := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isSimpleSymbolChar: readStream peek ] ] whileTrue: [
-			stream nextPut: readStream next ] ].
+	string := String new.
+	[ readStream atEnd not and: [ self isSimpleSymbolChar: readStream peek ] ]
+		whileTrue: [ string addAll: readStream next ].
 	string isEmpty
 		ifFalse: [ 
 			self consumeWhitespace.
 			^ string asSymbol ].
 	self error: 'unexpected input'
-
 ]
 
 { #category : 'parsing' }

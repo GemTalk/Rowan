@@ -681,7 +681,7 @@ RwResolvedProjectV2 >> compileWhileReading [
 	^ (self dynamicInstVarAt: #'compileWhileReading') ifNil: [ false ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class reading' }
 RwResolvedProjectV2 >> compileWhileReading: aBoolean [
 	"true means compile method defs while reading tonel files for immediate detection of syntax errors"
 
