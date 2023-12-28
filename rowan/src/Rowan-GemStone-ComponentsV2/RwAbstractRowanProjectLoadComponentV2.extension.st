@@ -10,7 +10,7 @@ RwAbstractRowanProjectLoadComponentV2 class >> fromFile: filePath [
 				do: [:ex |
 					ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 
 						lineNumberStringForOffset: fileStream position 
-						fileName: filePath asFileReference fullName).
+						fileName: filePath).
 					ex pass ] ]
 ]
 

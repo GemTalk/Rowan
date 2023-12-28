@@ -22,10 +22,8 @@ RwTopazTonelReader class >> _lineNumberStringForOffset: offset fileName: fName [
 	| res |
 	res := '  (Unable to determine line number)'.
 	[ 
-	| buf lNum gsfile |
-	gsfile := GsFile openReadOnServer: fName.
-	buf := gsfile contents.
-	gsfile close.
+	| buf lNum |
+	buf := fName asFileReference contents.
 	buf size > offset
 		ifTrue: [ buf size: offset ].
 	lNum := 1 + (buf occurrencesOf: Character lf).
