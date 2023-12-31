@@ -156,8 +156,8 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 	| behavior symbolList |
 	symbolList := GsCurrentSession currentSession symbolList.
-	className = self theClassName
-		ifFalse: [ 
+	(self theClassName notNil and: [ className ~= self theClassName ]) "tmethod command uses className to identify the target class" 
+		ifTrue: [ 
 			self
 				error:
 					'The name of the class (', className printString, ') specified for the method ' , selector printString

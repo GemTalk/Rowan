@@ -98,7 +98,7 @@ RwTopazTonelReaderTest >> testCompileMethod_02 [
 	^1
 ]
 '.
-	self should: [ RwTopazTonelReader topazCompileTonelMethod: tonelMethodString ] raise: RwTonelParseError
+	self should: [ RwTopazTonelReader topazCompileTonelMethod: tonelMethodString ] raise: Error
 ]
 
 { #category : 'tests' }

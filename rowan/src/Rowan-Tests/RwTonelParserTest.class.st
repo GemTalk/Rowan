@@ -204,8 +204,7 @@ RwTonelParserTest >> testMethodDef [
 	[ 
 	self
 		assertParse:
-			'
-{ #category: ''accessing'' }
+			'{ #category: ''accessing'' }
 Object>>name [
 	^ self printString
 ]'
@@ -222,7 +221,7 @@ Object>>name [
 
 	self
 		assertParse:
-			'
+			'{ #category: ''changed'' }
 Object class>>name [ 
 	^ self printString
 ]'
@@ -232,14 +231,14 @@ Object class>>name [
 				newMethodDefinitionForClassNamed: #'Object'
 				classIsMeta: true
 				selector: #'name'
-				category: ''
+				category: 'changed'
 				source:
 					'name 
 	^ self printString').
 
 	self
 		assertParse:
-			'
+			'{ #category: ''accessing'' }
 TClass classSide >> template: aSystemCategoryName [ 
 	"I really do not care"
 ]'
@@ -249,7 +248,7 @@ TClass classSide >> template: aSystemCategoryName [
 				newMethodDefinitionForClassNamed: #'TClass'
 				classIsMeta: true
 				selector: #'template:'
-				category: ''
+				category: 'accessing'
 				source:
 					'template: aSystemCategoryName 
 	"I really do not care"') ]
@@ -272,15 +271,16 @@ RwTonelParserTest >> testMethodDef_627_01 [
 
 { #category : 'tests' }
 RwTonelParserTest >> testMethodDef_627_02 [
+	"Missing method category... error"
+
 	self
 		shouldParse:
-			'
-( #category: ''accessing'' }
+			'( #category: ''accessing'' }
 Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: RwTonelParseError
+		raise: Error
 ]
 
 { #category : 'tests' }
@@ -294,7 +294,7 @@ Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: RwTonelParseError
+		raise: Error
 ]
 
 { #category : 'tests' }
@@ -308,7 +308,7 @@ Object>>name [
 	^ self printString
 ]'
 		rule: #'methodDef'
-		raise: RwTonelParseError
+		raise: Error
 ]
 
 { #category : 'tests' }
@@ -317,7 +317,7 @@ RwTonelParserTest >> testMethodDefList [
 	[ 
 	parsed := self
 		parse:
-			'
+			'{ #category: ''accessing'' }
 Object class>>new [
 	^ self basicNew initialize
 ]

@@ -1628,7 +1628,9 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 "resolve project"
 	resolvedProject1 := loadSpec resolveProject.
 	resolvedProject1 repository checkout: 'issue_549'.	"tag pointing to inconsistent checkout"
-	resolvedProject1 read.
+	[ resolvedProject1 read ]
+		on: RwUnreadPackagesErrorNotification
+		do: [:ex | ex resume ].
 
 "load project"
 	errorHit := false.

@@ -484,7 +484,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 	visitor visit: changedProjectSetModification.
 
 "validation"
-	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	[readProjectSetDefinition := writtenProjectDefinition readProjectSet]
+		on: RwUnreadPackagesErrorNotification
+		do: [:ex | ex resume ].
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.

@@ -21,7 +21,8 @@ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 >> filenameExtension: aSt
 
 { #category : 'package reading' }
 RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 >> readPackages: packagesRoot [
-	| trace |
+	| trace packageNamesRead |
+	packageNamesRead := Set new.
 	trace := Rowan projectTools trace.
 	packagesRoot files
 		do: [ :packageFile | 
@@ -34,15 +35,17 @@ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 >> readPackages: packages
 				ifTrue: [ 
 					| packageName |
 					packageName := packageFile base.
-					trace
-						trace:
-							'--- reading package ' , packageName asString , ' dir ' , packageFile asString.
 					(self packageNamesBlock value: packageName)
 						ifTrue: [ 
+							trace
+								trace:
+									'--- reading package ' , packageName asString , ' dir ' , packageFile asString.
 							GsFileinPackager
 								toPackagesForDefinedProject: self currentProjectDefinition
 								componentName:
 									(self currentProjectDefinition componentForPackageNamed: packageName) name
-								fromServerPath: packageFile pathString ]
-						ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ]
+								fromServerPath: packageFile pathString.
+							packageNamesRead add: packageName ]
+						ifFalse: [ trace trace: '      skipped readClasses, ' , packageName , ' rejected' ] ] ].
+	^ packageNamesRead
 ]

@@ -44,7 +44,7 @@ RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout: projectName [
 doit
 (Object
 	subclass: ''', projectName, 'Class1''
-	instVarNames: #( ivar1 )
+	instVarNames: #(ivar1)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()

@@ -50,25 +50,38 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMet
 		projectDefinitionSet := RwProjectSetDefinition new
 			addProject: projectDefinition;
 			yourself ]
-		on: RwInvalidCategoryProtocolConventionErrorNotification
+		on: RwInvalidCategoryProtocolConventionErrorNotification , RwUnreadPackagesErrorNotification
 		do: [:ex | 
-			ex
-				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
-				nonExtensionMethodNoficationDo: [ 
-					"repair the protocol"
-					ex methodDefinition protocol: 'repaired'.
-					ex resume ] 
-				extensionMethodPackageMismatchNoficationDo: [ 
-					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ]  
-				extensionMethodNonExtensionProtocolNoficationDo: [ 
-					"repair the protocol - extension method protocol doesn't start with a *"
-					ex methodDefinition protocol: '*', ex packageName asLowercase.
-					ex resume ] ].
+			(ex isKindOf: RwUnreadPackagesErrorNotification)
+				ifTrue: [
+					| unreadPackageNames |
+					"Handle and resume, allowing the read to continue without error ... allowing for repair"
+					unreadPackageNames := ex unreadPackageNames.
+					self assert: unreadPackageNames size = 1.
+					self assert: (unreadPackageNames includes: 'Issue122-Core-ProtocolValidationErro').
+					ex resume]
+				ifFalse: [ 
+					ex
+						classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
+						nonExtensionMethodNoficationDo: [ 
+							"repair the protocol"
+							ex methodDefinition protocol: 'repaired'.
+							ex resume ] 
+						extensionMethodPackageMismatchNoficationDo: [ 
+							"repair the protocol - extension method protocol does start with a *, but does not match the package name"
+							ex methodDefinition protocol: '*', ex packageName asLowercase.
+							ex resume ]  
+						extensionMethodNonExtensionProtocolNoficationDo: [ 
+							"repair the protocol - extension method protocol doesn't start with a *"
+							ex methodDefinition protocol: '*', ex packageName asLowercase.
+							ex resume ] ] ].
 
 "validation - read from disk, without repairing the issues (creating a patch reads without repairing validation errors"
-	patches := Rowan projectTools diff patchesForProjectDefinition: projectDefinition.
+	[patches := Rowan projectTools diff patchesForProjectDefinition: projectDefinition]
+		on: RwUnreadPackagesErrorNotification
+		do: [:ex | 
+			"Handle and resume, allowing the read to continue without error ... allowing for repair"
+			ex resume ].
 	self assert: patches size = 1.
 	patches do: [:assoc |
 		| packageName patch operations |

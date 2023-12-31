@@ -236,6 +236,7 @@ RwTonelParser >> metadata [
 	| result ch count |
 	(ch := stream peek) == ${
 		ifFalse: [ 
+			"use Error instead of RwTonelParseError, to avoid having try: reset the stream position"
 			Error
 				signal:
 					'Missing method category or class properties. Expected ${, got '
@@ -290,7 +291,10 @@ RwTonelParser >> methodBody [
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
 	| result char prevChar comment string count startPos |
-	(char := stream peek) == $[ ifFalse: [ Error signal: 'Missing leading $[ for method body' ].
+	(char := stream peek) == $[ 
+		ifFalse: [ 
+			"use Error instead of RwTonelParseError, to avoid having try: reset the stream position"
+			Error signal: 'Missing leading $[ for method body' ].
 	startPos := stream position .
 	result := String new .
 	comment := false.

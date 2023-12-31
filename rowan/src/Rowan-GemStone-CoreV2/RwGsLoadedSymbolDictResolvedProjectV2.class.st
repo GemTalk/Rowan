@@ -198,6 +198,13 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentForPackageNamed: packageName [
 	^ self _projectComponents componentForPackageNamed: packageName
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentNamed: aComponentName [
+	^ self
+		componentNamed: aComponentName
+		ifAbsent: [ self error: 'No component named ' , aComponentName printString , ' found' ]
+]
+
 { #category : 'querying' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _projectComponents componentNamed: aComponentName ifAbsent: absentBlock

@@ -98,7 +98,8 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
-	| trace |
+	| trace packageNamesRead |
+	packageNamesRead := Set new.
 	trace := Rowan projectTools trace.
 	packagesRoot directories
 		do: [ :packageDir | 
@@ -109,15 +110,18 @@ RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
 							'--- skip reading ' , packageDir printString
 								, ' not a tonel package directory (missing or malformed package.st file' ]
 				ifNotNil: [ :packageName | 
-					trace
-						trace:
-							'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
 					packageDir extension = self packageExtension
 						ifFalse: [ trace trace: '      skipped readClasses, extension does not match' ]
 						ifTrue: [ 
+							trace
+								trace:
+									'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
 							(self packageNamesBlock value: packageName)
-								ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ]
-								ifFalse: [ trace trace: '      skipped readClasses, packageName rejected' ] ] ] ]
+								ifTrue: [ 
+									self readClassesFor: packageName packageRoot: packageDir.
+									packageNamesRead add: packageName ]
+								ifFalse: [ trace trace: '      skipped readClasses, package ' , packageName , ' rejected' ] ] ] ].
+	^ packageNamesRead
 ]
 
 { #category : 'public' }
@@ -128,8 +132,28 @@ RwRepositoryComponentProjectReaderVisitor >> visit: anObject [
 
 { #category : 'visiting' }
 RwRepositoryComponentProjectReaderVisitor >> visitResolvedProjectV2: aRwResolvedProjectV2 [
-
+	| packageNamesRead pn |
 	self currentProjectDefinition: aRwResolvedProjectV2.
 	aRwResolvedProjectV2 _projectDefinition packages: Dictionary new.
-	self readPackages: aRwResolvedProjectV2 packagesRoot
+	packageNamesRead := self readPackages: aRwResolvedProjectV2 packagesRoot.
+	(pn := self packageNames asSet) = packageNamesRead
+		ifFalse: [ 
+			| message unreadPackageNames |
+			message := 'Requested ' , pn size printString
+				, ' packages to be read, but only ' , packageNamesRead size printString
+				, ' packages were read. The following packages were not read:'.
+			message lf.
+			(unreadPackageNames := pn - packageNamesRead)
+				do: [ :pkgName | 
+					message
+						tab;
+						addAll: pkgName;
+						lf ].
+			message
+				addAll:
+					'Check that the package directory exists and that the name in the package.st file is correct (tonel format).'.
+			RwUnreadPackagesErrorNotification new
+				errorMessage: message;
+				unreadPackageNames: unreadPackageNames;
+				signal ]
 ]
