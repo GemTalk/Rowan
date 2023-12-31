@@ -247,7 +247,9 @@ loadProjectSpecs
 								gitUrl: 'file:', externalsStBase, '/', loadSpec projectAlias ]
 						ifFalse: [ 
 							loadSpec
-								gitUrl: 'file:', externalsStBase, '/', rowanProject projectAlias, '/', relRoot ] ].
+								gitUrl: 'file:', externalsStBase, '/', rowanProject projectAlias, '/', relRoot ].
+					loadSpec specName = 'STON'
+						ifTrue: [ loadSpec addComponentNamed: 'Tests' ] ].
 			loadSpec
 				projectsHome: '$ROWAN_PROJECTS_HOME';
 				addCustomConditionalAttributes: #('tests' 'testsV2');
@@ -271,7 +273,6 @@ loadProjectSpecs
 					"save copy of script class in image and commit"
 					self persist ].
 			self exitWithStatus: 0].
-false ifTrue: [
  	warnings isEmpty ifFalse: [
 		| warningStatusStream message |
 		warningStatusStream := WriteStream on: String new.
@@ -285,7 +286,6 @@ false ifTrue: [
 			writeTestDone: message 
 			explanation: 'See teststatus.txt for more details'.
 		self exit: message withStatus: 1 ].
-] 
 %
 method
 buildTestSuite: testSuiteName
