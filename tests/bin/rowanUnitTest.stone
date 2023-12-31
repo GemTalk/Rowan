@@ -214,6 +214,7 @@ loadProjectSpecs
 	rowanProjectsSandbox asFileReference ensureCreateDirectory.
 	warnings := {}.
 	[ 
+		| stonLoadSpec |
 		self preDoitSpecLoad: [:loadSpec |
 			loadSpec projectsHome: externalsStBase ].
 		"Compensate for Rowan v2 bugs"
@@ -229,6 +230,11 @@ loadProjectSpecs
 			loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').	
 		(Rowan projectNamed: 'RowanClientServices')
 			loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' 'testsV2').
+		stonLoadSpec := (Rowan projectNamed: 'STON') _loadSpecification.
+		(stonLoadSpec 
+			addTopLevelComponentNamed: 'Tests';
+			customConditionalAttributes: stonLoadSpec customConditionalAttributes, {'tests'};
+			resolve) load.
 		System commit.
 	]
 		on: CompileWarning

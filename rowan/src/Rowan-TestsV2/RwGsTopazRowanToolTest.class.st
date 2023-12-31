@@ -44,9 +44,9 @@ RwGsTopazRowanToolTest >> _expected_spec_0001_Fileout [
 doit
 (Object
 	subclass: ''RowanSample9Class1''
-	instVarNames: #( ivar1 )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #(ivar1)
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -63,9 +63,9 @@ removeallclassmethods RowanSample9Class1
 doit
 (TestCase
 	subclass: ''RowanSample9TestCase''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
