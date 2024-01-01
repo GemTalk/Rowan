@@ -15,9 +15,9 @@ percent := '%'.	"a method containing % in the first column cannot be loaded into
 doit
 (Array
 	subclass: ''Issue361Class2''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -30,9 +30,9 @@ true.
 doit
 (Object
 	subclass: ''Issue361Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -45,9 +45,9 @@ true.
 doit
 (Issue361Class1
 	subclass: ''Issue361Class3''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -107,9 +107,9 @@ percent := '%'.	"a method containing % in the first column cannot be loaded into
 doit
 (Array
 	subclass: ''Issue361Class2''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -125,9 +125,9 @@ removeallclassmethods Issue361Class2
 doit
 (Object
 	subclass: ''Issue361Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -143,9 +143,9 @@ removeallclassmethods Issue361Class1
 doit
 (Issue361Class1
 	subclass: ''Issue361Class3''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #( #logCreation )
@@ -208,9 +208,9 @@ percent := '%'.	"a method containing % in the first column cannot be loaded into
 doit
 (Array
 	subclass: ''Issue361Class2''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -224,9 +224,9 @@ true.
 doit
 (Object
 	subclass: ''Issue361Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -239,9 +239,9 @@ true.
 doit
 (Issue361Class1
 	subclass: ''Issue361Class3''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -306,9 +306,9 @@ percent := '%'.	"a method containing % in the first column cannot be loaded into
 doit
 (Array
 	subclass: ''Issue361Class2''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -321,9 +321,9 @@ true.
 doit
 (Object
 	subclass: ''Issue361Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -336,9 +336,9 @@ true.
 doit
 (Issue361Class1
 	subclass: ''Issue361Class3''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -389,9 +389,9 @@ percent := '%'.	"a method containing % in the first column cannot be loaded into
 doit
 (Array
 	subclass: ''Issue361Class2''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -407,9 +407,9 @@ removeallclassmethods Issue361Class2
 doit
 (Object
 	subclass: ''Issue361Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()
@@ -425,9 +425,9 @@ removeallclassmethods Issue361Class1
 doit
 (Issue361Class1
 	subclass: ''Issue361Class3''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: CypressTestData
 	options: #()

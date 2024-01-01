@@ -36,8 +36,8 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 		hasInstanceVariables: [ 
 			aStream
 				nextPutAll:
-						'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames)
-								, ' )';
+						'	instVarNames: #(' , (self _stringForVariables: classDefinition instVarNames)
+								, ')';
 				lf ].
 	optionsString := String new.
 	classDefinition gs_options isEmpty
@@ -59,15 +59,15 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutClassDeclaration: classDefinitio
 			reservedOopString := strm contents ].
 	aStream
 		nextPutAll:
-				'	classVars: #( ' , (self _stringForVariables: classDefinition classVarNames)
-						, ' )';
+				'	classVars: #(' , (self _stringForVariables: classDefinition classVarNames)
+						, ')';
 		lf.
 	hasClassInstVars
 		ifTrue: [ 
 			aStream
 				nextPutAll:
-						'	classInstVars: #( '
-								, (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+						'	classInstVars: #('
+								, (self _stringForVariables: classDefinition classInstVarNames) , ')';
 				lf ].
 	aStream
 		nextPutAll: '	poolDictionaries: #()';

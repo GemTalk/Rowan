@@ -87,7 +87,7 @@ RwModificationTonelWriterVisitor >> _splitMethodSource: aMethodDefinition into: 
 	(source peek = $") ifTrue: [ self skipComment: source ]. 
 	"Parse declaration"
 	declaration := String new writeStreamPortable.
-	[ (self _selectorIsComplete: keywords in: declaration originalContents) not 
+	[ (self _selectorIsComplete: keywords in: declaration collection) not 
 		or: [ ':+-/\*~<>=@,%|&?!' includes: declaration contents trimRight last ] ]
 	whileTrue: [ 
 		"get separators"

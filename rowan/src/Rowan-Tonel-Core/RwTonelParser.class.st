@@ -436,7 +436,7 @@ RwTonelParser >> removeFrom: aString enclosingStart: startChar end: endChar clea
             ifTrue: [ stop := stop - 1 ].
           result skip: -1 ] ].
   end := result position.
-  ^ result originalContents copyFrom: start + 1 to: end + 1
+  ^ result contents copyFrom: start + 1 to: end + 1
 ]
 
 { #category : 'parsing' }

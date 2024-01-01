@@ -107,9 +107,9 @@ RwRowanSample9Test >> _expectedIssue766GsFileContents [
 doit
 (IdentityKeyValueDictionary
 	subclass: ''RowanSample9IdentityKeyValueDictionary''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -123,9 +123,9 @@ true.
 doit
 (Object
 	subclass: ''RowanSample9Class1''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -139,9 +139,9 @@ true.
 doit
 (TestCase
 	subclass: ''RowanSample9GemStoneTestCase''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
@@ -155,9 +155,9 @@ true.
 doit
 (TestCase
 	subclass: ''RowanSample9TestCase''
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanSample9_1
 	options: #( #logCreation )
