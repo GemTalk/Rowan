@@ -214,7 +214,7 @@ loadProjectSpecs
 	rowanProjectsSandbox asFileReference ensureCreateDirectory.
 	warnings := {}.
 	[ 
-		| stonLoadSpec |
+		| stonLoadSpec stonProject |
 		self preDoitSpecLoad: [:loadSpec |
 			loadSpec projectsHome: externalsStBase ].
 		"Compensate for Rowan v2 bugs"
@@ -230,11 +230,18 @@ loadProjectSpecs
 			loadProjectSet: Rowan platformConditionalAttributes, #('tests' 'v2' 'v2Only' 'testsV2' 'stubs' 'tonel').	
 		(Rowan projectNamed: 'RowanClientServices')
 			loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'tests' 'testsV2').
-		stonLoadSpec := (Rowan projectNamed: 'STON') _loadSpecification.
-		(stonLoadSpec 
-			addTopLevelComponentNamed: 'Tests';
-			customConditionalAttributes: stonLoadSpec customConditionalAttributes, {'tests'};
-			resolve) load.
+		stonProject := Rowan projectNamed: 'STON'.
+		stonLoadSpec := stonProject _loadSpecification.
+		(stonLoadSpec componentNames includes: 'Tests')
+			ifTrue: [
+				"pre 3.7.1 ... load project directly ... loadSpec projectUrl may not be updated during upgrade"
+				stonProject loadProjectSet: stonProject platformConditionalAttributes , {'tests'} ]
+			ifFalse: [
+				"3.7.1 or later, safe to use the load spec project url" 
+				(stonLoadSpec 
+					addTopLevelComponentNamed: 'Tests';
+					customConditionalAttributes: stonLoadSpec customConditionalAttributes, {'tests'};
+					resolve) load ].
 		System commit.
 	]
 		on: CompileWarning
