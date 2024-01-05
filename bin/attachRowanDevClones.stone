@@ -30,60 +30,58 @@ EXAMPLES
 -----
 %
 method
-attachRowanProjects
-	| rowanProject loadSpecs gitUrl |
+attachRowanProjects: projectsHome
+	| rowanProject loadSpecs projectNames |
 	rowanProject := Rowan projectNamed: 'Rowan'.
-	gitUrl := rowanProject loadSpecification gitUrl.
-	(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
-		ifTrue: [ 
-			"project has already been attached ... reload the project"
-			rowanProject reload.
-			self logMessage: 'Rowan project reloaded'.
-			^ self ].
 	loadSpecs := rowanProject loadedLoadSpecifications.
+	{
+		'Announcements' .
+		'FileSystemGs' .
+		'RemoteServiceReplication' .
+		'RowanClientServices' .
+	}
+		do: [:projectName |
+			"pick up the extra rowan3 projects"
+			(Rowan projectNamed: projectName ifAbsent: [])
+				ifNotNil: [:project |
+					| loadSpec |
+					loadSpec :=  project loadSpecification.
+					loadSpecs addLoadSpec: loadSpec ] ].
 	loadSpecs do: [:loadSpec |
 		| relRoot |
 		relRoot := loadSpec relativeRepositoryRoot.
-		loadSpec specName = 'RowanClientServices'
-			ifTrue: [
-				loadSpec gitUrl
-						ifNil: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString) ].
-				loadSpec projectsHome: '$ROWAN_PROJECTS_HOME'.
-				loadSpec resolve ]
+		relRoot isEmpty
+			ifTrue: [ 
+				loadSpec 
+					projectsHome: projectsHome;
+					gitUrl: 'file:', ((projectsHome, '/', loadSpec projectAlias) asFileReference pathString);
+					yourself  ]
 			ifFalse: [
-				loadSpec specName = 'Rowan'
-					ifTrue: [
-						loadSpec gitUrl
-							ifNil: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString) ].
-						loadSpec 
-							projectsHome: '$ROWAN_PROJECTS_HOME';
-							addCustomConditionalAttributes: #('tests' 'testsV2').
-						loadSpec resolve ]
-					ifFalse: [
 						"embedded Rowan project" 
-						relRoot isEmpty
-							ifTrue: [ loadSpec gitUrl: 'file:', (('$ROWAN_PROJECTS_HOME/', loadSpec projectName) asFileReference pathString)  ]
-							ifFalse: [ 
-								loadSpec
-									gitUrl: 'file:', ((('$ROWAN_PROJECTS_HOME/Rowan') asFileReference / relRoot) pathString) ].
 						loadSpec
-							addCustomConditionalAttributes: #('tests' 'testsV2');
-							projectsHome: '$ROWAN_PROJECTS_HOME';
-							yourself ] ] ].
-	loadSpecs load. 
-	self logMessage: 'Rowan project attached and reloaded' 
+							gitUrl: 'file:', (((projectsHome, '/', loadSpec projectAlias) asFileReference / relRoot) pathString);
+							projectsHome: projectsHome;
+							yourself ].
+		loadSpec addCustomConditionalAttributes: #('tests' 'testsv2') ].
+ 	projectNames := loadSpecs load projectNames asArray sort. 
+	self logMessage: 'Rowan projects attached and reloaded: '.
+	projectNames do: [:each |
+		self logMessage: '	', each ]
 %
 doit
-	| rowanProject loadSpecs gitUrl |
+	| rowanProject loadSpecs gitUrl projectsHome |
 	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
 	self projectsHome
 		ifNotNil: [:value |
-			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: value asFileReference pathString ]
+			projectsHome := value asFileReference pathString.
+			System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: projectsHome ]
 		ifNil: [ 
 			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+				ifNotNil: [:value | projectsHome := value asFileReference pathString ]
 				ifNil: [ self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined, or the --projectsHome option used.' ] ].
 	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
+	self logMessage: 'Rowan version: ', Rowan versionString.
 	(self archBase
 		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
 		ifNotNil: [:value | value ])
@@ -98,7 +96,9 @@ doit
 			(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
 					ifTrue: [ 
 						"project already attached, so reload"
-						loadSpec load.
+						loadSpec
+							addCustomConditionalAttributes: #('tests');
+							load.
 						self logMessage: 'gemstoneBaseImage reloaded' ] 
 					ifFalse: [
 						loadSpec
@@ -107,6 +107,6 @@ doit
 							addCustomConditionalAttributes: #('tests');
 							load.
 						self logMessage: 'gemstoneBaseImage project attached and reloaded' ] ].
-	self attachRowanProjects.
+	self attachRowanProjects: projectsHome.
 	^ System commit
 %
