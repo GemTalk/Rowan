@@ -6,20 +6,25 @@ Class {
 
 { #category : 'smalltalk api' }
 RwPrjDiffTool >> patchesForProjectDefinition: imageProjectDefinition [
-
 	| imagePackageDefinitions diskProjectSet diskProject diskPackageDefinitionMaps |
 	imagePackageDefinitions := imageProjectDefinition packages values.
-	[ diskProjectSet :=  imageProjectDefinition readProjectSet ]
+	[ diskProjectSet := imageProjectDefinition readProjectSet ]
 		on: RwInvalidCategoryProtocolConventionErrorNotification
-		do: [:ex | ex resume ].
+		do: [ :ex | ex resume ].
 	diskProject := diskProjectSet projectNamed: imageProjectDefinition name.
 	diskPackageDefinitionMaps := diskProject packages.
-	^ imagePackageDefinitions collect: [:packageDefinition |
-		| imageSnapshot diskPackageDefinition diskSnapshot |
-		imageSnapshot := (RwCypressPackageStructure fromPackage: packageDefinition ) snapshot.
-		diskPackageDefinition := diskPackageDefinitionMaps at: packageDefinition name.
-		diskSnapshot := (RwCypressPackageStructure fromPackage: diskPackageDefinition ) snapshot.
-		packageDefinition name -> (CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot) ]
+	^ imagePackageDefinitions
+		collect: [ :packageDefinition | 
+			| imageSnapshot diskSnapshot |
+			imageSnapshot := (RwCypressPackageStructure fromPackage: packageDefinition)
+				snapshot.
+			(diskPackageDefinitionMaps at: packageDefinition name ifAbsent: [  ])
+				ifNil: [ diskSnapshot := CypressSnapshot empty ]
+				ifNotNil: [ :diskPackageDefinition | 
+					diskSnapshot := (RwCypressPackageStructure fromPackage: diskPackageDefinition)
+						snapshot ].
+			packageDefinition name
+				-> (CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot) ]
 ]
 
 { #category : 'smalltalk api' }
