@@ -1,0 +1,23 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/obsolete/Obsolete',
+	#condition : 'obsolete',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/obsolete/gemstone/Obsolete'
+	],
+	#packageNames : [
+		'Rowan-Obsolete'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Obsolete' : {
+						'symbolDictName' : 'RowanTools'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Obsolete code'
+}

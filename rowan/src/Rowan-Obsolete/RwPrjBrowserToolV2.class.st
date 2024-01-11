@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPrjBrowserToolV2',
 	#superclass : 'RwProjectTool',
-	#category : 'Rowan-Tools-CoreV2'
+	#category : 'Rowan-Obsolete'
 }
 
 { #category : 'private' }

@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/Obsolete',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'common/obsolete/Obsolete'
+	],
+	#packageNames : [ ],
+	#comment : ''
+}

@@ -11,6 +11,7 @@ RwSimpleProjectLoadComponentV2 {
 		'common/Core',
 		'common/Definitions',
 		'common/Loader',
+		'common/Obsolete',
 		'common/Specifications',
 		'common/Tests',
 		'common/Tools'

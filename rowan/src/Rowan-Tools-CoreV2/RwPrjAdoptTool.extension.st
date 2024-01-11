@@ -112,20 +112,6 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl diskUrl: diskUrl projectsHome: pr
 ]
 
 { #category : '*rowan-tools-corev2' }
-RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectsHome: projectsHome [
-	"Create loaded project (if needed), traverse the package definitions and 
-				create loaded packages for each"
-
-	| loadSpec projectSetDefinition |
-	loadSpec := RwSpecification fromUrl: specUrl.
-	projectSetDefinition := loadSpec
-		projectsHome: projectsHome;
-		readProjectSet.
-
-	self _adoptProjectProjectsInProjectSet: projectSetDefinition
-]
-
-{ #category : '*rowan-tools-corev2' }
 RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectAlias: projectAlias projectsHome: projectsHome [
 	"Create loaded project (if needed), traverse the package definitions and 
 				create loaded packages for each"
@@ -134,6 +120,20 @@ RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectAlias: projectAlias projec
 	loadSpec :=( RwSpecification fromUrl: specUrl)
 		projectAlias: projectAlias;
 		yourself.
+	projectSetDefinition := loadSpec
+		projectsHome: projectsHome;
+		readProjectSet.
+
+	self _adoptProjectProjectsInProjectSet: projectSetDefinition
+]
+
+{ #category : '*rowan-tools-corev2' }
+RwPrjAdoptTool >> adoptProjectFromUrl: specUrl projectsHome: projectsHome [
+	"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+
+	| loadSpec projectSetDefinition |
+	loadSpec := RwSpecification fromUrl: specUrl.
 	projectSetDefinition := loadSpec
 		projectsHome: projectsHome;
 		readProjectSet.

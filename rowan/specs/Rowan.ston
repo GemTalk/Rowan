@@ -11,6 +11,7 @@ RwLoadSpecificationV2 {
 	#customConditionalAttributes : [
 		'stubs',
 		'tonel',
+		'obsolete',
 		'v2',
 		'v2Only',
 		'examples',

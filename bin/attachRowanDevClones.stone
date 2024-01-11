@@ -62,7 +62,7 @@ attachRowanProjects: projectsHome
 							gitUrl: 'file:', (((projectsHome, '/', loadSpec projectAlias) asFileReference / relRoot) pathString);
 							projectsHome: projectsHome;
 							yourself ].
-		loadSpec addCustomConditionalAttributes: #('tests' 'testsv2') ].
+		loadSpec addCustomConditionalAttributes: #('tests' 'testsv2' 'obsolete') ].
  	projectNames := loadSpecs load projectNames asArray sort. 
 	self logMessage: 'Rowan projects attached and reloaded: '.
 	projectNames do: [:each |

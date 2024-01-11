@@ -1,0 +1,20 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'common/obsolete/gemstone/Obsolete',
+	#condition : [
+		'gemstone'
+	],
+	#packageNames : [
+		'Rowan-Obsolete-GemStone'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Obsolete-GemStone' : {
+						'symbolDictName' : 'Globals'
+					}
+				}			}
+		}
+	},
+	#comment : 'ObsoleteTools gemstone  packages '
+}
