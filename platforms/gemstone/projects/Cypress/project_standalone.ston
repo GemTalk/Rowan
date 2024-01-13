@@ -1,0 +1,10 @@
+RwProjectSpecificationV2 {
+	#specName : 'project',
+	#projectSpecPath : '',
+	#componentsPath : 'componentsV2',
+	#packagesPath : 'src',
+	#projectsPath : 'projectsV2',
+	#specsPath : 'specsV2',
+	#packageFormat : 'tonel',
+	#comment : 'Cypress V2 standalone project specification'
+}

@@ -4,7 +4,7 @@ RwLoadSpecificationV2 {
 	#projectAlias : 'Rowan',
 	#gitUrl : 'git@github.com:GemTalk/Rowan.git',
 	#relativeRepositoryRoot : 'platforms/gemstone/projects/Cypress',	
-	#revision : 'masterV3.0',
+	#revision : 'masterV3.1',
 	#projectSpecFile : 'project.ston',
 	#componentNames : [
 		'Core'

@@ -1,20 +1,19 @@
 RwLoadSpecificationV2 {
-	#specName : 'STON_standalone',
-	#projectName : 'STON',
+	#specName : 'Cypress_standalone',
+	#projectName : 'Cypress',
 	#gitUrl : 'https://github.com/GemTalk/Rowan',
 	#revision : 'masterV3.1',
 	#projectSpecFile : 'project_standalone.ston',
 	#componentNames : [
-		'Core',
-		'Tests'
+		'Core'
 	],
 	#groupNames : [ ],
 	#platformProperties : {
 		'gemstone' : {
 			'SystemUser' : {
-				#defaultSymbolDictName : 'RowanKernel'
+				#defaultSymbolDictName : 'Globals'
 			}
 		}
 	},
-	#comment : 'Standalone STON project for reading project independently of Rowan project'
+#comment : 'Standalone Cypress project for reading project independently of Rowan project'
 }
