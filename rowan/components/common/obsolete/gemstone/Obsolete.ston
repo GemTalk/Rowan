@@ -13,7 +13,8 @@ RwPlatformNestedProjectLoadComponentV2 {
 					'Rowan-Obsolete-GemStone' : {
 						'symbolDictName' : 'Globals'
 					}
-				}			}
+				}
+			}
 		}
 	},
 	#comment : 'ObsoleteTools gemstone  packages '
