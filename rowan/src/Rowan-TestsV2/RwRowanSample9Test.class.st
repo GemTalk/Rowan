@@ -907,10 +907,10 @@ RwRowanSample9Test >> testAutomaticMigration_gitolite [
 		ifTrue: [ 
 			"This test randomly fails and is not actually testing anything interesting ... leaving test in place in case we find out there really is something important causing the intermittent failures"
 			^ self ].
-	loadSpec := self
-		_migrationLoadSpecNamed: 'spec_0034'
-		projectName: 'RowanSample9'
-		projectAlias: 'RowanSample9_Automatic_Migration'
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0034' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9_Automatic_Migration' 
 		gitUrl: 'git@git.gemtalksystems.com:RowanSample9.git'.
 
 	instanceMap := self
