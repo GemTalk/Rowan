@@ -340,7 +340,17 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	packageModification isEmpty
 		ifFalse: [ packagesModification addElementModification: packageModification ].
 	projectModification packagesModification: packagesModification.
-
+"
+	ENTERING compareAgainstBaseForLoader: ZONE
+"
+	projectSetModification := RwProjectSetModification new.
+"
+	self
+		compareDictionary: dictionaryOfProjectDefinitions
+		againstBaseDictionary: dictionaryOfProjectDefinitions
+		into: result
+		elementClass: RwProjectDefinition.
+"
 "-------------------------------------------------"
 self halt.
 "-------------------------------------------------"
@@ -348,7 +358,7 @@ self halt.
 "-------------------------------------------------"
 self halt: 'not expected to be run'.
 "-------------------------------------------------"
-	projectSetModification := RwProjectSetModification new.	
+
 
 	packageDefinition := RwPackageDefinition newNamed: thePackageName.
 
