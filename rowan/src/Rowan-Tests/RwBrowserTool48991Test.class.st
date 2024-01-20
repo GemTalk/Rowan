@@ -28,7 +28,8 @@ RwBrowserTool48991Test >> testAddMethod [
 
 	browserTool := RwPrjBrowserTool new.
 
-	browserTool
+	"add new method"
+	gsNMethod := browserTool
 		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
 		inProtocol: 'accessing'
 		forClassNamed: className
@@ -42,7 +43,15 @@ RwBrowserTool48991Test >> testAddMethod [
 	testInstance perform: #'ivar1:' with: 3.
 	self assert: (testInstance perform: #'ivar1') = 3.
 	self should: [ testInstance perform: #'foo' ] raise: MessageNotUnderstood.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
 
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName1.
+
+	"add new extension method"
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
 		inProtocol: '*' , packageName2 asLowercase

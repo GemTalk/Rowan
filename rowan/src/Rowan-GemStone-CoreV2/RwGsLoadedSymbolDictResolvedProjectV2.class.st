@@ -35,6 +35,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> _projectDefinitionPlatformConditionalAt
 	^ self resolvedProject _projectDefinitionPlatformConditionalAttributes: platformConditionalAttributes
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> _projectSpecification [
+	^ handle _projectSpecification
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> _requiredProjectNamesForLoadedProject: visitedSet [
 	^ self handle _requiredProjectNamesForLoadedProject: visitedSet
@@ -223,6 +228,11 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> componentsRoot [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> componentsWithDoits [
+	^ self _projectComponents componentsWithDoits
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> conditionalAttributes [
 
 	^ self platformConditionalAttributes, self customConditionalAttributes
@@ -251,10 +261,21 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneDefaultSymbolDictName [
 	^ self resolvedProject gemstoneDefaultSymbolDictName
 ]
 
+{ #category : 'querying' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneMethodEnvForPackageNamed: packageName [
+
+	^ handle gemstoneMethodEnvForPackageNamed: packageName
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneSymbolDictNameForPackageNamed: packageName [
 
 	^self resolvedProject gemstoneSymbolDictNameForPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictResolvedProjectV2 >> gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName [
+	^ handle gemstoneUseSessionMethodsForExtensionsForPackageNamed: packageName
 ]
 
 { #category : 'accessing' }

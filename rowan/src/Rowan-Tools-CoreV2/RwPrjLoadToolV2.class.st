@@ -118,6 +118,17 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 ]
 
 { #category : 'private' }
+RwPrjLoadToolV2 >> _doProjectSetModificationLoad: projectSetModification instanceMigrator: instanceMigrator symbolList: symbolList processedClassNames: processedClassNames [
+	"Wrapper method in case we need to handle RwExistingVisitorAddingExistingClassNotification RwExistingVisitorAddingExistingMethodNotification here ... 
+		currently this method is used for single method/class updates so we should be able to handle these in the process of create projectSetModification"
+
+	^ self
+		_loadProjectSetModification: projectSetModification
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList
+]
+
+{ #category : 'private' }
 RwPrjLoadToolV2 >> _loadProjectDefinition: projectDefinition customConditionalAttributes: customConditionalAttributes instanceMigrator: instanceMigrator symbolList: symbolList [
 	"read the components for <projectDefinition> to develop the list of dependent projects"
 
@@ -226,6 +237,27 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 	^ loadedProjects
 ]
 
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _loadProjectSetModification: projectSetModification instanceMigrator: instanceMigrator symbolList: symbolList [
+	| loadedProjects |
+	projectSetModification isEmpty
+		ifFalse: [ 
+			| componentsWithDoits |
+			componentsWithDoits := projectSetModification componentsWithDoits.
+			componentsWithDoits do: [ :component | component executePreloadDoit ].
+			Rowan image
+				applyModification_V2: projectSetModification
+				instanceMigrator: instanceMigrator
+				symbolList: symbolList.
+			componentsWithDoits do: [ :component | component executePostloadDoit ] ].
+	loadedProjects := RwLoadedProjectSet new.
+	projectSetModification elementsModified values
+		do: [ :aProjectSetModification | 
+			loadedProjects
+				addProject: (RwProject newNamed: aProjectSetModification after name) ].
+	^ loadedProjects
+]
+
 { #category : 'load project by name' }
 RwPrjLoadToolV2 >> loadProjectNamed: projectName [
 	| projectSet  res |
@@ -285,6 +317,26 @@ RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinition instanceMigrat
 RwPrjLoadToolV2 >> loadProjectSetDefinition: projectSetDefinitionToLoad symbolList: symbolList [
 	^ self
 		loadProjectSetDefinition: projectSetDefinitionToLoad
+		instanceMigrator: Rowan platform instanceMigrator
+		symbolList: symbolList
+]
+
+{ #category : 'load project set modification' }
+RwPrjLoadToolV2 >> loadProjectSetModification: projectSetModification instanceMigrator: instanceMigrator symbolList: symbolList [
+	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
+		project and a definition can have come from anywhere"
+
+	^ self
+		_doProjectSetModificationLoad: projectSetModification
+		instanceMigrator: instanceMigrator
+		symbolList: symbolList
+		processedClassNames: Set new
+]
+
+{ #category : 'load project set modification' }
+RwPrjLoadToolV2 >> loadProjectSetModification: projectSetModification symbolList: symbolList [
+	^ self
+		loadProjectSetModification: projectSetModification
 		instanceMigrator: Rowan platform instanceMigrator
 		symbolList: symbolList
 ]

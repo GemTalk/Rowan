@@ -261,7 +261,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| beforeMethod afterMethod classDefinition methodModification classModification theClassName instanceMethodsModification packageDefinition thePackageName packageModification classesModification projectDefinition theProjectName projectModification packagesModification 
+	| beforeMethod afterMethod classDefinition methodModification classModification packageDefinition packageModification classesModification projectModification packagesModification loadedProjects
 
 "-------------------------------------------------"
 	  fromLoadedPackage fromLoadedProject 
@@ -270,9 +270,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	projectSetModification 
 	methodsModification
 |
-
-	theClassName := className.
-	thePackageName := packageName.
 
 "-------------------------------------------------"
 
@@ -302,8 +299,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 				beforeMethod := fromLoadedMethod asDefinition.
 				 ].
 
-	theLoadedClass loadedPackage name = packageName 
-		ifFalse: [ self error: 'Not handling extension methods for classes, yet' ].
 	toLoadedPackage name = packageName 
 		ifFalse: [ self error: 'Not handling method moves between packages, yet' ].
 	fromLoadedProject 
@@ -312,10 +307,20 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
 
 	classDefinition := theLoadedClass asDefinition.
-	methodModification := (afterMethod compareAgainstBase: beforeMethod).
+
+	methodModification := theLoadedClass loadedPackage name = packageName 
+		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
+		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
+	methodModification
+		isMeta: isMeta;
+		classDefinition: classDefinition;
+		yourself.
 "
 	ENTERING THE FABRICATION ZONE
+		1. _projectDefinitionPlatformConditionalAttributes is not being handled
+		2. gs_symbolDictionary: for packages and class defs is not being done either
 "
+
 	projectModification := RwProjectModification 
 		before: toLoadedProject
 		after: toLoadedProject.
@@ -340,47 +345,14 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	packageModification isEmpty
 		ifFalse: [ packagesModification addElementModification: packageModification ].
 	projectModification packagesModification: packagesModification.
-"
-	ENTERING compareAgainstBaseForLoader: ZONE
-"
 	projectSetModification := RwProjectSetModification new.
-"
-	self
-		compareDictionary: dictionaryOfProjectDefinitions
-		againstBaseDictionary: dictionaryOfProjectDefinitions
-		into: result
-		elementClass: RwProjectDefinition.
-"
-"-------------------------------------------------"
-self halt.
-"-------------------------------------------------"
-
-"-------------------------------------------------"
-self halt: 'not expected to be run'.
-"-------------------------------------------------"
-
-
-	packageDefinition := RwPackageDefinition newNamed: thePackageName.
-
-	projectDefinition := RwProjectDefinition new
-		projectName: theProjectName;
-		yourself.
-
-	projectModification := projectDefinition compareAgainstBase: projectDefinition.
-	packagesModification := RwPackagesModification new.
-	packageModification := packageDefinition compareAgainstBase: packageDefinition.
-	classesModification := RwClassesModification new.
-	classModification := classDefinition compareAgainstBase: classDefinition.
-	instanceMethodsModification := RwMethodsModification
-		extendedClassName: theClassName.
-
-	methodModification := (afterMethod compareAgainstBase: beforeMethod)
-		isMeta: false;
-		classDefinition: classDefinition;
-		yourself.
-
-
-	projectModification halt
+	projectModification isEmpty
+		ifFalse: [ projectSetModification addElementModification: projectModification ].
+	loadedProjects := Rowan projectTools load
+		loadProjectSetModification: projectSetModification
+		symbolList: aSymbolList.
+	^ (self _loadedMethod: afterMethod selector inClassNamed: className isMeta: isMeta)
+		handle
 ]
 
 { #category : 'method browsing' }
