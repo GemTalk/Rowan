@@ -1,29 +1,6 @@
 Extension { #name : 'Behavior' }
 
 { #category : '*rowan-obsolete-gemstone' }
-Behavior >> rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName [
-	^ Rowan projectTools browser
-		addOrUpdateMethod: sourceString
-		inProtocol: categoryName
-		forClassNamed: self thisClass name asString
-		isMeta: self isMeta
-		inPackageNamed: packageName
-]
-
-{ #category : '*rowan-obsolete-gemstone' }
-Behavior >> rwCompileExtensionMethod: sourceString package: aPackageName [
-
-	| aCategory |
-	aCategory := '*', aPackageName asLowercase .
-	^Rowan projectTools browser
-		addOrUpdateMethod: sourceString
-		inProtocol: aCategory asString asLowercase
-		forClassNamed: self thisClass name asString
-		isMeta: self isMeta
-
-]
-
-{ #category : '*rowan-obsolete-gemstone' }
 Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 
 	^ Rowan projectTools browser

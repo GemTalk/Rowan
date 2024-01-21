@@ -341,7 +341,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_02 [
 		inDictionary: symbolDictionary
 		options: #().
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -413,7 +413,7 @@ RwUnmanagedClassesV2Test >> testCurrentTopazPackageFilein_03 [
 		inDictionary: symbolDictionary
 		options: #().
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -612,7 +612,7 @@ RwUnmanagedClassesV2Test >> testMoveManagedMethod_01 [
 		inDictionary: symbolDictionary
 		options: #().
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -669,7 +669,7 @@ RwUnmanagedClassesV2Test >> testMoveUnmanagedClass_01 [
 		category: 'unmanaged'
 		environmentId: 0.
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -862,7 +862,7 @@ RwUnmanagedClassesV2Test >> testRemoveAllMethods [
 		category: 'unmanaged'
 		environmentId: 0.
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -1363,7 +1363,7 @@ RwUnmanagedClassesV2Test >> testUnmanagedFilein_04 [
 	self assert: managedClass notNil.
 
 	managedMethod := managedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
@@ -1442,10 +1442,10 @@ baz ^3
 	self assert: managedClass notNil.
 
 	managedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 			category: 'managed'
 			packageName: packageName1;
-		rwCompileExtensionMethod: 'baz ^3'
+		rwCompileMethod: 'baz ^3'
 			category: 'extension'
 			packageName: packageName2;
 		yourself.
@@ -1577,7 +1577,7 @@ RwUnmanagedClassesV2Test >> testUnpackageManagedMethod_01 [
 		inDictionary: symbolDictionary
 		options: #().
 	managedMethod := unmanagedClass
-		rwCompileExtensionMethod: 'bar ^2'
+		rwCompileMethod: 'bar ^2'
 		category: 'managed'
 		packageName: packageName.
 
