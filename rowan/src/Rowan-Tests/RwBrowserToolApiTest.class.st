@@ -525,7 +525,7 @@ RwBrowserToolApiTest >> testIssue913 [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := Rowan globalNamed: #RwPrjBrowserTool.
+	browserTool := Rowan projectTools browser.
 
 	browserTool
 		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
