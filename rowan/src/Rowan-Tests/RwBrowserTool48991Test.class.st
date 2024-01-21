@@ -82,7 +82,80 @@ RwBrowserTool48991Test >> testAddMethod [
 ]
 
 { #category : 'tests' }
-RwBrowserTool48991Test >> testHybridMoveMethod [
+RwBrowserTool48991Test >> testMoveMethodBetweenCategories [
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := RwPrjBrowserTool new.
+
+	"add new method"
+	gsNMethod := browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance perform: #'ivar1:' with: 3.
+	self assert: (testInstance perform: #'ivar1') = 3.
+	self should: [ testInstance perform: #'foo' ] raise: MessageNotUnderstood.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName1.
+	self assert: (testClass categoryOfSelector: #'ivar1:') equals: #'accessing'.
+
+	"move method to different category"
+	gsNMethod := browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'setting'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance perform: #'ivar1:' with: 3.
+	self assert: (testInstance perform: #'ivar1') = 3.
+	self should: [ testInstance perform: #'foo' ] raise: MessageNotUnderstood.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName1.
+	self assert: (testClass categoryOfSelector: #'ivar1:') equals: #'setting'
+]
+
+{ #category : 'tests' }
+RwBrowserTool48991Test >> testMoveMethodBetweenPackages [
 
 	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
 	projectName := 'Hybrid Project A'.
@@ -143,4 +216,74 @@ RwBrowserTool48991Test >> testHybridMoveMethod [
 	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.
+]
+
+{ #category : 'tests' }
+RwBrowserTool48991Test >> testUpdateMethodSource [
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := RwPrjBrowserTool new.
+
+	"add new method"
+	gsNMethod := browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance perform: #'ivar1:' with: 3.
+	self assert: (testInstance perform: #'ivar1') = 3.
+	self should: [ testInstance perform: #'foo' ] raise: MessageNotUnderstood.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName1.
+
+	"update existing method source"
+	gsNMethod := browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := 2 * anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance perform: #'ivar1:' with: 3.
+	self assert: (testInstance perform: #'ivar1') = 6.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName1.
 ]
