@@ -54,3 +54,14 @@ Behavior >> rwCompileMethod: sourceString dictionaries: aSymbolList category: aC
 		isMeta: self isMeta
 		inPackageNamed: packageName
 ]
+
+{ #category : '*rowan-obsolete-gemstone' }
+Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
+
+	^ Rowan projectTools browser
+		moveMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+		toProtocol: categoryName
+
+]

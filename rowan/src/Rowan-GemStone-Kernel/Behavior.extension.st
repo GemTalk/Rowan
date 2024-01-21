@@ -198,17 +198,6 @@ Behavior >> rwMoveClassToPackage: packageName [
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
-
-	^ Rowan projectTools browser
-		moveMethod: methodSelector
-		forClassNamed: self thisClass name asString
-		isMeta: self isMeta
-		toProtocol: categoryName
-
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwMoveMethod: methodSelector toPackage: packageName [
 	"Move the method into <packageName>, whether or not it has been packaged"
 
