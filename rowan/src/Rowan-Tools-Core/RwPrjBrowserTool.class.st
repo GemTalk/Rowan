@@ -261,7 +261,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| beforeMethod afterMethod classDefinition methodModification classModification packageDefinition packageModification classesModification projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification methodsModification |
+	| beforeMethod afterMethod classDefinition methodModification classModification fromPackageDefinition toPackageDefinition packageModification classesModification projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification methodsModification |
 	afterMethod := RwMethodDefinition newForSource: methodSource protocol: protocol.
 	toLoadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -285,8 +285,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			fromLoadedProject := fromLoadedPackage loadedProject.	"derive definitions ... need beforeMethod and classDefinition"
 			beforeMethod := fromLoadedMethod asDefinition ].
 
-	toLoadedPackage name = packageName
-		ifFalse: [ self error: 'Not handling method moves between packages, yet' ].
 	fromLoadedProject
 		ifNotNil: [ 
 			fromLoadedProject name = toLoadedPackage loadedProject name
@@ -294,13 +292,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 
 	classDefinition := theLoadedClass asDefinition.
 
-	methodModification := theLoadedClass loadedPackage name = packageName
-		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
-		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
-	methodModification
-		isMeta: isMeta;
-		classDefinition: classDefinition;
-		yourself.	"
+"
 	ENTERING THE FABRICATION ZONE
 		1. _projectDefinitionPlatformConditionalAttributes is not being handled
 		2. gs_symbolDictionary: for packages and class defs is not being done either
@@ -310,28 +302,47 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		before: toLoadedProject
 		after: toLoadedProject.
 	packagesModification := RwPackagesModification new.
-	packageDefinition := toLoadedPackage asDefinition.
-	packageModification := packageDefinition compareAgainstBase: packageDefinition.
-	classesModification := RwClassesModification new.
-	classModification := classDefinition compareAgainstBase: classDefinition.
-	methodsModification := RwMethodsModification extendedClassName: className.
-	methodModification isEmpty
-		ifFalse: [ methodsModification addElementModification: methodModification ].
-	methodsModification isEmpty
-		ifFalse: [ 
-			isMeta
-				ifTrue: [ classModification classMethodsModification: methodsModification ]
-				ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
-	classModification isEmpty
-		ifFalse: [ classesModification addElementModification: classModification ].
-	classesModification isEmpty
-		ifFalse: [ packageModification classesModification: classesModification ].
-	packageModification isEmpty
-		ifFalse: [ packagesModification addElementModification: packageModification ].
+	toPackageDefinition := toLoadedPackage asDefinition.
+	fromPackageDefinition := fromLoadedPackage
+		ifNotNil: [ fromLoadedPackage asDefinition ] 
+		ifNil: [ toPackageDefinition ].
+	fromPackageDefinition name = toPackageDefinition name
+		ifTrue: [ 
+			methodModification := theLoadedClass loadedPackage name = packageName
+				ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
+				ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
+			methodModification
+				isMeta: isMeta;
+				classDefinition: classDefinition;
+				yourself.	
+			methodsModification := RwMethodsModification extendedClassName: className.
+			methodModification isEmpty
+				ifFalse: [ methodsModification addElementModification: methodModification ].
+			classModification := classDefinition compareAgainstBase: classDefinition.
+			methodsModification isEmpty
+				ifFalse: [ 
+					isMeta
+						ifTrue: [ classModification classMethodsModification: methodsModification ]
+						ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
+			classesModification := RwClassesModification new.
+			classModification isEmpty
+				ifFalse: [ classesModification addElementModification: classModification ].
+			packageModification := toPackageDefinition compareAgainstBase: fromPackageDefinition.
+			classesModification isEmpty
+				ifFalse: [ packageModification classesModification: classesModification ].
+			packageModification isEmpty
+				ifFalse: [ packagesModification addElementModification: packageModification ] ]
+		ifFalse: [
+			"package move"
+self error: 'not yet implemented'].
 	projectModification packagesModification: packagesModification.
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
 		ifFalse: [ projectSetModification addElementModification: projectModification ].
+	projectSetModification
+		updateForPackageMoves;
+		updateForClassMoves;
+		updateForMethodMoves.		
 	loadedProjects := Rowan projectTools load
 		loadProjectSetModification: projectSetModification
 		symbolList: aSymbolList.
