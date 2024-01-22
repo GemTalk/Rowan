@@ -386,10 +386,15 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 
 { #category : 'modification' }
 RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toPackageDefinition using: packagesModification [
-	| beforeMethod packageName methodModification methodsModification classDefinition className classModification classesModification fromPackageDefinition packageModification |
+	| beforeMethod packageName methodModification methodsModification classDefinition classExtensionDefinition className classModification classesModification fromPackageDefinition packageModification templateClassDefinition |
 	beforeMethod := RwMethodDefinition new.
 	packageName := toPackageDefinition name.
 	classDefinition := theLoadedClass asDefinition.
+	templateClassDefinition := classDefinition copy.
+	classExtensionDefinition := RwClassExtensionDefinition
+		withProperties: templateClassDefinition properties
+		classMethodDefinitions: templateClassDefinition classMethodDefinitions
+		instanceMethodDefinitions: templateClassDefinition instanceMethodDefinitions.
 	className := classDefinition name.
 	fromPackageDefinition := toPackageDefinition.
 
@@ -404,7 +409,7 @@ RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toC
 	methodsModification := RwMethodsModification extendedClassName: className.
 	methodModification isEmpty
 		ifFalse: [ methodsModification addElementModification: methodModification ].
-	classModification := classDefinition compareAgainstBase: classDefinition.
+	classModification := classExtensionDefinition compareAgainstBase: classDefinition.
 	methodsModification isEmpty
 		ifFalse: [ 
 			isMeta
