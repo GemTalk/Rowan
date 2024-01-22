@@ -261,7 +261,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| beforeMethod afterMethod classDefinition methodModification classModification fromPackageDefinition toPackageDefinition packageModification classesModification projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification methodsModification |
+	| beforeMethod afterMethod classDefinition classModification fromLoadedMethod fromPackageDefinition toPackageDefinition packageModification classesModification projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification methodModification methodsModification |
 	afterMethod := RwMethodDefinition newForSource: methodSource protocol: protocol.
 	toLoadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -277,7 +277,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			beforeMethod := RwMethodDefinition new.
 			theLoadedClass := Rowan image loadedClassNamed: className ]
 		ifNotNil: [ :loadedMethod | 
-			| fromLoadedMethod |
 			"updating method in class ..."
 			fromLoadedMethod := loadedMethod.
 			fromLoadedPackage := fromLoadedMethod loadedPackage.
@@ -307,7 +306,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		ifNotNil: [ fromLoadedPackage asDefinition ] 
 		ifNil: [ toPackageDefinition ].
 	fromPackageDefinition name = toPackageDefinition name
-		ifTrue: [ 
+		ifTrue: [
 			methodModification := theLoadedClass loadedPackage name = packageName
 				ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
 				ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
@@ -333,8 +332,9 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			packageModification isEmpty
 				ifFalse: [ packagesModification addElementModification: packageModification ] ]
 		ifFalse: [
-			"package move"
-self error: 'not yet implemented'].
+			"package move - remove before from fromPackage and add after to toPackage"
+			packagesModification := self packagesModificationForRemoveMethod: fromLoadedMethod fromClass: theLoadedClass isMeta: isMeta fromPackage: fromPackageDefinition.
+			self addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toPackageDefinition using: packagesModification ].
 	projectModification packagesModification: packagesModification.
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
@@ -382,6 +382,43 @@ RwPrjBrowserTool >> addPackageNamed: packageName toComponentNamed: componentName
 RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 
 	^ self addPackageNamed: packageName toComponentNamed: 'Core' andProjectNamed: projectName
+]
+
+{ #category : 'modification' }
+RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toPackageDefinition using: packagesModification [
+	| beforeMethod packageName methodModification methodsModification classDefinition className classModification classesModification fromPackageDefinition packageModification |
+	beforeMethod := RwMethodDefinition new.
+	packageName := toPackageDefinition name.
+	classDefinition := theLoadedClass asDefinition.
+	className := classDefinition name.
+	fromPackageDefinition := toPackageDefinition.
+
+	methodModification := theLoadedClass loadedPackage name = packageName
+		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
+		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
+
+	methodModification
+		isMeta: isMeta;
+		classDefinition: classDefinition;
+		yourself.
+	methodsModification := RwMethodsModification extendedClassName: className.
+	methodModification isEmpty
+		ifFalse: [ methodsModification addElementModification: methodModification ].
+	classModification := classDefinition compareAgainstBase: classDefinition.
+	methodsModification isEmpty
+		ifFalse: [ 
+			isMeta
+				ifTrue: [ classModification classMethodsModification: methodsModification ]
+				ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
+	classesModification := RwClassesModification new.
+	classModification isEmpty
+		ifFalse: [ classesModification addElementModification: classModification ].
+	packageModification := toPackageDefinition
+		compareAgainstBase: fromPackageDefinition.
+	classesModification isEmpty
+		ifFalse: [ packageModification classesModification: classesModification ].
+	packageModification isEmpty
+		ifFalse: [ packagesModification addElementModification: packageModification ]
 ]
 
 { #category : 'project browsing' }
@@ -927,6 +964,44 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 				forClassNamed: className
 				isMeta: isMeta
 				inPackageNamed: packageName ]
+]
+
+{ #category : 'modification' }
+RwPrjBrowserTool >> packagesModificationForRemoveMethod: fromLoadedMethod fromClass: theLoadedClass isMeta: isMeta fromPackage: fromPackageDefinition [
+	| methodModification packageName beforeMethod afterMethod classDefinition className methodsModification toPackageDefinition classModification classesModification packageModification packagesModification |
+	packageName := fromPackageDefinition name.
+	beforeMethod := fromLoadedMethod asDefinition.
+	afterMethod := RwMethodDefinition new.
+	classDefinition := theLoadedClass asDefinition.
+	className := classDefinition name.
+	toPackageDefinition := fromPackageDefinition.
+	methodModification := theLoadedClass loadedPackage name = packageName
+		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
+		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
+	methodModification
+		isMeta: isMeta;
+		classDefinition: classDefinition;
+		yourself.
+	methodsModification := RwMethodsModification extendedClassName: className.
+	methodModification isEmpty
+		ifFalse: [ methodsModification addElementModification: methodModification ].
+	classModification := classDefinition compareAgainstBase: classDefinition.
+	methodsModification isEmpty
+		ifFalse: [ 
+			isMeta
+				ifTrue: [ classModification classMethodsModification: methodsModification ]
+				ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
+	classesModification := RwClassesModification new.
+	classModification isEmpty
+		ifFalse: [ classesModification addElementModification: classModification ].
+	packageModification := toPackageDefinition
+		compareAgainstBase: fromPackageDefinition.
+	classesModification isEmpty
+		ifFalse: [ packageModification classesModification: classesModification ].
+	packagesModification := RwPackagesModification new.
+	packageModification isEmpty
+		ifFalse: [ packagesModification addElementModification: packageModification ].
+	^ packagesModification
 ]
 
 { #category : 'project browsing' }
