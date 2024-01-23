@@ -317,7 +317,16 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			methodsModification := RwMethodsModification extendedClassName: className.
 			methodModification isEmpty
 				ifFalse: [ methodsModification addElementModification: methodModification ].
-			classModification := classDefinition compareAgainstBase: classDefinition.
+			classModification := theLoadedClass packageName = toPackageDefinition name
+				ifTrue: [ classDefinition compareAgainstBase: classDefinition ]
+				ifFalse: [
+					| templateClassDefinition classExtensionDefinition |
+					templateClassDefinition := classDefinition copy.
+					classExtensionDefinition := RwClassExtensionDefinition
+						withProperties: templateClassDefinition properties
+						classMethodDefinitions: templateClassDefinition classMethodDefinitions
+						instanceMethodDefinitions: templateClassDefinition instanceMethodDefinitions.
+					classExtensionDefinition compareAgainstBase: classDefinition ].
 			methodsModification isEmpty
 				ifFalse: [ 
 					isMeta
@@ -386,15 +395,19 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 
 { #category : 'modification' }
 RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toPackageDefinition using: packagesModification [
-	| beforeMethod packageName methodModification methodsModification classDefinition classExtensionDefinition className classModification classesModification fromPackageDefinition packageModification templateClassDefinition |
+	| beforeMethod packageName methodModification methodsModification classDefinition classOrExtensionDefinition className classModification classesModification fromPackageDefinition packageModification |
 	beforeMethod := RwMethodDefinition new.
 	packageName := toPackageDefinition name.
 	classDefinition := theLoadedClass asDefinition.
-	templateClassDefinition := classDefinition copy.
-	classExtensionDefinition := RwClassExtensionDefinition
-		withProperties: templateClassDefinition properties
-		classMethodDefinitions: templateClassDefinition classMethodDefinitions
-		instanceMethodDefinitions: templateClassDefinition instanceMethodDefinitions.
+	classOrExtensionDefinition := theLoadedClass packageName = packageName 
+		ifTrue: [ classDefinition ]
+		ifFalse: [ 
+			| templateClassDefinition |
+			templateClassDefinition := classDefinition copy.
+			RwClassExtensionDefinition
+				withProperties: templateClassDefinition properties
+				classMethodDefinitions: templateClassDefinition classMethodDefinitions
+				instanceMethodDefinitions: templateClassDefinition instanceMethodDefinitions ].
 	className := classDefinition name.
 	fromPackageDefinition := toPackageDefinition.
 
@@ -409,7 +422,7 @@ RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toC
 	methodsModification := RwMethodsModification extendedClassName: className.
 	methodModification isEmpty
 		ifFalse: [ methodsModification addElementModification: methodModification ].
-	classModification := classExtensionDefinition compareAgainstBase: classDefinition.
+	classModification := classOrExtensionDefinition compareAgainstBase: classDefinition.
 	methodsModification isEmpty
 		ifFalse: [ 
 			isMeta
@@ -1096,38 +1109,46 @@ RwPrjBrowserTool >> removeClassNamed: className [
 
 { #category : 'method browsing' }
 RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta: isMeta [
-
 	"Remove the given method selector from the class named className"
 
-	| loadedMethodToBeRemoved loadedPackage loadedClassOrExtension projectDef packageDef crDef |
-	loadedMethodToBeRemoved := self
+	| beforeMethod packagesModification fromLoadedMethod theLoadedClass fromPackageDefinition projectModification projectSetModification loadedProjects aSymbolList fromLoadedProject |
+	(self
 		_loadedMethod: methodSelector
 		inClassNamed: className
 		isMeta: isMeta
-		ifAbsent: [
-			| theBehavior |
-			theBehavior := Rowan globalNamed: className.
-			isMeta ifTrue: [ theBehavior := theBehavior class ].
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method from the class ', className printString, '. The removal will not be tracked by Rowan'.
-			"Notification resumed, so continue with removal"
-			^ theBehavior removeSelector: methodSelector ].
-	loadedPackage := loadedMethodToBeRemoved loadedPackage.
-	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClassNamed: className
-		ifAbsent: [ 
+		ifAbsent: [  ])
+		ifNil: [ 
 			self
 				error:
-					'Internal error -- no class or extension for ' , className printString
-						, ' in package ' , loadedPackage name printString , '.' ].
-	projectDef := loadedPackage loadedProject asDefinition.
-	packageDef := projectDef packageNamed: loadedPackage name.
-	crDef := loadedClassOrExtension isLoadedClass
-		ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
-		ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
-	isMeta
-		ifTrue: [ crDef removeClassMethod: methodSelector ]
-		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
-	projectDef load
+					'No method ' , methodSelector printString , ' found in the class ',
+					(className,
+						(isMeta
+							ifTrue: [ ' class' ]
+							ifFalse: [ '' ])) printString ]
+		ifNotNil: [ :loadedMethod | 
+			| fromLoadedPackage |
+			"removing method in class ...derive definitions ... need beforeMethod and classDefinition"
+			fromLoadedMethod := loadedMethod.
+			fromLoadedPackage := fromLoadedMethod loadedPackage.
+			fromPackageDefinition := fromLoadedPackage asDefinition.
+			theLoadedClass := loadedMethod loadedClass.
+			fromLoadedProject := fromLoadedPackage loadedProject.
+			beforeMethod := fromLoadedMethod asDefinition ].
+	projectModification := RwProjectModification
+		before: fromLoadedProject
+		after: fromLoadedProject.
+	packagesModification := self
+		packagesModificationForRemoveMethod: fromLoadedMethod
+		fromClass: theLoadedClass
+		isMeta: isMeta
+		fromPackage: fromPackageDefinition.
+	projectModification packagesModification: packagesModification.
+	projectSetModification := RwProjectSetModification new.
+	projectModification isEmpty
+		ifFalse: [ projectSetModification addElementModification: projectModification ].
+	loadedProjects := Rowan projectTools load
+		loadProjectSetModification: projectSetModification
+		symbolList: aSymbolList
 ]
 
 { #category : 'package browsing' }

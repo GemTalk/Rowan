@@ -82,6 +82,130 @@ RwBrowserTool48991Test >> testAddMethod [
 ]
 
 { #category : 'tests' }
+RwBrowserTool48991Test >> testDeleteGlobalExtensionMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool audit project|
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Global-Extensions1'.
+	packageNames := {packageName1}.
+	className := 'Object'.
+	self
+		_loadGlobalExtensionsProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := RwPrjBrowserTool new.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: '*', packageName1 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add extension method to Object"
+
+	self assert: (audit := project audit) isEmpty.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: (testInstance perform: #foo) = 'bar'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className.
+
+	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
+
+	self assert: (audit := project audit) isEmpty.
+
+	self should: [ testInstance perform: #foo ] raise: MessageNotUnderstood.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
+RwBrowserTool48991Test >> testDeleteMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict project audit |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className.
+
+	browserTool := RwPrjBrowserTool new.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+	testInstance := testClass new.
+	testInstance perform: #ivar1: with: 3.
+	self assert: (testInstance  perform: #ivar1) = 3.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 2;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1:') ] ]
+		forClassNamed: className.
+
+
+	browserTool removeMethod: #'ivar1:' forClassNamed: className isMeta: false.
+
+	self assert: (audit := project audit) isEmpty.
+	self should: [ testInstance  perform: #ivar1: with: 2 ] raise: MessageNotUnderstood.
+	self assert: (testInstance  perform: #ivar1) = 3.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className
+]
+
+{ #category : 'tests' }
 RwBrowserTool48991Test >> testMoveMethodBetweenCategories [
 	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
 	projectName := 'Simple Browser'.
