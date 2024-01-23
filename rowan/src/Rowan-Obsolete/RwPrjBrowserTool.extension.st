@@ -1,6 +1,66 @@
 Extension { #name : 'RwPrjBrowserTool' }
 
 { #category : '*rowan-obsolete' }
+RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray [
+	| loadedPackage packageConvention packageName |
+	(self _loadedClassNamed: className ifAbsent: [  ])
+		ifNil: [ 
+			"no loaded class, see if the category matches an existing package name"
+			loadedPackage := self
+				_loadedPackageNamed: category
+				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
+		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
+	packageConvention := loadedPackage loadedProject packageConvention.
+	packageConvention = 'Rowan'
+		ifTrue: [ packageName := loadedPackage name ]
+		ifFalse: [ 
+			packageConvention = 'RowanHybrid'
+				ifTrue: [ 
+					packageName := (loadedPackage loadedProject loadedPackages
+						at: category
+						ifAbsent: [ 
+							self
+								error:
+									'No package named ' , category printString
+										, ' found (RowanHybrid package convention)' ]) name ]
+				ifFalse: [ 
+					"Monticello"
+					packageName := (loadedPackage loadedProject loadedPackages
+						detect: [ :each | category beginsWith: each name ]
+						ifNone: [ 
+							self
+								error:
+									'No package matching ' , category printString
+										, ' found (Monticello package convention)' ]) name ] ].
+	^ self
+		addOrUpdateClassDefinition: className
+		type: type
+		superclass: superclassName
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: category
+		packageName: packageName
+		options: optionsArray
+]
+
+{ #category : '*rowan-obsolete' }
+RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: ignored options: optionsArray [
+	^ self
+		addOrUpdateClassDefinition: className
+		type: type
+		superclass: superclassName
+		instVarNames: anArrayOfStrings
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		category: category
+		packageName: packageName
+		options: optionsArray
+]
+
+{ #category : '*rowan-obsolete' }
 RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: className isMeta: isMeta [
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 

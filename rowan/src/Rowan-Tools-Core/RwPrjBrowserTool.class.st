@@ -120,135 +120,47 @@ RwPrjBrowserTool >> _rowanSymbolDictionaryNames [
 ]
 
 { #category : 'class browsing' }
-RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category options: optionsArray [
-	| loadedPackage packageConvention packageName |
-	(self _loadedClassNamed: className ifAbsent: [  ])
-		ifNil: [ 
-			"no loaded class, see if the category matches an existing package name"
-			loadedPackage := self
-				_loadedPackageNamed: category
-				ifAbsent: [ self error: 'No package named ' , category printString , ' found' ] ]
-		ifNotNil: [ :loadedClass | loadedPackage := loadedClass loadedPackage ].
-	packageConvention := loadedPackage loadedProject packageConvention.
-	packageConvention = 'Rowan'
-		ifTrue: [ packageName := loadedPackage name ]
-		ifFalse: [ 
-			packageConvention = 'RowanHybrid'
-				ifTrue: [ 
-					packageName := (loadedPackage loadedProject loadedPackages
-						at: category
-						ifAbsent: [ 
-							self
-								error:
-									'No package named ' , category printString
-										, ' found (RowanHybrid package convention)' ]) name ]
-				ifFalse: [ 
-					"Monticello"
-					packageName := (loadedPackage loadedProject loadedPackages
-						detect: [ :each | category beginsWith: each name ]
-						ifNone: [ 
-							self
-								error:
-									'No package matching ' , category printString
-										, ' found (Monticello package convention)' ]) name ] ].
-	^ self
-		addOrUpdateClassDefinition: className
-		type: type
-		superclass: superclassName
-		instVarNames: anArrayOfStrings
-		classVars: anArrayOfClassVars
-		classInstVars: anArrayOfClassInstVars
-		poolDictionaries: anArrayOfPoolDicts
-		category: category
-		packageName: packageName
-		constraints: #()
-		options: optionsArray
-]
-
-{ #category : 'class browsing' }
-RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray [
-	| loadedPackage loadedProject loadedClass theOptions theConstraints |
-	loadedPackage := self
+RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName options: optionsArray [
+	| loadedProject loadedClass theOptions classDefinition toLoadedPackage |
+	toLoadedPackage := self
 		_loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ].
-	loadedProject := loadedPackage loadedProject.
+	loadedProject := toLoadedPackage loadedProject.
 	anArrayOfPoolDicts isEmpty
 		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
-	loadedClass := self _loadedClassNamed: className ifAbsent: [  ].
+	(loadedClass := self _loadedClassNamed: className ifAbsent: [  ])
+		ifNotNil: [
+			| fromLoadedProject |
+			fromLoadedProject := loadedClass loadedProject.
+			fromLoadedProject name = toLoadedPackage loadedProject name
+				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
 	theOptions := optionsArray collect: [ :each | each asString ].
-	(constraintsArray isKindOf: Array)
-		ifTrue: [ 
-			theConstraints := {}.
-			constraintsArray
-				do: [ :ar | 
-					(ar isKindOf: Array)
-						ifTrue: [ 
-							theConstraints
-								add:
-									{((ar at: 1) asString).
-									((ar at: 2) name asString)} ]
-						ifFalse: [ theConstraints add: ar name asString ] ] ]
-		ifFalse: [ theConstraints := constraintsArray ifNil: [ #() ] ifNotNil: [ constraintsArray ] ].
-	(Rowan image validClassCategory: category forLoadedPackage: loadedPackage)
+	(Rowan image validClassCategory: category forLoadedPackage: toLoadedPackage)
 		ifFalse: [ 
 			self
 				error:
 					'Category ' , category printString , ' for class ' , className printString
 						, 'does not follow ' , loadedProject packageConvention
 						, ' package convention' ].
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: superclassName
+		instvars: (anArrayOfStrings collect: [ :each | each asString ])
+		classinstvars: (anArrayOfClassInstVars collect: [ :each | each asString ])
+		classvars: (anArrayOfClassVars collect: [ :each | each asString ])
+		category: category
+		comment: nil
+		pools: #()
+		type: type.
+	classDefinition gs_options: theOptions.
 	loadedClass
 		ifNil: [ 
-			| classDef |
-			"create a new class"
-			classDef := RwClassDefinition
-				newForClassNamed: className
-				super: superclassName
-				instvars: (anArrayOfStrings collect: [ :each | each asString ])
-				classinstvars: (anArrayOfClassInstVars collect: [ :each | each asString ])
-				classvars: (anArrayOfClassVars collect: [ :each | each asString ])
-				category: category
-				comment: nil
-				pools: #()
-				type: type.
-			classDef gs_options: theOptions.
-			classDef gs_constraints: theConstraints.
-			self createClass: classDef inPackageNamed: packageName ]
-		ifNotNil: [ 
-			self class edit
-				definitionsForClassNamed: className
-				ifFound: [ :classDef :packageDef :projectDef | 
-					| classProjectDef projectSetDef |
-					classProjectDef := projectDef.
-					projectSetDef := RwProjectSetDefinition new.
-					projectSetDef addProject: classProjectDef.
-					classDef
-						superclassName: superclassName;
-						instVarNames: (anArrayOfStrings collect: [ :each | each asString ]);
-						classVarNames: (anArrayOfClassVars collect: [ :each | each asString ]);
-						classInstVarNames:
-								(anArrayOfClassInstVars collect: [ :each | each asString ]);
-						gs_options: theOptions;
-						gs_constraints: theConstraints;
-						category: category;
-						yourself.
-					loadedClass packageName = packageName
-						ifFalse: [ 
-							| thePackageDef |
-							"move class to another package"
-							packageDef removeClassDefinition: classDef.
-							thePackageDef := classProjectDef
-								packageNamed: packageName
-								ifAbsent: [ 
-									| packageProjectDef |
-									"loadedPackage in a different project"
-									packageProjectDef := loadedPackage loadedProject asDefinition.
-									projectSetDef addProject: packageProjectDef.
-									packageProjectDef packageNamed: packageName ].
-							thePackageDef addClassDefinition: classDef ].
-					self class load loadProjectSetDefinition: projectSetDef ]
-				ifAbsent: [ 
-					"shouldn't happen ... loadedClass known to exist"
-					self error: 'unexpected missing class ' , className printString ] ].
+			"add a new class definition"
+			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: loadedClass toPackage: toLoadedPackage ]
+		ifNotNil: [
+			"update existing class definition"
+			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: nil toPackage: toLoadedPackage.
+self halt.].
 	^ (self _loadedClassNamed: className ifAbsent: [  ]) handle currentVersion
 ]
 
@@ -391,6 +303,55 @@ RwPrjBrowserTool >> addPackageNamed: packageName toComponentNamed: componentName
 RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 
 	^ self addPackageNamed: packageName toComponentNamed: 'Core' andProjectNamed: projectName
+]
+
+{ #category : 'modification' }
+RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: afterClassDefinition loadedClass: loadedClassOrNil toPackage: toLoadedPackage [
+	| beforeClassDefinition packageName className classModification classesModification fromPackageDefinition packageModification fromLoadedProject toPackageDefinition packagesModification projectModification projectSetModification toLoadedProject |
+
+	packageName := toLoadedPackage name.
+	className := afterClassDefinition name.
+	loadedClassOrNil 
+		ifNil: [ 
+			beforeClassDefinition := RwClassDefinition new.
+			fromPackageDefinition := toLoadedPackage asDefinition ]
+		ifNotNil: [
+			beforeClassDefinition := loadedClassOrNil asDefinition .
+			fromPackageDefinition := loadedClassOrNil loadedPackage asDefinition.
+			fromLoadedProject := loadedClassOrNil loadedProject asDefinition ].
+	fromLoadedProject
+		ifNotNil: [ 
+			fromLoadedProject name = toLoadedPackage loadedProject name
+				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
+
+	toPackageDefinition := toLoadedPackage asDefinition.
+	toLoadedProject := toLoadedPackage loadedProject.
+
+	classModification := afterClassDefinition compareAgainstBase: beforeClassDefinition.
+	classesModification := RwClassesModification new.
+	classModification isEmpty
+		ifFalse: [ classesModification addElementModification: classModification ].
+	packageModification := toPackageDefinition
+		compareAgainstBase: fromPackageDefinition.
+	classesModification isEmpty
+		ifFalse: [ packageModification classesModification: classesModification ].
+	packagesModification := RwPackagesModification new.
+	packageModification isEmpty
+		ifFalse: [ packagesModification addElementModification: packageModification ].
+	projectModification := RwProjectModification
+		before: toLoadedProject
+		after: toLoadedProject.
+	projectModification packagesModification: packagesModification.
+	projectSetModification := RwProjectSetModification new.
+	projectModification isEmpty
+		ifFalse: [ projectSetModification addElementModification: projectModification ].
+	projectSetModification
+		updateForPackageMoves;
+		updateForClassMoves;
+		updateForMethodMoves.		
+	Rowan projectTools load
+		loadProjectSetModification: projectSetModification
+		symbolList: Rowan image symbolList.
 ]
 
 { #category : 'modification' }
