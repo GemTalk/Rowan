@@ -357,7 +357,7 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 												error:
 													'The supplied method protocol ' , protocol printString
 														,
-															' does not follow the expected package convention for ''RowanHybrid''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
+															' does not follow the expected package convention ''RowanHybrid'' for the package ', packageName printString, '. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
 								ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
 					^ updateBlock value: classDef value: projectDef ]
 				ifFalse: [ 
@@ -389,7 +389,7 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 								error:
 									'The supplied method protocol ' , protocol printString
 										, ' does not follow the expected package convention '
-										, expectedProtocol printString , ' for ''RowanHybrid''' ] ]
+										, expectedProtocol printString , ' ''RowanHybrid'' for the package ', loadedPackage name printString ] ]
 				ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
 
 	classExtensionDef := packageDefinition classExtensions

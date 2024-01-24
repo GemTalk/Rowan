@@ -181,7 +181,7 @@ RwClsAuditTool >> auditLoadedClassProperties: aLoadedClass forClass: aClass [
 						message:
 							'For class ' , aLoadedClass name , ' the class category ('
 								, classProperty printString , ') does not follow the '
-								, packageConvention printString , ' package convention')
+								, packageConvention printString , ' package convention for the package ', aLoadedClass loadedPackage name printString)
 						reason: #'violateClassCategoryConvention';
 						loadedPropertyValue: aLoadedClass classCategory;
 						classPropertyValue: classProperty;
