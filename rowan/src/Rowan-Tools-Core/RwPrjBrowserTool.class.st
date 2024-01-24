@@ -156,11 +156,10 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 	loadedClass
 		ifNil: [ 
 			"add a new class definition"
-			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: loadedClass toPackage: toLoadedPackage ]
+			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: nil toPackage: toLoadedPackage ]
 		ifNotNil: [
 			"update existing class definition"
-			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: nil toPackage: toLoadedPackage.
-self halt.].
+			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: loadedClass toPackage: toLoadedPackage ].
 	^ (self _loadedClassNamed: className ifAbsent: [  ]) handle currentVersion
 ]
 
@@ -306,17 +305,20 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 ]
 
 { #category : 'modification' }
-RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: afterClassDefinition loadedClass: loadedClassOrNil toPackage: toLoadedPackage [
-	| beforeClassDefinition packageName className classModification classesModification fromPackageDefinition packageModification fromLoadedProject toPackageDefinition packagesModification projectModification projectSetModification toLoadedProject |
+RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefinition loadedClass: loadedClassOrNil toPackage: toLoadedPackage [
+	| beforeClassDefinition afterClassDefinition packageName className classModification classesModification fromPackageDefinition packageModification fromLoadedProject toPackageDefinition packagesModification projectModification projectSetModification toLoadedProject |
 
 	packageName := toLoadedPackage name.
-	className := afterClassDefinition name.
+	className := theClassDefinition name.
 	loadedClassOrNil 
 		ifNil: [ 
 			beforeClassDefinition := RwClassDefinition new.
+			afterClassDefinition := theClassDefinition.
 			fromPackageDefinition := toLoadedPackage asDefinition ]
 		ifNotNil: [
 			beforeClassDefinition := loadedClassOrNil asDefinition .
+			afterClassDefinition := theClassDefinition copy.
+			afterClassDefinition gs_symbolDictionary: beforeClassDefinition gs_symbolDictionary.
 			fromPackageDefinition := loadedClassOrNil loadedPackage asDefinition.
 			fromLoadedProject := loadedClassOrNil loadedProject asDefinition ].
 	fromLoadedProject

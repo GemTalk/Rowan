@@ -256,6 +256,73 @@ RwBrowserTool48991Test >> testDeleteMethod [
 ]
 
 { #category : 'tests' }
+RwBrowserTool48991Test >> testMoveClass [
+	| packagedClass projectName packageNames className packageName1 packageName2 packageName3 browserTool project audit projectDefinition movedClass |
+
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {
+		packageName1.
+		packageName2.
+		packageName3
+	}.
+	className := 'SimpleBrowse'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment:
+			'This is a simple project used to test add or update class definitions'.
+	[ projectDefinition load ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := RwPrjBrowserTool new.
+
+	packagedClass := browserTool
+		addOrUpdateClassDefinition: className
+		type: 'normal'
+		superclass: 'Object'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		packageName: packageName1
+		options: #().
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: packagedClass notNil.
+	self assert: (Rowan globalNamed: className) == packagedClass.
+
+	movedClass := browserTool
+		addOrUpdateClassDefinition: className
+		type: 'normal'
+		superclass: 'Object'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName2
+		packageName: packageName2
+		options: #().
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: movedClass notNil.
+	self assert: (Rowan globalNamed: className) == movedClass.
+	self assert:packagedClass == movedClass.
+]
+
+{ #category : 'tests' }
 RwBrowserTool48991Test >> testMoveMethodBetweenCategories [
 	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
 	projectName := 'Simple Browser'.
