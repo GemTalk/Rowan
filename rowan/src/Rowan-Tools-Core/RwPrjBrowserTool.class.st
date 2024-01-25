@@ -121,27 +121,8 @@ RwPrjBrowserTool >> _rowanSymbolDictionaryNames [
 
 { #category : 'class browsing' }
 RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName options: optionsArray [
-	| toLoadedProject loadedClass theOptions classDefinition toLoadedPackage fromLoadedProject projectModification packagesModification projectSetModification aSymbolList loadedProjects|
-	toLoadedPackage := self
-		_loadedPackageNamed: packageName
-		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ].
-	toLoadedProject := toLoadedPackage loadedProject.
-	anArrayOfPoolDicts isEmpty
-		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
-	(loadedClass := self _loadedClassNamed: className ifAbsent: [  ])
-		ifNotNil: [
-			fromLoadedProject := loadedClass loadedProject.
-			fromLoadedProject name = toLoadedProject name
-				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
-	theOptions := optionsArray collect: [ :each | each asString ].
-	(Rowan image validClassCategory: category forLoadedPackage: toLoadedPackage)
-		ifFalse: [ 
-			self
-				error:
-					'Category ' , category printString , ' for class ' , className printString
-						, 'does not follow ' , toLoadedProject packageConvention
-						, ' package convention' ].
-	classDefinition := RwClassDefinition
+	| toLoadedProject theOptions afterClass beforeClass toLoadedPackage fromLoadedPackage fromLoadedProject projectModification packagesModification projectSetModification aSymbolList loadedProjects |
+	afterClass := RwClassDefinition
 		newForClassNamed: className
 		super: superclassName
 		instvars: (anArrayOfStrings collect: [ :each | each asString ])
@@ -151,27 +132,56 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 		comment: nil
 		pools: #()
 		type: type.
-	classDefinition gs_options: theOptions.
+	afterClass gs_options: theOptions.
+	toLoadedPackage := self
+		_loadedPackageNamed: packageName
+		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ].
+	toLoadedProject := toLoadedPackage loadedProject.
+	anArrayOfPoolDicts isEmpty
+		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
+	(self _loadedClassNamed: className ifAbsent: [  ])
+		ifNotNil: [:loadedClass |
+			beforeClass := loadedClass asDefinition.
+			beforeClass gs_symbolDictionary: loadedClass gs_symbolDictionary.
+			fromLoadedPackage := loadedClass loadedPackage.
+			fromLoadedProject := loadedClass loadedProject.
+			fromLoadedProject name = toLoadedProject name
+				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
+
+	fromLoadedProject
+		ifNotNil: [ 
+			fromLoadedProject name = toLoadedPackage loadedProject name
+				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
+
+	theOptions := optionsArray collect: [ :each | each asString ].
+	(Rowan image validClassCategory: category forLoadedPackage: toLoadedPackage)
+		ifFalse: [ 
+			self
+				error:
+					'Category ' , category printString , ' for class ' , className printString
+						, 'does not follow ' , toLoadedProject packageConvention
+						, ' package convention' ].
 	projectModification := RwProjectModification
 		before: toLoadedProject
 		after: toLoadedProject.
-	loadedClass
+	fromLoadedPackage
 		ifNil: [ 
 			"add a new class definition"
 			packagesModification := RwPackagesModification new.
-			self addPackagesModificationsForClassDefinition: classDefinition loadedClass: nil toPackage: toLoadedPackage using: packagesModification ]
+			self addPackagesModificationsForClassDefinition: afterClass beforeClass: beforeClass fromPackage: toLoadedPackage toPackage: toLoadedPackage using: packagesModification ]
 		ifNotNil: [
 			| fromPackageDefinition |
-			fromPackageDefinition := loadedClass loadedPackage asDefinition.
+			fromPackageDefinition := fromLoadedPackage asDefinition.
 			fromPackageDefinition name = packageName
 				ifTrue: [ 
 					"update existing class definition"
 					packagesModification := RwPackagesModification new.
-					self addPackagesModificationsForClassDefinition: classDefinition loadedClass: loadedClass toPackage: toLoadedPackage using: packagesModification ]
+					self addPackagesModificationsForClassDefinition: afterClass beforeClass: beforeClass fromPackage: fromLoadedPackage toPackage: toLoadedPackage using: packagesModification ]
 				ifFalse: [
 					"package move - remove class from from package and add after to toPackage"
-					packagesModification := self packagesModificationForRemoveClass: loadedClass fromPackage: fromPackageDefinition.
-					self addPackagesModificationsForClassDefinition: classDefinition loadedClass: loadedClass toPackage: toLoadedPackage using: packagesModification ]].
+					packagesModification := self packagesModificationForRemoveClass: beforeClass fromPackage: fromPackageDefinition.
+					self addPackagesModificationsForClassDefinition: afterClass beforeClass: beforeClass fromPackage: fromLoadedPackage toPackage: toLoadedPackage using: packagesModification].
+			 ].
 	projectModification packagesModification: packagesModification.
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
@@ -328,79 +338,24 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 ]
 
 { #category : 'modification' }
-RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefinition loadedClass: loadedClassOrNil toPackage: toLoadedPackage [
-	| beforeClassDefinition afterClassDefinition packageName className classModification classesModification fromPackageDefinition packageModification fromLoadedProject toPackageDefinition packagesModification projectModification projectSetModification toLoadedProject |
-
-	packageName := toLoadedPackage name.
-	className := theClassDefinition name.
-	loadedClassOrNil 
-		ifNil: [ 
-			beforeClassDefinition := RwClassDefinition new.
-			afterClassDefinition := theClassDefinition.
-			fromPackageDefinition := toLoadedPackage asDefinition ]
-		ifNotNil: [
-			beforeClassDefinition := loadedClassOrNil asDefinition .
-			afterClassDefinition := theClassDefinition copy.
-			afterClassDefinition gs_symbolDictionary: beforeClassDefinition gs_symbolDictionary.
-			fromPackageDefinition := loadedClassOrNil loadedPackage asDefinition.
-			fromLoadedProject := loadedClassOrNil loadedProject asDefinition ].
-	fromLoadedProject
-		ifNotNil: [ 
-			fromLoadedProject name = toLoadedPackage loadedProject name
-				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
-
-	toPackageDefinition := toLoadedPackage asDefinition.
-	toLoadedProject := toLoadedPackage loadedProject.
-
-	classModification := afterClassDefinition compareAgainstBase: beforeClassDefinition.
-	classesModification := RwClassesModification new.
-	classModification isEmpty
-		ifFalse: [ classesModification addElementModification: classModification ].
-	packageModification := toPackageDefinition
-		compareAgainstBase: fromPackageDefinition.
-	classesModification isEmpty
-		ifFalse: [ packageModification classesModification: classesModification ].
-	packagesModification := RwPackagesModification new.
-	packageModification isEmpty
-		ifFalse: [ packagesModification addElementModification: packageModification ].
-	projectModification := RwProjectModification
-		before: toLoadedProject
-		after: toLoadedProject.
-	projectModification packagesModification: packagesModification.
-	projectSetModification := RwProjectSetModification new.
-	projectModification isEmpty
-		ifFalse: [ projectSetModification addElementModification: projectModification ].
-	projectSetModification
-		updateForPackageMoves;
-		updateForClassMoves;
-		updateForMethodMoves.		
-	Rowan projectTools load
-		loadProjectSetModification: projectSetModification
-		symbolList: Rowan image symbolList.
-]
-
-{ #category : 'modification' }
-RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefinition loadedClass: loadedClassOrNil toPackage: toLoadedPackage using: packagesModification [
+RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefinition beforeClass: beforeClassOrNil fromPackage: fromLoadedPackage toPackage: toLoadedPackage using: packagesModification [
 	"loadProjectSetModification:symbolList: call is expected to be done by caller"
-	| beforeClassDefinition afterClassDefinition packageName className classModification classesModification fromPackageDefinition packageModification fromLoadedProject toPackageDefinition projectModification toLoadedProject |
+	| beforeClassDefinition afterClassDefinition packageName className classModification classesModification  packageModification fromLoadedProject toPackageDefinition toLoadedProject fromPackageDefinition |
 
 	packageName := toLoadedPackage name.
 	className := theClassDefinition name.
-	loadedClassOrNil 
+	fromLoadedProject := fromLoadedPackage loadedProject asDefinition.
+	fromLoadedProject name = toLoadedPackage loadedProject name
+		ifFalse: [ self error: 'Not handling method moves between projects, yet' ].
+	fromPackageDefinition := fromLoadedPackage asDefinition.
+	beforeClassOrNil 
 		ifNil: [ 
 			beforeClassDefinition := RwClassDefinition new.
-			afterClassDefinition := theClassDefinition.
-			fromPackageDefinition := toLoadedPackage asDefinition ]
+			afterClassDefinition := theClassDefinition]
 		ifNotNil: [
-			beforeClassDefinition := loadedClassOrNil asDefinition .
+			beforeClassDefinition := beforeClassOrNil.
 			afterClassDefinition := theClassDefinition copy.
-			afterClassDefinition gs_symbolDictionary: beforeClassDefinition gs_symbolDictionary.
-			fromPackageDefinition := loadedClassOrNil loadedPackage asDefinition.
-			fromLoadedProject := loadedClassOrNil loadedProject asDefinition ].
-	fromLoadedProject
-		ifNotNil: [ 
-			fromLoadedProject name = toLoadedPackage loadedProject name
-				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
+			afterClassDefinition gs_symbolDictionary: beforeClassDefinition gs_symbolDictionary ].
 
 	toPackageDefinition := toLoadedPackage asDefinition.
 	toLoadedProject := toLoadedPackage loadedProject.
@@ -415,9 +370,7 @@ RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefiniti
 		ifFalse: [ packageModification classesModification: classesModification ].
 	packageModification isEmpty
 		ifFalse: [ packagesModification addElementModification: packageModification ].
-	projectModification := RwProjectModification
-		before: toLoadedProject
-		after: toLoadedProject.
+
 ]
 
 { #category : 'modification' }
@@ -1012,10 +965,9 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 ]
 
 { #category : 'modification' }
-RwPrjBrowserTool >> packagesModificationForRemoveClass: fromLoadedClass fromPackage: fromPackageDefinition [
-	| packageName beforeClass afterClass toPackageDefinition classModification classesModification packageModification packagesModification |
+RwPrjBrowserTool >> packagesModificationForRemoveClass: beforeClass fromPackage: fromPackageDefinition [
+	| packageName afterClass toPackageDefinition classModification classesModification packageModification packagesModification |
 	packageName := fromPackageDefinition name.
-	beforeClass := fromLoadedClass asDefinition.
 	afterClass := RwClassDefinition new.
 	toPackageDefinition := fromPackageDefinition.
 	classModification := afterClass compareAgainstBase: beforeClass.
