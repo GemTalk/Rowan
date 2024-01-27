@@ -122,10 +122,51 @@ RwPrjLoadToolV2 >> _doProjectSetModificationLoad: projectSetModification instanc
 	"Wrapper method in case we need to handle RwExistingVisitorAddingExistingClassNotification RwExistingVisitorAddingExistingMethodNotification here ... 
 		currently this method is used for single method/class updates so we should be able to handle these in the process of create projectSetModification"
 
-	^ self
+	^ [ 
+	self
 		_loadProjectSetModification: projectSetModification
 		instanceMigrator: instanceMigrator
-		symbolList: symbolList
+		symbolList: symbolList ]
+		on:
+			RwExistingVisitorAddingExistingClassNotification
+				, RwExistingVisitorAddingExistingMethodNotification
+		do: [ :ex | 
+			| theClassName theClass theLoadedProject copiedProjectSetDef projectDef loadedClass packageDef |
+			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
+				ifTrue: [ 
+					| theProjectName |
+					theClassName := ex classDefinition name.
+					(processedClassNames includes: theClassName)
+						ifTrue: [ ex resume ].
+					theClass := ex theClass.
+					theClass isBehavior
+						ifFalse: [ ex pass ].
+					theProjectName := theClass rowanProjectName.
+					theProjectName = Rowan unpackagedName
+						ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
+						ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
+					theLoadedProject
+						ifNil: [ 
+							"the loaded project should not be nil - if it is, pass the notification"
+							ex pass ].
+					(projectSetModification projectNamed: theLoadedProject name ifAbsent: [  ])
+						ifNotNil: [ 
+							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+							ex resume ].
+					copiedProjectSetDef := projectSetModification copy.	"a project in the original project set is taking ownership of an already  loaded class,
+					remove the class from the original project's package and attempt a reload"
+					projectDef := copiedProjectSetDef
+						projectNamed: theLoadedProject name
+						ifAbsent: [ 
+							projectDef := theLoadedProject asDefinition.
+							copiedProjectSetDef addProject: projectDef.
+							projectDef ].
+					loadedClass := Rowan image
+						loadedClassForClass: theClass
+						ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
+					packageDef := projectDef packageNamed: loadedClass loadedPackage name.
+					packageDef removeClassNamed: theClassName.
+					processedClassNames add: theClassName ] ]
 ]
 
 { #category : 'private' }

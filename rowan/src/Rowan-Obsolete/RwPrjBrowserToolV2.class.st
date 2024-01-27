@@ -1127,7 +1127,7 @@ RwPrjBrowserToolV2 >> moveClassNamed: className toPackage: packageName [
 			destinationLoadedPackage name = sourceLoadedPackage name
 				ifTrue: [ 
 					"class is already in the desired package, never mind"
-					^ self ].
+					^ loadedClass handle currentVersion ].
 			projectSetDefinition := RwProjectSetDefinition new.
 			projectDef := sourceLoadedPackage loadedProject asDefinition.
 			packageDef := projectDef packageNamed: sourceLoadedPackage name.
@@ -1158,7 +1158,8 @@ RwPrjBrowserToolV2 >> moveClassNamed: className toPackage: packageName [
 				packageConvention: destinationLoadedPackage loadedProject packageConvention.
 			destPackageDef classDefinitions at: className put: srcClsDef.
 
-			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
+			Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ].
+	^ (self _loadedClassNamed: className ifAbsent: [  ]) handle currentVersion
 ]
 
 { #category : 'method browsing' }

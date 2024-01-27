@@ -309,6 +309,12 @@ RwProjectSetModification >> isEmpty [
   ^ movedMethods isEmpty and:[ movedClasses isEmpty and:[ super isEmpty]]
 ]
 
+{ #category : 'RwProjectSet compat' }
+RwProjectSetModification >> projectNamed: projectName ifAbsent: absentBlock [
+
+	^ elementsModified at: projectName ifAbsent: absentBlock
+]
+
 { #category : 'private - moves' }
 RwProjectSetModification >> updateForClassMoveFrom: removal to: addition [
 	"Transform the given removal and addition to a move."
