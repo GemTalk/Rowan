@@ -15,6 +15,16 @@ Class {
 	#category : 'Rowan-Loader'
 }
 
+{ #category : 'comparing' }
+RwLoadedMethod >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	( #( #'_gsFileOffset' #'_gsFileName' ) includesIdentical: propertyKey)
+		ifTrue: [ 
+		"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+		^ true ].
+	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+]
+
 { #category : 'definitions' }
 RwLoadedMethod >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
@@ -27,6 +37,17 @@ RwLoadedMethod >> asDefinition [
 RwLoadedMethod >> classIsMeta [
 
 	^classIsMeta
+]
+
+{ #category : 'comparing' }
+RwLoadedMethod >> compareAgainstBase: aDefinition [ 
+
+	| modification |
+	modification := RwMethodModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: (self compareSourceAgainstBase: aDefinition).
+	^modification
 ]
 
 { #category : 'comparing' }

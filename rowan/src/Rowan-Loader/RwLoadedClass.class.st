@@ -21,6 +21,36 @@ RwLoadedClass >> _classBasedProperties [
 	^ #()
 ]
 
+{ #category : 'comparing' }
+RwLoadedClass >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+	propertyKey == #'comment'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"empty or nil comments need to compare equal in GemStone"
+					^ (propertyValue == nil or: [ propertyValue isEmpty ])
+						and: [ baseValue == nil or: [ baseValue isEmpty ] ] ] ].
+	propertyKey == #'classvars'
+		ifTrue: [ 
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"order is not relevant when comparing class vars"
+					(propertyValue _isArray and: [ baseValue _isArray ])
+						ifTrue: [ ^ propertyValue sort = baseValue sort ] ] ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
+]
+
+{ #category : 'comparing' }
+RwLoadedClass >> _modificationClass [
+
+	^ RwClassModification
+]
+
 { #category : 'definitions' }
 RwLoadedClass >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."

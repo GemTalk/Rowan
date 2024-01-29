@@ -39,10 +39,71 @@ RwLoadedThing class >> newNamed: aName [
 		yourself
 ]
 
+{ #category : 'comparing' }
+RwLoadedThing >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	^ propertyValue = baseValue
+]
+
 { #category : 'accessing' }
 RwLoadedThing >> absentToken [
 
 	^AbsentToken
+]
+
+{ #category : 'comparing' }
+RwLoadedThing >> compareAgainstBase: aDefinition [
+	"Diff myself for changes against the given base definition. 
+	Answer a Modification, which might be empty if there are no changes."
+
+	self subclassResponsibility
+]
+
+{ #category : 'comparing' }
+RwLoadedThing >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
+
+	| keys |
+	keys := myDictionary keys . "keys is already a copy"
+	keys addAll: baseDictionary keys.
+	keys do: 
+			[:key |
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [].
+			before := before
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			after := myDictionary at: key ifAbsent: [].
+			after := after
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			modification := after compareAgainstBase: before.
+			modification isEmpty
+				ifFalse: [anElementsModification addElementModification: modification]]
+]
+
+{ #category : 'comparing' }
+RwLoadedThing >> comparePropertiesAgainstBase: aDefinition [
+
+	| keys modification |
+	modification := RwPropertiesModification new.
+	keys := self propertiesForCompare keys . "properties is a dictionary, keys is a copy"
+  aDefinition propertiesForCompare keysDo:[:k | keys add: k ].
+	keys do: 
+			[:key |
+				| before after |
+				before := aDefinition propertyForCompareAt: key ifAbsent: [nil].
+				after := self propertyForCompareAt: key ifAbsent: [nil].
+				(self _compareProperty: key propertyVaue: before againstBaseValue: after)
+					ifFalse: 
+						[modification addElementModification: (RwPropertyModification
+							key: key
+							oldValue: before
+							newValue: after)]].
+	^modification
 ]
 
 { #category : 'private' }
@@ -131,6 +192,12 @@ RwLoadedThing >> printOn: aStream [
 			[aStream
 				space;
 				nextPutAll: name]
+]
+
+{ #category : 'accessing' }
+RwLoadedThing >> properties [
+
+	^properties
 ]
 
 { #category : 'comparing' }

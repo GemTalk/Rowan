@@ -82,6 +82,31 @@ RwLoadedPackage >> classOrExtensionForClassNamed: className ifAbsent: absentBloc
 		ifAbsent: [loadedClassExtensions at: className ifAbsent: absentBlock]
 ]
 
+{ #category : 'comparing' }
+RwLoadedPackage >> compareAgainstBase: aDefinition [
+
+	| modification classesModification classExtensionsModification |
+	modification := RwPackageModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	classesModification := RwClassesModification new.
+	classExtensionsModification := RwClassExtensionsModification new.
+	self
+		compareDictionary: self classDefinitionsForCompare
+		againstBaseDictionary: aDefinition classDefinitionsForCompare
+		into: classesModification
+		elementClass: RwClassDefinition.
+	self
+		compareDictionary: self classExtensionsForCompare
+		againstBaseDictionary: aDefinition classExtensionsForCompare
+		into: classExtensionsModification
+		elementClass: RwClassExtensionDefinition.
+	modification
+		classesModification: classesModification;
+		classExtensionsModification: classExtensionsModification.
+	^modification
+]
+
 { #category : 'testing' }
 RwLoadedPackage >> isDirty [
 	"a project is dirty if it has changes that are not written to disk, or it's packages 

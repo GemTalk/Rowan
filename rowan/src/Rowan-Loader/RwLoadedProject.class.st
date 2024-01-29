@@ -63,6 +63,26 @@ RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	^ #'unknown'
 ]
 
+{ #category : 'comparing' }
+RwLoadedProject >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+	({#'projectOwnerId'.
+	#'spec'.
+	(RwLoadedProject _projectDefinitionSourceKey).
+	(RwLoadedProject _projectDefinitionPlatformConditionalAttributesKey).
+	#'projectRef' } includesIdentical: propertyKey)
+		ifTrue: [ 
+			"projectRef entries are considered to be equal for comparison purposes"
+			"spec entries are considered to be equal for comparison purposes"
+			"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+			"_projectDefinitionPlatformConditionalAttributesKey entries are considered equal for comparison purpposes"
+			"projectOwnerId entries are considered equal for comparison purpposes"
+			^ true ].
+	^ super
+		_compareProperty: propertyKey
+		propertyVaue: propertyValue
+		againstBaseValue: baseValue
+]
+
 { #category : 'accessing' }
 RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 
@@ -89,6 +109,23 @@ RwLoadedProject >> auditOn: logStreamOrNil [
 RwLoadedProject >> commitLog: logLimit [
 
 	self subclassResponsibility: #commitLog:
+]
+
+{ #category : 'comparing' }
+RwLoadedProject >> compareAgainstBase: aDefinition [
+
+	| modification packagesModification |
+	modification := RwProjectModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	packagesModification := RwPackagesModification new.
+	self
+		compareDictionary: self packagesForCompare
+		againstBaseDictionary: aDefinition packagesForCompare
+		into: packagesModification
+		elementClass: RwPackageDefinition.
+	modification packagesModification: packagesModification.
+	^ modification
 ]
 
 { #category : 'initialization' }

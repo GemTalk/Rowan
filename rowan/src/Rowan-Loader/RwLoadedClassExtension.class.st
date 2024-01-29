@@ -16,6 +16,12 @@ Class {
 	#category : 'Rowan-Loader'
 }
 
+{ #category : 'comparing' }
+RwLoadedClassExtension >> _modificationClass [
+
+	^ RwClassExtensionModification
+]
+
 { #category : 'definitions' }
 RwLoadedClassExtension >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
@@ -34,6 +40,12 @@ RwLoadedClassExtension >> classMethodDefinitions [
 { #category : 'private' }
 RwLoadedClassExtension >> classMethodDefinitionsForCompare [
 	^ self loadedClassMethods
+]
+
+{ #category : 'comparing' }
+RwLoadedClassExtension >> compareAgainstBase: aDefinition [
+
+	^self compareAgainstBase: aDefinition using:  self _modificationClass
 ]
 
 { #category : 'testing' }
