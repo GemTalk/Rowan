@@ -800,7 +800,7 @@ RwPrjBrowserTool >> moveClassDefinition: classDefinition toPackage: packageName 
 	classesModification := RwClassesModification new.
 	classModification isEmpty
 		ifFalse: [ classesModification addElementModification: classModification ].
-	packageModification := fromLoadedPackage compareAgainstBase: toLoadedPackage.
+	packageModification := toLoadedPackage compareAgainstBase: fromLoadedPackage.
 	classesModification isEmpty
 		ifFalse: [ packageModification classesModification: classesModification ].
 
