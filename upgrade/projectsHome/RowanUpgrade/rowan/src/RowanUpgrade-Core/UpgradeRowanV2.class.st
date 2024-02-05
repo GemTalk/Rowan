@@ -49,6 +49,83 @@ UpgradeRowanV2 class >> logMessage: message [
 	GsFile gciLogServer: message
 ]
 
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV2 >> _adoptUpgradeFromPre370To371 [
+	"	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+	"
+
+	"Adopt the new classes added in 3.7.0/3.7.1"
+
+	#('AbstractCloudCredentials' 'AbstractCloudKey' 'AzureCredentials' 'AzureDataKey' 'AzureError' 'GsSftpRemoteFile' 'GsSftpSocket' 'GsSshSocket' 'JsonParser' 'SshSocketError')
+		do: [ :className | 
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: className)
+				intoPackageNamed: 'Filein3B' ].
+
+	Rowan packageTools adopt
+		adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
+		intoPackageNamed: 'Filein4Rowan'.
+
+	Rowan packageTools adopt
+		adoptClass: (Rowan globalNamed: 'ReadByteStream')
+		intoPackageNamed: 'UnPackaged-Globals'.
+
+	Rowan packageTools adopt
+		adoptClass: (Rowan globalNamed: 'InstVarMappingArray')
+		intoPackageNamed: 'Filein2A'.
+
+	(Rowan globalNamed: 'AbstractCharacter')
+		ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
+	#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
+		do: [ :unusedUnPackagedPackageName | 
+			((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
+				at: unusedUnPackagedPackageName
+				ifAbsent: [  ])
+				ifNotNil: [ :obsoleteClassesPackage | 
+					(Rowan projectNamed: 'UnPackaged') _loadedProject
+						removeLoadedPackage: obsoleteClassesPackage ] ].
+
+	Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
+
+	(String compiledMethodAt: #'asPath' otherwise: nil)
+		ifNotNil: [ 
+			Rowan packageTools disown
+				disownMethod: #'asPath'
+				inClassNamed: 'String'
+				isMeta: false ].
+
+	Rowan projectTools adopt
+		adoptProjectFromUrl:
+			'file:$GEMSTONE/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
+		readonlyDiskUrl: 'file:$GEMSTONE/projects/FileSystemGs'
+		projectsHome: '$GEMSTONE/projects'
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV2 >> _adoptUpgradeFromPre371To371 [
+	"	(self gemstoneVersion >= '3.7.1' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.1' asRwGemStoneVersionNumber ])
+	"
+
+	"Adopt the new classes added in 3.7.1"
+
+	self upgradeFrom asRwGemStoneVersionNumber = '3.7.0' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			#('AzureDataKey')
+				do: [ :className | 
+					Rowan packageTools adopt
+						adoptClass: (Rowan globalNamed: className)
+						intoPackageNamed: 'Filein3B' ] ].
+
+	#('HtDictionaryInternalNode' 'HtDictionaryLeafNode' 'HtDictionaryScratchLeafNode' 'HtDictionaryTreeWalker' 'HtHeap' 'HtInternalNode' 'HtLeafNode' 'HtSetInternalNode' 'HtSetLeafNode' 'HtSetScratchLeafNode' 'HtSetTreeWalker' 'HtTreeWalker' 'TreeDictionary' 'TreeSet')
+		do: [ :className | 
+			"new classes in 3.7.1 that need to be adopted"
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: className)
+				intoPackageNamed: 'Filein3B' ]
+]
+
 { #category : 'private' }
 UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 	"
@@ -204,135 +281,10 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein2A' ].
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
-		ifTrue: [ 
-			"GcFinalizeNotification, GsSftpRemoteFile, GsSftpSocket, GsSshSocket, JsonParser,
-				ReadByteStream, SshSocketError, AbstractCloudCredentials, AbstractCloudKey, AzureDataKey, 
-				AzureCredentials, AzureError, Special56bit0, Special56bit1, Special56bit10, 
-				Special56bit11, Special56bit12, Special56bit13, Special56bit14, Special56bit15, 
-				Special56bit2, Special56bit3, Special56bit4, Special56bit5, Special56bit6,
-				Special56bit7, Special56bit8, Special56bit9 are new classes in 3.7.0 that need to be adopted 
-				(along with all of their methods) before reloading GemStone packages.
-
-			UnPackaged-ObsoleteClasses and UnPackaged-GsCompilerClasses are no longer used.
-			AbstractCharacter removed from System.
-
-			New version of InstVarMappingArray so it needs to be adopted ..."
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit0')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit1')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit2')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit3')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit4')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit5')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit6')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit7')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit8')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit9')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit10')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit11')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit12')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit13')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit14')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'Special56bit15')
-				intoPackageNamed: 'Filein4Rowan'.
-
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GcFinalizeNotification')
-				intoPackageNamed: 'Filein4Rowan'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AbstractCloudCredentials')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AbstractCloudKey')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AzureCredentials')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AzureDataKey')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'AzureError')
-				intoPackageNamed: 'Filein3B'.
-
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GsSftpRemoteFile')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GsSftpSocket')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GsSshSocket')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'JsonParser')
-				intoPackageNamed: 'Filein3B'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'ReadByteStream')
-				intoPackageNamed: 'UnPackaged-Globals'.
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'SshSocketError')
-				intoPackageNamed: 'Filein3B'.
-
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'InstVarMappingArray')
-				intoPackageNamed: 'Filein2A'.
-
-			(Rowan globalNamed: 'AbstractCharacter')
-				ifNotNil: [ :class | Rowan packageTools disown disownClass: class ].
-			#('UnPackaged-ObsoleteClasses' 'UnPackaged-GsCompilerClasses')
-				do: [ :unusedUnPackagedPackageName | 
-					((Rowan projectNamed: 'UnPackaged') _loadedProject loadedPackages
-						at: unusedUnPackagedPackageName
-						ifAbsent: [  ])
-						ifNotNil: [ :obsoleteClassesPackage | 
-							(Rowan projectNamed: 'UnPackaged') _loadedProject
-								removeLoadedPackage: obsoleteClassesPackage ] ].
-
-			Rowan projectTools disown disownProjectNamed: 'FileSystemGs'.	"FileSystemGs moved from Rowan project to gemstoneBaseImage ... disown/adopt"
-
-			(String compiledMethodAt: #'asPath' otherwise: nil)
-				ifNotNil: [ 
-					Rowan packageTools disown
-						disownMethod: #'asPath'
-						inClassNamed: 'String'
-						isMeta: false ].
-
-			Rowan projectTools adopt
-				adoptProjectFromUrl:
-					'file:$GEMSTONE/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'
-				readonlyDiskUrl: 'file:$GEMSTONE/projects/FileSystemGs'
-				projectsHome: '$GEMSTONE/projects' ]
+		ifTrue: [self _adoptUpgradeFromPre370To371 ].
+	(self gemstoneVersion >= '3.7.1' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.1' asRwGemStoneVersionNumber ])
+		ifTrue: [self _adoptUpgradeFromPre371To371 ]
 ]
 
 { #category : 'upgrade rowan' }
