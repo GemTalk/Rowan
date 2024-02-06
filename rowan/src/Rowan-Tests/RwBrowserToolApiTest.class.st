@@ -502,6 +502,12 @@ RwBrowserToolApiTest >> testDeletePackage [
 
 { #category : 'tests' }
 RwBrowserToolApiTest >> testIssue893 [
+	"Internal bug: 50731 GsNMethod>>recompileFromSource unconditionally changes the method category to '(as yet unclassified)'"
+
+	"https://github.com/GemTalk/Rowan/issues/893 - Allow a rowanized method to be forcibly recompiled when source is identical"
+
+	"https://github.com/GemTalk/Rowan/issues/906 - GsNMethod>>_rwRecompileFromSourceIfUnpackagedDo: is incorrect"
+
 	| theBehavior before after categoryBefore categoryAfter |
 	theBehavior := RwSpecification class.
 	before := theBehavior compiledMethodAt: #'fromUrl:'.
