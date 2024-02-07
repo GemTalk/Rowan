@@ -23,6 +23,13 @@ RwElementsModification class >> new [
 ]
 
 { #category : 'modifications' }
+RwElementsModification >> _addElementModification: aModification [
+	"needed as part of fixt for https://github.com/GemTalk/Rowan/issues/893"
+
+	elementsModified at: aModification key put: aModification
+]
+
+{ #category : 'modifications' }
 RwElementsModification >> addElementModification: aModification [
 
 	aModification isEmpty
