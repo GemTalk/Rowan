@@ -144,6 +144,7 @@ GsFileinPackager >> abortTransaction [
 { #category : 'processing' }
 GsFileinPackager >> classMethod [
   | className |
+  super parseClassmethodLine .
 	(className := self currentClass) ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
@@ -169,7 +170,7 @@ GsFileinPackager >> classMethod [
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
 					self _correctMethodProtocolFor: methodDef ] ]
-		ifNil: [ super classMethod ]
+		ifNil: [ super classMethodBody ]
 ]
 
 { #category : 'processing' }
@@ -444,13 +445,14 @@ GsFileinPackager >> isSupportedClassCreationSelector: sel [
 { #category : 'processing' }
 GsFileinPackager >> method [
   | className |
+  super parseMethodLine .
 	(className := self currentClass) ifNil: [ self error: 'current class not defined' ].
 	self packageDefinition
 		ifNotNil: [ :packageDef | 
 			| classDef methodDef |
 			methodDef := ((classDef := packageDef
 				classDefinitionNamed: className
-				ifAbsent: [  ])
+				ifAbsent: [ ])
 				ifNil: [ 
 					packageDef
 						classExtensionDefinitionNamed: className
@@ -469,7 +471,7 @@ GsFileinPackager >> method [
 				do: [ :ex | 
 					"opportunity to automatically correct method protocol"
 					self _correctMethodProtocolFor: methodDef ] ]
-		ifNil: [ super method ]
+		ifNil: [ super methodBody ]
 ]
 
 { #category : 'accessing' }
