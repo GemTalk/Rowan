@@ -15,6 +15,16 @@ RwExtensionMethodsModification class >> extendedClassName: aString [
 		yourself
 ]
 
+{ #category : 'modifications' }
+RwExtensionMethodsModification >> _addElementModification: aModification [
+	"needed as part of fixt for https://github.com/GemTalk/Rowan/issues/893"
+
+	| anExtensionModification |
+	anExtensionModification := aModification asExtensionMethodModification.
+	anExtensionModification extendedClassName: self extendedClassName.
+	elementsModified at: anExtensionModification key put: anExtensionModification
+]
+
 { #category : 'visiting' }
 RwExtensionMethodsModification >> acceptVisitor: aVisitor [
 
