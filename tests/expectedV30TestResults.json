@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 8,
+		"errors" : 11,
 		"failures" : 8,
-		"passed" : 1151,
-		"summary" : "1167 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 2051.58s",
-		"tests" : 1167,
-		"time" : 2051.584
+		"passed" : 1156,
+		"summary" : "1175 Tests with 8 Failures, 11 Errors and 0 DeprecationWarnings in 1631.85s",
+		"tests" : 1175,
+		"time" : 1631.845
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -676,6 +676,60 @@
 			"time" : "0"
 		},
 		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testAddClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testAddMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testDeleteGlobalExtensionMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testDeleteMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testMoveClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testMoveClass_old",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testMoveMethodBetweenCategories",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testMoveMethodBetweenPackages",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserTool48991Test",
+			"status" : "passed",
+			"selector" : "testUpdateMethodSource",
+			"time" : "0"
+		},
+		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testAddMethod",
@@ -763,6 +817,12 @@
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testIssue893",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIssue913",
 			"time" : "0"
 		},
 		{
@@ -1944,12 +2004,6 @@
 		{
 			"className" : "RwProjectAuditToolTest",
 			"status" : "passed",
-			"selector" : "testClassBadExtensionName",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectAuditToolTest",
-			"status" : "passed",
 			"selector" : "testClassCategoryViolation",
 			"time" : "0"
 		},
@@ -1957,12 +2011,6 @@
 			"className" : "RwProjectAuditToolTest",
 			"status" : "passed",
 			"selector" : "testClassesNotIdentical",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectAuditToolTest",
-			"status" : "passed",
-			"selector" : "testClassExtension",
 			"time" : "0"
 		},
 		{
@@ -7018,5 +7066,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-02-07T18:33:50.499077-08:00"
+	"timeStamp" : "2024-02-08T19:32:16.461027-08:00"
 }
