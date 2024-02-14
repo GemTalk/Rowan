@@ -222,7 +222,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		isMeta: isMeta
 		ifAbsent: [  ])
 		ifNil: [ 
-			"adding method to class ... need beforeMethod and classDefinition"
+			"adding method to class ... need beforeMethod and classDefinition ... fromLoadedPackage isNil --- to indicate new method"
 			beforeMethod := RwMethodDefinition new.
 			theLoadedClass := Rowan image loadedClassNamed: className.
 			fromLoadedPackage := theLoadedClass loadedPackage ]
@@ -249,8 +249,9 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		before: fromLoadedProject
 		after: toLoadedProject.
 	packagesModification := RwPackagesModification new.
-	fromLoadedPackage name = toLoadedPackage name
+	(fromLoadedPackage isNil or: [fromLoadedPackage name = toLoadedPackage name])
 		ifTrue: [ 
+			"add/update method in package"
 			methodModification := theLoadedClass loadedPackage name = packageName
 				ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
 				ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
@@ -286,7 +287,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			packageModification isEmpty
 				ifFalse: [ packagesModification addElementModification: packageModification ] ]
 		ifFalse: [ 
-			"if fromLoadedMethod isNil, just add ater to toPackage"
+			"move method"
 			fromLoadedMethod
 				ifNotNil: [ 
 					"method package move - remove before from fromPackage and add after to toPackage"

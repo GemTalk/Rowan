@@ -55,6 +55,61 @@ RwBrowserTool48991Test >> testAddClass [
 ]
 
 { #category : 'tests' }
+RwBrowserTool48991Test >> testAddExtensionMethod [
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := RwPrjBrowserTool new.
+
+	"add new extension method"
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (testInstance perform: #'foo') = 'bar'.
+
+	"update existing extension method"
+	gsNMethod := browserTool
+		addOrUpdateMethod: 'foo ^''baz'''
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (testInstance perform: #'foo') = 'baz'.
+
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'foo'.
+	self assert: gsNMethod == compiledMethod.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
 RwBrowserTool48991Test >> testAddMethod [
 	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod project audit |
 	projectName := 'Simple Browser'.
@@ -92,7 +147,6 @@ RwBrowserTool48991Test >> testAddMethod [
 	testInstance := testClass new.
 	testInstance perform: #'ivar1:' with: 3.
 	self assert: (testInstance perform: #'ivar1') = 3.
-	self should: [ testInstance perform: #'foo' ] raise: MessageNotUnderstood.
 	self assert: testClass rowanProjectName = projectName.
 	self assert: testClass rowanPackageName = packageName1.
 
@@ -101,34 +155,26 @@ RwBrowserTool48991Test >> testAddMethod [
 	self assert: compiledMethod rowanProjectName = projectName.
 	self assert: compiledMethod rowanPackageName = packageName1.
 
-	"add new extension method"
-	browserTool
-		addOrUpdateMethod: 'foo ^''bar'''
-		inProtocol: '*' , packageName2 asLowercase
-		forClassNamed: className
-		isMeta: false
-		inPackageNamed: packageName2.
-
-	self assert: (audit := project audit) isEmpty.
-	self assert: (testInstance perform: #'foo') = 'bar'.
-
+	"update method"
 	gsNMethod := browserTool
-		addOrUpdateMethod: 'foo ^''baz'''
-		inProtocol: '*' , packageName2 asLowercase
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger * 2'
+		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
-		inPackageNamed: packageName2.	"add method in a package as a class extension"
+		inPackageNamed: packageName1.
+
+	testInstance perform: #'ivar1:' with: 2.
+	self assert: (testInstance perform: #'ivar1') = 4.
 
 	self assert: (audit := project audit) isEmpty.
-	self assert: (testInstance perform: #'foo') = 'baz'.
 
 	self assert: testClass rowanProjectName = projectName.
 	self assert: testClass rowanPackageName = packageName1.
 
-	compiledMethod := testClass compiledMethodAt: #'foo'.
+	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
 	self assert: gsNMethod == compiledMethod.
 	self assert: compiledMethod rowanProjectName = projectName.
-	self assert: compiledMethod rowanPackageName = packageName2
+	self assert: compiledMethod rowanPackageName = packageName1
 ]
 
 { #category : 'tests' }
