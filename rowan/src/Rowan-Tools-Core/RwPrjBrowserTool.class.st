@@ -224,8 +224,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		ifNil: [ 
 			"adding method to class ... need beforeMethod and classDefinition ... fromLoadedPackage isNil --- to indicate new method"
 			beforeMethod := RwMethodDefinition new.
-			theLoadedClass := Rowan image loadedClassNamed: className.
-			fromLoadedPackage := theLoadedClass loadedPackage ]
+			theLoadedClass := Rowan image loadedClassNamed: className ]
 		ifNotNil: [ :loadedMethod | 
 			"updating method in class ..."
 			fromLoadedMethod := loadedMethod.
@@ -238,9 +237,8 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		ifNil: [ fromLoadedProject := toLoadedProject ]
 		ifNotNil: [ 
 			fromLoadedProject name = toLoadedPackage loadedProject name
-				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].
+				ifFalse: [ self error: 'Not handling method moves between projects, yet' ] ].	"
 
-	classDefinition := theLoadedClass asDefinition.	"
 	ENTERING THE FABRICATION ZONE
 		1. _projectDefinitionPlatformConditionalAttributes is not being handled
 		2. gs_symbolDictionary: for packages and class defs is not being done either"
@@ -249,9 +247,21 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		before: fromLoadedProject
 		after: toLoadedProject.
 	packagesModification := RwPackagesModification new.
-	(fromLoadedPackage isNil or: [fromLoadedPackage name = toLoadedPackage name])
+	fromLoadedPackage isNil
 		ifTrue: [ 
-			"add/update method in package"
+			"add method"
+			classDefinition := theLoadedClass packageName = packageName
+				ifTrue: [ 
+					"adding method to package of class"
+					classesModification := RwClassesModification new.
+					theLoadedClass asDefinition ]
+				ifFalse: [ 
+					"adding method to extension package"
+					classesModification := RwClassExtensionsModification new.
+					(toLoadedPackage
+						classOrExtensionForClassNamed: className
+						ifAbsent: [ RwClassExtensionDefinition withProperties: theLoadedClass properties copy ])
+						asDefinition ].
 			methodModification := theLoadedClass loadedPackage name = packageName
 				ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
 				ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
@@ -262,34 +272,23 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			methodsModification := RwMethodsModification extendedClassName: className.
 			methodModification isEmpty
 				ifFalse: [ methodsModification addElementModification: methodModification ].
-			classModification := theLoadedClass packageName = toLoadedPackage name
-				ifTrue: [ classDefinition compareAgainstBase: classDefinition ]
-				ifFalse: [ 
-					| templateClassDefinition classExtensionDefinition |
-					templateClassDefinition := classDefinition copy.
-					classExtensionDefinition := RwClassExtensionDefinition
-						withProperties: templateClassDefinition properties
-						classMethodDefinitions: templateClassDefinition classMethodDefinitions
-						instanceMethodDefinitions:
-							templateClassDefinition instanceMethodDefinitions.
-					classExtensionDefinition compareAgainstBase: classDefinition ].
+			classModification := classDefinition compareAgainstBase: classDefinition.
 			methodsModification isEmpty
 				ifFalse: [ 
 					isMeta
 						ifTrue: [ classModification classMethodsModification: methodsModification ]
 						ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
-			classesModification := RwClassesModification new.
 			classModification isEmpty
 				ifFalse: [ classesModification addElementModification: classModification ].
-			packageModification := toLoadedPackage compareAgainstBase: fromLoadedPackage.
+			packageModification := toLoadedPackage compareAgainstBase: toLoadedPackage.
 			classesModification isEmpty
 				ifFalse: [ packageModification classesModification: classesModification ].
 			packageModification isEmpty
 				ifFalse: [ packagesModification addElementModification: packageModification ] ]
 		ifFalse: [ 
-			"move method"
-			fromLoadedMethod
-				ifNotNil: [ 
+			"update/move existing method"
+			fromLoadedPackage name ~= toLoadedPackage name
+				ifTrue: [ 
 					"method package move - remove before from fromPackage and add after to toPackage"
 					packagesModification := self
 						packagesModificationForRemoveMethod: fromLoadedMethod

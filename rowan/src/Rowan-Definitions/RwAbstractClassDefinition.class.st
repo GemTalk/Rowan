@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwAbstractClassDefinition class >> withProperties: propertiesDictionary [
+	^ self
+		withProperties: propertiesDictionary
+		classMethodDefinitions: Dictionary new
+		instanceMethodDefinitions: Dictionary new
+]
+
+{ #category : 'instance creation' }
 RwAbstractClassDefinition class >> withProperties: propertiesDictionary classMethodDefinitions: classMethodDefinitions instanceMethodDefinitions: instanceMethodDefinitions [
   | res |
   propertiesDictionary _validateClass: SymbolDictionary .
