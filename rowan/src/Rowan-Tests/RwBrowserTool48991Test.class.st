@@ -238,6 +238,52 @@ RwBrowserTool48991Test >> testAddMethod [
 ]
 
 { #category : 'tests' }
+RwBrowserTool48991Test >> testDeleteExtensionMethod [
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool project audit |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	browserTool := self _browserTool.
+
+	"add new extension method"
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: '*' , packageName2 asLowercase
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.
+
+	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: (testInstance perform: #'foo') = 'bar'.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
+
+	self assert: (audit := project audit) isEmpty.
+	self should: [ testInstance  perform: #foo ] raise: MessageNotUnderstood.
+]
+
+{ #category : 'tests' }
 RwBrowserTool48991Test >> testDeleteGlobalExtensionMethod [
 
 	| projectName packageNames className packageName1 testClass testInstance browserTool audit project|

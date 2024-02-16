@@ -1082,6 +1082,10 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
 		ifFalse: [ projectSetModification addElementModification: projectModification ].
+	projectSetModification
+		updateForPackageMoves;
+		updateForClassMoves;
+		updateForMethodMoves.
 	loadedProjects := Rowan projectTools load
 		loadProjectSetModification: projectSetModification
 		symbolList: aSymbolList
