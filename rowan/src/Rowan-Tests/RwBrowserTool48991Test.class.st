@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'private' }
+RwBrowserTool48991Test >> _browserTool [
+	^ RwPrjBrowserTool new
+]
+
 { #category : 'tests' }
 RwBrowserTool48991Test >> testAddClass [
 	| packagedClass projectName packageNames className packageName1 packageName2 packageName3 browserTool project audit projectDefinition |
@@ -35,7 +40,7 @@ RwBrowserTool48991Test >> testAddClass [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	packagedClass := browserTool
 		addOrUpdateClassDefinition: className
@@ -76,7 +81,7 @@ RwBrowserTool48991Test >> testAddExtensionMethod [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	"add new extension method"
 	browserTool
@@ -162,7 +167,7 @@ RwBrowserTool48991Test >> testAddMethod [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	"add new method"
 	gsNMethod := browserTool
@@ -249,7 +254,7 @@ RwBrowserTool48991Test >> testDeleteGlobalExtensionMethod [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
@@ -311,7 +316,7 @@ RwBrowserTool48991Test >> testDeleteMethod [
 						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
 		forClassNamed: className.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	browserTool
 		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
@@ -387,7 +392,7 @@ RwBrowserTool48991Test >> testMoveClass [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	packagedClass := browserTool
 		addOrUpdateClassDefinition: className
@@ -500,7 +505,7 @@ RwBrowserTool48991Test >> testMoveMethodBetweenCategories [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	"add new method"
 	gsNMethod := browserTool
@@ -595,7 +600,7 @@ RwBrowserTool48991Test >> testMoveMethodBetweenPackages [
 	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
 	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
 
-	 (RwPrjBrowserTool new)
+	 (self _browserTool)
 		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing' toPackage: packageName1;
 		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase) toPackage: packageName2;
 		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase) toPackage: packageName2;
@@ -606,7 +611,7 @@ RwBrowserTool48991Test >> testMoveMethodBetweenPackages [
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
 
-	(RwPrjBrowserTool new)
+	(self _browserTool)
 		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
 		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
 		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
@@ -640,7 +645,7 @@ RwBrowserTool48991Test >> testUpdateMethodSource [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := RwPrjBrowserTool new.
+	browserTool := self _browserTool.
 
 	"add new method"
 	gsNMethod := browserTool

@@ -210,7 +210,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| beforeMethod afterMethod classDefinition classModification fromLoadedMethod packageModification classesModification projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification methodModification methodsModification |
+	| beforeMethod afterMethod fromLoadedMethod projectModification packagesModification loadedProjects fromLoadedPackage fromLoadedProject toLoadedPackage toLoadedProject theLoadedClass projectSetModification |
 	afterMethod := RwMethodDefinition newForSource: methodSource protocol: protocol.
 	toLoadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -249,51 +249,12 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	packagesModification := RwPackagesModification new.
 	fromLoadedPackage isNil
 		ifTrue: [ 
-true ifTrue: [
-self
+			self
 				addPackagesModificationsForMethodDefinition: afterMethod
 				toClass: theLoadedClass
 				isMeta: isMeta
 				toPackage: toLoadedPackage
-				using: packagesModification
-] ifFalse: [ 
-			"add method"
-			classDefinition := theLoadedClass packageName = packageName
-				ifTrue: [ 
-					"adding method to package of class"
-					classesModification := RwClassesModification new.
-					theLoadedClass asDefinition ]
-				ifFalse: [ 
-					"adding method to extension package"
-					classesModification := RwClassExtensionsModification new.
-					(toLoadedPackage
-						classOrExtensionForClassNamed: className
-						ifAbsent: [ RwClassExtensionDefinition withProperties: theLoadedClass properties copy ])
-						asDefinition ].
-			methodModification := theLoadedClass loadedPackage name = packageName
-				ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
-				ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
-			methodModification
-				isMeta: isMeta;
-				classDefinition: classDefinition;
-				yourself.
-			methodsModification := RwMethodsModification extendedClassName: className.
-			methodModification isEmpty
-				ifFalse: [ methodsModification addElementModification: methodModification ].
-			classModification := classDefinition compareAgainstBase: classDefinition.
-			methodsModification isEmpty
-				ifFalse: [ 
-					isMeta
-						ifTrue: [ classModification classMethodsModification: methodsModification ]
-						ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
-			classModification isEmpty
-				ifFalse: [ classesModification addElementModification: classModification ].
-			packageModification := toLoadedPackage compareAgainstBase: toLoadedPackage.
-			classesModification isEmpty
-				ifFalse: [ packageModification classesModification: classesModification ].
-			packageModification isEmpty
-				ifFalse: [ packagesModification addElementModification: packageModification
-] ] ]
+				using: packagesModification ]
 		ifFalse: [ 
 			"update/move existing method"
 			fromLoadedPackage name ~= toLoadedPackage name
@@ -315,12 +276,12 @@ self
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
 		ifFalse: [ projectSetModification addElementModification: projectModification ].
-false ifTrue: [ 
-	projectSetModification
-		updateForPackageMoves;
-		updateForClassMoves;
-		updateForMethodMoves.
-].
+	false
+		ifTrue: [ 
+			projectSetModification
+				updateForPackageMoves;
+				updateForClassMoves;
+				updateForMethodMoves ].
 	loadedProjects := Rowan projectTools load
 		loadProjectSetModification: projectSetModification
 		symbolList: aSymbolList.

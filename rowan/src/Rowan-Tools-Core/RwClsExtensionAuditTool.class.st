@@ -50,12 +50,15 @@ RwClsExtensionAuditTool >> auditCompiledMethods: aLoadedClassExtension forClass:
 											((RwAuditMethodCategoryDetail
 												for: aLoadedClassExtension
 												message:
-													'Missing '
+													'Expected '
 														,
 															(aBehavior isMeta
 																ifTrue: [ 'class' ]
 																ifFalse: [ 'instance' ]) , ' method extension category named '
-														, extensionCategoryName , ' for: ' , aLoadedClassExtension name)
+														, extensionCategoryName , ' for class named '
+														, aLoadedClassExtension name
+														,
+															' is not present. The extension methods in this class are miscategorized.')
 												reason: #'missingExtensionCategory';
 												category: extensionCategoryName;
 												behavior: aBehavior;
