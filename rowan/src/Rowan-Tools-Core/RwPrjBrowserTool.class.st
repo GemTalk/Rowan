@@ -249,6 +249,14 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	packagesModification := RwPackagesModification new.
 	fromLoadedPackage isNil
 		ifTrue: [ 
+true ifTrue: [
+self
+				addPackagesModificationsForMethodDefinition: afterMethod
+				toClass: theLoadedClass
+				isMeta: isMeta
+				toPackage: toLoadedPackage
+				using: packagesModification
+] ifFalse: [ 
 			"add method"
 			classDefinition := theLoadedClass packageName = packageName
 				ifTrue: [ 
@@ -284,7 +292,8 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 			classesModification isEmpty
 				ifFalse: [ packageModification classesModification: classesModification ].
 			packageModification isEmpty
-				ifFalse: [ packagesModification addElementModification: packageModification ] ]
+				ifFalse: [ packagesModification addElementModification: packageModification
+] ] ]
 		ifFalse: [ 
 			"update/move existing method"
 			fromLoadedPackage name ~= toLoadedPackage name
@@ -390,45 +399,44 @@ RwPrjBrowserTool >> addPackagesModificationsForClassDefinition: theClassDefiniti
 ]
 
 { #category : 'modification' }
-RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toPackageDefinition using: packagesModification [
-	| beforeMethod packageName methodModification methodsModification classDefinition classOrExtensionDefinition className classModification classesModification fromPackageDefinition packageModification |
+RwPrjBrowserTool >> addPackagesModificationsForMethodDefinition: afterMethod toClass: theLoadedClass isMeta: isMeta toPackage: toLoadedPackage using: packagesModification [
+	| beforeMethod packageName methodModification methodsModification classOrExtensionDefinition className classModification classesModification packageModification |
 	beforeMethod := RwMethodDefinition new.
-	packageName := toPackageDefinition name.
-	classDefinition := theLoadedClass asDefinition.
-	classOrExtensionDefinition := theLoadedClass packageName = packageName 
-		ifTrue: [ classDefinition ]
+	packageName := toLoadedPackage name.
+	classOrExtensionDefinition := theLoadedClass packageName = packageName
+		ifTrue: [ 
+			"adding method to package of class"
+			classesModification := RwClassesModification new.
+			theLoadedClass asDefinition ]
 		ifFalse: [ 
-			| templateClassDefinition |
-			templateClassDefinition := classDefinition copy.
-			RwClassExtensionDefinition
-				withProperties: templateClassDefinition properties
-				classMethodDefinitions: templateClassDefinition classMethodDefinitions
-				instanceMethodDefinitions: templateClassDefinition instanceMethodDefinitions ].
-	className := classDefinition name.
-	fromPackageDefinition := toPackageDefinition.
-
+			"adding method to extension package"
+			classesModification := RwClassExtensionsModification new.
+			(toLoadedPackage
+				classOrExtensionForClassNamed: className
+				ifAbsent: [ RwClassExtensionDefinition withProperties: theLoadedClass properties copy ])
+				asDefinition ].
+	className := classOrExtensionDefinition name.
 	methodModification := theLoadedClass loadedPackage name = packageName
 		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
 		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].
 
 	methodModification
 		isMeta: isMeta;
-		classDefinition: classDefinition;
+		classDefinition: classOrExtensionDefinition;
 		yourself.
 	methodsModification := RwMethodsModification extendedClassName: className.
 	methodModification isEmpty
 		ifFalse: [ methodsModification addElementModification: methodModification ].
-	classModification := classOrExtensionDefinition compareAgainstBase: classDefinition.
+	classModification := classOrExtensionDefinition
+		compareAgainstBase: classOrExtensionDefinition.
 	methodsModification isEmpty
 		ifFalse: [ 
 			isMeta
 				ifTrue: [ classModification classMethodsModification: methodsModification ]
 				ifFalse: [ classModification instanceMethodsModification: methodsModification ] ].
-	classesModification := RwClassesModification new.
 	classModification isEmpty
 		ifFalse: [ classesModification addElementModification: classModification ].
-	packageModification := toPackageDefinition
-		compareAgainstBase: fromPackageDefinition.
+	packageModification := toLoadedPackage compareAgainstBase: toLoadedPackage.
 	classesModification isEmpty
 		ifFalse: [ packageModification classesModification: classesModification ].
 	packageModification isEmpty
@@ -908,111 +916,6 @@ RwPrjBrowserTool >> moveClassNamed: className toPackage: packageName [
 ]
 
 { #category : 'method browsing' }
-RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: packageName [
-	"Move the method into <packageName>, whether or not it has been packaged"
-
-	(self
-		_loadedMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta
-		ifAbsent: [  ])
-		ifNotNil: [ :loadedMethodToBeMoved | 
-			| category |
-			category := loadedMethodToBeMoved methodCategory.
-			loadedMethodToBeMoved loadedProject packageConvention ~= 'Rowan'
-				ifTrue: [ 
-					"need to fabricate new method protocol"
-					loadedMethodToBeMoved loadedClass isLoadedClassExtension
-						ifTrue: [ 
-							"fabricate new class extension protocol"
-							category := '*' , packageName asLowercase ]
-						ifFalse: [ 
-							"fabricate new non-class extensions protocol"
-							category := '(as yet unclassified)' ] ].
-			self
-				moveMethod: methodSelector
-				forClassNamed: className
-				isMeta: isMeta
-				toProtocol: category
-				toPackage: packageName ]
-]
-
-{ #category : 'method browsing' }
-RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName [
-	"hybridPackageName is expected to be an existing protocol in className"
-
-	| loadedMethodToBeMoved srcLoadedClassPackage destinationLoadedPackage |
-	loadedMethodToBeMoved := self
-		_loadedMethod: methodSelector
-		inClassNamed: className
-		isMeta: isMeta
-		ifAbsent: [  ].
-
-	destinationLoadedPackage := (hybridPackageName at: 1) = $*
-		ifTrue: [ 
-			Rowan image
-				loadedHybridPackageNamed: hybridPackageName
-				ifAbsent: [ 
-					self
-						error:
-							'A package for hybrid package name ' , hybridPackageName printString
-								, ' was not found.' ] ]
-		ifFalse: [ 
-			| lc |
-			lc := self _loadedClassNamed: className ifAbsent: [  ].
-			lc
-				ifNil: [ 
-					loadedMethodToBeMoved
-						ifNil: [ 
-							"unpackaged method moved to unpackaged category"
-							^ (Rowan image objectNamed: className)
-								_moveMethod: methodSelector
-								toCategory: hybridPackageName ].
-					RwPerformingUnpackagedEditNotification
-						signal:
-							'Attempt to move a packaged method to an unpackaged class '
-								, className printString
-								, '. The unpackaged method will not be tracked by Rowan'.	"Notification resumed, so continue with move"	"Move packaged method to unpackaged category"	"Disown the method, then move it to proper category"
-					Rowan packageTools disown
-						disownMethod: methodSelector
-						inClassNamed: className
-						isMeta: isMeta.
-					^ (Rowan image objectNamed: className)
-						_moveMethod: methodSelector
-						toCategory: hybridPackageName ].	"use the loaded package for the class that contains the method"
-			srcLoadedClassPackage := lc loadedPackage ].
-
-	loadedMethodToBeMoved
-		ifNil: [ 
-			| instanceSelectors classSelectors res |
-			"Moving an unpackaged method to a package in an unpackage class"
-			"Move the method to the proper category and then adopt the method"
-			isMeta
-				ifTrue: [ 
-					instanceSelectors := {}.
-					classSelectors := {methodSelector} ]
-				ifFalse: [ 
-					instanceSelectors := {methodSelector}.
-					classSelectors := {} ].
-			res := (Rowan image objectNamed: className)
-				_moveMethod: methodSelector
-				toCategory: hybridPackageName.
-			Rowan packageTools adopt
-				adoptClassNamed: className
-				classExtension: true
-				instanceSelectors: instanceSelectors
-				classSelectors: classSelectors
-				intoPackageNamed: destinationLoadedPackage name.
-			^ res ].	"Moving a packaged method to another package"
-	self
-		moveMethod: methodSelector
-		forClassNamed: className
-		isMeta: isMeta
-		toProtocol: hybridPackageName
-		toPackage: destinationLoadedPackage name
-]
-
-{ #category : 'method browsing' }
 RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: protocol toPackage: packageName [
 	"Move the method into <packageName>, whether or not it has been packaged"
 
@@ -1061,12 +964,12 @@ RwPrjBrowserTool >> packagesModificationForRemoveClass: beforeClass fromPackage:
 { #category : 'modification' }
 RwPrjBrowserTool >> packagesModificationForRemoveMethod: fromLoadedMethod fromClass: theLoadedClass isMeta: isMeta fromPackage: fromPackageDefinition [
 	| methodModification packageName beforeMethod afterMethod classDefinition className methodsModification toPackageDefinition classModification classesModification packageModification packagesModification |
-	packageName := fromPackageDefinition name.
 	beforeMethod := fromLoadedMethod asDefinition.
 	afterMethod := RwMethodDefinition new.
 	classDefinition := theLoadedClass asDefinition.
 	className := classDefinition name.
 	toPackageDefinition := fromPackageDefinition.
+	packageName := toPackageDefinition name.
 	methodModification := theLoadedClass loadedPackage name = packageName
 		ifTrue: [ afterMethod compareAgainstBase: beforeMethod ]
 		ifFalse: [ afterMethod compareExtensionMethodsAgainstBase: beforeMethod ].

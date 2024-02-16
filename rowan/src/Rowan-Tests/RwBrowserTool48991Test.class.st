@@ -554,7 +554,7 @@ RwBrowserTool48991Test >> testMoveMethodBetweenCategories [
 { #category : 'tests' }
 RwBrowserTool48991Test >> testMoveMethodBetweenPackages [
 
-	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions1'.
@@ -590,26 +590,29 @@ RwBrowserTool48991Test >> testMoveMethodBetweenPackages [
 		rwCompileMethod: 'baz ^baz'
 		category: 'accessing'.
 
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty.
 	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName2 asLowercase) asSymbol.
 	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
 	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
 
 	 (RwPrjBrowserTool new)
-		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
-		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
-		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing' toPackage: packageName1;
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase) toPackage: packageName2;
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase) toPackage: packageName2;
 		yourself.
 
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty.
 	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
 
 	(RwPrjBrowserTool new)
-		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase) toPackage: packageName3;
 		yourself.
 
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty.
 	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.

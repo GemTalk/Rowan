@@ -333,3 +333,108 @@ RwPrjBrowserTool >> addOrUpdateMethodDefinition: methodDef forClassNamed: classN
 
 	^ updateBlock value: classExtensionDef value: projectDefinition
 ]
+
+{ #category : '*rowan-obsolete' }
+RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toPackage: packageName [
+	"Move the method into <packageName>, whether or not it has been packaged"
+
+	(self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [  ])
+		ifNotNil: [ :loadedMethodToBeMoved | 
+			| category |
+			category := loadedMethodToBeMoved methodCategory.
+			loadedMethodToBeMoved loadedProject packageConvention ~= 'Rowan'
+				ifTrue: [ 
+					"need to fabricate new method protocol"
+					loadedMethodToBeMoved loadedClass isLoadedClassExtension
+						ifTrue: [ 
+							"fabricate new class extension protocol"
+							category := '*' , packageName asLowercase ]
+						ifFalse: [ 
+							"fabricate new non-class extensions protocol"
+							category := '(as yet unclassified)' ] ].
+			self
+				moveMethod: methodSelector
+				forClassNamed: className
+				isMeta: isMeta
+				toProtocol: category
+				toPackage: packageName ]
+]
+
+{ #category : '*rowan-obsolete' }
+RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName [
+	"hybridPackageName is expected to be an existing protocol in className"
+
+	| loadedMethodToBeMoved srcLoadedClassPackage destinationLoadedPackage |
+	loadedMethodToBeMoved := self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [  ].
+
+	destinationLoadedPackage := (hybridPackageName at: 1) = $*
+		ifTrue: [ 
+			Rowan image
+				loadedHybridPackageNamed: hybridPackageName
+				ifAbsent: [ 
+					self
+						error:
+							'A package for hybrid package name ' , hybridPackageName printString
+								, ' was not found.' ] ]
+		ifFalse: [ 
+			| lc |
+			lc := self _loadedClassNamed: className ifAbsent: [  ].
+			lc
+				ifNil: [ 
+					loadedMethodToBeMoved
+						ifNil: [ 
+							"unpackaged method moved to unpackaged category"
+							^ (Rowan image objectNamed: className)
+								_moveMethod: methodSelector
+								toCategory: hybridPackageName ].
+					RwPerformingUnpackagedEditNotification
+						signal:
+							'Attempt to move a packaged method to an unpackaged class '
+								, className printString
+								, '. The unpackaged method will not be tracked by Rowan'.	"Notification resumed, so continue with move"	"Move packaged method to unpackaged category"	"Disown the method, then move it to proper category"
+					Rowan packageTools disown
+						disownMethod: methodSelector
+						inClassNamed: className
+						isMeta: isMeta.
+					^ (Rowan image objectNamed: className)
+						_moveMethod: methodSelector
+						toCategory: hybridPackageName ].	"use the loaded package for the class that contains the method"
+			srcLoadedClassPackage := lc loadedPackage ].
+
+	loadedMethodToBeMoved
+		ifNil: [ 
+			| instanceSelectors classSelectors res |
+			"Moving an unpackaged method to a package in an unpackage class"
+			"Move the method to the proper category and then adopt the method"
+			isMeta
+				ifTrue: [ 
+					instanceSelectors := {}.
+					classSelectors := {methodSelector} ]
+				ifFalse: [ 
+					instanceSelectors := {methodSelector}.
+					classSelectors := {} ].
+			res := (Rowan image objectNamed: className)
+				_moveMethod: methodSelector
+				toCategory: hybridPackageName.
+			Rowan packageTools adopt
+				adoptClassNamed: className
+				classExtension: true
+				instanceSelectors: instanceSelectors
+				classSelectors: classSelectors
+				intoPackageNamed: destinationLoadedPackage name.
+			^ res ].	"Moving a packaged method to another package"
+	self
+		moveMethod: methodSelector
+		forClassNamed: className
+		isMeta: isMeta
+		toProtocol: hybridPackageName
+		toPackage: destinationLoadedPackage name
+]
