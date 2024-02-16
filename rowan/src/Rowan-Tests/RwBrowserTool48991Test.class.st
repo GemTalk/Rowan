@@ -111,7 +111,33 @@ RwBrowserTool48991Test >> testAddExtensionMethod [
 	compiledMethod := testClass compiledMethodAt: #'foo'.
 	self assert: gsNMethod == compiledMethod.
 	self assert: compiledMethod rowanProjectName = projectName.
-	self assert: compiledMethod rowanPackageName = packageName2
+	self assert: compiledMethod rowanPackageName = packageName2.
+
+
+	{
+		{ true. 'accessing' . 'c1 ^ 1'  . packageName1 } .
+		{ false. '*', packageName2 asLowercase . 'xxx ^ 1' . packageName2 } .
+		{ true. '*', packageName3 asLowercase . 'c2 ^ 2' . packageName3 } .
+		{ false. '*', packageName3 asLowercase . 'yyy ^ 2' . packageName3} .
+	}
+		do: [:ar |
+			| category source isMeta pkgName |
+			isMeta := ar at: 1.
+			category := ar at: 2.
+			source := ar at: 3.
+			pkgName := ar at: 4.
+			browserTool
+				addOrUpdateMethod: source
+				inProtocol: category
+				forClassNamed: className
+				isMeta: isMeta
+				inPackageNamed: pkgName ].
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (testInstance perform: #'xxx') = 1.
+	self assert: (testInstance class perform: #'c1') = 1.
+	self assert: (testInstance perform: #'yyy') = 2.
+	self assert: (testInstance class perform: #'c2') = 2.
 ]
 
 { #category : 'tests' }
@@ -179,7 +205,31 @@ RwBrowserTool48991Test >> testAddMethod [
 	compiledMethod := testClass compiledMethodAt: #'ivar1:'.
 	self assert: gsNMethod == compiledMethod.
 	self assert: compiledMethod rowanProjectName = projectName.
-	self assert: compiledMethod rowanPackageName = packageName1
+	self assert: compiledMethod rowanPackageName = packageName1.
+
+	{
+		{ true. 'accessing' . 'c1 ^ 1' } .
+		{ false. 'accessing' . 'xxx ^ 1' } .
+		{ true. 'accessing' . 'c2 ^ 2' } .
+		{ false. 'accessing' . 'yyy ^ 2' } .
+	}
+		do: [:ar |
+			| category source isMeta |
+			isMeta := ar at: 1.
+			category := ar at: 2.
+			source := ar at: 3.
+			browserTool
+				addOrUpdateMethod: source
+				inProtocol: category
+				forClassNamed: className
+				isMeta: isMeta
+				inPackageNamed: packageName1 ].
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (testInstance perform: #'xxx') = 1.
+	self assert: (testInstance class perform: #'c1') = 1.
+	self assert: (testInstance perform: #'yyy') = 2.
+	self assert: (testInstance class perform: #'c2') = 2.
 ]
 
 { #category : 'tests' }
