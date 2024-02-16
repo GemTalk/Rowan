@@ -281,7 +281,7 @@ RwProjectSetModification >> findRemovedPackages [
 			packagesModification := projectModification packagesModification.
 			packagesModification elementsModified
 				do: [ :packageModification | 
-					packageModification after isEmpty
+					packageModification after isNullModification  "isRemoval?"
 						ifTrue: [ 
 							| oldPackage |
 							oldPackage := packageModification before.
