@@ -306,10 +306,12 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource dictionaries: aSymbolList in
 	projectSetModification := RwProjectSetModification new.
 	projectModification isEmpty
 		ifFalse: [ projectSetModification addElementModification: projectModification ].
+false ifTrue: [ 
 	projectSetModification
 		updateForPackageMoves;
 		updateForClassMoves;
 		updateForMethodMoves.
+].
 	loadedProjects := Rowan projectTools load
 		loadProjectSetModification: projectSetModification
 		symbolList: aSymbolList.

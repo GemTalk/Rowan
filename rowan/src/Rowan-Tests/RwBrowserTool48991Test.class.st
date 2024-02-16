@@ -87,7 +87,12 @@ RwBrowserTool48991Test >> testAddExtensionMethod [
 		inPackageNamed: packageName2.
 
 	self assert: (audit := project audit) isEmpty.
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
 	self assert: (testInstance perform: #'foo') = 'bar'.
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
 
 	"update existing extension method"
 	gsNMethod := browserTool

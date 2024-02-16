@@ -59,13 +59,13 @@ RwModification >> initialize [
 { #category : 'testing' }
 RwModification >> isAddition [
 
-	^before isEmpty
+	^before isNullModification
 ]
 
 { #category : 'testing' }
 RwModification >> isDeletion [
 
-	^after isEmpty
+	^after isNullModification
 ]
 
 { #category : 'testing' }
@@ -77,7 +77,14 @@ RwModification >> isEmpty [
 { #category : 'testing' }
 RwModification >> isModification [
 
-	^after isEmpty not and: [ before isEmpty not ]
+	^after isNullModification not and: [ before isNullModification not ]
+]
+
+{ #category : 'testing' }
+RwModification >> isNullModification [
+	"return true if the receiver is a null modification, a marker for an addition"
+
+	^ self isEmpty
 ]
 
 { #category : 'Accessing' }

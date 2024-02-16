@@ -151,6 +151,15 @@ RwLoadedThing >> isEmpty [
 	^ self propertiesForCompare isEmpty
 ]
 
+{ #category : 'testing' }
+RwLoadedThing >> isNullModification [
+	"return true if the receiver is a null modification, a marker for an addition . return false if the receiver is not a marker for a an addition"
+
+	"loaded things are never a marker for an addition"
+
+	^ false
+]
+
 { #category : 'accessing' }
 RwLoadedThing >> loadedPackage [
 

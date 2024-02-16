@@ -921,6 +921,13 @@ RwResolvedProjectV2 >> isEmpty [
 ]
 
 { #category : 'project definition' }
+RwResolvedProjectV2 >> isNullModification [
+	"return true if the receiver is a null modification, a marker for an addition"
+
+	^ self isEmpty
+]
+
+{ #category : 'project definition' }
 RwResolvedProjectV2 >> key [
 	^ self projectName
 ]

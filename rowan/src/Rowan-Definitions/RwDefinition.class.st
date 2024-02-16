@@ -120,6 +120,13 @@ RwDefinition >> isEmpty [
 	^properties isEmpty
 ]
 
+{ #category : 'testing' }
+RwDefinition >> isNullModification [
+	"return true if the receiver is a null modification, a marker for an addition"
+
+	^ self isEmpty
+]
+
 { #category : 'properties' }
 RwDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
