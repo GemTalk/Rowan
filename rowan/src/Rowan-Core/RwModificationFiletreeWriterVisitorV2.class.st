@@ -544,8 +544,8 @@ RwModificationFiletreeWriterVisitorV2 >> processProject: aProjectModification [
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
-	"confirm that the project source is written in Tonel format"
-	(self _repositoryFormatFor: self packagesRoot) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].
+	"confirm that the project source is written in filetree format"
+	(self _repositoryFormatFor: self packagesRoot) = 'filetree' ifFalse: [ self error: 'expected filetree format repository' ].
 
 	projectProperties := self _filetreeProjectPropertyDictFor: aProjectModification.
 	packageExtension := projectProperties at: 'packageExtension' ifAbsent: [ self packageExtension ].
