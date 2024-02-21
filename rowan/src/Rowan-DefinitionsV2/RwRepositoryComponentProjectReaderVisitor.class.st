@@ -29,9 +29,16 @@ RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
 
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
-	| metadata |
+	| metadata typeField typeValue |
 	metadata := anArray sixth.
 	currentClassExtension := nil.
+	typeField := metadata at: #'type' ifAbsent: [ #'normal' ].
+	typeField isString
+		ifTrue: [ typeValue := typeField asString ]
+		ifFalse: [ 
+			"assume typeField is an array: slot 1 is type; slot 2 is gs_options"
+			typeValue := typeField at: 1.
+			metadata at: #'gs_options' put: (typeField at: 2) ].
 	currentClassDefinition := RwClassDefinition
 		newForClassNamed: (metadata at: #'name') asString
 		super:
@@ -40,9 +47,9 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
-		comment: (anArray second )
+		comment: anArray second
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
-		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
+		type: typeValue.
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
@@ -113,14 +120,14 @@ RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
 					packageDir extension = self packageExtension
 						ifFalse: [ trace trace: '      skipped readClasses, extension does not match' ]
 						ifTrue: [ 
-							trace
-								trace:
-									'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
 							(self packageNamesBlock value: packageName)
 								ifTrue: [ 
-									self readClassesFor: packageName packageRoot: packageDir.
-									packageNamesRead add: packageName ]
-								ifFalse: [ trace trace: '      skipped readClasses, package ' , packageName , ' rejected' ] ] ] ].
+									trace
+										trace:
+											'--- reading package ' , packageName asString , ' dir ' , packageDir asString.
+											self readClassesFor: packageName packageRoot: packageDir.
+											packageNamesRead add: packageName ]
+										ifFalse: [ trace trace: '      skipped readClasses, package ' , packageName , ' rejected' ] ] ] ].
 	^ packageNamesRead
 ]
 

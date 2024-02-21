@@ -135,7 +135,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
-					type = 'byteSubclass'
+					(type = 'byteSubclass' or: [ type = 'bytes' ])
 						ifTrue: [ 
 							(classDefinition propertyAt: 'instvars') isEmpty
 								ifFalse: [ self error: 'Cannot define byte class with named instvars.' ].
@@ -148,7 +148,7 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 								newVersionOf: oldVersion
 								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
-						ifFalse: [ self error: 'Unknown class type' ] ] ].
+						ifFalse: [ self error: 'Unknown class type for definition of class ', classDefinition name printString ] ] ].
 	^ createdClass
 ]
 

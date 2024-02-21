@@ -433,7 +433,10 @@ RwGsImage class >> validClassCategory: aClassCategory forPackageConvention: pack
 	packageConvention = 'RowanHybrid'
 		ifTrue: [ ^ aClassCategory asString = packageName ].
 	packageConvention = 'Monticello'
-		ifTrue: [ ^ packageName at: 1 equals: aClassCategory asString ].
+		ifTrue: [ 
+			^ (packageName copyUpTo: $.)
+				at: 1
+				equals: (aClassCategory asString copyUpToLast: $-) ].
 	^ true	"Rowan - no convention ... any old category is fine"
 ]
 

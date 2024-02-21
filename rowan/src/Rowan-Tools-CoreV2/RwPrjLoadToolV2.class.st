@@ -5,8 +5,8 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
-	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
+RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList originalProjectSet: originalProjectSetDefinition processedClassNames: processedClassNames [
+	| workingProjectSetDef theOriginalWorkingProjectSetDefinition |
 	[ 
 	^ self
 		_loadProjectSetDefinition: projectSetDefinition
@@ -18,102 +18,51 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		do: [ :ex | 
 			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
-					| theLoadedMethod theClasDef originalMethodDefinition |
-					theLoadedMethod := ex loadedMethod.
+					| theClassName incomingPackage |
 					theClassName := ex theClass theNonMetaClass name asString.
+					incomingPackage := ex incomingPackage.
 					(processedClassNames includes: theClassName)
-						ifTrue: [ ex resume ].
-					theLoadedProject := ex loadedProject.
-					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-						ifNotNil: [ :originalProject | 
-							| originalPackage originalClassDef |
-							originalPackage := originalProject
-								packageNamed: theLoadedMethod loadedPackage name.
-							originalClassDef := originalPackage
-								classDefinitionNamed: theClassName
-								ifAbsent: [ 
-									originalPackage
-										classExtensionDefinitionNamed: theClassName
-										ifAbsent: [ ex resume ] ].
-							ex theClass isMeta
-								ifTrue: [ 
-									(originalClassDef classMethodDefinitions includesKey: theLoadedMethod selector)
-										ifFalse: [ 
-											"method not present in original project, so we can continue with load"
-											ex resume ] ]
-								ifFalse: [ 
-									(originalClassDef instanceMethodDefinitions
-										includesKey: theLoadedMethod selector)
-										ifFalse: [ 
-											"method not present in original project, so we can continue with load"
-											ex resume ] ]	"original project needs to be modified, continue with surgery" ].
-					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded method,
-					remove the method from the original project's package and attempt a reload"
-					projectDef := copiedProjectSetDef
-						projectNamed: theLoadedProject name
-						ifAbsent: [ 
-							projectDef := theLoadedProject asDefinition.
-							copiedProjectSetDef addProject: projectDef.
-							projectDef ].
-					packageDef := projectDef packageNamed: theLoadedMethod loadedPackage name.
-					theClasDef := packageDef
-						classExtensionDefinitionNamed: theClassName
-						ifAbsent: [ packageDef classDefinitionNamed: theClassName ].
-					originalMethodDefinition := ex theClass isMeta
-						ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
-						ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ].
-					originalMethodDefinition source = theLoadedMethod handle sourceString
-						ifFalse: [ 
-							"method changed in both projects"
-							self
-								error:
-									'Incompatible changes to the same method (' , theClassName
-										,
-											(ex theClass isMeta
-												ifTrue: [ ' class>>' ]
-												ifFalse: [ '>>' ]) , originalMethodDefinition selector
-										, ' ) in project ' , theLoadedProject name printString
-										, ' and project ' , ex incomingProject name printString ] ].
+						ifTrue: [ 
+							"we've processed this class, but have we processed extension methods?"
+							Rowan projectTools trace
+								trace:
+									'[RwPrjLoadToolV2] THE CLASS ' , theClassName , ' in the package named '
+										, incomingPackage name
+										, ' is in PROCESSED CLASSES for existing method ... RESUMING'.
+							ex resume ].	"
+					original project set contains a modification to a loaded method that is in a different project"
+					workingProjectSetDef := self
+						_scanProjectSet: projectSetDefinition
+						exMethodNotification: ex
+						originalProjectSet: originalProjectSetDefinition ].
 			(ex isKindOf: RwExistingVisitorAddingExistingClassNotification)
 				ifTrue: [ 
-					| theProjectName |
+					| theClassName incomingPackage |
 					theClassName := ex classDefinition name.
+					incomingPackage := ex incomingPackage.
 					(processedClassNames includes: theClassName)
-						ifTrue: [ ex resume ].
-					theClass := ex theClass.
-					theClass isBehavior
-						ifFalse: [ ex pass ].
-					theProjectName := theClass rowanProjectName.
-					theProjectName = Rowan unpackagedName
-						ifTrue: [ self error: 'Unexpected unpackaged class ' , theClass name asString printString ]
-						ifFalse: [ theLoadedProject := Rowan image loadedProjectNamed: theProjectName ].
-					theLoadedProject
-						ifNil: [ 
-							"the loaded project should not be nil - if it is, pass the notification"
-							ex pass ].
-					(originalProjectSet projectNamed: theLoadedProject name ifAbsent: [  ])
-						ifNotNil: [ 
-							"If the loadedProject is in the originalProjectSet, then is likely to be a class move - resume and let the chips fall where they may"
+						ifTrue: [ 
+							"we've processed this class, but have we processed extension methods?"
+							Rowan projectTools trace
+								trace:
+									'[RwPrjLoadToolV2] THE CLASS ' , theClassName , ' in the package named '
+										, incomingPackage name
+										, ' is in PROCESSED CLASSES for existing class... RESUMING'.
 							ex resume ].
-					copiedProjectSetDef := projectSetDefinition copy.	"a project in the original project set is taking ownership of an already  loaded class,
-					remove the class from the original project's package and attempt a reload"
-					projectDef := copiedProjectSetDef
-						projectNamed: theLoadedProject name
-						ifAbsent: [ 
-							projectDef := theLoadedProject asDefinition.
-							copiedProjectSetDef addProject: projectDef.
-							projectDef ].
-					loadedClass := Rowan image
-						loadedClassForClass: theClass
-						ifAbsent: [ self error: 'No loaded class for classs ' , theClassName printString ].
-					packageDef := projectDef packageNamed: loadedClass loadedPackage name.
-					packageDef removeClassNamed: theClassName.
-					processedClassNames add: theClassName ] ].	"trim the stack"
+					workingProjectSetDef := self
+						_scanProjectSet: projectSetDefinition
+						exClassNotification: ex
+						originalProjectSet: originalProjectSetDefinition ] ].	"trim the stack"
+	theOriginalWorkingProjectSetDefinition := workingProjectSetDef
+		ifNil: [ originalProjectSetDefinition ]
+		ifNotNil: [ 
+			"treat the workingProjectSetDef as originalProjectSetDefinition because it contains edits to the originalProjectSetDefinition that must be preserved"
+			workingProjectSetDef ].
 	^ self
-		_doProjectSetLoad: copiedProjectSetDef
+		_doProjectSetLoad: workingProjectSetDef
 		instanceMigrator: instanceMigrator
 		symbolList: symbolList
-		originalProjectSet: originalProjectSet
+		originalProjectSet: theOriginalWorkingProjectSetDefinition
 		processedClassNames: processedClassNames
 ]
 
@@ -224,6 +173,380 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 					theLoadedProject loadedPackages
 						valuesDo: [ :loadedPackage | loadedPackage markNotDirty ] ] ].
 	^ loadedProjects
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exClassNotification: existingClassNotification originalProjectSet: originalProjectSetDefinition [
+	"original project set contains a modification to a method that is in a different project"
+
+	| theLoadedProject theLoadedPackage theClass incomingProject incomingPackage workingProjectSetDef theLoadedClass theClassName |
+	theClassName := existingClassNotification theClass theNonMetaClass name
+		asString.
+	incomingProject := existingClassNotification incomingProject.
+	incomingPackage := existingClassNotification incomingPackage.
+	theClass := existingClassNotification theClass.
+	theLoadedClass := existingClassNotification loadedClass.
+	theLoadedProject := existingClassNotification loadedProject.
+	theLoadedPackage := existingClassNotification loadedPackage.	"
+	copy (if needed) and update the projectSetDefinition, moving the method from 
+		theLoadedPackage to the incomingPackage"
+	workingProjectSetDef := self
+		_updateProjectSet: projectSetDefinition
+		incomingProject: incomingProject
+		incomingPackage: incomingPackage
+		theClassName: theClassName
+		theLoadedClass: theLoadedClass
+		theLoadedProject: theLoadedProject
+		theLoadedPackage: theLoadedPackage
+		originalProjectSet: originalProjectSetDefinition.	"
+	while we're in the neighborhood, scan the originalProjectSetDefinition for any loaded 
+		method definitions that are not in a different project than the incoming project
+		for the method. It's cheaper to do this in one pass, than to use the loader
+		to find them. We'll let the loader find class definitions that are in a different project,
+		as this happens less frequently."
+	originalProjectSetDefinition
+		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
+			originalProjectDefinition packages
+				keysAndValuesDo: [ :originalPackageName :originalPackageDefinition | 
+					originalPackageDefinition classDefinitions
+						keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
+							self
+								_updateProjectSetForScan: theLoadedClass
+								projectDefinition: originalProjectDefinition
+								packageDefinition: originalPackageDefinition
+								className: originalClassName
+								projectSetDefinition: workingProjectSetDef
+								originalProjectSet: originalProjectSetDefinition ] ] ].
+	^ workingProjectSetDef
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exMethodNotification: existingMethodNotification originalProjectSet: originalProjectSetDefinition [
+	"original project set contains a modification to a method that is in a different project"
+
+	| theLoadedMethod theLoadedProject theLoadedPackage theClass incomingProject incomingPackage theClassName workingProjectSetDef theLoadedClass |
+	theClassName := existingMethodNotification theClass theNonMetaClass name
+		asString.
+	incomingProject := existingMethodNotification incomingProject.
+	incomingPackage := existingMethodNotification incomingPackage.
+	theClass := existingMethodNotification theClass.
+	theLoadedMethod := existingMethodNotification loadedMethod.
+	theLoadedClass := theLoadedMethod loadedClass.
+	theLoadedProject := existingMethodNotification loadedProject.
+	theLoadedPackage := existingMethodNotification loadedPackage.	"
+	copy (if needed) and update the projectSetDefinition, moving the method from 
+		theLoadedPackage to the incomingPackage"
+	workingProjectSetDef := self
+		_updateProjectSet: projectSetDefinition
+		incomingProject: incomingProject
+		incomingPackage: incomingPackage
+		theClass: theClass
+		theLoadedMethod: theLoadedMethod
+		theLoadedProject: theLoadedProject
+		theLoadedPackage: theLoadedPackage
+		originalProjectSet: originalProjectSetDefinition.	"
+	while we're in the neighborhood, scan the originalProjectSetDefinition for any loaded 
+		method definitions that are not in a different project than the incoming project
+		for the method. It's cheaper to do this in one pass, than to use the loader
+		to find them. We'll let the loader find class definitions that are in a different project,
+		as this happens less frequently."
+	originalProjectSetDefinition
+		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
+			originalProjectDefinition packages
+				keysAndValuesDo: [ :originalPackageName :originalPackageDefinition | 
+					{(originalPackageDefinition classDefinitions).
+					(originalPackageDefinition classExtensions)}
+						do: [ :classDefs | 
+							classDefs
+								keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
+									originalClassDefinition instanceMethodDefinitions
+										keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
+											self
+												_updateProjectSetForScan: theLoadedMethod
+												projectDefinition: originalProjectDefinition
+												packageDefinition: originalPackageDefinition
+												className: originalClassName
+												isMeta: false
+												selector: originalSelector
+												methodDefinition: originalMethodDefinition
+												projectSet: workingProjectSetDef
+												originalProjectSet: originalProjectSetDefinition ].
+									originalClassDefinition classMethodDefinitions
+										keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
+											self
+												_updateProjectSetForScan: theLoadedMethod
+												projectDefinition: originalProjectDefinition
+												packageDefinition: originalPackageDefinition
+												className: originalClassName
+												isMeta: true
+												selector: originalSelector
+												methodDefinition: originalMethodDefinition
+												projectSet: workingProjectSetDef
+												originalProjectSet: originalProjectSetDefinition ] ] ] ] ].
+	^ workingProjectSetDef
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _updateProjectSet: projectSetDefinition incomingProject: incomingProject incomingPackage: incomingPackage theClass: theClass theLoadedMethod: theLoadedMethod theLoadedProject: theLoadedProject theLoadedPackage: theLoadedPackage originalProjectSet: originalProjectSetDefinition [
+	"original project set contains a modification to a method that is in a different project.
+		MOVE the definition from the loaded project/package and add it to the incoming project/package"
+
+	| theClasDef originalMethodDefinition theClassName workingPackageDef workingProjectDef workingProjectSetDef |
+	theClassName := theClass theNonMetaClass name asString.
+	Rowan projectTools trace
+		trace:
+			'[RwPrjLoadToolV2] Loaded project ' , theLoadedProject name , ' manages method definition of '
+				, theClassName
+				,
+					(theClass isMeta
+						ifTrue: [ ' class' ]
+						ifFalse: [ '' ]) , '>>' , theLoadedMethod selector , ', incoming project '
+				, incomingProject name , ' and package ' , incomingPackage name
+				, ' modifies the method.'.	"
+	confirm that the definition for theLoadedMethod is in the original project"
+	(originalProjectSetDefinition
+		projectNamed: incomingProject name
+		ifAbsent: [ 
+			self
+				error:
+					'no project named ' , incomingProject name , ' found in original project set.' ])
+		ifNotNil: [ :originalProject | 
+			| originalPackage originalClassDef |
+			originalPackage := originalProject packageNamed: incomingPackage name.
+			originalClassDef := originalPackage
+				classDefinitionNamed: theClassName
+				ifAbsent: [ 
+					originalPackage
+						classExtensionDefinitionNamed: theClassName
+						ifAbsent: [ 
+							self
+								error:
+									'No class definition or extension found for the class ' , theClassName,
+					(theClass isMeta
+						ifTrue: [ ' class' ]
+						ifFalse: [ '' ]) 
+										, ' in the incoming package named ' , incomingPackage name
+										, ' during load processing.' ] ].
+			theClass isMeta
+				ifTrue: [ 
+					(originalClassDef classMethodDefinitions includesKey: theLoadedMethod selector)
+						ifFalse: [ 
+							self
+								error:
+									'No method definition found for the method ' , theClassName , ' class>>'
+										, theLoadedMethod selector , ' in the incoming package '
+										, incomingPackage name , ' during load processing.' ] ]
+				ifFalse: [ 
+					(originalClassDef instanceMethodDefinitions
+						includesKey: theLoadedMethod selector)
+						ifFalse: [ 
+							self
+								error:
+									'No method definition found for the method ' , theClassName , '>>'
+										, theLoadedMethod selector , ' in the incoming package '
+										, incomingPackage name , ' during load processing.' ] ] ].	"
+	confirm that the definition for theLoadedMethod is in the loadedProject project"
+	workingProjectSetDef := originalProjectSetDefinition == projectSetDefinition
+		ifTrue: [ projectSetDefinition copy ]
+		ifFalse: [ 
+			"copy was made in an earlier iteration"
+			projectSetDefinition ].	"
+	a project in the incoming project set is taking ownership of an already  loaded method,
+	remove the method from the loaded project's package and attempt a reload"
+	workingProjectDef := workingProjectSetDef
+		projectNamed: theLoadedProject name
+		ifAbsent: [ 
+			| projectDef |
+			"adding copy of the theloadedProject to the copied project"
+			projectDef := theLoadedProject asDefinition.
+			workingProjectSetDef addProject: projectDef.
+			projectDef ].	"
+	confirm that the definition for theLoadedMethod is in the working project"
+	(workingProjectSetDef
+		projectNamed: theLoadedProject name
+		ifAbsent: [ 
+			self
+				error:
+					'no project named ' , theLoadedProject name
+						, ' found in working projectSet project set.' ])
+		ifNotNil: [ :originalProject | 
+			| originalPackage originalClassDef |
+			originalPackage := originalProject packageNamed: theLoadedPackage name.
+			originalClassDef := originalPackage
+				classDefinitionNamed: theClassName
+				ifAbsent: [ 
+					originalPackage
+						classExtensionDefinitionNamed: theClassName
+						ifAbsent: [ 
+							self
+								error:
+									'No class definition or extension found for the class ' , theClassName
+										, ' in the working package named ' , theLoadedProject name
+										, ' during load processing.' ] ].
+			theClass isMeta
+				ifTrue: [ 
+					(originalClassDef classMethodDefinitions includesKey: theLoadedMethod selector)
+						ifFalse: [ 
+							self
+								error:
+									'No method definition found for the method ' , theClassName , ' class>>'
+										, theLoadedMethod selector , ' in the working package '
+										, theLoadedPackage name , ' during load processing.' ] ]
+				ifFalse: [ 
+					(originalClassDef instanceMethodDefinitions
+						includesKey: theLoadedMethod selector)
+						ifFalse: [ 
+							self
+								error:
+									'No method definition found for the method ' , theClassName , '>>'
+										, theLoadedMethod selector , ' in the working package '
+										, theLoadedPackage name , ' during load processing.' ] ] ].
+	workingPackageDef := workingProjectDef packageNamed: theLoadedPackage name.
+	theClasDef := workingPackageDef
+		classExtensionDefinitionNamed: theClassName
+		ifAbsent: [ workingPackageDef classDefinitionNamed: theClassName ]."
+	Remove the method definition from the working project ... it is already 
+		present in the incoming package, so no need for explicit add. "
+	originalMethodDefinition := theClass isMeta
+		ifTrue: [ theClasDef removeClassMethod: theLoadedMethod handle selector ]
+		ifFalse: [ theClasDef removeInstanceMethod: theLoadedMethod handle selector ].
+	Rowan projectTools trace
+		trace:
+			'[RwPrjLoadToolV2] Moving method definition ' , theClassName , '>>'
+				, theLoadedMethod handle selector , ' from package '
+				, workingPackageDef name , ' into the package ' , incomingPackage name.
+	^ workingProjectSetDef
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _updateProjectSet: projectSetDefinition incomingProject: incomingProject incomingPackage: incomingPackage theClassName: theClassName theLoadedClass: theLoadedClass theLoadedProject: theLoadedProject theLoadedPackage: theLoadedPackage originalProjectSet: originalProjectSetDefinition [
+	"original project set contains a modification to a method or class that is in a different project.
+		MOVE the definition from the loaded project/package and add it to the incoming project/package"
+
+	| workingProjectSetDef workingProjectDef workingPackageDef originalClassDef |
+	Rowan projectTools trace
+		trace:
+			'[RwPrjLoadToolV2] Loaded project ' , theLoadedProject name
+				, ' manages the class definition of ' , theClassName , ', incoming project '
+				, incomingProject name , ' and package ' , incomingPackage name
+				, ' modifies the class.'.	"
+	confirm that the definition for theLoadedClass is in the original project"
+	(originalProjectSetDefinition
+		projectNamed: incomingProject name
+		ifAbsent: [ 
+			self
+				error:
+					'no project named ' , incomingProject name , ' found in original project set.' ])
+		ifNotNil: [ :originalProject | 
+			| originalPackage |
+			originalPackage := originalProject packageNamed: incomingPackage name.
+			originalPackage
+				classDefinitionNamed: theClassName
+				ifAbsent: [ 
+					originalPackage
+						classExtensionDefinitionNamed: theClassName
+						ifAbsent: [ 
+							self
+								error:
+									'No class definition found for the class ' , theClassName , incomingPackage name
+										, ' during load processing.' ] ] ].	"
+	confirm that the definition for theLoadedMethod is in the loadedProject project"
+	workingProjectSetDef := originalProjectSetDefinition == projectSetDefinition
+		ifTrue: [ projectSetDefinition copy ]
+		ifFalse: [ 
+			"copy was made in an earlier iteration"
+			projectSetDefinition ].	"
+	a project in the incoming project set is taking ownership of an already  loaded class,
+	remove the class from the loaded project's package and attempt a reload"
+	workingProjectDef := workingProjectSetDef
+		projectNamed: theLoadedProject name
+		ifAbsent: [ 
+			| projectDef |
+			"adding copy of the theloadedProject to the copied project"
+			projectDef := theLoadedProject asDefinition.
+			workingProjectSetDef addProject: projectDef.
+			projectDef ].	"
+	confirm that the definition for theLoadedClass is in the working project"
+	(workingProjectSetDef
+		projectNamed: theLoadedProject name
+		ifAbsent: [ 
+			self
+				error:
+					'no project named ' , theLoadedProject name
+						, ' found in working projectSet project set.' ])
+		ifNotNil: [ :originalProject | 
+			| originalPackage |
+			originalPackage := originalProject packageNamed: theLoadedPackage name.
+			originalPackage
+				classDefinitionNamed: theClassName
+				ifAbsent: [ 
+					self
+						error:
+							'No class definition for the class ' , theClassName
+								, ' in the working package named ' , theLoadedProject name
+								, ' during load processing.' ] ].
+	workingPackageDef := workingProjectDef packageNamed: theLoadedPackage name."
+	Remove the class definition from the working project ... it is already 
+		present in the incoming package, so no need for explicit add. "
+	originalClassDef := workingPackageDef removeClassNamed: theClassName.
+	Rowan projectTools trace
+		trace:
+			'[RwPrjLoadToolV2] Moving class definition ' , theClassName , ' from package '
+				, workingPackageDef name , ' into the package ' , incomingPackage name.
+	^ workingProjectSetDef
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedMethod projectDefinition: oProjectDefinition packageDefinition: oPackageDefinition className: className isMeta: isMeta selector: oSelector methodDefinition: oMethodDefinition projectSet: projectSetDefinition originalProjectSet: originalProjectSetDefinition [
+	"oLoadedMethod is the original loaded method that kicked off this scan"
+
+	Rowan image
+		loadedMethod: oSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifFound: [ :loadedMethod | 
+			oLoadedMethod ~~ loadedMethod
+				ifTrue: [ 
+					| theBehavior |
+					"we've already updated original theLoadedMethod"
+					theBehavior := loadedMethod loadedClass handle.
+					isMeta
+						ifTrue: [ theBehavior := theBehavior class ].
+					^ self
+						_updateProjectSet: projectSetDefinition
+						incomingProject: oProjectDefinition
+						incomingPackage: oPackageDefinition
+						theClass: theBehavior
+						theLoadedMethod: loadedMethod
+						theLoadedProject: loadedMethod loadedProject
+						theLoadedPackage: loadedMethod loadedPackage
+						originalProjectSet: originalProjectSetDefinition ]
+				ifFalse: [  ] ]
+		ifAbsent: [  ].
+	^ projectSetDefinition
+]
+
+{ #category : 'private' }
+RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedClass projectDefinition: oProjectDefinition packageDefinition: oPackageDefinition className: className projectSetDefinition: projectSetDefinition originalProjectSet: originalProjectSetDefinition [
+	"oLoadedMethod is the original loaded method that kicked off this scan"
+
+	Rowan image
+		loadedClassNamed: className
+		ifFound: [ :loadedClass | 
+			oLoadedClass ~~ loadedClass
+				ifTrue: [ 
+					"we have not updated the working project for this class"
+					^ self
+						_updateProjectSet: projectSetDefinition
+						incomingProject: oProjectDefinition
+						incomingPackage: oPackageDefinition
+						theClassName: className
+						theLoadedClass: loadedClass
+						theLoadedProject: loadedClass loadedProject
+						theLoadedPackage: loadedClass loadedPackage
+						originalProjectSet: originalProjectSetDefinition ]
+				ifFalse: [  ] ]
+		ifAbsent: [  ]
 ]
 
 { #category : 'load project by name' }

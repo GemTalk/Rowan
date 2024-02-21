@@ -3,6 +3,7 @@ Class {
 	#superclass : 'RwNotification',
 	#instVars : [
 		'incomingProject',
+		'incomingPackage',
 		'loadedMethod',
 		'methodDefinition'
 	],
@@ -21,13 +22,23 @@ RwExistingVisitorAddingExistingMethodNotification >> defaultAction [
 ]
 
 { #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> incomingPackage [
+	^incomingPackage
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> incomingPackage: aPackageDefinition [
+	incomingPackage := aPackageDefinition
+]
+
+{ #category : 'accessing' }
 RwExistingVisitorAddingExistingMethodNotification >> incomingProject [
 	^incomingProject
 ]
 
 { #category : 'accessing' }
-RwExistingVisitorAddingExistingMethodNotification >> incomingProject: object [
-	incomingProject := object
+RwExistingVisitorAddingExistingMethodNotification >> incomingProject: aProjectDefinition [
+	incomingProject := aProjectDefinition
 ]
 
 { #category : 'accessing' }
@@ -38,6 +49,11 @@ RwExistingVisitorAddingExistingMethodNotification >> loadedMethod [
 { #category : 'accessing' }
 RwExistingVisitorAddingExistingMethodNotification >> loadedMethod: object [
 	loadedMethod := object
+]
+
+{ #category : 'accessing' }
+RwExistingVisitorAddingExistingMethodNotification >> loadedPackage [
+	^ loadedMethod loadedPackage
 ]
 
 { #category : 'accessing' }

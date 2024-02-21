@@ -319,9 +319,10 @@ RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: met
 				packageConvention: 'Monticello'.
 			^ self ].
 	canonProtocol := protocol asLowercase.
-	expectedProtocol := '*' , packageName asLowercase.
+	expectedProtocol := '*' , packageName asLowercase copyUpTo: $..
 	(canonProtocol beginsWith: expectedProtocol)
-		ifTrue: [ ^ self ].	"protocol does not match package name"
+		ifTrue: [ ^ self ].	"
+	protocol does not match package name"
 	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
 		signalWithMethodDefinition: methodDef
 		className: className
