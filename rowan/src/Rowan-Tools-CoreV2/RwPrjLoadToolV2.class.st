@@ -18,7 +18,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		do: [ :ex | 
 			(ex isKindOf: RwExistingVisitorAddingExistingMethodNotification)
 				ifTrue: [ 
-					| theClassName incomingPackage |
+					| theClassName incomingPackage theLoadedProject theLoadedMethod |
 					theClassName := ex theClass theNonMetaClass name asString.
 					incomingPackage := ex incomingPackage.
 					(processedClassNames includes: theClassName)
@@ -29,7 +29,37 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 									'[RwPrjLoadToolV2] THE CLASS ' , theClassName , ' in the package named '
 										, incomingPackage name
 										, ' is in PROCESSED CLASSES for existing method ... RESUMING'.
-							ex resume ].	"
+							ex resume ].
+					theLoadedProject := ex loadedProject.
+					theLoadedMethod := ex loadedMethod.
+					(originalProjectSetDefinition
+						projectNamed: theLoadedProject name
+						ifAbsent: [  ])
+						ifNotNil: [ :originalProject | 
+							| originalPackage originalClassDef |
+							"During the reload step, we will be this exception will be signalled and if the method 
+								is NOT in the original project definition, then we want to go ahead and make the 
+								change"
+							originalPackage := originalProject
+								packageNamed: theLoadedMethod loadedPackage name.
+							originalClassDef := originalPackage
+								classDefinitionNamed: theClassName
+								ifAbsent: [ 
+									originalPackage
+										classExtensionDefinitionNamed: theClassName
+										ifAbsent: [ ex resume ] ].
+							ex theClass isMeta
+								ifTrue: [ 
+									(originalClassDef classMethodDefinitions includesKey: theLoadedMethod selector)
+										ifFalse: [ 
+											"method not present in original project, so we can continue with load"
+											ex resume ] ]
+								ifFalse: [ 
+									(originalClassDef instanceMethodDefinitions
+										includesKey: theLoadedMethod selector)
+										ifFalse: [ 
+											"method not present in original project, so we can continue with load"
+											ex resume ] ] ].	"
 					original project set contains a modification to a loaded method that is in a different project"
 					workingProjectSetDef := self
 						_scanProjectSet: projectSetDefinition
@@ -176,6 +206,49 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 ]
 
 { #category : 'private' }
+RwPrjLoadToolV2 >> _scanFullProjectSetForMoves: workingProjectSetDef loadedMethod: theLoadedMethodOrNil loadedClass: theLoadedClassOrNil originalProjectSet: originalProjectSetDefinition [
+	originalProjectSetDefinition
+		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
+			originalProjectDefinition packages
+				keysAndValuesDo: [ :originalPackageName :originalPackageDefinition | 
+					originalPackageDefinition classExtensions
+						keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
+							originalClassDefinition instanceMethodDefinitions
+								keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
+									self
+										_updateProjectSetForScan: theLoadedMethodOrNil
+										projectDefinition: originalProjectDefinition
+										packageDefinition: originalPackageDefinition
+										className: originalClassName
+										isMeta: false
+										selector: originalSelector
+										methodDefinition: originalMethodDefinition
+										projectSet: workingProjectSetDef
+										originalProjectSet: originalProjectSetDefinition ].
+							originalClassDefinition classMethodDefinitions
+								keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
+									self
+										_updateProjectSetForScan: theLoadedMethodOrNil
+										projectDefinition: originalProjectDefinition
+										packageDefinition: originalPackageDefinition
+										className: originalClassName
+										isMeta: true
+										selector: originalSelector
+										methodDefinition: originalMethodDefinition
+										projectSet: workingProjectSetDef
+										originalProjectSet: originalProjectSetDefinition ] ].
+					originalPackageDefinition classDefinitions
+						keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
+							self
+								_updateProjectSetForScan: theLoadedClassOrNil
+								projectDefinition: originalProjectDefinition
+								packageDefinition: originalPackageDefinition
+								className: originalClassName
+								projectSetDefinition: workingProjectSetDef
+								originalProjectSet: originalProjectSetDefinition ] ] ]
+]
+
+{ #category : 'private' }
 RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exClassNotification: existingClassNotification originalProjectSet: originalProjectSetDefinition [
 	"original project set contains a modification to a method that is in a different project"
 
@@ -204,19 +277,12 @@ RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exClassNotification: ex
 		for the method. It's cheaper to do this in one pass, than to use the loader
 		to find them. We'll let the loader find class definitions that are in a different project,
 		as this happens less frequently."
-	originalProjectSetDefinition
-		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
-			originalProjectDefinition packages
-				keysAndValuesDo: [ :originalPackageName :originalPackageDefinition | 
-					originalPackageDefinition classDefinitions
-						keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
-							self
-								_updateProjectSetForScan: theLoadedClass
-								projectDefinition: originalProjectDefinition
-								packageDefinition: originalPackageDefinition
-								className: originalClassName
-								projectSetDefinition: workingProjectSetDef
-								originalProjectSet: originalProjectSetDefinition ] ] ].
+	self
+		_scanFullProjectSetForMoves: workingProjectSetDef
+		loadedMethod: nil
+		loadedClass: theLoadedClass
+		originalProjectSet: originalProjectSetDefinition.
+
 	^ workingProjectSetDef
 ]
 
@@ -250,39 +316,11 @@ RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exMethodNotification: e
 		for the method. It's cheaper to do this in one pass, than to use the loader
 		to find them. We'll let the loader find class definitions that are in a different project,
 		as this happens less frequently."
-	originalProjectSetDefinition
-		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
-			originalProjectDefinition packages
-				keysAndValuesDo: [ :originalPackageName :originalPackageDefinition | 
-					{(originalPackageDefinition classDefinitions).
-					(originalPackageDefinition classExtensions)}
-						do: [ :classDefs | 
-							classDefs
-								keysAndValuesDo: [ :originalClassName :originalClassDefinition | 
-									originalClassDefinition instanceMethodDefinitions
-										keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
-											self
-												_updateProjectSetForScan: theLoadedMethod
-												projectDefinition: originalProjectDefinition
-												packageDefinition: originalPackageDefinition
-												className: originalClassName
-												isMeta: false
-												selector: originalSelector
-												methodDefinition: originalMethodDefinition
-												projectSet: workingProjectSetDef
-												originalProjectSet: originalProjectSetDefinition ].
-									originalClassDefinition classMethodDefinitions
-										keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
-											self
-												_updateProjectSetForScan: theLoadedMethod
-												projectDefinition: originalProjectDefinition
-												packageDefinition: originalPackageDefinition
-												className: originalClassName
-												isMeta: true
-												selector: originalSelector
-												methodDefinition: originalMethodDefinition
-												projectSet: workingProjectSetDef
-												originalProjectSet: originalProjectSetDefinition ] ] ] ] ].
+	self
+		_scanFullProjectSetForMoves: workingProjectSetDef
+		loadedMethod: theLoadedMethod
+		loadedClass: nil
+		originalProjectSet: originalProjectSetDefinition.
 	^ workingProjectSetDef
 ]
 
