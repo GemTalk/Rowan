@@ -16,16 +16,32 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 		public git repositories and those are also guarded by a 'dhenrich' test ... Restoring old
 		behavior, since QA tests fail with new behavior."
 
-	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich' ifTrue: [ 
-		(loadSpecification projectUrl includesString: 'RowanSample9')
+	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
+		ifTrue: [ 
+			(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ 
 					loadSpecification
 						gitUrl:
 							'https://github.com/dalehenrich/' , self _rowanSample9ProjectName , '.git' ]
 				ifFalse: [ 
 					(loadSpecification projectUrl includesString: 'RowanSample10')
-						ifTrue: [ loadSpecification gitUrl: 'https://github.com/dalehenrich/' , self _rowanSample10ProjectName , '.git' ]
-						ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ]
+						ifTrue: [ 
+							loadSpecification
+								gitUrl:
+									'https://github.com/dalehenrich/' , self _rowanSample10ProjectName , '.git' ]
+						ifFalse: [ 
+							(loadSpecification projectUrl includesString: 'RowanSample11')
+								ifTrue: [ 
+									loadSpecification
+										gitUrl:
+											'https://github.com/dalehenrich/' , self _rowanSample11ProjectName , '.git' ]
+								ifFalse: [ 
+									(loadSpecification projectUrl includesString: 'RowanSample12')
+										ifTrue: [ 
+											loadSpecification
+												gitUrl:
+													'https://github.com/dalehenrich/' , self _rowanSample12ProjectName , '.git' ]
+										ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ] ] ]
 		ifFalse: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ 
@@ -34,7 +50,10 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 							'git@github.com:dalehenrich/' , self _rowanSample9ProjectName , '.git' ]
 				ifFalse: [ 
 					(loadSpecification projectUrl includesString: 'RowanSample10')
-						ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/' , self _rowanSample10ProjectName , '.git' ]
+						ifTrue: [ 
+							loadSpecification
+								gitUrl:
+									'git@github.com:dalehenrich/' , self _rowanSample10ProjectName , '.git' ]
 						ifFalse: [ 
 							(loadSpecification projectUrl includesString: 'RowanSample11')
 								ifTrue: [ loadSpecification gitUrl: 'git@github.com:dalehenrich/RowanSample11.git' ]
