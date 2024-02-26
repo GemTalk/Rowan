@@ -11,9 +11,12 @@ Class {
 RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 	"https://github.com/GemTalk/Rowan/issues/805"
 
-	"OLD comment: have to use https for project url if NOT dhenrich"
+	"Have to use https for project url if NOT dhenrich ... public SSH key has to be registered on 
+		github to use ssh urls ... there ARE some tests that MUST be able to push to certain
+		public git repositories and those are also guarded by a 'dhenrich' test ... Restoring old
+		behavior, since QA tests fail with new behavior."
 
-	false ifTrue: [ 
+	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich' ifTrue: [ 
 		(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ 
 					loadSpecification
