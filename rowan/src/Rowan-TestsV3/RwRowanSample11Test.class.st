@@ -24,6 +24,11 @@ RwRowanSample11Test class >> _rowanSample_0000_load_spec [
 ]
 
 { #category : 'private' }
+RwRowanSample11Test class >> _rowanSample11ProjectName [
+	^ 'RowanSample11'
+]
+
+{ #category : 'private' }
 RwRowanSample11Test >> _rowanSample10_0000_load_spec [
 	^ self class _rowanSample_0000_load_spec
 ]
