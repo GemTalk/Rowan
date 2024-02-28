@@ -24,7 +24,7 @@ RwDeleteClassFromSystemNotification >> candidateClass: aClassToBeDeleted [
 
 { #category : 'handling' }
 RwDeleteClassFromSystemNotification >> defaultAction [
+	"delete class from system"
 
 	^ true
-
 ]

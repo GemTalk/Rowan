@@ -382,9 +382,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteClassFromPackage: c
 	| removeClassFromSystem |
 	removeClassFromSystem := RwDeleteClassFromSystemNotification new
 		candidateClass: class;
-		signal. "handle and `resume: true` if you want class to remain in system, unpackaged"
+		signal. "handle and `resume: false` if you want class to remain in system, unpackaged"
 	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSystem instance: registryInstance
-
 ]
 
 { #category : 'class - patch api' }

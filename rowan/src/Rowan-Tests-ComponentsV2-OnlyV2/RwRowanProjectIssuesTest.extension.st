@@ -4349,7 +4349,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_class_handle_remove_from_system 
 	packageDefinition
 		removeClassDefinition: classDefinition1.
 
-"load"
+"load -- remove from loaded things and remove from system"
 	handled := false.
 	[ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
 		on: RwDeleteClassFromSystemNotification
@@ -4512,7 +4512,7 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 	packageDefinition
 		removeClassDefinition: classDefinition2.
 
-"load -- remove from loaded things, but leave in system"
+"load -- remove from loaded things, but leave in system as unpackaged"
 	handled := false.
 	[ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition ]
 		on: RwDeleteClassFromSystemNotification

@@ -18,7 +18,7 @@ RwAllowChangeRepositoryRevisionOnResolveNotification class >> signal: aRwProject
 
 { #category : 'Handling' }
 RwAllowChangeRepositoryRevisionOnResolveNotification >> defaultAction [
-	"By default allow revisions to be changed when resolving a load specification"
+	"By default don't allow revisions to be changed when resolving a load specification"
 
 	^ false
 ]
