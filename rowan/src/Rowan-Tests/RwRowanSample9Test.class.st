@@ -4709,6 +4709,131 @@ RwRowanSample9Test >> testIssue752_04 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9Test >> testIssue752_04x [
+
+	"
+		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method foo is 
+		overriden by RowanSample10 extension method.
+
+		The load should succeed and the RowanSample1>>foo method should be loaded.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/752"
+
+	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1
+		projectSetDefinition projectDef audit project2 |
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
+	projectName1 := loadSpec1 projectName.
+	projectName2 := loadSpec2 projectName.
+
+  {projectName1 . projectName2 }
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	className := projectName1 , 'Class1'.
+
+"load project1"
+	projects := loadSpec1 resolveStrict load.
+	project1 := projects projectNamed: projectName1.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+
+"load project2 ... has overrides for project1 methods"
+	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec2 read;
+		yourself.
+	projectDef := project1 asDefinition.
+	projectSetDefinition addProject: projectDef.
+	projects := projectSetDefinition load.
+	project1 := projects projectNamed: projectName1.
+	project2 := projects projectNamed: projectName2.
+
+"validate"
+	self assert: projects size equals: 2.
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: project1 isDirty.
+	self assert: (audit := project2 audit) isEmpty.
+	self deny: project2 isDirty.
+	self assert: (Rowan globalNamed: className) new foo equals: 2.
+	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testIssue752_04y [
+
+	"
+		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method foo is 
+		overriden by RowanSample10 extension method.
+
+		The load of incoming foo, should be skipped and the loaded method RowanSample1>>foo 
+		should be preserved.
+	"
+
+	"https://github.com/GemTalk/Rowan/issues/752"
+
+	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1
+		projectSetDefinition audit project2 notificationHit |
+	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
+	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
+		yourself.
+	projectName1 := loadSpec1 projectName.
+	projectName2 := loadSpec2 projectName.
+
+  {projectName1 . projectName2 }
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	className := projectName1 , 'Class1'.
+
+"load project1"
+	projects := loadSpec1 resolveStrict load.
+	project1 := projects projectNamed: projectName1.
+
+"validate"
+	self assert: projects size equals: 1.
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+
+"load project2 ... has overrides for project1 methods"
+	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec2 read;
+		yourself.
+	self assert: projectSetDefinition size equals: 1.
+	notificationHit := false.
+	[ projects := projectSetDefinition load ]
+		on: RwExistingVisitorChangingPackageOwnershipNotification
+		do: [:ex | 
+			"do not override loaded method -- incoming loses"
+			notificationHit := true.
+			self assert: ex incomingProject notNil.
+			self assert: ex incomingPackage notNil.
+			ex resume: false ].
+"validate"
+	self assert: projects size equals: 1.
+	project2 := projects projectNamed: projectName2.
+	self assert: (audit := project1 audit) isEmpty.
+	self assert: (audit := project2 audit) isEmpty.
+	self assert: notificationHit.
+	self assert: (Rowan globalNamed: className) new foo equals: 1.
+	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
+	self deny: project1 isDirty.
+	self assert: project2 isDirty.
+]
+
+{ #category : 'tests' }
 RwRowanSample9Test >> testIssue761 [
 	"Modify and write an extension method"
 

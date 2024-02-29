@@ -40,37 +40,15 @@ RwGsImage class >> applyModification_V2: aProjectSetModification instanceMigrato
 			self
 				applyModification_V2: aProjectSetModification
 				visitorClass:
-					(self _cloneRowanLoaderSymbolDictionary
-						at: RwGsImagePatchVisitor_V2 name)
+					(self _cloneRowanLoaderSymbolDictionary at: RwGsImagePatchVisitor_V2 name)
 				instanceMigrator: instanceMigrator
 				symbolList: symbolList ]
 		ifFalse: [ 
 			self
 				applyModification_V2: aProjectSetModification
 				visitorClass: RwGsImagePatchVisitor_V2
-				instanceMigrator: instanceMigrator ]
-]
-
-{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
-	| visitor patchSet newClassVersionPatchSet |
-	visitor := visitorClass new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	patchSet setupForNewClassVersionUpdates.
-	patchSet classesWithNewVersions
-		do: [ :each | 
-			patchSet
-				updatePatchesForNewClassVersion: each
-				projectModification: aProjectSetModification ].
-	visitor := visitorClass new.
-	visitor visit: aProjectSetModification.
-	newClassVersionPatchSet := visitor patchSet.
-	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
+				instanceMigrator: instanceMigrator
+				symbolList: symbolList ]
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
