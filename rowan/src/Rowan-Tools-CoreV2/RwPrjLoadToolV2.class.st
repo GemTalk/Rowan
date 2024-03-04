@@ -6,7 +6,7 @@ Class {
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator symbolList: symbolList originalProjectSet: originalProjectSetDefinition processedClassNames: processedClassNames [
-	| workingProjectSetDef theOriginalWorkingProjectSetDefinition |
+	| workingProjectSetDef theOriginalWorkingProjectSetDefinition loadedProjectSetDef |
 	Rowan projectTools trace trace: '[RwPrjLoadToolV2] [BEGIN _doProjectSetLoad]'.
 	[ 
 	^ self
@@ -111,6 +111,11 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 								ifNil: [ 
 									"resume exception"
 									ex resume ].
+							((workingProjectSetDef _attributes
+								at: 'modifiedProjects'
+								ifAbsentPut: [ Dictionary new ])
+								at: incomingProject name
+								ifAbsentPut: [ Set new ]) add: incomingPackage name.
 							Rowan projectTools trace trace: '[RwPrjLoadToolV2] [end incoming loses]' ].
 					Rowan projectTools trace
 						trace: '[RwPrjLoadToolV2] [end method notification]' ].
@@ -172,7 +177,9 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 								trace: '[RwPrjLoadToolV2] [end start class incoming losess]' ].
 					Rowan projectTools trace
 						trace: '[RwPrjLoadToolV2] [end class notification]' ].
-			Rowan projectTools trace trace: '[RwPrjLoadToolV2] [about to trim stack]' ].	"trim the stack"
+			Rowan projectTools trace trace: '[RwPrjLoadToolV2] [about to trim stack]' ].	"
+	trim the stack ... We've made modifications to the originalProjectSetDefinition in the
+		workingProjectSetDef, so we need rerun the load using workingProjectSetDef"
 	Rowan projectTools trace
 		trace: '[RwPrjLoadToolV2] [trim the stack and recurse]'.
 	theOriginalWorkingProjectSetDefinition := workingProjectSetDef
@@ -180,12 +187,24 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 		ifNotNil: [ 
 			"treat the workingProjectSetDef as originalProjectSetDefinition because it contains edits to the originalProjectSetDefinition that must be preserved"
 			workingProjectSetDef ].
-	^ self
+	loadedProjectSetDef := self
 		_doProjectSetLoad: workingProjectSetDef
 		instanceMigrator: instanceMigrator
 		symbolList: symbolList
 		originalProjectSet: theOriginalWorkingProjectSetDefinition
-		processedClassNames: processedClassNames
+		processedClassNames: processedClassNames.
+	(workingProjectSetDef _attributes
+		at: 'modifiedProjects'
+		ifAbsent: [ Dictionary new ])
+		keysAndValuesDo: [ :modifiedProjectName :modifiedPackageNames | 
+			| modLoadedPackages |
+			"mark the packages that 'lost' as dirty, since they no longer match
+				the original project definition (incoming loses and loaded loses"
+			modLoadedPackages := (loadedProjectSetDef projectNamed: modifiedProjectName)
+				_concreteProject loadedPackages.
+			modifiedPackageNames
+				do: [ :modPackageName | (modLoadedPackages at: modPackageName) markDirty ] ].
+	^ loadedProjectSetDef
 ]
 
 { #category : 'private' }

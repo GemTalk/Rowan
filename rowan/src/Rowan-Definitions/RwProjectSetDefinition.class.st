@@ -8,6 +8,9 @@ Object
 Class {
 	#name : 'RwProjectSetDefinition',
 	#superclass : 'RwDefinitionSetDefinition',
+	#instVars : [
+		'attributes'
+	],
 	#category : 'Rowan-Definitions'
 }
 
@@ -18,6 +21,13 @@ RwProjectSetDefinition class >> withAll: someDefinitions [
 		initialize;
 		addAll: someDefinitions;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwProjectSetDefinition >> _attributes [
+	"private dictionary for stashing information during load that is used in different phases of the load"
+
+	^ attributes ifNil: [ attributes := Dictionary new ]
 ]
 
 { #category : 'accessing' }

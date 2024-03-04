@@ -401,6 +401,13 @@ RwProject >> packageGroupNames [
 ]
 
 { #category : 'querying' }
+RwProject >> packageNamed: aString [
+	^ self
+		packageNamed: aString
+		ifAbsent: [ self error: 'Package named: ' , aString printString , ' does not exist.' ]
+]
+
+{ #category : 'querying' }
 RwProject >> packageNamed: aString ifAbsent: absentBlock [
 	^ self packages
 		detect: [ :package | package name = aString ]

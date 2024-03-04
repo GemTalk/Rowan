@@ -4850,6 +4850,7 @@ Rowan projectTools trace
 	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
 	self deny: project1 isDirty.
 	self assert: project2 isDirty.
+	self assert: (project2 packageNamed: 'RowanSample10-Extensions') isDirty
 ]
 
 { #category : 'tests' }

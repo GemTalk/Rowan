@@ -434,7 +434,6 @@ RwGsLoadedSymbolDictResolvedProjectV2 >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-self halt. "do not checkin ??"
 	props at: #'projectRef' put: handle copy.
 	^ props
 ]
