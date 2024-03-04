@@ -83,6 +83,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 								_scanProjectSet: projectSetDefinition
 								exMethodNotification: ex
 								originalProjectSet: originalProjectSetDefinition)
+								ifNotNil: [ :return | workingProjectSetDef := return ]
 								ifNil: [ 
 									"resume exception"
 									ex resume ].
@@ -142,6 +143,7 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 								_scanProjectSet: projectSetDefinition
 								exClassNotification: ex
 								originalProjectSet: originalProjectSetDefinition)
+								ifNotNil: [ :return | workingProjectSetDef := return ]
 								ifNil: [ 
 									"resume exception"
 									ex resume ].

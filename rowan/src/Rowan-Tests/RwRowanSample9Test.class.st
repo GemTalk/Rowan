@@ -4342,7 +4342,7 @@ RwRowanSample9Test >> testIssue743_1 [
 	] ensure: [ Rowan gemstoneTools topaz currentTopazPackageName: nil ]
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_01 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 which stomps on RowanSample9Class1>>foo and RowanSample9Class1 class>>bar.
@@ -4408,7 +4408,7 @@ Rowan projectTools trace
 	self assert: project2 isDirty.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_02a [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but remove the methods 
@@ -4472,7 +4472,7 @@ Rowan projectTools trace
 	self deny: project2 isDirty.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_02b1 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but remove 
@@ -4537,7 +4537,7 @@ Rowan projectTools trace
 	self deny: project2 isDirty.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_02b2 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but remove 
@@ -4600,7 +4600,7 @@ Rowan projectTools trace
 	self deny: project2 isDirty.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_03 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 but RowanSample9 project is in project set for unrelated reason (new method #baz).
@@ -4663,7 +4663,7 @@ Rowan projectTools trace
 	self deny: project2 isDirty.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_04 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method
@@ -4722,7 +4722,7 @@ Rowan projectTools trace
 	self assert: exceptionSeen description: 'Expected an error'
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_04x [
 
 	"
@@ -4784,7 +4784,7 @@ Rowan projectTools trace
 	self assert: (Rowan globalNamed: className) bar equals: 'bare'.
 ]
 
-{ #category : 'tests' }
+{ #category : 'issue 752' }
 RwRowanSample9Test >> testIssue752_04y [
 
 	"
