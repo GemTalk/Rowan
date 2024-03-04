@@ -66,6 +66,7 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 						ifTrue: [ 
 							(RwExistingVisitorAddingExistingMethodNotification new
 								incomingProject: aProjectDefinition;
+								incomingPackage: aPackage;
 								loadedMethod: loadedMethod;
 								methodDefinition: self after) signal ] ]
 				ifAbsent: [ 

@@ -4355,6 +4355,8 @@ RwRowanSample9Test >> testIssue752_01 [
 	"https://github.com/GemTalk/Rowan/issues/752"
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_01'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	projectName1 := loadSpec1 projectName.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
@@ -4419,6 +4421,8 @@ RwRowanSample9Test >> testIssue752_02a [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_02a'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4481,6 +4485,8 @@ RwRowanSample9Test >> testIssue752_02b1 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_02b1'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4506,7 +4512,7 @@ RwRowanSample9Test >> testIssue752_02b1 [
 	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
 	self deny: project1 isDirty.
 
-"load project2 and remove the methods RowanSample9Class1>>foo and RowanSample9Class1 class>>bar from project1"
+"load project2 and remove the methods RowanSample9Class1>>foo from project1"
 	projectSetDefinition := (RwProjectSetDefinition new)
 		addProject: loadSpec2 read;
 		yourself.
@@ -4516,7 +4522,9 @@ RwRowanSample9Test >> testIssue752_02b1 [
 			removeInstanceMethod: #foo;
 			yourself.
 	projectSetDefinition addProject: projectDef.
-	projects := projectSetDefinition load.
+	[projects := projectSetDefinition load]
+		on: RwExistingVisitorChangingPackageOwnershipNotification
+		do: [:ex | ex resume: true ].
 	project2 := projects projectNamed: projectName2.
 
 "validate"
@@ -4542,6 +4550,8 @@ RwRowanSample9Test >> testIssue752_02b2 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_02b2'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4602,6 +4612,8 @@ RwRowanSample9Test >> testIssue752_03 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 project2 
 		projectSetDefinition projectDef |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_03'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4664,6 +4676,8 @@ RwRowanSample9Test >> testIssue752_04 [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 exceptionSeen
 		projectSetDefinition projectDef |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_04'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4715,13 +4729,16 @@ RwRowanSample9Test >> testIssue752_04x [
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method foo is 
 		overriden by RowanSample10 extension method.
 
-		The load should succeed and the RowanSample1>>foo method should be loaded.
+		The load should succeed and the RowanSample10 extension method RowanSample1>>foo  
+		should be loaded.
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/752"
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1
 		projectSetDefinition projectDef audit project2 |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_04x'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
@@ -4747,7 +4764,7 @@ RwRowanSample9Test >> testIssue752_04x [
 	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
 	self deny: project1 isDirty.
 
-"load project2 ... has overrides for project1 methods"
+"load project2 ... has overrides for project1 methods incoming methods win"
 	projectSetDefinition := (RwProjectSetDefinition new)
 		addProject: loadSpec2 read;
 		yourself.
@@ -4782,6 +4799,8 @@ RwRowanSample9Test >> testIssue752_04y [
 
 	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1
 		projectSetDefinition audit project2 notificationHit |
+Rowan projectTools trace
+		trace:  self class name, ' >> testIssue752_04y'.
 	loadSpec1 := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0005.ston'.
 	loadSpec2 := (RwRowanSample10Test _loadSpecNamed: 'spec_0005')
 		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9_2';
