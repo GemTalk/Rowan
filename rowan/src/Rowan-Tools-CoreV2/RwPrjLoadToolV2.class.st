@@ -452,7 +452,7 @@ RwPrjLoadToolV2 >> _scanProjectSet: projectSetDefinition exMethodNotification: e
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _updateProjectSet: projectSetDefinition incomingProject: incomingProject incomingPackage: incomingPackage notification: ex theClass: theClass theLoadedMethod: theLoadedMethod theLoadedProject: theLoadedProject theLoadedPackage: theLoadedPackage originalProjectSet: originalProjectSetDefinition [
-	"original project set contains a modification to a method that is in a different project.
+	"incoming wins ... original project set contains a modification to a method that is in a different project.
 		MOVE the definition from the loaded project/package and add it to the incoming project/package
 	... return nil to resume exception ... need to recurse the _doProjectSet... call"
 
@@ -679,7 +679,7 @@ RwPrjLoadToolV2 >> _updateProjectSetForOriginalProjectModification: projectSetDe
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _updateProjectSetForOriginalProjectModification: projectSetDefinition exMethodNotification: ex className: theClassName incomingPackageName: incomingPackageName  incomingProjectName: incomingProjectName loadedMethod: theLoadedMethod loadedProject: theLoadedProject originalProjectSet: originalProjectSetDefinition [
-	"the loaded project wins, so modify and return a copy of the incoming projectSetDefinition with the conflicting method definition removed 
+	"loaded project wins ... modify and return a copy of the incoming projectSetDefinition with the conflicting method definition removed 
 		... return nil to resume exception ... need to recurse the _doProjectSet... call"
 
 	| theClasDef copiedProjectSetDef projectDef packageDef |
