@@ -279,7 +279,12 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved packageConvention |
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved packageConvention theSymbolList |
+	theSymbolList := aSymbolList isEmpty
+		ifTrue: [ 
+			"in some cases, an empty symbol list can be passed in (see compileMissingAccessingMethods)... but Rowan requires a symbol list"
+			Rowan image symbolList ]
+		ifFalse: [ aSymbolList ].
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
@@ -334,7 +339,7 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 	projectSetDefinition addProject: pDef.
 	projectTools load
 		loadProjectSetDefinition: projectSetDefinition
-		symbolList: aSymbolList.
+		symbolList: theSymbolList.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
 		handle ].
 
