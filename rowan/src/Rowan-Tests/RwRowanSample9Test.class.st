@@ -4803,15 +4803,12 @@ RwRowanSample9Test >> testIssue752_05 [
 	"
 		Load RowanSample9:spec_0005, then load RowanSample10:spec_0005 the method
 			RowanSample9Class1>>foo has a competing change in RowanSample9 project.
-
-		incoming wins
-
 		The load should fail with a competing change error between project1 and project2.
 	"
 
 	"https://github.com/GemTalk/Rowan/issues/752"
 
-	| loadSpec1 loadSpec2 className projectName1 projectName2 projects project1 exceptionSeen
+	| loadSpec1 loadSpec2 className projectName1 projectName2 exceptionSeen
 		projectSetDefinition projectDef |
 Rowan projectTools trace
 		trace:  self class name, ' >> testIssue752_05'.
@@ -4829,33 +4826,31 @@ Rowan projectTools trace
 
 	className := projectName1 , 'Class1'.
 
-"load project1"
-	projects := loadSpec1 resolveStrict load.
-	project1 := projects projectNamed: projectName1.
-
-"validate"
-	self assert: projects size equals: 1.
-	self assert: project1 audit isEmpty.
-	self assert: (Rowan globalNamed: className) new foo equals: 1.
-	self assert: (Rowan globalNamed: className) bar equals: 'bar'.
-	self deny: project1 isDirty.
-
 "load project2 and make competing change to the method RowanSample9Class1>>foo in project1"
 	projectSetDefinition := (RwProjectSetDefinition new)
+		addProject: loadSpec1 read;
 		addProject: loadSpec2 read;
 		yourself.
-	projectDef := project1 asDefinition.
-	((projectDef packageNamed: 'RowanSample9-Core1')
-		classDefinitionNamed: className)
+	self assert: projectName2 equals: 'RowanSample10'.
+
+	projectDef := projectSetDefinition projectNamed: projectName2.
+	((projectDef packageNamed: 'RowanSample10-Extensions')
+		classExtensionDefinitionNamed: className)
 			updateInstanceMethod: 'foo  "competing change" ^3' protocol: 'accessing';
 			yourself.
-	projectSetDefinition addProject: projectDef.
 	exceptionSeen := false.
+
+	self assert: (Rowan globalNamed: className) isNil.
+
 	[ projectSetDefinition load ] 
 		on: Error 
 		do: [:ex |
 			exceptionSeen := true.
 			self assert: ex description equals: 'UserDefinedError: Incompatible changes to the same method (RowanSample9Class1>>foo ) in project ''RowanSample9'' and project ''RowanSample10''' ].
+
+	self assert: (Rowan globalNamed: className) new foo equals: 1. "which competing project won? RowanSample9"
+	self assert: (Rowan globalNamed: className) new foo equals: 3. "which competing project won? RowanSample10"
+
 	self assert: exceptionSeen description: 'Expected an error'
 ]
 
