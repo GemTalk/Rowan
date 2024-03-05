@@ -4805,6 +4805,11 @@ RwRowanSample9Test >> testIssue752_05 [
 			RowanSample9Class1>>foo has a competing change in RowanSample9 project.
 		The load should fail with a competing change error between project1 and project2.
 	"
+	"turning this test into an expected failure ... it is expensive to find conflicting changes
+		between two different incoming projects ... we either have to scan the incoming 
+		projects/packages to find a competing change or record all method changes being 
+		made during a load ... neither of which is very appealing ... soooo will defer the
+		final decision to a later date"
 
 	"https://github.com/GemTalk/Rowan/issues/752"
 
@@ -4826,7 +4831,9 @@ Rowan projectTools trace
 
 	className := projectName1 , 'Class1'.
 
-"load project2 and make competing change to the method RowanSample9Class1>>foo in project1"
+"load project1 and project2, make competing change to the method 
+	RowanSample9Class1>>foo in project1 -- both projects are modifying 
+	the same method"
 	projectSetDefinition := (RwProjectSetDefinition new)
 		addProject: loadSpec1 read;
 		addProject: loadSpec2 read;
