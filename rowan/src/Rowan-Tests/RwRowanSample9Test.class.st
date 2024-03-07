@@ -5966,7 +5966,7 @@ false ifTrue: [
 RwRowanSample9Test >> testIssue919 [
 	"https://github.com/GemTalk/Rowan/issues/919"
 
-	| loadSpec projectName resolvedProject loadedProjects class |
+	| loadSpec projectName resolvedProject loadedProjects class project audit className |
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -5978,14 +5978,24 @@ RwRowanSample9Test >> testIssue919 [
 	resolvedProject := loadSpec resolveProject.
 
 "create the unmanaged class"
-	class := Object subclass: 'RowanSample9Class1'
+	className := projectName, 'Class1'.
+	class := Object subclass: className
 		instVarNames: #( ivar1 )
 		inDictionary: (Rowan image newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1).
+
 "validate"
 	self assert: class rowanProjectName equals: Rowan unpackagedName.
 
-"load project"
+"load project -- expect unmanaged class to be managed now"
 	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size equals: 1.
+
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+	self assert: class rowanProjectName equals: projectName
 ]
 
 { #category : 'issue 493' }
