@@ -77,7 +77,8 @@ RwPrjLoadToolV2 >> _doProjectSetLoad: projectSetDefinition instanceMigrator: ins
 											(ex theClass isMeta
 												ifTrue: [ ' class' ]
 												ifFalse: [ '' ]) , '>>' , theLoadedMethod handle selector
-										, ' into the package ' , incomingPackage name.	"
+										, ' into the package ' , incomingPackage name.
+	"
 							original project set contains a modification to a loaded method that is in a different project"
 							(self
 								_scanProjectSet: projectSetDefinition
@@ -318,8 +319,11 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _scanFullProjectSetForMoves: workingProjectSetDef notification: ex loadedMethod: theLoadedMethodOrNil loadedClass: theLoadedClassOrNil originalProjectSet: originalProjectSetDefinition [
-	"incoming wins.
-	... return nil to resume exception ... need to recurse the _doProjectSet... call"
+	"scan the originalProjectSetDefinition for any loaded class or
+		method definitions that are loaded in a different project than the target incoming project
+		for the method or class. It's cheaper to do this in one pass, than to use the loader
+		to find them. We'll let the loader find class definitions that are in a different project,
+		as this happens less frequently."
 
 	originalProjectSetDefinition
 		namesAndDefinitions: [ :originalProjectName :originalProjectDefinition | 
@@ -343,7 +347,7 @@ RwPrjLoadToolV2 >> _scanFullProjectSetForMoves: workingProjectSetDef notificatio
 							originalClassDefinition classMethodDefinitions
 								keysAndValuesDo: [ :originalSelector :originalMethodDefinition | 
 									self
-										_updateProjectSetForScan: theLoadedMethodOrNil
+										_updateProjectSetForScan: theLoadedClassOrNil
 										notification: ex
 										projectDefinition: originalProjectDefinition
 										packageDefinition: originalPackageDefinition
@@ -725,8 +729,9 @@ RwPrjLoadToolV2 >> _updateProjectSetForOriginalProjectModification: projectSetDe
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedMethodOrNil notification: ex projectDefinition: oProjectDefinition packageDefinition: oPackageDefinition className: className isMeta: isMeta selector: oSelector methodDefinition: oMethodDefinition projectSet: projectSetDefinition originalProjectSet: originalProjectSetDefinition [
-	"oLoadedMethod is the original loaded method that kicked off this scan ... and the prupose of this scan is to 
-	scan the REST of the changes, excluding oLoadedMethodOrNil (when not nil), since we've aready processed that puppy)"
+	"oLoadedMethod is the original loaded method that kicked off this scan ... and the purpose of this scan is to 
+	scan the REST of the changes where a project to project move is involved, excluding oLoadedMethodOrNil 
+	(when not nil), since we've aready processed that puppy)"
 
 	oLoadedMethodOrNil
 		ifNil: [ 
@@ -739,30 +744,34 @@ RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedMethodOrNil notification: ex
 		ifFound: [ :loadedMethod | 
 			oLoadedMethodOrNil ~~ loadedMethod
 				ifTrue: [ 
-					| theBehavior |
-					"we've already updated original theLoadedMethod"
-					theBehavior := loadedMethod loadedClass handle.
-					isMeta
-						ifTrue: [ theBehavior := theBehavior class ].
-					(self
-						_updateProjectSet: projectSetDefinition
-						incomingProject: oProjectDefinition
-						incomingPackage: oPackageDefinition
-						notification: ex
-						theClass: theBehavior
-						theLoadedMethod: loadedMethod
-						theLoadedProject: loadedMethod loadedProject
-						theLoadedPackage: loadedMethod loadedPackage
-						originalProjectSet: originalProjectSetDefinition)
-						ifNil: [ ^ nil	"resume" ] ]
-				ifFalse: [  ] ]
+					oProjectDefinition name ~= loadedMethod loadedProject name
+						ifTrue: [ 
+							| theBehavior |
+							"project to project move"
+							theBehavior := loadedMethod loadedClass handle.
+							isMeta
+								ifTrue: [ theBehavior := theBehavior class ].
+							(self
+								_updateProjectSet: projectSetDefinition
+								incomingProject: oProjectDefinition
+								incomingPackage: oPackageDefinition
+								notification: ex
+								theClass: theBehavior
+								theLoadedMethod: loadedMethod
+								theLoadedProject: loadedMethod loadedProject
+								theLoadedPackage: loadedMethod loadedPackage
+								originalProjectSet: originalProjectSetDefinition)
+								ifNil: [ ^ nil	"resume" ] ]
+						ifFalse: [  ] ] ]
 		ifAbsent: [  ].
 	^ self
 ]
 
 { #category : 'private' }
 RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedClassOrNil notification: ex projectDefinition: oProjectDefinition packageDefinition: oPackageDefinition className: className projectSetDefinition: projectSetDefinition originalProjectSet: originalProjectSetDefinition [
-	"oLoadedMethod is the original loaded method that kicked off this scan"
+	"oLoadedClassOrNil is the original loaded method that kicked off this scan ... and the purpose of this scan is to 
+	scan the REST of the changes where a project to project move is involved, excluding oLoadedMethodOrNil 
+	(when not nil), since we've aready processed that puppy)"
 
 	oLoadedClassOrNil
 		ifNil: [ 
@@ -771,20 +780,22 @@ RwPrjLoadToolV2 >> _updateProjectSetForScan: oLoadedClassOrNil notification: ex 
 	Rowan image
 		loadedClassNamed: className
 		ifFound: [ :loadedClass | 
+			"oLoadedClassOrNil kicked off this scan, so skip it"
 			oLoadedClassOrNil ~~ loadedClass
 				ifTrue: [ 
-					"we have not updated the working project for this class"
-					^ self
-						_updateProjectSet: projectSetDefinition
-						incomingProject: oProjectDefinition
-						incomingPackage: oPackageDefinition
-						notification: ex
-						theClassName: className
-						theLoadedClass: loadedClass
-						theLoadedProject: loadedClass loadedProject
-						theLoadedPackage: loadedClass loadedPackage
-						originalProjectSet: originalProjectSetDefinition ]
-				ifFalse: [  ] ]
+					oProjectDefinition name ~= loadedClass loadedProject name
+						ifTrue: [ 
+							"project to project move"
+							^ self
+								_updateProjectSet: projectSetDefinition
+								incomingProject: oProjectDefinition
+								incomingPackage: oPackageDefinition
+								notification: ex
+								theClassName: className
+								theLoadedClass: loadedClass
+								theLoadedProject: loadedClass loadedProject
+								theLoadedPackage: loadedClass loadedPackage
+								originalProjectSet: originalProjectSetDefinition ] ] ]
 		ifAbsent: [  ]
 ]
 
