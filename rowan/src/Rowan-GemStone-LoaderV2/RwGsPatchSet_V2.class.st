@@ -933,7 +933,7 @@ RwGsPatchSet_V2 >> addPatchedUnmanagedClassNewVersion: aClassModification inPack
 
 	currentProjectDefinition := aProjectDefinition.
 
-	classesWithNewVersions
+	addedUnmanagedClasses
 		add:
 			((self _classUnmanagedVersioningPatchClass
 				for: aClassModification
@@ -1248,7 +1248,7 @@ RwGsPatchSet_V2 >> installAddedClasses [
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	addedClasses do: [:patch |  patch installClassInSystem ].
-	addedUnmanagedClasses do: [ :patch | patch installClassInSystem ]
+	addedUnmanagedClasses do: [ :patch | patch installNewClassVersionInSystem ]
 ]
 
 { #category : 'private - applying' }

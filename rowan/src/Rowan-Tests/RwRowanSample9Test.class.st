@@ -5962,6 +5962,32 @@ false ifTrue: [
  ]
 ]
 
+{ #category : 'issue 919' }
+RwRowanSample9Test >> testIssue919 [
+	"https://github.com/GemTalk/Rowan/issues/919"
+
+	| loadSpec projectName resolvedProject loadedProjects class |
+	loadSpec := self _loadSpecNamed: 'spec_0001'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"create the unmanaged class"
+	class := Object subclass: 'RowanSample9Class1'
+		instVarNames: #( ivar1 )
+		inDictionary: (Rowan image newOrExistingSymbolDictionaryNamed: self _sampleSymbolDictionaryName1).
+"validate"
+	self assert: class rowanProjectName equals: Rowan unpackagedName.
+
+"load project"
+	loadedProjects := resolvedProject load.
+]
+
 { #category : 'issue 493' }
 RwRowanSample9Test >> testMoveClassBetweenSymDicts_changeDefaulSymDict_2_493 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
