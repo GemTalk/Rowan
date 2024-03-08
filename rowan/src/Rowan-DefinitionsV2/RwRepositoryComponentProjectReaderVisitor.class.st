@@ -48,7 +48,10 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
 		comment: anArray second
-		pools: (metadata at: #'pools' ifAbsent: [ #() ])
+		pools: #()
+"
+IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
+"
 		type: typeValue.
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
