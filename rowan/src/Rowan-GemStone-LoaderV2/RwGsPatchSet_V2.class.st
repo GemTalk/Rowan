@@ -355,12 +355,18 @@ RwGsPatchSet_V2 >> addAddedClass: aClassDefinition inPackage: aPackageDefinition
 RwGsPatchSet_V2 >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
-	addedClasses do: [:patch | 
-		| key |
-		key :=  patch className asSymbol.
-		(tempSymbols includesKey: key) ifTrue: [ self error: 'Encountered an existing association for a new class ', key asString ].
-		tempSymbols at: key put: nil ].
-
+	addedClasses
+		do: [ :patch | 
+			| key |
+			key := patch className asSymbol.
+			(tempSymbols includesKey: key)
+				ifTrue: [ 
+					(tempSymbols at: key ifAbsent: [  ])
+						ifNotNil: [ 
+							self
+								error:
+									'Encountered an existing association for a new class ' , key asString ] ].
+			tempSymbols at: key put: nil ]
 ]
 
 { #category : 'building' }
