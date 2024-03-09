@@ -33,6 +33,15 @@ RwGsClassUnmanagedAdditionSymbolDictPatchV2 >> installClassInSystem [
 	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 ]
 
+{ #category : 'actions' }
+RwGsClassUnmanagedAdditionSymbolDictPatchV2 >> installNewClassVersionInSystem [
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	^ self installClassInSystem
+]
+
 { #category : 'accessing' }
 RwGsClassUnmanagedAdditionSymbolDictPatchV2 >> oldClassVersion [
 	^oldClassVersion
