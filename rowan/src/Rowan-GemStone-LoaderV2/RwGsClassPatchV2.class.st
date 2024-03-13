@@ -28,7 +28,7 @@ RwGsClassPatchV2 >> _classFormat: fmt forSubclassType: classType [
 			classType = 'variable'
 				ifTrue: [ fmt bitOr: 16r4	"add indexable bit" ]
 				ifFalse: [ 
-					classType = 'byteSubclass'
+					(classType = 'byteSubclass' or: [classType = 'bytes' ])
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
 						ifFalse: [ 
 							classType = 'immediate'
