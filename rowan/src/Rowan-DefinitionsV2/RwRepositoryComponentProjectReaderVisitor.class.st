@@ -9,6 +9,39 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
+{ #category : 'error handling' }
+RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForDefinition: anRwDefinition [
+  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+	(anRwDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
+		 (anRwDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
+			 ^ self lineNumberStringForOffset: offset fileName: fName
+			] 
+	].
+  ^ '  (Unable to determine line )' .
+]
+
+{ #category : 'error handling' }
+RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForOffset: offset fileName: fName [
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| fRef |
+	fRef := fName asFileReference.
+	fRef
+		readStreamDo: [ :fStream | 
+			| buf lNum |
+			buf := fStream contents.
+			buf size > offset
+				ifTrue: [ buf size: offset ].
+			lNum := 1 + (buf occurrencesOf: Character lf).
+			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
+]
+
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir ifAbsent: absentBlock [
 

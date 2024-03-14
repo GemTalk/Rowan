@@ -5,39 +5,6 @@ Class {
 }
 
 { #category : 'class file reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForMethod: anRwMethodDefinition [
-  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
-	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
-		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
-			 ^ self lineNumberStringForOffset: offset fileName: fName
-			] 
-	].
-  ^ '  (Unable to determine line )' .
-]
-
-{ #category : 'class file reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForOffset: offset fileName: fName [
-	| res |
-	res := '  (Unable to determine line number)'.
-	[ 
-	| fRef |
-	fRef := fName asFileReference.
-	fRef
-		readStreamDo: [ :fStream | 
-			| buf lNum |
-			buf := fStream contents.
-			buf size > offset
-				ifTrue: [ buf size: offset ].
-			lNum := 1 + (buf occurrencesOf: Character lf).
-			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
-		on: Error
-		do: [ :ex | 
-			"ignore"
-			 ].
-	^ res
-]
-
-{ #category : 'class file reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFile: file [
 
 	^ self readClassFiles: { file }
@@ -122,7 +89,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> checkMethodDefinitions: aClas
       intoCategories: nil
       environmentId:  0
     ] on: ( CompileError , CompileWarning ) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
+      ex addText: (RwRepositoryComponentProjectReaderVisitor lineNumberStringForDefinition: methDef ).
       ex pass
     ]
   ].
