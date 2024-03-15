@@ -131,14 +131,123 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
 
 { #category : 'topaz support' }
 RwTopazTonelReader class >> topazReadTonelStream: tonelStream envId: envId [
-	"Read a single tonel format class from a stream and compile the methods on that stream. 
-		Definition/redefinition of the class not implemented yet.
-		For topaz TFILE command"
+	"Used in implementation of the topaz TFILE command.
+   Read a single tonel format class from a stream and compile the methods on that stream. 
+   It file is  a class.st file, 
+   creation of the class is attempted by RwTopazTonelReader >> createClassFrom:"
 
 	RwTonelParser
 		parseStream: tonelStream
 		forReader: (self forEnvironmentId: envId)
 ]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName [
+	^theClassName
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName: object [
+	theClassName := object
+]
+
+{ #category : 'tonel parser interface' }
+RwTopazTonelReader >> createClassFrom: anArray [
+  "Execute class creation.  
+   The typical use cases are filein of tonel files from tests/ernie , 
+   or slowfilein or patching of a base image using topaz.
+   Signal an error if the creation creates a new version of the class .
+   If the class is found in the symbolList , 
+   argument to inDictionary: is the dictionary in which it was found. 
+   If class not found in the symbolList and we are SystemUser and not in a solo session,
+   the arg to inDictionary: will be Globals, 
+   else the arg will be UserGlobals of the current session."
+
+  | dict instVars classVars superN name categ knownKeys xKeys sess intoDict 
+    oldClass theClass  options type keys superCls classInstVars comment resOop | 
+  dict := anArray at: 6 .
+  knownKeys := IdentitySet withAll:#( name superclass instvars classvars classinstvars 
+                                           category gs_options type shebang gs_reservedoop ).
+  keys := IdentitySet new .
+  dict keys do:[:k|  keys add: k asSymbol ].
+  (xKeys := keys - knownKeys) size > 0 
+    ifTrue:[ Error signal:'unknown keys ', (Array withAll: xKeys) printString ].
+  sess := GsCurrentSession currentSession .
+  (superCls := (sess resolveSymbol: (superN := (dict at: #superclass ) asSymbol))) 
+     ifNil:[ Error signal: superN , ' not found' ].
+  superCls := superCls _value .
+  superCls ifNil:[ Error signal: superN , ' not defined yet' ].  
+  name := dict at: #name .
+  self theClassName: name .
+  categ := dict at: #category otherwise: nil .
+  instVars := dict at: #instvars otherwise: #() .
+  classVars := dict at: #classvars otherwise: #() .
+  classInstVars := dict at: #classinstvars otherwise: #() .
+  options := dict at: #gs_options otherwise: #() .
+  1 to: options size do:[:j | | opt |
+    (opt := Symbol _existingWithAll:( options at: j)) ifNil:[
+      Error signal:'invalid option ', opt printString .
+    ].
+    options at: j put: opt.
+  ].
+  comment := anArray at: 2 .
+  type := dict at: #type otherwise: nil .
+  (sess symbolList dictionaryAndAssociationOf: name asSymbol) ifNotNil:[:ary |
+    oldClass := (ary at: 2) _value  .
+    intoDict := (ary at: 1) 
+  ].
+  intoDict ifNil:[ 
+    intoDict := ((System myUserProfile userId = 'SystemUser') and:[ sess isSolo not]) 
+               ifTrue:[ Globals ] 
+              ifFalse:[ (sess resolveSymbol: #UserGlobals) _value ].
+  ].
+  resOop := dict at: #gs_reservedoop otherwise: nil .
+  theClass := superCls .
+  type ifNil:[
+    resOop ifNotNil:[
+      theClass := superCls _newKernelSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options reservedOop: resOop
+    ] ifNil:[
+      theClass := superCls subclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+    ]
+  ] ifNotNil:[
+    type = 'variable' ifTrue:[
+      resOop ifNotNil:[
+        theClass := superCls _newKernelIndexableSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options reservedOop: resOop
+      ] ifNil:[
+        theClass := superCls indexableSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+      ]
+    ].
+    type = 'byteSubclass' ifTrue:[
+      instVars size ~~ 0 ifTrue:[ Error signal:'instVars not allowed on a byte subclass'].
+      resOop ifNotNil:[
+        classInstVars size ~~ 0 ifTrue:[ Error signal:' classInstVars not allowed'].
+        theClass := superCls _newKernelByteSubclass: name 
+          classVars: classVars poolDictionaries:#() inDictionary: intoDict 
+             options: options reservedOop: resOop
+      ] ifNil:[
+        theClass := superCls byteSubclass: name 
+         classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+      ].
+    ].
+    theClass ifNil:[ Error signal:'unsupported type ', type printString ].
+  ].
+  (oldClass ~~ nil and:[ oldClass ~~ theClass]) ifTrue:[ 
+    GsFile gciLogServer:'--- old class: ' , oldClass definition .
+    GsFile gciLogServer:'--- new class: ' , theClass definition .
+    Error signal:'new version of ', name, ' created'.
+  ].
+  comment ifNotNil:[ theClass comment: comment ].
+]
+
 
 { #category : 'accessing' }
 RwTopazTonelReader >> environmentId [
@@ -174,22 +283,19 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 { #category : 'tonel parser interface' }
 RwTopazTonelReader >> newTypeDefinitionFrom: anArray [
-	"class definition/redefinition not supported, but we do need to be able to confirm that all of the methods being processed are aimed at the current class"
-
-	self theClassName: (anArray sixth at: #'name') asString
+  | knd |
+  (knd := anArray at: 4) = 'Class' ifTrue:[
+    self createClassFrom: anArray
+  ] ifFalse:[
+    knd = 'Extension' ifTrue:[ | name dict |
+      dict := anArray at: 6 .
+      name := dict at: #name .
+      theClassName := name .
+    ] ifFalse:[ Error signal: 'uknown tonel file kind ', knd printString ]
+  ].
 ]
 
 { #category : 'method definition' }
 RwTopazTonelReader >> offset: anInteger inFile: aFileName [
 	"message sent to method definitions ... avoid MNU"
-]
-
-{ #category : 'accessing' }
-RwTopazTonelReader >> theClassName [
-	^theClassName
-]
-
-{ #category : 'accessing' }
-RwTopazTonelReader >> theClassName: object [
-	theClassName := object
 ]
