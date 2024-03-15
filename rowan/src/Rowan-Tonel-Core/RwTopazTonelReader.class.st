@@ -159,7 +159,7 @@ RwTopazTonelReader >> createClassFrom: anArray [
    Signal an error if the creation creates a new version of the class .
    If the class is found in the symbolList , 
    argument to inDictionary: is the dictionary in which it was found. 
-   If class found in the symbolList and we are SystemUser and not in a solo session,
+   If class not found in the symbolList and we are SystemUser and not in a solo session,
    the arg to inDictionary: will be Globals, 
    else the arg will be UserGlobals of the current session."
 
