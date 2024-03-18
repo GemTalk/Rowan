@@ -90,8 +90,8 @@ RwGsMethodPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistin
 		do: [ :ex | 
 			ex
 				addText:
-					(RwRepositoryResolvedProjectTonelReaderVisitorV2
-						lineNumberStringForMethod: methodDefinition).
+					(RwRepositoryComponentProjectReaderVisitor
+						lineNumberStringForDefinition: methodDefinition).
 			ex pass ]
 ]
 
