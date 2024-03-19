@@ -134,3 +134,23 @@ RwRowanCrooked9Test >> testIssue820 [
 			self deny: testResult hasFailures.
 			loadedProject unload ]
 ]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue896_1 [
+	"https://github.com/GemTalk/Rowan/issues/896 -- filetree duplicates"
+
+	| loadSpec crookedProject crookedProjectName  |
+	self _checkoutBranchNamed: 'spec_0005'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName.}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+	
+	loadSpec := RwSpecification fromUrl: 'file:', (self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs' / 'spec_0005.ston') fullName.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [:ex | self halt ].
+	self assert: false description: 'should not get error ... expected error'
+]
