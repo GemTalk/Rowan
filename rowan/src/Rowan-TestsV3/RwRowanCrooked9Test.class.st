@@ -139,18 +139,30 @@ RwRowanCrooked9Test >> testIssue820 [
 RwRowanCrooked9Test >> testIssue896_1 [
 	"https://github.com/GemTalk/Rowan/issues/896 -- filetree duplicates"
 
-	| loadSpec crookedProject crookedProjectName  |
+	| loadSpec crookedProject crookedProjectName errorHit |
 	self _checkoutBranchNamed: 'spec_0005'.
 	crookedProjectName := 'RowanCrooked9'.
 
-	{crookedProjectName.}
+	{crookedProjectName}
 		do: [ :pName | 
 			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
 				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-	
-	loadSpec := RwSpecification fromUrl: 'file:', (self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs' / 'spec_0005.ston') fullName.
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0005.ston') fullName.
+	errorHit := false.
 	[ crookedProject := loadSpec resolve load ]
 		on: Error
-		do: [:ex | self halt ].
-	self assert: false description: 'should not get error ... expected error'
+		do: [ :ex | 
+			errorHit := true.
+			self
+				assert:
+					(ex messageText
+						beginsWith:
+							'Duplicate definition of olview in RowanSample9V3Class1 [1]  near line 2 in file') ].
+	self assert: errorHit description: 'expected error not encountered'
 ]

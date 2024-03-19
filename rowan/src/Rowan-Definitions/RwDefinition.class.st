@@ -34,14 +34,23 @@ RwDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue agains
 
 { #category : 'private' }
 RwDefinition >> addDefinition: aDefinition to: aDictionary [
-
 	| key |
 	key := aDefinition key.
-	(aDictionary includesKey: key) ifTrue: [
-     | nam |
-     nam := [ ' in ' , self name ] on: Error do:[:ex | '' ].
-     self error: 'Duplicate definition of ', key , nam .
-   ].
+	(aDictionary includesKey: key)
+		ifTrue: [ 
+			| nam |
+			nam := [ ' in ' , self name ]
+				on: Error
+				do: [ :ex | '' ].
+			self
+				error:
+					'Duplicate definition of ' , key , nam , ' [1] '
+						,
+							(RwRepositoryComponentProjectReaderVisitor
+								lineNumberStringForDefinition: aDefinition) , ' [2] '
+						,
+							(RwRepositoryComponentProjectReaderVisitor
+								lineNumberStringForDefinition: (aDictionary at: key)) ].
 	^ aDictionary at: key put: aDefinition
 ]
 
