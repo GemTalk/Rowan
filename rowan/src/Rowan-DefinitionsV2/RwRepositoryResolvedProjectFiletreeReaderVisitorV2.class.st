@@ -71,27 +71,44 @@ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 >> packageExtension [
 
 { #category : 'class reading' }
 RwRepositoryResolvedProjectFiletreeReaderVisitorV2 >> readClassDirectory: classDirectory inPackage: packageName [
-
-	| classDirectoryReference classProperties classComment normalizedMetadata classDef |
+	| classDirectoryReference classProperties classComment normalizedMetadata classDef propertiesRef |
 	classDirectoryReference := classDirectory asFileReference.
-	classProperties :=  self _readObjectFrom: classDirectoryReference / 'properties' , 'json'.
+	propertiesRef := classDirectoryReference / 'properties' , 'json'.
+	classProperties := self _readObjectFrom: propertiesRef.
 	classComment := (classDirectoryReference / 'README' , 'md') contents.
 	normalizedMetadata := Dictionary new.
-	classProperties keysAndValuesDo: [:key :value |
-		normalizedMetadata at: key asLowercase asSymbol put: value ].
-	classDef :=	self newClassDefinitionFrom: {
-		nil.
-		classComment isEmpty ifTrue: [ nil ] ifFalse: [ classComment ]. 
-		nil. 
-		normalizedMetadata at: 'type' ifAbsent: ['normal']. 
-		nil. 
-		normalizedMetadata
-	}.
-	self validateClassCategory: classDef forPackageNamed: packageName.
+	classProperties
+		keysAndValuesDo: [ :key :value | normalizedMetadata at: key asLowercase asSymbol put: value ].
+	normalizedMetadata
+		at: #'_gsFileOffset' put: 0;
+		at: #'_gsFileName' put: propertiesRef fullName;
+		yourself.
+	classDef := self
+		newClassDefinitionFrom:
+			{nil.
+			(classComment isEmpty
+				ifTrue: [ nil ]
+				ifFalse: [ classComment ]).
+			nil.
+			(normalizedMetadata at: #'type' ifAbsent: [ 'normal' ]).
+			nil.
+			normalizedMetadata}.
+	[ self validateClassCategory: classDef forPackageNamed: packageName ]
+		on: Error
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryResolvedProjectTonelReaderVisitorV2
+						lineNumberStringForOffset: 0
+						fileName: propertiesRef fullName).
+			ex pass ].
 	(currentProjectDefinition packageNamed: packageName)
 		addClassDefinition: currentClassDefinition.
 
-	self readMethodDirectories: classDirectoryReference forClassDefinition: classDef inPackage: packageName
+	self
+		readMethodDirectories: classDirectoryReference
+		forClassDefinition: classDef
+		inPackage: packageName
 ]
 
 { #category : 'class reading' }

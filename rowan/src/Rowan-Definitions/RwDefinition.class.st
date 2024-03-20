@@ -44,10 +44,10 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 				do: [ :ex | '' ].
 			self
 				error:
-					'Duplicate definition of ' , key , nam , ' [1] '
+					'Duplicate definition of ' , key , nam , ' [1]'
 						,
 							(RwRepositoryComponentProjectReaderVisitor
-								lineNumberStringForDefinition: aDefinition) , ' [2] '
+								lineNumberStringForDefinition: aDefinition) , ' [2]'
 						,
 							(RwRepositoryComponentProjectReaderVisitor
 								lineNumberStringForDefinition: (aDictionary at: key)) ].

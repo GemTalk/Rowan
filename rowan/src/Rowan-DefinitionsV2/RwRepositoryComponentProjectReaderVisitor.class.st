@@ -11,13 +11,13 @@ Class {
 
 { #category : 'error handling' }
 RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForDefinition: anRwDefinition [
-  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
-	(anRwDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
-		 (anRwDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
-			 ^ self lineNumberStringForOffset: offset fileName: fName
-			] 
-	].
-  ^ '  (Unable to determine line )' .
+	"used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+
+	(anRwDefinition propertyAt: #'_gsFileOffset' ifAbsent: nil)
+		ifNotNil: [ :offset | 
+			(anRwDefinition propertyAt: #'_gsFileName' ifAbsent: nil)
+				ifNotNil: [ :fName | ^ self lineNumberStringForOffset: offset fileName: fName ] ].
+	^ '  (Unable to determine line )'
 ]
 
 { #category : 'error handling' }
@@ -79,9 +79,15 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ])
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
-		comment: (anArray second )
+		comment: anArray second
 		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
+	(metadata
+		at: #'_gsFileOffset' ifAbsent: [])
+		ifNotNil: [ :offset | currentClassDefinition propertyAt: #'_gsFileOffset' put: offset ].
+	(metadata
+		at: #'_gsFileName' ifAbsent: [])
+		ifNotNil: [ :filename | currentClassDefinition propertyAt: #'_gsFileName' put: filename ].
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
