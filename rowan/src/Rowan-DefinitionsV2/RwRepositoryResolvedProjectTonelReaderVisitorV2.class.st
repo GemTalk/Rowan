@@ -184,8 +184,10 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		[ | definitions |
 		  definitions := (RwTonelParser on: fileStream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
+			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
+			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
     ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
@@ -195,7 +197,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
   ].
 ]
 
-{ #category : 'class reading' }
+{ #category : '(as yet unclassified)' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage: packageName [
 	| fileReference |
 	fileReference := file asFileReference.
@@ -212,18 +214,25 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 				ifNil: [ currentClassExtension ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
-				do: [ :mDef | clsDef addClassMethodDefinition: mDef ].
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsDef addClassMethodDefinition: mDef ].
 			((definitions at: 2) at: 2)
-				do: [ :mDef | clsDef addInstanceMethodDefinition: mDef ].
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsDef addInstanceMethodDefinition: mDef ].
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
-			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , RwTonelParseError, Error
+			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ] ]
+				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
-					ex
-						addText:
-							(self class
-								lineNumberStringForOffset: fileStream position
-								fileName: fileReference fullName).
+					(ex messageText includesString: 'near line')
+						ifFalse: [ 
+							"only add line number info, in absence of existing line number info"
+							ex
+								addText:
+									(self class
+										lineNumberStringForOffset: fileStream position
+										fileName: fileReference fullName) ].
 					ex pass ] ]
 ]

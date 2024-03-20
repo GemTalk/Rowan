@@ -29,11 +29,17 @@ RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForOffset: of
 	fRef := fName asFileReference.
 	fRef
 		readStreamDo: [ :fStream | 
-			| buf lNum |
-			buf := fStream contents.
-			buf size > offset
-				ifTrue: [ buf size: offset ].
-			lNum := 1 + (buf occurrencesOf: Character lf).
+			| lNum |
+			offset
+				ifNil: [ 
+					"line 1 is better than nothing"
+					lNum := 1 ]
+				ifNotNil: [ 
+					| buf |
+					buf := fStream contents.
+					buf size > offset
+						ifTrue: [ buf size: offset ].
+					lNum := 1 + (buf occurrencesOf: Character lf) ].
 			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
 		on: Error
 		do: [ :ex | 

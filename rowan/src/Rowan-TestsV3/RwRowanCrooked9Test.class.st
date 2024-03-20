@@ -166,3 +166,35 @@ RwRowanCrooked9Test >> testIssue896_1 [
 							'Duplicate definition of olview in RowanSample9V3Class1 [1]  near line 2 in file') ].
 	self assert: errorHit description: 'expected error not encountered'
 ]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue896_2 [
+	"https://github.com/GemTalk/Rowan/issues/896 -- tonel duplicates"
+
+	| loadSpec crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0006'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0006.ston') fullName.
+	errorHit := false.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			errorHit := true.
+			self
+				assert:
+					(ex messageText
+						beginsWith:
+							'Duplicate definition of foo in RowanSample9V3Class1 [1]  near line 17') ].
+	self assert: errorHit description: 'expected error not encountered'
+]
