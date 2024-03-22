@@ -235,7 +235,41 @@ RwRowanCrooked9Test >> testIssue896_3 [
 
 { #category : 'tests' }
 RwRowanCrooked9Test >> testIssue896_4 [
-	"invalid filetree class category"
+	"https://github.com/GemTalk/Rowan/issues/896 -- duplicate class class definition - tonel. Technically this is a tonel format error, since we only expect a single class definition per tonel file"
+
+	| loadSpec crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0008'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0008.ston') fullName.
+	errorHit := false.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			| errorMessage|
+			errorMessage := ex printString.
+			errorHit := true.
+			self
+				assert:
+					(errorMessage
+						beginsWith:
+							'a Error occurred (error 2710), Missing method category or class properties. Expected ${, got $C,  near line 13 in file') ].
+	self assert: errorHit description: 'expected error not encountered'
+]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue896_5 [
+	"https://github.com/GemTalk/Rowan/issues/896 -- invalid class category - filetree"
 
 	| loadSpec crookedProject crookedProjectName errorHit |
 	self _checkoutBranchNamed: 'spec_0009'.
@@ -251,7 +285,7 @@ RwRowanCrooked9Test >> testIssue896_4 [
 			'file:'
 				,
 					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
-						/ 'spec_0007.ston') fullName.
+						/ 'spec_0009.ston') fullName.
 	errorHit := false.
 	[ crookedProject := loadSpec resolve load ]
 		on: Error
@@ -268,8 +302,8 @@ RwRowanCrooked9Test >> testIssue896_4 [
 ]
 
 { #category : 'tests' }
-RwRowanCrooked9Test >> testIssue896_5 [
-	"invalid filetree class category"
+RwRowanCrooked9Test >> testIssue896_6 [
+	"https://github.com/GemTalk/Rowan/issues/896 -- duplicate class definition, filetree"
 
 	| loadSpec crookedProject crookedProjectName errorHit |
 	self _checkoutBranchNamed: 'spec_0010'.
@@ -285,7 +319,7 @@ RwRowanCrooked9Test >> testIssue896_5 [
 			'file:'
 				,
 					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
-						/ 'spec_0007.ston') fullName.
+						/ 'spec_0010.ston') fullName.
 	errorHit := false.
 	[ crookedProject := loadSpec resolve load ]
 		on: Error
