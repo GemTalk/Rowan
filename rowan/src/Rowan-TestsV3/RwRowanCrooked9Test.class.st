@@ -368,8 +368,11 @@ RwRowanCrooked9Test >> testIssue920_1 [
 	methodDef source: 'gsmfc "different selector case - with mod"'.
 	methodDef := classDef instanceMethodDefinitions at:  #'gsMfc'.
 	methodDef source: 'gsMfc "different selector case - with mod"'.
-"write project do disk"
-	definedProject export.
-"now reread project ... should not get duplicate definition error"
-	loadedProjects := loadSpec resolve load.
+	[
+		"write project do disk"
+		definedProject export.
+		"now reread project ... should not get duplicate definition error"
+		loadedProjects := loadSpec resolve load
+	] ensure: [
+		Rowan gitTools performGitCommand: 'restore' in: (self _testRowanProjectsSandbox / crookedProjectName ) fullName with: ' .'  ]
 ]
