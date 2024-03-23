@@ -364,5 +364,12 @@ RwRowanCrooked9Test >> testIssue920_1 [
 	methodDef source: 'olView "different selector case - with mod"'.
 	methodDef := classDef instanceMethodDefinitions at:  #'olview'.
 	methodDef source: 'olview "different selector case - with mod"'.
-	definedProject export.	"write the project to disk and confirmed we are not matching the GsDevKit order"
+	methodDef := classDef instanceMethodDefinitions at:  #'gsmfc'.
+	methodDef source: 'gsmfc "different selector case - with mod"'.
+	methodDef := classDef instanceMethodDefinitions at:  #'gsMfc'.
+	methodDef source: 'gsMfc "different selector case - with mod"'.
+"write project do disk"
+	definedProject export.
+"now reread project ... should not get duplicate definition error"
+	loadedProjects := loadSpec resolve load.
 ]
