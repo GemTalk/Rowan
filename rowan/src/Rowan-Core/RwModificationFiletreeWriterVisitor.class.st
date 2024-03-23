@@ -123,7 +123,7 @@ RwModificationFiletreeWriterVisitor >> _createFileNameMapForMethods: aMethodDefi
 			put: (self _methodFileNameFor: def) ]
 		ifFalse: [ 
 		  "tack on postfix to guarantee  file names are unique on case insensitive file systems"
-		  sortedCol := col sorted: [ :a :b | a asString _unicodeLessThan: b asString ].
+		  sortedCol := col sort: [ :a :b | a asString _unicodeLessThan: b asString ].
 		  (1 to: sortedCol size) do: [ :index | 
 			| def filename |
 			def := sortedCol at: index.

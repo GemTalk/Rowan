@@ -334,3 +334,35 @@ RwRowanCrooked9Test >> testIssue896_6 [
 							'Duplicate definition of RowanSample9V3Class1 in RowanSample9V3-Core [1] near line 1 in file') ].
 	self assert: errorHit description: 'expected error not encountered'
 ]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue920_1 [
+	"https://github.com/GemTalk/Rowan/issues/920 -- case insensitive filename convention, filetree"
+
+	| loadSpec crookedProject crookedProjectName loadedProjects definedProject classDef methodDef  |
+	self _checkoutBranchNamed: 'spec_0011'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0011.ston') fullName.
+	loadedProjects := loadSpec resolve load.
+	crookedProject := loadedProjects projectNamed: crookedProjectName.
+	definedProject := crookedProject defined.
+"have to modify the methods to force a write"
+	classDef := ((definedProject packageNamed:  'RowanSample9V3-Core')
+		classDefinitionNamed:  'RowanSample9V3Class1').
+	methodDef := classDef instanceMethodDefinitions at:  #'olView'.
+	methodDef source: 'olView "different selector case - with mod"'.
+	methodDef := classDef instanceMethodDefinitions at:  #'olview'.
+	methodDef source: 'olview "different selector case - with mod"'.
+	definedProject export.	"write the project to disk and confirmed we are not matching the GsDevKit order"
+]
