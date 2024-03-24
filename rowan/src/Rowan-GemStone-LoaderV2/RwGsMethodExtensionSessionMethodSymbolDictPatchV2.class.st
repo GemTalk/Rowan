@@ -42,8 +42,8 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClassesSymbo
 		do: [ :ex | 
 			ex
 				addText:
-					(RwRepositoryResolvedProjectTonelReaderVisitorV2
-						lineNumberStringForMethod: methodDefinition).
+					(RwRepositoryComponentProjectReaderVisitor
+						lineNumberStringForDefinition: methodDefinition).
 			ex pass ]
 ]
 

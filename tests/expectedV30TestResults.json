@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.1",
+	"gsVersion" : "3.7.2",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 8,
-		"failures" : 10,
-		"passed" : 1155,
-		"summary" : "1173 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1354.39s",
-		"tests" : 1173,
-		"time" : 1354.387
+		"failures" : 8,
+		"passed" : 1158,
+		"summary" : "1174 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 1351.07s",
+		"tests" : 1174,
+		"time" : 1351.074
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2515,6 +2515,48 @@
 			"className" : "RwRowanCrooked9Test",
 			"status" : "passed",
 			"selector" : "testIssue820",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_1",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_3",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_4",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_5",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_6",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue920_1",
 			"time" : "0"
 		},
 		{
@@ -7054,5 +7096,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-03-08T18:02:39.374614-08:00"
+	"timeStamp" : "2024-03-23T15:36:25.046771-07:00"
 }

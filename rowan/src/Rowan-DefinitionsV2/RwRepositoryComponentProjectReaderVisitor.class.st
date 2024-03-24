@@ -9,6 +9,45 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
+{ #category : 'error handling' }
+RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForDefinition: anRwDefinition [
+	"used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+
+	(anRwDefinition propertyAt: #'_gsFileOffset' ifAbsent: nil)
+		ifNotNil: [ :offset | 
+			(anRwDefinition propertyAt: #'_gsFileName' ifAbsent: nil)
+				ifNotNil: [ :fName | ^ self lineNumberStringForOffset: offset fileName: fName ] ].
+	^ '  (Unable to determine line )'
+]
+
+{ #category : 'error handling' }
+RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForOffset: offset fileName: fName [
+	| res |
+	res := '  (Unable to determine line number)'.
+	[ 
+	| fRef |
+	fRef := fName asFileReference.
+	fRef
+		readStreamDo: [ :fStream | 
+			| lNum |
+			offset
+				ifNil: [ 
+					"line 1 is better than nothing"
+					lNum := 1 ]
+				ifNotNil: [ 
+					| buf |
+					buf := fStream contents.
+					buf size > offset
+						ifTrue: [ buf size: offset ].
+					lNum := 1 + (buf occurrencesOf: Character lf) ].
+			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
+		on: Error
+		do: [ :ex | 
+			"ignore"
+			 ].
+	^ res
+]
+
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir ifAbsent: absentBlock [
 
@@ -52,7 +91,13 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 "
 IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 "
-		type: typeValue.
+		type: typeValue asSymbol.
+	(metadata
+		at: #'_gsFileOffset' ifAbsent: [])
+		ifNotNil: [ :offset | currentClassDefinition propertyAt: #'_gsFileOffset' put: offset ].
+	(metadata
+		at: #'_gsFileName' ifAbsent: [])
+		ifNotNil: [ :filename | currentClassDefinition propertyAt: #'_gsFileName' put: filename ].
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);

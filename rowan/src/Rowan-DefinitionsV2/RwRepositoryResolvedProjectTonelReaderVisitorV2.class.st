@@ -5,39 +5,6 @@ Class {
 }
 
 { #category : 'class file reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForMethod: anRwMethodDefinition [
-  "used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
-	(anRwMethodDefinition propertyAt:'_gsFileOffset' ifAbsent: nil) ifNotNil:[:offset |
-		 (anRwMethodDefinition propertyAt:'_gsFileName' ifAbsent: nil) ifNotNil:[:fName | 
-			 ^ self lineNumberStringForOffset: offset fileName: fName
-			] 
-	].
-  ^ '  (Unable to determine line )' .
-]
-
-{ #category : 'class file reading' }
-RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> lineNumberStringForOffset: offset fileName: fName [
-	| res |
-	res := '  (Unable to determine line number)'.
-	[ 
-	| fRef |
-	fRef := fName asFileReference.
-	fRef
-		readStreamDo: [ :fStream | 
-			| buf lNum |
-			buf := fStream contents.
-			buf size > offset
-				ifTrue: [ buf size: offset ].
-			lNum := 1 + (buf occurrencesOf: Character lf).
-			res := ' near line ' , lNum asString , ' in file ' , fName ] ]
-		on: Error
-		do: [ :ex | 
-			"ignore"
-			 ].
-	^ res
-]
-
-{ #category : 'class file reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFile: file [
 
 	^ self readClassFiles: { file }
@@ -122,7 +89,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> checkMethodDefinitions: aClas
       intoCategories: nil
       environmentId:  0
     ] on: ( CompileError , CompileWarning ) do:[:ex | 
-      ex addText: (RwRepositoryResolvedProjectTonelReaderVisitorV2 lineNumberStringForMethod: methDef ).
+      ex addText: (RwRepositoryComponentProjectReaderVisitor lineNumberStringForDefinition: methDef ).
       ex pass
     ]
   ].
@@ -217,8 +184,10 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		[ | definitions |
 		  definitions := (RwTonelParser on: fileStream forReader: self) start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
+			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addClassMethodDefinition: mDef ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
+			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
       self checkMethodDefinitions: currentClassExtension .
     ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
@@ -228,7 +197,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
   ].
 ]
 
-{ #category : 'class reading' }
+{ #category : '(as yet unclassified)' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage: packageName [
 	| fileReference |
 	fileReference := file asFileReference.
@@ -245,18 +214,25 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 				ifNil: [ currentClassExtension ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
-				do: [ :mDef | clsDef addClassMethodDefinition: mDef ].
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsDef addClassMethodDefinition: mDef ].
 			((definitions at: 2) at: 2)
-				do: [ :mDef | clsDef addInstanceMethodDefinition: mDef ].
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsDef addInstanceMethodDefinition: mDef ].
 			self checkMethodDefinitions: clsDef.
 			projectDef := currentProjectDefinition packageNamed: packageName.
-			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ]	"ifNil:[ projectDef addClassExtensionDefinition: clsDef]." ]
-				on: STONReaderError , RwTonelParseError, Error
+			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ] ]
+				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
-					ex
-						addText:
-							(self class
-								lineNumberStringForOffset: fileStream position
-								fileName: fileReference fullName).
+					(ex messageText includesString: 'near line')
+						ifFalse: [ 
+							"only add line number info, in absence of existing line number info"
+							ex
+								addText:
+									(self class
+										lineNumberStringForOffset: fileStream position
+										fileName: fileReference fullName) ].
 					ex pass ] ]
 ]
