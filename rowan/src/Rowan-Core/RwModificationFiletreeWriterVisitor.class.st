@@ -343,7 +343,8 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 		aStream 
 			<< '{'
 			<< self  _newLine
-			<< '	 }'].
+			<< '	 }'
+			<< self  _newLine ].
 
 	packageProperties := self _filetreePackagePropertyDictFor: aPackageModification.
 	(packageProperties at:  'noMethodMetaData' ifAbsent: []) = self noMethodMetaData
