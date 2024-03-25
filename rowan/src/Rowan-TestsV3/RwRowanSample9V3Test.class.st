@@ -19,6 +19,15 @@ RwRowanSample9V3Test class >> _rowanSample9ProjectName [
 	^ 'RowanSample9V3'
 ]
 
+{ #category : 'private' }
+RwRowanSample9V3Test >> _spec_0079Name [
+	"as part of the work on https://github.com/GemTalk/Rowan/issues/920; changes to filetree writer have been made to improve Rowan's 
+		fidelity to the GsDevKit filetree format. These changes have been recently introduced in Rowan 3.  We have to leave spec_0079 for older 
+		versions of Rowan 3 to use when running tests, but moving forward, spec_0079 will be abandonded in favor of spec_0083, which will be 
+		the same in RowanSample9V2 and RowanSample9V3" 
+	^ 'spec_0083'
+]
+
 { #category : 'tests' }
 RwRowanSample9V3Test >> testIssue_571_1 [
 	"load project with a different projectName and projectAlias"
