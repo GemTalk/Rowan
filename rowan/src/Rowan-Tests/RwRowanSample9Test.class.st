@@ -8353,11 +8353,11 @@ RwRowanSample9Test >> testSpec_0081 [
 
 { #category : 'tests' }
 RwRowanSample9Test >> testSpec_0083 [
-	"spec_0083 should load cleanly"
+	"spec_0083 should load cleanly --- use _spec_0079Name resolved to spec_0083 or spec_0079 if spec_0083 isn't available"
 
 
 	| loadSpec projectName resolvedProject loadedProjects |
-	loadSpec := self _loadSpecNamed: 'spec_0083'.
+	loadSpec := self _loadSpecNamed: self _spec_0079Name.
 
 	projectName := loadSpec projectName.
 
