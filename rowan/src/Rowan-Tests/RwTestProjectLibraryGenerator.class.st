@@ -7184,6 +7184,53 @@ RwTestProjectLibraryGenerator >> genSpec_0081: commitMessage [
 		commitMessage: commitMessage
 ]
 
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0083: commitMessage [
+	"Start with spec_0002; and write in filetree format instead of tonel format."
+
+	"https://github.com/GemTalk/Rowan/issues/761"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0083'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0002'.
+	title := 'Start with spec_0002; and write in filetree format instead of tonel format.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 83
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(761);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0079: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
 { #category : 'accessing' }
 RwTestProjectLibraryGenerator >> indexCardMap [
 	^ indexCardMap

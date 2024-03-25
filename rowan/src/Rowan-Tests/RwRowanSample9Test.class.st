@@ -797,6 +797,15 @@ RwRowanSample9Test >> _validateSymbolDictMapping: classesToSymDictMap [
 	self assert: exceptions isEmpty
 ]
 
+{ #category : 'private' }
+RwRowanSample9Test >> spec_0079Name [
+	"as part of the work on https://github.com/GemTalk/Rowan/issues/920; changes to filetree writer have been made to improve Rowan's 
+		fidelity to the GsDevKit filetree format. These changes have been recently introduced in Rowan 3.  We have to leave spec_0079 for older 
+		versions of Rowan 3 to use when running tests, but moving forward, spec_0079 will be abandonded in favor of spec_0083, which will be 
+		the same in RowanSample9V2 and RowanSample9V3" 
+	^ 'spec_0083'
+]
+
 { #category : 'audit tests' }
 RwRowanSample9Test >> testAuditMethodsNotIdentical [
 	"RwAuditMethodDetail with #'methodsNotIdentical' reason for instance and class side methods"
@@ -4715,7 +4724,7 @@ RwRowanSample9Test >> testIssue761 [
 	"https://github.com/GemTalk/Rowan/issues/761"
 
 	| loadSpec projectName projectNames resolvedProject definedProject methodDef |
-	loadSpec := self _loadSpecNamed: 'spec_0079'.
+	loadSpec := self _loadSpecNamed: self spec_0079Name.
 
 	projectName := loadSpec projectName.
 	projectNames := {projectName}.
@@ -8279,7 +8288,7 @@ RwRowanSample9Test >> testSpec_0079 [
 
 
 	| loadSpec projectName resolvedProject loadedProjects |
-	loadSpec := self _loadSpecNamed: 'spec_0079'.
+	loadSpec := self _loadSpecNamed: self spec_0079Name.
 
 	projectName := loadSpec projectName.
 
@@ -8340,6 +8349,29 @@ RwRowanSample9Test >> testSpec_0081 [
 
 "validate"
 	self _standard_validate: resolvedProject loadedProjects: loadedProjects.
+]
+
+{ #category : 'tests' }
+RwRowanSample9Test >> testSpec_0083 [
+	"spec_0083 should load cleanly"
+
+
+	| loadSpec projectName resolvedProject loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0083'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self _standard_validate: resolvedProject loadedProjects: loadedProjects
 ]
 
 { #category : 'tests' }

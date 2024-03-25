@@ -88,9 +88,10 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
 		genSpec_0061: commitComment;
 		genSpec_0062: commitComment;
 		genSpec_0063: commitComment;
-		genSpec_0079: commitComment;
+		"genSpec_0079: commitComment;"
 		genSpec_0080: commitComment;
 		genSpec_0081: commitComment;
+		genSpec_0083: commitComment;
 		yourself
 ]
 

@@ -89,8 +89,10 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V2Generator [
 		genSpec_0062: commitComment;
 		genSpec_0063: commitComment;
 		genSpec_0064: commitComment;
-		genSpec_0079: commitComment;
+		"genSpec_0079: commitComment;"
 		genSpec_0080: commitComment;
 		genSpec_0081: commitComment;
+		"skip 0082 -- already used by RowanSample9V3"
+		genSpec_0083: commitComment;
 		yourself
 ]
