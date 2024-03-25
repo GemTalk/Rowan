@@ -9,8 +9,8 @@
 		"errors" : 8,
 		"failures" : 8,
 		"passed" : 1158,
-		"summary" : "1174 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 1351.07s",
-		"tests" : 1174,
+		"summary" : "1175 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 1351.07s",
+		"tests" : 1175,
 		"time" : 1351.074
 	},
 	"suiteName" : "Rowan projects Test Suite",
@@ -2557,6 +2557,12 @@
 			"className" : "RwRowanCrooked9Test",
 			"status" : "passed",
 			"selector" : "testIssue920_1",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue920_2",
 			"time" : "0"
 		},
 		{
