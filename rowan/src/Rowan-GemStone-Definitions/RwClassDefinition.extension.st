@@ -2,9 +2,9 @@ Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
-	(#(#'_gsFileOffset' #'_gsFileName') includesIdentical: propertyKey)
+	(#(#'_gsFileOffset' #'_gsFileName' #'commentStamp') includesIdentical: propertyKey)
 		ifTrue: [ 
-			"_gsFileOffset' '_gsFileName' are informational properties so any differences can be ignored "
+			"_gsFileOffset' '_gsFileName' 'commentStamp' are informational properties so any differences can be ignored "
 			^ true ].
 	propertyKey == #'comment'
 		ifTrue: [ 

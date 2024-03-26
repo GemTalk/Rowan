@@ -259,7 +259,7 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
-	definition at: #commentStamp put: ''.
+	definition at: #commentStamp put: (aClassDefinition propertyAt: #commentStamp ifAbsent: ['']).
 
 	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
 

@@ -376,3 +376,40 @@ RwRowanCrooked9Test >> testIssue920_1 [
 	] ensure: [
 		Rowan gitTools performGitCommand: 'restore' in: (self _testRowanProjectsSandbox / crookedProjectName ) fullName with: ' .'  ]
 ]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue920_2 [
+	"https://github.com/GemTalk/Rowan/issues/920 -- preserve commentStamp class property on write"
+
+	| loadSpec crookedProjectName readProjects definedProject classDef  |
+	self _checkoutBranchNamed: 'spec_0012'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0012.ston') fullName.
+	readProjects := loadSpec resolve read.
+	definedProject := readProjects projectNamed: crookedProjectName.
+	classDef := ((definedProject packageNamed:  'RowanSample9V3-Core')
+		classDefinitionNamed:  'RowanSample9V3Class1').
+	self assert: (classDef propertyAt: #'commentStamp') equals: 'Tbn 11/12/2010 23:15'.
+	[
+		"write project do disk"
+		definedProject  export.
+		"now reread project ... should still see the commentStamp property"
+		readProjects := loadSpec resolve read.
+		definedProject := readProjects projectNamed: crookedProjectName.
+		classDef := ((definedProject packageNamed:  'RowanSample9V3-Core')
+			classDefinitionNamed:  'RowanSample9V3Class1').
+		self assert: (classDef propertyAt: #'commentStamp') equals: 'Tbn 11/12/2010 23:15'.	
+	] ensure: [
+		Rowan gitTools performGitCommand: 'restore' in: (self _testRowanProjectsSandbox / crookedProjectName ) fullName with: ' .'  ]
+]

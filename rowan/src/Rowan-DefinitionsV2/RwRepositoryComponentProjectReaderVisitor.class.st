@@ -98,6 +98,9 @@ IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 	(metadata
 		at: #'_gsFileName' ifAbsent: [])
 		ifNotNil: [ :filename | currentClassDefinition propertyAt: #'_gsFileName' put: filename ].
+	(metadata
+		at: #'commentstamp' ifAbsent: [])
+		ifNotNil: [ :timestampString | currentClassDefinition propertyAt: #'commentStamp' put: timestampString ].
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
