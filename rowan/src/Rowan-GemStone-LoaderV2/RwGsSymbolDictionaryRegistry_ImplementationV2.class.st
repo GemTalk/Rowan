@@ -366,12 +366,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> createLoadedPackageNamed:
 	| existingLoadedPackage newLoadedPackage |
 	existingLoadedPackage := registryInstance packageRegistry at: packageName ifAbsent: [ nil ].
 	existingLoadedPackage
-		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
+		ifNotNil: [ self error: 'Internal error -- Attempt to add a package ', packageName printString, '  that exists: ' ].
 	newLoadedPackage := RwGsLoadedSymbolDictPackage newNamed: packageName.
 	newLoadedPackage setPropertiesTo: properties.
 	registryInstance packageRegistry at: packageName put: newLoadedPackage.
 	^ newLoadedPackage
-
 ]
 
 { #category : 'class - patch api' }
