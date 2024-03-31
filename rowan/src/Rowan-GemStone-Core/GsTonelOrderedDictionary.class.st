@@ -45,9 +45,7 @@ GsTonelOrderedDictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 
 	| indent cnt |
 	indent := startIndent.
-	aStream
-		nextPutAll: '{';
-		lf.
+	aStream nextPutAll: '{'.
 	cnt := 0.
 	indent := indent + 1.
 	self keys do: 
@@ -55,16 +53,17 @@ GsTonelOrderedDictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 			| value |
 			value := self at: key.
 			cnt := cnt + 1.
+			aStream lf.
 			indent timesRepeat: [aStream tab].
 			key _writeCypressJsonOn: aStream indent: indent.
 			aStream nextPutAll: ' : '.
 			value _writeCypressJsonOn: aStream indent: indent.
 			cnt < size
 				ifTrue: 
-					[aStream
-						nextPutAll: ',';
-						lf]].
-	size == 0 ifTrue: [indent timesRepeat: [aStream tab]].
+					[aStream nextPutAll: ',' ]].
+	self size > 0
+		ifTrue: [ aStream lf ]
+		ifFalse: [ aStream space ].
 	aStream nextPutAll: ' }'
 ]
 
