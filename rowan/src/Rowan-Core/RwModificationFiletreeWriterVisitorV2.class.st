@@ -246,12 +246,24 @@ RwModificationFiletreeWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinitio
 	| definition |
 	definition := self class orderedDictionaryClass new.
 
+	definition at: #commentStamp put: (aClassDefinition propertyAt: #commentStamp ifAbsent: ['']).
+
+	definition at: #super put: aClassDefinition superclassName.
+
 	definition 		
 		at: #category put: aClassDefinition category.
 
 	definition at: #classinstvars put: (aClassDefinition classInstVarNames) asArray.
 
+	definition at: #pools put: ((aClassDefinition poolDictionaryNames) collect: [:each | each asString]) asArray.
+
 	definition at: #classvars put: (aClassDefinition classVarNames) asArray.
+
+	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
+
+	definition at: #name put: aClassDefinition name.
+
+	definition at: #type put: aClassDefinition classType.
 
 	(aClassDefinition gs_constraints)
 		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
@@ -259,20 +271,8 @@ RwModificationFiletreeWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinitio
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
-	definition at: #commentStamp put: (aClassDefinition propertyAt: #commentStamp ifAbsent: ['']).
-
-	definition at: #instvars put: (aClassDefinition instVarNames) asArray.
-
 	(aClassDefinition gs_reservedOop)
 		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
-
-	definition at: #name put: aClassDefinition name.
-
-	definition at: #pools put: ((aClassDefinition poolDictionaryNames) collect: [:each | each asString]) asArray.
-
-	definition at: #super put: aClassDefinition superclassName.
-
-	definition at: #type put: aClassDefinition classType.
 
 	^ self _toJSON: definition
 ]
@@ -343,8 +343,7 @@ RwModificationFiletreeWriterVisitorV2 >> addedPackage: aPackageModification [
 		aStream 
 			<< '{'
 			<< self  _newLine
-			<< '	 }'
-			<< self  _newLine ].
+			<< '	 }'  ].
 
 	packageProperties := self _filetreePackagePropertyDictFor: aPackageModification.
 	(packageProperties at:  'noMethodMetaData' ifAbsent: []) = self noMethodMetaData
