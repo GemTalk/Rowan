@@ -340,9 +340,7 @@ RwModificationFiletreeWriterVisitorV2 >> addedPackage: aPackageModification [
 		writeStreamDo: [:aStream |
 		aStream truncate.
 		aStream 
-			<< '{'
-			<< self  _newLine
-			<< '	 }'  ].
+			<< '{ }'  ].
 
 	packageProperties := self _filetreePackagePropertyDictFor: aPackageModification.
 	(packageProperties at:  'noMethodMetaData' ifAbsent: []) = self noMethodMetaData
@@ -493,9 +491,7 @@ RwModificationFiletreeWriterVisitorV2 >> processClass: aClassModification [
 	(self _classSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
 			aStream truncate.
-			aStream 
-				<< (self _typeClassDefinitionOf: self currentClassDefinition)
-				<< self _newLine ].
+			aStream << (self _typeClassDefinitionOf: self currentClassDefinition) ].
 
 	instanceFileNameMap  := self _createFileNameMapForMethods: aClassModification after instanceMethodDefinitions.
 	classFileNameMap := self _createFileNameMapForMethods: aClassModification after classMethodDefinitions.
