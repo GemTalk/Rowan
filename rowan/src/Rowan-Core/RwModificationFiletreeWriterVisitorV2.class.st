@@ -150,8 +150,7 @@ RwModificationFiletreeWriterVisitorV2 >> _filetreePackagePropertyDictFor: aPacka
 						add: 'noMethodMetaData' -> self noMethodMetaData;
 						add: 'separateMethodMetaAndSource' -> self separateMethodMetaAndSource;
 						add: 'useCypressPropertiesFile' -> self useCypressPropertiesFile;
-						yourself))
-					<< self  _newLine ] ].
+						yourself)) ] ].
 	^ self _readObjectFrom: propertiesFile
 ]
 
@@ -172,8 +171,7 @@ RwModificationFiletreeWriterVisitorV2 >> _filetreeProjectPropertyDictFor: aProje
 					yourself.
 				aStream truncate.
 				aStream 
-					<< (self _toJSON: dict )
-					<< self  _newLine ] ].
+					<< (self _toJSON: dict ) ] ].
 	^ self _readObjectFrom: propertiesFile
 ]
 
