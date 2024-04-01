@@ -32,5 +32,7 @@ Dictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 					[aStream
 						nextPutAll: ',';
 						lf]]].
+	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' }'
+
 ]

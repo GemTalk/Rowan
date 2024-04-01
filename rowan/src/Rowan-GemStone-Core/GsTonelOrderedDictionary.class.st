@@ -61,7 +61,10 @@ GsTonelOrderedDictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 			cnt < size
 				ifTrue: 
 					[aStream nextPutAll: ',' ]].
-	aStream nextPutAll: ' }'
+	self size > 0
+		ifTrue: [ aStream lf ]
+		ifFalse: [ aStream space ].
+	aStream nextPutAll: '}'
 ]
 
 { #category : 'accessing' }
