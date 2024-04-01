@@ -171,7 +171,8 @@ RwModificationFiletreeWriterVisitorV2 >> _filetreeProjectPropertyDictFor: aProje
 					yourself.
 				aStream truncate.
 				aStream 
-					<< (self _toJSON: dict ) ] ].
+					<< (self _toJSON: dict )
+					<< self  _newLine ] ].
 	^ self _readObjectFrom: propertiesFile
 ]
 

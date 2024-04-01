@@ -150,8 +150,7 @@ RwModificationFiletreeWriterVisitor >> _filetreePackagePropertyDictFor: aPackage
 						add: 'noMethodMetaData' -> self noMethodMetaData;
 						add: 'separateMethodMetaAndSource' -> self separateMethodMetaAndSource;
 						add: 'useCypressPropertiesFile' -> self useCypressPropertiesFile;
-						yourself))
-					<< self  _newLine ] ].
+						yourself)) ] ].
 	^ self _readObjectFrom: propertiesFile
 ]
 
