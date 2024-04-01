@@ -18,10 +18,7 @@ Array >> _writeCypressJsonOn: aStream indent: startIndent [
 			index < self size
 				ifTrue: 
 					[ aStream nextPutAll: ',']  ].
-	self size > 0
-		ifTrue: [  
-			aStream lf.
-			 startIndent timesRepeat: [ aStream tab ].
-			 aStream nextPutAll: ']' ]
-		ifFalse: [ aStream nextPutAll: ' ]' ]
+	aStream lf.
+	indent timesRepeat: [ aStream tab ].
+	aStream nextPutAll: ']'
 ]
