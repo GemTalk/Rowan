@@ -518,8 +518,7 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 				writeStreamDo: [:aStream |
 					aStream truncate.
 					aStream 
-						<< (self _classExtensionOf: self currentClassExtension)
-						<< self _newLine ].
+						<< (self _classExtensionOf: self currentClassExtension) ].
 
 			instanceFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification after instanceMethodDefinitions.
 			classFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification after classMethodDefinitions.
