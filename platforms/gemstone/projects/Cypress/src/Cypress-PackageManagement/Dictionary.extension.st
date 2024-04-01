@@ -4,9 +4,7 @@ Extension { #name : 'Dictionary' }
 Dictionary >> _writeCypressJsonOn: fileStream [
 	"Private method which may be removed in a future GemStone version."
 
-	self _writeCypressJsonOn: fileStream indent: 0.
-	fileStream lf
-
+	self _writeCypressJsonOn: fileStream indent: 0
 ]
 
 { #category : '*Cypress-PackageManagement' }
