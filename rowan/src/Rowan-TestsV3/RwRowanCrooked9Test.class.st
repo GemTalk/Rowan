@@ -200,7 +200,8 @@ RwRowanCrooked9Test >> testIssue896_2 [
 ]
 
 { #category : 'tests' }
-RwRowanCrooked9Test >> testIssue896_3 [
+RwRowanCrooked9Test >> testIssue896_3a [
+	"Different error message is signalled if the class is added 2 or more times in the incoming package load (a), than is signaled when the class is already present in the image(b)"
 	"https://github.com/GemTalk/Rowan/issues/896 -- filetree duplicate class defs"
 
 	| loadSpec crookedProject crookedProjectName errorHit |
@@ -220,6 +221,48 @@ RwRowanCrooked9Test >> testIssue896_3 [
 						/ 'spec_0007.ston') fullName.
 	errorHit := false.
 	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			| errorMessage|
+			errorMessage := ex messageText.
+			errorHit := true.
+			self
+				assert:
+					(errorMessage
+						beginsWith:
+							'Duplicate new class name #''RowanSample9V3Class1'' in symbol dictionary #''RowanSample9_1''') ].
+	self assert: errorHit description: 'expected error not encountered'
+]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue896_3b [
+	"Different error message is signalled if the class is added 2 or more times in the incoming package load (a), than is signaled when the class is already present in the image(b)"
+	"https://github.com/GemTalk/Rowan/issues/896 -- filetree duplicate class defs"
+
+	| loadSpecA loadSpecB crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0007'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpecA := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0007a.ston') fullName.
+	loadSpecB := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0007.ston') fullName.
+	crookedProject := loadSpecA resolve load.
+	errorHit := false.
+	[ crookedProject := loadSpecB resolve load ]
 		on: Error
 		do: [ :ex | 
 			| errorMessage|
