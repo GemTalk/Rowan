@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 9,
-		"failures" : 8,
-		"passed" : 1160,
-		"summary" : "1177 Tests with 8 Failures, 9 Errors and 0 DeprecationWarnings in 1416.61s",
-		"tests" : 1177,
-		"time" : 1416.605
+		"errors" : 8,
+		"failures" : 10,
+		"passed" : 1166,
+		"summary" : "1184 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1508.50s",
+		"tests" : 1184,
+		"time" : 1508.497
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2532,7 +2532,13 @@
 		{
 			"className" : "RwRowanCrooked9Test",
 			"status" : "passed",
-			"selector" : "testIssue896_3",
+			"selector" : "testIssue896_3a",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue896_3b",
 			"time" : "0"
 		},
 		{
@@ -7114,5 +7120,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-03-25T16:26:45.732303-07:00"
+	"timeStamp" : "2024-04-05T16:02:42.109386-07:00"
 }
