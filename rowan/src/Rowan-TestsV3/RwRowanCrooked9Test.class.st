@@ -228,9 +228,9 @@ RwRowanCrooked9Test >> testIssue896_3a [
 			errorHit := true.
 			self
 				assert:
-					(errorMessage
+					((errorMessage
 						beginsWith:
-							'Duplicate new class name #''RowanSample9V3Class1'' in symbol dictionary #''RowanSample9_1''') ].
+							'Duplicate new class name #''RowanSample9V3Class1'' in symbol dictionary #''RowanSample9_1''') and: [ errorMessage includesString: 'near line' ]) ].
 	self assert: errorHit description: 'expected error not encountered'
 ]
 
@@ -270,9 +270,9 @@ RwRowanCrooked9Test >> testIssue896_3b [
 			errorHit := true.
 			self
 				assert:
-					(errorMessage
+					((errorMessage
 						beginsWith:
-							'Encountered an existing association for a new class RowanSample9V3Class1') ].
+							'Encountered an existing association for a new class RowanSample9V3Class1') and: [ errorMessage includesString: 'near line' ]) ].
 	self assert: errorHit description: 'expected error not encountered'
 ]
 

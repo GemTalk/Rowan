@@ -365,7 +365,10 @@ RwGsPatchSet_V2 >> addAddedClassesToTempSymbols [
 						ifNotNil: [ 
 							self
 								error:
-									'Encountered an existing association for a new class ' , key asString ] ].
+									'Encountered an existing association for a new class ' , key asString
+										,
+											(RwRepositoryComponentProjectReaderVisitor
+												lineNumberStringForDefinition: patch classDefinition) ] ].
 			tempSymbols at: key put: nil ]
 ]
 

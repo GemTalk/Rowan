@@ -85,7 +85,9 @@ RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList 
 			self
 				error:
 					'Duplicate new class name ' , name printString , ' in symbol dictionary '
-						, symDictName printString ].
+						, symDictName printString ,
+											(RwRepositoryComponentProjectReaderVisitor
+												lineNumberStringForDefinition: classDefinition)].
 	symDict at: name put: self
 ]
 
