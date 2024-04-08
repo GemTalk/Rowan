@@ -11,7 +11,8 @@ Class {
 	#name : 'RwTopazTonelReader',
 	#superclass : 'Object',
 	#instVars : [
-		'environmentId'
+		'environmentId',
+		'theClassName'
 	],
 	#category : 'Rowan-Tonel-Core'
 }
@@ -21,14 +22,12 @@ RwTopazTonelReader class >> _lineNumberStringForOffset: offset fileName: fName [
 	| res |
 	res := '  (Unable to determine line number)'.
 	[ 
-	| buf lf lNum gsfile |
-	gsfile := GsFile openReadOnServer: fName.
-	buf := gsfile contents.
-	gsfile close.
+	| buf lNum |
+	buf := fName asFileReference contents.
 	buf size > offset
 		ifTrue: [ buf size: offset ].
-	lNum := 1 + (buf occurrencesOf: (lf := Character lf)).
-	res := '' , lf , ' near line ' , lNum asString , lf , ' in file ' , fName ]
+	lNum := 1 + (buf occurrencesOf: Character lf).
+	res := ' near line ' , lNum asString , ' in file ' , fName ]
 		on: Error
 		do: [ :ex | 
 			"ignore"
@@ -86,45 +85,169 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
 		Definition/redefinition of the class not implemented yet.
 		For topaz TFILE command"
 
-  | warningsEnabled |
-  warningsEnabled := Notification signallingEnabled .
-  [ 
-	  | gsfile stream errBlk warnBlk |
-    Notification enableSignalling . "compile warnings can be logged"
-	  gsfile := GsFile openReadOnServer: filePath.
-	  gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
-	  stream := ReadStreamPortable on: gsfile contents.
-	  gsfile close.
-		errBlk := [ :ex | 
-         ex addText: (self _lineNumberStringForOffset: stream position fileName: filePath).
-			   ex pass ].
-    warnBlk := [ :warn| | str | 
-       str := warn asString .
-       ((str subStrings occurrencesOf: 'WARNING:') == 1 
-         and:[ str includesString: 'not optimized']) ifFalse:[
-         GsFile gciLogServer: warn asString . 
-       ].
-       warn resume 
-    ].
-	  [
-      self topazReadTonelStream: stream envId: envId 
-    ] onException: { STONReaderError . RwTonelParseError . Warning }
-		  do: { errBlk . errBlk . warnBlk } .
-  ] ensure:[ 
-    warningsEnabled ifFalse:[ Notification disableSignalling]
-  ]
+	| warningsEnabled |
+	warningsEnabled := Notification signallingEnabled.
+	[ 
+	| gsfile stream errBlk warnBlk |
+	Notification enableSignalling.	"compile warnings can be logged"
+	gsfile := GsFile openReadOnServer: filePath.
+	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
+	stream := ReadStreamPortable on: gsfile contents.
+	gsfile close.
+	errBlk := [ :ex | 
+	(ex isKindOf: CompileError)
+		ifTrue: [ 
+			GsFile
+				gciLogServer:
+					'CompileError encountered '
+						, (self _lineNumberStringForOffset: stream position fileName: filePath) ]
+		ifFalse: [ 
+			ex
+				addText:
+					(self _lineNumberStringForOffset: stream position fileName: filePath) ].
+	ex pass ].
+	warnBlk := [ :warn | 
+	| str |
+	str := warn asString.
+	((str subStrings occurrencesOf: 'WARNING:') == 1
+		and: [ str includesString: 'not optimized' ])
+		ifFalse: [ GsFile gciLogServer: warn asString ].
+	warn resume ].
+	[ self topazReadTonelStream: stream envId: envId ]
+		onException:
+			{STONReaderError.
+			RwTonelParseError.
+			Error.
+			Warning}
+		do:
+			{errBlk.
+			errBlk.
+			errBlk.
+			warnBlk} ]
+		ensure: [ 
+			warningsEnabled
+				ifFalse: [ Notification disableSignalling ] ]
 ]
 
 { #category : 'topaz support' }
 RwTopazTonelReader class >> topazReadTonelStream: tonelStream envId: envId [
-	"Read a single tonel format class from a stream and compile the methods on that stream. 
-		Definition/redefinition of the class not implemented yet.
-		For topaz TFILE command"
+	"Used in implementation of the topaz TFILE command.
+   Read a single tonel format class from a stream and compile the methods on that stream. 
+   It file is  a class.st file, 
+   creation of the class is attempted by RwTopazTonelReader >> createClassFrom:"
 
 	RwTonelParser
 		parseStream: tonelStream
 		forReader: (self forEnvironmentId: envId)
 ]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName [
+	^theClassName
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName: object [
+	theClassName := object
+]
+
+{ #category : 'tonel parser interface' }
+RwTopazTonelReader >> createClassFrom: anArray [
+  "Execute class creation.  
+   The typical use cases are filein of tonel files from tests/ernie , 
+   or slowfilein or patching of a base image using topaz.
+   Signal an error if the creation creates a new version of the class .
+   If the class is found in the symbolList , 
+   argument to inDictionary: is the dictionary in which it was found. 
+   If class not found in the symbolList and we are SystemUser and not in a solo session,
+   the arg to inDictionary: will be Globals, 
+   else the arg will be UserGlobals of the current session."
+
+  | dict instVars classVars superN name categ knownKeys xKeys sess intoDict 
+    oldClass theClass  options type keys superCls classInstVars comment resOop | 
+  dict := anArray at: 6 .
+  knownKeys := IdentitySet withAll:#( name superclass instvars classvars classinstvars 
+                                           category gs_options type shebang gs_reservedoop ).
+  keys := IdentitySet new .
+  dict keys do:[:k|  keys add: k asSymbol ].
+  (xKeys := keys - knownKeys) size > 0 
+    ifTrue:[ Error signal:'unknown keys ', (Array withAll: xKeys) printString ].
+  sess := GsCurrentSession currentSession .
+  (superCls := (sess resolveSymbol: (superN := (dict at: #superclass ) asSymbol))) 
+     ifNil:[ Error signal: superN , ' not found' ].
+  superCls := superCls _value .
+  superCls ifNil:[ Error signal: superN , ' not defined yet' ].  
+  name := dict at: #name .
+  self theClassName: name .
+  categ := dict at: #category otherwise: nil .
+  instVars := dict at: #instvars otherwise: #() .
+  classVars := dict at: #classvars otherwise: #() .
+  classInstVars := dict at: #classinstvars otherwise: #() .
+  options := dict at: #gs_options otherwise: #() .
+  1 to: options size do:[:j | | opt |
+    (opt := Symbol _existingWithAll:( options at: j)) ifNil:[
+      Error signal:'invalid option ', opt printString .
+    ].
+    options at: j put: opt.
+  ].
+  comment := anArray at: 2 .
+  type := dict at: #type otherwise: nil .
+  (sess symbolList dictionaryAndAssociationOf: name asSymbol) ifNotNil:[:ary |
+    oldClass := (ary at: 2) _value  .
+    intoDict := (ary at: 1) 
+  ].
+  intoDict ifNil:[ 
+    intoDict := ((System myUserProfile userId = 'SystemUser') and:[ sess isSolo not]) 
+               ifTrue:[ Globals ] 
+              ifFalse:[ (sess resolveSymbol: #UserGlobals) _value ].
+  ].
+  resOop := dict at: #gs_reservedoop otherwise: nil .
+  theClass := superCls .
+  type ifNil:[
+    resOop ifNotNil:[
+      theClass := superCls _newKernelSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options reservedOop: resOop
+    ] ifNil:[
+      theClass := superCls subclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+    ]
+  ] ifNotNil:[
+    type = 'variable' ifTrue:[
+      resOop ifNotNil:[
+        theClass := superCls _newKernelIndexableSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options reservedOop: resOop
+      ] ifNil:[
+        theClass := superCls indexableSubclass: name 
+         instVarNames: instVars classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+      ]
+    ].
+    type = 'byteSubclass' ifTrue:[
+      instVars size ~~ 0 ifTrue:[ Error signal:'instVars not allowed on a byte subclass'].
+      resOop ifNotNil:[
+        classInstVars size ~~ 0 ifTrue:[ Error signal:' classInstVars not allowed'].
+        theClass := superCls _newKernelByteSubclass: name 
+          classVars: classVars poolDictionaries:#() inDictionary: intoDict 
+             options: options reservedOop: resOop
+      ] ifNil:[
+        theClass := superCls byteSubclass: name 
+         classVars: classVars classInstVars: classInstVars
+          poolDictionaries:#() inDictionary: intoDict options: options .
+      ].
+    ].
+    theClass ifNil:[ Error signal:'unsupported type ', type printString ].
+  ].
+  (oldClass ~~ nil and:[ oldClass ~~ theClass]) ifTrue:[ 
+    GsFile gciLogServer:'--- old class: ' , oldClass definition .
+    GsFile gciLogServer:'--- new class: ' , theClass definition .
+    Error signal:'new version of ', name, ' created'.
+  ].
+  comment ifNotNil:[ theClass comment: comment ].
+]
+
 
 { #category : 'accessing' }
 RwTopazTonelReader >> environmentId [
@@ -142,6 +265,12 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 	| behavior symbolList |
 	symbolList := GsCurrentSession currentSession symbolList.
+	(self theClassName notNil and: [ className ~= self theClassName ]) "tmethod command uses className to identify the target class" 
+		ifTrue: [ 
+			self
+				error:
+					'The name of the class (', className printString, ') specified for the method ' , selector printString
+						, ' does not match the name of class (', self theClassName printString, ') declared in this tonel class file' ].
 	behavior := symbolList objectNamed: className asSymbol.
 	meta
 		ifTrue: [ behavior := behavior class ].
@@ -154,7 +283,16 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 
 { #category : 'tonel parser interface' }
 RwTopazTonelReader >> newTypeDefinitionFrom: anArray [
-	"class definition/redefinition not supported"
+  | knd |
+  (knd := anArray at: 4) = 'Class' ifTrue:[
+    self createClassFrom: anArray
+  ] ifFalse:[
+    knd = 'Extension' ifTrue:[ | name dict |
+      dict := anArray at: 6 .
+      name := dict at: #name .
+      theClassName := name .
+    ] ifFalse:[ Error signal: 'uknown tonel file kind ', knd printString ]
+  ].
 ]
 
 { #category : 'method definition' }
