@@ -160,6 +160,15 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein3B' ]
 ]
 
+{ #category : 'upgrade rowan' }
+UpgradeRowanV2 >> adoptRowan [
+	"classes that are new relative to original Rowan version"
+
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ "nothing yet" ]
+]
+
 { #category : 'upgrade' }
 UpgradeRowanV2 >> auditForProjectsNamed: theProjectNames [
 	audit := KeyValueDictionary new.
@@ -368,11 +377,6 @@ UpgradeRowanV2 >> errorMessages [
 
 ]
 
-{ #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> gemstoneBaseProjectNames [
-	^ {'gemstoneBaseImage'}
-]
-
 { #category : 'repair' }
 UpgradeRowanV2 >> gemstoneBaseRepairClassesNotIdentical: auditDetail [
 	"classes not identical when the loadedClass is referencing an older version of class whose shape 
@@ -519,23 +523,57 @@ UpgradeRowanV2 >> reloadCustomer [
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> reloadGemstoneBase [
+	| project platformConditionalAttributes projectName loadSpecSet projectDefinitionSet  |
+	projectName := 'gemstoneBaseImage'.
+	self upgradeUnPackagedProject.
 	self adoptGemstoneBase.
-	self gemstoneBaseProjectNames
-		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+	self logMessage: 'gemstoneBaseImage Loading ' , projectName.
+	project := Rowan projectNamed: projectName.
+	platformConditionalAttributes := project platformConditionalAttributes
+		collect: [ :attribute | 
+			"replace old GemStone version with current GemStone version"
+			(attribute isKindOf: RwGemStoneVersionNumber)
+				ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+				ifFalse: [ attribute ] ].
+	loadSpecSet := project loadedLoadSpecifications.
+	projectDefinitionSet := loadSpecSet read: platformConditionalAttributes.
+	[ projectDefinitionSet load ]
+		on: CompileWarning , RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [ :ex | 
+			(ex isKindOf: CompileWarning)
+				ifTrue: [ ex resume ]
+				ifFalse: [ 
+					(ex isKindOf: RwExecuteClassInitializeMethodsAfterLoadNotification)
+						ifTrue: [ 
+							"skip auto initialization for certain classes"
+							({GsCurrentSession.
+							GsPackagePolicy.
+							Upgrade1B.
+							Upgrade2A.
+							Upgrade2C.
+							Upgrade3Init} includes: ex candidateClass)
+								ifTrue: [ 
+									"skip initialization"
+									ex resume: false ]
+								ifFalse: [ ex resume: true ] ] ] ]
 ]
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> reloadRowan [
-	self rowanProjectNames
-		do: [ :projectName | 
-			"make sure test group is loaded ... include deprecated packages"
-			[ (Rowan projectNamed: projectName) reload ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+	| project platformConditionalAttributes loadSpecSet projectDefinitionSet |
+	self adoptRowan.
+	project := Rowan projectNamed: 'Rowan'.
+	platformConditionalAttributes := project platformConditionalAttributes
+		collect: [ :attribute | 
+			"replace old GemStone version with current GemStone version"
+			(attribute isKindOf: RwGemStoneVersionNumber)
+				ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+				ifFalse: [ attribute ] ].
+	loadSpecSet := project loadedLoadSpecifications.
+	projectDefinitionSet := loadSpecSet read: platformConditionalAttributes.
+	[ projectDefinitionSet load ]
+		on: CompileWarning
+		do: [ :ex | ex resume ]
 ]
 
 { #category : 'upgrade' }
@@ -1072,7 +1110,7 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 	"Use the gemstoneBaseImage project audit to repair the damaged Rowan metadata"
 
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
-	self auditForProjectsNamed: self gemstoneBaseProjectNames.
+	self auditForProjectsNamed: {'gemstoneBaseImage'}.
 	self logMessage: ' repairing gemstoneBaseImage audit failures'.
 	audit isEmpty
 		ifFalse: [ 
@@ -1150,4 +1188,16 @@ UpgradeRowanV2 >> upgradeFrom [
 { #category : 'accessing' }
 UpgradeRowanV2 >> upgradeFrom: object [
 	upgradeFrom := object
+]
+
+{ #category : 'upgrade UnPackaged' }
+UpgradeRowanV2 >> upgradeUnPackagedProject [
+	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"The UnPackaged project references an ObsoleteFileLocator for projects home ... 
+				need to patch it with an EnvironmentResolver"
+			self logMessage: 'PATCHING UnPackaged project'.
+			(Rowan projectNamed: 'UnPackaged') _loadedProject handle _projectRepository
+				projectsHome: (FileLocator origin: #'ROWAN_PROJECTS_HOME') ]
 ]
