@@ -1051,8 +1051,8 @@ RwRowanSample9V3Test >> testIssue715_02 [
 			ifTrue: [ self deny: lp testSuite tests isEmpty]
 			ifFalse: [ self assert: lp testSuite tests isEmpty] ].
 
-"reload project - preserve primary load spec, reload required load specs"
-	loadedProjects := project reload.
+"reload project - preserve primary load spec, reload required load specs -- to read specs, load the original spec and required project specs will be reread"
+	loadedProjects := loadSpec resolve load.
 
 "validate"
 	self

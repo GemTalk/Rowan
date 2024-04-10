@@ -5714,11 +5714,11 @@ RwRowanSample9Test >> testIssue838_03 [
 		use gitRepository:projectsHome: to point one of the embedded projects at
 		spec_0073B checkout and load ... validate ... load primary project .. validate ... 
 		reload (reread all from disk) primary project ... validate"
-
+		
 	"https://github.com/dalehenrich/Rowan/issues/838"
 
 	| loadSpec_0073A loadSpec_0073B loadedProjects projectsHome project loadedSpecs projectName resolvedSpecs 
-		newLoadedSpecs expected0073A expected0073B oldLoadedProjects |
+		newLoadedSpecs expected0073A expected0073B oldLoadedProjects loadSpecs |
 	loadSpec_0073A := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	loadSpec_0073B := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9/master/specs/spec_0073.ston'.
 	projectsHome := '$ROWAN_PROJECTS_SANDBOX' asFileReference / 'isolated'.
@@ -5815,8 +5815,10 @@ load"
 				proj gitUrl asRwUrl pathString]) 
 		equals: expected0073B.
 
-"reload primary project - reread all projects from disk (restore to original)"
-	loadedProjects := (loadedProjects projectNamed: projectName) reload.
+"reload primary project - reread all projects from disk (restore to original) ... new approved way of reloading when specs are to be read from disk ... duplicate original load expression"
+	loadSpecs := loadSpec_0073A resolve.
+	loadSpecs do: [:lspec | lspec projectsHome: projectsHome ].
+	loadedProjects := loadSpecs load.
 
 "validate"
 	self 
@@ -8010,8 +8012,8 @@ RwRowanSample9Test >> testSpec_0060_2 [
 "checkout spec_0060 and reload"
 	project checkout: 'spec_0060'.
 
-"reload project"
-	loadedProjects := project reload. "can afford to take required projects into account"
+"reload project - reread all projects from disk (restore to original) ... new approved way of reloading when specs are to be read from disk ... duplicate original load expression"
+	loadedProjects := loadSpec load.
 
 "validate"
 	self

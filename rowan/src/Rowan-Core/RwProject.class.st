@@ -446,22 +446,13 @@ RwProject >> projectUrl [
 { #category : 'actions' }
 RwProject >> reload [
 	"
-		Load the receiver AND required projects using the primary project's loadSpec, while rereading all required projects from disk.
-		Use resolve, in case there have been significant changes on disk
+		Load the receiver AND required projects from disk ... the load specs are not reread from disk, only the pacakges are reread.
+		If you want to reread the specs from disk, then use (note that if you did not use default projects home for original load, you 
+		will have to set the projectsHome for each spec to the original value):
+			self loadSpecification resolve load
 	"
 
-	^ self loadSpecification resolve load
-]
-
-{ #category : 'actions' }
-RwProject >> reload: instanceMigrator [
-	"
-		load the receiver AND required projects using the loaded load specs.
-
-		Use the specifiied instanceMigrator
-	"
-
-	^ Rowan projectTools load loadProjectNamed: self name instanceMigrator: instanceMigrator
+	^ self loadedLoadSpecifications read load
 ]
 
 { #category : 'accessing' }
