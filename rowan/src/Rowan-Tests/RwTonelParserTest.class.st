@@ -51,6 +51,15 @@ RwTonelParserTest >> newClassDefinitionFrom: anArray [
 ]
 
 { #category : 'private' }
+RwTonelParserTest >> newForTraitNamed: traitName instanceVariableNames: instvars packageName: packageName [
+	^ RwTraitDefinition
+		newForTraitNamed: traitName
+		uses: #()
+		instanceVariableNames: instvars
+		packageName: packageName
+]
+
+{ #category : 'private' }
 RwTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
 	^ RwMethodDefinition newForSelector: selector protocol: category source: source
 ]
@@ -388,6 +397,23 @@ RwTonelParserTest >> testRemoveFromEnclosingStartEnd [
 	^ self
 ' withLineEndings: nl)
 
+]
+
+{ #category : 'tests' }
+RwTonelParserTest >> testTraitTypeDef [
+	self
+		assertParse:
+			'
+Trait { 
+	#name: ''X'',
+	#category: ''Z'' 
+}'
+		rule: #'typeDef'
+		equals:
+			(self
+				newForTraitNamed: 'X'
+				instanceVariableNames: #()
+				packageName: 'Z')
 ]
 
 { #category : 'tests' }

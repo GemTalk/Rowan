@@ -160,6 +160,11 @@ RwAbstractReaderWriterVisitor class >> tonelExtensionLabel [
 	^ 'Extension'
 ]
 
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor class >> tonelTraitLabel [
+	^ 'Trait'
+]
+
 { #category : 'validation' }
 RwAbstractReaderWriterVisitor class >> validatePackageConvention: packageConvention forClassCategory: aClassDefinition inPackageNamed: packageName [
 	"

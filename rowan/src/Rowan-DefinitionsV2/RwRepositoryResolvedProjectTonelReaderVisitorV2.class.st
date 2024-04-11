@@ -118,6 +118,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
     ifTrue: [ ^ #class ].
   aString = self class tonelExtensionLabel
     ifTrue: [ ^ #classExtension ].
+  aString = self class tonelTraitLabel
+    ifTrue: [ ^ #trait ].
   RwTonelParseError signal: 'Unknown type declaration.'
 ]
 
@@ -145,6 +147,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> newTypeDefinitionFrom: anArra
     ifTrue: [ ^  self newClassDefinitionFrom: anArray ].
   typeClass == #classExtension
 	ifTrue: [ ^ self newClassExtensionDefinitionFrom: anArray ].
+  typeClass == #trait
+	ifTrue: [ ^ self newTraitDefinitionFrom: anArray ].
   ^ self error: 'unexpected typeClass: ', typeClass printString
 ]
 

@@ -210,6 +210,12 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> addTraitNamed: traitName [
+
+	^ self addTraitDefinition: (RwTraitDefinition newForTraitNamed: traitName)
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classDefinitionNamed: className [
 
 	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]

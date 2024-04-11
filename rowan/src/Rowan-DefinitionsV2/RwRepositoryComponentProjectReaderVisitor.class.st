@@ -119,6 +119,18 @@ RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: an
 		ifAbsent: [ currentPackageDefinition addClassExtensionNamed: className ].
 ]
 
+{ #category : 'tonel parser' }
+RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
+"
+	| className |
+	className := ((anArray sixth) at: #name) asString.
+	currentClassDefinition := nil.
+	^currentClassExtension := currentPackageDefinition
+		classExtensionDefinitionNamed: className 
+		ifAbsent: [ currentPackageDefinition addClassExtensionNamed: className ].
+		"
+]
+
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> packageExtension [
 
