@@ -121,14 +121,18 @@ RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: an
 
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
-"
-	| className |
-	className := ((anArray sixth) at: #name) asString.
-	currentClassDefinition := nil.
-	^currentClassExtension := currentPackageDefinition
-		classExtensionDefinitionNamed: className 
-		ifAbsent: [ currentPackageDefinition addClassExtensionNamed: className ].
-		"
+	| traitName metadata instvars packageName |
+	metadata := anArray sixth.
+	traitName := metadata at: #'name'.
+	instvars := #().	"for now"
+	packageName := metadata at: #'category'.
+	currentTraitDefinition := RwTraitDefinition
+		newForTraitNamed: traitName
+		instanceVariableNames: instvars
+		packageName: packageName.
+	^ currentPackageDefinition
+		traitDefinitionNamed: traitName
+		ifAbsent: [ currentPackageDefinition addTraitDefinition: currentTraitDefinition ]
 ]
 
 { #category : 'package reading' }

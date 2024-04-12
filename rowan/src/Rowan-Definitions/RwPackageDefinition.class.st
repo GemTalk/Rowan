@@ -9,7 +9,8 @@ Class {
 	#superclass : 'RwDefinition',
 	#instVars : [
 		'classDefinitions',
-		'classExtensions'
+		'classExtensions',
+		'traitDefinitions'
 	],
 	#category : 'Rowan-Definitions'
 }
@@ -210,9 +211,9 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addTraitNamed: traitName [
+RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
 
-	^ self addTraitDefinition: (RwTraitDefinition newForTraitNamed: traitName)
+	^ self addDefinition: aTraitDefinition to: traitDefinitions
 ]
 
 { #category : 'accessing' }
@@ -278,7 +279,8 @@ RwPackageDefinition >> initialize [
 
 	super initialize.
 	classDefinitions := Dictionary new.
-	classExtensions := Dictionary new
+	classExtensions := Dictionary new.
+	traitDefinitions := Dictionary new.
 ]
 
 { #category : 'testing' }
@@ -418,6 +420,16 @@ RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageCon
 			classDef
 				moveToPackageNamed: newPackageName
 				packageConvention: thePackageConvention ]
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> traitDefinitions [
+	^traitDefinitions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> traitDefinitions: traitDefinitionsDictionary [
+	traitDefinitions := traitDefinitionsDictionary
 ]
 
 { #category : 'accessing' }

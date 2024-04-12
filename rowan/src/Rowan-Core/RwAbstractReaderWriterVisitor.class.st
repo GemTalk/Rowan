@@ -6,7 +6,8 @@ Class {
 		'packageConvention',
 		'currentPackageDefinition',
 		'currentClassDefinition',
-		'currentClassExtension'
+		'currentClassExtension',
+		'currentTraitDefinition'
 	],
 	#category : 'Rowan-Core'
 }
@@ -370,6 +371,17 @@ RwAbstractReaderWriterVisitor >> currentProjectDefinition [
 RwAbstractReaderWriterVisitor >> currentProjectDefinition: aRwComponentProjectDefinition [
 
 	currentProjectDefinition := aRwComponentProjectDefinition
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> currentTraitDefinition [
+
+	^ currentTraitDefinition
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> currentTraitDefinition: aRwTraitDefinition [
+	currentTraitDefinition := aRwTraitDefinition
 ]
 
 { #category : 'accessing' }

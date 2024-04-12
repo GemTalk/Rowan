@@ -51,17 +51,21 @@ RwTonelParserTest >> newClassDefinitionFrom: anArray [
 ]
 
 { #category : 'private' }
-RwTonelParserTest >> newForTraitNamed: traitName instanceVariableNames: instvars packageName: packageName [
-	^ RwTraitDefinition
-		newForTraitNamed: traitName
-		uses: #()
-		instanceVariableNames: instvars
-		packageName: packageName
+RwTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
+	^ RwMethodDefinition newForSelector: selector protocol: category source: source
 ]
 
 { #category : 'private' }
-RwTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
-	^ RwMethodDefinition newForSelector: selector protocol: category source: source
+RwTonelParserTest >> newTraitDefinitionFrom: anArray [
+	| traitName metadata instvars packageName |
+	metadata := anArray sixth.
+	traitName := metadata at: #'name'.
+	instvars := #().	"for now"
+	packageName := metadata at: #'category'.
+	^ RwTraitDefinition
+		newForTraitNamed: traitName
+		instanceVariableNames: instvars
+		packageName: packageName
 ]
 
 { #category : 'private' }
@@ -72,6 +76,8 @@ RwTonelParserTest >> newTypeDefinitionFrom: anArray [
 		ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
 	typeString = RwAbstractReaderWriterVisitor tonelExtensionLabel
 		ifTrue: [ ^ self newClassExtensionDefinitionFrom: anArray ].
+	typeString = RwAbstractReaderWriterVisitor tonelTraitLabel
+		ifTrue: [ ^ self newTraitDefinitionFrom: anArray ].
 	^ self error: 'unexpected typeClass: ' , typeString
 ]
 
@@ -410,7 +416,7 @@ Trait {
 }'
 		rule: #'typeDef'
 		equals:
-			(self
+			(RwTraitDefinition
 				newForTraitNamed: 'X'
 				instanceVariableNames: #()
 				packageName: 'Z')
