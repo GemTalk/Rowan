@@ -67,6 +67,32 @@ RwRowanCrooked9Test >> _checkoutBranchNamed: branchName [
 ]
 
 { #category : 'tests' }
+RwRowanCrooked9Test >> testIssue783_1 [
+	"Traits support -- read/write a project using Traits ... export in topaz format"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec crookedProjectName readProjects resolvedProject  |
+	self _checkoutBranchNamed: 'spec_0013'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0013.ston') fullName.
+	readProjects := loadSpec resolve read.
+self halt.
+	resolvedProject := readProjects projectNamed: crookedProjectName.
+]
+
+{ #category : 'tests' }
 RwRowanCrooked9Test >> testIssue820 [
 	"https://github.com/GemTalk/Rowan/issues/820"
 
