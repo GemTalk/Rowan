@@ -26,6 +26,12 @@ RwModification class >> before: beforeDefinition after: afterDefinition [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwModification class >> new [
+
+	^self basicNew initialize
+]
+
 { #category : 'Accessing' }
 RwModification >> after [
 	^after

@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 8,
 		"failures" : 10,
-		"passed" : 1166,
-		"summary" : "1184 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1508.50s",
-		"tests" : 1184,
-		"time" : 1508.497
+		"passed" : 1167,
+		"summary" : "1185 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1358.02s",
+		"tests" : 1185,
+		"time" : 1358.024
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -6162,6 +6162,12 @@
 		{
 			"className" : "RwTonelParserTest",
 			"status" : "passed",
+			"selector" : "testTraitTypeDef",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTonelParserTest",
+			"status" : "passed",
 			"selector" : "testType",
 			"time" : "0"
 		},
@@ -7120,5 +7126,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-04-05T16:02:42.109386-07:00"
+	"timeStamp" : "2024-04-12T11:50:01.652870-07:00"
 }

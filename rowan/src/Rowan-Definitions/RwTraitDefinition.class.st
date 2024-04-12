@@ -6,21 +6,10 @@ Class {
 
 { #category : 'instance creation' }
 RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars packageName: packageName [
-	^ self
-		newForTraitNamed: traitName
-		uses: #()
-		instanceVariableNames: instvars
-		packageName: packageName
-]
-
-{ #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName uses: traitCompositionOrCollection instanceVariableNames: instvars packageName: packageName [
-	"I think that traitCompositionOrCollection is not really used ... always empty array"
-
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
-		at: #'uses' put: traitCompositionOrCollection;
+		at: #'uses' put: #();	"included because it is part of the tonel format for traits ... appears to be unused these days"
 		at: #'name' put: traitName asString;
 		at: #'category' put: packageName asString;
 		yourself.
@@ -40,6 +29,12 @@ RwTraitDefinition >> _modificationClass [
 	^ RwTraitModification
 ]
 
+{ #category : 'private' }
+RwTraitDefinition >> _traitNameForCompare: aDefinition [
+
+	^ self key ifNil: [ aDefinition key ]
+]
+
 { #category : 'comparing' }
 RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 
@@ -56,7 +51,7 @@ RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 		compareDictionary: self instanceMethodDefinitionsForCompare
 		againstBaseDictionary: aDefinition instanceMethodDefinitionsForCompare
 		into: instanceMethodsModification
-		elementClass: RwTraitDefinition
+		elementClass: RwMethodDefinition
 		isMeta: false.
 	self
 		compareDictionary: self classMethodDefinitionsForCompare
