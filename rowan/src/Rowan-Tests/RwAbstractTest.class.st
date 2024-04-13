@@ -367,7 +367,7 @@ RwAbstractTest >> packageDefinition: packageName [
 		withProperties: (SymbolDictionary with: #'name' -> packageName  with: #'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: Dictionary new
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -378,7 +378,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 		classDefinitions:
 			(self classDefinition: className super: superClassName inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -393,7 +393,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				category: category
 				inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -408,7 +408,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				classVars: classVars
 				inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -423,7 +423,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				comment: comment
 				inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -439,7 +439,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				classMethods: classMethods
 				inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -454,7 +454,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				instVars: instVars
 				inPackage: packageName)
 		classExtensions: Dictionary new
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }
@@ -468,7 +468,7 @@ RwAbstractTest >> packageDefinition: packageName extendClassNamed: className ins
 				classExtensionDefinition: className
 				instanceMethods: instanceMethods
 				classMethods: classMethods)
-
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'support' }

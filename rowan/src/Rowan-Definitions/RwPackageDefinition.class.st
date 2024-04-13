@@ -22,6 +22,7 @@ RwPackageDefinition class >> newNamed: packageName [
 		withProperties: (SymbolDictionary with: #'name' -> packageName)
 		classDefinitions: Dictionary new
 		classExtensions: Dictionary new
+		traitDefinitions: Dictionary new
 ]
 
 { #category : 'instance creation' }
@@ -31,6 +32,17 @@ RwPackageDefinition class >> withProperties: properties classDefinitions: classD
 		properties: properties;
 		classDefinitions: classDefinitions;
 		classExtensions: classExtensionDefinitions;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwPackageDefinition class >> withProperties: properties classDefinitions: classDefinitions classExtensions: classExtensionDefinitions traitDefinitions: traitDefinitions [
+
+	^(self basicNew)
+		properties: properties;
+		classDefinitions: classDefinitions;
+		classExtensions: classExtensionDefinitions;
+		traitDefinitions: traitDefinitions;
 		yourself
 ]
 
@@ -212,7 +224,6 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
-
 	^ self addDefinition: aTraitDefinition to: traitDefinitions
 ]
 
@@ -420,6 +431,12 @@ RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageCon
 			classDef
 				moveToPackageNamed: newPackageName
 				packageConvention: thePackageConvention ]
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> traitDefinitionNamed: traitName ifAbsent: absentBlock [
+
+	^ self traitDefinitions at: traitName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }

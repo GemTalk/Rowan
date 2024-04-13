@@ -141,16 +141,6 @@ RwTopazTonelReader class >> topazReadTonelStream: tonelStream envId: envId [
 		forReader: (self forEnvironmentId: envId)
 ]
 
-{ #category : 'accessing' }
-RwTopazTonelReader >> theClassName [
-	^theClassName
-]
-
-{ #category : 'accessing' }
-RwTopazTonelReader >> theClassName: object [
-	theClassName := object
-]
-
 { #category : 'tonel parser interface' }
 RwTopazTonelReader >> createClassFrom: anArray [
   "Execute class creation.  
@@ -248,7 +238,6 @@ RwTopazTonelReader >> createClassFrom: anArray [
   comment ifNotNil:[ theClass comment: comment ].
 ]
 
-
 { #category : 'accessing' }
 RwTopazTonelReader >> environmentId [
 	^ environmentId ifNil: [ environmentId := 0 ]
@@ -298,4 +287,14 @@ RwTopazTonelReader >> newTypeDefinitionFrom: anArray [
 { #category : 'method definition' }
 RwTopazTonelReader >> offset: anInteger inFile: aFileName [
 	"message sent to method definitions ... avoid MNU"
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName [
+	^theClassName
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> theClassName: object [
+	theClassName := object
 ]

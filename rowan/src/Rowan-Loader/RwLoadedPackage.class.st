@@ -43,6 +43,7 @@ RwLoadedPackage >> asDefinition [
 		withProperties: self propertiesForDefinition
 		classDefinitions: self classDefinitions
 		classExtensions: self classExtensionDefinitions
+		traitDefinitions: Dictionary new "for now ..."
 ]
 
 { #category : 'other' }

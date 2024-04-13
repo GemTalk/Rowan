@@ -88,8 +88,8 @@ RwRowanCrooked9Test >> testIssue783_1 [
 					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
 						/ 'spec_0013.ston') fullName.
 	readProjects := loadSpec resolve read.
-self halt.
 	resolvedProject := readProjects projectNamed: crookedProjectName.
+"now we export as .gs file and tonel file"
 ]
 
 { #category : 'tests' }

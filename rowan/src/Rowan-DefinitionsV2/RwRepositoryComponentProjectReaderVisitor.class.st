@@ -70,7 +70,7 @@ RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
 RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 	| metadata typeField typeValue |
 	metadata := anArray sixth.
-	currentClassExtension := nil.
+	currentTraitDefinition := currentClassExtension := nil.
 	typeField := metadata at: #'type' ifAbsent: [ #'normal' ].
 	typeField isString
 		ifTrue: [ typeValue := typeField asString ]
@@ -113,7 +113,7 @@ IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: anArray [
 	| className |
 	className := ((anArray sixth) at: #name) asString.
-	currentClassDefinition := nil.
+	currentTraitDefinition := currentClassDefinition := nil.
 	^currentClassExtension := currentPackageDefinition
 		classExtensionDefinitionNamed: className 
 		ifAbsent: [ currentPackageDefinition addClassExtensionNamed: className ].
@@ -123,6 +123,7 @@ RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: an
 RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
 	| traitName metadata instvars packageName |
 	metadata := anArray sixth.
+	currentClassExtension := currentClassDefinition := nil.
 	traitName := metadata at: #'name'.
 	instvars := #().	"for now"
 	packageName := metadata at: #'category'.
@@ -130,9 +131,7 @@ RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
 		newForTraitNamed: traitName
 		instanceVariableNames: instvars
 		packageName: packageName.
-	^ currentPackageDefinition
-		traitDefinitionNamed: traitName
-		ifAbsent: [ currentPackageDefinition addTraitDefinition: currentTraitDefinition ]
+	^ currentTraitDefinition
 ]
 
 { #category : 'package reading' }

@@ -160,13 +160,14 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> packageExtension [
 
 { #category : 'class reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassesFor: packageName packageRoot: packageRoot [
-	| classFileExtensions classExtensionFileExtensions trace |
+	| classFileExtensions classExtensionFileExtensions traitFileExtensions trace |
 	trace := Rowan projectTools trace.
 	currentPackageDefinition := currentProjectDefinition
 		packageNamed: packageName
 		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
+	traitFileExtensions := self traitFileExtensions.
 	packageRoot files
 		do: [ :file | 
 			| fileExtensions |
@@ -176,7 +177,10 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassesFor: packageName p
 				ifTrue: [ self readClassFile: file inPackage: packageName ]
 				ifFalse: [ 
 					fileExtensions = classExtensionFileExtensions
-						ifTrue: [ self readClassExtensionFile: file inPackage: packageName ] ] ]
+						ifTrue: [ self readClassExtensionFile: file inPackage: packageName ]
+						ifFalse: [ 
+							fileExtensions = traitFileExtensions
+								ifTrue: [ self readTraitFile: file inPackage: packageName ] ] ] ]
 ]
 
 { #category : 'class reading' }
@@ -213,7 +217,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
-						ifNotNil: [ Error signal: 'both a class definition and extension in file ' , file name ].
+						ifNotNil: [ Error signal: 'both a class definition and extension in file ' , fileReference fullName ].
+					currentTraitDefinition
+						ifNotNil: [ Error signal: 'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentClassExtension ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
@@ -239,4 +245,54 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 										lineNumberStringForOffset: fileStream position
 										fileName: fileReference fullName) ].
 					ex pass ] ]
+]
+
+{ #category : '(as yet unclassified)' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage: packageName [
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference
+		readStreamDo: [ :fileStream | 
+			[ 
+			| definitions traitDef projectDef |
+			definitions := (RwTonelParser on: fileStream forReader: self) start.
+			traitDef := currentTraitDefinition
+				ifNotNil: [ :def | 
+					currentClassDefinition
+						ifNotNil: [ 
+							Error
+								signal:
+									'both a trait definition and class definition in file ' , fileReference fullName ].
+					currentClassExtension
+						ifNotNil: [ Error signal: 'both a trait definition and class extension in file ' , fileReference fullName ].
+					def ]
+				ifNil: [ currentClassExtension ].
+			((definitions at: 2) at: 1)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					traitDef addClassMethodDefinition: mDef ].
+			((definitions at: 2) at: 2)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					traitDef addInstanceMethodDefinition: mDef ].
+			self checkMethodDefinitions: traitDef.
+			projectDef := currentProjectDefinition packageNamed: packageName.
+			currentTraitDefinition ifNotNil: [ projectDef addTraitDefinition: traitDef ] ]
+				on: STONReaderError , RwTonelParseError , Error
+				do: [ :ex | 
+					(ex messageText includesString: 'near line')
+						ifFalse: [ 
+							"only add line number info, in absence of existing line number info"
+							ex
+								addText:
+									(self class
+										lineNumberStringForOffset: fileStream position
+										fileName: fileReference fullName) ].
+					ex pass ] ]
+]
+
+{ #category : 'class reading' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 >> traitFileExtensions [
+
+	^ #( 'trait' 'st' )
 ]
