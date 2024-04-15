@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 8,
 		"failures" : 10,
-		"passed" : 1167,
-		"summary" : "1185 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1358.02s",
-		"tests" : 1185,
-		"time" : 1358.024
+		"passed" : 1168,
+		"summary" : "1186 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1340.10s",
+		"tests" : 1186,
+		"time" : 1340.1
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2509,6 +2509,12 @@
 			"className" : "RwResolvedProjectV2Test",
 			"status" : "passed",
 			"selector" : "testCreateNewGitProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanCrooked9Test",
+			"status" : "passed",
+			"selector" : "testIssue783_1",
 			"time" : "0"
 		},
 		{
@@ -7126,5 +7132,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-04-12T11:50:01.652870-07:00"
+	"timeStamp" : "2024-04-12T17:52:38.693415-07:00"
 }
