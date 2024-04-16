@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectFiletreeReaderWriterTest',
 	#superclass : 'RwProjectFiletreeTonelReaderWriterTest',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Obsolete-Tests'
 }
 
 { #category : 'private' }

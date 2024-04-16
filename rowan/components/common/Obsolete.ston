@@ -3,7 +3,8 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#condition : 'common',
 	#projectNames : [ ],
 	#componentNames : [
-		'common/obsolete/Obsolete'
+		'common/obsolete/Obsolete',
+		'common/obsolete/ObsoleteReaderWriter'
 	],
 	#packageNames : [ ],
 	#comment : ''

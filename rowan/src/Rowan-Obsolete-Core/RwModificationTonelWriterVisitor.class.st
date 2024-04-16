@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwModificationTonelWriterVisitor',
 	#superclass : 'RwModificationCypressFamilyWriterVisitor',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Obsolete-Core'
 }
 
 { #category : 'accessing' }

@@ -15,7 +15,7 @@ Class {
 	#classInstVars : [
 		'specials'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Obsolete-Core'
 }
 
 { #category : 'initialization' }

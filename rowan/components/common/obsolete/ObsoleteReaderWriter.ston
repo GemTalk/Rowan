@@ -1,0 +1,21 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/obsolete/ObsoleteReaderWriter',
+	#condition : 'obsoleteReaderWriter',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Obsolete-Core'
+	],
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Obsolete-Core' : {
+						'symbolDictName' : 'RowanKernel'
+					}
+				}
+			}
+		}
+	},
+	#comment : 'Obsolete Reader/Writer classes code'
+}

@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/tests/obsolete/Tests',
+	#condition : 'obsoleteReaderWriter',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-Obsolete-Tests'
+	],
+	#comment : ''
+}

@@ -11,7 +11,7 @@ Class {
 		'packageDefFileNameMap',
 		'packageDefBeforeFileNameMap'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Obsolete-Core'
 }
 
 { #category : 'accessing' }

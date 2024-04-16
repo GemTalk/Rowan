@@ -7,11 +7,11 @@
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 8,
-		"failures" : 10,
-		"passed" : 1168,
-		"summary" : "1186 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1340.10s",
-		"tests" : 1186,
-		"time" : 1340.1
+		"failures" : 12,
+		"passed" : 1141,
+		"summary" : "1161 Tests with 12 Failures, 8 Errors and 0 DeprecationWarnings in 986.37s",
+		"tests" : 1161,
+		"time" : 986.366
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2056,120 +2056,6 @@
 			"time" : "0"
 		},
 		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProject",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProjectWithBothMethodProtocolValidationError",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProjectWithClassCategoryValidationError",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProjectWithEmptyClassExtension",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProjectWithExtensionMethodProtocolValidationError",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testReadExistingDiskProjectWithMethodProtocolValidationError",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_A",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_moveClass_518",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_moveInstanceClassMethods_518",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_moveLastInstanceClassMethods_518",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeExtensionClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeInstanceClassMethods",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeLastInstanceClassMethods",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removePackage",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_C",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_D_changeClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_D_changeMethods",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectFiletreeReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_E",
-			"time" : "0"
-		},
-		{
 			"className" : "RwProjectSetTest",
 			"status" : "passed",
 			"selector" : "testProjectAdoptTool",
@@ -2328,43 +2214,7 @@
 		{
 			"className" : "RwProjectTonelReaderWriterTest",
 			"status" : "passed",
-			"selector" : "testWriterReader_B_moveClass_518",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removeExtensionClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_B_removePackage",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
 			"selector" : "testWriterReader_C",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_D_changeClass",
-			"time" : "0"
-		},
-		{
-			"className" : "RwProjectTonelReaderWriterTest",
-			"status" : "passed",
-			"selector" : "testWriterReader_D_changeMethods",
 			"time" : "0"
 		},
 		{
@@ -7132,5 +6982,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-04-12T17:52:38.693415-07:00"
+	"timeStamp" : "2024-04-16T12:19:22.763470-07:00"
 }

@@ -302,7 +302,7 @@ RwAbstractReaderWriterVisitor >> _validateRowanMonticelloProtocolConvention: met
 	protocol := methodDef protocol.
 	(protocol at: 1) = $*
 		ifTrue: [ 
-			(currentClassDefinition notNil or: [ currentTraitDefinition notNIl ])
+			(currentClassDefinition notNil or: [ currentTraitDefinition notNil ])
 				ifTrue: [ 
 					"protocol should not start with $* for a non-extension method"
 					RwExtensionProtocolNonExtensionMethodErrorNotification
