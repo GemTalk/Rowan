@@ -209,12 +209,14 @@ RwAbstractProjectSetModificationVisitor >> visitPackageModification: aPackageMod
 			self addedPackage: aPackageModification.
 			aPackageModification classesModification acceptVisitor: self.
 			aPackageModification classExtensionsModification acceptVisitor: self.
+			aPackageModification traitsModification acceptVisitor: self.
 			^ self ].
 	aPackageModification isDeletion
 		ifTrue: [ ^ self deletedPackage: aPackageModification ].
 	self changedPackage: aPackageModification.
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self.
+	aPackageModification traitsModification acceptVisitor: self.
 	^ self
 ]
 
@@ -239,4 +241,35 @@ RwAbstractProjectSetModificationVisitor >> visitProjectModification: aProjectMod
 		ifTrue: [ ^ self deletedProject: aProjectModification ].
 	self changedProject: aProjectModification.
 	^ aProjectModification packagesModification acceptVisitor: self
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectSetModificationVisitor >> visitTraitMethodModification: aTraitMethodModification [
+	aTraitMethodModification isAddition
+		ifTrue: [ ^ self addedMethod: aTraitMethodModification ].
+	aTraitMethodModification isDeletion
+		ifTrue: [ ^ self deletedMethod: aTraitMethodModification ].
+	^ self changedMethod: aTraitMethodModification
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectSetModificationVisitor >> visitTraitModification: aTraitModification [
+	aTraitModification isAddition
+		ifTrue: [ 
+			self addedClass: aTraitModification.
+			aTraitModification instanceMethodsModification acceptVisitor: self.
+			aTraitModification classMethodsModification acceptVisitor: self.
+			^ self ].
+	aTraitModification isDeletion
+		ifTrue: [ ^ self deletedTrait: aTraitModification ].
+	self changedTrait: aTraitModification.
+	aTraitModification instanceMethodsModification acceptVisitor: self.
+	aTraitModification classMethodsModification acceptVisitor: self.
+	^ self
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectSetModificationVisitor >> visitTraitsModification: aTraitsModification [
+	true
+		ifTrue: [ aTraitsModification elementsModified do: [ :each | each acceptVisitor: self ] ]
 ]

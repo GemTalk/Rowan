@@ -9,6 +9,11 @@ RwModificationTonelWriterVisitorV2 class >> classLabel [
 	^ 'Class'
 ]
 
+{ #category : 'accessing' }
+RwModificationTonelWriterVisitorV2 class >> traitLabel [
+	^ 'Trait'
+]
+
 { #category : 'class extension writing' }
 RwModificationTonelWriterVisitorV2 >> _classExtensionSourceFile [
 
@@ -116,6 +121,17 @@ RwModificationTonelWriterVisitorV2 >> _splitMethodSource: aMethodDefinition into
 		value: (source upToEnd withLineEndings: self _newLine)
 ]
 
+{ #category : 'trait writing' }
+RwModificationTonelWriterVisitorV2 >> _traitSourceFile [
+	| filename |
+	filename := traitDefFileNameMap
+		at: self currentTraitDefinition name
+		ifAbsent: [ 
+			"in the case of class removal, need to use the before class def map"
+			traitDefBeforeFileNameMap at: self currentTraitDefinition name ].
+	^ self _packageSourceDir / (filename , '.trait.st')
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 	| definition |
@@ -157,6 +173,22 @@ RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeOfClass: aClassDefinition [
 	^ self class tonelClassLabel
+]
+
+{ #category : 'class writing' }
+RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
+	| definition |
+	
+	(definition := self class orderedDictionaryClass new )
+		at: #name put: aTraitDefinition name .
+
+	(aTraitDefinition instVarNames)
+		ifNotEmpty: [ :vars | definition at: #instVars put: vars asArray ].
+
+	definition 		
+		at: #category put: aTraitDefinition category.
+	
+	^ self _toSTON: definition
 ]
 
 { #category : 'class writing' }
@@ -214,6 +246,16 @@ RwModificationTonelWriterVisitorV2 >> _writeMethodDefinition: aMethodDefinition 
 				<< (self _methodDefinitionOf: aMethodDefinition) << nl 
 				<< fullClassName << ' >> ' << methodDeclaration 
 				<< ' [' << methodBody << nl << ']' << nl ]
+]
+
+{ #category : 'trait writing' }
+RwModificationTonelWriterVisitorV2 >> _writeTraitDefinition: aTraitDefinition on: aStream [
+	| nl |
+	nl := self _newLine.
+	
+	aStream
+		<< (self class traitLabel) 
+		<< ' ' << (self _typeTraitDefinitionOf: aTraitDefinition ) << nl
 ]
 
 { #category : 'actions' }
@@ -322,6 +364,19 @@ RwModificationTonelWriterVisitorV2 >> processProject: aProjectModification [
 					] ].
 
 	super processProject: aProjectModification.
+]
+
+{ #category : 'trait writing' }
+RwModificationTonelWriterVisitorV2 >> processTrait: aTraitModification [
+
+	"write out the class definition"
+
+	self _traitSourceFile
+		writeStreamDo: [:aStream |
+			aStream truncate.
+			self _writeTraitDefinition: currentTraitDefinition on: aStream.
+			self _writeClassSideMethodDefinitions: currentTraitDefinition on: aStream.
+			self _writeInstanceSideMethodDefinitions: currentTraitDefinition on: aStream ]
 ]
 
 { #category : 'private' }

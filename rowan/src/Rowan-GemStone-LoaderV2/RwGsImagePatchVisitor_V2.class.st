@@ -200,7 +200,8 @@ RwGsImagePatchVisitor_V2 >> visitPackageModification: aPackageModification [
 												projectAfter: currentProject) ] ].
 					patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
 	aPackageModification classesModification acceptVisitor: self.
-	aPackageModification classExtensionsModification acceptVisitor: self
+	aPackageModification classExtensionsModification acceptVisitor: self.
+	aPackageModification traitsModification acceptVisitor: self.
 ]
 
 { #category : 'visting' }
@@ -268,4 +269,10 @@ RwGsImagePatchVisitor_V2 >> visitSourceModification: aSourceModification [
 
 	self error: 'internal error - not yet implemented'
 
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor_V2 >> visitTraitsModification: aTraitsModification [
+	true
+		ifTrue: [ aTraitsModification elementsModified do: [ :each | each acceptVisitor: self ] ]
 ]

@@ -52,7 +52,9 @@ RwTestProjectLibraryIndexCard >> exportTo: directoryReference [
 { #category : 'export' }
 RwTestProjectLibraryIndexCard >> exportTo: directoryReference as: fileName [
 	directoryReference / fileName
-		writeStreamDo: [ :fileStream | self exportToStream: fileStream ]
+		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
+			self exportToStream: fileStream ]
 ]
 
 { #category : 'export' }

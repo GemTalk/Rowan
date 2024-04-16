@@ -975,6 +975,25 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0082: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0084: resolvedProject [
+	"Start with spec_0001; add and use Traits"
+
+	| packageName1 packageName2 packageName3 traitName |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Traits'.
+	packageName3 := projectName , '-' , 'Tests'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	traitName := projectName , 'Trait1'.
+	((resolvedProject packageNamed: packageName2) addTraitNamed: traitName)
+		addInstanceMethod: 'instanceSide ^''instanceSide''' protocol: 'accessing';
+		addClassMethod: 'classSide ^''classSide''' protocol: 'accessing';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _createNewProject: aString [
 	^ Rowan newProjectNamed: aString
 ]
@@ -1801,6 +1820,53 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0082: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0082: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0084: commitMessage [
+	"Start with spec_0001; add and use Traits"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0084'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001; add and use Traits'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 84
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(783);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0084: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName

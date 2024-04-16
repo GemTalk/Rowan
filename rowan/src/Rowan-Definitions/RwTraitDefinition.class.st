@@ -21,7 +21,7 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 
 { #category : 'private' }
 RwTraitDefinition >> _methodsModificationClass [
-	^ RwTraitMethodModification
+	^ RwTraitMethodsModification
 ]
 
 { #category : 'private' }
@@ -33,6 +33,18 @@ RwTraitDefinition >> _modificationClass [
 RwTraitDefinition >> _traitNameForCompare: aDefinition [
 
 	^ self key ifNil: [ aDefinition key ]
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> category [
+
+	^ properties at: #'category' ifAbsent: [  ]
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> category: aString [
+
+	^ properties at: #'category' put: aString
 ]
 
 { #category : 'comparing' }
@@ -63,4 +75,29 @@ RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> instVarNames [
+	^ properties at: #'instvars' ifAbsent: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> instVarNames: arrayOfInstanceVariableNames [
+
+	^ properties at: #'instvars' put: arrayOfInstanceVariableNames
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> packageName [
+	"category is the name of the field that the packageName is stored under on disk"
+
+	^ self category
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> packageName: aPackageName [
+	"category is the name of the field that the packageName is stored under on disk"
+
+	^ self category: aPackageName
 ]

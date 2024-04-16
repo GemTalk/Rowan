@@ -92,6 +92,14 @@ RwModificationWriterVisitor >> addedProject: aProjectModification [
 ]
 
 { #category : 'actions' }
+RwModificationWriterVisitor >> addedTrait: aTraitModification [
+
+	currentTraitDefinition := aTraitModification after.
+
+	self processTrait: aTraitModification
+]
+
+{ #category : 'actions' }
 RwModificationWriterVisitor >> changedClass: aClassModification [
 
 	currentClassDefinition := aClassModification after.
@@ -119,6 +127,14 @@ RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
 	self processProject: aProjectModification
+]
+
+{ #category : 'actions' }
+RwModificationWriterVisitor >> changedTrait: aTraitModification [
+
+	currentTraitDefinition := aTraitModification after.
+
+	self processTrait: aTraitModification
 ]
 
 { #category : 'actions' }
@@ -168,7 +184,8 @@ RwModificationWriterVisitor >> processClassExtension: aClassExtensionModificatio
 RwModificationWriterVisitor >> processPackage: aPackageModification [
 
 	aPackageModification classesModification acceptVisitor: self.
-	aPackageModification classExtensionsModification acceptVisitor: self
+	aPackageModification classExtensionsModification acceptVisitor: self.
+	aPackageModification traitsModification acceptVisitor: self.
 ]
 
 { #category : 'project writing' }
@@ -260,4 +277,18 @@ RwModificationWriterVisitor >> visitProjectModification: aProjectModification [
 	aProjectModification isDeletion
 		ifTrue: [ ^ self deletedProject: aProjectModification ].
 	^ self changedProject: aProjectModification
+]
+
+{ #category : 'visiting' }
+RwModificationWriterVisitor >> visitTraitModification: aTraitModification [
+	aTraitModification isAddition
+		ifTrue: [ ^ self addedTrait: aTraitModification ].
+	aTraitModification isDeletion
+		ifTrue: [ ^ self deletedTrait: aTraitModification ].
+	^ self changedTrait: aTraitModification
+]
+
+{ #category : 'visiting' }
+RwModificationWriterVisitor >> visitTraitsModification: aTraitsModification [
+	aTraitsModification elementsModified do: [ :each | each acceptVisitor: self ]
 ]

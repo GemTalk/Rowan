@@ -12,7 +12,8 @@ Class {
 	#superclass : 'RwModification',
 	#instVars : [
 		'classesModification',
-		'classExtensionsModification'
+		'classExtensionsModification',
+		'traitsModification'
 	],
 	#category : 'Rowan-Core'
 }
@@ -53,11 +54,24 @@ RwPackageModification >> initialize [
 
 	super initialize.
 	classesModification := #().
-	classExtensionsModification := #()
+	classExtensionsModification := #().
+	traitsModification := #()
 ]
 
 { #category : 'testing' }
 RwPackageModification >> isEmpty [
+	^ classExtensionsModification isEmpty
+		and: [ 
+			classesModification isEmpty
+				and: [ traitsModification isEmpty and: [ super isEmpty ] ] ]
+]
 
-  ^ classExtensionsModification isEmpty and:[ classesModification isEmpty and:[ super isEmpty]]
+{ #category : 'accessing' }
+RwPackageModification >> traitsModification [
+	^traitsModification
+]
+
+{ #category : 'accessing' }
+RwPackageModification >> traitsModification: object [
+	traitsModification := object
 ]

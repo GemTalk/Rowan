@@ -4,6 +4,8 @@ Class {
 	#instVars : [
 		'classDefFileNameMap',
 		'classExtFileNameMap',
+		'traitDefFileNameMap',
+		'traitDefBeforeFileNameMap',
 		'classDefBeforeFileNameMap',
 		'classExtBeforeFileNameMap',
 		'packageDefFileNameMap',
@@ -86,8 +88,10 @@ RwModificationCypressFamilyWriterVisitorV2 >> processPackage: aPackageModificati
 
 	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
 	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+	traitDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after traitDefinitions.
 	classDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classDefinitions.
 	classExtBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classExtensions.
+	traitDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before traitDefinitions.
 
 	super processPackage: aPackageModification
 ]

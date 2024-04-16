@@ -3667,6 +3667,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			theLoadSpec gitUrl: self projectUrl.
 			resolvedRepository gitRoot / 'README.md'
 				writeStreamDo: [ :fileStream | 
+					fileStream truncate.
 					fileStream
 						nextPutAll: '# ' , projectName , ' - ' , specName;
 						lf.
@@ -3719,6 +3720,7 @@ RwTestProjectLibraryGenerator >> _finishCommitAndPush: specName loadSpecificatio
 			indexCardDict at: card specName put: card ].
 	resolvedRepository gitRoot / 'README.md'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '# ' , projectName;
 				lf;
@@ -4054,6 +4056,7 @@ RwTestProjectLibraryGenerator >> exportPharoTonelFormatV1For: aRwResolvedProject
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	packagesRoot / 'properties' , 'st'
 		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
 			fileStream
 				nextPutAll: '{ ';
 				lf;

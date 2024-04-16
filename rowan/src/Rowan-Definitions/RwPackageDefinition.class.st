@@ -224,7 +224,31 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
+	aTraitDefinition packageName ~= self name
+		ifTrue: [ 
+			self error: 'The package name of trait (' , aTraitDefinition packageName.
+			'), must match the name of the receiver (' , self name , ').' ].
 	^ self addDefinition: aTraitDefinition to: traitDefinitions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addTraitNamed: traitName [
+	^ self
+		addTraitDefinition:
+			(RwTraitDefinition
+				newForTraitNamed: traitName
+				instanceVariableNames: #()
+				packageName: self name)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addTraitNamed: traitName instvars: instvars [
+	self
+		addTraitDefinition:
+			(RwTraitDefinition
+				newForTraitNamed: traitName
+				instanceVariableNames: instvars
+				packageName: self name)
 ]
 
 { #category : 'accessing' }
@@ -447,6 +471,11 @@ RwPackageDefinition >> traitDefinitions [
 { #category : 'accessing' }
 RwPackageDefinition >> traitDefinitions: traitDefinitionsDictionary [
 	traitDefinitions := traitDefinitionsDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> traitDefinitionsForCompare [
+	^ self traitDefinitions
 ]
 
 { #category : 'accessing' }

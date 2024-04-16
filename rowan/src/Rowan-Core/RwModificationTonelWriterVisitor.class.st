@@ -9,6 +9,11 @@ RwModificationTonelWriterVisitor class >> classLabel [
 	^ 'Class'
 ]
 
+{ #category : 'accessing' }
+RwModificationTonelWriterVisitor class >> traitLabel [
+	^ 'Trait'
+]
+
 { #category : 'class extension writing' }
 RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
 
@@ -99,6 +104,18 @@ RwModificationTonelWriterVisitor >> _splitMethodSource: aMethodDefinition into: 
 	aBlock 
 		value: (declaration contents trimLeft withLineEndings: self _newLine)
 		value: (source upToEnd withLineEndings: self _newLine)
+]
+
+{ #category : 'class writing' }
+RwModificationTonelWriterVisitor >> _traitSourceFile [
+
+	| filename |
+	filename := traitDefFileNameMap 
+		at:  self currentTraitDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			traitDefBeforeFileNameMap at: self currentTraitDefinition name ].
+	^ self _packageSourceDir / (filename, '.trait.st')
 ]
 
 { #category : 'class writing' }
@@ -250,6 +267,14 @@ RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModifi
 	self _classExtensionSourceFile ensureDelete
 ]
 
+{ #category : 'actions' }
+RwModificationTonelWriterVisitor >> deletedTrait: aTraitModification [
+
+	currentTraitDefinition := aTraitModification before.
+
+	self _traitSourceFile ensureDelete
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> processClass: aClassModification [
 
@@ -301,6 +326,19 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 					yourself ] ].
 
 	super processProject: aProjectModification.
+]
+
+{ #category : 'class writing' }
+RwModificationTonelWriterVisitor >> processTrait: aTraitModification [
+
+	"write out the class definition"
+
+	self _traitSourceFile
+		writeStreamDo: [:aStream |
+			aStream truncate.
+			self _writeTraitDefinition: currentTraitDefinition on: aStream.
+			self _writeClassSideMethodDefinitions: currentTraitDefinition on: aStream.
+			self _writeInstanceSideMethodDefinitions: currentTraitDefinition on: aStream ]
 ]
 
 { #category : 'private' }
