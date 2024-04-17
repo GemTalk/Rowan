@@ -57,14 +57,25 @@ RwTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: me
 
 { #category : 'private' }
 RwTonelParserTest >> newTraitDefinitionFrom: anArray [
-	| traitName metadata instvars packageName |
+	| traitName metadata instvars packageName category |
 	metadata := anArray sixth.
 	traitName := metadata at: #'name'.
 	instvars := #().	"for now"
-	packageName := metadata at: #'category'.
+	category := metadata at: #'category' ifAbsent: [  ].
+	category
+		ifNil: [ 
+			packageName := metadata
+				at: #'packageName'
+				ifAbsent: [ 
+					self
+						error:
+							'One of package name or category must be specified for trait '
+								, traitName printString ] ]
+		ifNotNil: [ packageName := metadata at: #'packageName' ifAbsent: [ category ] ].
 	^ RwTraitDefinition
 		newForTraitNamed: traitName
 		instanceVariableNames: instvars
+		category: category
 		packageName: packageName
 ]
 

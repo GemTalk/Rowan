@@ -5,13 +5,39 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars category: category packageName: packageName [
+	| propertiesDictionary |
+	propertiesDictionary := SymbolDictionary new.
+	propertiesDictionary
+		at: #'uses' put: #();
+		at: #'name' put: traitName asString;
+		yourself.	"included because it is part of the tonel format for traits ... appears to be unused these days"
+	category = packageName
+		ifTrue: [ 
+			propertiesDictionary
+				at: #'packageName' put: packageName asString;
+				yourself ]
+		ifFalse: [ 
+			category
+				ifNotNil: [ 
+					propertiesDictionary
+						at: #'packageName' put: packageName asString;
+						at: #'category' put: category asString;
+						yourself ] ].
+	^ self
+		withProperties: propertiesDictionary
+		classMethodDefinitions: Dictionary new
+		instanceMethodDefinitions: Dictionary new
+]
+
+{ #category : 'instance creation' }
 RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars packageName: packageName [
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
 		at: #'uses' put: #();	"included because it is part of the tonel format for traits ... appears to be unused these days"
 		at: #'name' put: traitName asString;
-		at: #'category' put: packageName asString;
+		at: #'packageName' put: packageName asString;
 		yourself.
 	^ self
 		withProperties: propertiesDictionary
@@ -37,14 +63,13 @@ RwTraitDefinition >> _traitNameForCompare: aDefinition [
 
 { #category : 'accessing' }
 RwTraitDefinition >> category [
-
 	^ properties at: #'category' ifAbsent: [  ]
 ]
 
 { #category : 'accessing' }
 RwTraitDefinition >> category: aString [
 
-	^ properties at: #'category' put: aString
+	^ properties at: #'category' put: aString asString
 ]
 
 { #category : 'comparing' }
@@ -92,12 +117,10 @@ RwTraitDefinition >> instVarNames: arrayOfInstanceVariableNames [
 RwTraitDefinition >> packageName [
 	"category is the name of the field that the packageName is stored under on disk"
 
-	^ self category
+	^ properties at: #'packageName' ifAbsent: [  self category  ]
 ]
 
 { #category : 'accessing' }
 RwTraitDefinition >> packageName: aPackageName [
-	"category is the name of the field that the packageName is stored under on disk"
-
-	^ self category: aPackageName
+	^ properties at: #'packageName' put: aPackageName asString
 ]
