@@ -7,11 +7,11 @@
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 8,
-		"failures" : 12,
-		"passed" : 1141,
-		"summary" : "1161 Tests with 12 Failures, 8 Errors and 0 DeprecationWarnings in 986.37s",
-		"tests" : 1161,
-		"time" : 986.366
+		"failures" : 10,
+		"passed" : 1144,
+		"summary" : "1162 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1431.65s",
+		"tests" : 1162,
+		"time" : 1431.648
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -5922,6 +5922,12 @@
 		{
 			"className" : "RwTestProjectLibraryGeneratorTest",
 			"status" : "passed",
+			"selector" : "testLibrarySample9V3UniqueGenerator",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTestProjectLibraryGeneratorTest",
+			"status" : "passed",
 			"selector" : "testRowanSample10LibraryGenerator",
 			"time" : "0"
 		},
@@ -6982,5 +6988,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-04-16T12:19:22.763470-07:00"
+	"timeStamp" : "2024-04-17T14:29:44.847432-07:00"
 }
