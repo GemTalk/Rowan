@@ -2,6 +2,8 @@ Extension { #name : 'RwTestProjectLibraryGeneratorTest' }
 
 { #category : '*rowan-testsv3' }
 RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
+	"Test the specs that are shared between RowanSample9V2 and RowanSample9V3"
+
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
 		1. hitting errors
 		2. changing any of the disk content"
@@ -92,6 +94,55 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
 		genSpec_0080: commitComment;
 		genSpec_0081: commitComment;
 		genSpec_0083: commitComment;
+		yourself
+]
+
+{ #category : '*rowan-testsv3' }
+RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3UniqueGenerator [
+	"The tests the specs that are usnique to RowanSample9V3"
+
+	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
+		1. hitting errors
+		2. changing any of the disk content"
+
+	"skip spec_004, because it makes two changes in a row, so always commits"
+
+	| commitComment |
+	((System gemEnvironmentVariable: 'USER') = 'dhenrich')
+		ifFalse: [
+			"user needs to have public ssh key registered with github project to run the test, and right now that's me"
+			^ self ].
+	RwRowanSample9V3Test _clearLoadSpecSessionCache.
+	(RwAbstractV2Test _testRowanProjectsSandbox / 'RowanSample9V3') ensureDeleteAll.
+
+	commitComment := 'running testLibraryGenerator tests ... no changes expected, thus no commits expected'.
+	RwRowanSample9V3TestProjectLibraryGeneratorTester new
+		testCase: self;
+		projectName: 'RowanSample9V3';
+		projectUrl: 'git@github.com:dalehenrich/RowanSample9V3.git';
+		preserveRowanSHA: true;
+		primeIndexCardMap;
+		preserveChangesOnGithub: false;
+		genSpec_0065: commitComment;
+		genSpec_0066: commitComment;
+		genSpec_0067: commitComment;
+		genSpec_0068: commitComment;
+		genSpec_0069: commitComment;
+		genSpec_0070: commitComment;
+		genSpec_0071: commitComment;
+		genSpec_0072: commitComment;
+		genSpec_0073: commitComment;
+		genSpec_0074: commitComment;
+		genSpec_0075: commitComment;
+		genSpec_0076: commitComment;
+		genSpec_0077: commitComment;
+		genSpec_0078: commitComment;
+		genSpec_0079: commitComment;
+		genSpec_0080: commitComment;
+		genSpec_0081: commitComment;
+		genSpec_0082: commitComment;
+		genSpec_0083: commitComment;
+		genSpec_0084: commitComment;
 		yourself
 ]
 

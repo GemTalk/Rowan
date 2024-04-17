@@ -93,6 +93,8 @@ RwTestProjectLibraryGeneratorV3 new
 	genSpec_0080: commitComment;
 	genSpec_0081: commitComment;
 	genSpec_0082: commitComment;
+	genSpec_0083: commitComment;
+	genSpec_0084: commitComment;
 	yourself
 "
 Class {
