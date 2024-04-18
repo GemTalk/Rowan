@@ -338,6 +338,12 @@ RwGsPatchSet_V2 >> _projectAdditionPatchClass [
 	^ RwGsProjectAdditionPatchV2
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _traitAdditionPatchTrait [
+
+	^ RwGsTraitAdditionSymbolDictPatchV2
+]
+
 { #category : 'building' }
 RwGsPatchSet_V2 >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
@@ -421,6 +427,19 @@ RwGsPatchSet_V2 >> addAddedProject: aProjectDefinition [
 	currentProjectDefinition := aProjectDefinition.
 	addedProjects
 		add: (self _projectAdditionPatchClass for: aProjectDefinition) yourself
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addAddedTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	addedTraits
+		add:
+			((self _traitAdditionPatchTrait
+				for: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 ]
 
 { #category : 'building' }

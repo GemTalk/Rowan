@@ -1,14 +1,15 @@
 Class {
-	#name : 'RwGsClassPatchV2',
+	#name : 'RwGsTraitPatchV2',
 	#superclass : 'RwGsPatchV2',
 	#instVars : [
+		'traitDefinition',
 		'classDefinition'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
 { #category : 'instance creation' }
-RwGsClassPatchV2 class >> for: aClassDefinition inPackage: aPackageDefinition [
+RwGsTraitPatchV2 class >> for: aClassDefinition inPackage: aPackageDefinition [
 
 	^(self new)
 		classDefinition: aClassDefinition;
@@ -17,7 +18,7 @@ RwGsClassPatchV2 class >> for: aClassDefinition inPackage: aPackageDefinition [
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> _classFormat: fmt forSubclassType: classType [
+RwGsTraitPatchV2 >> _classFormat: fmt forSubclassType: classType [
 	"Legal types are normal, variable, immediate, and byteSubclass."
 
 	"These values need to be moved into Class"
@@ -39,7 +40,7 @@ RwGsClassPatchV2 >> _classFormat: fmt forSubclassType: classType [
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
+RwGsTraitPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
 	"reify the constraints array converting to references to instvar names and classes"
 
 	(gs_constraints isKindOf: Array)
@@ -59,7 +60,7 @@ RwGsClassPatchV2 >> _gemStoneConstraintsFrom:	gs_constraints [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
+RwGsTraitPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
 	| name symDict symDictName |
@@ -92,7 +93,7 @@ RwGsClassPatchV2 >> addToNewClassesByNameSymbolList: newClassesByNameSymbolList 
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
+RwGsTraitPatchV2 >> basicCreateClassWithSuperclass: superclass [
 	"For GemStone, the valid values are:
 	byteSubclass
 	variable
@@ -154,26 +155,14 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 	^ createdClass
 ]
 
-{ #category : 'accessing' }
-RwGsClassPatchV2 >> classDefinition [
-	^classDefinition
+{ #category : 'private' }
+RwGsTraitPatchV2 >> basicCreateTrait [
 
-]
-
-{ #category : 'accessing' }
-RwGsClassPatchV2 >> classDefinition: newValue [
-	classDefinition := newValue .
-]
-
-{ #category : 'accessing' }
-RwGsClassPatchV2 >> className [
-
-	^classDefinition key
-
+	self halt.
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> createClassFor: aPatchSet [
+RwGsTraitPatchV2 >> createClassFor: aPatchSet [
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet.
 	aPatchSet createdClass: createdClass.
@@ -181,7 +170,7 @@ RwGsClassPatchV2 >> createClassFor: aPatchSet [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
+RwGsTraitPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
 	aPatchSet createdClass: createdClass inSymDict: symDictName.
@@ -189,21 +178,21 @@ RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> createTraitFor: aPatchSet [
+RwGsTraitPatchV2 >> createTraitFor: aPatchSet [
 	| createdTrait |
-	createdTrait := self privateCreateClassFor: aPatchSet.
+	createdTrait := self privateCreateTraitFor: aPatchSet.
 	aPatchSet createdTrait: createdTrait.
 	^ createdTrait
 ]
 
 { #category : 'installing' }
-RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
+RwGsTraitPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet_symbolList [
 
 	self installPropertiesPatchSymbolListFor: aPatchSet_symbolList registry: self symbolDictionaryRegistry
 ]
 
 { #category : 'patching moved classes' }
-RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
+RwGsTraitPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aClassMove [
 
 	| theRegistry |
 	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
@@ -212,21 +201,21 @@ RwGsClassPatchV2 >> installPropertiesPatchSymbolListFor: aPatchSet classMove: aC
 ]
 
 { #category : 'versioning' }
-RwGsClassPatchV2 >> oldClassVersion [
+RwGsTraitPatchV2 >> oldTraitVersion [
 	"The old version is what is currently bound to the class definition's name."
 
-	^ (self resolveName: classDefinition key) value
+	^ (self resolveName: traitDefinition key) value
 ]
 
 { #category : 'Formatting' }
-RwGsClassPatchV2 >> printOn: aStream [
+RwGsTraitPatchV2 >> printOn: aStream [
 
 	super printOn: aStream.
-	aStream nextPutAll: '(', classDefinition name, ')'
+	aStream nextPutAll: '(', traitDefinition name, ')'
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
+RwGsTraitPatchV2 >> privateCreateClassFor: aPatchSet [
 	| superclass |
 	superclass := aPatchSet 
 		superclassNamed: classDefinition superclassName 
@@ -248,7 +237,7 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
+RwGsTraitPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
 	| superclass |
 	superclass := aPatchSet
 		superclassNamed: classDefinition superclassName
@@ -269,7 +258,7 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
 ]
 
 { #category : 'private' }
-RwGsClassPatchV2 >> privateCreateClassWithSuperclass: superclass [
+RwGsTraitPatchV2 >> privateCreateClassWithSuperclass: superclass [
 
 	| classProperties infoSource category createdClass |
 	createdClass := self basicCreateClassWithSuperclass: superclass.
@@ -283,7 +272,17 @@ RwGsClassPatchV2 >> privateCreateClassWithSuperclass: superclass [
 ]
 
 { #category : 'accessing' }
-RwGsClassPatchV2 >> superclassName [
+RwGsTraitPatchV2 >> traitDefinition [
+	^traitDefinition
+]
 
-	^classDefinition superclassName
+{ #category : 'accessing' }
+RwGsTraitPatchV2 >> traitDefinition: newValue [
+	traitDefinition := newValue .
+]
+
+{ #category : 'accessing' }
+RwGsTraitPatchV2 >> traitName [
+
+	^traitDefinition key
 ]
