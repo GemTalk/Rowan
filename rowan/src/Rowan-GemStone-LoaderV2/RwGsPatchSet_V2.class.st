@@ -20,6 +20,7 @@ Class {
 		'classesWithClassVariableChanges',
 		'classesWithConstraintChanges',
 		'classesWithNewVersions',
+		'addedTraits',
 		'addedMethods',
 		'deletedMethods',
 		'deleteNewVersionMethods',
@@ -949,6 +950,75 @@ RwGsPatchSet_V2 >> addPatchedUnmanagedClassNewVersion: aClassModification inPack
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+]
+
+{ #category : 'modification dispatching' }
+RwGsPatchSet_V2 >> addTraitModification: aRwTraitModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
+	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
+		while updating the loader using the loader"
+
+	aRwTraitModification isAddition
+		ifTrue: [ 
+			| symDictName traitName |
+			traitName := aRwTraitModification after name.
+			symDictName := aProjectDefinition
+				gemstoneSymbolDictNameForPackageNamed: aPackage name.
+			Rowan image newOrExistingSymbolDictionaryNamed: symDictName.
+			(Rowan globalNamed: aRwTraitModification after name)
+				ifNotNil: [ :trait | 
+					(Rowan image loadedTraitForTrait: trait ifAbsent: [  ])
+						ifNil: [ 
+							| theTraitDefinition theTraitModification |
+							"no loaded trait exists for the trait"
+							theTraitDefinition := trait
+								rwTraitDefinitionInSymbolDictionaryNamed: symDictName.
+							theTraitModification := aRwTraitModification after
+								compareAgainstBase: theTraitDefinition.
+							theTraitModification isEmpty
+								ifTrue: [ 
+									self
+										addAddedUnmanagedTrait: aRwTraitModification after
+										oldTraitVersion: trait
+										inPackage: aPackage
+										inProject: aProjectDefinition ]
+								ifFalse: [ 
+									aRwTraitModification before: theTraitDefinition.
+									self
+										addPatchedUnmanagedTraitNewVersion: aRwTraitModification
+										inPackage: aPackage
+										inProject: aProjectDefinition ].
+							^ self ]
+						ifNotNil: [ :aLoadedTrait | 
+							"if the trait is packaged, then it must be in another project, signal notification"
+							aProjectDefinition name ~= aLoadedTrait loadedProject name
+								ifTrue: [ 
+									((Globals at: #RwExistingVisitorAddingExistingTraitNotification) new
+										incomingProject: aProjectDefinition;
+										incomingPackage: aPackage;
+										loadedTrait: aLoadedTrait;
+										theTrait: trait;
+										traitDefinition: aRwTraitModification after;
+										loadedProject: aLoadedTrait loadedProject;
+										yourself) signal ] ] ].
+			self
+				addAddedTrait: aRwTraitModification after
+				inPackage: aPackage
+				inProject: aProjectDefinition.
+			^ self ].
+	aRwTraitModification isDeletion
+		ifTrue: [ 
+			self
+				addDeletedTrait: aRwTraitModification before
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	aRwTraitModification isModification
+		ifTrue: [ 
+			(Globals at: #RwGsTraitVersioningPatchV2)
+				addPatchedTraitModification: aRwTraitModification
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: self.
+			 ]
 ]
 
 { #category : 'private - applying' }

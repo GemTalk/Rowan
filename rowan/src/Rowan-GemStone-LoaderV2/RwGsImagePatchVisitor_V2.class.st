@@ -9,6 +9,7 @@ Class {
 		'currentProject',
 		'currentPackage',
 		'currentClass',
+		'currentTrait',
 		'currentMethod'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
@@ -269,6 +270,18 @@ RwGsImagePatchVisitor_V2 >> visitSourceModification: aSourceModification [
 
 	self error: 'internal error - not yet implemented'
 
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor_V2 >> visitTraitModification: aTraitModification [
+
+	aTraitModification
+		addModificationToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject.
+	currentTrait := aTraitModification after.
+	aTraitModification instanceMethodsModification acceptVisitor: self.
+	aTraitModification classMethodsModification acceptVisitor: self
 ]
 
 { #category : 'visting' }
