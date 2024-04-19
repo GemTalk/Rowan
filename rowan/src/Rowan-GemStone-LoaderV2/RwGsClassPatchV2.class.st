@@ -173,27 +173,11 @@ RwGsClassPatchV2 >> className [
 ]
 
 { #category : 'actions' }
-RwGsClassPatchV2 >> createClassFor: aPatchSet [
-	| createdClass |
-	createdClass := self privateCreateClassFor: aPatchSet.
-	aPatchSet createdClass: createdClass.
-	^ createdClass
-]
-
-{ #category : 'actions' }
 RwGsClassPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	| createdClass |
 	createdClass := self privateCreateClassFor: aPatchSet inSymDict: symDictName.
 	aPatchSet createdClass: createdClass inSymDict: symDictName.
 	^ createdClass
-]
-
-{ #category : 'actions' }
-RwGsClassPatchV2 >> createTraitFor: aPatchSet [
-	| createdTrait |
-	createdTrait := self privateCreateClassFor: aPatchSet.
-	aPatchSet createdTrait: createdTrait.
-	^ createdTrait
 ]
 
 { #category : 'installing' }
@@ -223,28 +207,6 @@ RwGsClassPatchV2 >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream nextPutAll: '(', classDefinition name, ')'
-]
-
-{ #category : 'private' }
-RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet [
-	| superclass |
-	superclass := aPatchSet 
-		superclassNamed: classDefinition superclassName 
-		ifAbsent: [
-			"https://github.com/GemTalk/Rowan/issues/471"
-			"if we can't look up the class, try accessing the superclass from the class itself"
-			(aPatchSet tempSymbols 
-				at: classDefinition name asSymbol
-				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
-	superclass
-		ifNil: [ 
-			classDefinition superclassName = 'nil'
-				ifFalse: [ 
-					self
-						error:
-							'The class named ' , classDefinition superclassName printString
-								, ' does not exist.' ] ].
-	^ self privateCreateClassWithSuperclass: superclass
 ]
 
 { #category : 'private' }

@@ -46,6 +46,11 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 ]
 
 { #category : 'private' }
+RwTraitDefinition >> _methodDefinitionClass [
+	^ RwTraitMethodDefinition
+]
+
+{ #category : 'private' }
 RwTraitDefinition >> _methodsModificationClass [
 	^ RwTraitMethodsModification
 ]
@@ -72,6 +77,17 @@ RwTraitDefinition >> category: aString [
 	^ properties at: #'category' put: aString asString
 ]
 
+{ #category : 'accessing' }
+RwTraitDefinition >> classVarNames [
+	^ properties at: #'classvars' ifAbsent: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> classVarNames: arrayOfClassVariableNames [
+
+	^ properties at: #'classvars' put: arrayOfClassVariableNames
+]
+
 { #category : 'comparing' }
 RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 
@@ -88,13 +104,13 @@ RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 		compareDictionary: self instanceMethodDefinitionsForCompare
 		againstBaseDictionary: aDefinition instanceMethodDefinitionsForCompare
 		into: instanceMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: RwTraitMethodDefinition
 		isMeta: false.
 	self
 		compareDictionary: self classMethodDefinitionsForCompare
 		againstBaseDictionary: aDefinition classMethodDefinitionsForCompare
 		into: classMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: RwTraitMethodDefinition
 		isMeta: true.
 	modification
 		instanceMethodsModification: instanceMethodsModification;

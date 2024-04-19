@@ -60,13 +60,12 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 		do: [ :cypMethodDef | 
 			self
 				addInstanceMethodDefinition:
-					(RwMethodDefinition fromCypressMethod: cypMethodDef) ].
+					(self _methodDefinitionClass fromCypressMethod: cypMethodDef) ].
 	aCypressClassStructure classMethods
 		do: [ :cypMethodDef | 
 			self
 				addClassMethodDefinition:
-					(RwMethodDefinition fromCypressMethod: cypMethodDef) ]
-
+					(self _methodDefinitionClass fromCypressMethod: cypMethodDef) ]
 ]
 
 { #category : '*rowan-cypress-definitions' }

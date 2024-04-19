@@ -27,6 +27,11 @@ RwAbstractClassDefinition >> _classNameForCompare: aDefinition [
 ]
 
 { #category : 'private' }
+RwAbstractClassDefinition >> _methodDefinitionClass [
+	^ RwMethodDefinition
+]
+
+{ #category : 'private' }
 RwAbstractClassDefinition >> _methodsModificationClass [
 
 	self subclassResponsibility: #'__methodsModificationClass'
@@ -41,7 +46,7 @@ RwAbstractClassDefinition >> _modificationClass [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
 
-	^self addClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+	^self addClassMethodDefinition: (self _methodDefinitionClass newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }
@@ -53,7 +58,7 @@ RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol [
 
-	^self addInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+	^self addInstanceMethodDefinition: (self _methodDefinitionClass newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }
@@ -111,13 +116,13 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition using: aModificatio
 		compareDictionary: self instanceMethodDefinitionsForCompare
 		againstBaseDictionary: aDefinition instanceMethodDefinitionsForCompare
 		into: instanceMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: false.
 	self
 		compareDictionary: self classMethodDefinitionsForCompare
 		againstBaseDictionary: aDefinition classMethodDefinitionsForCompare
 		into: classMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: true.
 	modification
 		instanceMethodsModification: instanceMethodsModification;
@@ -158,13 +163,13 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition u
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions
 		into: instanceMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: false.
 	self
 		compareDictionary: classMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition classMethodDefinitions
 		into: classMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: true.
 	modification
 		instanceMethodsModification: instanceMethodsModification;
@@ -332,7 +337,7 @@ RwAbstractClassDefinition >> updateClassMethodDefinition: aMethodDefinition [
 { #category : 'accessing' }
 RwAbstractClassDefinition >> updateInstanceMethod: methodSource protocol: protocol [
 
-	^self updateInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+	^self updateInstanceMethodDefinition: (self _methodDefinitionClass newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }

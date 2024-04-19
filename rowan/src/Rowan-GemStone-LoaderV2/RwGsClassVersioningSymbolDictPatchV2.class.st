@@ -333,18 +333,6 @@ RwGsClassVersioningSymbolDictPatchV2 >> classModification: aClassModification [
 ]
 
 { #category : 'actions' }
-RwGsClassVersioningSymbolDictPatchV2 >> createClassFor: aPatchSet [
-
-	"we're using createClassFor: to apply the class modifications to the existing class
-	oldClassVersion and produce a new class version"
-
-	oldClassVersion := self oldClassVersion.	"grab the class version BEFORE creating newClassVersion ...it may be needed later"
-	newClassVersion := super createClassFor: aPatchSet.
-	symbolAssociation := self resolveName: newClassVersion name.
-	^ newClassVersion
-]
-
-{ #category : 'actions' }
 RwGsClassVersioningSymbolDictPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	"we're using createClassFor: to apply the class modifications to the existing class
 	oldClassVersion and produce a new class version"

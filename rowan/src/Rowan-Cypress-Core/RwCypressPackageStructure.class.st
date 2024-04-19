@@ -103,13 +103,13 @@ RwCypressPackageStructure >> rwSnapshot [
 				do: [ :methodStructure | 
 					rwClassExtensionDef
 						addInstanceMethodDefinition:
-							(RwMethodDefinition fromCypressMethod: methodStructure) ].
+							(self _methodDefinitionClass fromCypressMethod: methodStructure) ].
 			(classStructure classMethods
 				asSortedCollection: [ :a :b | a selector <= b selector ])
 				do: [ :methodStructure | 
 					rwClassExtensionDef
 						addClassMethodDefinition:
-							(RwMethodDefinition fromCypressMethod: methodStructure) ].
+							(self _methodDefinitionClass fromCypressMethod: methodStructure) ].
 			rwPackageDefinition addClassExtensionDefinition: rwClassExtensionDef ].
 	^ rwPackageDefinition
 ]

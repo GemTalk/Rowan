@@ -376,6 +376,21 @@ RwGsPatchSet_V2 >> addAddedClassesToTempSymbols [
 										,
 											(RwRepositoryComponentProjectReaderVisitor
 												lineNumberStringForDefinition: patch classDefinition) ] ].
+			tempSymbols at: key put: nil ].
+	addedTraits
+		do: [ :patch | 
+			| key |
+			key := patch traitName asSymbol.
+			(tempSymbols includesKey: key)
+				ifTrue: [ 
+					(tempSymbols at: key ifAbsent: [  ])
+						ifNotNil: [ 
+							self
+								error:
+									'Encountered an existing association for a new trait ' , key asString
+										,
+											(RwRepositoryComponentProjectReaderVisitor
+												lineNumberStringForDefinition: patch traitDefinition) ] ].
 			tempSymbols at: key put: nil ]
 ]
 
@@ -1081,6 +1096,7 @@ RwGsPatchSet_V2 >> apply [
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
+		installAddedTraits;
 		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
@@ -1233,6 +1249,20 @@ RwGsPatchSet_V2 >> createdClasses [
 	^ createdClasses ifNil: [ createdClasses :=  self _createNewSymbolList ]
 ]
 
+{ #category : 'patch access' }
+RwGsPatchSet_V2 >> createdTrait: aTrait inSymDict: symDictName [
+	| traitName symDict |
+	traitName := aTrait name.
+	symDict := self class lookupSymbolDictName: symDictName in: self createdTraits.
+	(symDict at: traitName ifAbsent: [  ])
+		ifNil: [ symDict add: (SymbolAssociation newWithKey: traitName value: aTrait) ]
+		ifNotNil: [ :tr | 
+			tr == aTrait
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					symDict at: traitName put: aTrait ] ]
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 	"Who: Added classes and classes with new versions and classes with class variable changes
@@ -1240,7 +1270,7 @@ RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	| newClassesByNameSymbolList workSymbolList |
+	| newClassesByNameSymbolList workSymbolList newTraitsByNameSymbolList |
 	newClassesByNameSymbolList := self _createNewSymbolList.
 	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
 	workSymbolList := self _createNewSymbolList.
@@ -1262,7 +1292,64 @@ RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 					self
 						createClassesFromWorkSymbolList: workSymbolList
 						symDictName: symDict name
-						andClassesByNameSymbolList: newClassesByNameSymbolList ] ]
+						andClassesByNameSymbolList: newClassesByNameSymbolList ] ].
+
+"traits logic"
+	newTraitsByNameSymbolList := self _createNewSymbolList.
+	addedTraits 
+		do: [ :patch | patch addToNewTraitsByNameSymbolList: newTraitsByNameSymbolList ].
+	workSymbolList := self _createNewSymbolList.
+	newTraitsByNameSymbolList
+		do: [ :symDict | 
+			| workList symDictName |
+			symDictName := symDict name.
+			workList := symDict keys.
+			workList remove: symDictName.
+			workList
+				do: [ :traitName | 
+					(self class lookupSymbolDictName: symDictName in: workSymbolList)
+						at: traitName
+						put: nil ] ].
+	workSymbolList
+		do: [ :symDict | 
+			[ symDict keys size <= 1 ]
+				whileFalse: [ 
+					self
+						createTraitsFromWorkSymbolList: workSymbolList
+						symDictName: symDict name
+						andTraitsByNameSymbolList: newTraitsByNameSymbolList ] ].
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> createTraitNamed: traitName fromWorkSymbolList: workSymbolList symDictName: symDictName andTraitsByNameSymbolList: newTraitsByNameSymbolList [
+	"Create the named trait from the workList.
+	Remove any traits created from the workList."
+
+	| patch  |
+	(self class lookupSymbolDictName: symDictName in: workSymbolList)
+		removeKey: traitName asSymbol.
+	patch := (self class
+		lookupSymbolDictName: symDictName
+		in: newTraitsByNameSymbolList) at: traitName asSymbol.
+	patch createTraitFor: self inSymDict: symDictName
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> createTraitsFromWorkSymbolList: workSymbolList symDictName: symDictName andTraitsByNameSymbolList: newTraitsByNameSymbolList [
+	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
+	Remove any classes created from the workList."
+
+	| traitNames traitName |
+	traitNames := (self class lookupSymbolDictName: symDictName in: workSymbolList)
+		keys.
+	traitNames remove: symDictName.
+	traitName := self anyElementOfCollection: traitNames.
+	traitName ifNil: [ self error: 'Empty WorkList.' ].
+	self
+		createTraitNamed: traitName
+		fromWorkSymbolList: workSymbolList
+		symDictName: symDictName
+		andTraitsByNameSymbolList: newTraitsByNameSymbolList
 ]
 
 { #category : 'private - applying' }
@@ -1318,6 +1405,7 @@ RwGsPatchSet_V2 >> initialize [
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	addedClasses := Set new.
+	addedTraits := Set new.
 	extendedClasses := Set new.
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
@@ -1353,6 +1441,15 @@ RwGsPatchSet_V2 >> installAddedClasses [
 RwGsPatchSet_V2 >> installAddedClassExtensions [
 
 	extendedClasses do: [ :each | each installClassExtensionInSystem: self loadSymbolList ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> installAddedTraits [
+	"Copy the name association from TempSymbols to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedTrait for the newtrait, add it to the defining LoadedPackage."
+
+	addedTraits do: [:patch |  patch installTraitInSystem ]
 ]
 
 { #category : 'accessing' }

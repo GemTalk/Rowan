@@ -9,17 +9,12 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsTraitAdditionSymbolDictPatchV2 >> createTraitFor: aPatchSet [
-	newTrait := super createTraitFor: aPatchSet.
-	symbolAssociation := aPatchSet tempAssociationFor: newTrait name.
-	^ newTrait
-]
+RwGsTraitAdditionSymbolDictPatchV2 >> basicCreateTrait [
 
-{ #category : 'actions' }
-RwGsTraitAdditionSymbolDictPatchV2 >> createTraitFor: aPatchSet inSymDict: symDictName [
-	newTrait := super createTraitFor: aPatchSet inSymDict: symDictName.
-	symbolAssociation := aPatchSet tempAssociationFor: newTrait name.
-	^ newTrait
+	^ (Globals at: #Trait)
+		name: traitDefinition name
+		instVars: traitDefinition instVarNames
+		classVars: traitDefinition classVarNames
 ]
 
 { #category : 'actions' }

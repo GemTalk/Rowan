@@ -269,17 +269,6 @@ RwGsClassVersioningPatchV2 >> classModification: aClassModification [
 	classDefinition := classModification after
 ]
 
-{ #category : 'actions' }
-RwGsClassVersioningPatchV2 >> createClassFor: aPatchSet [
-	"we're using createClassFor: to apply the class modifications to the existing class
-	oldClassVersion and produce a new class version"
-
-	oldClassVersion := self oldClassVersion.
-	newClassVersion := super createClassFor: aPatchSet.
-	symbolAssociation := self resolveName: newClassVersion name.
-	^ newClassVersion
-]
-
 { #category : 'accessing' }
 RwGsClassVersioningPatchV2 >> oldClassDefinition [
 

@@ -53,19 +53,18 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions
 		into: instanceMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: false.
 	self
 		compareDictionary: classMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition classMethodDefinitions
 		into: classMethodsModification
-		elementClass: RwMethodDefinition
+		elementClass: self _methodDefinitionClass
 		isMeta: true.
 	modification
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
-
 ]
 
 { #category : '*rowan-gemstone-definitions' }

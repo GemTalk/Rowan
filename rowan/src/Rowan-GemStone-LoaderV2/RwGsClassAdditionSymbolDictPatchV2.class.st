@@ -9,13 +9,6 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet [
-	newClass := super createClassFor: aPatchSet.
-	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
-	^ newClass
-]
-
-{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatchV2 >> createClassFor: aPatchSet inSymDict: symDictName [
 	newClass := super createClassFor: aPatchSet inSymDict: symDictName.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
