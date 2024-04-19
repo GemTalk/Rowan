@@ -127,7 +127,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source [
 
 	| methodDef |
-	methodDef := RwMethodDefinition
+	methodDef := (currentTraitDefinition ifNil: [ RwMethodDefinition ] ifNotNil: [ RwTraitMethodDefinition ])
 		newForSelector: selector 
 			protocol: protocol 
 			source: source.

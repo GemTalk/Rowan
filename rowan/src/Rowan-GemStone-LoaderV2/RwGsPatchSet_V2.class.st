@@ -22,6 +22,7 @@ Class {
 		'classesWithNewVersions',
 		'addedTraits',
 		'addedMethods',
+		'addedTraitMethods',
 		'deletedMethods',
 		'deleteNewVersionMethods',
 		'movedMethods',
@@ -30,6 +31,7 @@ Class {
 		'methodsNeedingRecompile',
 		'tempSymbols',
 		'createdClasses',
+		'createdTraits',
 		'errors',
 		'currentProjectDefinition',
 		'movedClassesSymbolList',
@@ -344,6 +346,12 @@ RwGsPatchSet_V2 >> _traitAdditionPatchTrait [
 	^ RwGsTraitAdditionSymbolDictPatchV2
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _traitMethodAdditionPatchClass [
+
+	^ RwGsTraitMethodAdditionSymbolDictPatchV2
+]
+
 { #category : 'building' }
 RwGsPatchSet_V2 >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
@@ -410,6 +418,20 @@ RwGsPatchSet_V2 >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDe
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addAddedClassTraitMethod: aClassTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+	currentProjectDefinition := aProjectDefinition.
+	addedTraitMethods
+		add:
+			((self _traitMethodAdditionPatchClass
+				forMethod: aClassTraitMethodDefinition
+				isMeta: true
+				inTrait: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -423,6 +445,20 @@ RwGsPatchSet_V2 >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: a
 				projectDefinition: aProjectDefinition;
 				yourself)
 
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addAddedInstanceTraitMethod: anInstanceMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+	currentProjectDefinition := aProjectDefinition.
+	addedTraitMethods
+		add:
+			((self _traitMethodAdditionPatchClass
+				forMethod: anInstanceMethodDefinition
+				isMeta: false
+				inTrait: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -1097,6 +1133,7 @@ RwGsPatchSet_V2 >> apply [
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
 		installAddedTraits;
+		compileTraitMethods;
 		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
@@ -1170,6 +1207,12 @@ RwGsPatchSet_V2 >> compileMethods [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSet_V2 >> compileTraitMethods [
+
+	addedTraitMethods do: [:each | self compileMethodPatch: each].
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSet_V2 >> createClassesFromWorkSymbolList: workSymbolList symDictName: symDictName andClassesByNameSymbolList: newClassesByNameSymbolList [
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
@@ -1218,19 +1261,6 @@ RwGsPatchSet_V2 >> createClassNamed: className fromWorkSymbolList: workSymbolLis
 ]
 
 { #category : 'patch access' }
-RwGsPatchSet_V2 >> createdClass: aClass [
-	| className |
-	className := aClass name asSymbol.
-	(createdClasses resolveSymbol: className)
-		ifNil: [ createdClasses add: (SymbolAssociation newWithKey: className value: aClass) ]
-		ifNotNil: [ :assoc | 
-			assoc value == aClass
-				ifFalse: [ 
-					"new version created, update entry in createdClasses"
-					createdClasses at: className put: aClass ] ]
-]
-
-{ #category : 'patch access' }
 RwGsPatchSet_V2 >> createdClass: aClass inSymDict: symDictName [
 	| className symDict |
 	className := aClass name.
@@ -1261,6 +1291,11 @@ RwGsPatchSet_V2 >> createdTrait: aTrait inSymDict: symDictName [
 				ifFalse: [ 
 					"new version created, update entry in createdClasses"
 					symDict at: traitName put: aTrait ] ]
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> createdTraits [
+	^ createdTraits ifNil: [ createdTraits :=  self _createNewSymbolList ]
 ]
 
 { #category : 'private - applying' }
@@ -1417,6 +1452,7 @@ RwGsPatchSet_V2 >> initialize [
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
 	addedMethods := Set new.
+	addedTraitMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
@@ -1424,6 +1460,7 @@ RwGsPatchSet_V2 >> initialize [
 	createdClasses := Dictionary new.
 	errors := Set new.
 	createdClasses := nil.
+	createdTraits := nil.
 	addedUnmanagedClasses := Set new
 ]
 

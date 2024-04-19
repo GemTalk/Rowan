@@ -273,6 +273,15 @@ RwGsImagePatchVisitor_V2 >> visitSourceModification: aSourceModification [
 ]
 
 { #category : 'visting' }
+RwGsImagePatchVisitor_V2 >> visitTraitMethodModification: aTraitMethodModification [
+
+	aTraitMethodModification
+		addModificationToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject
+]
+
+{ #category : 'visting' }
 RwGsImagePatchVisitor_V2 >> visitTraitMethodsModification: aTraitMethodsModification [
 
 	aTraitMethodsModification elementsModified

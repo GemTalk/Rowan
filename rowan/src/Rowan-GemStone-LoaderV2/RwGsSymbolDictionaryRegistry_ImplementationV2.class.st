@@ -232,6 +232,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
 	^ #rowanLoadedClass
 ]
 
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitKey [
+	^ #rowanLoadedTrait
+]
+
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _symbolDictionary: symbolDictionary associationAt: aKey ifPresent: oneArgBlock [
 
@@ -348,6 +353,44 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewUnmanagedClassVersi
 		_symbolDictionary: registryInstance _symbolDictionary
 		associationAt: newClass name
 		ifPresent: [ :assoc | Rowan packageTools adopt adoptClass: newClass intoPackageNamed: aPackageName ]
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: assoc forTrait: trait toPackageNamed: packageName instance: registryInstance [
+
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	| loadedPackage loadedTrait |
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+
+	loadedTrait := self 
+		loadedTraitForTrait: trait 
+		ifAbsent: [ 
+			loadedTrait := RwLoadedTrait newForTrait: trait.
+			loadedPackage addLoadedTrait: loadedTrait.
+			self registerLoadedTrait: loadedTrait forTrait: trait.
+			loadedTrait ].
+
+	self 
+		_symbolDictionary: registryInstance _symbolDictionary 
+		at: assoc key 
+		ifPresent: [:theTrait |
+			theTrait ~~ trait
+				ifTrue: [
+					(RwExistingAssociationWithSameKeyNotification new
+						errorMessage: 'Found an existing association in the ',  
+								registryInstance _symbolDictionary name asString printString, 
+								' symbol dictionary with a duplicate key ',
+								assoc key printString, 
+								' while attempting to add a new trait' )
+						signal.
+					(registryInstance _symbolDictionary associationAt: assoc key) value: trait ] ]
+		ifAbsent: [
+			assoc value: trait.
+			registryInstance _symbolDictionary add: assoc].
+	^ loadedTrait
 ]
 
 { #category : 'package - patch api' }
@@ -564,6 +607,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedPackageNamed: packa
 
 	^ registryInstance packageRegistry at: packageName ifAbsent: absentBlock
 
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedTraitForTrait: aTrait ifAbsent: absentBlock [
+	^ (aTrait _extraDictAt: self _loadedTraitKey) ifNil: absentBlock
 ]
 
 { #category : 'package - patch api' }

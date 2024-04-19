@@ -12,7 +12,6 @@ RwTraitModification >> acceptVisitor: aVisitor [
 
 { #category : 'patching' }
 RwTraitModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
-
 	aPatchSet
 		addTraitModification: self 
 		toPatchSetInPackage: aPackage 

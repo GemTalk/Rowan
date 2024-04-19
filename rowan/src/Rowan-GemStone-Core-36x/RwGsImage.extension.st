@@ -29,6 +29,24 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 ]
 
 { #category : '*rowan-gemstone-core-36x' }
+RwGsImage class >> loadedTraitMethod: selector inTraitNamed: traitName isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
+	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
+
+	| trait compiledMethodSource |
+	trait := self objectNamed: traitName.
+	trait ifNil: [ ^ absentBlock value ].
+	isMeta
+		ifTrue: [ trait := trait classTrait ].
+self halt."figure the rest out when I get here"
+	compiledMethodSource := trait
+		sourceCodeAt: selector asSymbol.
+	compiledMethodSource ifNil: [ ^ absentBlock value ].
+	^ compiledMethodSource _rowanPackageInfo
+		ifNotNil: [ :loadedMethod | foundBlock cull: loadedMethod ]
+		ifNil: [ absentBlock value ]
+]
+
+{ #category : '*rowan-gemstone-core-36x' }
 RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 	"The given compiled method is being removed from the system, remove the loadedMethod associated 
 		with the compiled method."

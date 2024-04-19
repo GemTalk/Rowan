@@ -23,6 +23,17 @@ RwGsMethodPatchV2 class >> forMethod: aMethodDefinition isMeta: isMeta inClass: 
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwGsMethodPatchV2 class >> forMethod: aTraitMethodDefinition isMeta: isMeta inTrait: aTraitDefinition inPackage: aPackageDefinition [
+
+	^(self new)
+		methodDefinition: aTraitMethodDefinition;
+		isMeta: isMeta;
+		traitDefinition: aTraitDefinition;
+		packageDefinition: aPackageDefinition;
+		yourself
+]
+
 { #category : 'accessing' }
 RwGsMethodPatchV2 >> behavior [
 
