@@ -68,7 +68,11 @@ RwTraitDefinition >> _traitNameForCompare: aDefinition [
 
 { #category : 'accessing' }
 RwTraitDefinition >> category [
-	^ properties at: #'category' ifAbsent: [  ]
+	^ properties
+		at: #'category'
+		ifAbsent: [ 
+			"recursion protection"
+			properties at: #'packageName' ifAbsent: [  ] ]
 ]
 
 { #category : 'accessing' }
@@ -133,7 +137,11 @@ RwTraitDefinition >> instVarNames: arrayOfInstanceVariableNames [
 RwTraitDefinition >> packageName [
 	"category is the name of the field that the packageName is stored under on disk"
 
-	^ properties at: #'packageName' ifAbsent: [  self category  ]
+	^ properties
+		at: #'packageName'
+		ifAbsent: [ 
+			"recursion protection"
+			properties at: #'category' ifAbsent: [  ] ]
 ]
 
 { #category : 'accessing' }
