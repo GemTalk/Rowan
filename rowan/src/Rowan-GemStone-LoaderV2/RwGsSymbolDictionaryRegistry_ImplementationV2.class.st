@@ -368,7 +368,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: asso
 	loadedTrait := self 
 		loadedTraitForTrait: trait 
 		ifAbsent: [ 
-			loadedTrait := RwLoadedTrait newForTrait: trait.
+			loadedTrait := RwGsLoadedSymbolDictTrait newForTrait: trait.
 			loadedPackage addLoadedTrait: loadedTrait.
 			self registerLoadedTrait: loadedTrait forTrait: trait.
 			loadedTrait ].
@@ -673,6 +673,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedClassExtens
 			aClass theNonMetaClass _extraDictAt: self _loadedClassExtensionKey put: set.
 			set ])
 		add: loadedClass
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> registerLoadedTrait: loadedTrait forTrait: aTrait [
+	aTrait _extraDictAt: self _loadedTraitKey put: loadedTrait
 ]
 
 { #category : 'class - registration' }

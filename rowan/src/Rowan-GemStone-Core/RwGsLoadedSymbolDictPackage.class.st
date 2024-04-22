@@ -34,6 +34,7 @@ RwGsLoadedSymbolDictPackage >> initialize [
 	super initialize.
 	loadedClasses := StringKeyValueDictionary new.
 	loadedClassExtensions := StringKeyValueDictionary new.
+	loadedTraits := StringKeyValueDictionary new.
 	"A new package is dirty until it has been shown to be identical to a repository."
 	isDirty := true
 ]

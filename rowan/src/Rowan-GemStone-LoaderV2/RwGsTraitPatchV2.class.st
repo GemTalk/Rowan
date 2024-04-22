@@ -49,16 +49,18 @@ RwGsTraitPatchV2 >> addToNewTraitsByNameSymbolList: newTraitsByNameSymbolList [
 	symDict at: name put: self
 ]
 
-{ #category : 'private' }
+{ #category : 'actions' }
 RwGsTraitPatchV2 >> basicCreateTrait [
-
-	self halt.
+	^ (Globals at: #'Trait')
+		name: traitDefinition name
+		instVars: traitDefinition instVarNames
+		classVars: traitDefinition classVarNames
 ]
 
 { #category : 'actions' }
 RwGsTraitPatchV2 >> createTraitFor: aPatchSet inSymDict: symDictName [
 	| createdTrait |
-	createdTrait := self privateCreateTrait.
+	createdTrait := self basicCreateTrait.
 	aPatchSet createdTrait: createdTrait inSymDict: symDictName.
 	^ createdTrait
 ]
@@ -68,20 +70,6 @@ RwGsTraitPatchV2 >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream nextPutAll: '(', traitDefinition name, ')'
-]
-
-{ #category : 'private' }
-RwGsTraitPatchV2 >> privateCreateTrait [
-
-	| traitProperties infoSource category createdTrait |
-	createdTrait := self basicCreateTrait.
-	traitProperties := traitDefinition properties.
-	infoSource := Rowan configuration packageInfoSource.
-	category := infoSource == #'Category'
-		ifTrue: [ self packageName ]
-		ifFalse: [ traitProperties at: 'category' ifAbsent: [  ] ].
-	createdTrait _category: category.
-	^ createdTrait
 ]
 
 { #category : 'accessing' }

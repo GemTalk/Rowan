@@ -1133,7 +1133,7 @@ RwGsPatchSet_V2 >> apply [
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
 		installAddedTraits;
-		compileTraitMethods;
+		updateTraitMethods;
 		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
@@ -1204,12 +1204,6 @@ RwGsPatchSet_V2 >> compileMethods [
 	addedMethods do: [:each | self compileMethodPatch: each].
 	extendedMethods do: [:each | self compileMethodPatch: each].
 	methodsNeedingRecompile do: [:each | self compileMethodPatch: each]
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_V2 >> compileTraitMethods [
-
-	addedTraitMethods do: [:each | self compileMethodPatch: each].
 ]
 
 { #category : 'private - applying' }
@@ -1839,4 +1833,17 @@ RwGsPatchSet_V2 >> updateSymbolAssociations [
 					| classMove |
 					classMove := assoc value.
 					each moveNewClassVersionInSystem: classMove ] ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> updateTraitMethods [
+
+	addedTraitMethods do: [:each | self updateTraitMethodSourcePatch: each].
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> updateTraitMethodSourcePatch: aMethodAdditionPatch [
+	aMethodAdditionPatch
+		updateTraitMethodSourceUsingNewClassesSymbolList: self createdTraits
+		andExistingClasses: self tempSymbols
 ]

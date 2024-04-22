@@ -8,13 +8,11 @@ Class {
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
-{ #category : 'actions' }
-RwGsTraitAdditionSymbolDictPatchV2 >> basicCreateTrait [
-
-	^ (Globals at: #Trait)
-		name: traitDefinition name
-		instVars: traitDefinition instVarNames
-		classVars: traitDefinition classVarNames
+{ #category : 'other' }
+RwGsTraitAdditionSymbolDictPatchV2 >> createTraitFor: aPatchSet inSymDict: symDictName [
+	newTrait := super createTraitFor: aPatchSet inSymDict: symDictName.
+	symbolAssociation := aPatchSet tempAssociationFor: newTrait name.
+	^ newTrait
 ]
 
 { #category : 'actions' }
@@ -30,7 +28,7 @@ RwGsTraitAdditionSymbolDictPatchV2 >> installTraitInSystem [
 		forTrait: self newTrait
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	loadedTrait updatePropertiesFromClassDefinition: self traitDefinition
+	loadedTrait updatePropertiesFromTraitDefinition: self traitDefinition
 ]
 
 { #category : 'accessing' }

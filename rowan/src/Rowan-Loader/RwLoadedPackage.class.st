@@ -12,6 +12,7 @@ Class {
 		'commitId',
 		'loadedClasses',
 		'loadedClassExtensions',
+		'loadedTraits',
 		'isDirty',
 		'loadedProject'
 	],
@@ -35,6 +36,14 @@ RwLoadedPackage >> addLoadedClassExtension: aLoadedClassExtension [
 	aLoadedClassExtension loadedPackage: self
 ]
 
+{ #category : 'accessing' }
+RwLoadedPackage >> addLoadedTrait: aLoadedTrait [
+
+	self markDirty.
+	loadedTraits at: aLoadedTrait key put: aLoadedTrait.
+	aLoadedTrait loadedPackage: self
+]
+
 { #category : 'definitions' }
 RwLoadedPackage >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
@@ -43,7 +52,7 @@ RwLoadedPackage >> asDefinition [
 		withProperties: self propertiesForDefinition
 		classDefinitions: self classDefinitions
 		classExtensions: self classExtensionDefinitions
-		traitDefinitions: Dictionary new "for now ..."
+		traitDefinitions: self traitDefinitions
 ]
 
 { #category : 'other' }
@@ -168,6 +177,11 @@ RwLoadedPackage >> loadedProject: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RwLoadedPackage >> loadedTraits [
+	^loadedTraits
+]
+
 { #category : 'private' }
 RwLoadedPackage >> markDirty [
 	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
@@ -215,4 +229,11 @@ RwLoadedPackage >> removeLoadedClassExtension: aLoadedClassExtension [
 	self markDirty.
 	loadedClassExtensions removeKey: aLoadedClassExtension key.
 	aLoadedClassExtension loadedPackage: nil
+]
+
+{ #category : 'private' }
+RwLoadedPackage >> traitDefinitions [
+	"Create definitions from all of the traits I define, and answer the collection of them"
+
+	^self definitionsFor: loadedTraits
 ]

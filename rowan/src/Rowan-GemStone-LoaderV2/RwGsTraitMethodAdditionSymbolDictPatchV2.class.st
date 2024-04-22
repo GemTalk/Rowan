@@ -7,47 +7,6 @@ Class {
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
-{ #category : 'compiling' }
-RwGsTraitMethodAdditionSymbolDictPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
-	self
-		compileUsingNewTraitsSymbolList: createdClasses
-		andExistingTraitss: tempSymbols
-]
-
-{ #category : 'compiling' }
-RwGsTraitMethodAdditionSymbolDictPatchV2 >> compileUsingNewTraitsSymbolList: createdTraits andExistingTraitss: tempSymbols [
-	self
-		primeBehaviorNewTraitsSymbolList: createdTraits
-		andExistingTraits: tempSymbols.
-	behavior
-		ifNil: [ 
-			self
-				error:
-					'Trait ' , self traitName printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-
-	[ 
-	| sourceString protocol symbolList |
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-		compileMethod: sourceString
-		dictionaries: symbolList
-		category: protocol
-		intoMethodDict: false
-		intoCategories: nil
-		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
-		on: CompileError , CompileWarning
-		do: [ :ex | 
-			ex
-				addText:
-					(RwRepositoryComponentProjectReaderVisitor
-						lineNumberStringForDefinition: methodDefinition).
-			ex pass ]
-]
-
 { #category : 'installing' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> installMethod [
 self halt.
@@ -63,7 +22,6 @@ self halt.
 { #category : 'private' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> primeBehaviorNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
 	| traitName trait symDictName |
-self halt.
 	traitDefinition key
 		ifNil: [ 
 			"trait is being deleted ... we're done"
@@ -76,8 +34,7 @@ self halt.
 			tempSymbols
 				at: traitName
 				ifAbsent: [ 
-self halt.
-					"cannot find class ... caller can decide whether or not that is a problem"
+					"cannot find trait ... caller can decide whether or not that is a problem -- behavior will be nil"
 					^ self ] ].
 	behavior := isMeta
 		ifTrue: [ trait class ]
@@ -98,4 +55,32 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitDefinition: object [
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitName [
 
 	^ self traitDefinition key
+]
+
+{ #category : 'compiling' }
+RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClassesSymbolList: createdTraits andExistingClasses: tempSymbols [
+	self
+		primeBehaviorNewTraitsSymbolList: createdTraits
+		andExistingTraits: tempSymbols.
+	behavior
+		ifNil: [ 
+			self
+				error:
+					'Trait ' , self traitName printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+
+	[ 
+	| sourceString protocol symbolList |
+	sourceString := methodDefinition source.
+	symbolList := SymbolList with: tempSymbols.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	compiledMethod := behavior compileMethod: sourceString ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryComponentProjectReaderVisitor
+						lineNumberStringForDefinition: methodDefinition).
+			ex pass ]
 ]

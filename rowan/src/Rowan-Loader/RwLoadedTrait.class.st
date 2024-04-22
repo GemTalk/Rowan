@@ -9,10 +9,18 @@ Class {
 	#category : 'Rowan-Loader'
 }
 
+{ #category : 'private' }
+RwLoadedTrait >> _traitBasedProperties [
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #(#'name' #'uses')
+]
+
 { #category : 'definitions' }
 RwLoadedTrait >> asDefinition [
 	"Create a Definition corresponding to what I define in the image."
-	^RwClassDefinition
+
+	^ RwTraitDefinition
 		withProperties: self propertiesForDefinition
 		classMethodDefinitions: self classMethodDefinitions
 		instanceMethodDefinitions: self instanceMethodDefinitions
@@ -97,8 +105,25 @@ RwLoadedTrait >> loadedPackage: aLoadedPackage [
 	loadedPackage := aLoadedPackage
 ]
 
+{ #category : 'private' }
+RwLoadedTrait >> markPackageDirty [
+
+	loadedPackage markDirty
+]
+
 { #category : 'accessing' }
 RwLoadedTrait >> packageName [
 
 	^loadedPackage name
+]
+
+{ #category : 'properties' }
+RwLoadedTrait >> updatePropertiesFromTraitDefinition: traitDefinition [
+	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
+
+	| recordedPropertyNames |
+	recordedPropertyNames := self _traitBasedProperties . "a small Array of Symbols"
+	traitDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
+		(recordedPropertyNames includesIdentical: propertyName)
+			ifFalse: [ self propertyAt: propertyName put: propertyValue ] ]
 ]
