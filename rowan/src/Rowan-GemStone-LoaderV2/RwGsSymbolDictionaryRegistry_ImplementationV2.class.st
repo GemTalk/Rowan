@@ -370,6 +370,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: asso
 		ifAbsent: [ 
 			loadedTrait := RwGsLoadedSymbolDictTrait newForTrait: trait.
 			loadedPackage addLoadedTrait: loadedTrait.
+			loadedTrait updatePropertiesFromTraitFor: registryInstance.
 			self registerLoadedTrait: loadedTrait forTrait: trait.
 			loadedTrait ].
 

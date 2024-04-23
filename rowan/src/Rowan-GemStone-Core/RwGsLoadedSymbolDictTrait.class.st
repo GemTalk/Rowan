@@ -39,3 +39,28 @@ RwGsLoadedSymbolDictTrait >> key [
 
 	^name
 ]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictTrait >> symbolDictionaryName: aName [
+
+	self propertyAt: #'gs_SymbolDictionary' put: aName asString
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updatePropertiesFromTraitFor: aSymbolDictionaryRegistry [
+	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
+
+	self
+		updateSymbolDictionaryFromTraitFor:
+			aSymbolDictionaryRegistry _symbolDictionary
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateSymbolDictionaryFromTraitFor: aSymbolDictionary [
+
+	| newName oldName |
+	newName := aSymbolDictionary name.
+	oldName := self propertyAt: #'gs_SymbolDictionary'.	"needs to be listed in _traitsBasedProperties method?"
+	oldName = newName
+		ifFalse: [ self symbolDictionaryName: newName ]
+]

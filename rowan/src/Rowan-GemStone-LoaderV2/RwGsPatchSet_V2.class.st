@@ -1039,7 +1039,7 @@ RwGsPatchSet_V2 >> addTraitModification: aRwTraitModification toPatchSetInPackag
 					(Rowan image loadedTraitForTrait: trait ifAbsent: [  ])
 						ifNil: [ 
 							| theTraitDefinition theTraitModification |
-							"no loaded trait exists for the trait"
+							self halt: 'no loaded trait exists for the trait'.
 							theTraitDefinition := trait
 								rwTraitDefinitionInSymbolDictionaryNamed: symDictName.
 							theTraitModification := aRwTraitModification after
@@ -1083,7 +1083,7 @@ RwGsPatchSet_V2 >> addTraitModification: aRwTraitModification toPatchSetInPackag
 				inProject: aProjectDefinition ].
 	aRwTraitModification isModification
 		ifTrue: [ 
-			(Globals at: #RwGsTraitVersioningPatchV2)
+			RwGsTraitModificationSymbolDictPatchV2
 				addPatchedTraitModification: aRwTraitModification
 				inPackage: aPackage
 				inProject: aProjectDefinition
@@ -1132,8 +1132,6 @@ RwGsPatchSet_V2 >> apply [
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
-		installAddedTraits;
-		updateTraitMethods;
 		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
@@ -1141,6 +1139,8 @@ RwGsPatchSet_V2 >> apply [
 		doMoveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
+		installAddedTraits;
+		updateTraitMethods;
 		removeDeletedMethods;
 		updateMethodDictionaries;
 		updateMethodProperties;

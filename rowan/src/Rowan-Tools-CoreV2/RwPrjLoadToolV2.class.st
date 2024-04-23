@@ -275,7 +275,9 @@ RwPrjLoadToolV2 >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanc
 						gemstoneSymbolDictNameForPackageNamed: packageName.
 					packageDefinition gs_symbolDictionary: symdictName.
 					packageDefinition classDefinitions values
-						do: [ :classDef | classDef gs_symbolDictionary: symdictName ] ] ].
+						do: [ :classDef | classDef gs_symbolDictionary: symdictName ].
+					packageDefinition traitDefinitions values
+						do: [ :traitDef | traitDef gs_symbolDictionary: symdictName ] ] ].
 	diff := projectSetDefinitionToLoad
 		compareAgainstBaseForLoader: loadedProjectDefinitionSet.
 	diff isEmpty
