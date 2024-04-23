@@ -2,17 +2,17 @@ Class {
 	#name : 'RwGsTraitMethodAdditionSymbolDictPatchV2',
 	#superclass : 'RwGsMethodAdditionSymbolDictPatchV2',
 	#instVars : [
-		'traitDefinition'
+		'traitDefinition',
+		'traitInstance'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
 { #category : 'installing' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> installMethod [
-self halt.
 	self symbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
-		for: behavior
+		for: traitInstance
 		protocol: self propertiesProtocolName
 		toPackageNamed: self packageName
 		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
@@ -34,11 +34,9 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> primeBehaviorNewTraitsSymbolList: cr
 			tempSymbols
 				at: traitName
 				ifAbsent: [ 
-					"cannot find trait ... caller can decide whether or not that is a problem -- behavior will be nil"
+					"cannot find trait ... caller can decide whether or not that is a problem -- traitInstance will be nil"
 					^ self ] ].
-	behavior := isMeta
-		ifTrue: [ trait class ]
-		ifFalse: [ trait ]
+	traitInstance :=  trait
 ]
 
 { #category : 'accessing' }
@@ -62,7 +60,7 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	self
 		primeBehaviorNewTraitsSymbolList: createdTraits
 		andExistingTraits: tempSymbols.
-	behavior
+	traitInstance
 		ifNil: [ 
 			self
 				error:
@@ -75,7 +73,9 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior compileMethod: sourceString ]
+	isMeta
+		ifTrue: [ traitInstance compileClassMethod: sourceString ]
+		ifFalse: [ traitInstance compileMethod: sourceString ] ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
 			ex
