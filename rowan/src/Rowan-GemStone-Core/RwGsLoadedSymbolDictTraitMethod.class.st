@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwGsLoadedSymbolDictTraitMethod class >> loadedClassMethodForTrait: aTrait source: sourceString [
+RwGsLoadedSymbolDictTraitMethod class >> loadedClassMethodForTrait: aTrait source: sourceString protocol: protocol [
 	| instance sel |
 	sel := self class extractSelector: sourceString.
 	instance := self newNamed: sel.
@@ -16,12 +16,13 @@ RwGsLoadedSymbolDictTraitMethod class >> loadedClassMethodForTrait: aTrait sourc
 		classIsMeta: true;
 		handle: aTrait;
 		source: sourceString;
+		propertyAt: 'protocol' put: protocol;
 		updateFromHandle.
 	^ instance
 ]
 
 { #category : 'instance creation' }
-RwGsLoadedSymbolDictTraitMethod class >> loadedMethodForTrait: aTrait source: sourceString [
+RwGsLoadedSymbolDictTraitMethod class >> loadedMethodForTrait: aTrait source: sourceString protocol: protocol [
 	| instance sel |
 	sel := self class extractSelector: sourceString.
 	instance := self newNamed: sel.
@@ -29,6 +30,7 @@ RwGsLoadedSymbolDictTraitMethod class >> loadedMethodForTrait: aTrait source: so
 		classIsMeta: false;
 		handle: aTrait;
 		source: sourceString;
+		propertyAt: 'protocol' put: protocol;
 		updateFromHandle.
 	^ instance
 ]

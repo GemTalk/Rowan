@@ -61,7 +61,7 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	| sourceString protocol symbolList loadedTrait loadedMethod |
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	protocol := (methodDefinition propertyAt: 'protocol') asString.
 
 	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: traitInstance.
 	isMeta
@@ -69,12 +69,14 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 			traitInstance compileClassMethod: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
 				loadedClassMethodForTrait: traitInstance
-				source: sourceString ]
+				source: sourceString
+				protocol: protocol ]
 		ifFalse: [ 
 			traitInstance compileMethod: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
 				loadedMethodForTrait: traitInstance
-				source: sourceString ].
+				source: sourceString
+				protocol: protocol ].
 	loadedTrait addLoadedMethod: loadedMethod ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
