@@ -373,7 +373,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: asso
 			loadedTrait updatePropertiesFromTraitFor: registryInstance.
 			self registerLoadedTrait: loadedTrait forTrait: trait.
 			loadedTrait ].
-
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
 		at: assoc key 
@@ -608,6 +607,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedPackageNamed: packa
 
 	^ registryInstance packageRegistry at: packageName ifAbsent: absentBlock
 
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> loadedTraitForTrait: aTrait [
+	^ self
+		loadedTraitForTrait: aTrait
+		ifAbsent: [ 
+			self
+				error:
+					'No loaded trait for trait named ' , aTrait name printString , ' found.' ]
 ]
 
 { #category : 'class - registration' }

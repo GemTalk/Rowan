@@ -408,6 +408,16 @@ RwGsSymbolDictionaryRegistryV2 >> loadedPackageNamed: packageName ifAbsent: abse
 ]
 
 { #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> loadedTraitForTrait: aTrait [
+	^ self class registry_ImplementationClass loadedTraitForTrait: aTrait
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> loadedTraitForTrait: aTrait ifAbsent: absentBlock [
+	^ self class registry_ImplementationClass loadedTraitForTrait: aTrait ifAbsent: absentBlock
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
 	"move a compiled method into a different protocol and update loaded things"

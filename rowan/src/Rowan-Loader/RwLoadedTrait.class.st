@@ -13,7 +13,7 @@ Class {
 RwLoadedTrait >> _traitBasedProperties [
 	"Answer the list of properties that are derived from the class instance itself"
 
-	^ #(#'name' #'uses')
+	^ #(#'name')
 ]
 
 { #category : 'definitions' }

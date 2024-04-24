@@ -10,6 +10,30 @@ RwGsLoadedSymbolDictTrait class >> newForTrait: aTrait [
 	^self new initializeForTrait: aTrait
 ]
 
+{ #category : 'methods' }
+RwGsLoadedSymbolDictTrait >> addLoadedClassMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedClassMethods at: aLoadedMethod key put: aLoadedMethod.
+	aLoadedMethod loadedClass: self
+]
+
+{ #category : 'methods' }
+RwGsLoadedSymbolDictTrait >> addLoadedInstanceMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedInstanceMethods at: aLoadedMethod key put: aLoadedMethod.
+	aLoadedMethod loadedClass: self
+]
+
+{ #category : 'method' }
+RwGsLoadedSymbolDictTrait >> addLoadedMethod: aLoadedMethod [
+
+	aLoadedMethod classIsMeta
+		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
+		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictTrait >> initialize [
 

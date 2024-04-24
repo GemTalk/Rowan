@@ -8,17 +8,6 @@ Class {
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
-{ #category : 'installing' }
-RwGsTraitMethodAdditionSymbolDictPatchV2 >> installMethod [
-	self symbolDictionaryRegistry
-		addNewCompiledMethod: compiledMethod
-		for: traitInstance
-		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2.
-	selector := compiledMethod selector
-]
-
 { #category : 'private' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> primeBehaviorNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
 	| traitName trait symDictName |
@@ -69,13 +58,24 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 						, methodDefinition selector printString ].
 
 	[ 
-	| sourceString protocol symbolList |
+	| sourceString protocol symbolList loadedTrait loadedMethod |
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+
+	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: traitInstance.
 	isMeta
-		ifTrue: [ traitInstance compileClassMethod: sourceString ]
-		ifFalse: [ traitInstance compileMethod: sourceString ] ]
+		ifTrue: [ 
+			traitInstance compileClassMethod: sourceString.
+			loadedMethod := RwGsLoadedSymbolDictTraitMethod
+				loadedClassMethodForTrait: traitInstance
+				source: sourceString ]
+		ifFalse: [ 
+			traitInstance compileMethod: sourceString.
+			loadedMethod := RwGsLoadedSymbolDictTraitMethod
+				loadedMethodForTrait: traitInstance
+				source: sourceString ].
+	loadedTrait addLoadedMethod: loadedMethod ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
 			ex
