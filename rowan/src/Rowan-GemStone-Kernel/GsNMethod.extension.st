@@ -1,6 +1,12 @@
 Extension { #name : 'GsNMethod' }
 
 { #category : '*rowan-gemstone-kernel' }
+GsNMethod >> isFromRowan [
+
+	^self origin isRowanLoadedMethod
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 GsNMethod >> rowanPackageName [
 
 	"answer the name of the package that the receiver is a member of. Answer `Rowan unpackagedName` if 

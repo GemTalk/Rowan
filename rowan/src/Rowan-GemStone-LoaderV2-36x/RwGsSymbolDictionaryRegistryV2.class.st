@@ -10,7 +10,7 @@ Class {
 
 { #category : 'package adopt' }
 RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName [
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	| methodDictionary selector protocolSymbol loadedMethod loadedPackage loadedClassOrExtension |
 	classExtension
 		ifTrue: [ 
 			"to adopt and extension method, it is much less complicated"
@@ -31,20 +31,18 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 		ifFalse: [ 
 			self
 				error:
-					'The given compiled method does not the existing compiled method in the class.' ].
+					'The given compiled method does not match the existing compiled method in the class.' ].
 
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _origin.
-	existing
-		ifNotNil: [ :lm | 
+	compiledMethod isFromRowan
+		ifTrue: [ 
 			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
-			lm isRowanLoadedMethod
-				ifFalse: [ self error: 'Expected a loaded method for  ' , compiledMethod printString ].
 			^ self ].
+
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 	compiledMethod _origin: loadedMethod.
 

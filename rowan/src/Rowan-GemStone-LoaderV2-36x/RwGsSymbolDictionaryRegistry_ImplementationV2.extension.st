@@ -37,7 +37,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 
 { #category : '*rowan-gemstone-loaderv2-36x' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
+	| methodDictionary selector protocolSymbol loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 
@@ -49,11 +49,8 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _origin.
-	existing
-		ifNotNil: [ 
-			existing isRowanLoadedMethod
-				ifFalse: [ self error: 'Expected a loaded method for  ' , compiledMethod printString ].
+	compiledMethod isFromRowan
+		ifTrue: [ 
 			registryInstance
 				error:
 					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
