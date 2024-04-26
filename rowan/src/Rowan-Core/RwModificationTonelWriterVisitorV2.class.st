@@ -165,7 +165,7 @@ RwModificationTonelWriterVisitorV2 >> _typeOfClass: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
-	| definition handledProperties |
+	| definition handledProperties traitCategory |
 	(definition := self class orderedDictionaryClass new)
 		at: #'name'
 		put: aTraitDefinition name.
@@ -179,10 +179,12 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 
 	aTraitDefinition instVarNames
 		ifNotEmpty: [ :vars | definition at: #'instVars' put: vars asArray ].
-	definition at: #'category' put: aTraitDefinition category.
+	definition at: #'category' put: (traitCategory := aTraitDefinition category).
 	aTraitDefinition properties
 		at: #'packageName'
-		ifPresent: [ :value | definition at: #'package' put: value ].
+		ifPresent: [ :value | 
+			traitCategory = value
+				ifFalse: [ definition at: #'package' put: value ] ].
 	aTraitDefinition properties
 		at: #'tag'
 		ifPresent: [ :value | definition at: #'tag' put: value ].
@@ -192,11 +194,7 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 		keysAndValuesDo: [ :propName :propValue | 
 			"write out any other unknown properties"
 			(handledProperties includes: propName)
-				ifFalse: [ 
-					propValue
-						ifNotNil: [ 
-							self halt.
-							definition at: propName put: propValue ] ] ].
+				ifFalse: [ propValue ifNotNil: [ definition at: propName put: propValue ] ] ].
 
 	^ self _toSTON: definition
 ]
