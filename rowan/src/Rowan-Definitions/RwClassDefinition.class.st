@@ -156,19 +156,6 @@ RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePa
 ]
 
 { #category : 'accessing' }
-RwClassDefinition >> shebang [
-
-	^ self propertyAt: #'shebang' ifAbsent: []
-]
-
-{ #category : 'accessing' }
-RwClassDefinition >> shebang: aStringOrNil [
-
-	aStringOrNil ifNil: [ ^ self properties removeKey: #'shebang' ifAbsent: [] ].
-	^ self propertyAt: #'shebang' put: aStringOrNil
-]
-
-{ #category : 'accessing' }
 RwClassDefinition >> superclassName [
 
 	^self propertyAt: #'superclass' ifAbsent: [self propertyAt: 'super']

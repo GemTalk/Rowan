@@ -1,6 +1,13 @@
 Extension { #name : 'Object' }
 
 { #category : '*rowan-gemstone-components-kernel' }
+Object >> isRowanLoadedMethod [
+	"Answer true if the receiver is a loaded method ... used for determining the _owner of compiled method"
+
+	^false
+]
+
+{ #category : '*rowan-gemstone-components-kernel' }
 Object >> rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher [
   ^ self
     error: 'Expected a String or a RwGemStoneVersion'

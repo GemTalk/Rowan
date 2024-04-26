@@ -157,7 +157,7 @@ RwTopazTonelReader >> createClassFrom: anArray [
     oldClass theClass  options type keys superCls classInstVars comment resOop | 
   dict := anArray at: 6 .
   knownKeys := IdentitySet withAll:#( name superclass instvars classvars classinstvars 
-                                           category gs_options type shebang gs_reservedoop ).
+                                           category gs_options type gs_reservedoop ).
   keys := IdentitySet new .
   dict keys do:[:k|  keys add: k asSymbol ].
   (xKeys := keys - knownKeys) size > 0 

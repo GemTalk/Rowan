@@ -45,7 +45,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 			compiledMethod := loadedMethod handle.
-			compiledMethod _rowanPackageInfo: nil.
+			compiledMethod _owner: nil.
 
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
@@ -88,5 +88,5 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			compiledMethod _rowanPackageInfo: loadedMethod ]
+			compiledMethod _owner: loadedMethod ]
 ]

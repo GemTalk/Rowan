@@ -5,9 +5,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 	"remove a compiled method from loaded things"
 
 	| loadedMethod loadedPackage loadedClassOrExtension |
-	compiledMethod _rowanPackageInfo
+	compiledMethod _owner
 		ifNotNil: [ :aLoadedMethod | 
-			compiledMethod _rowanPackageInfo: nil.
+			compiledMethod _owner: nil.
 			loadedMethod := aLoadedMethod ]
 		ifNil: [ 
 			registryInstance
@@ -49,9 +49,11 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo.
+	existing := compiledMethod _owner.
 	existing
 		ifNotNil: [ 
+			existing isRowanLoadedMethod
+				ifFalse: [ self error: 'Expected a loaded method for  ' , compiledMethod printString ].
 			registryInstance
 				error:
 					'internal error - Existing LoadedMethod ' , behavior name asString , '>>'
@@ -59,7 +61,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _rowanPackageInfo: loadedMethod.
+	compiledMethod _owner: loadedMethod.
 
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -101,7 +103,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
 			compiledMethod := meth ].
 
-	existing := compiledMethod _rowanPackageInfo.
+	existing := compiledMethod _owner.
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -109,7 +111,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _rowanPackageInfo: loadedMethod.
+	compiledMethod _owner: loadedMethod.
 
 	loadedPackage := self
 		existingOrNewLoadedPackageNamed: packageName
@@ -151,14 +153,14 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _rowanPackageInfo.
+	existing := compiledMethod _owner.
 	existing
 		ifNotNil: [ 
 			registryInstance
 				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _rowanPackageInfo: loadedMethod.
+	compiledMethod _owner: loadedMethod.
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -199,16 +201,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
-	loadedMethod := oldCompiledMethod _rowanPackageInfo.
+	loadedMethod := oldCompiledMethod _owner.
 	loadedMethod
 		ifNil: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	oldCompiledMethod _rowanPackageInfo: nil.
+	oldCompiledMethod _owner: nil.
 
 	loadedMethod handle: newCompiledMethod.
-	newCompiledMethod _rowanPackageInfo: loadedMethod.
+	newCompiledMethod _owner: loadedMethod.
 	^ registryInstance
 ]
 
@@ -239,16 +241,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 		updateMethodLookupCacheFor: newCompiledMethod
 		in: behavior.
 
-	loadedMethod := oldCompiledMethod _rowanPackageInfo.
+	loadedMethod := oldCompiledMethod _owner.
 	loadedMethod
 		ifNil: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	oldCompiledMethod _rowanPackageInfo: nil.
+	oldCompiledMethod _owner: nil.
 
 	loadedMethod handle: newCompiledMethod.
-	newCompiledMethod _rowanPackageInfo: loadedMethod
+	newCompiledMethod _owner: loadedMethod
 ]
 
 { #category : '*rowan-gemstone-loaderv2-36x' }
@@ -333,7 +335,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 
 	behavior _moveMethod: selector toCategory: newProtocol.
 
-	loadedMethod := compiledMethod _rowanPackageInfo.
+	loadedMethod := compiledMethod _owner.
 	loadedMethod
 		ifNil: [ 
 			registryInstance

@@ -105,7 +105,6 @@ IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
-		shebang: (metadata at: #'shebang' ifAbsent: [  ]);
 		yourself
 ]
 
@@ -121,18 +120,24 @@ RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: an
 
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
-	| traitName metadata instvars packageName category |
+	| traitName metadata instvars packageName category expectedProperties |
 	metadata := anArray sixth.
 	currentClassExtension := currentClassDefinition := nil.
 	traitName := metadata at: #'name'.
 	instvars := #().	"for now"
-	category :=  metadata at: #'category' ifAbsent: [ ].
-	packageName := metadata at: #'package' ifAbsent: [ category].
+	category := metadata at: #'category' ifAbsent: [  ].
+	packageName := metadata at: #'package' ifAbsent: [ category ].
 	currentTraitDefinition := RwTraitDefinition
 		newForTraitNamed: traitName
 		instanceVariableNames: instvars
 		category: category
 		packageName: packageName.
+	expectedProperties := #(#'name' #'category' #'package').
+	metadata
+		keysAndValuesDo: [ :propName :propValue | 
+			"copy any additional properties, to preserve them for other platforms"
+			(expectedProperties includes: propName)
+				ifFalse: [ currentTraitDefinition propertyAt: propName put: propValue ] ].
 	^ currentTraitDefinition
 ]
 

@@ -24,7 +24,7 @@ RwGsMethodAdditionSymbolDictPatchV2 >> installMovedMethod: aClassMove newClassVe
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
 				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					oldCompiledMethod _rowanPackageInfo: nil ] ].
+					oldCompiledMethod _owner: nil ] ].
 
 	theRegistry
 		addNewCompiledMethod: compiledMethod

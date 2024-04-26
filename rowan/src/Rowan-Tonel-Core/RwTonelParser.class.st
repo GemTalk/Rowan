@@ -478,15 +478,6 @@ RwTonelParser >> separator [
 
 ]
 
-{ #category : 'parsing' }
-RwTonelParser >> shebang [
-	"look for a '#!' in first two character position and skip to next line if present"
-
-	(stream peekFor: $#) ifFalse: [ ^ nil ].	
-	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	^ stream  upTo: Character_lf.
-]
-
 { #category : 'accessing' }
 RwTonelParser >> start [
 	^ self document
@@ -551,25 +542,24 @@ RwTonelParser >> type [
 
 { #category : 'parsing' }
 RwTonelParser >> typeDef [
-	| shebang |
-	shebang := self shebang. "ignore shebang on first line of file if present"
-	^ self newTypeDefinitionFrom: { 
-		self separator.
-    stream peek == $" ifTrue:[ self try: [ self comment ]].
-		self separator. 
-		self type. 
-		self separator. 
-    stream peek == ${ ifTrue:[
-		  self try: [ 
-			  | typeMetadata normalizedMetadata |
-			  typeMetadata := self metadata.
-			  normalizedMetadata := Dictionary new.
-			  typeMetadata keysAndValuesDo: [:key :value |
-				  normalizedMetadata at: key asLowercase asSymbol put: value ].
-			  normalizedMetadata at: #shebang put: shebang.
-			  normalizedMetadata ] 
-    ].
-	}
+	^ self
+		newTypeDefinitionFrom:
+			{(self separator).
+			(stream peek == $"
+				ifTrue: [ self try: [ self comment ] ]).
+			(self separator).
+			(self type).
+			(self separator).
+			(stream peek == ${
+				ifTrue: [ 
+					self
+						try: [ 
+							| typeMetadata normalizedMetadata |
+							typeMetadata := self metadata.
+							normalizedMetadata := Dictionary new.
+							typeMetadata
+								keysAndValuesDo: [ :key :value | normalizedMetadata at: key asLowercase asSymbol put: value ].
+							normalizedMetadata ] ])}
 ]
 
 { #category : 'private parsing' }

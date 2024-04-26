@@ -14,8 +14,14 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 		environmentId: 0
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
-	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | foundBlock cull: loadedMethod ]
+	^ compiledMethod _owner
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod isRowanLoadedMethod
+				ifFalse: [ 
+					self
+						error:
+							'Expected a loaded method for ' , behavior printString , '>>' , selector ].
+			foundBlock cull: loadedMethod ]
 		ifNil: [ absentBlock value ]
 ]
 
@@ -23,8 +29,11 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
-	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | loadedMethod ]
+	^ compiledMethod _owner
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod isRowanLoadedMethod
+				ifFalse: [ self error: 'Expected a loaded method for ' , compiledMethod printString ].
+			loadedMethod ]
 		ifNil: [ absentBlock value ]
 ]
 
@@ -37,12 +46,21 @@ RwGsImage class >> loadedTraitMethod: selector inTraitNamed: traitName isMeta: i
 	trait ifNil: [ ^ absentBlock value ].
 	isMeta
 		ifTrue: [ trait := trait classTrait ].
-self halt."figure the rest out when I get here"
-	compiledMethodSource := trait
-		sourceCodeAt: selector asSymbol.
+self halt.	"figure the rest out when I get here"
+	compiledMethodSource := trait sourceCodeAt: selector asSymbol.
 	compiledMethodSource ifNil: [ ^ absentBlock value ].
-	^ compiledMethodSource _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | foundBlock cull: loadedMethod ]
+	^ compiledMethodSource _owner
+		ifNotNil: [ :loadedMethod | 
+			loadedMethod isRowanLoadedMethod
+				ifFalse: [ 
+					self
+						error:
+							'Expected a loaded method for  trait ' , traitName
+								,
+									(isMeta
+										ifTrue: [ ' class>>' ]
+										ifFalse: [ '>>' ]) , selector ].
+			foundBlock cull: loadedMethod ]
 		ifNil: [ absentBlock value ]
 ]
 
@@ -51,5 +69,5 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 	"The given compiled method is being removed from the system, remove the loadedMethod associated 
 		with the compiled method."
 
-	compiledMethod _rowanPackageInfo: nil
+	compiledMethod _owner: nil
 ]

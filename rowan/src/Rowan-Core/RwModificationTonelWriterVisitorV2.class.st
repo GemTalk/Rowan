@@ -55,12 +55,6 @@ RwModificationTonelWriterVisitorV2 >> _hasCommentOf: aClassDefinition [
 ]
 
 { #category : 'class writing' }
-RwModificationTonelWriterVisitorV2 >> _hasShebangOf: aClassDefinition [ 
-
-	^  aClassDefinition shebang notNil
-]
-
-{ #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _methodDefinitionOf: aMethodDefinition [
 	| excludedMethodProperties methodProperties exportedProperties |
 	excludedMethodProperties := #(#'_gsFileOffset' #'_gsFileName' #'category' #'protocol' #'selector').
@@ -87,12 +81,6 @@ RwModificationTonelWriterVisitorV2 >> _selectorIsComplete: keywords in: aString 
 		index = 0 ifTrue: [ ^ false ].
 		start := index + each size ].
 	^ true
-]
-
-{ #category : 'class writing' }
-RwModificationTonelWriterVisitorV2 >> _shebangOf: aClassDefinition [
-
-	^ aClassDefinition shebang
 ]
 
 { #category : 'class writing' }
@@ -177,17 +165,39 @@ RwModificationTonelWriterVisitorV2 >> _typeOfClass: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
-	| definition |
-	
-	(definition := self class orderedDictionaryClass new )
-		at: #name put: aTraitDefinition name .
+	| definition handledProperties |
+	(definition := self class orderedDictionaryClass new)
+		at: #'name'
+		put: aTraitDefinition name.
 
-	(aTraitDefinition instVarNames)
-		ifNotEmpty: [ :vars | definition at: #instVars put: vars asArray ].
+	aTraitDefinition properties
+		at: #'traits'
+		ifPresent: [ :value | definition at: #'traits' put: value ].
+	aTraitDefinition properties
+		at: #'classtraits'
+		ifPresent: [ :value | definition at: #'classTraits' put: value ].
 
-	definition 		
-		at: #category put: aTraitDefinition category.
-	
+	aTraitDefinition instVarNames
+		ifNotEmpty: [ :vars | definition at: #'instVars' put: vars asArray ].
+	definition at: #'category' put: aTraitDefinition category.
+	aTraitDefinition properties
+		at: #'packageName'
+		ifPresent: [ :value | definition at: #'package' put: value ].
+	aTraitDefinition properties
+		at: #'tag'
+		ifPresent: [ :value | definition at: #'tag' put: value ].
+
+	handledProperties := #(#'name' #'category' #'instVars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits' #'classtraits').
+	aTraitDefinition properties
+		keysAndValuesDo: [ :propName :propValue | 
+			"write out any other unknown properties"
+			(handledProperties includes: propName)
+				ifFalse: [ 
+					propValue
+						ifNotNil: [ 
+							self halt.
+							definition at: propName put: propValue ] ] ].
+
 	^ self _toSTON: definition
 ]
 
@@ -196,8 +206,6 @@ RwModificationTonelWriterVisitorV2 >> _writeClassDefinition: aClassDefinition on
 	| nl |
 	nl := self _newLine.
 	
-	(self _hasShebangOf: aClassDefinition)
-		ifTrue: [ aStream << '#!' << (self _shebangOf: aClassDefinition) << nl ].
 	(self _hasCommentOf: aClassDefinition) 
 		ifTrue: [ 
 			aStream 

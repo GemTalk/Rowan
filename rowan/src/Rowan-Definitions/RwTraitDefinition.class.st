@@ -9,9 +9,8 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
-		at: #'uses' put: #();
 		at: #'name' put: traitName asString;
-		yourself.	"included because it is part of the tonel format for traits ... appears to be unused these days"
+		yourself.
 	category = packageName
 		ifTrue: [ 
 			propertiesDictionary
@@ -35,7 +34,6 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
-		at: #'uses' put: #();	"included because it is part of the tonel format for traits ... appears to be unused these days"
 		at: #'name' put: traitName asString;
 		at: #'packageName' put: packageName asString;
 		yourself.
