@@ -23,7 +23,7 @@ RwGsMethodExtensionSymbolDictPatchV2 >> installMovedMethod: aMethodMove newClass
 			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
 				ifNotNil: [ :oldCompiledMethod | 
 					"new methods will not be in the old method dictionary"
-					oldCompiledMethod _owner: nil ] ].
+					oldCompiledMethod _origin: nil ] ].
 
 	newBehavior := behavior isMeta
 		ifTrue: [ newClassVersionPatch newClassVersion class ]

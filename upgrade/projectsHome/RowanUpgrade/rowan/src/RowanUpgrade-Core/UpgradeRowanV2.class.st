@@ -882,7 +882,7 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 								, thePackageName.
 					repairedCount := self repairedCount + 1.
 					^ self ] ].
-	theCompiledMethod _owner: loadedMethod.
+	theCompiledMethod _origin: loadedMethod.
 	loadedMethod handle: theCompiledMethod.
 	self
 		logMessage:
@@ -934,7 +934,7 @@ UpgradeRowanV2 >> repairMissingLoadedNotIdenticalFor: theSelector detailDict: de
 						error:
 							'Invalid loaded method audit details for repair of methodsNotIdentical and missingLoadedMethod audit error' ].
 			loadedMethod handle: theMethod.
-			theMethod _owner: loadedMethod.
+			theMethod _origin: loadedMethod.
 			repairedDetails
 				add: methodsNotIdenticalDetail;
 				add: (detailDict at: #'missingLoadedMethodDetail');
@@ -1008,9 +1008,9 @@ UpgradeRowanV2 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: classNam
 						, packageName , ' no repair necessary'.
 			^ self ].
 
-	oldCompiledMethod _owner: nil.
+	oldCompiledMethod _origin: nil.
 	loadedMethod handle: newCompiledMethod.
-	newCompiledMethod _owner: loadedMethod.
+	newCompiledMethod _origin: loadedMethod.
 	self
 		logMessage:
 			'  Repair nonidentical method: ' , theBehavior printString , '>>' , selector

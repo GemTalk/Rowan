@@ -5,9 +5,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethodFr
 	"remove a compiled method from loaded things"
 
 	| loadedMethod loadedPackage loadedClassOrExtension |
-	compiledMethod _owner
+	compiledMethod _origin
 		ifNotNil: [ :aLoadedMethod | 
-			compiledMethod _owner: nil.
+			compiledMethod _origin: nil.
 			loadedMethod := aLoadedMethod ]
 		ifNil: [ 
 			registryInstance
@@ -49,7 +49,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _owner.
+	existing := compiledMethod _origin.
 	existing
 		ifNotNil: [ 
 			existing isRowanLoadedMethod
@@ -61,7 +61,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionCompiledMetho
 						, packageName , ').' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _owner: loadedMethod.
+	compiledMethod _origin: loadedMethod.
 
 	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
@@ -103,7 +103,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
 			compiledMethod := meth ].
 
-	existing := compiledMethod _owner.
+	existing := compiledMethod _origin.
 	existing
 		ifNotNil: [ 
 			registryInstance
@@ -111,7 +111,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addExtensionSessionMethod
 					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _owner: loadedMethod.
+	compiledMethod _origin: loadedMethod.
 
 	loadedPackage := self
 		existingOrNewLoadedPackageNamed: packageName
@@ -153,14 +153,14 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewCompiledMethod: com
 		ifFalse: [ behavior addCategory: protocolSymbol ].
 	behavior _moveMethod: selector toCategory: protocolSymbol.
 
-	existing := compiledMethod _owner.
+	existing := compiledMethod _origin.
 	existing
 		ifNotNil: [ 
 			registryInstance
 				error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
-	compiledMethod _owner: loadedMethod.
+	compiledMethod _origin: loadedMethod.
 
 	loadedPackage := self
 		loadedPackageNamed: packageName
@@ -201,16 +201,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledMethod: newC
 	methodDictionary at: selector put: newCompiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
 
-	loadedMethod := oldCompiledMethod _owner.
+	loadedMethod := oldCompiledMethod _origin.
 	loadedMethod
 		ifNil: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	oldCompiledMethod _owner: nil.
+	oldCompiledMethod _origin: nil.
 
 	loadedMethod handle: newCompiledMethod.
-	newCompiledMethod _owner: loadedMethod.
+	newCompiledMethod _origin: loadedMethod.
 	^ registryInstance
 ]
 
@@ -241,16 +241,16 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addRecompiledSessionMetho
 		updateMethodLookupCacheFor: newCompiledMethod
 		in: behavior.
 
-	loadedMethod := oldCompiledMethod _owner.
+	loadedMethod := oldCompiledMethod _origin.
 	loadedMethod
 		ifNil: [ 
 			registryInstance
 				error:
 					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	oldCompiledMethod _owner: nil.
+	oldCompiledMethod _origin: nil.
 
 	loadedMethod handle: newCompiledMethod.
-	newCompiledMethod _owner: loadedMethod
+	newCompiledMethod _origin: loadedMethod
 ]
 
 { #category : '*rowan-gemstone-loaderv2-36x' }
@@ -335,7 +335,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 
 	behavior _moveMethod: selector toCategory: newProtocol.
 
-	loadedMethod := compiledMethod _owner.
+	loadedMethod := compiledMethod _origin.
 	loadedMethod
 		ifNil: [ 
 			registryInstance

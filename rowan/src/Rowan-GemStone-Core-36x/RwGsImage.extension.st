@@ -14,7 +14,7 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 		environmentId: 0
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
-	^ compiledMethod _owner
+	^ compiledMethod _origin
 		ifNotNil: [ :loadedMethod | 
 			loadedMethod isRowanLoadedMethod
 				ifFalse: [ 
@@ -29,7 +29,7 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
-	^ compiledMethod _owner
+	^ compiledMethod _origin
 		ifNotNil: [ :loadedMethod | 
 			loadedMethod isRowanLoadedMethod
 				ifFalse: [ self error: 'Expected a loaded method for ' , compiledMethod printString ].
@@ -49,7 +49,7 @@ RwGsImage class >> loadedTraitMethod: selector inTraitNamed: traitName isMeta: i
 self halt.	"figure the rest out when I get here"
 	compiledMethodSource := trait sourceCodeAt: selector asSymbol.
 	compiledMethodSource ifNil: [ ^ absentBlock value ].
-	^ compiledMethodSource _owner
+	^ compiledMethodSource _origin
 		ifNotNil: [ :loadedMethod | 
 			loadedMethod isRowanLoadedMethod
 				ifFalse: [ 
@@ -69,5 +69,5 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 	"The given compiled method is being removed from the system, remove the loadedMethod associated 
 		with the compiled method."
 
-	compiledMethod _owner: nil
+	compiledMethod _origin: nil
 ]

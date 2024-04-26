@@ -7,9 +7,9 @@ RwGsLoadedSymbolDictClass >> disownFromLoaded: aPackageSymbolDictionary [
 		valuesDo: [ :loadedInstanceMethod | 
 			self removeLoadedInstanceMethod: loadedInstanceMethod.
 			compiledMethod := loadedInstanceMethod handle.
-			compiledMethod _owner: nil ].
+			compiledMethod _origin: nil ].
 	loadedClassMethods
 		valuesDo: [ :loadedClassMethod | 
 			compiledMethod := loadedClassMethod handle.
-			compiledMethod _owner: nil ]
+			compiledMethod _origin: nil ]
 ]
