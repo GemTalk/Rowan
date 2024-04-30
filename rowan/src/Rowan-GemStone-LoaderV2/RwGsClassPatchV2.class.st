@@ -151,6 +151,10 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type for definition of class ', classDefinition name printString ] ] ].
+	(classDefinition propertyAt: #traits ifAbsent: []) 
+		ifNotNil: [:traitString |createdClass traits: traitString ].
+	(classDefinition propertyAt: #classtraits ifAbsent: []) 
+		ifNotNil: [:traitString | createdClass classTraits: traitString ].
 	^ createdClass
 ]
 

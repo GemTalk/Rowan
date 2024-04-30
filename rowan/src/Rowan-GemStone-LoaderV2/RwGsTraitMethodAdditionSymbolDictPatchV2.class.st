@@ -66,13 +66,13 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: traitInstance.
 	isMeta
 		ifTrue: [ 
-			traitInstance compileClassMethod: sourceString.
+			traitInstance classSide compile: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
-				loadedClassMethodForTrait: traitInstance
+				loadedClassMethodForTrait: traitInstance classSide
 				source: sourceString
 				protocol: protocol ]
 		ifFalse: [ 
-			traitInstance compileMethod: sourceString.
+			traitInstance compile: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
 				loadedMethodForTrait: traitInstance
 				source: sourceString

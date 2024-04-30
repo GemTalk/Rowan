@@ -87,20 +87,20 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 		classvars: (metadata at: #'classvars' ifAbsent: [ #() ])
 		category: (metadata at: #'category' ifAbsent: [  ])
 		comment: anArray second
-		pools: #()
-"
+		pools: #()	"
 IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 "
 		type: typeValue asSymbol.
-	(metadata
-		at: #'_gsFileOffset' ifAbsent: [])
+	(metadata at: #'_gsFileOffset' ifAbsent: [  ])
 		ifNotNil: [ :offset | currentClassDefinition propertyAt: #'_gsFileOffset' put: offset ].
-	(metadata
-		at: #'_gsFileName' ifAbsent: [])
+	(metadata at: #'_gsFileName' ifAbsent: [  ])
 		ifNotNil: [ :filename | currentClassDefinition propertyAt: #'_gsFileName' put: filename ].
-	(metadata
-		at: #'commentstamp' ifAbsent: [])
+	(metadata at: #'commentstamp' ifAbsent: [  ])
 		ifNotNil: [ :timestampString | currentClassDefinition propertyAt: #'commentStamp' put: timestampString ].
+	(metadata at: #'traits' ifAbsent: [  ])
+		ifNotNil: [ :traitsSpecString | currentClassDefinition propertyAt: #'traits' put: traitsSpecString ].
+	(metadata at: #'classtraits' ifAbsent: [  ])
+		ifNotNil: [ :classTraitsSpecString | currentClassDefinition propertyAt: #'classTraits' put: classTraitsSpecString ].
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);

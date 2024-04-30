@@ -363,7 +363,6 @@ RwGsPatchSet_V2 >> addAddedClass: aClassDefinition inPackage: aPackageDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'private - applying' }
@@ -1122,6 +1121,8 @@ RwGsPatchSet_V2 >> apply [
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
+		createNewTraits;
+		installAddedTraits;
 		createNewClassesAndClassVersions;
 		compileMethods.
 	self reportAnyErrors
@@ -1139,7 +1140,6 @@ RwGsPatchSet_V2 >> apply [
 		doMoveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
-		installAddedTraits;
 		updateTraitMethods;
 		removeDeletedMethods;
 		updateMethodDictionaries;
@@ -1292,14 +1292,14 @@ RwGsPatchSet_V2 >> createdTraits [
 	^ createdTraits ifNil: [ createdTraits :=  self _createNewSymbolList ]
 ]
 
-{ #category : 'private - applying' }
+{ #category : 'other' }
 RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 	"Who: Added classes and classes with new versions and classes with class variable changes
 	   How: Create the new class or class version. Superclass by identity, not name resolution.
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	| newClassesByNameSymbolList workSymbolList newTraitsByNameSymbolList |
+	| newClassesByNameSymbolList workSymbolList |
 	newClassesByNameSymbolList := self _createNewSymbolList.
 	self addCreatedClassesAndVersionsToSymbolList: newClassesByNameSymbolList.
 	workSymbolList := self _createNewSymbolList.
@@ -1322,8 +1322,12 @@ RwGsPatchSet_V2 >> createNewClassesAndClassVersions [
 						createClassesFromWorkSymbolList: workSymbolList
 						symDictName: symDict name
 						andClassesByNameSymbolList: newClassesByNameSymbolList ] ].
+]
 
-"traits logic"
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> createNewTraits [
+
+	|  workSymbolList newTraitsByNameSymbolList |
 	newTraitsByNameSymbolList := self _createNewSymbolList.
 	addedTraits 
 		do: [ :patch | patch addToNewTraitsByNameSymbolList: newTraitsByNameSymbolList ].
@@ -1479,7 +1483,6 @@ RwGsPatchSet_V2 >> installAddedTraits [
 	"Copy the name association from TempSymbols to the correct 
         SymbolDictionary in the live SymbolList.
         Create a LoadedTrait for the newtrait, add it to the defining LoadedPackage."
-
 	addedTraits do: [:patch |  patch installTraitInSystem ]
 ]
 
