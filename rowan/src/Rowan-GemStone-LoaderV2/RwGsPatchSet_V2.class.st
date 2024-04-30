@@ -1122,7 +1122,6 @@ RwGsPatchSet_V2 >> apply [
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
 		createNewTraits;
-		installAddedTraits;
 		createNewClassesAndClassVersions;
 		compileMethods.
 	self reportAnyErrors
@@ -1140,6 +1139,7 @@ RwGsPatchSet_V2 >> apply [
 		doMoveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
+		installAddedTraits;
 		updateTraitMethods;
 		removeDeletedMethods;
 		updateMethodDictionaries;
