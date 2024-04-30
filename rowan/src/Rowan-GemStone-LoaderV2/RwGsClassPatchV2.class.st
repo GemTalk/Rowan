@@ -151,10 +151,6 @@ RwGsClassPatchV2 >> basicCreateClassWithSuperclass: superclass [
 								description: (classDefinition propertyAt: 'comment' ifAbsent: [  ])
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type for definition of class ', classDefinition name printString ] ] ].
-	(classDefinition propertyAt: #traits ifAbsent: []) 
-		ifNotNil: [:traitString |createdClass traits: traitString ].
-	(classDefinition propertyAt: #classtraits ifAbsent: []) 
-		ifNotNil: [:traitString | createdClass classTraits: traitString ].
 	^ createdClass
 ]
 
@@ -215,7 +211,7 @@ RwGsClassPatchV2 >> printOn: aStream [
 
 { #category : 'private' }
 RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
-	| superclass |
+	| superclass createdClass |
 	superclass := aPatchSet
 		superclassNamed: classDefinition superclassName
 		ifAbsent: [ 
@@ -231,7 +227,12 @@ RwGsClassPatchV2 >> privateCreateClassFor: aPatchSet inSymDict: symDictName [
 						error:
 							'The declared superclass (' , classDefinition superclassName printString
 								, ') of new class ' , classDefinition name printString , ' does not exist.' ] ].
-	^ self privateCreateClassWithSuperclass: superclass
+	createdClass := self privateCreateClassWithSuperclass: superclass.
+	(classDefinition propertyAt: #traits ifAbsent: []) 
+		ifNotNil: [:traitString | aPatchSet classesWithTraits add: self  ].
+	(classDefinition propertyAt: #classTraits ifAbsent: []) 
+		ifNotNil: [:traitString | aPatchSet classesWithTraits add: self  ].
+	^ createdClass
 ]
 
 { #category : 'private' }
@@ -252,4 +253,14 @@ RwGsClassPatchV2 >> privateCreateClassWithSuperclass: superclass [
 RwGsClassPatchV2 >> superclassName [
 
 	^classDefinition superclassName
+]
+
+{ #category : 'private' }
+RwGsClassPatchV2 >> updateClassWithTraits: tempSymbols [
+	| classWithTraits |
+	classWithTraits := tempSymbols at: classDefinition name ifAbsent: [self halt].
+	(classDefinition propertyAt: #'traits' ifAbsent: [  ])
+		ifNotNil: [ :traitString | classWithTraits traits: traitString ].
+	(classDefinition propertyAt: #'classTraits' ifAbsent: [  ])
+		ifNotNil: [ :traitString | classWithTraits classTraits: traitString ]
 ]

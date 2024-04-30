@@ -32,6 +32,7 @@ Class {
 		'tempSymbols',
 		'createdClasses',
 		'createdTraits',
+		'classesWithTraits',
 		'errors',
 		'currentProjectDefinition',
 		'movedClassesSymbolList',
@@ -1140,10 +1141,11 @@ RwGsPatchSet_V2 >> apply [
 		updateSymbolAssociations;
 		updateClassProperties;
 		installAddedTraits;
-		updateTraitMethods;
 		removeDeletedMethods;
 		updateMethodDictionaries;
 		updateMethodProperties;
+		updateClassesWithTraits;
+		updateTraitMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
 		removeDeletedPackages;
 		commit;
@@ -1178,6 +1180,12 @@ RwGsPatchSet_V2 >> applyForNewClassVersions: anInstanceMigrator [
 RwGsPatchSet_V2 >> classesWithNewVersions [
 
 	^ classesWithNewVersions
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet_V2 >> classesWithTraits [
+
+	^ classesWithTraits
 ]
 
 { #category : 'private - applying' }
@@ -1445,6 +1453,7 @@ RwGsPatchSet_V2 >> initialize [
 	classesWithPropertyChanges := Set new.
 	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
+	classesWithTraits := Set new.
 	movedClasses := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
@@ -1691,6 +1700,12 @@ RwGsPatchSet_V2 >> tempAssociationFor: aName [
 { #category : 'accessing' }
 RwGsPatchSet_V2 >> tempSymbols [
 	^ tempSymbols
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> updateClassesWithTraits [
+
+	classesWithTraits do: [:each | each updateClassWithTraits: self tempSymbols ].
 ]
 
 { #category : 'private - applying' }
