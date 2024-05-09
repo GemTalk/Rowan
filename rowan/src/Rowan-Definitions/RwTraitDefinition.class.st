@@ -80,6 +80,17 @@ RwTraitDefinition >> category: aString [
 ]
 
 { #category : 'accessing' }
+RwTraitDefinition >> classInstVarNames [
+	^ properties at: #'classinstvars' ifAbsent: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwTraitDefinition >> classInstVarNames: arrayOfClassInstVariableNames [
+
+	^ properties at: #'classinstvars' put: arrayOfClassInstVariableNames
+]
+
+{ #category : 'accessing' }
 RwTraitDefinition >> classVarNames [
 	^ properties at: #'classvars' ifAbsent: [ #() ]
 ]
