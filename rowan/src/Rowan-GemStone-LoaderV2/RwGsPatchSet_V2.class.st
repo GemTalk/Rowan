@@ -13,6 +13,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
+		'deletedTraits',
 		'movedClasses',
 		'extendedClasses',
 		'classesWithPropertyChanges',
@@ -348,9 +349,21 @@ RwGsPatchSet_V2 >> _traitAdditionPatchTrait [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _traitDeletionPatchClass [
+
+	^ RwGsTraitDeletionSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_V2 >> _traitMethodAdditionPatchClass [
 
 	^ RwGsTraitMethodAdditionSymbolDictPatchV2
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _traitMethodDeletionPatchClass [
+
+	^ RwGsTraitMethodDeletionSymbolDictPatchV2
 ]
 
 { #category : 'building' }
@@ -672,6 +685,21 @@ RwGsPatchSet_V2 >> addDeletedClassMethod: aClassMethodDefinition inClass: aClass
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addDeletedClassTraitMethod: aClassTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedMethods
+		add:
+			((self _traitMethodDeletionPatchClass
+				forMethod: aClassTraitMethodDefinition
+				isMeta: true
+				inTrait: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -719,12 +747,40 @@ RwGsPatchSet_V2 >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass:
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addDeletedInstanceTraitMethod: anInstanceTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedMethods
+		add:
+			((self _traitMethodDeletionPatchClass
+				forMethod: anInstanceTraitMethodDefinition
+				isMeta: false
+				inTrait: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addDeletedPackage: packageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedPackages
 		add:
 			((self _packageDeletionPatchClass for: packageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addDeletedTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedTraits
+		add:
+			((self _traitDeletionPatchClass
+				for: aTraitDefinition
+				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
 ]
@@ -1119,6 +1175,7 @@ RwGsPatchSet_V2 >> apply [
 (UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	self
 		setupForApply;
+		removeDeletedTraitsFromTempSymbols;
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
@@ -1130,6 +1187,7 @@ RwGsPatchSet_V2 >> apply [
 	self
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
+		removeDeletedTraitsFromSystem;
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
@@ -1445,6 +1503,7 @@ RwGsPatchSet_V2 >> initialize [
 	movedPackages := Set new.
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
+	deletedTraits := Set new.
 	addedClasses := Set new.
 	addedTraits := Set new.
 	extendedClasses := Set new.
@@ -1587,8 +1646,6 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 RwGsPatchSet_V2 >> removeDeletedMethods [
 	deletedMethods
 		do: [ :methodDeletionPatch | 
-			| className |
-			className := methodDeletionPatch className.
 			methodDeletionPatch
 				deleteMethodNewClassesSymbolList: self createdClasses
 				andExistingClasses: self tempSymbols ].
@@ -1603,6 +1660,21 @@ RwGsPatchSet_V2 >> removeDeletedMethods [
 RwGsPatchSet_V2 >> removeDeletedPackages [
 
 	deletedPackages do: [:each | each deletePackage ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> removeDeletedTraitsFromSystem [
+	"Remove the name binding from the SymbolDictionaries in the live SymbolList
+        Remove the LoadedClass from its LoadedPackage"
+
+	deletedTraits do: [:patch | patch deleteTraitFromSystem ]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> removeDeletedTraitsFromTempSymbols [
+	"Deleted class names should not resolve during compilation."
+
+	deletedTraits do: [:patch | tempSymbols removeKey: patch traitName asSymbol ]
 ]
 
 { #category : 'private - applying' }

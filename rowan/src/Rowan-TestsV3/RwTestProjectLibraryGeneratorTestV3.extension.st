@@ -1,7 +1,7 @@
-Extension { #name : 'RwTestProjectLibraryGeneratorTest' }
+Extension { #name : 'RwTestProjectLibraryGeneratorTestV3' }
 
 { #category : '*rowan-testsv3' }
-RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
+RwTestProjectLibraryGeneratorTestV3 >> testLibrarySample9V3Generator [
 	"Test the specs that are shared between RowanSample9V2 and RowanSample9V3"
 
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
@@ -98,7 +98,7 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3Generator [
 ]
 
 { #category : '*rowan-testsv3' }
-RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3UniqueGenerator [
+RwTestProjectLibraryGeneratorTestV3 >> testLibrarySample9V3UniqueGenerator [
 	"The tests the specs that are usnique to RowanSample9V3"
 
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
@@ -147,7 +147,7 @@ RwTestProjectLibraryGeneratorTest >> testLibrarySample9V3UniqueGenerator [
 ]
 
 { #category : '*rowan-testsv3' }
-RwTestProjectLibraryGeneratorTest >> testRowanSample10V3LibraryGenerator [
+RwTestProjectLibraryGeneratorTestV3 >> testRowanSample10V3LibraryGenerator [
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
 		1. hitting errors
 		2. changing any of the disk content"
@@ -178,7 +178,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample10V3LibraryGenerator [
 ]
 
 { #category : '*rowan-testsv3' }
-RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
+RwTestProjectLibraryGeneratorTestV3 >> testRowanSample11LibraryGenerator [
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
 		1. hitting errors
 		2. changing any of the disk content"
@@ -209,7 +209,7 @@ RwTestProjectLibraryGeneratorTest >> testRowanSample11LibraryGenerator [
 ]
 
 { #category : '*rowan-testsv3' }
-RwTestProjectLibraryGeneratorTest >> testRowanSample12LibraryGenerator [
+RwTestProjectLibraryGeneratorTestV3 >> testRowanSample12LibraryGenerator [
 	"run RwTestProjectLibraryGenerator to ensure that spes can be regenerated without:
 		1. hitting errors
 		2. changing any of the disk content"

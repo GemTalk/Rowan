@@ -9,7 +9,8 @@ options
 	SuperDoitOptionalOptionWithRequiredArg long: 'externalsStBase'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsHome'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsSandbox'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'
+	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'testSegment'.
 }
 %
 usage
@@ -72,6 +73,16 @@ OPTIONS
   --rowanProjectsSandbox=<directory-path>
                              Location used by tests when cloning git repositores. 
                              By default, $ROWAN_PROJECTS_SANDBOX. MUST BE DEFINED.
+  --testSegment=<segment-id>
+                             Currently there are five test segments defined: base,
+                             sample9V2, sample9V3, generatorV2, and generatorV3. The 
+                             RwTestProjectLibraryGeneratorTest, 
+                             RwTestProjectLibraryGeneratorTestV3, RwRowanSample9V2Test, 
+                             and RwRowanSample9V3Test tests each take a significant 
+                             amount of time to run. By running the four segments in 
+                             parallel the overal elapsed time of the full test suite 
+                             is significantly reduced. With no testSegment specified 
+                             all 5 segments are run in sequence in the same gem.
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
 
@@ -81,6 +92,11 @@ EXAMPLES
   $basename --resultDir=TEST_RESULTS --debugSuite -- -L -I .topazini
   $basename --resultDir=TEST_RESULTS --expectedResults=expectedTestResults.json -- -L -I .topazini
   $basename --resultDir=TEST_RESULTS --expectedResults=TEST_RESULTS/expectedTestResults.json --isColorful=false -- -L -I .topazini
+
+  $basename --resultDir=segment1 --testSegment=base --expectedResults=expectedTestResults_base.json -- -L -I .topazini
+  $basename --resultDir=segment2 --testSegment=sample9V2 --expectedResults=expectedTestResults_sample9V2.json -- -L -I .topazini
+  $basename --resultDir=segment3 --testSegment=sample9V3 --expectedResults=expectedTestResults_sample9V3.json -- -L -I .topazini
+
 -----
 %
 instvars
@@ -288,21 +304,67 @@ loadProjectSpecs
 		self exit: message withStatus: 1 ].
 %
 method
-buildTestSuite: testSuiteName
+testSuiteForProject: projectName excludingClassesNamed: excludedClassNames
+	| testSuite loadedProject |
+	testSuite := TestSuite named: projectName , ' nonExcludedTests'.
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	loadedProject loadedPackages
+		do: [ :loadedPackage | 
+			loadedPackage loadedClasses values
+				do: [ :rowanLoadedClass | 
+					| cl |
+					cl := rowanLoadedClass handle.
+					(cl inheritsFrom: TestCase)
+						ifTrue: [ 
+							cl isAbstract
+								ifFalse: [
+									(excludedClassNames includes: cl name asString)
+										ifFalse: [ testSuite addTests: cl suite tests ] ] ] ] ].
+	^ testSuite
+%
+method
+buildTestSuite: testSuiteName segment: segmentNameOrNil
 	| systemTestSuite |
 	systemTestSuite := TestSuite named: testSuiteName.
-	{ 'Rowan' . 'STON' . 'Cypress' . 'FileSystemGs' }
+	{ 'Rowan' . 'STON' . 'Cypress' }
 		do: [:projectName |
-		| testSuite |
-		testSuite := (Rowan projectNamed: projectName) testSuite.
-		systemTestSuite addTests: testSuite tests ].
+		segmentNameOrNil 
+			ifNil: [ 
+				| testSuite |
+				testSuite := (Rowan projectNamed: projectName) testSuite.
+				systemTestSuite addTests: testSuite tests ]
+			ifNotNil: [ :segmentName |
+				segmentName = 'base'
+					ifTrue: [
+						| testSuite |
+						testSuite := projectName = 'Rowan'
+							ifTrue: [ 
+								self 
+									testSuiteForProject: projectName 
+									excludingClassesNamed: {'RwRowanSample9V2Test' . 'RwRowanSample9V3Test' . 'RwTestProjectLibraryGeneratorTest' . 'RwTestProjectLibraryGeneratorTestV3'} ]
+							ifFalse: [ (Rowan projectNamed: projectName) testSuite ].
+						systemTestSuite addTests: testSuite tests ]
+					ifFalse: [
+						projectName = 'Rowan'
+							ifTrue: [ 
+								segmentName = 'sample9V2'
+									ifTrue: [ systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V2Test') suite tests ]
+									ifFalse: [ 
+										segmentName = 'sample9V3'
+											ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V3Test') suite tests  ] 
+											ifFalse: [
+												 segmentName = 'generatorV2'
+													ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTest') suite tests  ] 
+													ifFalse: [ segmentName = 'generatorV3'
+														ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTestV3') suite tests  ] 
+														ifFalse: [self error: 'Unknown test segment ', segmentName printString ] ] ] ] ] ] ] ].
 	^ systemTestSuite
 %
 method
 runTestSuite: testSuiteName
 	| systemTestSuite |
 	self removeSuperDoitTransientSymbolDictionary.
-	systemTestSuite := self buildTestSuite: testSuiteName.
+	systemTestSuite := self buildTestSuite: testSuiteName segment: self testSegment.
 	self debugSuite
 		ifTrue: [
 			| debugOption |

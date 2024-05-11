@@ -231,6 +231,13 @@ RwLoadedPackage >> removeLoadedClassExtension: aLoadedClassExtension [
 	aLoadedClassExtension loadedPackage: nil
 ]
 
+{ #category : 'accessing' }
+RwLoadedPackage >> removeLoadedTrait: aLoadedTrait [
+	self markDirty.
+	loadedTraits removeKey: aLoadedTrait key.
+	aLoadedTrait loadedPackage: nil
+]
+
 { #category : 'private' }
 RwLoadedPackage >> traitDefinitions [
 	"Create definitions from all of the traits I define, and answer the collection of them"

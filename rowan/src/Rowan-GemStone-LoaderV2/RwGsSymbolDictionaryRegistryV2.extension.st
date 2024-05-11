@@ -320,6 +320,16 @@ RwGsSymbolDictionaryRegistryV2 >> deletePackage: packageName [
 ]
 
 { #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> deleteTraitNamedFromPackage: traitName implementationClass: implementationClass [
+
+	"a class association is being deleted from the receiver remove it from the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteTraitNamedFromPackage: traitName instance: self
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> disownClass: class [
 
 	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
@@ -479,6 +489,11 @@ RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClass: loadedClass forClass: a
 { #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedClassExtension: loadedClassExtension forClass: aClass [
 	^ self class registry_ImplementationClass unregisterLoadedClassExtension: loadedClassExtension forClass: aClass
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> unregisterLoadedTrait: loadedTrait forTrait: aTrait [
+	^ self class registry_ImplementationClass unregisterLoadedTrait: loadedTrait forTrait: aTrait
 ]
 
 { #category : '*rowan-gemstone-loaderV2' }

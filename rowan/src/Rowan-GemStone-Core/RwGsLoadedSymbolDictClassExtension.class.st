@@ -123,7 +123,7 @@ RwGsLoadedSymbolDictClassExtension >> removeLoadedClassMethod: aLoadedMethod [
 
 	self markPackageDirty.
 	loadedClassMethods removeKey: aLoadedMethod key
-		ifAbsent: [self error: 'Method not present in LoadedClassExtension']
+		ifAbsent: [self error: 'Method not present in LoadedClassExtension ', self key printString]
 ]
 
 { #category : 'methods' }

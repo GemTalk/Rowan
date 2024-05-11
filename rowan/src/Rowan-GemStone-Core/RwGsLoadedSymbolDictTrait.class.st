@@ -34,6 +34,13 @@ RwGsLoadedSymbolDictTrait >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> handleTraitDeletion [
+	"The Trait to which I refer has been deleted, so I must unregister myself."
+
+	self loadedPackage removeLoadedTrait: self
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictTrait >> initialize [
 
@@ -62,6 +69,29 @@ RwGsLoadedSymbolDictTrait >> key [
 	"Answer some token that will uniquely identify me relative to any other LoadedClass in the same package."
 
 	^name
+]
+
+{ #category : 'removing' }
+RwGsLoadedSymbolDictTrait >> removeFromLoaded: aPackageSymbolDictionary [
+
+	self disownFromLoaded: aPackageSymbolDictionary.
+	self handleTraitDeletion
+]
+
+{ #category : 'methods' }
+RwGsLoadedSymbolDictTrait >> removeLoadedClassMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedClassMethods removeKey: aLoadedMethod key
+		ifAbsent: [self error: 'Method not present in LoadedTrait ', self key printString]
+]
+
+{ #category : 'methods' }
+RwGsLoadedSymbolDictTrait >> removeLoadedInstanceMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedInstanceMethods removeKey: aLoadedMethod key
+		ifAbsent: [self error: 'Method not present in LoadedClassExtension']
 ]
 
 { #category : 'private' }

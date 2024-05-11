@@ -1,0 +1,50 @@
+{
+	"branch" : "",
+	"commitSha" : "",
+	"deprecationWarnings" : [ ],
+	"gsVersion" : "3.7.2",
+	"notes" : "",
+	"properties" : { },
+	"resultsSummary" : {
+		"errors" : 0,
+		"failures" : 0,
+		"passed" : 5,
+		"summary" : "5 Tests with 0 Failures, 0 Errors and 0 DeprecationWarnings in 354.95s",
+		"tests" : 5,
+		"time" : 354.948
+	},
+	"suiteName" : "Rowan projects Test Suite",
+	"testCases" : [
+		{
+			"className" : "RwTestProjectLibraryGeneratorTestV3",
+			"status" : "passed",
+			"selector" : "testLibrarySample9V3Generator",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTestProjectLibraryGeneratorTestV3",
+			"status" : "passed",
+			"selector" : "testLibrarySample9V3UniqueGenerator",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTestProjectLibraryGeneratorTestV3",
+			"status" : "passed",
+			"selector" : "testRowanSample10V3LibraryGenerator",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTestProjectLibraryGeneratorTestV3",
+			"status" : "passed",
+			"selector" : "testRowanSample11LibraryGenerator",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTestProjectLibraryGeneratorTestV3",
+			"status" : "passed",
+			"selector" : "testRowanSample12LibraryGenerator",
+			"time" : "0"
+		}
+	],
+	"timeStamp" : "2024-05-10T20:37:58.409288-07:00"
+}

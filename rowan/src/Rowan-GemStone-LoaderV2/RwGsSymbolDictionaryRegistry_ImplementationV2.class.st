@@ -83,6 +83,21 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: 
 
 ]
 
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteTraitFromLoadedThings: trait instance: registryInstance [
+
+	"a class association is being deleted from the receiver remove it from the loaded things."
+
+	self
+		_loadedTraitFor: trait
+		noNewVersion: [ :loadedTrait | 
+			"association for class is present, finish delete operation"
+			loadedTrait removeFromLoaded: registryInstance.
+			registryInstance _symbolDictionary removeKey: loadedTrait key asSymbol ]
+		instance: registryInstance.
+	^ registryInstance
+]
+
 { #category : 'class - registration' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassExtensionKey [
 	^ #rowanLoadedClassExtension
@@ -230,6 +245,46 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassFor: class ol
 { #category : 'class - registration' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedClassKey [
 	^ #rowanLoadedClass
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait noNewVersion: noNewVersionBlock instance: registryInstance [
+
+	self
+		_loadedTraitFor: trait
+		noNewVersion: noNewVersionBlock
+		newVersion: [ :loadedTrait | 
+			self
+				error:
+					'internal error - the value associated with the key ' , trait name printString
+						, ' is not identical to the given trait' ]
+		instance: registryInstance.
+	^ registryInstance
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
+	(trait isKindOf: Trait)
+		ifFalse: [ registryInstance error: 'internal error - expected a trait' ].
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: trait name
+		ifPresent: [ :assoc | 
+			| loadedTrait |
+			loadedTrait := self
+				loadedTraitForTrait: trait
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no loaded trait for the trait '
+								, trait name asString printString ].
+			assoc value == trait
+				ifTrue: [ ^ noNewVersionBlock cull: loadedTrait cull: assoc ]
+				ifFalse: [ ^ newVersionBlock cull: loadedTrait cull: assoc ] ].
+	registryInstance
+		error:
+			'internal error - there is no assocation present in the receiver for the given trait '
+				, trait name asString printString
 ]
 
 { #category : 'class - registration' }
@@ -484,6 +539,27 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deletePackage: packageNam
 
 ]
 
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteTraitFromPackage: trait instance: registryInstance [
+
+	"a trait association is being deleted from the receiver remove it from the loaded things and remove trait from system"
+
+	^ self _doDeleteTraitFromLoadedThings: trait instance: registryInstance
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> deleteTraitNamedFromPackage: traitName instance: registryInstance [
+	"a class association is being deleted from the receiver remove it from the loaded things"
+
+	| trait |
+	trait := registryInstance _symbolDictionary
+		at: traitName asSymbol
+		ifAbsent: [ 
+			registryInstance
+				error: 'No trait found for the given trait name: ' , traitName printString ].
+	^ self deleteTraitFromPackage: trait instance: registryInstance
+]
+
 { #category : 'class disown api' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> disownClass: class instance: registryInstance [
 
@@ -708,6 +784,14 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedClassExte
 				ifAbsent: [ "if the class extension has already been removed we are okay" ].
 			aSet isEmpty
 				ifTrue: [ aClass theNonMetaClass _extraDictRemoveKey:  self _loadedClassExtensionKey ] ]
+]
+
+{ #category : 'class - registration' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> unregisterLoadedTrait: loadedTrait forTrait: aTrait [
+	| lc |
+	(lc := aTrait _extraDictAt: self _loadedTraitKey) == loadedTrait
+		ifFalse: [ self error: 'Loaded Trait for ', aTrait name printString, ' not found. Found ', lc printString, ' instead.' ].
+	aTrait _extraDictRemoveKey:  self _loadedTraitKey
 ]
 
 { #category : 'class - patch api' }

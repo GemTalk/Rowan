@@ -75,7 +75,7 @@ RwGsImage class >> applyModification_V2: aProjectSetModification visitorClass: v
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
-RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
+RwGsImage class >> loadedClassAndSymbolDictionaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
 	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
 
 	| loadedClass loadedPackage packageName |
@@ -121,6 +121,25 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 		loadedClassForClass: class
 		ifAbsent: [ ^ absentBlock value ].
 	^ foundBlock value: loadedClass
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedTraitAndSymbolDictionaryForTrait: trait ifPresent: presentBlock ifAbsent: absentBlock [
+	"scan the symbol list for a loaded package that matches the loaded package for the given loaded class"
+
+	| loadedTrait loadedPackage packageName |
+	loadedTrait := self symbolDictionaryRegistryClass registry_ImplementationClass loadedTraitForTrait: trait.
+	loadedPackage := loadedTrait loadedPackage.
+	packageName := loadedPackage name.
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: packageName ifAbsent: [  ])
+						ifNotNil: [ :lp | 
+							lp == loadedPackage 
+								ifTrue: [ ^ presentBlock value: (symbolDict) value: loadedTrait ] ] ] ].
+	^ absentBlock value
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
