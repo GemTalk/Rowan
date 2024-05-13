@@ -224,6 +224,7 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
+	aTraitDefinition packageName ifNil: [ aTraitDefinition packageName: self name ].
 	aTraitDefinition packageName ~= self name
 		ifTrue: [ 
 			self error: 'The package name of trait (' , aTraitDefinition packageName.
@@ -238,16 +239,21 @@ RwPackageDefinition >> addTraitNamed: traitName [
 			(RwTraitDefinition
 				newForTraitNamed: traitName
 				instanceVariableNames: #()
+				classInstanceVariableNames: #()
+				classVariableNames: #()
+				category: nil
 				packageName: self name)
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addTraitNamed: traitName instvars: instvars [
-	self
+RwPackageDefinition >> addTraitNamed: traitName instvars: instvars classInstVars: classinstvars classVariableNames: classvars [
+	^ self
 		addTraitDefinition:
 			(RwTraitDefinition
 				newForTraitNamed: traitName
 				instanceVariableNames: instvars
+				classInstanceVariableNames: classinstvars
+				classVariableNames: classvars
 				packageName: self name)
 ]
 

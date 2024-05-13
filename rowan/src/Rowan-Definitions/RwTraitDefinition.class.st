@@ -5,11 +5,14 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars category: category packageName: packageName [
+RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars category: category packageName: packageName [
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
 		at: #'name' put: traitName asString;
+		at: #'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
+		at: #'classvars' put: (classvars collect: [ :each | each asString ]);
+		at: #'instvars' put: (instvars collect: [ :each | each asString ]);
 		yourself.
 	category = packageName
 		ifTrue: [ 
@@ -30,17 +33,14 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 ]
 
 { #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars packageName: packageName [
-	| propertiesDictionary |
-	propertiesDictionary := SymbolDictionary new.
-	propertiesDictionary
-		at: #'name' put: traitName asString;
-		at: #'packageName' put: packageName asString;
-		yourself.
+RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars packageName: packageName [
 	^ self
-		withProperties: propertiesDictionary
-		classMethodDefinitions: Dictionary new
-		instanceMethodDefinitions: Dictionary new
+		newForTraitNamed: traitName
+		instanceVariableNames: instvars
+		classInstanceVariableNames: classinstvars
+		classVariableNames: classvars
+		category: nil
+		packageName: packageName
 ]
 
 { #category : 'private' }

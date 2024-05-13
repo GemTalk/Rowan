@@ -109,6 +109,23 @@ RwClassDefinition >> _removeSubclassesDisallowed [
 ]
 
 { #category : 'accessing' }
+RwClassDefinition >> classTraits [
+	^ self propertyAt: #'classtraits'
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> classTraits: aTraitCompositionOrStringOrNil [
+	"aTraitCompositionOrNil is a Trait or a concrete subclass of TaAbstractComposition."
+
+	aTraitCompositionOrStringOrNil ifNil: [ ^ self removeProperty: #'classtraits' ].
+	aTraitCompositionOrStringOrNil isString
+		ifTrue: [ ^ self propertyAt: #'classtraits' put: aTraitCompositionOrStringOrNil ].
+	^ self
+		propertyAt: #'classtraits'
+		put: aTraitCompositionOrStringOrNil traitCompositionExpression
+]
+
+{ #category : 'accessing' }
 RwClassDefinition >> classType [
 	"Legal types are normal, variable, and byteSubclass."
 
@@ -165,4 +182,21 @@ RwClassDefinition >> superclassName [
 RwClassDefinition >> superclassName: aString [
 
 	^ self propertyAt: #'superclass' put: aString
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> traits [
+	^ self propertyAt: #'traits'
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> traits: aTraitCompositionOrStringOrNil [
+	"aTraitCompositionOrNil is a Trait or a concrete subclass of TaAbstractComposition."
+
+	aTraitCompositionOrStringOrNil ifNil: [ ^ self removeProperty: #'traits' ].
+	aTraitCompositionOrStringOrNil isString
+		ifTrue: [ ^ self propertyAt: #'traits' put: aTraitCompositionOrStringOrNil ].
+	^ self
+		propertyAt: #'traits'
+		put: aTraitCompositionOrStringOrNil traitCompositionExpression
 ]
