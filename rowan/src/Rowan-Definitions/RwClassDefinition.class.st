@@ -110,7 +110,7 @@ RwClassDefinition >> _removeSubclassesDisallowed [
 
 { #category : 'accessing' }
 RwClassDefinition >> classTraits [
-	^ self propertyAt: #'classtraits'
+	^ self propertyAt: #'classtraits' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
@@ -186,7 +186,7 @@ RwClassDefinition >> superclassName: aString [
 
 { #category : 'accessing' }
 RwClassDefinition >> traits [
-	^ self propertyAt: #'traits'
+	^ self propertyAt: #'traits' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }

@@ -246,7 +246,7 @@ RwPackageDefinition >> addTraitNamed: traitName [
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addTraitNamed: traitName instvars: instvars classInstVars: classinstvars classVariableNames: classvars [
+RwPackageDefinition >> addTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars [
 	^ self
 		addTraitDefinition:
 			(RwTraitDefinition

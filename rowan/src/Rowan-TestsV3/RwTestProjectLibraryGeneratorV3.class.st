@@ -980,27 +980,39 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0082: resolvedProject [
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0084: resolvedProject [
 	"Start with spec_0001; add and use Traits"
 
-	| packageName1 packageName2 packageName3 traitName className1 |
+	| packageName1 packageName2 packageName3 traitName className1 className2 |
 	packageName1 := projectName , '-' , 'Core'.
 	packageName2 := projectName , '-' , 'Traits'.
 	packageName3 := projectName , '-' , 'Tests'.
 	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
 	resolvedProject
 		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
 		yourself.
 	traitName := projectName , 'Trait1'.
 	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		classInstVarNames: #('civ1');
+		classVarNames: #('Cv1');
 		traits: traitName;
 		classTraits: traitName , ' classTrait';
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addTraitNamed: traitName
-		instvars: #('iv1')
-		classInstVars: #('civ1')
+		instanceVariableNames: #('iv1')
+		classInstanceVariableNames: #('civ1')
 		classVariableNames: #('Cv1'))
 		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
 		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
 		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
 		yourself.
 	^ resolvedProject
 ]

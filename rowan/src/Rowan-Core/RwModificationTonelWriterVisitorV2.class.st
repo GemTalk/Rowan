@@ -143,6 +143,12 @@ RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 	(aClassDefinition classInstVarNames)
 		ifNotEmpty: [ :vars | definition at: #classInstVars put: vars asArray ].
 
+	aClassDefinition traits
+		ifNotEmpty: [ :aString | definition at: #traits put: aString ].
+
+	aClassDefinition classTraits
+		ifNotEmpty: [ :aString | definition at: #classTraits put: aString ].
+
 	(aClassDefinition gs_constraints)
 		ifNotEmpty: [:gs_constraints | definition at: #'gs_constraints' put: gs_constraints asArray ].
 
@@ -179,6 +185,10 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 
 	aTraitDefinition instVarNames
 		ifNotEmpty: [ :vars | definition at: #'instVars' put: vars asArray ].
+	aTraitDefinition classInstVarNames
+		ifNotEmpty: [ :vars | definition at: #'classInstVars' put: vars asArray ].
+	aTraitDefinition classVarNames
+		ifNotEmpty: [ :vars | definition at: #'classVars' put: vars asArray ].
 	definition at: #'category' put: (traitCategory := aTraitDefinition category).
 	aTraitDefinition properties
 		at: #'packageName'
@@ -189,7 +199,7 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 		at: #'tag'
 		ifPresent: [ :value | definition at: #'tag' put: value ].
 
-	handledProperties := #(#'name' #'category' #'instVars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits' #'classtraits').
+	handledProperties := #(#'name' #'category' #'instvars' #'classinstvars' #'classvars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits' #'classtraits').
 	aTraitDefinition properties
 		keysAndValuesDo: [ :propName :propValue | 
 			"write out any other unknown properties"
