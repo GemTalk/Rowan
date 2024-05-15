@@ -72,18 +72,20 @@ RwClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavior 
 								yourself) ].
 			aMethod == aLoadedMethod handle
 				ifFalse: [ 
-					self theAuditDetails
-						add:
-							((RwAuditMethodDetail
-								for: aLoadedClassOrExtension
-								message:
-									'Compiled method is not identical to loaded method: ' , aBehavior printString
-										, '>>' , aLoadedMethod selector)
-								reason: #'methodsNotIdentical';
-								loadedMethod: aLoadedMethod;
-								method: aMethod;
-								behavior: aBehavior;
-								yourself) ] ]
+					aMethod isFromTrait
+						ifFalse: [ 
+							self theAuditDetails
+								add:
+									((RwAuditMethodDetail
+										for: aLoadedClassOrExtension
+										message:
+											'Compiled method is not identical to loaded method: ' , aBehavior printString
+												, '>>' , aLoadedMethod selector)
+										reason: #'methodsNotIdentical';
+										loadedMethod: aLoadedMethod;
+										method: aMethod;
+										behavior: aBehavior;
+										yourself) ] ] ]
 ]
 
 { #category : 'audit' }
@@ -143,30 +145,32 @@ RwClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBehavio
 		loadedMethodForMethod: compiledMethod
 		ifAbsent: [ 
 			| notification |
-			notification := (RwAuditMethodErrorNotification
-				method: aSelector
-				isMeta: aBehavior isMeta
-				inClassNamed: aBehavior theNonMetaClass name
-				isClassExtension: aLoadedClass isLoadedClassExtension
-				intoPackageNamed: aLoadedClass loadedPackage name)
-				description: 'Missing loaded method';
-				reason: #'missingLoadedMethod';
-				yourself.
-			notification signal
-				ifTrue: [ 
-					"record audit detail"
-					self theAuditDetails
-						add:
-							((RwAuditMethodDetail
-								for: aLoadedClass
-								message:
-									'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
-								reason: #'missingLoadedMethod';
-								loadedMethod: nil;
-								method: compiledMethod;
-								selector: aSelector;
-								behavior: aBehavior;
-								yourself) ].
+			compiledMethod isFromTrait
+				ifFalse: [ 
+					notification := (RwAuditMethodErrorNotification
+						method: aSelector
+						isMeta: aBehavior isMeta
+						inClassNamed: aBehavior theNonMetaClass name
+						isClassExtension: aLoadedClass isLoadedClassExtension
+						intoPackageNamed: aLoadedClass loadedPackage name)
+						description: 'Missing loaded method';
+						reason: #'missingLoadedMethod';
+						yourself.
+					notification signal
+						ifTrue: [ 
+							"record audit detail"
+							self theAuditDetails
+								add:
+									((RwAuditMethodDetail
+										for: aLoadedClass
+										message:
+											'Missing loaded method: ' , aBehavior printString , '>>' , aSelector)
+										reason: #'missingLoadedMethod';
+										loadedMethod: nil;
+										method: compiledMethod;
+										selector: aSelector;
+										behavior: aBehavior;
+										yourself) ] ].
 			^ self ]
 ]
 

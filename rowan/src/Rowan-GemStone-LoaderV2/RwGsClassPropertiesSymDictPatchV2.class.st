@@ -31,7 +31,7 @@ RwGsClassPropertiesSymDictPatchV2 >> installPropertiesPatchSymbolListFor: aPatch
 				at: className
 				ifAbsent: [ 
 					"cannot find class ... caller can decide whether or not that is a problem"
-					self error: 'Cannot find class to update properties for.' ] ].
+					self error: 'Cannot find class ', className printString, ' for which there are properties to update.' ] ].
 	createdClass := self
 		createClassFor: aPatchSet
 		inSymDict: self symbolDictionaryName.	"use createClassFor:, but not expected to create new class version"

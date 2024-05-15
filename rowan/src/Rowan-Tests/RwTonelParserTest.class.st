@@ -60,16 +60,7 @@ RwTonelParserTest >> newTraitDefinitionFrom: anArray [
 	metadata := anArray sixth.
 	traitName := metadata at: #'name'.
 	category := metadata at: #'category' ifAbsent: [  ].
-	category
-		ifNil: [ 
-			packageName := metadata
-				at: #'packageName'
-				ifAbsent: [ 
-					self
-						error:
-							'One of package name or category must be specified for trait '
-								, traitName printString ] ]
-		ifNotNil: [ packageName := metadata at: #'packageName' ifAbsent: [ category ] ].
+	packageName := metadata at: #'packageName' ifAbsent: [  ].
 	^ RwTraitDefinition
 		newForTraitNamed: traitName
 		instanceVariableNames: #()
@@ -432,8 +423,7 @@ Trait {
 				instanceVariableNames: #()
 				classInstanceVariableNames: #()
 				classVariableNames: #()
-				category: nil
-				packageName: 'Z')
+				category:  'Z')
 ]
 
 { #category : 'tests' }

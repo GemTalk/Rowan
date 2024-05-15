@@ -2584,6 +2584,79 @@ RwRowanSample9V3Test >> testSpec_0078_3 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0084 [
+	"spec_0084 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 class1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0084'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	(ClassOrganizer new traits) includes: trait1.
+
+	class1 :=  Rowan globalNamed: 'RowanSample9V3Class1'.
+	self assert: class1 new iv1 equals: nil.
+
+"trait manipulation - change source"
+	trait1 compile: 'iv1 ^ iv1 ifNil: [ 1 ]'.
+	self assert: class1 new iv1 equals: 1.
+
+	trait1 classSide compile: 'cv1 ^ Cv1 ifNil: [ 2 ]'.
+	self assert: class1 cv1 equals: 2.
+
+	self assert: (audit := project audit) isEmpty.
+
+"trait manipulation - add selector"
+	trait1 compile: 'summary ^ {iv1. Cv1. self class cv1 . self class civ1}'.
+	self assert: class1 new summary equals: {nil . nil . 2 . nil}.
+
+	trait1 classSide compile: 'summary ^ {nil . Cv1 . self cv1 . self civ1}'.
+	self assert: class1 summary equals: {nil. nil . 2 . nil}.
+
+	self assert: (audit := project audit) isEmpty.
+
+"trait manipulation - remove selector"
+	trait1 removeSelector: 'summary'.
+	trait1 classSide removeSelector: 'summary'.
+
+	self should: [ class1 summary ] raise: 2010. "MNU"
+	self should: [class1 new summary ] raise: 2010. "MNU"
+
+	self assert: (audit := project audit) isEmpty.
+
+"remove trait from system"
+	trait1 removeFromSystem.
+
+"validate removal"
+	self assert: (Rowan globalNamed: 'RowanSample9V3Trait1') equals: nil.
+	self should: [class1 new iv1 ] raise: 2010. "MNU"
+	self should: [class1  new cv1 ] raise: 2010. "MNU"
+	self should: [class1 civ1 ] raise: 2010. "MNU"
+	self assert: (audit := project audit) isEmpty. "should fail???"
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 

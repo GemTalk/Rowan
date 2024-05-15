@@ -235,18 +235,24 @@ RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitNamed: traitName [
 	^ self
-		addTraitDefinition:
-			(RwTraitDefinition
-				newForTraitNamed: traitName
-				instanceVariableNames: #()
-				classInstanceVariableNames: #()
-				classVariableNames: #()
-				category: nil
-				packageName: self name)
+		addTraitNamed: traitName
+		instanceVariableNames: #()
+		classInstanceVariableNames: #()
+		classVariableNames: #()
 ]
 
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars [
+	^ self
+		addTraitNamed: traitName
+		instanceVariableNames: instvars
+		classInstanceVariableNames: classinstvars
+		classVariableNames: classvars
+		category: nil
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars category: categoryNameOrNil [
 	^ self
 		addTraitDefinition:
 			(RwTraitDefinition
@@ -254,7 +260,7 @@ RwPackageDefinition >> addTraitNamed: traitName instanceVariableNames: instvars 
 				instanceVariableNames: instvars
 				classInstanceVariableNames: classinstvars
 				classVariableNames: classvars
-				packageName: self name)
+				category: categoryNameOrNil)
 ]
 
 { #category : 'accessing' }

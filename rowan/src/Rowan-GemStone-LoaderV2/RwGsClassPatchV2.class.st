@@ -258,7 +258,12 @@ RwGsClassPatchV2 >> superclassName [
 { #category : 'private' }
 RwGsClassPatchV2 >> updateClassWithTraits: tempSymbols [
 	| classWithTraits |
-	classWithTraits := tempSymbols at: classDefinition name ifAbsent: [self halt].
+	classWithTraits := tempSymbols
+		at: classDefinition name
+		ifAbsent: [ 
+			self
+				error:
+					'Cannot find class ' , classDefinition name printString , ' for traits updates.' ].
 	(classDefinition propertyAt: #'traits' ifAbsent: [  ])
 		ifNotNil: [ :traitString | classWithTraits traits: traitString ].
 	(classDefinition propertyAt: #'classTraits' ifAbsent: [  ])

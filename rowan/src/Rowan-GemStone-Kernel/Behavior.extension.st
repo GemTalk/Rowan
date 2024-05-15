@@ -37,8 +37,7 @@ sourceClass _poolDictionaries do: [ :dict | | poolDicts |
 otherCvs := sourceClass _classVars .
 otherCvs ifNotNil:[ | destCvs |
    destCvs := classVars . 
-   otherCvs == destCvs ifTrue: [ self halt ].
-   otherCvs associationsDo: [ :assn | | other |
+  otherCvs associationsDo: [ :assn | | other |
     destCvs ifNotNil:[ other := destCvs associationAt: assn key otherwise: nil ].
 	(other == assn)
 		ifTrue: [
@@ -77,7 +76,6 @@ otherCvs ifNotNil:[ | destCvs |
 ].
 
 ^failed.
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }

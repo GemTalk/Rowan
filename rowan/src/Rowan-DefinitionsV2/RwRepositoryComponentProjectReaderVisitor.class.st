@@ -131,9 +131,8 @@ RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
 		instanceVariableNames: #()
 		classInstanceVariableNames: #()
 		classVariableNames: #()
-		category: category
-		packageName: packageName.
-	expectedProperties := #(#'name' #'category' #'package').
+		category: category.
+	expectedProperties := #(#'name' #'category').
 	metadata
 		keysAndValuesDo: [ :propName :propValue | 
 			"copy any additional properties, to preserve them for other platforms"
