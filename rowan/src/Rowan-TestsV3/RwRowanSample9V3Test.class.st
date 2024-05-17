@@ -2622,7 +2622,7 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	trait1 compile: 'iv1 ^ iv1 ifNil: [ 1 ]'.
 	self assert: class1 new iv1 equals: 1.
 
-	trait1 classSide compile: 'cv1 ^ Cv1 ifNil: [ 2 ]'.
+	trait1 classTrait compile: 'cv1 ^ Cv1 ifNil: [ 2 ]'.
 	self assert: class1 cv1 equals: 2.
 
 	self assert: (audit := project audit) isEmpty.
@@ -2631,14 +2631,14 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	trait1 compile: 'summary ^ {iv1. Cv1. self class cv1 . self class civ1}'.
 	self assert: class1 new summary equals: {nil . nil . 2 . nil}.
 
-	trait1 classSide compile: 'summary ^ {nil . Cv1 . self cv1 . self civ1}'.
+	trait1 classTrait compile: 'summary ^ {nil . Cv1 . self cv1 . self civ1}'.
 	self assert: class1 summary equals: {nil. nil . 2 . nil}.
 
 	self assert: (audit := project audit) isEmpty.
 
 "trait manipulation - remove selector"
 	trait1 removeSelector: 'summary'.
-	trait1 classSide removeSelector: 'summary'.
+	trait1 classTrait removeSelector: 'summary'.
 
 	self should: [ class1 summary ] raise: 2010. "MNU"
 	self should: [class1 new summary ] raise: 2010. "MNU"
