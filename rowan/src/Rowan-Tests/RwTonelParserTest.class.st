@@ -63,9 +63,9 @@ RwTonelParserTest >> newTraitDefinitionFrom: anArray [
 	packageName := metadata at: #'packageName' ifAbsent: [  ].
 	^ RwTraitDefinition
 		newForTraitNamed: traitName
-		instanceVariableNames: #()
-		classInstanceVariableNames: #()
-		classVariableNames: #()
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
 		category: category
 		packageName: packageName
 ]
@@ -420,10 +420,10 @@ Trait {
 		equals:
 			(RwTraitDefinition
 				newForTraitNamed: 'X'
-				instanceVariableNames: #()
-				classInstanceVariableNames: #()
-				classVariableNames: #()
-				category:  'Z')
+				instvars: #()
+				classinstvars: #()
+				classvars: #()
+				category: 'Z')
 ]
 
 { #category : 'tests' }

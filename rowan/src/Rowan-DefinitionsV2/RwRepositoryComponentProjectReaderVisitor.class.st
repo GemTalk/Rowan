@@ -128,9 +128,9 @@ RwRepositoryComponentProjectReaderVisitor >> newTraitDefinitionFrom: anArray [
 	packageName := metadata at: #'package' ifAbsent: [ category ].
 	currentTraitDefinition := RwTraitDefinition
 		newForTraitNamed: traitName
-		instanceVariableNames: #()
-		classInstanceVariableNames: #()
-		classVariableNames: #()
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
 		category: category.
 	expectedProperties := #(#'name' #'category').
 	metadata

@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars category: category [
+RwTraitDefinition class >> newForTraitNamed: traitName instvars: instvars classinstvars: classinstvars classvars: classvars category: category [
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
@@ -26,7 +26,7 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 ]
 
 { #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars category: category packageName: packageName [
+RwTraitDefinition class >> newForTraitNamed: traitName instvars: instvars classinstvars: classinstvars classvars: classvars category: category packageName: packageName [
 	| propertiesDictionary |
 	propertiesDictionary := SymbolDictionary new.
 	propertiesDictionary
@@ -43,17 +43,6 @@ RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: in
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
 		instanceMethodDefinitions: Dictionary new
-]
-
-{ #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instanceVariableNames: instvars classInstanceVariableNames: classinstvars classVariableNames: classvars packageName: packageName [
-	^ self
-		newForTraitNamed: traitName
-		instanceVariableNames: instvars
-		classInstanceVariableNames: classinstvars
-		classVariableNames: classvars
-		category: nil
-		packageName: packageName
 ]
 
 { #category : 'private' }

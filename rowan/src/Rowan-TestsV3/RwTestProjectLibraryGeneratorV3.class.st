@@ -999,9 +999,9 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0084: resolvedProject [
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addTraitNamed: traitName
-		instanceVariableNames: #('iv1')
-		classInstanceVariableNames: #('civ1')
-		classVariableNames: #('Cv1'))
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1'))
 		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
 		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
 		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
