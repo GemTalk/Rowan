@@ -266,6 +266,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait no
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
 	(trait isKindOf: Trait)
 		ifFalse: [ registryInstance error: 'internal error - expected a trait' ].
+self halt.
 	self
 		_symbolDictionary: registryInstance _symbolDictionary
 		associationAt: trait name

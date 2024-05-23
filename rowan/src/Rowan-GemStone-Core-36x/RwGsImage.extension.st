@@ -37,9 +37,12 @@ RwGsImage class >> loadedTraitMethod: selector inTraitNamed: traitName isMeta: i
 	trait ifNil: [ ^ absentBlock value ].
 	isMeta
 		ifTrue: [ trait := trait classTrait ].
-self halt.	"figure the rest out when I get here .. BTW, the following code does not make sense, since we don't have a compiled method to ply with ... but maybe we should?"
 	compiledMethodSource := trait sourceCodeAt: selector asSymbol.
-	compiledMethodSource ifNil: [ ^ absentBlock value ].
+	compiledMethodSource
+		ifNil: [ 
+			"no method found in trait -- addition"
+			^ absentBlock value ].
+	self halt.	"figure the rest out when I get here .. BTW, the following code does not make sense, since we don't have a compiled method to ply with ... but maybe we should?"
 	^ compiledMethodSource _origin
 		ifNotNil: [ :loadedMethod | 
 			loadedMethod isRowanLoadedMethod

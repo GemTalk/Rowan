@@ -25,11 +25,13 @@ Class {
 		'addedMethods',
 		'addedTraitMethods',
 		'deletedMethods',
+		'deletedTraitMethods',
 		'deleteNewVersionMethods',
 		'movedMethods',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
+		'traitMethodsNeedingRecompile',
 		'tempSymbols',
 		'createdClasses',
 		'createdTraits',
@@ -366,6 +368,12 @@ RwGsPatchSet_V2 >> _traitMethodDeletionPatchClass [
 	^ RwGsTraitMethodDeletionSymbolDictPatchV2
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_V2 >> _traitMethodSourcePatchClass [
+
+	^ RwGsTraitMethodSourceSymbolDictPatchV2
+]
+
 { #category : 'building' }
 RwGsPatchSet_V2 >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
@@ -688,7 +696,7 @@ RwGsPatchSet_V2 >> addDeletedClassMethod: aClassMethodDefinition inClass: aClass
 RwGsPatchSet_V2 >> addDeletedClassTraitMethod: aClassTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
-	deletedMethods
+	deletedTraitMethods
 		add:
 			((self _traitMethodDeletionPatchClass
 				forMethod: aClassTraitMethodDefinition
@@ -750,7 +758,7 @@ RwGsPatchSet_V2 >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass:
 RwGsPatchSet_V2 >> addDeletedInstanceTraitMethod: anInstanceTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
-	deletedMethods
+	deletedTraitMethods
 		add:
 			((self _traitMethodDeletionPatchClass
 				forMethod: anInstanceTraitMethodDefinition
@@ -973,6 +981,20 @@ RwGsPatchSet_V2 >> addPatchedClassSymbolDictionaryMove: aClassModification inPac
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addPatchedClassTraitMethod: aClassTraitMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+	currentProjectDefinition := aProjectDefinition.
+	traitMethodsNeedingRecompile
+		add:
+			((self _traitMethodSourcePatchClass
+				forMethod: aClassTraitMethodDefinition
+				isMeta: true
+				inTrait: aTraitDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -1059,6 +1081,20 @@ RwGsPatchSet_V2 >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition
 				forMethod: aInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSet_V2 >> addPatchedInstanceTraitMethod: aInstanceMethodDefinition inTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+	currentProjectDefinition := aProjectDefinition.
+	traitMethodsNeedingRecompile
+		add:
+			((self _traitMethodSourcePatchClass
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inTrait: aTraitDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
@@ -1266,10 +1302,17 @@ RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> compileMethods [
+	addedMethods do: [ :each | self compileMethodPatch: each ].
+	extendedMethods do: [ :each | self compileMethodPatch: each ].
+	methodsNeedingRecompile do: [ :each | self compileMethodPatch: each ].
+	traitMethodsNeedingRecompile do: [ :each | self compileTraitMethodPatch: each ]
+]
 
-	addedMethods do: [:each | self compileMethodPatch: each].
-	extendedMethods do: [:each | self compileMethodPatch: each].
-	methodsNeedingRecompile do: [:each | self compileMethodPatch: each]
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> compileTraitMethodPatch: aTraitMethodAdditionPatch [
+	aTraitMethodAdditionPatch
+		compileUsingNewTraitsSymbolList: self createdTraits
+		andExistingTraits: self tempSymbols
 ]
 
 { #category : 'private - applying' }
@@ -1515,12 +1558,14 @@ RwGsPatchSet_V2 >> initialize [
 	classesWithTraits := Set new.
 	movedClasses := Set new.
 	deletedMethods := Set new.
+	deletedTraitMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
 	addedMethods := Set new.
 	addedTraitMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
+	traitMethodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
@@ -1649,6 +1694,11 @@ RwGsPatchSet_V2 >> removeDeletedMethods [
 			methodDeletionPatch
 				deleteMethodNewClassesSymbolList: self createdClasses
 				andExistingClasses: self tempSymbols ].
+	deletedTraitMethods
+		do: [ :methodDeletionPatch | 
+			methodDeletionPatch
+				deleteNewTraitsSymbolList: self createdTraits
+				andExistingTraits: self tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch

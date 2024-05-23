@@ -9,51 +9,42 @@ Class {
 }
 
 { #category : 'deleting' }
-RwGsTraitMethodDeletionSymbolDictPatchV2 >> deleteMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
-	self
-		primeBehaviorNewTraitsSymbolList: createdClasses
-		andExistingTraits: tempSymbols.
-	traitInstance
-		ifNil: [ 
-			"trait is being deleted, nothing else to do"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		deleteMethod: methodDefinition selector
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'deleting' }
-RwGsTraitMethodDeletionSymbolDictPatchV2 >> deleteNewVersionMethodNewClassesSymbolList: createdClasses andExistingClasses: tempSymbols [
+RwGsTraitMethodDeletionSymbolDictPatchV2 >> deleteNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
 	"remove the method from deleted things"
-
-	"behavior is set, by an earlier call to deleteMethodNewClasses:andExistingClassSymbolList: "
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2
-]
-
-{ #category : 'private' }
-RwGsTraitMethodDeletionSymbolDictPatchV2 >> primeBehaviorNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
-	| traitName trait symDictName |
-	traitDefinition key
+| loadedTrait |
+	self
+		primeBehaviorNewTraitsSymbolList: createdTraits
+		andExistingTraits: tempSymbols.
+	self traitInstance
 		ifNil: [ 
-			"trait is being deleted ... we're done"
-			^ self ].
-	traitName := traitDefinition key asSymbol.
-	symDictName := self symbolDictionaryName.
-	trait := (RwGsPatchSet_V2 lookupSymbolDictName: symDictName in: createdTraits)
-		at: traitName
-		ifAbsent: [ 
-			tempSymbols
-				at: traitName
-				ifAbsent: [ 
-					"cannot find trait ... caller can decide whether or not that is a problem -- traitInstance will be nil"
-					^ self ] ].
-	traitInstance :=  trait
+			self
+				error:
+					'Trait ' , self traitName printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: self traitInstance.
+
+	isMeta
+		ifTrue: [ 
+			self traitInstance classTrait removeSelector: methodDefinition selector.
+self halt: 'Now delete the loaded method for that selector from the loadedTrait'.
+"
+			loadedMethod := RwGsLoadedSymbolDictTraitMethod
+				loadedClassMethodForTrait: self traitInstance classTrait
+				source: sourceString
+				protocol: protocol.
+"
+ ]
+		ifFalse: [ 
+			self traitInstance removeSelector: methodDefinition selector.
+self halt: 'Now delete the loaded method for that selector from the loadedTrait'.
+"
+		loadedMethod := RwGsLoadedSymbolDictTraitMethod
+				loadedMethodForTrait: self traitInstance
+				source: sourceString
+				protocol: protocol.
+"
+ ].
 ]
 
 { #category : 'accessing' }
@@ -64,4 +55,20 @@ RwGsTraitMethodDeletionSymbolDictPatchV2 >> traitDefinition [
 { #category : 'accessing' }
 RwGsTraitMethodDeletionSymbolDictPatchV2 >> traitDefinition: object [
 	traitDefinition := object
+]
+
+{ #category : 'accessing' }
+RwGsTraitMethodDeletionSymbolDictPatchV2 >> traitInstance [
+	^traitInstance
+]
+
+{ #category : 'accessing' }
+RwGsTraitMethodDeletionSymbolDictPatchV2 >> traitInstance: object [
+	traitInstance := object
+]
+
+{ #category : 'accessing' }
+RwGsTraitMethodDeletionSymbolDictPatchV2 >> traitName [
+
+	^ self traitDefinition key
 ]

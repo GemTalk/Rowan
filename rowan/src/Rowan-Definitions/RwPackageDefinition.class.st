@@ -470,6 +470,12 @@ RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageCon
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> traitDefinitionNamed: traitName [
+
+	^ self traitDefinitionNamed: traitName ifAbsent: [ self error: 'No trait definition found with the name ', traitName printString ]
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> traitDefinitionNamed: traitName ifAbsent: absentBlock [
 
 	^ self traitDefinitions at: traitName ifAbsent: absentBlock

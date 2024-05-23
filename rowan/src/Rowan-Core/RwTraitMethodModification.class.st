@@ -76,14 +76,12 @@ RwTraitMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPa
 				ifFalse: [ 
 					self isMeta
 						ifTrue: [ 
-self halt.
 							aPatchSet
 								addPatchedClassTraitMethod: self after
 								inTrait: self traitDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ]
 						ifFalse: [ 
-self halt.
 							aPatchSet
 								addPatchedInstanceTraitMethod: self after
 								inTrait: self traitDefinition

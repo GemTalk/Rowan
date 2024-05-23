@@ -8,26 +8,6 @@ Class {
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
-{ #category : 'private' }
-RwGsTraitMethodAdditionSymbolDictPatchV2 >> primeBehaviorNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
-	| traitName trait symDictName |
-	traitDefinition key
-		ifNil: [ 
-			"trait is being deleted ... we're done"
-			^ self ].
-	traitName := traitDefinition key asSymbol.
-	symDictName := self symbolDictionaryName.
-	trait := (RwGsPatchSet_V2 lookupSymbolDictName: symDictName in: createdTraits)
-		at: traitName
-		ifAbsent: [ 
-			tempSymbols
-				at: traitName
-				ifAbsent: [ 
-					"cannot find trait ... caller can decide whether or not that is a problem -- traitInstance will be nil"
-					^ self ] ].
-	traitInstance :=  trait
-]
-
 { #category : 'accessing' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitDefinition [
 	^traitDefinition
@@ -36,6 +16,16 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitDefinition [
 { #category : 'accessing' }
 RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitDefinition: object [
 	traitDefinition := object
+]
+
+{ #category : 'accessing' }
+RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitInstance [
+	^traitInstance
+]
+
+{ #category : 'accessing' }
+RwGsTraitMethodAdditionSymbolDictPatchV2 >> traitInstance: object [
+	traitInstance := object
 ]
 
 { #category : 'accessing' }
@@ -49,7 +39,7 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	self
 		primeBehaviorNewTraitsSymbolList: createdTraits
 		andExistingTraits: tempSymbols.
-	traitInstance
+	self traitInstance
 		ifNil: [ 
 			self
 				error:
@@ -63,18 +53,18 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asString.
 
-	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: traitInstance.
+	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: self traitInstance.
 	isMeta
 		ifTrue: [ 
-			traitInstance classTrait compile: sourceString.
+			self traitInstance classTrait compile: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
-				loadedClassMethodForTrait: traitInstance classTrait
+				loadedClassMethodForTrait: self traitInstance classTrait
 				source: sourceString
 				protocol: protocol ]
 		ifFalse: [ 
-			traitInstance compile: sourceString.
+			self traitInstance compile: sourceString.
 			loadedMethod := RwGsLoadedSymbolDictTraitMethod
-				loadedMethodForTrait: traitInstance
+				loadedMethodForTrait: self traitInstance
 				source: sourceString
 				protocol: protocol ].
 	loadedTrait addLoadedMethod: loadedMethod ]

@@ -25,7 +25,6 @@ RwGsMethodPatchV2 class >> forMethod: aMethodDefinition isMeta: isMeta inClass: 
 
 { #category : 'instance creation' }
 RwGsMethodPatchV2 class >> forMethod: aTraitMethodDefinition isMeta: isMeta inTrait: aTraitDefinition inPackage: aPackageDefinition [
-
 	^(self new)
 		methodDefinition: aTraitMethodDefinition;
 		isMeta: isMeta;
@@ -97,6 +96,36 @@ RwGsMethodPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistin
 		intoMethodDict: false
 		intoCategories: nil
 		environmentId: self methodEnvironmentId	"we do not want the compiled method added to the class methodDictionary" ]
+		on: CompileError , CompileWarning
+		do: [ :ex | 
+			ex
+				addText:
+					(RwRepositoryComponentProjectReaderVisitor
+						lineNumberStringForDefinition: methodDefinition).
+			ex pass ]
+]
+
+{ #category : 'compiling' }
+RwGsMethodPatchV2 >> compileUsingNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
+	self
+		primeBehaviorNewTraitsSymbolList: createdTraits
+		andExistingTraits: tempSymbols.
+	self traitInstance
+		ifNil: [ 
+			self
+				error:
+					'Trait ' , self traitName printString , ' not found in the symbol dictionary '
+						, self symbolDictionaryName printString , ' associated with the method '
+						, methodDefinition selector printString ].
+
+	[ 
+	| sourceString protocol theTrait |
+	sourceString := methodDefinition source.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	theTrait := self isMeta
+		ifTrue: [ self classTrait ]
+		ifFalse: [ self traitInstance ].
+	theTrait compile: sourceString category: protocol ]
 		on: CompileError , CompileWarning
 		do: [ :ex | 
 			ex
@@ -191,6 +220,26 @@ RwGsMethodPatchV2 >> primeBehaviorNewClassesSymbolList: createdClassesSymbolList
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]
+]
+
+{ #category : 'private' }
+RwGsMethodPatchV2 >> primeBehaviorNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
+	| traitName trait symDictName |
+	self traitDefinition key
+		ifNil: [ 
+			"trait is being deleted ... we're done"
+			^ self ].
+	traitName := self traitName asSymbol.
+	symDictName := self symbolDictionaryName.
+	trait := (RwGsPatchSet_V2 lookupSymbolDictName: symDictName in: createdTraits)
+		at: traitName
+		ifAbsent: [ 
+			tempSymbols
+				at: traitName
+				ifAbsent: [ 
+					"cannot find trait ... caller can decide whether or not that is a problem -- traitInstance will be nil"
+					^ self ] ].
+	self traitInstance:  trait
 ]
 
 { #category : 'printing' }

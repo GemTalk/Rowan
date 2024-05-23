@@ -31,9 +31,13 @@ RwGsTraitModificationSymbolDictPatchV2 >> addPatchedTraitModification: aTraitMod
 	beforeSymDict := beforeTraitDefinition gs_symbolDictionary.
 	beforeSymDict ~= afterSymDict
 		ifTrue: [ 
+			self halt: 'not implemented yet'.
 			aRwGsPatchSet
 				addPatchedTraitSymbolDictionaryMove: aTraitModification
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ].
+false ifTrue: [
+	"bypass for the moment while I get method modifications handled"
 	self halt: 'modifiy the existing trait in place'
+]
 ]
