@@ -38,7 +38,7 @@ doit
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	oldComponentName := args at: 1.
 	newComponentName := args at: 2.
 	resolvedProject renameComponentNamed: oldComponentName  to: newComponentName.	

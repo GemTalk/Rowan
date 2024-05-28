@@ -38,7 +38,7 @@ doit
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
   originalProjectSetDefinition := RwProjectSetDefinition new
 		addProject: resolvedProject copy;
 		yourself.

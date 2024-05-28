@@ -46,7 +46,7 @@ doit
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	projectName := loadSpec projectName.
 	loadSpec
-		diskUrl: 'file://', self projectsHome, '/', projectName;
+		diskUrl: 'file://', self projectsHome asFileReference fullName, '/', projectName;
 		projectsHome: self projectsHome;
 		yourself.
 	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}) read.
