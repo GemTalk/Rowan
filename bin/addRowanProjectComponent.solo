@@ -1,4 +1,4 @@
-#!/usr/bin/env superdoit_solo
+#!/usr/bin/env superdoit_rowan3_solo
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'parentComponent'.
@@ -57,16 +57,16 @@ doit
 	loadSpec
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	self parentComponent
-		ifNil: [ resolvedProject addTopLevelComponentNamed: componentName ]
+		ifNil: [ resolvedProject addLoadComponentNamed: componentName ]
 		ifNotNil: [:parentComponentName |
 			| component |
 			resolvedProject
 				componentNamed: componentName
 				ifAbsent: [
 					resolvedProject
-						addNewComponentNamed: componentName 
+						addSubComponentNamed: componentName 
 						condition: self componentCondition ].
 			resolvedProject 
 				addComponentNamed: componentName

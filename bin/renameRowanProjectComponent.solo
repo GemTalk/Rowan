@@ -1,4 +1,4 @@
-#!/usr/bin/env superdoit_solo
+#!/usr/bin/env superdoit_rowan3_solo
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
@@ -38,7 +38,7 @@ doit
 	loadSpec := (RwSpecification fromUrl: loadSpecUrl)
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve.
+	resolvedProject := loadSpec resolveProject.
 	oldComponentName := args at: 1.
 	newComponentName := args at: 2.
 	resolvedProject renameComponentNamed: oldComponentName  to: newComponentName.	

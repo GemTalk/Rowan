@@ -1,4 +1,4 @@
-#!/usr/bin/env superdoit_solo
+#!/usr/bin/env superdoit_rowan3_solo
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
@@ -35,7 +35,7 @@ EXAMPLES
 -----
 %
 doit
-	| loadSpecUrl args loadSpec resolvedProject topazFilename |
+	| loadSpecUrl args loadSpec resolvedProject topazFilename projectSet projectName |
 	args := self positionalArgs.
 	args size ~= 2
 		ifTrue: [
@@ -44,12 +44,13 @@ doit
 	loadSpecUrl := args removeFirst.
 	topazFilename := args removeFirst.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	projectName := loadSpec projectName.
 	loadSpec
-		diskUrl: 'file://', self projectsHome, '/', loadSpec projectName;
+		diskUrl: 'file://', self projectsHome asFileReference fullName, '/', projectName;
 		projectsHome: self projectsHome;
 		yourself.
-	resolvedProject := loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}.
-	resolvedProject
+	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}) read.
+	(projectSet projectNamed: projectName)
 		exportTopazFormatTo: topazFilename 
 		logClassCreation: false 
 		excludeClassInitializers: false 
