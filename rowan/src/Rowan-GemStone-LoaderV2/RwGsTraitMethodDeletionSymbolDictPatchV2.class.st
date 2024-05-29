@@ -11,40 +11,28 @@ Class {
 { #category : 'deleting' }
 RwGsTraitMethodDeletionSymbolDictPatchV2 >> deleteNewTraitsSymbolList: createdTraits andExistingTraits: tempSymbols [
 	"remove the method from deleted things"
-| loadedTrait |
+
+	| loadedTrait loadedMethod |
 	self
 		primeBehaviorNewTraitsSymbolList: createdTraits
 		andExistingTraits: tempSymbols.
 	self traitInstance
 		ifNil: [ 
-			self
-				error:
-					'Trait ' , self traitName printString , ' not found in the symbol dictionary '
-						, self symbolDictionaryName printString , ' associated with the method '
-						, methodDefinition selector printString ].
-	loadedTrait := self symbolDictionaryRegistry loadedTraitForTrait: self traitInstance.
+			"trait has been deleted from system ... no more clean up needed"
+			^ self ].
+	loadedTrait := self symbolDictionaryRegistry
+		loadedTraitForTrait: self traitInstance.
+	loadedMethod := loadedTrait
+		loadedMethodAt: methodDefinition selector
+		isMeta: isMeta.
 
 	isMeta
 		ifTrue: [ 
 			self traitInstance classTrait removeSelector: methodDefinition selector.
-self halt: 'Now delete the loaded method for that selector from the loadedTrait'.
-"
-			loadedMethod := RwGsLoadedSymbolDictTraitMethod
-				loadedClassMethodForTrait: self traitInstance classTrait
-				source: sourceString
-				protocol: protocol.
-"
- ]
+			loadedTrait removeLoadedClassMethod: loadedMethod ]
 		ifFalse: [ 
 			self traitInstance removeSelector: methodDefinition selector.
-self halt: 'Now delete the loaded method for that selector from the loadedTrait'.
-"
-		loadedMethod := RwGsLoadedSymbolDictTraitMethod
-				loadedMethodForTrait: self traitInstance
-				source: sourceString
-				protocol: protocol.
-"
- ].
+			loadedTrait removeLoadedInstanceMethod: loadedMethod ]
 ]
 
 { #category : 'accessing' }

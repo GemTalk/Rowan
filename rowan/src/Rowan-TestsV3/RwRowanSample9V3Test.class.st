@@ -1228,7 +1228,8 @@ RwRowanSample9V3Test >> testIssue783 [
 
 	"https://github.com/GemTalk/Rowan/issues/783"
 
-	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 class1 project audit projectDefinition packageName packageDefinition traitName traitDefinition methodDefinition |
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 class1 project audit projectDefinition packageName packageDefinition traitName traitDefinition methodDefinition
+systemTraits installedTraits |
 	loadSpec := self _loadSpecNamed: 'spec_0084'.
 
 	projectName := loadSpec projectName.
@@ -1237,6 +1238,8 @@ RwRowanSample9V3Test >> testIssue783 [
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	systemTraits := ClassOrganizer new traits.
 
 "resolve project"
 	loadSpecs := loadSpec resolve.
@@ -1293,26 +1296,25 @@ RwRowanSample9V3Test >> testIssue783 [
 	self should: [ class1 summary ] raise: 2010. "MNU"
 	self should: [class1 new summary ] raise: 2010. "MNU"
 
-self halt: 'success'.
-"====="
-	trait1 removeSelector: 'summary'.
-	trait1 classTrait removeSelector: 'summary'.
-
-	self should: [ class1 summary ] raise: 2010. "MNU"
-	self should: [class1 new summary ] raise: 2010. "MNU"
-
-	self assert: (audit := project audit) isEmpty.
-"^^^^^"
-
 "remove trait from system"
-	trait1 removeFromSystem.
+	packageDefinition 
+		removeTraitNamed: traitName.
+	projectDefinition load.
 
 "validate removal"
 	self assert: (Rowan globalNamed: 'RowanSample9V3Trait1') equals: nil.
 	self should: [class1 new iv1 ] raise: 2010. "MNU"
-	self should: [class1  new cv1 ] raise: 2010. "MNU"
 	self should: [class1 civ1 ] raise: 2010. "MNU"
-	self assert: (audit := project audit) isEmpty. "should fail???"
+	self assert: (audit := project audit) isEmpty.
+
+	installedTraits := ClassOrganizer new traits.
+	self assert: installedTraits = systemTraits.
+
+
+self halt: 'success'.
+"====="
+	trait1 removeFromSystem.
+"^^^^^"
 ]
 
 { #category : 'tests' }

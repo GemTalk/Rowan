@@ -86,14 +86,15 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteTraitFromLoadedThings: trait instance: registryInstance [
 
-	"a class association is being deleted from the receiver remove it from the loaded things."
+	"a trait association is being deleted from the receiver remove it from the loaded things."
 
 	self
 		_loadedTraitFor: trait
 		noNewVersion: [ :loadedTrait | 
 			"association for class is present, finish delete operation"
 			loadedTrait removeFromLoaded: registryInstance.
-			registryInstance _symbolDictionary removeKey: loadedTrait key asSymbol ]
+			registryInstance _symbolDictionary removeKey: loadedTrait key asSymbol.
+			trait removeFromSystem ]
 		instance: registryInstance.
 	^ registryInstance
 ]
@@ -266,7 +267,6 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait no
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _loadedTraitFor: trait noNewVersion: noNewVersionBlock newVersion: newVersionBlock instance: registryInstance [
 	(trait isKindOf: Trait)
 		ifFalse: [ registryInstance error: 'internal error - expected a trait' ].
-self halt.
 	self
 		_symbolDictionary: registryInstance _symbolDictionary
 		associationAt: trait name

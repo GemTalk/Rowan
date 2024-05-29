@@ -449,6 +449,11 @@ RwPackageDefinition >> removeClassNamed: className ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> removeTraitNamed: traitName [
+	^ self removeKey: traitName from: traitDefinitions
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> renameTo: newPackageName packageConvention: thePackageConvention [
 	self propertyAt: #'name' put: newPackageName.
 	thePackageConvention = 'Rowan'
