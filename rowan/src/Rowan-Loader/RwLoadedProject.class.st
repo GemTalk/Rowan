@@ -183,8 +183,7 @@ RwLoadedProject >> loadedPackages: anObject [
 ]
 
 { #category : 'enumeration' }
-RwLoadedProject >> loadedPackagesDo: loadedPackageBlock loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
-
+RwLoadedProject >> loadedPackagesDo: loadedPackageBlock loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock loadedTraitsDo: loadedTraitBlock [
 	loadedPackages
 		valuesDo: [ :loadedPackage | 
 			loadedPackageBlock cull: self cull: loadedPackage.
@@ -192,7 +191,8 @@ RwLoadedProject >> loadedPackagesDo: loadedPackageBlock loadedClassedDo: loadedC
 				loadedClassedDo: loadedClassBlock
 				loadedClassExtensionsDo: loadedClassExtensionBlock
 				loadedInstanceMethodsDo: loadedInstanceMethodBlock
-				loadedClassMethodsDo: loadedClassMethodBlock ]
+				loadedClassMethodsDo: loadedClassMethodBlock
+				loadedTraitsDo: loadedTraitBlock ]
 ]
 
 { #category : 'accessing' }

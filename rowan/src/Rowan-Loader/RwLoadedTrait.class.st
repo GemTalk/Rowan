@@ -35,8 +35,7 @@ RwLoadedTrait >> classCategory [
 { #category : 'accessing' }
 RwLoadedTrait >> classInstVarNames [
 
-	^self propertyAt: #'instvars'
-
+	^self propertyAt: #'classinstvars'
 ]
 
 { #category : 'private' }
@@ -52,6 +51,12 @@ RwLoadedTrait >> classSymbolDictionaryName [
 
 ]
 
+{ #category : 'accessing' }
+RwLoadedTrait >> classVarNames [
+
+	^self propertyAt: #'classvars'
+]
+
 { #category : 'private' }
 RwLoadedTrait >> instanceMethodDefinitions [
 
@@ -62,6 +67,12 @@ RwLoadedTrait >> instanceMethodDefinitions [
 RwLoadedTrait >> instanceMethodDefinitionsForCompare [
 
 	^self loadedInstanceMethods
+]
+
+{ #category : 'accessing' }
+RwLoadedTrait >> instVarNames [
+
+	^self propertyAt: #'instvars'
 ]
 
 { #category : 'testing' }

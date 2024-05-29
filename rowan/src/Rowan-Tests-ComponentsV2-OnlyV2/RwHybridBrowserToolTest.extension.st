@@ -164,7 +164,8 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 						assert: false
 						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
+				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ]
+		loadedTraitsDo: [ :loadedProject :loadedPackage :loadedTrait | ] ].
 
 	writtenStateValidationBlock value.
 
@@ -285,7 +286,8 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 						assert: false
 						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
+				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ]
+		loadedTraitsDo: [  :loadedProject :loadedPackage :loadedTrait | ].
 
 	projectTools load loadProjectNamed: projectName.	"restore original state of project"
 
@@ -418,7 +420,8 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 						assert: false
 						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
+				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ]
+		loadedTraitsDo: [ :loadedProject :loadedPackage :loadedTrait | ] ].
 
 	writtenStateValidationBlock value.
 
@@ -508,7 +511,8 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 						assert: false
 						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
-				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
+				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ]
+		loadedTraitsDo: [ :loadedProject :loadedPackage :loadedTrait | ].
 
 	projectTools load loadProjectNamed: projectName.	"restore original state of project"
 

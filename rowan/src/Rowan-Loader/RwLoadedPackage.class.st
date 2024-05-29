@@ -113,8 +113,7 @@ RwLoadedPackage >> key [
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
-
+RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock loadedTraitsDo: loadedTraitBlock [
 	loadedClasses
 		valuesDo: [ :loadedClass | 
 			loadedClassBlock cull: self loadedProject cull: self cull: loadedClass.
@@ -129,8 +128,9 @@ RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: lo
 				cull: loadedClassExtension.
 			loadedClassExtension
 				loadedInstanceMethodsDo: loadedInstanceMethodBlock
-				loadedClassMethodsDo: loadedClassMethodBlock ]
-
+				loadedClassMethodsDo: loadedClassMethodBlock ].
+	loadedTraits
+		valuesDo: [ :loadedTrait | loadedTraitBlock cull: self loadedProject cull: self cull: loadedTrait ]
 ]
 
 { #category : 'accessing' }
@@ -140,7 +140,7 @@ RwLoadedPackage >> loadedClasses [
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock [ 
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedTraitsDo: loadedTraitBlock [
 
 	loadedClasses
 		valuesDo: [ :loadedClass | 
@@ -153,8 +153,13 @@ RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: lo
 			loadedClassExtensionBlock
 				cull: loadedClassExtension
 				cull: self loadedProject
-				cull: self ]
-
+				cull: self ].
+	loadedTraits
+		valuesDo: [ :loadedTrait | 
+			loadedTraitBlock 
+				cull: loadedTrait
+				cull: self loadedProject 
+				cull: self].
 ]
 
 { #category : 'accessing' }
@@ -180,6 +185,17 @@ RwLoadedPackage >> loadedProject: anObject [
 { #category : 'accessing' }
 RwLoadedPackage >> loadedTraits [
 	^loadedTraits
+]
+
+{ #category : 'enumeration' }
+RwLoadedPackage >> loadedTraitsDo: loadedTraitBlock [
+
+	loadedTraits
+		valuesDo: [ :loadedTrait | 
+			loadedTraitBlock 
+				cull: loadedTrait
+				cull: self loadedProject 
+				cull: self].
 ]
 
 { #category : 'private' }

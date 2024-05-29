@@ -143,6 +143,13 @@ RwGsImage class >> loadedTraitAndSymbolDictionaryForTrait: trait ifPresent: pres
 ]
 
 { #category : '*rowan-gemstone-loader-extensions-onlyv2' }
+RwGsImage class >> loadedTraitForTrait: trait ifAbsent: absentBlock [
+	"Lookup the given class in the classRegistry"
+
+	^ self symbolDictionaryRegistryClass registry_ImplementationClass loadedTraitForTrait: trait ifAbsent: absentBlock
+]
+
+{ #category : '*rowan-gemstone-loader-extensions-onlyv2' }
 RwGsImage class >> removeLoadedClassExtensionsForClass: class [
 	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
 		to the given class"

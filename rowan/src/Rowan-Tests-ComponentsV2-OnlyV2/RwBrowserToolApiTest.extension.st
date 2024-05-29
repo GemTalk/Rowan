@@ -235,7 +235,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 					self
 						assert: false
-						description: 'no class methods should be present in the project structure' ] ].
+						description: 'no class methods should be present in the project structure' ]
+				loadedTraitsDo: [ :loadedProject :loadedPackage :loadedTrait | ] ].
 
 
 	GsPackagePolicy current
@@ -404,7 +405,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 					self
 						assert: false
-						description: 'no class methods should be present in the project structure' ] ].
+						description: 'no class methods should be present in the project structure' ] 
+				loadedTraitsDo: [ :loadedProject :loadedPackage :loadedTrait | ] ].
 
 	testClass := Rowan globalNamed: className1.
 	self assert: testClass isNil.

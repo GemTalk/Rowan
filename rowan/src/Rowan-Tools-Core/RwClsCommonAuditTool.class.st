@@ -146,6 +146,37 @@ RwClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBehavio
 		ifAbsent: [ 
 			| notification |
 			compiledMethod isFromTrait
+				ifTrue: [ 
+					| trait |
+					trait := compiledMethod origin.
+					Rowan image
+						loadedTraitForTrait: trait
+						ifAbsent: [ 
+							notification := (RwAuditMethodErrorNotification
+								method: aSelector
+								isMeta: aBehavior isMeta
+								inClassNamed: aBehavior theNonMetaClass name
+								isClassExtension: aLoadedClass isLoadedClassExtension
+								intoPackageNamed: aLoadedClass loadedPackage name)
+								description: 'Missing loaded trait';
+								reason: #'missingLoadedTrait';
+								yourself.
+							notification signal
+								ifTrue: [ 
+									"record audit detail"
+									self theAuditDetails
+										add:
+											((RwAuditMethodDetail
+												for: aLoadedClass
+												message:
+													'Missing loaded trait: ' , trait name printString , ' for method' , aSelector
+														, ' in class ' , aBehavior printString)
+												reason: #'missingLoadedTrait';
+												loadedMethod: nil;
+												method: compiledMethod;
+												selector: aSelector;
+												behavior: aBehavior;
+												yourself) ] ] ]
 				ifFalse: [ 
 					notification := (RwAuditMethodErrorNotification
 						method: aSelector

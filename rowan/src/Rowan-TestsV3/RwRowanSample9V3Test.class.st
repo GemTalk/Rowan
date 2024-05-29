@@ -2714,7 +2714,14 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	trait1 classTrait compile: 'cv1 ^ Cv1 ifNil: [ 2 ]'.
 	self assert: class1 cv1 equals: 2.
 
-	self assert: (audit := project audit) isEmpty.
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#( iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
 
 "trait manipulation - add selector"
 	trait1 compile: 'summary ^ {iv1. Cv1. self class cv1 . self class civ1}'.
@@ -2723,7 +2730,14 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	trait1 classTrait compile: 'summary ^ {nil . Cv1 . self cv1 . self civ1}'.
 	self assert: class1 summary equals: {nil. nil . 2 . nil}.
 
-	self assert: (audit := project audit) isEmpty.
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#(summary iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
 
 "trait manipulation - remove selector"
 	trait1 removeSelector: 'summary'.
@@ -2732,7 +2746,14 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	self should: [ class1 summary ] raise: 2010. "MNU"
 	self should: [class1 new summary ] raise: 2010. "MNU"
 
-	self assert: (audit := project audit) isEmpty.
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#(iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
 
 "remove trait from system"
 	trait1 removeFromSystem.
@@ -2742,7 +2763,57 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	self should: [class1 new iv1 ] raise: 2010. "MNU"
 	self should: [class1  new cv1 ] raise: 2010. "MNU"
 	self should: [class1 civ1 ] raise: 2010. "MNU"
-	self assert: (audit := project audit) isEmpty. "should fail???"
+
+	self assert: (audit := project audit) isEmpty not.
+	self assert: audit size equals: 1.
+	self assert: ((audit at: 'RowanSample9V3-Traits') at: trait1 name) size equals: 1.
+	self assert: (((audit at: 'RowanSample9V3-Traits') at: trait1 name) at: 1) reason 
+			equals: #missingGemStoneTraitForLoadedTrait
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0084_forceDelete [
+	"load spec_0084 with traits and then do a forceDelete"
+
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 class1 project audit traitName className |
+	loadSpec := self _loadSpecNamed: 'spec_0084'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	traitName := 'RowanSample9V3Trait1'.
+	className := 'RowanSample9V3Class1'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: traitName.
+	(ClassOrganizer new traits) includes: trait1.
+
+	class1 :=  Rowan globalNamed: className.
+	self assert: class1 new iv1 equals: nil.
+
+"delete project"
+	Rowan projectTools delete forceDeleteProjectNamed: projectName.
+
+	self assert: (Rowan globalNamed: className) equals: nil.
+	self assert: (Rowan globalNamed: traitName) equals: nil.
+	self assert: (Rowan projectNamed: projectName ifAbsent: []) equals: nil.
 ]
 
 { #category : 'tests' }

@@ -679,6 +679,7 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			self assert: false description: 'no class methods expected in class'.
 			loadedClassOrClassExtension name ]
+		loadedTraitsDo: [  :loadedProject :loadedPackage :loadedTrait |   ]
 ]
 
 { #category : 'tests' }
