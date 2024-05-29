@@ -1309,12 +1309,6 @@ systemTraits installedTraits |
 
 	installedTraits := ClassOrganizer new traits.
 	self assert: installedTraits = systemTraits.
-
-
-self halt: 'success'.
-"====="
-	trait1 removeFromSystem.
-"^^^^^"
 ]
 
 { #category : 'tests' }
