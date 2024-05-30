@@ -95,6 +95,7 @@ RwTestProjectLibraryGeneratorV3 new
 	genSpec_0082: commitComment;
 	genSpec_0083: commitComment;
 	genSpec_0084: commitComment;
+	genSpec_0085: commitComment;
 	yourself
 "
 Class {
@@ -1018,6 +1019,189 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0084: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_A: resolvedProject [
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	C01, Tr01, T01
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
+"
+
+	| componentName1 componentName2 componentName3 packageName1 packageName2 packageName3 traitName className1 className2 index |
+	traitName := projectName , 'Trait1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	index := '01'.
+	componentName1 := 'C' , index.
+	componentName2 := 'Tr' , index.
+	componentName3 := 'T' , index.
+	resolvedProject
+		addSubcomponentNamed: componentName1
+			condition: 'C' , index
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName2
+			condition: 'Tr' , index
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName3
+			condition: 'T' , index
+			toComponentNamed: 'Core';
+		yourself.
+
+
+	packageName1 := projectName , '-' , 'C' , index.
+	packageName2 := projectName , '-' , 'Tr' , index.
+	packageName3 := projectName , '-' , 'T' , index.
+	resolvedProject
+		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
+		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
+		addPackagesNamed: {packageName3} toComponentNamed: componentName3;
+		yourself.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1')
+		category: packageName1
+		comment: 'I am an example class')
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addTraitNamed: traitName
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1')
+		category: packageName2)
+		addInstanceMethod: 'iv1_t ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1_t ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1_t ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3)
+		addClassNamed: className2
+		super: 'TestCase'
+		category: packageName3
+		comment: 'I test the example class')
+		addInstanceMethod:
+				'testIv1_t  self assert: ' , className1 , ' new iv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1_t  self assert: ' , className1 , ' civ1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testCv1_t  self assert: ' , className1 , ' new cv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_B: resolvedProject [
+	"Start with spec_0084 (RowanSample9V3) Move the trait into a conditional package, move the class and tests into separate conditional packages (same condition as the trait). Then add additional conditional core/trait/test packages each with a unique set of changes to efficiently test various combinations of class/trait changes ... the shape of the class and trait have to be synchronized."
+
+	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	traitName := projectName , 'Trait1'.
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Trait1'.
+	packageName3 := projectName , '-' , 'Test1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		classInstVarNames: #('civ1');
+		classVarNames: #('Cv1');
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addTraitNamed: traitName
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1'))
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_C: resolvedProject [
+	"Start with spec_0084 (RowanSample9V3) Move the trait into a conditional package, move the class and tests into separate conditional packages (same condition as the trait). Then add additional conditional core/trait/test packages each with a unique set of changes to efficiently test various combinations of class/trait changes ... the shape of the class and trait have to be synchronized."
+
+	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	traitName := projectName , 'Trait1'.
+	packageName1 := projectName , '-' , 'Core1'.
+	packageName2 := projectName , '-' , 'Trait1'.
+	packageName3 := projectName , '-' , 'Test1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		classInstVarNames: #('civ1');
+		classVarNames: #('Cv1');
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addTraitNamed: traitName
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1'))
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085: resolvedProject [
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	C01, Tr01, T01
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
+"
+
+	resolvedProject
+		addTopLevelComponentNamed: 'Core'
+		comment: 'Single top-level component, that lists all of conditional components that can be loaded. The packages that are actually loaded, will be dictated by the conditional attributes'.
+	self _addDefinitionsFor_0085_A: resolvedProject.
+true ifTrue: [ ^ resolvedProject ].
+	self _addDefinitionsFor_0085_B: resolvedProject.
+	self _addDefinitionsFor_0085_C: resolvedProject.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _createNewProject: aString [
 	^ Rowan newProjectNamed: aString
 ]
@@ -1878,6 +2062,7 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0084: commitMessage [
 		comment: '')
 		rowanIssues: #(783);
 		yourself.
+
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
 		revision: derivedFrom;
@@ -1901,7 +2086,67 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0084: commitMessage [
 		commitMessage: commitMessage
 ]
 
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0085: commitMessage [
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	C01, Tr01, T01
+
+Interesting things coould happen when different conditions are mixed together, but transitions between built tuples should always work.
+"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0085'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	title := 'Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate Core* packages. Traits are in separate Trait* packages. Tests  are in separate Test* packages. Each Core* package is in a Core* conditional (C*) component. Each Trait* package is in a Trait* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 85
+		derivedFrom:derivedFrom
+		comment: '')
+		rowanIssues: #(783);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'C01' .  'T01' . 'Tr01' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0085: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> primaryProjectName [
 	^ 'RowanSample9V3'
+]
+
+{ #category : 'accessing' }
+RwTestProjectLibraryGeneratorV3 >> projectReadmeIntro [
+	"Intro in README -- change this to reflect that this is for V3.0 not V2.0 and that it is a v3 variant of RowanSample9 ... do the change when you are prepared to push changes to masterV3.2"
+
+	^ 'Sample project that is being used to develop the **final** version of the V2.0 project handling API.'
 ]

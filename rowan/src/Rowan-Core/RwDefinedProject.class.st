@@ -349,6 +349,20 @@ RwDefinedProject >> addSubcomponentStructureFor: componentBasename startingAtCom
 		comment: aString
 ]
 
+{ #category : 'components' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName [
+	"add a new instance of RwLoadComponent to the project components (it will NOT be loaded when the load spec is loaded, however it is a candidate to be used by a load spec)"
+
+	^ self addTopLevelComponentNamed: componentName comment: ''
+]
+
+{ #category : 'components' }
+RwDefinedProject >> addTopLevelComponentNamed: componentName comment: aString [
+	"add a new instance of RwLoadComponent to the project components (it will NOT be loaded when the load spec is loaded, however it is a candidate to be used by a load spec)"
+
+	^ self _concreteProject addTopLevelComponentNamed: componentName comment: aString
+]
+
 { #category : 'accessing' }
 RwDefinedProject >> componentNamed: aComponentName ifAbsent: absentBlock [
 	^ self _concreteProject componentNamed: aComponentName ifAbsent: absentBlock

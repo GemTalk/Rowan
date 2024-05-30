@@ -565,6 +565,28 @@ RwResolvedProjectV2 >> addSubcomponentStructureFor: componentBasename startingAt
 ]
 
 { #category : 'components' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: aComponentName [
+	"add a new instance of RwLoadComponent to the project components (i.e., it will NOT 
+		be loaded when the load spec is loaded, but it is a candidate to be used in a load spec)"
+
+	self addTopLevelComponentNamed: aComponentName comment: ''
+]
+
+{ #category : 'components' }
+RwResolvedProjectV2 >> addTopLevelComponentNamed: aComponentName comment: aString [
+	"add a new instance of RwLoadComponent to the project components (i.e., it will NOT 
+		be loaded when the load spec is loaded, but it is a candidate to be used in a load spec)"
+
+	self _projectSpecification useV3ComponentClasses
+		ifTrue: [ ^ self _projectComponents addLoadComponentNamed: aComponentName comment: aString ]
+		ifFalse: [ 
+			^ self _projectComponents
+				addSimpleComponentNamed: aComponentName
+				condition: 'common'
+				comment: aString ]
+]
+
+{ #category : 'components' }
 RwResolvedProjectV2 >> allComponentsIn: componentNameOrArrayOfNames matchBlock: matchBlock notFound: notFoundBlock do: aBlock [
 	| visited theBlock componentNames subs |
 	visited := IdentitySet new.
