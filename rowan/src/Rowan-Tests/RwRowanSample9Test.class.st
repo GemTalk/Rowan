@@ -4864,10 +4864,21 @@ Rowan projectTools trace
 			exceptionSeen := true.
 			self assert: ex description equals: 'UserDefinedError: Incompatible changes to the same method (RowanSample9Class1>>foo ) in project ''RowanSample9'' and project ''RowanSample10''' ].
 
-	self assert: (Rowan globalNamed: className) new foo equals: 1. "which competing project won? RowanSample9"
-	self assert: (Rowan globalNamed: className) new foo equals: 3. "which competing project won? RowanSample10"
+	exceptionSeen ifFalse: [ 
+		| dirtyProject1 dirtyProject2 patchCollection |
+		"if we don't throw an error, one or the other of the projects should have nonEmpty changes when compared"
+		patchCollection := Rowan projectTools diff patchesForProjectNamed: projectName1.
+		patchCollection do: [:assoc |
+			assoc key = 'RowanSample9-Core1'
+				ifTrue: [ dirtyProject1 := assoc value operations isEmpty ]].
+		patchCollection := Rowan projectTools diff patchesForProjectNamed: projectName2.
+		patchCollection do: [:assoc |
+		assoc key = 'RowanSample10-Extensions'
+			ifTrue: [ dirtyProject2 := assoc value operations isEmpty ]].
+		self assert: (dirtyProject1 or: dirtyProject2).
+		self deny: (dirtyProject1 == dirtyProject2) ].
 
-	self assert: exceptionSeen description: 'Expected an error'
+	self assert: exceptionSeen description: 'Expected an error -- open issue'
 ]
 
 { #category : 'tests' }

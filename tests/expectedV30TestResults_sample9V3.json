@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 0,
 		"failures" : 1,
-		"passed" : 225,
-		"summary" : "226 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 465.18s",
-		"tests" : 226,
-		"time" : 465.181
+		"passed" : 227,
+		"summary" : "228 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 432.51s",
+		"tests" : 228,
+		"time" : 432.509
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -457,6 +457,12 @@
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testIssue781",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testIssue783",
 			"time" : "0"
 		},
 		{
@@ -1338,6 +1344,12 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0084_forceDelete",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSwitchRepository",
 			"time" : "0"
 		},
@@ -1372,5 +1384,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-05-14T18:43:16.001951-07:00"
+	"timeStamp" : "2024-05-29T17:40:42.336599-07:00"
 }
