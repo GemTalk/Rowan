@@ -1066,6 +1066,8 @@ Interesting things could happen when different conditions are mixed together, bu
 		classvars: #('Cv1')
 		category: packageName1
 		comment: 'I am an example class')
+		traits: traitName;
+		classTraits: traitName , ' classTrait';
 		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
 		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
 		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
@@ -2088,12 +2090,12 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0084: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGeneratorV3 >> genSpec_0085: commitMessage [
-	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
 	C01, Tr01, T01
 
-Interesting things coould happen when different conditions are mixed together, but transitions between built tuples should always work.
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
 
 	"https://github.com/GemTalk/Rowan/issues/783"
@@ -2105,7 +2107,12 @@ Interesting things coould happen when different conditions are mixed together, b
 	postfix := '0085'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'master'.
-	title := 'Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate Core* packages. Traits are in separate Trait* packages. Tests  are in separate Test* packages. Each Core* package is in a Core* conditional (C*) component. Each Trait* package is in a Trait* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.'.
+	title := 'Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	C01, Tr01, T01
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.'.
 
 	indexCard := (self
 		_createCard: postfix

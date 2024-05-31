@@ -2817,6 +2817,39 @@ RwRowanSample9V3Test >> testSpec_0084_forceDelete [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085 [
+	"spec_0085 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	(ClassOrganizer new traits) includes: trait1.
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 
