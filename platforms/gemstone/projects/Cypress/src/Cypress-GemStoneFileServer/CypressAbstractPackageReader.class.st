@@ -198,6 +198,12 @@ CypressAbstractPackageReader >> readFileTreeFormatMethodStructureFrom: fileStrea
 	category := fileStream nextLine trimSeparators.
 	source := fileStream upToEnd.
 	selector := self parseSelectorFrom: source.
+	selector = '_____could_not_parse_selector_from_method_source_____'
+		ifTrue: [ 
+			self
+				error:
+					'compile error while attempting to extract selector from method: '
+						, source printString ].
 	methods at: selector
 		put: ((CypressMethodStructure new)
 				packageStructure: self packageStructure;
@@ -208,7 +214,6 @@ CypressAbstractPackageReader >> readFileTreeFormatMethodStructureFrom: fileStrea
 				category: category;
 				source: source;
 				yourself)
-
 ]
 
 { #category : 'reading' }

@@ -1312,6 +1312,57 @@ systemTraits installedTraits |
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testIssue929 [
+	"https://github.com/GemTalk/Rowan/issues/929 "
+
+	| componentName packageName className definedProject projectName hitError classDefinition |
+	projectName := 'Issue929Project'.
+	className := 'Issue929TestCase'.
+
+	(self _testRowanProjectsSandbox / projectName) ensureDeleteAll.
+
+	definedProject := (RwDefinedProject newNamed: projectName)
+		projectsHome: self _testRowanProjectsSandbox;
+		repoType: #'disk';
+		yourself.
+
+	componentName := 'Core'.
+
+	definedProject addLoadComponentNamed: componentName.
+
+	packageName := 'Issue929'.
+	definedProject addPackagesNamed: {packageName} toComponentNamed: componentName.
+
+	classDefinition := (definedProject packageNamed: packageName)
+		addClassNamed: className
+		super: 'Object'
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1')
+		category: packageName
+		comment: 'I am an example class'.
+	hitError := false.
+	[ 
+	classDefinition
+		addInstanceMethod:
+				'testTrait  self assert: (ClassOrganizer new traits) includes: Trait1)'
+			protocol: 'tests';
+		yourself ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert:
+					(ex description
+						includesString: 'compile error while attempting to extract selector from method')
+				description: 'Unexpected error message signatiure'.
+			hitError := true ].
+	self
+		assert: hitError
+		description:
+			'Expected to hit an error while adding invalid instance method source'
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 

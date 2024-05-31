@@ -18,9 +18,14 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 
 { #category : 'instance creation' }
 RwMethodDefinition class >> newForSource: methodSource protocol: protocol [
-
 	| selector |
 	selector := Rowan platform parseSelectorFrom: methodSource.
+	selector = '_____could_not_parse_selector_from_method_source_____'
+		ifTrue: [ 
+			self
+				error:
+					'compile error while attempting to extract selector from method: '
+						, methodSource printString ].
 	^ self
 		newForSelector: selector asSymbol
 		protocol: protocol
