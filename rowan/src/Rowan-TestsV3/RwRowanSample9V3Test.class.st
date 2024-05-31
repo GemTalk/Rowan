@@ -2835,7 +2835,7 @@ RwRowanSample9V3Test >> testSpec_0085 [
 "resolve project"
 	loadSpecs := loadSpec resolve.
 
-"load project"
+"load project: C01, T01, Tr01"
 	loadedProjects := loadSpecs load.
 	project := loadedProjects projectNamed: projectName.
 
@@ -2846,7 +2846,20 @@ RwRowanSample9V3Test >> testSpec_0085 [
 		expectedProjectNames: projectNames.
 
 	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
-	(ClassOrganizer new traits) includes: trait1.
+	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
+
+"load class and class tests only: C01"
+	loadSpec customConditionalAttributes: { 'C01' . 'T01' }. "load just class and class tests"
+	loadSpecs := loadSpec resolve.
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	self assert:trait1 isNil description: 'trait1 is unexpectedly present'.
 ]
 
 { #category : 'tests' }
