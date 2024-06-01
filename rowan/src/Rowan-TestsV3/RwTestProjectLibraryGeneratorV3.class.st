@@ -1020,17 +1020,17 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0084: resolvedProject [
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_A: resolvedProject [
-"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-	1. C01, Tr01, T01
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
 
-	| componentName1 componentName2 componentName3 componentName4 componentName5 
-		packageName1 packageName2 packageName3 packageName4 packageName5 traitName 
-		className1 className2 index |
+	| componentName1 componentName2 componentName3 componentName4 componentName5 packageName1 packageName2 packageName3 packageName4 packageName5 traitName className1 className2 index |
 	traitName := projectName , 'Trait1'.
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'TestCase'.
@@ -1039,28 +1039,28 @@ Interesting things could happen when different conditions are mixed together, bu
 	componentName1 := 'C' , index.
 	componentName2 := 'Tr' , index.
 	componentName3 := 'T' , index.
-	componentName4 := 'T' , index, '_class'.
-	componentName5 := 'T' , index, '_trait'.
+	componentName4 := 'T' , index , '_class'.
+	componentName5 := 'T' , index , '_trait'.
 	resolvedProject
 		addSubcomponentNamed: componentName1
 			condition: 'C' , index
-			comment: 'Class package'
+			comment: 'Class ', index, ' package'
 			toComponentNamed: 'Core';
 		addSubcomponentNamed: componentName2
 			condition: 'Tr' , index
-			comment: 'Trait package'
+			comment: 'Trait ', index, ' package'
 			toComponentNamed: 'Core';
 		addSubcomponentNamed: componentName3
 			condition: 'T' , index
-			comment: 'Test package'
+			comment: 'Test ', index, ' package'
 			toComponentNamed: 'Core';
 		addSubcomponentNamed: componentName4
 			condition: 'C' , index
-			comment: 'Class Test package'
+			comment: 'Class Test ', index, ' package'
 			toComponentNamed: componentName3;
 		addSubcomponentNamed: componentName5
 			condition: 'Tr' , index
-			comment: 'Trait Test package'
+			comment: 'Trait Test ', index, ' package'
 			toComponentNamed: componentName3;
 		yourself.
 
@@ -1068,8 +1068,8 @@ Interesting things could happen when different conditions are mixed together, bu
 	packageName1 := projectName , '-' , 'C' , index.
 	packageName2 := projectName , '-' , 'Tr' , index.
 	packageName3 := projectName , '-' , 'T' , index.
-	packageName4 := projectName , '-' , 'C', '-' , 'T' , index.
-	packageName5 := projectName , '-' , 'Tr', '-' , 'T'  , index.
+	packageName4 := projectName , '-' , 'C' , '-' , 'T' , index.
+	packageName5 := projectName , '-' , 'Tr' , '-' , 'T' , index.
 	resolvedProject
 		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
 		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
@@ -1097,10 +1097,10 @@ Interesting things could happen when different conditions are mixed together, bu
 		classinstvars: #('civ1')
 		classvars: #('Cv1')
 		category: packageName2)
-			addInstanceMethod: 'iv1_t ^ iv1' protocol: 'accessing';
-			addInstanceMethod: 'cv1_t ^ Cv1' protocol: 'accessing';
-			addClassMethod: 'civ1_t ^ civ1' protocol: 'accessing';
-			yourself.
+		addInstanceMethod: 'iv1_t ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1_t ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1_t ^ civ1' protocol: 'accessing';
+		yourself.
 	(resolvedProject packageNamed: packageName3)
 		addClassNamed: className2
 		super: 'TestCase'
@@ -1108,127 +1108,294 @@ Interesting things could happen when different conditions are mixed together, bu
 		comment: 'I test the example class'.
 	((resolvedProject packageNamed: packageName4)
 		addClassExtensionNamed: className2)
-			addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
-				protocol: 'tests';
-			addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
-				protocol: 'tests';
-			addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
-				protocol: 'tests';
-			yourself.
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
 	((resolvedProject packageNamed: packageName5)
 		addClassExtensionNamed: className2)
-			addInstanceMethod:
-					'testIv1_t  self assert: ' , className1 , ' new iv1_t = nil'
-				protocol: 'tests';
-			addInstanceMethod: 'testCiv1_t  self assert: ' , className1 , ' civ1_t = nil'
-				protocol: 'tests';
-			addInstanceMethod:
-					'testCv1_t  self assert: ' , className1 , ' new cv1_t = nil'
-				protocol: 'tests';
-			addInstanceMethod:
-					'testTrait  self assert: ((ClassOrganizer new traits) includes: ', traitName, ')'
-				protocol: 'tests';
-			yourself.
+		addInstanceMethod:
+				'testIv1_t  self assert: ' , className1 , ' new iv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1_t  self assert: ' , className1 , ' civ1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testCv1_t  self assert: ' , className1 , ' new cv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testTrait  self assert: ((ClassOrganizer new traits) includes: ' , traitName
+						, ')'
+			protocol: 'tests';
+		yourself.
 
 	^ resolvedProject
 ]
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_B: resolvedProject [
-"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-	1. C01, Tr01, T01
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
 
-	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	| componentName1 componentName2 componentName3 componentName4 componentName5 packageName1 packageName2 packageName3 packageName4 packageName5 traitName className1 className2 index |
+
 	traitName := projectName , 'Trait1'.
-	packageName1 := projectName , '-' , 'Core1'.
-	packageName2 := projectName , '-' , 'Trait1'.
-	packageName3 := projectName , '-' , 'Test1'.
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'TestCase'.
+
+	index := '02'.
+	componentName1 := 'C' , index.
+	componentName2 := 'Tr' , index.
+	componentName3 := 'T' , index.
+	componentName4 := 'T' , index , '_class'.
+	componentName5 := 'T' , index , '_trait'.
 	resolvedProject
-		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName1
+			condition: 'C' , index
+			comment: 'Class ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName2
+			condition: 'Tr' , index
+			comment: 'Trait ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName3
+			condition: 'T' , index
+			comment: 'Test ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName4
+			condition: 'C' , index
+			comment: 'Class Test ', index, ' package'
+			toComponentNamed: componentName3;
+		addSubcomponentNamed: componentName5
+			condition: 'Tr' , index
+			comment: 'Trait Test ', index, ' package'
+			toComponentNamed: componentName3;
 		yourself.
-	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		instVarNames: #('iv1');
-		classInstVarNames: #('civ1');
-		classVarNames: #('Cv1');
+
+
+	packageName1 := projectName , '-' , 'C' , index.
+	packageName2 := projectName , '-' , 'Tr' , index.
+	packageName3 := projectName , '-' , 'T' , index.
+	packageName4 := projectName , '-' , 'C' , '-' , 'T' , index.
+	packageName5 := projectName , '-' , 'Tr' , '-' , 'T' , index.
+	resolvedProject
+		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
+		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
+		addPackagesNamed: {packageName3} toComponentNamed: componentName3;
+		addPackagesNamed: {packageName4} toComponentNamed: componentName4;
+		addPackagesNamed: {packageName5} toComponentNamed: componentName5;
+		yourself.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('iv1' 'iv2')
+		classinstvars: #('civ1' 'civ2')
+		classvars: #('Cv1' 'Cv2')
+		category: packageName1
+		comment: 'I am an example class')
+		traits: traitName;
+		classTraits: traitName , ' classTrait';
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'iv2 ^ iv2' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addInstanceMethod: 'cv2 ^ Cv2' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		addClassMethod: 'civ2 ^ civ2' protocol: 'accessing';
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addTraitNamed: traitName
-		instvars: #('iv1')
-		classinstvars: #('civ1')
-		classvars: #('Cv1'))
-		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
-		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
-		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		instvars: #('iv1' 'iv2')
+		classinstvars: #('civ1' 'civ2')
+		classvars: #('Cv1' 'Cv2')
+		category: packageName2)
+		addInstanceMethod: 'iv1_t ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'iv2_t ^ iv2' protocol: 'accessing';
+		addInstanceMethod: 'cv1_t ^ Cv1' protocol: 'accessing';
+		addInstanceMethod: 'cv2_t ^ Cv2' protocol: 'accessing';
+		addClassMethod: 'civ1_t ^ civ1' protocol: 'accessing';
+		addClassMethod: 'civ2_t ^ civ2' protocol: 'accessing';
 		yourself.
-	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+	(resolvedProject packageNamed: packageName3)
+		addClassNamed: className2
+		super: 'TestCase'
+		category: packageName3
+		comment: 'I test the example class'.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className2)
 		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testIv2  self assert: ' , className1 , ' new iv2 = nil'
 			protocol: 'tests';
 		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
 			protocol: 'tests';
+		addInstanceMethod: 'testCiv2  self assert: ' , className1 , ' civ2 = nil'
+			protocol: 'tests';
 		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
 			protocol: 'tests';
+		addInstanceMethod: 'testCv2  self assert: ' , className1 , ' new cv2 = nil'
+			protocol: 'tests';
 		yourself.
+	((resolvedProject packageNamed: packageName5)
+		addClassExtensionNamed: className2)
+		addInstanceMethod:
+				'testIv1_t  self assert: ' , className1 , ' new iv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testIv2_t  self assert: ' , className1 , ' new iv2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1_t  self assert: ' , className1 , ' civ1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv2_t  self assert: ' , className1 , ' civ2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testCv1_t  self assert: ' , className1 , ' new cv1_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testCv2_t  self assert: ' , className1 , ' new cv2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testTrait  self assert: ((ClassOrganizer new traits) includes: ' , traitName
+						, ')'
+			protocol: 'tests';
+		yourself.
+
 	^ resolvedProject
 ]
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_C: resolvedProject [
-"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-	1. C01, Tr01, T01
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
 
-	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	| componentName1 componentName2 componentName3 componentName4 componentName5 packageName1 packageName2 packageName3 packageName4 packageName5 traitName className1 className2 index |
+
 	traitName := projectName , 'Trait1'.
-	packageName1 := projectName , '-' , 'Core1'.
-	packageName2 := projectName , '-' , 'Trait1'.
-	packageName3 := projectName , '-' , 'Test1'.
 	className1 := projectName , 'Class1'.
 	className2 := projectName , 'TestCase'.
+
+	index := '03'.
+	componentName1 := 'C' , index.
+	componentName2 := 'Tr' , index.
+	componentName3 := 'T' , index.
+	componentName4 := 'T' , index , '_class'.
+	componentName5 := 'T' , index , '_trait'.
 	resolvedProject
-		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName1
+			condition: 'C' , index
+			comment: 'Class ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName2
+			condition: 'Tr' , index
+			comment: 'Trait ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName3
+			condition: 'T' , index
+			comment: 'Test ', index, ' package'
+			toComponentNamed: 'Core';
+		addSubcomponentNamed: componentName4
+			condition: 'C' , index
+			comment: 'Class Test ', index, ' package'
+			toComponentNamed: componentName3;
+		addSubcomponentNamed: componentName5
+			condition: 'Tr' , index
+			comment: 'Trait Test ', index, ' package'
+			toComponentNamed: componentName3;
 		yourself.
-	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		instVarNames: #('iv1');
-		classInstVarNames: #('civ1');
-		classVarNames: #('Cv1');
+
+
+	packageName1 := projectName , '-' , 'C' , index.
+	packageName2 := projectName , '-' , 'Tr' , index.
+	packageName3 := projectName , '-' , 'T' , index.
+	packageName4 := projectName , '-' , 'C' , '-' , 'T' , index.
+	packageName5 := projectName , '-' , 'Tr' , '-' , 'T' , index.
+	resolvedProject
+		addPackagesNamed: {packageName1} toComponentNamed: componentName1;
+		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
+		addPackagesNamed: {packageName3} toComponentNamed: componentName3;
+		addPackagesNamed: {packageName4} toComponentNamed: componentName4;
+		addPackagesNamed: {packageName5} toComponentNamed: componentName5;
+		yourself.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: 'Object'
+		instvars: #('iv2')
+		classinstvars: #('civ2')
+		classvars: #('Cv2')
+		category: packageName1
+		comment: 'I am an example class')
+		traits: traitName;
+		classTraits: traitName , ' classTrait';
+		addInstanceMethod: 'iv2 ^ iv2' protocol: 'accessing';
+		addInstanceMethod: 'cv2 ^ Cv2' protocol: 'accessing';
+		addClassMethod: 'civ2 ^ civ2' protocol: 'accessing';
 		yourself.
 	((resolvedProject packageNamed: packageName2)
 		addTraitNamed: traitName
-		instvars: #('iv1')
-		classinstvars: #('civ1')
-		classvars: #('Cv1'))
-		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
-		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
-		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		instvars: #('iv2')
+		classinstvars: #('civ2')
+		classvars: #('Cv2')
+		category: packageName2)
+		addInstanceMethod: 'iv2_t ^ iv2' protocol: 'accessing';
+		addInstanceMethod: 'cv2_t ^ Cv2' protocol: 'accessing';
+		addClassMethod: 'civ2_t ^ civ2' protocol: 'accessing';
 		yourself.
-	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
-		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+	(resolvedProject packageNamed: packageName3)
+		addClassNamed: className2
+		super: 'TestCase'
+		category: packageName3
+		comment: 'I test the example class'.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className2)
+		addInstanceMethod: 'testIv2  self assert: ' , className1 , ' new iv2 = nil'
 			protocol: 'tests';
-		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+		addInstanceMethod: 'testCiv2  self assert: ' , className1 , ' civ2 = nil'
 			protocol: 'tests';
-		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+		addInstanceMethod: 'testCv2  self assert: ' , className1 , ' new cv2 = nil'
 			protocol: 'tests';
 		yourself.
+	((resolvedProject packageNamed: packageName5)
+		addClassExtensionNamed: className2)
+		addInstanceMethod:
+				'testIv2_t  self assert: ' , className1 , ' new iv2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv2_t  self assert: ' , className1 , ' civ2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testCv2_t  self assert: ' , className1 , ' new cv2_t = nil'
+			protocol: 'tests';
+		addInstanceMethod:
+				'testTrait  self assert: ((ClassOrganizer new traits) includes: ' , traitName
+						, ')'
+			protocol: 'tests';
+		yourself.
+
 	^ resolvedProject
 ]
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085: resolvedProject [
-"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-	1. C01, Tr01, T01
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -1237,9 +1404,9 @@ Interesting things could happen when different conditions are mixed together, bu
 		addTopLevelComponentNamed: 'Core'
 		comment: 'Single top-level component, that lists all of conditional components that can be loaded. The packages that are actually loaded, will be dictated by the conditional attributes'.
 	self _addDefinitionsFor_0085_A: resolvedProject.
-true ifTrue: [ ^ resolvedProject ].
 	self _addDefinitionsFor_0085_B: resolvedProject.
 	self _addDefinitionsFor_0085_C: resolvedProject.
+true ifTrue: [ ^ resolvedProject ].
 	^ resolvedProject
 ]
 
@@ -2130,10 +2297,12 @@ RwTestProjectLibraryGeneratorV3 >> genSpec_0084: commitMessage [
 
 { #category : 'generators' }
 RwTestProjectLibraryGeneratorV3 >> genSpec_0085: commitMessage [
-"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-	1. C01, Tr01, T01
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -2150,8 +2319,11 @@ Interesting things could happen when different conditions are mixed together, bu
 	title := 'Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
 List of condition tuples intended to work together, since they were built together:
-
-C01, Tr01, T01
+```
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+```
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.'.
 

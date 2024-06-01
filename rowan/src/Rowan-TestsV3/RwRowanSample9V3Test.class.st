@@ -2868,8 +2868,8 @@ RwRowanSample9V3Test >> testSpec_0084_forceDelete [
 ]
 
 { #category : 'tests' }
-RwRowanSample9V3Test >> testSpec_0085 [
-	"spec_0085 should load cleanly"
+RwRowanSample9V3Test >> testSpec_0085_01 [
+	"spec_0085  C01, T01, Tr01 should load cleanly"
 
 	"https://github.com/GemTalk/Rowan/issues/783"
 
@@ -2884,6 +2884,41 @@ RwRowanSample9V3Test >> testSpec_0085 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve project"
+	loadSpec customConditionalAttributes: { 'C01' . 'T01' . 'Tr01' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project: C01, T01, Tr01"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_01_to_02 [
+	"load spec_0085  C01, T01, Tr01 then load spec_0085  C02, T02, Tr02"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C01' . 'T01' . 'Tr01' }. 
 	loadSpecs := loadSpec resolve.
 
 "load project: C01, T01, Tr01"
@@ -2899,18 +2934,114 @@ RwRowanSample9V3Test >> testSpec_0085 [
 	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
-"load class and class tests only: C01"
-	loadSpec customConditionalAttributes: { 'C01' . 'T01' }. "load just class and class tests"
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C02' . 'T02' . 'Tr02' }. 
 	loadSpecs := loadSpec resolve.
+
+"load project: C02, T02, Tr02 on top of C01, T01, Tr01 - should load cleanly"
 	loadedProjects := loadSpecs load.
 	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_02 [
+	"spec_0085  C02, T02, Tr02 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C02' . 'T02' . 'Tr02' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
 	self assert: (audit := project audit) isEmpty.
 	self
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
 	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
-	self assert:trait1 isNil description: 'trait1 is unexpectedly present'.
+	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_03 [
+	"spec_0085  C03, T03, Tr03 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C03' . 'T03' . 'Tr03' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_C03_T03_Tr02 [
+	"spec_0085  C03, T03, Tr02 should explode"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C03' . 'T03' . 'Tr02' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project -- trait compile error"
+	self 
+		should: [ loadedProjects := loadSpecs load ] 
+		raise: CompileError 
+		description: 'Expected a compile error when loading a trait whose instance variables don''t match the target class'.
 ]
 
 { #category : 'tests' }
