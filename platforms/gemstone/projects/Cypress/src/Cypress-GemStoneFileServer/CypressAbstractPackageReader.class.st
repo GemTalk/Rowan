@@ -164,7 +164,7 @@ CypressAbstractPackageReader >> readCypressFormatMethodStructureFrom: fileStream
 		ifTrue: [fileStream nextLine]
 		ifFalse: [self error: 'Method does not have valid Cypress format'].
 	source := fileStream upToEnd.
-	selector := self parseSelectorFrom: source.
+	selector := self parseSelectorFrom: source passCompileError: true.
 	methods at: selector
 		put: ((CypressMethodStructure new)
 				packageStructure: self packageStructure;
@@ -175,7 +175,6 @@ CypressAbstractPackageReader >> readCypressFormatMethodStructureFrom: fileStream
 				category: category;
 				source: source;
 				yourself)
-
 ]
 
 { #category : 'reading' }
@@ -197,13 +196,7 @@ CypressAbstractPackageReader >> readFileTreeFormatMethodStructureFrom: fileStrea
 	| category source selector |
 	category := fileStream nextLine trimSeparators.
 	source := fileStream upToEnd.
-	selector := self parseSelectorFrom: source.
-	selector = '_____could_not_parse_selector_from_method_source_____'
-		ifTrue: [ 
-			self
-				error:
-					'compile error while attempting to extract selector from method: '
-						, source printString ].
+	selector := self parseSelectorFrom: source passCompileError: true.
 	methods at: selector
 		put: ((CypressMethodStructure new)
 				packageStructure: self packageStructure;

@@ -457,7 +457,8 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource inProtocol: hybridPackageN
 							couldBeHybrid := false ] ] ].
 	methodDef := RwMethodDefinition
 		newForSource: methodSource
-		protocol: hybridPackageName.
+		protocol: hybridPackageName
+		 passCompileError: true.
 	(self
 		_loadedMethod: methodDef selector
 		inClassNamed: className

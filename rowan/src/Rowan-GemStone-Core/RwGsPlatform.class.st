@@ -286,7 +286,11 @@ RwGsPlatform >> orderedDictionaryClass [
 
 { #category : 'parsing' }
 RwGsPlatform >> parseSelectorFrom: methodString [
+	^ self parseSelectorFrom: methodString passCompileError: false
+]
 
+{ #category : 'parsing' }
+RwGsPlatform >> parseSelectorFrom: methodString passCompileError: passCompileError [
 	| meth |
 	^ [ 
 	meth := self
@@ -302,7 +306,10 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 			meth := meth at: 1 ].
 	meth selector asString ]
 		on: CompileError
-		do: [ :ex | ex return: '_____could_not_parse_selector_from_method_source_____' ]
+		do: [ :ex | 
+			passCompileError
+				ifTrue: [ ex pass ]
+				ifFalse: [ ex return: '_____could_not_parse_selector_from_method_source_____' ] ]
 ]
 
 { #category : 'queries' }

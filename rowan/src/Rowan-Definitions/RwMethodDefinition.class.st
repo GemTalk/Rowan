@@ -18,8 +18,13 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 
 { #category : 'instance creation' }
 RwMethodDefinition class >> newForSource: methodSource protocol: protocol [
+	^ self newForSource: methodSource protocol: protocol passCompileError: false
+]
+
+{ #category : 'instance creation' }
+RwMethodDefinition class >> newForSource: methodSource protocol: protocol passCompileError: passCompileError [
 	| selector |
-	selector := Rowan platform parseSelectorFrom: methodSource.
+	selector := Rowan platform parseSelectorFrom: methodSource passCompileError: passCompileError.
 	selector = '_____could_not_parse_selector_from_method_source_____'
 		ifTrue: [ 
 			self
