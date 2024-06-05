@@ -2903,7 +2903,7 @@ RwRowanSample9V3Test >> testSpec_0085_01 [
 
 { #category : 'tests' }
 RwRowanSample9V3Test >> testSpec_0085_01_to_02 [
-	"load spec_0085  C01, T01, Tr01 then load spec_0085  C02, T02, Tr02"
+	"load spec_0085  C01, T01, Tr01 then load spec_0085  C02, T02, Tr02 - add instance, class instance and class variables"
 
 	"https://github.com/GemTalk/Rowan/issues/783"
 
@@ -3045,8 +3045,8 @@ RwRowanSample9V3Test >> testSpec_0085_C03_T03_Tr02 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9V3Test >> testSpec_0085_move_trait_method_to_package [
-	"spec_0085  C01, T01, Tr01 loaded followed by manual move of a trait method to a different package"
+RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
+	"spec_0085  C01, T01, Tr01 loaded followed by manual move of a trait to a different package"
 
 	"https://github.com/GemTalk/Rowan/issues/783"
 
