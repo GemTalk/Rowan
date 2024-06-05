@@ -3100,6 +3100,64 @@ RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
+	"spec_0085  C02, T02, Tr02 loaded followed by manual shape change of trait ... remove iv"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects project 
+		audit traitDef definedProject packageName classDef traitIvNames classIvNames |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C02' . 'T02' . 'Tr02' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project: C01, T01, Tr01"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	packageName := projectName, '-Tr02'.
+	(Rowan image loadedPackageNamed: packageName) 
+		loadedTraitNamed: 'RowanSample9V3Trait1'
+		ifAbsent: [ self assert: false description: 'Loaded trait RowanSample9V3Trait1 not present'].
+
+"remove iv from trait and class"
+	definedProject := project defined.
+	traitDef := (definedProject packageNamed: projectName, '-Tr02') 
+		traitDefinitionNamed: 'RowanSample9V3Trait1'.
+	classDef := (definedProject packageNamed: projectName, '-C02') 
+		classDefinitionNamed:'RowanSample9V3Class1'.
+	traitIvNames := traitDef instVarNames.
+	classIvNames := classDef instVarNames.
+	self assert: traitIvNames equals: classIvNames.
+
+self halt: 'checkpoint'.
+"load project"
+[UserGlobals at: #TraitDebugging put: nil.
+	project := (definedProject load) projectNamed: projectName.
+ ] ensure: [ UserGlobals removeKey: #TraitDebugging].
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 
