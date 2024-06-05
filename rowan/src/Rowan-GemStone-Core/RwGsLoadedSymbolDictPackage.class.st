@@ -75,6 +75,11 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 ]
 
 { #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> loadedTraitNamed: traitName ifAbsent: absentBlock [
+	^ loadedTraits at: traitName ifAbsent: absentBlock
+]
+
+{ #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> packageSymbolDictionaryName [
 
 	^self propertyAt: #'gs_SymbolDictionary'

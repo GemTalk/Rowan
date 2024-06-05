@@ -137,6 +137,101 @@ RwProjectSetModification >> addMethodsRemovedByPackageModification: packageModif
 
 ]
 
+{ #category : 'private - moves' }
+RwProjectSetModification >> addTraitMethodsAddedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
+
+	packageModification after key notNil
+	ifTrue: [ 
+	packageModification traitsModification elementsModified do: 
+			[:traitModification |
+			| classMethodsModification instanceMethodsModification |
+			classMethodsModification := traitModification classMethodsModification.
+			instanceMethodsModification := traitModification
+						instanceMethodsModification.
+			classMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification before key
+						ifNil: 
+							[| newMethod |
+							newMethod := methodModification after.
+							dictionary at: traitModification key -> true -> newMethod key
+								put: (RwTraitMethodAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										traitDefinition: traitModification after
+										methodKey: newMethod key
+										isMeta: true
+										methodsModification: classMethodsModification)]].
+			instanceMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification before key
+						ifNil: 
+							[| newMethod |
+							newMethod := methodModification after.
+							dictionary at: traitModification key -> false -> newMethod key
+								put: (RwTraitMethodAdditionOrRemoval
+										projectDefinition: projectModification after
+										packageDefinition: packageModification after
+										traitDefinition: traitModification after
+										methodKey: newMethod key
+										isMeta: false
+										methodsModification: instanceMethodsModification)]]]
+]
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> addTraitMethodsRemovedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
+
+	packageModification before key notNil
+	ifTrue: [ 
+		"ignore removals for packages that have been added"
+		self
+			addTraitMethodsRemovedByTraitsModification: packageModification
+					traitsModification
+			inPackage: packageModification before
+			inProject: projectModification before
+			toDictionary: dictionary ]
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> addTraitMethodsRemovedByTraitsModification: traitsModification inPackage: package inProject: project toDictionary: dictionary [
+
+	traitsModification elementsModified do: 
+			[:traitModification |
+			| classMethodsModification instanceMethodsModification |
+			classMethodsModification := traitModification classMethodsModification.
+			instanceMethodsModification := traitModification
+						instanceMethodsModification.
+			classMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification after key
+						ifNil: 
+							[| oldMethod |
+							oldMethod := methodModification before.
+							dictionary at: traitModification key -> true -> oldMethod key
+								put: (RwTraitMethodAdditionOrRemoval
+										projectDefinition: project
+										packageDefinition: package
+										traitDefinition: traitModification before
+										methodKey: oldMethod key
+										isMeta: true
+										methodsModification: classMethodsModification)]].
+			instanceMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification after key
+						ifNil: 
+							[| oldMethod |
+							oldMethod := methodModification before.
+							dictionary at: traitModification key -> false -> oldMethod key
+								put: (RwTraitMethodAdditionOrRemoval
+										projectDefinition: project
+										packageDefinition: package
+										traitDefinition: traitModification after
+										methodKey: oldMethod key
+										isMeta: false
+										methodsModification: instanceMethodsModification)]]]
+]
+
 { #category : 'enumerating' }
 RwProjectSetModification >> classesModificationAndPackageModificationAndProjectModificationDo: aBlock [
 
@@ -224,6 +319,53 @@ RwProjectSetModification >> findAddedPackages [
 ]
 
 { #category : 'private - moves' }
+RwProjectSetModification >> findAddedTraitMethods [
+	"Answer a dictionary of added methods."
+
+	| addedTraitMethods |
+	addedTraitMethods := Dictionary new.
+	elementsModified
+		do: [ :projectModification | 
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified
+				do: [ :packageModification | 
+					self
+						addTraitMethodsAddedByPackageModification: packageModification
+						inProject: projectModification
+						toDictionary: addedTraitMethods ] ].
+	^ addedTraitMethods
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> findAddedTraits [
+
+	| addedTraits |
+	addedTraits := Dictionary new.
+	elementsModified do: 
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				| traitsModification |
+				traitsModification := packageModification traitsModification.
+				traitsModification elementsModified do: 
+						[:traitModification |
+						traitModification before isEmpty
+							ifTrue: 
+								[| newTrait |
+								newTrait := traitModification after.
+								addedTraits at: newTrait key
+									put: (RwTraitAdditionOrRemoval
+											projectDefinition: projectModification after
+											packageDefinition: packageModification after
+											traitKey: newTrait key
+											traitsModification: traitsModification)]]]].
+	^addedTraits
+]
+
+{ #category : 'private - moves' }
 RwProjectSetModification >> findRemovedClasses [
 
 	| removedClasses |
@@ -296,17 +438,69 @@ RwProjectSetModification >> findRemovedPackages [
 	^ removedPackages
 ]
 
+{ #category : 'private - moves' }
+RwProjectSetModification >> findRemovedTraitMethods [
+	"Answer a dictionary of removed methods."
+
+	| removedMethods |
+	removedMethods := Dictionary new.
+	elementsModified do: 
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				self addTraitMethodsRemovedByPackageModification: packageModification
+					inProject: projectModification
+					toDictionary: removedMethods]].
+	^removedMethods
+
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> findRemovedTraits [
+
+	| removedTraits |
+	removedTraits := Dictionary new.
+	elementsModified do: 
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				| traitsModification |
+				traitsModification := packageModification traitsModification.
+				traitsModification elementsModified do: 
+						[:traitModification |
+						traitModification after isEmpty
+							ifTrue: 
+								[| oldTrait |
+								oldTrait := traitModification before.
+								removedTraits at: oldTrait key
+									put: (RwTraitAdditionOrRemoval
+											projectDefinition: projectModification before
+											packageDefinition: packageModification before
+											traitKey: oldTrait key
+											traitsModification: traitsModification)]]]].
+	^removedTraits
+]
+
 { #category : 'initialization' }
 RwProjectSetModification >> initialize [
 	super initialize.
 	movedPackages := Set new.
 	movedClasses := Set new.
-	movedMethods := Set new
+	movedMethods := Set new.
+	movedTraits := Set new.
+	movedTraitMethods := Set new
 ]
 
 { #category : 'testing' }
 RwProjectSetModification >> isEmpty [
-  ^ movedMethods isEmpty and:[ movedClasses isEmpty and:[ super isEmpty]]
+	^ movedMethods isEmpty
+		and: [ 
+			movedClasses isEmpty
+				and: [ movedTraitMethods isEmpty and: [ movedTraits isEmpty and: [ super isEmpty ] ] ] ]
 ]
 
 { #category : 'private - moves' }
@@ -414,7 +608,6 @@ RwProjectSetModification >> updateForMethodMoves [
 			| removal |
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
-
 ]
 
 { #category : 'private - moves' }
@@ -464,4 +657,108 @@ RwProjectSetModification >> updateForPackageMoves [
 			| removal |
 			removal := packageRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [self updateForPackageMoveFrom: removal to: addition]]
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> updateForTraitMethodMoveFrom: removal to: addition isMeta: isMeta [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition methodModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal methodsModification modificationOf: removal methodKey)
+		before.
+	newDefinition := (addition methodsModification
+		modificationOf: addition methodKey) after.	"Delete the removal and the addition."
+	removal methodsModification removeModificationOf: removal methodKey.
+	addition methodsModification removeModificationOf: addition methodKey.	"Record the move."
+	movedMethods
+		add:
+			(RwTraitMethodMove
+				methodBefore: oldDefinition
+				methodAfter: newDefinition
+				traitBefore: removal traitDefinition
+				traitAfter: addition traitDefinition
+				packageBefore: removal packageDefinition
+				packageAfter: addition packageDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition
+				isMeta: addition isMeta).	"Does the method have other modifications that need to be recorded?"
+	methodModification := newDefinition compareAgainstBase: oldDefinition.
+	methodModification
+		isMeta: isMeta;
+		traitDefinition: addition traitDefinition.
+	methodModification isEmpty
+		ifFalse: [ addition methodsModification addElementModification: methodModification ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> updateForTraitMethodMoves [
+	"Trait methods that have been moved between packages will initially show up as a remove and an add rather than a move.
+	Find moved trait methods and correct the structure."
+
+	| methodAdditions methodRemovals |
+	methodAdditions := self findAddedTraitMethods.
+	methodRemovals := self findRemovedTraitMethods.
+	"Any keys that match between added and removed should be considered a move."
+(UserGlobals at: #TraitDebugging ifAbsent: []) ifNotNil: [ self halt: 'updateForTraitMethodMoves' ].
+	methodAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := methodRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [ self updateForTraitMethodMoveFrom: removal to: addition isMeta: key key value]]
+]
+
+{ #category : 'private - moves' }
+RwProjectSetModification >> updateForTraitMoveFrom: removal to: addition [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition traitModification |
+	removal
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	addition
+		ifNil: [ 
+			"not a move"
+			^ self ].
+	oldDefinition := (removal traitsModification modificationOf: removal traitKey)
+		before.
+	newDefinition := (addition traitsModification modificationOf: addition traitKey)
+		after.	"Delete the removal and the addition."
+	removal traitsModification removeModificationOf: removal traitKey.
+	addition traitsModification removeModificationOf: addition traitKey.	"Record the move."
+	movedTraits
+		add:
+			(RwTraitMove
+				traitBefore: oldDefinition
+				traitAfter: newDefinition
+				packageBefore: removal packageDefinition
+				packageAfter: addition packageDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).	"Does the class have other modifications that need to be recorded?"
+	traitModification := newDefinition compareAgainstBase: oldDefinition.
+	traitModification isEmpty
+		ifFalse: [ addition traitsModification addElementModification: traitModification ]
+]
+
+{ #category : 'moves' }
+RwProjectSetModification >> updateForTraitMoves [
+
+	| traitAdditions traitRemovals |
+	traitAdditions := self findAddedTraits.
+	traitRemovals := self findRemovedTraits.
+
+	"Any keys that match between added and removed should be considered a move."
+	traitAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := traitRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForTraitMoveFrom: removal to: addition]]
 ]

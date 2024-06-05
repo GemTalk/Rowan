@@ -3045,6 +3045,61 @@ RwRowanSample9V3Test >> testSpec_0085_C03_T03_Tr02 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_move_trait_method_to_package [
+	"spec_0085  C01, T01, Tr01 loaded followed by manual move of a trait method to a different package"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects project 
+		audit traitDef definedProject packageName |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C01' . 'T01' . 'Tr01' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project: C01, T01, Tr01"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+	packageName := projectName, '-Tr01'.
+	(Rowan image loadedPackageNamed: packageName) 
+		loadedTraitNamed: 'RowanSample9V3Trait1'
+		ifAbsent: [ self assert: false description: 'Loaded trait RowanSample9V3Trait1 not present'].
+
+"move a trait from Tr01 to C01"
+	definedProject := project defined.
+	traitDef := (definedProject packageNamed: projectName, '-Tr01') 
+		removeTraitNamed: 'RowanSample9V3Trait1'.
+	packageName := projectName, '-C01'.
+	traitDef packageName: packageName.
+	(definedProject packageNamed: packageName) addTraitDefinition: traitDef.
+
+"load project"
+[UserGlobals at: #TraitDebugging put: nil.
+	project := (definedProject load) projectNamed: projectName.
+ ] ensure: [ UserGlobals removeKey: #TraitDebugging].
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 

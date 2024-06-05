@@ -91,14 +91,14 @@ RwTraitMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPa
 				ifFalse: [ 
 					self isMeta
 						ifTrue: [ 
-self halt.
+							self halt.
 							aPatchSet
 								addPatchedClassTraitMethodProperties: self after
 								inTrait: self traitDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ]
 						ifFalse: [ 
-self halt.
+							self halt.
 							aPatchSet
 								addPatchedInstanceMethodTraitProperties: self after
 								inTrait: self traitDefinition
@@ -116,4 +116,10 @@ RwTraitMethodModification >> initialize [
 RwTraitMethodModification >> traitDefinition [
 
 	^ self classDefinition
+]
+
+{ #category : 'accessing' }
+RwTraitMethodModification >> traitDefinition: aTraitDefinition [
+
+	^ self classDefinition: aTraitDefinition
 ]

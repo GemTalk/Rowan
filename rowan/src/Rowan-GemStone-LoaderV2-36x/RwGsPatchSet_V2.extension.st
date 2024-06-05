@@ -6,59 +6,62 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 	image := Rowan image.
 	movedMethods
 		do: [ :aMethodMove | 
-			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
+			| packageDef classOrExtensionOrTraitDef loadedPackage loadedClassOrExtensionOrTrait loadedMethods loadedMethod compiledMethod registry |
 			packageDef := aMethodMove packageBefore.
-			classOrExtensionDef := aMethodMove classOrExtensionBefore.
+			classOrExtensionOrTraitDef := aMethodMove classOrExtensionBefore.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			loadedClassOrExtension := loadedPackage
-				classOrExtensionForClassNamed: classOrExtensionDef name
+			loadedClassOrExtensionOrTrait := loadedPackage
+				classOrExtensionForClassNamed: classOrExtensionOrTraitDef name
 				ifAbsent: [ 
-					self
-						error:
-							'internal error - no loaded class or extension found for class '
-								, classOrExtensionDef name printString , '  in package '
-								, packageDef name printString ].
+					loadedPackage
+						loadedTraitNamed: classOrExtensionOrTraitDef name
+						ifAbsent: [ 
+							self
+								error:
+									'internal error - no loaded class or extension or trait found '
+										, classOrExtensionOrTraitDef name printString , '  in package '
+										, packageDef name printString ] ].
 			loadedMethods := aMethodMove isMeta
-				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
-				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
+				ifTrue: [ loadedClassOrExtensionOrTrait loadedClassMethods ]
+				ifFalse: [ loadedClassOrExtensionOrTrait loadedInstanceMethods ].
 			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
 
 			registry := image loadedRegistryForPackageNamed: loadedPackage name.
 
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-			loadedClassOrExtension isLoadedClassExtension
+			loadedClassOrExtensionOrTrait removeLoadedMethod: loadedMethod.
+			loadedClassOrExtensionOrTrait isLoadedClassExtension
 				ifTrue: [ 
-					loadedClassOrExtension isEmpty
+					loadedClassOrExtensionOrTrait isEmpty
 						ifTrue: [ 
 							(registry
-								loadedClassExtensionsForClass: loadedClassOrExtension handle
+								loadedClassExtensionsForClass: loadedClassOrExtensionOrTrait handle
 								ifAbsent: [  ])
 								ifNotNil: [ :loadedClassExtensions | 
 									loadedClassExtensions isEmpty
 										ifFalse: [ 
-											loadedClassExtensions remove: loadedClassOrExtension.
+											loadedClassExtensions remove: loadedClassOrExtensionOrTrait.
 											loadedClassExtensions isEmpty
 												ifTrue: [ 
 													registry
-														unregisterLoadedClassExtension: loadedClassOrExtension
-														forClass: loadedClassOrExtension handle ] ] ].
-							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+														unregisterLoadedClassExtension: loadedClassOrExtensionOrTrait
+														forClass: loadedClassOrExtensionOrTrait handle ] ] ].
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtensionOrTrait ] ].
 
 			compiledMethod := loadedMethod handle.
 			compiledMethod _origin: nil.
 
 			packageDef := aMethodMove packageAfter.
-			classOrExtensionDef := aMethodMove classOrExtensionAfter.
+			classOrExtensionOrTraitDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
 			registry := (Rowan image
 				symbolDictNamed:
 					(aMethodMove projectAfter
 						gemstoneSymbolDictNameForPackageNamed: aMethodMove packageAfter name))
 				rowanSymbolDictionaryRegistry.
-			loadedClassOrExtension := loadedPackage
-				classOrExtensionForClassNamed: classOrExtensionDef name
+			loadedClassOrExtensionOrTrait := loadedPackage
+				classOrExtensionForClassNamed: classOrExtensionOrTraitDef name
 				ifAbsent: [ 
-					classOrExtensionDef isClassExtension
+					classOrExtensionOrTraitDef isClassExtension
 						ifTrue: [ 
 							"add a new class extension on demand"
 							(aMethodMove projectAfter
@@ -67,7 +70,7 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 								ifTrue: [ 
 									| resolved |
 									((resolved := self loadSymbolList
-										objectNamed: classOrExtensionDef name asSymbol) notNil
+										objectNamed: classOrExtensionOrTraitDef name asSymbol) notNil
 										and: [ resolved isBehavior and: [ resolved isMeta not ] ])
 										ifFalse: [ 
 											self
@@ -75,18 +78,18 @@ RwGsPatchSet_V2 >> doMoveMethodsBetweenPackages [
 													'The extension class named ' , self className printString , ' cannot be found.' ]	"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"	"https://github.com/dalehenrich/Rowan/issues/254" ]
 								ifFalse: [ 
 									registry
-										ensureExtensionClassNamed: classOrExtensionDef name
+										ensureExtensionClassNamed: classOrExtensionOrTraitDef name
 										existsForPackageNamed: packageDef name
 										implementationClass: RwGsSymbolDictionaryRegistry_ImplementationV2 ].
-							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
+							loadedPackage loadedClassExtensions at: classOrExtensionOrTraitDef name ]
 						ifFalse: [ 
 							self
 								error:
 									'internal error - no loaded class found for class '
-										, classOrExtensionDef name printString , '  in package '
+										, classOrExtensionOrTraitDef name printString , '  in package '
 										, packageDef name printString ] ].
 
-			loadedClassOrExtension addLoadedMethod: loadedMethod.
+			loadedClassOrExtensionOrTrait addLoadedMethod: loadedMethod.
 
 			compiledMethod _origin: loadedMethod ]
 ]

@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'movedClasses',
 		'movedMethods',
-		'movedPackages'
+		'movedPackages',
+		'movedTraits',
+		'movedTraitMethods'
 	],
 	#category : 'Rowan-Core'
 }
@@ -27,4 +29,14 @@ RwEntitySetModification >> movedMethods [
 RwEntitySetModification >> movedPackages [
 
 	^ movedPackages
+]
+
+{ #category : 'accessing' }
+RwEntitySetModification >> movedTraitMethods [
+	^movedTraitMethods
+]
+
+{ #category : 'accessing' }
+RwEntitySetModification >> movedTraits [
+	^movedTraits
 ]

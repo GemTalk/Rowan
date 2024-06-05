@@ -133,6 +133,12 @@ RwLoadedClass >> isLoadedClassExtension [
 	^ false
 ]
 
+{ #category : 'testing' }
+RwLoadedClass >> isLoadedTrait [
+
+	^ false
+]
+
 { #category : 'accessing' }
 RwLoadedClass >> loadedClassMethods [
 

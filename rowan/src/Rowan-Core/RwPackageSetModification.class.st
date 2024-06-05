@@ -180,28 +180,41 @@ RwPackageSetModification >> findAddedMethods [
 { #category : 'private - moves' }
 RwPackageSetModification >> findRemovedClasses [
 
-	| removedClasses |
-	removedClasses := Dictionary new.
+	| removedTraits |
+	removedTraits := Dictionary new.
 	elementsModified do: 
 			[:packageModification |
-			| classesModification |
-			classesModification := packageModification classesModification.
-			classesModification elementsModified do: 
-					[:classModification |
-					classModification after isEmpty
+			| traitsModification |
+			traitsModification := packageModification traitsModification.
+			traitsModification elementsModified do: 
+					[:traitModification |
+					traitModification after isEmpty
 						ifTrue: 
-							[| oldClass |
-							oldClass := classModification before.
-							removedClasses at: oldClass key
-								put: (RwClassAdditionOrRemoval
+							[| oldTrait |
+							oldTrait := traitModification before.
+							removedTraits at: oldTrait key
+								put: (RwTraitAdditionOrRemoval
 										packageDefinition: packageModification after
-										classKey: oldClass key
-										classesModification: classesModification)]]].
-	^removedClasses
+										traitKey: oldTrait key
+										traitModification: traitModification)]]].
+	^removedTraits
 ]
 
 { #category : 'private - moves' }
 RwPackageSetModification >> findRemovedMethods [
+	"Answer a dictionary of removed methods."
+
+	| removedMethods |
+	removedMethods := Dictionary new.
+	elementsModified do: 
+			[:packageModification |
+			self addMethodsRemovedByPackageModification: packageModification
+				toDictionary: removedMethods].
+	^removedMethods
+]
+
+{ #category : 'private - moves' }
+RwPackageSetModification >> findRemovedTraitMethods [
 	"Answer a dictionary of removed methods."
 
 	| removedMethods |
@@ -308,4 +321,62 @@ RwPackageSetModification >> updateForMethodMoves [
 			| removal |
 			removal := methodRemovals at: key ifAbsent: [ nil ].
 			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition ] ]
+]
+
+{ #category : 'moves' }
+RwPackageSetModification >> updateForTraitMethodMoves [
+	"Methods that have been moved between packages will initially show up as a remove and an add rather than a move.
+	Find moved methods and correct the structure."
+
+	| methodAdditions methodRemovals |
+	methodAdditions := self findAddedTraitMethods.
+	methodRemovals := self findRemovedTraitMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
+			| removal |
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal ifNotNil: [ self updateForTraitMethodMoveFrom: removal to: addition ] ]
+]
+
+{ #category : 'private - moves' }
+RwPackageSetModification >> updateForTraitMoveFrom: removal to: addition [
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition traitModification |
+	oldDefinition := (removal traitsModification
+				modificationOf: removal classKey) before.
+	newDefinition := (addition traitsModification
+				modificationOf: addition traitKey) after.
+
+	"Delete the removal and the addition."
+	removal traitsModification removeModificationOf: removal traitKey.
+	addition traitsModification removeModificationOf: addition traitKey.
+
+	"Record the move."
+	movedTraits add: (RwTraitMove
+				traitBefore: oldDefinition
+				traitAfter: newDefinition
+				packageBefore: removal packageDefinition
+				packageAfter: addition packageDefinition).
+
+	"Does the class have other modifications that need to be recorded?"
+	traitModification := newDefinition compareAgainstBase: oldDefinition.
+	traitModification isEmpty
+		ifFalse: 
+			[addition traitsModification addElementModification: traitModification]
+]
+
+{ #category : 'moves' }
+RwPackageSetModification >> updateForTraitMoves [
+
+	| traitAdditions traitRemovals |
+	traitAdditions := self findAddedTraits.
+	traitRemovals := self findRemovedTraits.
+
+	"Any keys that match between added and removed should be considered a move."
+	traitAdditions keysAndValuesDo: 
+			[:key :addition |
+			| removal |
+			removal := traitRemovals at: key ifAbsent: [nil].
+			removal ifNotNil: [self updateForTraitMoveFrom: removal to: addition]]
 ]

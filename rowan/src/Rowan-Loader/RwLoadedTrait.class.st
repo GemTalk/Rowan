@@ -81,6 +81,24 @@ RwLoadedTrait >> isEmpty [
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
 ]
 
+{ #category : 'testing' }
+RwLoadedTrait >> isLoadedClass [
+
+	^ false
+]
+
+{ #category : 'testing' }
+RwLoadedTrait >> isLoadedClassExtension [
+
+	^ false
+]
+
+{ #category : 'testing' }
+RwLoadedTrait >> isLoadedTrait [
+
+	^ true
+]
+
 { #category : 'accessing' }
 RwLoadedTrait >> loadedClassMethods [
 

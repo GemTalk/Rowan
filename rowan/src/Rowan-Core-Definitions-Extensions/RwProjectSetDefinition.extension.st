@@ -27,6 +27,9 @@ RwProjectSetDefinition >> compareAgainstBaseForLoader: aDefinition [
 	result
 		updateForPackageMoves;
 		updateForClassMoves;
-		updateForMethodMoves.
+		updateForTraitMoves;
+		updateForMethodMoves;
+		updateForTraitMethodMoves.
+
 	^ result
 ]
