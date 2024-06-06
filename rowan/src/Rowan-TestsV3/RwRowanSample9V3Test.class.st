@@ -1353,7 +1353,7 @@ RwRowanSample9V3Test >> testIssue929 [
 			self
 				assert:
 					(ex description
-						includesString: 'compile error while attempting to extract selector from method')
+						includesString: 'a CompileError occurred (error 1001), unexpected token ')
 				description: 'Unexpected error message signatiure'.
 			hitError := true ].
 	self

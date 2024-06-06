@@ -329,20 +329,6 @@ Object>>name [
 ]
 
 { #category : 'tests' }
-RwTonelParserTest >> testMethodDef_929 [
-	"https://github.com/GemTalk/Rowan/issues/929"
-
-	self
-		shouldParse:
-			'
-{ #category: ''tests'' }
-Object>>testTrait [	self assert: (ClassOrganizer new traits) includes: RowanSample9V3Trait1)
-]'
-		rule: #'methodDef'
-		raise: RwTonelParseError
-]
-
-{ #category : 'tests' }
 RwTonelParserTest >> testMethodDefList [
 	| parsed |
 	[ 

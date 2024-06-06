@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 0,
+		"errors" : 2,
 		"failures" : 1,
-		"passed" : 227,
-		"summary" : "228 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 432.51s",
-		"tests" : 228,
-		"time" : 432.509
+		"passed" : 233,
+		"summary" : "236 Tests with 1 Failures, 2 Errors and 0 DeprecationWarnings in 505.57s",
+		"tests" : 236,
+		"time" : 505.573
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -559,6 +559,12 @@
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testIssue919",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testIssue929",
 			"time" : "0"
 		},
 		{
@@ -1350,6 +1356,48 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0085_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_01_to_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_C03_T03_Tr02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_move_trait_to_package",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_trait_shape_change_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSwitchRepository",
 			"time" : "0"
 		},
@@ -1384,5 +1432,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-05-29T17:40:42.336599-07:00"
+	"timeStamp" : "2024-06-05T18:07:01.222576-07:00"
 }

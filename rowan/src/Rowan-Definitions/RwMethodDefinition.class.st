@@ -9,7 +9,6 @@ Class {
 
 { #category : 'instance creation' }
 RwMethodDefinition class >> newForSelector: selector protocol: protocol source: source [
-
 	^ self
 		withProperties:
 			( SymbolDictionary with: #'selector' -> selector with: #'protocol' -> protocol asString)
@@ -18,7 +17,7 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 
 { #category : 'instance creation' }
 RwMethodDefinition class >> newForSource: methodSource protocol: protocol [
-	^ self newForSource: methodSource protocol: protocol passCompileError: false
+	^ self newForSource: methodSource protocol: protocol passCompileError: true
 ]
 
 { #category : 'instance creation' }
