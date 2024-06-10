@@ -32,30 +32,19 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 RwGsImage class >> loadedTraitMethod: selector inTraitNamed: traitName isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
 
-	| trait compiledMethodSource |
+	| trait loadedTrait |
 	trait := self objectNamed: traitName.
 	trait ifNil: [ ^ absentBlock value ].
-	isMeta
-		ifTrue: [ trait := trait classTrait ].
-	compiledMethodSource := trait sourceCodeAt: selector asSymbol.
-	compiledMethodSource
-		ifNil: [ 
-			"no method found in trait -- addition"
-			^ absentBlock value ].
-	self halt.	"figure the rest out when I get here .. BTW, the following code does not make sense, since we don't have a compiled method to ply with ... but maybe we should?"
-	^ compiledMethodSource _origin
-		ifNotNil: [ :loadedMethod | 
-			loadedMethod isRowanLoadedMethod
-				ifFalse: [ 
-					self
-						error:
-							'Expected a loaded method for  trait ' , traitName
-								,
-									(isMeta
-										ifTrue: [ ' class>>' ]
-										ifFalse: [ '>>' ]) , selector ].
-			foundBlock cull: loadedMethod ]
-		ifNil: [ absentBlock value ]
+	loadedTrait := self loadedTraitForTrait: trait ifAbsent: absentBlock.
+	^ isMeta
+		ifTrue: [ 
+			(loadedTrait loadedClassMethods at: selector asString ifAbsent: [  ])
+				ifNil: [ absentBlock value ]
+				ifNotNil: [ :loadedMethod | loadedMethod ] ]
+		ifFalse: [ 
+			(loadedTrait loadedInstanceMethods at: selector asString ifAbsent: [  ])
+				ifNil: [ absentBlock value ]
+				ifNotNil: [ :loadedMethod | loadedMethod ] ]
 ]
 
 { #category : '*rowan-gemstone-core-36x' }

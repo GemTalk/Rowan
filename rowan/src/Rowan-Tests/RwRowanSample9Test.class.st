@@ -1188,10 +1188,7 @@ RwRowanSample9Test >> testIssue_446 [
 
 	project2 := RwResolvedProjectV2 new
 		componentNames: #('Core2');
-		yourself.
-
-	false
-		ifTrue: [ self halt ]
+		yourself
 ]
 
 { #category : 'issue 493' }
