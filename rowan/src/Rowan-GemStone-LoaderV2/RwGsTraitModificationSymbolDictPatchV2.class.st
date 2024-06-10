@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwGsTraitModificationSymbolDictPatchV2',
 	#superclass : 'RwGsTraitPatchV2',
+	#instVars : [
+		'existingTrait'
+	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
 
@@ -13,15 +16,15 @@ RwGsTraitModificationSymbolDictPatchV2 class >> addPatchedTraitModification: aTr
 		toPatchSet: aRwGsPatchSet
 ]
 
-{ #category : 'actions' }
+{ #category : 'other' }
 RwGsTraitModificationSymbolDictPatchV2 >> addPatchedTraitModification: aTraitModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingTrait afterTraitDefinition beforeTraitDefinition afterSymDict beforeSymDict |
+	| dict beforeTraitDefinition afterSymDict beforeSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
-	afterTraitDefinition := aTraitModification after.
+	traitDefinition := aTraitModification after.
 	beforeTraitDefinition := aTraitModification before.
 	dict := Rowan image symbolDictNamed: beforeTraitDefinition gs_symbolDictionary.
 	existingTrait := dict
@@ -29,12 +32,35 @@ RwGsTraitModificationSymbolDictPatchV2 >> addPatchedTraitModification: aTraitMod
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a trait whose name is not bound.' ].
 	afterSymDict := self symbolDictionary name asString.
 	beforeSymDict := beforeTraitDefinition gs_symbolDictionary.
-	beforeSymDict ~= afterSymDict
-		ifTrue: [ 
+	beforeSymDict = afterSymDict
+		ifTrue: [ aRwGsPatchSet addPatchedTraitChanged: self inProject: aProjectDefinition ]
+		ifFalse: [ 
 			self halt: 'not implemented yet'.
 			aRwGsPatchSet
 				addPatchedTraitSymbolDictionaryMove: aTraitModification
 				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ].
-	(UserGlobals at: #TraitDebugging ifAbsent: []) ifNotNil: [self halt: 'modifiy the existing trait in place']
+				inProject: aProjectDefinition ]
+]
+
+{ #category : 'accessing' }
+RwGsTraitModificationSymbolDictPatchV2 >> existingTrait [
+	^existingTrait
+]
+
+{ #category : 'accessing' }
+RwGsTraitModificationSymbolDictPatchV2 >> existingTrait: object [
+	existingTrait := object
+]
+
+{ #category : 'other' }
+RwGsTraitModificationSymbolDictPatchV2 >> updateChangedTraits [
+	"The trait has changed shape (iv, civ, or cv)"
+
+	self existingTrait
+		ivNames: traitDefinition instVarNames
+		civNames: traitDefinition classInstVarNames
+		cvNames: traitDefinition classVarNames.
+	(Rowan image loadedTraitForTrait: self existingTrait ifAbsent: [  ])
+		ifNil: [ self error: 'No trait found for ' , self existingTrait name ]
+		ifNotNil: [ :loadedTrait | loadedTrait updatePropertiesFromTraitDefinition: traitDefinition ]
 ]

@@ -705,14 +705,13 @@ RwProjectSetModification >> updateForTraitMethodMoves [
 
 	| methodAdditions methodRemovals |
 	methodAdditions := self findAddedTraitMethods.
-	methodRemovals := self findRemovedTraitMethods.
-	"Any keys that match between added and removed should be considered a move."
-(UserGlobals at: #TraitDebugging ifAbsent: []) ifNotNil: [ self halt: 'updateForTraitMethodMoves' ].
-	methodAdditions keysAndValuesDo: 
-			[:key :addition |
+	methodRemovals := self findRemovedTraitMethods.	"Any keys that match between added and removed should be considered a move."
+	methodAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [ self updateForTraitMethodMoveFrom: removal to: addition isMeta: key key value]]
+			removal := methodRemovals at: key ifAbsent: [ nil ].
+			removal
+				ifNotNil: [ self updateForTraitMethodMoveFrom: removal to: addition isMeta: key key value ] ]
 ]
 
 { #category : 'private - moves' }
@@ -750,15 +749,12 @@ RwProjectSetModification >> updateForTraitMoveFrom: removal to: addition [
 
 { #category : 'moves' }
 RwProjectSetModification >> updateForTraitMoves [
-
 	| traitAdditions traitRemovals |
 	traitAdditions := self findAddedTraits.
-	traitRemovals := self findRemovedTraits.
-
-	"Any keys that match between added and removed should be considered a move."
-	traitAdditions keysAndValuesDo: 
-			[:key :addition |
+	traitRemovals := self findRemovedTraits.	"Any keys that match between added and removed should be considered a move."
+	traitAdditions
+		keysAndValuesDo: [ :key :addition | 
 			| removal |
-			removal := traitRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [self updateForTraitMoveFrom: removal to: addition]]
+			removal := traitRemovals at: key ifAbsent: [ nil ].
+			removal ifNotNil: [ self updateForTraitMoveFrom: removal to: addition ] ]
 ]

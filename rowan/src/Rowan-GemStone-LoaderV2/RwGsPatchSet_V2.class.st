@@ -34,6 +34,7 @@ Class {
 		'traitMethodsNeedingRecompile',
 		'tempSymbols',
 		'createdClasses',
+		'changedTraits',
 		'createdTraits',
 		'classesWithTraits',
 		'errors',
@@ -1101,6 +1102,13 @@ RwGsPatchSet_V2 >> addPatchedInstanceTraitMethod: aInstanceMethodDefinition inTr
 ]
 
 { #category : 'building' }
+RwGsPatchSet_V2 >> addPatchedTraitChanged: aTraitModificationChange inProject: aProjectDefinition [
+	currentProjectDefinition := aProjectDefinition.
+
+	changedTraits add: aTraitModificationChange
+]
+
+{ #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedUnmanagedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -1239,6 +1247,7 @@ RwGsPatchSet_V2 >> apply [
 		updateMethodDictionaries;
 		updateMethodProperties;
 		updateClassesWithTraits;
+		updateChangedTraits;
 		updateTraitMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
 		removeDeletedPackages;
@@ -1550,6 +1559,7 @@ RwGsPatchSet_V2 >> initialize [
 	addedClasses := Set new.
 	addedTraits := Set new.
 	extendedClasses := Set new.
+	changedTraits := Set new.
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
@@ -1822,6 +1832,11 @@ RwGsPatchSet_V2 >> tempAssociationFor: aName [
 { #category : 'accessing' }
 RwGsPatchSet_V2 >> tempSymbols [
 	^ tempSymbols
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_V2 >> updateChangedTraits [
+	changedTraits do: [ :each | each updateChangedTraits ]
 ]
 
 { #category : 'private - applying' }

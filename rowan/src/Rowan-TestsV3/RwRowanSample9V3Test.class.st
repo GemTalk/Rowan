@@ -3088,9 +3088,7 @@ RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
 	(definedProject packageNamed: packageName) addTraitDefinition: traitDef.
 
 "load project"
-[UserGlobals at: #TraitDebugging put: nil.
 	project := (definedProject load) projectNamed: projectName.
- ] ensure: [ UserGlobals removeKey: #TraitDebugging].
 
 "validate"
 	self assert: (audit := project audit) isEmpty.
@@ -3106,7 +3104,8 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 	"https://github.com/GemTalk/Rowan/issues/783"
 
 	| loadSpec projectName projectNames loadSpecs loadedProjects project 
-		audit traitDef definedProject packageName classDef traitIvNames classIvNames |
+		audit traitDef definedProject packageName classDef traitIvNames classIvNames
+		testClassDef testTraitDef |
 	loadSpec := self _loadSpecNamed: 'spec_0085'.
 
 	projectName := loadSpec projectName.
@@ -3136,19 +3135,30 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 
 "remove iv from trait and class"
 	definedProject := project defined.
-	traitDef := (definedProject packageNamed: projectName, '-Tr02') 
-		traitDefinitionNamed: 'RowanSample9V3Trait1'.
 	classDef := (definedProject packageNamed: projectName, '-C02') 
 		classDefinitionNamed:'RowanSample9V3Class1'.
-	traitIvNames := traitDef instVarNames.
-	classIvNames := classDef instVarNames.
+	traitDef := (definedProject packageNamed: projectName, '-Tr02') 
+		traitDefinitionNamed: 'RowanSample9V3Trait1'.
+	traitIvNames := traitDef instVarNames copy.
+	classIvNames := classDef instVarNames copy.
 	self assert: traitIvNames equals: classIvNames.
 
-self halt: 'checkpoint'.
+"remove iv2 instVars and methods..."
+	traitIvNames remove: 'iv2'.
+	traitDef removeInstanceMethod: #'iv2_t'.
+	traitDef instVarNames: traitIvNames.
+	classDef  removeInstanceMethod: #'iv2'.
+	classDef instVarNames: traitIvNames.
+	testClassDef := (definedProject packageNamed: projectName, '-C-T02')
+		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
+	testClassDef removeInstanceMethod: #'testIv2'.
+	testTraitDef := (definedProject packageNamed: projectName, '-Tr-T02')
+		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
+	testTraitDef removeInstanceMethod: #'testIv2_t'.
+
 "load project"
-[UserGlobals at: #TraitDebugging put: nil.
 	project := (definedProject load) projectNamed: projectName.
- ] ensure: [ UserGlobals removeKey: #TraitDebugging].
+
 
 "validate"
 	self assert: (audit := project audit) isEmpty.

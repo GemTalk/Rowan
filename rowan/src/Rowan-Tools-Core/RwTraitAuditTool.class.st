@@ -65,7 +65,7 @@ RwTraitAuditTool >> auditLoadedTraitProperties: aLoadedTrait forTrait: aTrait [
 								, varNames printString , ') v loaded Trait ('
 								, aLoadedTrait instVarNames printString , ')')
 						reason: #'differentInstVars';
-						loadedPropertyValue: aLoadedTrait iInstVarNames;
+						loadedPropertyValue: aLoadedTrait instVarNames;
 						traitPropertyValue: aTrait instVarNames;
 						trait: aTrait;
 						yourself) ].
