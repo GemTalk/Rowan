@@ -1102,8 +1102,7 @@ RwGsPatchSet_V2 >> addPatchedInstanceTraitMethod: aInstanceMethodDefinition inTr
 ]
 
 { #category : 'building' }
-RwGsPatchSet_V2 >> addPatchedTraitChanged: aTraitModificationChange inProject: aProjectDefinition [
-	currentProjectDefinition := aProjectDefinition.
+RwGsPatchSet_V2 >> addPatchedTraitChanged: aTraitModificationChange [
 
 	changedTraits add: aTraitModificationChange
 ]
@@ -1836,7 +1835,11 @@ RwGsPatchSet_V2 >> tempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateChangedTraits [
-	changedTraits do: [ :each | each updateChangedTraits ]
+	changedTraits
+		do: [ :each | 
+			each updateChangedTraits.
+			each modificationForMove
+				ifNotNil: [ :modificationForMove | RwGsSymbolDictionaryRegistry_ImplementationV2 moveTraitFor: modificationForMove ] ]
 ]
 
 { #category : 'private - applying' }

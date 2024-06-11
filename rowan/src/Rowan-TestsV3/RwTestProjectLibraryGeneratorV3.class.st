@@ -1026,6 +1026,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -1142,6 +1143,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -1279,6 +1281,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -1389,6 +1392,50 @@ Interesting things could happen when different conditions are mixed together, bu
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085_D: resolvedProject [
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
+"
+
+	| componentName2 packageName2 traitName className1 className2 index traitIndex |
+
+	traitName := projectName , 'Trait1'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	index := '03'.
+	traitIndex := '04'.
+	componentName2 := 'Tr' , traitIndex.
+
+	resolvedProject
+		addSubcomponentNamed: componentName2
+			condition: 'Tr' , traitIndex
+			comment: 'Trait ', traitIndex, ' package'
+			toComponentNamed: 'Core';
+		yourself.
+
+	packageName2 := projectName , '-' , 'Tr' , index.
+
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: componentName2;
+		yourself.
+
+	(resolvedProject componentNamed: componentName2)
+		conditionalPackageMapSpecsAtGemStoneUserId: RwLoadSpecificationV2 _gemstoneAllUsersName 
+			andPackageName: packageName2 
+			setSymbolDictNameTo: RwRowanSample9Test _sampleSymbolDictionaryName2.
+
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0085: resolvedProject [
 	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
 
@@ -1396,6 +1443,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -1406,6 +1454,7 @@ Interesting things could happen when different conditions are mixed together, bu
 	self _addDefinitionsFor_0085_A: resolvedProject.
 	self _addDefinitionsFor_0085_B: resolvedProject.
 	self _addDefinitionsFor_0085_C: resolvedProject.
+	self _addDefinitionsFor_0085_D:  resolvedProject.
 true ifTrue: [ ^ resolvedProject ].
 	^ resolvedProject
 ]
@@ -2303,6 +2352,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
 "
@@ -2323,6 +2373,7 @@ List of condition tuples intended to work together, since they were built togeth
 	A. C01, Tr01, T01 - baseline
 	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
 	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
 ```
 
 Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.'.

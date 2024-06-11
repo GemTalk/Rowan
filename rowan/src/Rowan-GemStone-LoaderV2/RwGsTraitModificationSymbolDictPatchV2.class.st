@@ -2,7 +2,8 @@ Class {
 	#name : 'RwGsTraitModificationSymbolDictPatchV2',
 	#superclass : 'RwGsTraitPatchV2',
 	#instVars : [
-		'existingTrait'
+		'existingTrait',
+		'theModificationForMove'
 	],
 	#category : 'Rowan-GemStone-LoaderV2'
 }
@@ -33,13 +34,8 @@ RwGsTraitModificationSymbolDictPatchV2 >> addPatchedTraitModification: aTraitMod
 	afterSymDict := self symbolDictionary name asString.
 	beforeSymDict := beforeTraitDefinition gs_symbolDictionary.
 	beforeSymDict = afterSymDict
-		ifTrue: [ aRwGsPatchSet addPatchedTraitChanged: self inProject: aProjectDefinition ]
-		ifFalse: [ 
-			self halt: 'not implemented yet'.
-			aRwGsPatchSet
-				addPatchedTraitSymbolDictionaryMove: aTraitModification
-				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ]
+		ifFalse: [ theModificationForMove := aTraitModification ].
+	aRwGsPatchSet addPatchedTraitChanged: self
 ]
 
 { #category : 'accessing' }
@@ -50,6 +46,12 @@ RwGsTraitModificationSymbolDictPatchV2 >> existingTrait [
 { #category : 'accessing' }
 RwGsTraitModificationSymbolDictPatchV2 >> existingTrait: object [
 	existingTrait := object
+]
+
+{ #category : 'accessing' }
+RwGsTraitModificationSymbolDictPatchV2 >> modificationForMove [
+
+	^theModificationForMove
 ]
 
 { #category : 'other' }

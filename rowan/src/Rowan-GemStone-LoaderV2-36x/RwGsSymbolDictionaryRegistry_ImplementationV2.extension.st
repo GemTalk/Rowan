@@ -342,3 +342,50 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveCompiledMethod: compi
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
 ]
+
+{ #category : '*rowan-gemstone-loaderv2-36x' }
+RwGsSymbolDictionaryRegistry_ImplementationV2 class >> moveTraitFor: traitMove [
+	" move trait from <originalSymbolDictionary> to <newSymbolDictionary> "
+
+	"loaded things are handled elsewhere, just need to move the association"
+
+	| originalSymbolDictionary newSymbolDictionary before after assoc theTrait |
+	before := traitMove before.
+	after := traitMove after.
+	originalSymbolDictionary := Rowan image
+		symbolDictNamed: before gs_symbolDictionary.
+	newSymbolDictionary := Rowan image symbolDictNamed: after gs_symbolDictionary.
+
+	assoc := originalSymbolDictionary
+		associationAt: before key asSymbol
+		ifAbsent: [ 
+			assoc := newSymbolDictionary
+				associationAt: after key asSymbol
+				ifAbsent: [ 
+					self
+						error:
+							'internal error - no association found for the trait ' , before name printString
+								, ' in either of the expected symbol dictionaries ('
+								, before gs_symbolDictionary asString , ' or '
+								, after gs_symbolDictionary asString , ').' ].
+			^ self	"class has already been moved (perhaps new version logic), we're done" ].
+	theTrait := assoc value.
+
+	newSymbolDictionary := Rowan image symbolDictNamed: after gs_symbolDictionary.
+
+	originalSymbolDictionary removeKey: assoc key.
+
+	self
+		_symbolDictionary: newSymbolDictionary
+		at: assoc key
+		ifPresent: [ :trait | 
+			theTrait ~~ trait
+				ifTrue: [ 
+					self
+						error:
+							' internal error - found an existing association in the '
+								, newSymbolDictionary name asString printString
+								, ' symbol dictionary with a duplicate key ' , assoc key printString
+								, ' while attempting to move trait ' , assoc key asString printString ] ]
+		ifAbsent: [ newSymbolDictionary add: assoc ]
+]

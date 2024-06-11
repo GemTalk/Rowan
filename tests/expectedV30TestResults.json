@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 10,
+		"errors" : 8,
 		"failures" : 10,
-		"passed" : 1153,
-		"summary" : "1173 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 1634.20s",
-		"tests" : 1173,
-		"time" : 1634.196
+		"passed" : 1162,
+		"summary" : "1180 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1427.38s",
+		"tests" : 1180,
+		"time" : 1427.376
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -5598,13 +5598,55 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0085_01_to_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSpec_0085_02",
 			"time" : "0"
 		},
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0085_02_to_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_02_to_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSpec_0085_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_03_to_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_03_to_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_03_to_04",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_04",
 			"time" : "0"
 		},
 		{
@@ -7054,5 +7096,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-06-05T18:25:28.487466-07:00"
+	"timeStamp" : "2024-06-11T12:01:49.317967-07:00"
 }
