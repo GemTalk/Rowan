@@ -59,9 +59,9 @@ RwGsTraitModificationSymbolDictPatchV2 >> updateChangedTraits [
 	"The trait has changed shape (iv, civ, or cv)"
 
 	self existingTrait
-		ivNames: traitDefinition instVarNames
-		civNames: traitDefinition classInstVarNames
-		cvNames: traitDefinition classVarNames.
+		instVars: traitDefinition instVarNames
+		classVars: traitDefinition classVarNames
+		classInstVars: traitDefinition classInstVarNames.
 	(Rowan image loadedTraitForTrait: self existingTrait ifAbsent: [  ])
 		ifNil: [ self error: 'No trait found for ' , self existingTrait name ]
 		ifNotNil: [ :loadedTrait | loadedTrait updatePropertiesFromTraitDefinition: traitDefinition ]

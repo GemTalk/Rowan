@@ -54,8 +54,8 @@ RwGsTraitPatchV2 >> basicCreateTrait [
 	^ Trait
 		name: traitDefinition name
 		instVars: traitDefinition instVarNames
-		classInstVars: traitDefinition classInstVarNames
 		classVars: traitDefinition classVarNames
+		classInstVars: traitDefinition classInstVarNames
 ]
 
 { #category : 'actions' }
