@@ -21,3 +21,17 @@ GsNMethod >> _rwRecompileFromSourceIfUnpackagedDo: unpackagedBlock [
 			^ self ].
 	^ unpackagedBlock value
 ]
+
+{ #category : '*rowan-gemstone-kernel-stubs-37x' }
+GsNMethod >> _sourceOriginString [
+  "Answer a string indicating the origin of the method: traitName or packageName (if Rowan 3 installed)"
+
+	| loadedPackage |
+	self isFromTrait
+		ifTrue: [ ^ '---ORIGIN: Trait method ' , self origin name printString , '---' ].
+	self isFromRowan
+		ifFalse: [ ^ '' ].
+	loadedPackage := self origin loadedPackage.
+	^ '---ORIGIN: Rowan project ' , loadedPackage loadedProject name printString , ' package '
+		, loadedPackage name printString , '---'
+]
