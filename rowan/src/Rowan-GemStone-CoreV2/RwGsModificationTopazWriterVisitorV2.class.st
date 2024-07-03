@@ -21,6 +21,7 @@ Class {
 		'classSymbolDictionaryNames',
 		'classDefinitions',
 		'classExtensions',
+		'traitDefinitions',
 		'bufferedStream',
 		'topazFilenamePackageNamesMap',
 		'classDefPackageNameMap',
@@ -125,6 +126,19 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forClas
 ]
 
 { #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _fileOutMethod: methodDefinition forTrait: traitName isMeta: isMeta on: aStream [
+
+	aStream
+		nextPutAll: 'category: '; nextPutAll: methodDefinition protocol printString; lf;
+		nextPutAll: (isMeta ifTrue: ['trclassmethod: '] ifFalse: ['trmethod: ']) ; nextPutAll: traitName; lf;
+		nextPutAll: methodDefinition source.
+	methodDefinition source last == Character_lf
+		ifFalse: [aStream lf].
+	aStream nextPut: $% ; lf;
+		lf
+]
+
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className on: aStream [
 	self excludeRemoveAllMethods
 		ifFalse: [ 
@@ -132,6 +146,69 @@ RwGsModificationTopazWriterVisitorV2 >> _fileoutRemoveAllMethodsFor: className o
 				nextPutAll: 'removeallmethods ' , className;
 				lf;
 				nextPutAll: 'removeallclassmethods ' , className;
+				lf;
+				lf ]
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _fileOutTraitDeclaration: traitDefinition on: aStream [
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(Trait';
+		lf;
+		nextPutAll: '	name: ' , traitDefinition name printString;
+		lf;
+		nextPutAll: '	instVars: #('.
+	self _stringForVariables: traitDefinition instVarNames to: aStream.
+	aStream
+		nextPutAll: ')';
+		lf.
+	aStream nextPutAll: '	classVars: #('.
+	self _stringForVariables: traitDefinition classVarNames to: aStream.
+	aStream
+		nextPutAll: ')';
+		lf.
+	aStream nextPutAll: '	classInstVars: #('.
+	self _stringForVariables: traitDefinition classInstVarNames to: aStream.
+	aStream
+		nextPutAll: ')';
+		lf.
+	aStream
+		nextPutAll: '	inDictionary: ';
+		nextPutAll: (self classSymbolDictionaryNames at: traitDefinition name);
+		lf;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		_category: ';
+		nextPutAll: traitDefinition category printString.
+"
+	traitDefinition comment size == 0
+		ifFalse: [ 
+			aStream
+				nextput: $;
+				lf;
+				nextPutAll: '		comment: ';
+				nextPutAll: traitDefinition comment printString;
+				yourself ].
+"
+	aStream
+		nextPut: $.;
+		lf.
+	aStream
+		nextPutAll: '%';
+		lf.
+	self _fileoutTraitRemoveAllMethodsFor: traitDefinition name on: aStream
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitorV2 >> _fileoutTraitRemoveAllMethodsFor: traitName on: aStream [
+	self excludeRemoveAllMethods
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'trremoveallmethods ' , traitName;
+				lf;
+				nextPutAll: 'trremoveallclassmethods ' , traitName;
 				lf;
 				lf ]
 ]
@@ -304,60 +381,81 @@ RwGsModificationTopazWriterVisitorV2 >> excludeRemoveAllMethods: aBool [
 
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitorV2 >> export [
+	self fileNamesInFileInOrder
+		do: [ :filename | 
+			| packageNames classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList traitDefinitionsList traitDefinitionsInOrder |
+			packageNames := self topazFilenamePackageNamesMap at: filename.
+			self _setBufferedStreamFor: filename.
+			self bufferedStream nextPutAll: self topazFileHeader.
 
-	self fileNamesInFileInOrder do: [:filename | 
-		| packageNames classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
-		packageNames := self topazFilenamePackageNamesMap at: filename.
-		self _setBufferedStreamFor: filename.
-		self bufferedStream nextPutAll: self topazFileHeader.
+			classInitializationDefinitions := Set new.	"per file record"
+			classDefinitionsList := Set new.
+			traitDefinitionsList := Set new.
 
-		classInitializationDefinitions := Set new. "per file record"
-		classDefinitionsList := Set new.
+			self classDefPackageNameMap
+				keysAndValuesDo: [ :classOrTraitName :packageName | 
+					(packageNames includes: packageName)
+						ifTrue: [ 
+							(self classDefinitions
+								at: classOrTraitName
+								ifPresent: [ :classDef | classDefinitionsList add: classDef ])
+								ifNil: [ traitDefinitionsList add: (self traitDefinitions at: classOrTraitName) ] ] ].
 
-		self classDefPackageNameMap keysAndValuesDo: [:className :packageName |
-			(packageNames includes: packageName)
-				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
+			traitDefinitionsInOrder := SortedCollection
+				sortBlock: [ :x :y | x name <= y name ].
+			traitDefinitionsInOrder addAll: traitDefinitionsList.
 
-		classDefinitionsInOrder := (RowanGsGeneralDependencySorter
-			on: classDefinitionsList
-			dependsOn: [:candidate | candidate superclassName]
-			dependent: [:candidate | candidate name]) inOrder.
-		self exportClassDefinitions: classDefinitionsInOrder;
-			exportMethodDefinitions: classDefinitionsInOrder.
+			classDefinitionsInOrder := (RowanGsGeneralDependencySorter
+				on: classDefinitionsList
+				dependsOn: [ :candidate | candidate superclassName ]
+				dependent: [ :candidate | candidate name ]) inOrder.
 
-		"consolidate the classExtensions for a class from multiple packages into a single definition"
-		classExtensionsList := Set new. 
-		self classExtensions keysAndValuesDo: [:classExtName :extSet |
-			| extsInConfig |
-			extsInConfig := Set new.
-			extSet do: [:ext |
-				| packageName |
-				packageName := self classExtPackageNameMap at: ext.
-				(packageNames includes: packageName)
-					ifTrue: [ extsInConfig add: ext ] ].
+			self
+				exportTraitDefinitions: traitDefinitionsInOrder;
+				exportClassDefinitions: classDefinitionsInOrder;
+				exportTraitMethodDefinitions: traitDefinitionsInOrder;
+				exportMethodDefinitions: classDefinitionsInOrder.	"
+			consolidate the classExtensions for a class from multiple packages into a single definition"
+			classExtensionsList := Set new.
+			self classExtensions
+				keysAndValuesDo: [ :classExtName :extSet | 
+					| extsInConfig |
+					extsInConfig := Set new.
+					extSet
+						do: [ :ext | 
+							| packageName |
+							packageName := self classExtPackageNameMap at: ext.
+							(packageNames includes: packageName)
+								ifTrue: [ extsInConfig add: ext ] ].
 
-			extsInConfig size <= 1 
-				ifTrue: [ classExtensionsList addAll: extsInConfig ]
-				ifFalse: [
-					| ar def |
-					ar := extsInConfig asArray.
-					def := (ar at: 1) copy.
-					2 to: ar size do: [:index |
-						| d |
-						d := (ar at: index).
-						d classMethodDefinitions values do: [:m | def addClassMethodDefinition: m ].
-						d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
-					classExtensionsList add: def ] ].
+					extsInConfig size <= 1
+						ifTrue: [ classExtensionsList addAll: extsInConfig ]
+						ifFalse: [ 
+							| ar def |
+							ar := extsInConfig asArray.
+							def := (ar at: 1) copy.
+							2 to: ar size do: [ :index | 
+								| d |
+								d := ar at: index.
+								d classMethodDefinitions values
+									do: [ :m | def addClassMethodDefinition: m ].
+								d instanceMethodDefinitions values
+									do: [ :m | def addInstanceMethodDefinition: m ] ].
+							classExtensionsList add: def ] ].
 
-		classExtensionsInOrder := classExtensionsList sort: [:a :b | a name <= b name ].
-		self
-			exportExtensionMethodDefinitions: classExtensionsInOrder.
+			classExtensionsInOrder := classExtensionsList
+				sort: [ :a :b | a name <= b name ].
+			self exportExtensionMethodDefinitions: classExtensionsInOrder.
 
-		self exportClassInitializations.
+			self exportTraitsForClasses: classDefinitionsInOrder.	"done last to allow any trait method overrides to be loaded before installing trait methods"
 
-		self bufferedStream nextPutAll: self topazFileFooter.
+			self exportClassInitializations.
 
-		self bufferedStream flush; close ].
+			self bufferedStream nextPutAll: self topazFileFooter.
+
+			self bufferedStream
+				flush;
+				close ]
 ]
 
 { #category : 'exporting' }
@@ -440,6 +538,89 @@ RwGsModificationTopazWriterVisitorV2 >> exportMethodDefinitions: classDefinition
 				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
 ]
 
+{ #category : 'exporting' }
+RwGsModificationTopazWriterVisitorV2 >> exportTraitDefinitions: traitDefinitionsInOrder [
+	| stream |
+	stream := self bufferedStream.
+	traitDefinitionsInOrder isEmpty not
+		ifTrue: [ 
+			stream
+				nextPutAll: '! Trait Declarations';
+				lf;
+				nextPutAll: '! Generated file, do not Edit';
+				lf;
+				lf ].
+	traitDefinitionsInOrder
+		do: [ :traitDef | self _fileOutTraitDeclaration: traitDef on: stream ]
+]
+
+{ #category : 'exporting' }
+RwGsModificationTopazWriterVisitorV2 >> exportTraitMethodDefinitions: traitDefinitionsInOrder [
+
+	self exportTraitMethodDefinitions: traitDefinitionsInOrder labeled: 'Trait implementation'
+]
+
+{ #category : 'exporting' }
+RwGsModificationTopazWriterVisitorV2 >> exportTraitMethodDefinitions: traitDefinitionsInOrder labeled: label [
+	| stream |
+	stream := self bufferedStream.
+	traitDefinitionsInOrder do: [:traitDef | 
+		| traitName |
+		traitName := traitDef name.
+		(traitDef classMethodDefinitions isEmpty not or: [ traitDef instanceMethodDefinitions isEmpty not])
+			ifTrue: [ 
+				stream nextPutAll: '! '; nextPutAll: label ; nextPutAll: ' for ' ; nextPutAll: traitName printString; lf;
+				lf ].
+		traitDef classMethodDefinitions isEmpty not
+			ifTrue: [ 
+				stream nextPutAll: '!		Class methods for ' ; nextPutAll: traitName printString; lf;
+				lf ].
+		(traitDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
+			do: [:methodDef |
+				self _fileOutMethod: methodDef forTrait: traitName isMeta: true on: stream ].
+		traitDef instanceMethodDefinitions isEmpty 
+			ifFalse: [ 
+				stream nextPutAll: '!		Instance methods for ' ; nextPutAll: traitName printString; lf;
+				lf ].
+		(traitDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
+			do: [:methodDef |
+				self _fileOutMethod: methodDef forTrait: traitName isMeta: false on: stream ] ].
+]
+
+{ #category : 'exporting' }
+RwGsModificationTopazWriterVisitorV2 >> exportTraitsForClasses: classDefinitionsInOrder [
+	| stream |
+	stream := self bufferedStream.
+	classDefinitionsInOrder
+		do: [ :classDef | 
+			(classDef traits isEmpty and: [ classDef classTraits isEmpty ])
+				ifFalse: [ 
+					stream
+						nextPutAll: '! ------------------- Traits for ';
+						_fileOutAll: classDef name;
+						lf.
+					stream
+						nextPutAll: 'expectvalue /Class';
+						lf;
+						nextPutAll: 'doit';
+						lf.
+					classDef traits isEmpty
+						ifFalse: [ 
+							stream
+								_fileOutAll: classDef name;
+								nextPutAll: ' addTrait: ' , classDef traits , '.';
+								lf ].
+					classDef classTraits isEmpty
+						ifFalse: [ 
+							stream
+								_fileOutAll: classDef name;
+								nextPutAll: ' addClassTrait: ' , classDef classTraits , '.';
+								lf ].
+					stream
+						nextPut: $%;
+						lf ] ]
+]
+
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> filenameExtension [
 
@@ -515,6 +696,25 @@ RwGsModificationTopazWriterVisitorV2 >> processProject: aProjectModification [
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
+{ #category : 'class writing' }
+RwGsModificationTopazWriterVisitorV2 >> processTrait: aTraitModification [
+
+	"write out the trait definition"
+
+	| traitDefinition symbolDictName traitName |
+	traitDefinition := aTraitModification after.
+	(self traitDefinitions at: (traitName := traitDefinition name) ifAbsent: []) ifNotNil: [ 
+   self error: 'duplicate trait definition for ', traitName printString, ' encountered.'].
+
+	symbolDictName := self currentProjectDefinition gemstoneSymbolDictNameForPackageNamed: self currentPackageDefinition name.
+	self classSymbolDictionaryNames at: traitDefinition name put: symbolDictName.
+	self traitDefinitions at: traitDefinition name put: traitDefinition.
+
+	self classDefPackageNameMap at: traitDefinition name put: currentPackageDefinition name.
+
+	"no need to visit any further as the trait definition records the instance and class methods"
+]
+
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitorV2 >> repositoryRootPath [
 
@@ -580,4 +780,10 @@ RwGsModificationTopazWriterVisitorV2 >> topazFilenamePackageNamesMap: aDictionar
 RwGsModificationTopazWriterVisitorV2 >> topazFileReference [
 
 	^ self repositoryRootPath / self topazFilename, self filenameExtension
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitorV2 >> traitDefinitions [
+
+	^ traitDefinitions ifNil: [ traitDefinitions := Dictionary new ]
 ]

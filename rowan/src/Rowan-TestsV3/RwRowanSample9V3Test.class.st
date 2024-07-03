@@ -3527,6 +3527,45 @@ RwRowanSample9V3Test >> testSpec_0085_C03_T03_Tr02 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_export [
+	"spec_0085  export traits in topaz format "
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpec customConditionalAttributes: { 'C01' . 'T01' . 'Tr01' }. 
+	loadSpecs := loadSpec resolve.
+
+"load project: C01, T01, Tr01"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
+
+	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
+
+"export"
+	project exportTopazFormatTo: 'spec_0085.gs'
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
 	"spec_0085  C01, T01, Tr01 loaded followed by manual move of a trait to a different package"
 

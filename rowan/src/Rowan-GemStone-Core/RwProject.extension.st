@@ -3,6 +3,7 @@ Extension { #name : 'RwProject' }
 { #category : '*rowan-gemstone-core' }
 RwProject >> exportTopazFormatTo: filePath [
 	^ self
+		exportTopazFormatTo: filePath
 		logClassCreation: false
 		excludeClassInitializers: false
 		excludeRemoveAllMethods: false

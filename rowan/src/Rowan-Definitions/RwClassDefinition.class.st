@@ -110,18 +110,18 @@ RwClassDefinition >> _removeSubclassesDisallowed [
 
 { #category : 'accessing' }
 RwClassDefinition >> classTraits [
-	^ self propertyAt: #'classtraits' ifAbsent: [ '' ]
+	^ self propertyAt: #'classTraits' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> classTraits: aTraitCompositionOrStringOrNil [
 	"aTraitCompositionOrNil is a Trait or a concrete subclass of TaAbstractComposition."
 
-	aTraitCompositionOrStringOrNil ifNil: [ ^ self removeProperty: #'classtraits' ].
+	aTraitCompositionOrStringOrNil ifNil: [ ^ self removeProperty: #'classTraits' ].
 	aTraitCompositionOrStringOrNil isString
-		ifTrue: [ ^ self propertyAt: #'classtraits' put: aTraitCompositionOrStringOrNil ].
+		ifTrue: [ ^ self propertyAt: #'classTraits' put: aTraitCompositionOrStringOrNil ].
 	^ self
-		propertyAt: #'classtraits'
+		propertyAt: #'classTraits'
 		put: aTraitCompositionOrStringOrNil traitCompositionExpression
 ]
 

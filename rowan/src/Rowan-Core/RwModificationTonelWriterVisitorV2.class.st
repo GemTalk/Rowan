@@ -180,7 +180,7 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 		at: #'traits'
 		ifPresent: [ :value | definition at: #'traits' put: value ].
 	aTraitDefinition properties
-		at: #'classtraits'
+		at: #'classTraits'
 		ifPresent: [ :value | definition at: #'classTraits' put: value ].
 
 	aTraitDefinition instVarNames
@@ -385,7 +385,7 @@ RwModificationTonelWriterVisitorV2 >> processProject: aProjectModification [
 { #category : 'trait writing' }
 RwModificationTonelWriterVisitorV2 >> processTrait: aTraitModification [
 
-	"write out the class definition"
+	"write out the trait definition"
 
 	self _traitSourceFile
 		writeStreamDo: [:aStream |
