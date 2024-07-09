@@ -2758,6 +2758,10 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	class1 :=  Rowan globalNamed: 'RowanSample9V3Class1'.
 	self assert: class1 new iv1 equals: nil.
 
+	self assert: (class1 categoryOfSelector: #iv1) equals: #'accessing'.
+	self assert: (class1 categoryOfSelector: #cv1) equals: #'accessing'.
+	self assert: (class1 class categoryOfSelector: #civ1) equals: #'accessing'.
+
 "trait manipulation - change source"
 	trait1 compile: 'iv1 ^ iv1 ifNil: [ 1 ]'.
 	self assert: class1 new iv1 equals: 1.
