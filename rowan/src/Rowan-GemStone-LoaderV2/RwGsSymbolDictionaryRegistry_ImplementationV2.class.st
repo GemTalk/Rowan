@@ -413,10 +413,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewUnmanagedClassVersi
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: assoc forTrait: trait toPackageNamed: packageName instance: registryInstance [
-
 	"Copy the name association to the correct 
         SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+        Create a LoadedTrait for the new trait, add it to the defining LoadedPackage."
 
 	| loadedPackage loadedTrait |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
@@ -429,6 +428,7 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: asso
 			loadedTrait updatePropertiesFromTraitFor: registryInstance.
 			self registerLoadedTrait: loadedTrait forTrait: trait.
 			loadedTrait ].
+
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
 		at: assoc key 

@@ -254,6 +254,19 @@ RwGsSymbolDictionaryRegistryV2 >> addRecompiledSessionMethodMethod: newCompiledM
 ]
 
 { #category : '*rowan-gemstone-loaderV2' }
+RwGsSymbolDictionaryRegistryV2 >> addTraitAssociation: assoc forTrait: trait toPackageNamed: packageName [
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedTraits for the new trait, add it to the defining LoadedPackage."
+
+	^ self class registry_ImplementationClass
+		addTraitAssociation: assoc
+		forTrait: trait
+		toPackageNamed: packageName
+		instance: self
+]
+
+{ #category : '*rowan-gemstone-loaderV2' }
 RwGsSymbolDictionaryRegistryV2 >> addTraitAssociation: assoc forTrait: trait toPackageNamed: packageName implementationClass: implementationClass [
 
 	"Copy the name association to the correct 

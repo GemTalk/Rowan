@@ -31,7 +31,7 @@ RwAdoptAuditMethodErrorNotification >> isMetaclass: aBoolean [
 ]
 
 { #category : 'Handling' }
-RwAdoptAuditMethodErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock [
+RwAdoptAuditMethodErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock traitErrorDo: traitBlock [
 	"helper method for use in exception handling block ... avoid isKindOf:"
 
 	methodBlock value

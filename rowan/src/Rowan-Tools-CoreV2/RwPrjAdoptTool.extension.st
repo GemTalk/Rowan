@@ -23,6 +23,7 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 					(resolvedProject_copy packageNamed: packageName)
 						classDefinitions: Dictionary new;
 						classExtensions: Dictionary new;
+						traitDefinitions: Dictionary new;
 						yourself ].
 			theProjectSetDefinition addProject: resolvedProject_copy ].
 	wasTracing
@@ -53,7 +54,12 @@ RwPrjAdoptTool >> _adoptProjectProjectsInProjectSet: projectSetDefinition [
 					adoptErrors := true.
 					tracer
 						trace:
-							'Missing loaded class ' , ex className , ' encountered during adopt' ].
+							'Missing loaded class ' , ex className , ' encountered during adopt' ]
+				traitErrorDo: [ 
+					adoptErrors := true.
+					tracer
+						trace:
+							'Missing loaded trait ' , ex traitName, ' encountered during adopt' ].
 			ex resume: nil ].
 
 	projectSetDefinition deriveLoadedThings

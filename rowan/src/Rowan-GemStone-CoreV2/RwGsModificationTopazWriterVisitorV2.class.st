@@ -181,8 +181,7 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutTraitDeclaration: traitDefinitio
 		nextPutAll: ')';
 		lf;
 		nextPutAll: '		_category: ';
-		nextPutAll: traitDefinition category printString.
-"
+		nextPutAll: traitDefinition category printString.	"
 	traitDefinition comment size == 0
 		ifFalse: [ 
 			aStream
@@ -196,6 +195,8 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutTraitDeclaration: traitDefinitio
 		nextPut: $.;
 		lf.
 	aStream
+		nextPutAll: 'true.';
+		lf;
 		nextPutAll: '%';
 		lf.
 	self _fileoutTraitRemoveAllMethodsFor: traitDefinition name on: aStream

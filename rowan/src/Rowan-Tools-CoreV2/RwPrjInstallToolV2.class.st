@@ -77,7 +77,11 @@ RwPrjInstallToolV2 >> install_3_RowanV2: rowanSpecPath rowanProjectsHome: rowanP
 				classErrorDo: [ 
 					GsFile
 						gciLogServer:
-							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ].
+							'Missing loaded class ' , ex className , ' encountered during adopt ... IGNORED' ]
+				traitErrorDo: [ 
+					GsFile
+						gciLogServer:
+							'Missing loaded Trait ' , ex traitName, ' encountered during adopt ... IGNORED' ].
 			ex resume: nil ].
 
 	projectSetDefinition deriveLoadedThings

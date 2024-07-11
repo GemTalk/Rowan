@@ -2,8 +2,6 @@ Class {
 	#name : 'RwAdoptAuditErrorNotification',
 	#superclass : 'RwNotification',
 	#instVars : [
-		'className',
-		'isClassExtension',
 		'packageName',
 		'description',
 		'reason'
@@ -11,32 +9,10 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'instance creation' }
-RwAdoptAuditErrorNotification class >> classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName [
-
-	^ self new
-		className: className;
-		isClassExtension: classExtension;
-		packageName: packageName;
-		yourself
-]
-
 { #category : 'private' }
 RwAdoptAuditErrorNotification >> _errorMessage [
 
 	self subclassResponsibility: #_errorMessage
-]
-
-{ #category : 'accessing' }
-RwAdoptAuditErrorNotification >> className [
-
-	^ className
-]
-
-{ #category : 'accessing' }
-RwAdoptAuditErrorNotification >> className: aString [
-
-	className := aString
 ]
 
 { #category : 'Handling' }
@@ -57,23 +33,11 @@ RwAdoptAuditErrorNotification >> description: aString [
 	description := aString
 ]
 
-{ #category : 'accessing' }
-RwAdoptAuditErrorNotification >> isClassExtension [
-
-	^ isClassExtension
-]
-
-{ #category : 'accessing' }
-RwAdoptAuditErrorNotification >> isClassExtension: aBoolean [
-
-	isClassExtension := aBoolean
-]
-
 { #category : 'Handling' }
-RwAdoptAuditErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock [
+RwAdoptAuditErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock traitErrorDo: traitBlock [
 	"helper method for use in exception handling block ... avoid isKindOf:"
 
-	self subclassResponsibility: #methodErrorDo:classErrorDo:
+	self subclassResponsibility: #methodErrorDo:classErrorDo:traitErrorDo:
 ]
 
 { #category : 'accessing' }
