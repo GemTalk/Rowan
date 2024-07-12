@@ -2755,7 +2755,7 @@ RwRowanSample9V3Test >> testSpec_0084 [
 	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
 	(ClassOrganizer new traits) includes: trait1.
 	self assert: trait1 category equals:  'RowanSample9V3-Traits'.
-
+	
 	class1 :=  Rowan globalNamed: 'RowanSample9V3Class1'.
 	self assert: class1 new iv1 equals: nil.
 	self assert: (class1 categoryOfSelector: #iv1) equals: #'accessing'.

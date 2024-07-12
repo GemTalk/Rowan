@@ -23,6 +23,12 @@ RwAuditTraitMethodErrorNotification >> _errorMessage [
 		, self methodPrintString
 ]
 
+{ #category : 'Handling' }
+RwAuditTraitMethodErrorNotification >> defaultAction [
+	"record audit error"
+	^ true
+]
+
 { #category : 'accessing' }
 RwAuditTraitMethodErrorNotification >> isMetaclass [
 	^isMetaclass

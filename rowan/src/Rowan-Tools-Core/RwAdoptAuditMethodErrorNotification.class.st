@@ -3,16 +3,30 @@ Class {
 	#superclass : 'RwAdoptAuditErrorNotification',
 	#instVars : [
 		'selector',
-		'isMetaclass'
+		'isMetaclass',
+		'isTrait'
 	],
 	#category : 'Rowan-Tools-Core'
 }
 
 { #category : 'instance creation' }
-RwAdoptAuditMethodErrorNotification class >> method: methodSelector isMeta: isMeta inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName [
+RwAdoptAuditMethodErrorNotification class >> method: methodSelector isMeta: isMeta inClassNamed: className isClassExtension: classExtension intoPackageNamed: packageName [
+	^ (self
+		classNamed: className
+		isClassExtension: classExtension
+		intoPackageNamed: packageName)
+		selector: methodSelector;
+		isMetaclass: isMeta;
+		yourself
+]
 
-
-	^ (self classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName)
+{ #category : 'instance creation' }
+RwAdoptAuditMethodErrorNotification class >> method: methodSelector isMeta: isMeta inTraitNamed: traitName intoPackageNamed: packageName [
+	^ (self
+		classNamed: traitName
+		isClassExtension: false
+		intoPackageNamed: packageName)
+		isTrait: true;
 		selector: methodSelector;
 		isMetaclass: isMeta;
 		yourself
@@ -30,11 +44,23 @@ RwAdoptAuditMethodErrorNotification >> isMetaclass: aBoolean [
 	isMetaclass := aBoolean
 ]
 
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> isTrait [
+	^ isTrait ifNil: [ ^ false ]
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> isTrait: object [
+	isTrait := object
+]
+
 { #category : 'Handling' }
 RwAdoptAuditMethodErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock traitErrorDo: traitBlock [
 	"helper method for use in exception handling block ... avoid isKindOf:"
 
-	methodBlock value
+	self isTrait
+		ifTrue: [ traitBlock value ]
+		ifFalse: [ methodBlock value ]
 ]
 
 { #category : 'accessing' }

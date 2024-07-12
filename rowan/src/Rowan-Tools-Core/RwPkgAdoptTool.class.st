@@ -317,7 +317,7 @@ RwPkgAdoptTool >> adoptTrait: theTrait intoPackageNamed: packageName [
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry theBehavior traitName |
+	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry traitName loadedTrait trait |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 	traitName := theTrait name asString.
@@ -337,56 +337,30 @@ RwPkgAdoptTool >> adoptTrait: theTrait intoPackageNamed: packageName [
 				traitNamed: traitName
 				traitCategory: theTrait category
 				packageConvention: loadedProject packageConvention
-				intoPackageNamed: packageName) signal.
-			^ self	"if exception resumed then we'll skip the adopt operation for this class" ].
-	registry
+				intoPackageNamed: packageName) signal.	"
+			if exception resumed then we'll skip the adopt operation for this class"
+			^ self ].
+	loadedTrait := registry
 		addTraitAssociation: (theSymbolDictionary associationAt: theTrait name)
 		forTrait: theTrait
 		toPackageNamed: packageName ]
 		on: RwExistingAssociationWithSameKeyNotification
-		do: [ :ex | ex resume ].
-
-	theTrait localSelectors
-		do: [ :methodSelector | 
-			| theCompiledMethod |
-			theCompiledMethod := (theBehavior
-				compiledMethodAt: methodSelector
-				otherwise: nil)
-				ifNil: [ 
-					(RwAdoptMissingMethodErrorNotification
-						method: methodSelector
-						isMeta: false
-						inTraitNamed: traitName
-						intoPackageNamed: packageName) signal.	"skip adoption of this method"
-					nil ].
-			theCompiledMethod
-				ifNotNil: [ 
-					registry
-						adoptCompiledMethod: theCompiledMethod
-						for: theBehavior
-						protocol: (theBehavior categoryOfSelector: methodSelector)
-						toPackageNamed: packageName ] ].
-
-	theTrait classTrait localSelectors
-		do: [ :methodSelector | 
-			| theCompiledMethod |
-			theCompiledMethod := (theBehavior
-				compiledMethodAt: methodSelector
-				otherwise: nil)
-				ifNil: [ 
-					(RwAdoptMissingMethodErrorNotification
-						method: methodSelector
-						isMeta: true
-						inTraitNamed: traitName
-						intoPackageNamed: packageName) signal.	"skip adoption of this method"
-					nil ].
-			theCompiledMethod
-				ifNotNil: [ 
-					registry
-						adoptCompiledMethod: theCompiledMethod
-						for: theBehavior
-						protocol: (theBehavior categoryOfSelector: methodSelector)
-						toPackageNamed: packageName ] ]
+		do: [ :ex | ex resume ].	"
+	adopt the method source"
+	trait := theTrait.
+	2
+		timesRepeat: [ 
+			trait localSelectors
+				do: [ :sel | 
+					| src cat loadedMethod |
+					src := trait sourceCodeAt: sel.
+					cat := trait categoryOfSelector: sel.
+					loadedMethod := RwGsLoadedSymbolDictTraitMethod
+						loadedMethodForTrait: trait
+						source: src
+						protocol: cat.
+					loadedTrait addLoadedMethod: loadedMethod ].
+			trait := trait classTrait ]
 ]
 
 { #category : 'smalltalk api' }

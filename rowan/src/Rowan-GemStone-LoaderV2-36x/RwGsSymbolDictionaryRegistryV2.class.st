@@ -31,7 +31,7 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 		ifFalse: [ 
 			self
 				error:
-					'The given compiled method does not match the existing compiled method in the class.' ].
+					'The given compiled method ', compiledMethod printString, ' does not match the existing compiled method in the class: ', behavior printString, '.' ].
 
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
@@ -50,14 +50,14 @@ RwGsSymbolDictionaryRegistryV2 >> adoptCompiledMethod: compiledMethod classExten
 		loadedPackageNamed: packageName
 		ifAbsent: [ 
 			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+				error: 'Internal error -- attempt to add a method ', compiledMethod printString, ' to a nonexistent package', packageName printString, '.' ].
 
 	loadedClassOrExtension := loadedPackage
 		loadedClassOrClassExtensionForClass: behavior
 		ifAbsent: [ 
 			self
 				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+					'Internal error -- attempt to add a method to a package ', loadedPackage name printString, ' in which its class ', behavior printString, ' is neither defined nor extended.' ].
 	loadedClassOrExtension addLoadedMethod: loadedMethod
 ]
 

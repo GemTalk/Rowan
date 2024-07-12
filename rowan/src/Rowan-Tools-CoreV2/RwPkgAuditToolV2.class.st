@@ -92,7 +92,7 @@ RwPkgAuditToolV2 >> auditForPackage: loadedPackage on: logStreamOrNil [
 						ifNotEmpty: [ :aColl | res at: aLoadedClass name put: aColl ] ]
 				loadedTraitsDo: [ :aLoadedTrait | 
 					| traitSymbolDictName |
-					traitSymbolDictName := aLoadedTrait classSymbolDictionaryName.
+					traitSymbolDictName := aLoadedTrait symbolDictionaryName.
 					traitSymbolDictName = packageSymbolDictionaryName
 						ifFalse: [ 
 							packageAuditDetail

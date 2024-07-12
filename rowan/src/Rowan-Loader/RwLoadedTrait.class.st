@@ -45,13 +45,6 @@ RwLoadedTrait >> classMethodDefinitions [
 ]
 
 { #category : 'accessing' }
-RwLoadedTrait >> classSymbolDictionaryName [
-
-	^self propertyAt: #'gs_SymbolDictionary'
-
-]
-
-{ #category : 'accessing' }
 RwLoadedTrait >> classVarNames [
 
 	^self propertyAt: #'classvars'
@@ -144,6 +137,12 @@ RwLoadedTrait >> markPackageDirty [
 RwLoadedTrait >> packageName [
 
 	^loadedPackage name
+]
+
+{ #category : 'accessing' }
+RwLoadedTrait >> traitCategory [
+
+	^self propertyAt: #'category' ifAbsent: [ '' ]
 ]
 
 { #category : 'properties' }

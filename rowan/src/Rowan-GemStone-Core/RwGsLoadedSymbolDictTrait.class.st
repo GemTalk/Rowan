@@ -94,6 +94,12 @@ RwGsLoadedSymbolDictTrait >> removeLoadedInstanceMethod: aLoadedMethod [
 		ifAbsent: [self error: 'Method not present in LoadedClassExtension']
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictTrait >> symbolDictionaryName [
+
+	^self propertyAt: #'gs_SymbolDictionary'
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictTrait >> symbolDictionaryName: aName [
 

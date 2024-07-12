@@ -415,13 +415,15 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addNewUnmanagedClassVersi
 RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: assoc forTrait: trait toPackageNamed: packageName instance: registryInstance [
 	"Copy the name association to the correct 
         SymbolDictionary in the live SymbolList.
-        Create a LoadedTrait for the new trait, add it to the defining LoadedPackage."
+        Create a LoadedTrait for the new trait, populate it's methods and add it to the defining LoadedPackage."
 
 	| loadedPackage loadedTrait |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+	loadedPackage := self
+		existingOrNewLoadedPackageNamed: packageName
+		instance: registryInstance.
 
-	loadedTrait := self 
-		loadedTraitForTrait: trait 
+	loadedTrait := self
+		loadedTraitForTrait: trait
 		ifAbsent: [ 
 			loadedTrait := RwGsLoadedSymbolDictTrait newForTrait: trait.
 			loadedPackage addLoadedTrait: loadedTrait.
@@ -429,23 +431,22 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> addTraitAssociation: asso
 			self registerLoadedTrait: loadedTrait forTrait: trait.
 			loadedTrait ].
 
-	self 
-		_symbolDictionary: registryInstance _symbolDictionary 
-		at: assoc key 
-		ifPresent: [:theTrait |
-			theTrait ~~ trait
-				ifTrue: [
+	self
+		_symbolDictionary: registryInstance _symbolDictionary
+		at: assoc key
+		ifPresent: [ :aTrait | 
+			aTrait ~~ trait
+				ifTrue: [ 
 					(RwExistingAssociationWithSameKeyNotification new
-						errorMessage: 'Found an existing association in the ',  
-								registryInstance _symbolDictionary name asString printString, 
-								' symbol dictionary with a duplicate key ',
-								assoc key printString, 
-								' while attempting to add a new trait' )
-						signal.
+						errorMessage:
+							'Found an existing association in the '
+								, registryInstance _symbolDictionary name asString printString
+								, ' symbol dictionary with a duplicate key ' , assoc key printString
+								, ' while attempting to add a new trait') signal.
 					(registryInstance _symbolDictionary associationAt: assoc key) value: trait ] ]
-		ifAbsent: [
+		ifAbsent: [ 
 			assoc value: trait.
-			registryInstance _symbolDictionary add: assoc].
+			registryInstance _symbolDictionary add: assoc ].
 	^ loadedTrait
 ]
 

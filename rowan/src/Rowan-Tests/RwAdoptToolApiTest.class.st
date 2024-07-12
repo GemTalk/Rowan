@@ -1615,54 +1615,8 @@ RwAdoptToolApiTest >> testAdoptSymbolList_2 [
 
 { #category : 'tests' }
 RwAdoptToolApiTest >> testAdoptTrait_01 [
-	| projectName packageNames traitName packageName theTrait symDict symDictName instanceMethod classMethod symbolList audit |
-	projectName := 'AdoptProject'.
-	packageName := 'Adopt-Core'.
-	packageNames := {packageName}.
-	symDictName := self _symbolDictionaryName2.
-	traitName := 'AdoptedTrait'.
-	symbolList := Rowan image symbolList.
-
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: symDictName
-		comment: 'project for testing package adopt api'.
-
-	symDict := Rowan image symbolDictNamed: symDictName.	"
-		Use non-Rowan api to create trait and methods"
-	theTrait := (Trait
-		name: traitName
-		instVars: #()
-		classVars: #()
-		classInstVars: #()
-		inDictionary: symDict)
-		category: packageName;
-		yourself.
-
-	theTrait compile: 'foo ^''foo''' category: 'accessing'.
-	theTrait classTrait compile: 'bar ^''bar''' category: 'accessing'.
-
-	self assert: theTrait rowanProjectName = Rowan unpackagedName.
-
-	Rowan packageTools adopt
-		adoptTraitNamed: traitName
-		intoPackageNamed: packageName.
-
-	self assert: theTrait rowanProjectName = projectName.
-	self assert: instanceMethod rowanProjectName = projectName.
-	self assert: classMethod rowanProjectName = projectName.
-
-	self
-		assert:
-			((Rowan image loadedPackageNamed: packageName)
-				loadedTraitForTrait: theTrait
-				ifAbsent: [  ]) notNil.
-	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty
-]
-
-{ #category : 'tests' }
-RwAdoptToolApiTest >> testAdoptTrait_02 [
+	"invalid trait category name -- expect an error"
+	
 	| projectName packageNames traitName packageName theTrait symDict symDictName instanceMethod classMethod symbolList audit hitError |
 	projectName := 'AdoptProject'.
 	packageName := 'Adopt-Core'.
@@ -1703,15 +1657,56 @@ RwAdoptToolApiTest >> testAdoptTrait_02 [
 	self
 		assert: hitError
 		description: 'expected a package convention error notification'.
+]
 
-	self assert: theTrait rowanProjectName equals: projectName.
-	self assert: instanceMethod rowanProjectName equals: projectName.
-	self assert: classMethod rowanProjectName equals: projectName.
+{ #category : 'tests' }
+RwAdoptToolApiTest >> testAdoptTrait_02 [
+	"successful adopt"
+
+	| projectName packageNames traitName packageName theTrait symDict symDictName symbolList audit loadedTrait |
+	projectName := 'AdoptProject'.
+	packageName := 'Adopt-Core'.
+	packageNames := {packageName}.
+	symDictName := self _symbolDictionaryName2.
+	traitName := 'AdoptedTrait'.
+	symbolList := Rowan image symbolList.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+
+	symDict := Rowan image symbolDictNamed: symDictName.	"
+		Use non-Rowan api to create trait and methods"
+	theTrait := (Trait
+		name: traitName
+		instVars: #()
+		classVars: #()
+		classInstVars: #()
+		inDictionary: symDict)
+		category: packageName;
+		yourself.
+
+	theTrait compile: 'foo ^''foo''' category: 'accessing'.
+	theTrait classTrait compile: 'bar ^''bar''' category: 'accessing'.
+
+	self assert: theTrait rowanProjectName = Rowan unpackagedName.
+
+	Rowan packageTools adopt
+		adoptTraitNamed: traitName
+		intoPackageNamed: packageName.
+	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty.
+
+	self assert: theTrait rowanProjectName = projectName.
 
 	self
 		assert:
-			((Rowan image loadedPackageNamed: packageName)
+			(loadedTrait := (Rowan image loadedPackageNamed: packageName)
 				loadedTraitForTrait: theTrait
 				ifAbsent: [  ]) notNil.
-	self assert: (audit := (Rowan projectNamed: projectName) audit) isEmpty
+	self 
+		assert: loadedTrait loadedPackage name equals: packageName.
+
+	loadedTrait loadedInstanceMethods halt.
 ]

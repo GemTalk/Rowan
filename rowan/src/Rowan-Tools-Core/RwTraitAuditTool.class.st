@@ -82,7 +82,7 @@ RwTraitAuditTool >> auditLoadedTraitProperties: aLoadedTrait forTrait: aTrait [
 								, aLoadedTrait classInstVarNames printString , ')')
 						reason: #'differentClassInstVars';
 						loadedPropertyValue: aLoadedTrait classInstVarNames;
-						classPropertyValue: aTrait instVarNames;
+						traitPropertyValue: aTrait instVarNames;
 						trait: aTrait;
 						yourself) ].
 	aLoadedTrait classVarNames
@@ -104,7 +104,7 @@ RwTraitAuditTool >> auditLoadedTraitProperties: aLoadedTrait forTrait: aTrait [
 						trait: aTrait;
 						yourself) ].
 	(aDict := System myUserProfile
-		resolveSymbol: aLoadedTrait classSymbolDictionaryName asSymbol)
+		resolveSymbol: aLoadedTrait symbolDictionaryName asSymbol)
 		ifNil: [ 
 			self theAuditDetails
 				add:
@@ -112,9 +112,9 @@ RwTraitAuditTool >> auditLoadedTraitProperties: aLoadedTrait forTrait: aTrait [
 						for: aLoadedTrait
 						message:
 							'For class ' , aLoadedTrait name , ' unable to find SymbolDictionary '
-								, aLoadedTrait classSymbolDictionaryName)
+								, aLoadedTrait symbolDictionaryName)
 						reason: #'missingSymbolDictionary';
-						loadedPropertyValue: aLoadedTrait classSymbolDictionaryName;
+						loadedPropertyValue: aLoadedTrait symbolDictionaryName;
 						trait: aTrait;
 						yourself) ]
 		ifNotNil: [ :smbd | 
@@ -127,11 +127,11 @@ RwTraitAuditTool >> auditLoadedTraitProperties: aLoadedTrait forTrait: aTrait [
 								for: aLoadedTrait
 								message:
 									'Trait (' , aLoadedTrait name , ') not found in symbol dictionary ('
-										, aLoadedTrait classSymbolDictionaryName asSymbol
+										, aLoadedTrait symbolDictionaryName asSymbol
 										, ') of loaded trait')
 								reason: #'missingTraitInSymbolDictionary';
-								loadedPropertyValue: aLoadedTrait classSymbolDictionaryName;
-								classPropertyValue:
+								loadedPropertyValue: aLoadedTrait symbolDictionaryName;
+								traitPropertyValue:
 										(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: aTrait)
 												yourself) ] ]
 ]

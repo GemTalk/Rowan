@@ -51,11 +51,13 @@ RwGsTraitPatchV2 >> addToNewTraitsByNameSymbolList: newTraitsByNameSymbolList [
 
 { #category : 'actions' }
 RwGsTraitPatchV2 >> basicCreateTrait [
-	^ Trait
+	^ (Trait
 		name: traitDefinition name
 		instVars: traitDefinition instVarNames
 		classVars: traitDefinition classVarNames
-		classInstVars: traitDefinition classInstVarNames
+		classInstVars: traitDefinition classInstVarNames)
+		category: traitDefinition category;
+		yourself
 ]
 
 { #category : 'actions' }
