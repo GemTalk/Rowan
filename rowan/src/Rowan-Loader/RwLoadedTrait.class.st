@@ -11,9 +11,10 @@ Class {
 
 { #category : 'private' }
 RwLoadedTrait >> _traitBasedProperties [
-	"Answer the list of properties that are derived from the class instance itself"
+	"Answer the list of properties that are derived from the trait instance itself"
 
-	^ #(#'name')
+	self halt.
+	^ #(#'name' #'instvars' #'classinstvars' #'classvars' #'comment' #'gs_constraints' #'gs_SymbolDictionary')
 ]
 
 { #category : 'definitions' }
@@ -24,12 +25,6 @@ RwLoadedTrait >> asDefinition [
 		withProperties: self propertiesForDefinition
 		classMethodDefinitions: self classMethodDefinitions
 		instanceMethodDefinitions: self instanceMethodDefinitions
-]
-
-{ #category : 'accessing' }
-RwLoadedTrait >> classCategory [
-
-	^self propertyAt: #'category' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
@@ -150,6 +145,7 @@ RwLoadedTrait >> updatePropertiesFromTraitDefinition: traitDefinition [
 	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
 
 	| recordedPropertyNames |
+self halt.
 	recordedPropertyNames := self _traitBasedProperties . "a small Array of Symbols"
 	traitDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
 		(recordedPropertyNames includesIdentical: propertyName)

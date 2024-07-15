@@ -1681,15 +1681,16 @@ RwAdoptToolApiTest >> testAdoptTrait_02 [
 		Use non-Rowan api to create trait and methods"
 	theTrait := (Trait
 		name: traitName
-		instVars: #()
-		classVars: #()
-		classInstVars: #()
+		instVars: #( iv1 )
+		classVars: #(Civ1)
+		classInstVars: #( civ1)
 		inDictionary: symDict)
 		category: packageName;
 		yourself.
 
-	theTrait compile: 'foo ^''foo''' category: 'accessing'.
-	theTrait classTrait compile: 'bar ^''bar''' category: 'accessing'.
+	theTrait compile: 'iv1 ^''iv1''' category: 'accessing'.
+	theTrait compile: 'Civ1 ^''Civ1''' category: 'accessing'.
+	theTrait classTrait compile: 'civ1 ^civ1' category: 'accessing'.
 
 	self assert: theTrait rowanProjectName = Rowan unpackagedName.
 

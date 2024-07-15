@@ -107,12 +107,92 @@ RwGsLoadedSymbolDictTrait >> symbolDictionaryName: aName [
 ]
 
 { #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateCategoryFromTrait [
+
+	| propertyName oldValue newValue absentToken |
+	propertyName := #'category'.	"needs to be listed in _traitBasedProperties method"
+	absentToken := self absentToken.
+	oldValue := self propertyAt: propertyName.
+	newValue := handle category ifNil: [ absentToken ].
+	(newValue ~~ absentToken and: [ newValue isEmpty ])
+		ifTrue: [ newValue := absentToken ].	"Absent token must be compared by identity, because a comment of '<absent>' would be equal to no comment."
+	(oldValue == absentToken | (newValue == absentToken)
+		ifTrue: [ oldValue == newValue ]
+		ifFalse: [ oldValue = newValue ])
+		ifFalse: [ 
+			newValue == absentToken
+				ifTrue: [ self removeProperty: propertyName ]
+				ifFalse: [ self propertyAt: propertyName put: newValue ] ]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateClassInstvarNamesFromTrait [
+
+	| propertyName oldNames newNames |
+	propertyName := #'classinstvars'.	"needs to be listed in _traitBasedProperties method"
+	oldNames := self propertyAt: propertyName.
+	newNames := handle classTrait instVarNames collect: [:each | each asString].
+	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateClassVariableNamesFromTrait [
+	"Order of variable names does not matter to for GemStone so we keep the names sorted."
+
+	| propertyName oldNames newNames |
+	propertyName := #'classvars'.	"needs to be listed in _traitBasedProperties method"
+	oldNames := self propertyAt: propertyName.
+	newNames := (handle classVarNames collect: [:each | each asString])
+				asSortedCollection asArray.
+	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateCommentFromTrait [
+
+	| propertyName oldValue newValue absentToken |
+	propertyName := #'comment'.	"needs to be listed in _traitBasedProperties method"
+	absentToken := self absentToken.
+	oldValue := self propertyAt: propertyName.
+	(oldValue ~~ absentToken and: [oldValue isEmpty])
+		ifTrue: [oldValue := absentToken].
+	newValue := (handle comment) ifNil: [absentToken].
+	(newValue ~~ absentToken and: [newValue isEmpty])
+		ifTrue: [newValue := absentToken].
+
+	"Absent token must be compared by identity, because a comment of '<absent>' would be equal to no comment."
+	(oldValue == absentToken | (newValue == absentToken)
+		ifTrue: [oldValue == newValue]
+		ifFalse: [oldValue = newValue])
+			ifFalse: 
+				[newValue == absentToken
+					ifTrue: [self removeProperty: propertyName]
+					ifFalse: [self propertyAt: propertyName put: newValue]]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateInstvarNamesFromTrait [
+
+	| propertyName oldNames newNames |
+	propertyName := #'instvars'.	"needs to be listed in _traitBasedProperties method"
+	oldNames := self propertyAt: propertyName.
+	newNames := handle instVarNames collect: [:each | each asString].
+	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+]
+
+{ #category : 'private-updating' }
 RwGsLoadedSymbolDictTrait >> updatePropertiesFromTraitFor: aSymbolDictionaryRegistry [
-	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
+	"Update my properties from the trait. Leave unknown properties alone, they may apply to another platform."
 
 	self
 		updateSymbolDictionaryFromTraitFor:
-			aSymbolDictionaryRegistry _symbolDictionary
+			aSymbolDictionaryRegistry _symbolDictionary;
+		updateTraitNameFromTrait;
+		updateInstvarNamesFromTrait;
+		updateClassInstvarNamesFromTrait;
+		updateClassVariableNamesFromTrait;
+		updateCommentFromTrait;
+		updateCategoryFromTrait
 ]
 
 { #category : 'private-updating' }
@@ -123,4 +203,16 @@ RwGsLoadedSymbolDictTrait >> updateSymbolDictionaryFromTraitFor: aSymbolDictiona
 	oldName := self propertyAt: #'gs_SymbolDictionary'.	"needs to be listed in _traitsBasedProperties method?"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictTrait >> updateTraitNameFromTrait [
+
+	| oldName newName |
+	oldName := name.
+	newName := handle name asString.
+	oldName = newName
+		ifFalse: 
+			[self name: newName.
+			self propertyAt: #'name' put: name] 	"needs to be listed in _traitBasedProperties method"
 ]
