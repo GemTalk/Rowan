@@ -1617,7 +1617,7 @@ RwAdoptToolApiTest >> testAdoptSymbolList_2 [
 RwAdoptToolApiTest >> testAdoptTrait_01 [
 	"invalid trait category name -- expect an error"
 	
-	| projectName packageNames traitName packageName theTrait symDict symDictName instanceMethod classMethod symbolList audit hitError |
+	| projectName packageNames traitName packageName theTrait symDict symDictName symbolList hitError |
 	projectName := 'AdoptProject'.
 	packageName := 'Adopt-Core'.
 	packageNames := {packageName}.
@@ -1704,10 +1704,11 @@ RwAdoptToolApiTest >> testAdoptTrait_02 [
 	self
 		assert:
 			(loadedTrait := (Rowan image loadedPackageNamed: packageName)
-				loadedTraitForTrait: theTrait
+				loadedTraitNamed: traitName
 				ifAbsent: [  ]) notNil.
 	self 
 		assert: loadedTrait loadedPackage name equals: packageName.
 
-	loadedTrait loadedInstanceMethods halt.
+	self assert: loadedTrait loadedInstanceMethods keys sort equals: #(Civ1 iv1).
+	self assert: loadedTrait loadedClassMethods keys sort equals: #(civ1).
 ]

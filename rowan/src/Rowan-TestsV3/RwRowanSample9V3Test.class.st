@@ -3630,7 +3630,7 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 
 	| loadSpec projectName projectNames loadSpecs loadedProjects project 
 		audit traitDef definedProject packageName classDef traitIvNames classIvNames
-		testClassDef testTraitDef |
+		testClassDef |
 	loadSpec := self _loadSpecNamed: 'spec_0085'.
 
 	projectName := loadSpec projectName.
@@ -3677,9 +3677,9 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 	testClassDef := (definedProject packageNamed: projectName, '-C-T02')
 		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
 	testClassDef removeInstanceMethod: #'testIv2'.
-	testTraitDef := (definedProject packageNamed: projectName, '-Tr-T02')
+	testClassDef := (definedProject packageNamed: projectName, '-Tr-T02')
 		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
-	testTraitDef removeInstanceMethod: #'testIv2_t'.
+	testClassDef removeInstanceMethod: #'testIv2_t'.
 
 "load project"
 	project := (definedProject load) projectNamed: projectName.

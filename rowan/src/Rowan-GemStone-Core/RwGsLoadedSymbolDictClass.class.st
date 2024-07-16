@@ -367,7 +367,6 @@ RwGsLoadedSymbolDictClass >> updatePoolDictionaryNamesFromClass [
 RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegistry [
 
 	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
-
 	self
 		updateSymbolDictionaryFromClassFor:
 				aSymbolDictionaryRegistry _symbolDictionary;
@@ -382,7 +381,6 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 		updateConstraintsFromClass;
 		updateCommentFromClass;
 		updateCategoryFromClass
-
 ]
 
 { #category : 'private-updating' }

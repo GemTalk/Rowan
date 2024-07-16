@@ -13,8 +13,7 @@ Class {
 RwLoadedTrait >> _traitBasedProperties [
 	"Answer the list of properties that are derived from the trait instance itself"
 
-	self halt.
-	^ #(#'name' #'instvars' #'classinstvars' #'classvars' #'comment' #'gs_constraints' #'gs_SymbolDictionary')
+	^ #()
 ]
 
 { #category : 'definitions' }
@@ -145,7 +144,6 @@ RwLoadedTrait >> updatePropertiesFromTraitDefinition: traitDefinition [
 	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
 
 	| recordedPropertyNames |
-self halt.
 	recordedPropertyNames := self _traitBasedProperties . "a small Array of Symbols"
 	traitDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
 		(recordedPropertyNames includesIdentical: propertyName)

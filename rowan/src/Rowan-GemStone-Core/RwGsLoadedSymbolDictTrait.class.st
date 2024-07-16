@@ -10,6 +10,16 @@ RwGsLoadedSymbolDictTrait class >> newForTrait: aTrait [
 	^self new initializeForTrait: aTrait
 ]
 
+{ #category : 'private' }
+RwGsLoadedSymbolDictTrait >> _traitBasedProperties [
+	"Answer the list of properties that are derived from the trait instance itself"
+
+"
+	^ #(#'name' #'instvars' #'classinstvars' #'classvars' #'comment' #'gs_constraints' #'gs_SymbolDictionary')
+"
+^ #()
+]
+
 { #category : 'methods' }
 RwGsLoadedSymbolDictTrait >> addLoadedClassMethod: aLoadedMethod [
 
@@ -183,7 +193,6 @@ RwGsLoadedSymbolDictTrait >> updateInstvarNamesFromTrait [
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictTrait >> updatePropertiesFromTraitFor: aSymbolDictionaryRegistry [
 	"Update my properties from the trait. Leave unknown properties alone, they may apply to another platform."
-
 	self
 		updateSymbolDictionaryFromTraitFor:
 			aSymbolDictionaryRegistry _symbolDictionary;

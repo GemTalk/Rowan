@@ -20,3 +20,10 @@ RwAuditMethodErrorNotification >> _errorMessage [
 		, ' in the package ' , self packageName printString
 		, ' is not present in the ' , typeMessage , ' method dictionary.'
 ]
+
+{ #category : 'Handling' }
+RwAuditMethodErrorNotification >> defaultAction [
+	"record audit error"
+
+	^ true
+]

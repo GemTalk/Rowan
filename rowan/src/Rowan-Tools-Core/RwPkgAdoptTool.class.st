@@ -317,7 +317,7 @@ RwPkgAdoptTool >> adoptTrait: theTrait intoPackageNamed: packageName [
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry traitName loadedTrait trait |
+	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry traitName loadedTrait |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 	traitName := theTrait name asString.
@@ -346,21 +346,30 @@ RwPkgAdoptTool >> adoptTrait: theTrait intoPackageNamed: packageName [
 		toPackageNamed: packageName ]
 		on: RwExistingAssociationWithSameKeyNotification
 		do: [ :ex | ex resume ].	"
-	adopt the method source"
-	trait := theTrait.
-	2
-		timesRepeat: [ 
+	adopt the method source for instance and class sides"
+	{{theTrait.
+	#'loadedMethodForTrait:source:protocol:'.
+	#'addLoadedMethod:'}.
+	{(theTrait classTrait).
+	#'loadedClassMethodForTrait:source:protocol:'.
+	#'addLoadedClassMethod:'}}
+		do: [ :ar | 
+			| trait sel1 sel2 |
+			trait := ar at: 1.
+			sel1 := ar at: 2.
+			sel2 := ar at: 3.
 			trait localSelectors
 				do: [ :sel | 
 					| src cat loadedMethod |
 					src := trait sourceCodeAt: sel.
 					cat := trait categoryOfSelector: sel.
 					loadedMethod := RwGsLoadedSymbolDictTraitMethod
-						loadedMethodForTrait: trait
-						source: src
-						protocol: cat.
-					loadedTrait addLoadedMethod: loadedMethod ].
-			trait := trait classTrait ]
+						perform: sel1
+						withArguments:
+							{trait.
+							src.
+							cat}.
+					loadedTrait perform: sel2 with: loadedMethod ] ]
 ]
 
 { #category : 'smalltalk api' }

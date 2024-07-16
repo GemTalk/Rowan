@@ -9,6 +9,16 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
+{ #category : 'instance creation' }
+RwAdoptAuditErrorNotification class >> classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName [
+
+	^ self new
+		className: className;
+		isClassExtension: classExtension;
+		packageName: packageName;
+		yourself
+]
+
 { #category : 'private' }
 RwAdoptAuditErrorNotification >> _errorMessage [
 

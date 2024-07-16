@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 8,
 		"failures" : 8,
-		"passed" : 738,
-		"summary" : "754 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 129.91s",
-		"tests" : 754,
-		"time" : 129.911
+		"passed" : 740,
+		"summary" : "756 Tests with 8 Failures, 8 Errors and 0 DeprecationWarnings in 116.04s",
+		"tests" : 756,
+		"time" : 116.041
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -631,6 +631,18 @@
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
 			"selector" : "testAdoptSymbolList_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptTrait_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptTrait_02",
 			"time" : "0"
 		},
 		{
@@ -4540,5 +4552,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-05-10T20:34:12.215637-07:00"
+	"timeStamp" : "2024-07-15T16:45:03.470806-07:00"
 }

@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'selector',
 		'isMetaclass',
-		'isTrait'
+		'isTrait',
+		'className',
+		'isClassExtension'
 	],
 	#category : 'Rowan-Tools-Core'
 }
@@ -30,6 +32,26 @@ RwAdoptAuditMethodErrorNotification class >> method: methodSelector isMeta: isMe
 		selector: methodSelector;
 		isMetaclass: isMeta;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> className [
+	^className
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> className: object [
+	className := object
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> isClassExtension [
+	^isClassExtension
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> isClassExtension: object [
+	isClassExtension := object
 ]
 
 { #category : 'accessing' }
