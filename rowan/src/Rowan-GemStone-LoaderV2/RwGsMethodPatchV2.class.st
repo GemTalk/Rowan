@@ -88,7 +88,7 @@ RwGsMethodPatchV2 >> compileUsingNewClassesSymbolList: createdClasses andExistin
 	| sourceString protocol symbolList |
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	protocol := (methodDefinition propertyAt: #'protocol') asSymbol.
 	compiledMethod := behavior
 		compileMethod: sourceString
 		dictionaries: symbolList
@@ -121,7 +121,7 @@ RwGsMethodPatchV2 >> compileUsingNewTraitsSymbolList: createdTraits andExistingT
 	[ 
 	| sourceString protocol theTrait |
 	sourceString := methodDefinition source.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	protocol := (methodDefinition propertyAt: #'protocol') asSymbol.
 	theTrait := self isMeta
 		ifTrue: [ self classTrait ]
 		ifFalse: [ self traitInstance ].
@@ -259,7 +259,7 @@ RwGsMethodPatchV2 >> printOn: aStream [
 { #category : 'private-installing' }
 RwGsMethodPatchV2 >> propertiesProtocolName [
 
-	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
+	^methodDefinition propertyAt: #'protocol' ifAbsent: ['unknown']
 ]
 
 { #category : 'initializers' }

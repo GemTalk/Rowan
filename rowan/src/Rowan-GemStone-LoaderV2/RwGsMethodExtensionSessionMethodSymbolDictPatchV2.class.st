@@ -27,7 +27,7 @@ RwGsMethodExtensionSessionMethodSymbolDictPatchV2 >> compileUsingNewClassesSymbo
 	| sourceString protocol symbolList |
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	protocol := (methodDefinition propertyAt: #'protocol') asSymbol.
 
 	methDict := GsMethodDictionary new.
 	catDict := GsMethodDictionary new.

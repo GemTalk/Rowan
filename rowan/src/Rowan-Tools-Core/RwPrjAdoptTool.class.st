@@ -21,8 +21,11 @@ RwPrjAdoptTool >> adoptProjectDefinition: projectDefinition [
 				adoptClassExtensionNamed: classDef name 
 				instanceSelectors: classDef instanceMethodDefinitions keys 
 				classSelectors: classDef classMethodDefinitions keys 
-				intoPackageNamed: packageDef name ] ]
-
+				intoPackageNamed: packageDef name ].
+		packageDef traitDefinitions valuesDo: [:traitDef |
+			pkgAdoptTool
+				adoptTraitNamed: traitDef  name 
+				intoPackageNamed: packageDef name] ]
 ]
 
 { #category : 'smalltalk api' }

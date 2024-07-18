@@ -51,7 +51,7 @@ RwGsTraitMethodAdditionSymbolDictPatchV2 >> updateTraitMethodSourceUsingNewClass
 	| sourceString protocol symbolList loadedTrait loadedMethod |
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asString.
+	protocol := (methodDefinition propertyAt: #'protocol') asString.
 
 	loadedTrait := self symbolDictionaryRegistry
 		loadedTraitForTrait: self traitInstance.

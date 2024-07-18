@@ -32,7 +32,7 @@ RwMethodDefinition class >> newForSource: methodSource protocol: protocol passCo
 						, methodSource printString ].
 	^ self
 		newForSelector: selector asSymbol
-		protocol: protocol
+		protocol: protocol asString
 		source: methodSource
 ]
 
@@ -88,9 +88,7 @@ RwMethodDefinition >> protocol [
 
 { #category : 'accessing' }
 RwMethodDefinition >> protocol: aString [
-
-	properties at: #'protocol' put: aString
-
+	properties at: #'protocol' put: aString asString
 ]
 
 { #category : 'accessing' }

@@ -16,7 +16,7 @@ RwGsLoadedSymbolDictTraitMethod class >> loadedClassMethodForTrait: aTrait sourc
 		classIsMeta: true;
 		handle: aTrait;
 		source: sourceString;
-		propertyAt: 'protocol' put: protocol;
+		propertyAt: #'protocol' put: protocol asString;
 		updateFromHandle.
 	^ instance
 ]
@@ -30,7 +30,7 @@ RwGsLoadedSymbolDictTraitMethod class >> loadedMethodForTrait: aTrait source: so
 		classIsMeta: false;
 		handle: aTrait;
 		source: sourceString;
-		propertyAt: 'protocol' put: protocol;
+		propertyAt: #'protocol' put: protocol asString;
 		updateFromHandle.
 	^ instance
 ]

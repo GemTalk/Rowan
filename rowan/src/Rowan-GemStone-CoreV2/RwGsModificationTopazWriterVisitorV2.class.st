@@ -180,7 +180,7 @@ RwGsModificationTopazWriterVisitorV2 >> _fileOutTraitDeclaration: traitDefinitio
 		lf;
 		nextPutAll: ')';
 		lf;
-		nextPutAll: '		_category: ';
+		nextPutAll: '		category: ';
 		nextPutAll: traitDefinition category printString.	"
 	traitDefinition comment size == 0
 		ifFalse: [ 

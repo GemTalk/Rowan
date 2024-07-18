@@ -91,16 +91,16 @@ RwTraitMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPa
 				ifFalse: [ 
 					self isMeta
 						ifTrue: [ 
-							self halt.
+System waitForDebug. "not implemented/tested yet -- change category"
 							aPatchSet
 								addPatchedClassTraitMethodProperties: self after
 								inTrait: self traitDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ]
 						ifFalse: [ 
-							self halt.
+System waitForDebug. "not implemented/tested yet -- change category"
 							aPatchSet
-								addPatchedInstanceMethodTraitProperties: self after
+								addPatchedInstanceTraitMethodProperties: self after
 								inTrait: self traitDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]

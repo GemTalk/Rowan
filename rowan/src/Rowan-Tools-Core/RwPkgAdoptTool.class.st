@@ -362,7 +362,7 @@ RwPkgAdoptTool >> adoptTrait: theTrait intoPackageNamed: packageName [
 				do: [ :sel | 
 					| src cat loadedMethod |
 					src := trait sourceCodeAt: sel.
-					cat := trait categoryOfSelector: sel.
+					cat := (trait categoryOfSelector: sel) asString.
 					loadedMethod := RwGsLoadedSymbolDictTraitMethod
 						perform: sel1
 						withArguments:
@@ -384,13 +384,13 @@ RwPkgAdoptTool >> adoptTraitNamed: traitName intoPackageNamed: packageName [
 		gemstoneSymbolDictNameForPackageNamed: packageName) asSymbol.
 	theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
 
-	theSymbolDictionary
+	theTrait := theSymbolDictionary
 		at: traitName asSymbol
 		ifAbsent: [ 
 			((Globals at: #'RwAdoptMissingTraitErrorNotification')
 				traitNamed: traitName
-				intoPackageNamed: packageName) signal.	"if exception resumed then we'll skip the adopt operation for this trait"
+				intoPackageNamed: packageName) signal.	"
+			if exception resumed then we'll skip the adopt operation for this trait"
 			^ self ].
-	theTrait := Rowan globalNamed: traitName.
 	^ self adoptTrait: theTrait intoPackageNamed: packageName
 ]

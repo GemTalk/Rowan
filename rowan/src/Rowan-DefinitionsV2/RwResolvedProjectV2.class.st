@@ -687,7 +687,7 @@ RwResolvedProjectV2 >> commitId: aString [
 	self _projectRepository isReadOnly
 		ifFalse: [ self error: 'Can only set commit id for read only repositories' ].
 	self _projectRepository commitId: aString.
-	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :aString | aString isEmpty ])
+	(self loadedCommitId ifNil: [ true ] ifNotNil: [ :commitIdString | commitIdString isEmpty ])
 		ifTrue: [ self _projectSpecification loadedCommitId: aString ]
 ]
 
