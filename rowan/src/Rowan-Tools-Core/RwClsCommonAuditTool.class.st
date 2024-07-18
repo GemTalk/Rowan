@@ -72,18 +72,20 @@ RwClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavior 
 								yourself) ].
 			aMethod == aLoadedMethod handle
 				ifFalse: [ 
-					self theAuditDetails
-						add:
-							((RwAuditMethodDetail
-								for: aLoadedClassOrExtension
-								message:
-									'Compiled method is not identical to loaded method: ' , aBehavior printString
-										, '>>' , aLoadedMethod selector)
-								reason: #'methodsNotIdentical';
-								loadedMethod: aLoadedMethod;
-								method: aMethod;
-								behavior: aBehavior;
-								yourself) ] ]
+					aMethod isFromTrait
+						ifFalse: [ 
+							self theAuditDetails
+								add:
+									((RwAuditMethodDetail
+										for: aLoadedClassOrExtension
+										message:
+											'Compiled method is not identical to loaded method: ' , aBehavior printString
+												, '>>' , aLoadedMethod selector)
+										reason: #'methodsNotIdentical';
+										loadedMethod: aLoadedMethod;
+										method: aMethod;
+										behavior: aBehavior;
+										yourself) ] ] ]
 ]
 
 { #category : 'audit' }
@@ -138,6 +140,10 @@ RwClsCommonAuditTool >> auditSelector: aSelector inCategory: category forBehavio
 					'**NOTE** no method or loaded method found for selector '
 						, aSelector printString , 'in category ' , category , ' for class '
 						, aBehavior printString.
+			^ self ].
+	compiledMethod isFromTrait
+		ifTrue: [ 
+			"trait methods are not packaged"
 			^ self ].
 	Rowan image
 		loadedMethodForMethod: compiledMethod

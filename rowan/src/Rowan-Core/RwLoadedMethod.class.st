@@ -29,6 +29,13 @@ RwLoadedMethod >> classIsMeta [
 	^classIsMeta
 ]
 
+{ #category : 'testing' }
+RwLoadedMethod >> isRowanLoadedMethod [
+	"Answer true if the receiver is a loaded method ... used for determining the _owner of compiled method"
+
+	^true
+]
+
 { #category : 'queries' }
 RwLoadedMethod >> loadedClass [
 

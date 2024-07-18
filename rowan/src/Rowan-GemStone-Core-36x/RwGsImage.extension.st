@@ -14,18 +14,18 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 		environmentId: 0
 		otherwise: nil.
 	compiledMethod ifNil: [ ^ absentBlock value ].
-	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | foundBlock value: loadedMethod ]
-		ifNil: [ absentBlock value ]
+	^ compiledMethod isFromRowan
+		ifTrue: [ foundBlock cull: compiledMethod origin ]
+		ifFalse: [ absentBlock value ]
 ]
 
 { #category : '*rowan-gemstone-core-36x' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
 
-	^ compiledMethod _rowanPackageInfo
-		ifNotNil: [ :loadedMethod | loadedMethod ]
-		ifNil: [ absentBlock value ]
+	^ compiledMethod isFromRowan
+		ifTrue: [ compiledMethod origin ]
+		ifFalse: [ absentBlock value ]
 ]
 
 { #category : '*rowan-gemstone-core-36x' }
