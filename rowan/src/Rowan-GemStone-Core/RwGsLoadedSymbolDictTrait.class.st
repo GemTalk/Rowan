@@ -166,7 +166,7 @@ RwGsLoadedSymbolDictTrait >> updateCommentFromTrait [
 	oldValue := self propertyAt: propertyName.
 	(oldValue ~~ absentToken and: [oldValue isEmpty])
 		ifTrue: [oldValue := absentToken].
-	newValue := (handle comment) ifNil: [absentToken].
+	newValue := (handle _comment) ifNil: [absentToken].
 	(newValue ~~ absentToken and: [newValue isEmpty])
 		ifTrue: [newValue := absentToken].
 

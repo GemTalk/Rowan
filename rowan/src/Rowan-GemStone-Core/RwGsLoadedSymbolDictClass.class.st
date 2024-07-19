@@ -16,7 +16,7 @@ RwGsLoadedSymbolDictClass >> _classBasedProperties [
 	"Answer the list of properties that are derived from the class instance itself"
 
 	^ #(  #'category' #'classinstvars'  #'name' #'type' #'classvars' #'comment' #'gs_constraints' #'instvars'  #'gs_options' 
-			#'pools' #'superclass' #'gs_SymbolDictionary' )
+			#'pools' #'superclass' #'gs_SymbolDictionary' #traits #classTraits)
 ]
 
 { #category : 'methods' }
@@ -380,7 +380,8 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 		updateOptionsFromClass;
 		updateConstraintsFromClass;
 		updateCommentFromClass;
-		updateCategoryFromClass
+		updateCategoryFromClass;
+		updateTraitsFromClass
 ]
 
 { #category : 'private-updating' }
@@ -402,4 +403,38 @@ RwGsLoadedSymbolDictClass >> updateSymbolDictionaryFromClassFor: aSymbolDictiona
 	oldName := self propertyAt: #'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
+]
+
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictClass >> updateTraitsFromClass [
+	| propertyName oldValue newValue absentToken |
+	"
+classTraits"
+	propertyName := #'classTraits'.	"needs to be listed in _classBasedProperties method"
+	absentToken := self absentToken.
+	oldValue := self propertyAt: propertyName.
+	newValue := handle classTraits.	"a collection containing a string describing a single classTrait ... or empty"
+	(newValue ~~ absentToken and: [ newValue isEmpty ])
+		ifTrue: [ newValue := absentToken ].
+	(oldValue == absentToken | (newValue == absentToken)
+		ifTrue: [ oldValue == newValue ]
+		ifFalse: [ oldValue = newValue ])
+		ifFalse: [ 
+			newValue == absentToken
+				ifTrue: [ self removeProperty: propertyName ]
+				ifFalse: [ self propertyAt: propertyName put: newValue any asString ] ].	"
+traits"
+	propertyName := #'traits'.	"needs to be listed in _classBasedProperties method"
+	absentToken := self absentToken.
+	oldValue := self propertyAt: propertyName.
+	newValue := handle traits.	"a collection containing a string describing a single trait ... or empty"
+	(newValue ~~ absentToken and: [ newValue isEmpty ])
+		ifTrue: [ newValue := absentToken ].
+	(oldValue == absentToken | (newValue == absentToken)
+		ifTrue: [ oldValue == newValue ]
+		ifFalse: [ oldValue = newValue ])
+		ifFalse: [ 
+			newValue == absentToken
+				ifTrue: [ self removeProperty: propertyName ]
+				ifFalse: [ self propertyAt: propertyName put: newValue any asString ] ]
 ]
