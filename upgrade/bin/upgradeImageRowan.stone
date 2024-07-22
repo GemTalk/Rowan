@@ -52,7 +52,7 @@ EXAMPLES
 -----
 %
 input
-	$GEMSTONE/projects/RowanV3/upgrade/UpgradeRowanV2.gs
+	$GEMSTONE/upgrade/bootstrap/UpgradeRowanV3.gs
 %
 specs
 [
