@@ -52,14 +52,22 @@ Class {
 		'stream',
 		'lastSelectorParsed'
 	],
+	#classVars : [
+		'Character_lf'
+	],
 	#category : 'Rowan-Tonel-Core'
 }
 
+{ #category : 'initialization' }
+RwTonelParser class >> initialize [
+	self _addInvariantClassVar: #Character_lf value: Character lf
+]
+
 { #category : 'accessing' }
 RwTonelParser class >> lineEnding [
-  "Answer the os-specific line endings"
+  "Answer the os-specific line endings.  See also #lineEndingSize if changing "
 
-  ^ String with: Character lf
+  ^ String with: Character_lf
 ]
 
 { #category : 'instance creation' }
