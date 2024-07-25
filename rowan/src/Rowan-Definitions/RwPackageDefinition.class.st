@@ -490,7 +490,10 @@ RwPackageDefinition >> traitDefinitionNamed: traitName ifAbsent: absentBlock [
 
 { #category : 'accessing' }
 RwPackageDefinition >> traitDefinitions [
-	^traitDefinitions
+	^ traitDefinitions
+		ifNil: [ 
+			"needed for upgrade"
+			traitDefinitions := Dictionary new ]
 ]
 
 { #category : 'accessing' }

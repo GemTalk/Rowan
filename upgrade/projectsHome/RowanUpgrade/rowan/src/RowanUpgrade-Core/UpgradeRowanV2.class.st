@@ -131,8 +131,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein3B'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'AwsError')
-				intoPackageNamed: 'Filein3B'.
- ].
+				intoPackageNamed: 'Filein3B' ].
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
@@ -157,7 +156,31 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'UnPackaged-Globals'.
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'SshSocketError')
-				intoPackageNamed: 'Filein3B' ]
+				intoPackageNamed: 'Filein3B' ].
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"RcKeyValueNorebuildDictionary,  GsSshPrivateKey, GsSshPublicKey, AbstratTrait, Trait ClassTrait, GsTraitImpl are new classes in 3.7.2 that need 
+				to be adopted (along with all of their methods) before reloading 
+				GemStone packages."
+			#('RcKeyValueNorebuildDictionary' 'GsSshPrivateKey' 'GsSshPublicKey')
+				do: [ :className | 
+					Rowan packageTools adopt
+						adoptClass: (Rowan globalNamed: className)
+						intoPackageNamed: 'Filein3B' ].
+			#('AbstractTrait' 'Trait' 'ClassTrait' 'GsTraitImpl')
+				do: [ :className | 
+					"target package is Filein2Traits, but it doesn't exist at this point in time"
+					Rowan packageTools adopt
+						adoptClass: (Rowan globalNamed: className)
+						intoPackageNamed: 'Filein2Streams' ].
+			Rowan packageTools adopt
+				adoptTrait: (Rowan globalNamed: 'GenerateGsTestTrait')
+				intoPackageNamed: 'Filein2Streams'.	"REMOVE ME ... JUST A TEST"
+
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'GenerateGsTestClass')
+				intoPackageNamed: 'Filein2Streams'	"REMOVE ME ... JUST A TEST" ]
 ]
 
 { #category : 'upgrade rowan' }
