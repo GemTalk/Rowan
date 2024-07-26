@@ -10,6 +10,7 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'gemstoneBaseReload'.
 	SuperDoitOptionalOptionWithNoArg long: 'gemstoneBaseRepair'.
 	SuperDoitOptionalOptionWithNoArg long: 'rowanReload'.
+	SuperDoitOptionalOptionWithNoArg long: 'rowanMigrate'.
 	SuperDoitOptionalOptionWithNoArg long: 'rowanRepair'.
 	SuperDoitOptionalOptionWithNoArg long: 'skip'.
 }
@@ -110,6 +111,8 @@ doit
 		ifTrue: [ upgrader step_3_repairCustomerAuditFailures ].
 	self rowanReload
 		ifTrue: [ upgrader step_4_reloadRowan ].
+	self rowanMigrate
+		ifTrue: [ upgrader step_4_1_migrateRowan ].
 	self gemstoneBaseReload
 		ifTrue: [ upgrader step_5_reloadGemstoneBase ].
 	self customerReload

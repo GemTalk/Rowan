@@ -91,6 +91,22 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 												((methodsNotIdenticalMap at: auditDetail behavior) at: auditDetail selector) ] ] ] ]
 ]
 
+{ #category : 'migrate rowan' }
+UpgradeRowanV2 >> _migrateRowanMigrateFromMethodSource [
+	^ 'migrateFrom: oldLoadedPackage instVarMap: aMap
+	super migrateFrom: oldLoadedPackage instVarMap: aMap.
+
+  self
+    instVarAt: (self class allInstVarNames indexOfIdentical: #''loadedTraits'')
+    put: StringKeyValueDictionary new.
+	^ self'
+]
+
+{ #category : 'migrate rowan' }
+UpgradeRowanV2 >> _migrateRowanMigrateFromMethodSourceSelector [
+	^ 'migrateFrom:instVarMap:'
+]
+
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV2 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
@@ -510,6 +526,20 @@ UpgradeRowanV2 >> gsVersion [
 { #category : 'private' }
 UpgradeRowanV2 >> logMessage: message [
 	self class logMessage: message
+]
+
+{ #category : 'migrate rowan' }
+UpgradeRowanV2 >> migrateRowan [
+	"RwLoadedPackage has a new instance variable loadedTraits"
+
+	| oldVersion instances |
+	oldVersion := self rowanMigrateTo.
+	instances := SystemRepository listInstances: {oldVersion}.
+	(instances at: 1) do: [ :instance | instance migrate ].
+	(instances at: 1) do: [ :instance | instance loadedTraits ].
+	(instances at: 1) collect: [ :instance | instance loadedTraits ].
+	RwGsLoadedSymbolDictPackage
+		removeSelector: self _migrateRowanMigrateFromMethodSourceSelector
 ]
 
 { #category : 'upgrade' }
@@ -1052,6 +1082,19 @@ UpgradeRowanV2 >> repairSummary [
 	self logMessage: 'Skipped ' , self skipCount printString , ' audit repairs'
 ]
 
+{ #category : 'migrate rowan' }
+UpgradeRowanV2 >> rowanMigrateTo [
+	"RwLoadedPackage has a new instance variable loadedTraits, set up for migration but do not run the migration"
+
+	| oldVersion |
+	RwGsLoadedSymbolDictPackage
+		compileMethod: self _migrateRowanMigrateFromMethodSource.
+	oldVersion := RwGsLoadedSymbolDictPackage classHistory at: 1.
+	oldVersion migrateTo: RwGsLoadedSymbolDictPackage.
+	System commit.
+	^ oldVersion
+]
+
 { #category : 'upgrade rowan' }
 UpgradeRowanV2 >> rowanProjectNames [
 	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
@@ -1161,6 +1204,20 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 	self
 		logMessage:
 			' CUSTOMER audit repair COMPLETE (' , repairedCount printString , ' repairs)'
+]
+
+{ #category : 'steps' }
+UpgradeRowanV2 >> step_4_1_migrateRowan [
+	"Migrate instances of Rowan objects that have changed shape with this version of Rowan"
+
+	"If you choose to combine the required Rowan migration with your own, then the your migration 
+		should be performed at this point during the Rowan upgrae, and see migrateRowan for migration 
+		pattern to be used for Rowan. The method selector _migrateRowanMigrateFromMethodSourceSelector
+		should be removed from RwGsLoadedSymbolDictPackage after migration is complete."
+
+	self logMessage: 'migrate Rowan'.
+	self migrateRowan.
+	self commit
 ]
 
 { #category : 'steps' }
