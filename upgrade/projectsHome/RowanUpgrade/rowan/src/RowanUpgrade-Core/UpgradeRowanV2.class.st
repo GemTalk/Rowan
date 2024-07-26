@@ -1417,10 +1417,19 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 											(isMeta
 												ifTrue: [ ' class' ]
 												ifFalse: [ '' ]) , '>>' , selector , ' in package named '
-										, thePackageName
-										, '. The loadedMethod belongs to a different package '
+										, thePackageName , '. The method belongs to a different package '
 										, theCompiledMethod rowanPackageName printString
 										, ' and is expected to be moved.'.
+							^ self ].
+					(selector = #'isRowanLoadedMethod' and: [ className = 'Object' ])
+						ifTrue: [ 
+							self
+								logMessage:
+									'  SKIP repair for method: ' , className
+										,
+											(isMeta
+												ifTrue: [ ' class' ]
+												ifFalse: [ '' ]) , '>>' , selector , ', it will be handled later'.
 							^ self ].
 					dbg
 						ifTrue: [ self logMessage: '[DEBUG] repairMissingLoadedMethod: [5]' ].
@@ -1743,9 +1752,6 @@ UpgradeRowanV2 >> step_4_reloadRowan [
 	self logMessage: 'reload Rowan'.
 	self debugToLog.
 	self reloadRowan.
-(GsNMethod compiledMethodAt: #isFromRowan otherwise: nil)
-ifNotNil: [:meth | self logMessage: 'GsNMethod>>isFromRowan origin: ', meth origin printString ]
-ifNil: [System waitForDebug].
 	self debugToLog.
 	self commit
 ]
