@@ -33,6 +33,29 @@ RwPkgDisownTool >> disownClass: theClass [
 ]
 
 { #category : 'classes' }
+RwPkgDisownTool >> disownClassExtensionMethodsInClass: theClass forProjectNamed: projectName [
+	"Remove the packaged instance and class methods from packages in projectName"
+
+	"The classes and methods are not removed from the system."
+
+	| loadedPackage loadedProject packageSymDictName theSymbolDictionary registry |
+	(Rowan image loadedClassExtensionsForClass: theClass)
+		do: [ :loadedClassExtension | 
+			loadedPackage := loadedClassExtension loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+			loadedProject name = projectName
+				ifTrue: [ 
+
+					packageSymDictName := loadedPackage packageSymbolDictionaryName.
+
+					theSymbolDictionary := Rowan image symbolDictNamed: packageSymDictName.
+
+					registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+					loadedClassExtension disownFromLoaded: registry.	"inline RwGsSymbolDictionaryRegistry_ImplementationV2>>disownClassExtensions:forLoadedPackage:instance: to avoid classname lookup"
+					loadedPackage removeLoadedClassExtension: loadedClassExtension ] ]
+]
+
+{ #category : 'classes' }
 RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName [
 
 	"Remove the extension methods in the named class for the named package"

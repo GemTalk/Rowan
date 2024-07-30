@@ -18,7 +18,7 @@ extension methods that may have been removed and update any other
 changes that they may have made to their application code.
 "
 Class {
-	#name : 'UpgradeRowanV2',
+	#name : 'UpgradeRowanV3',
 	#superclass : 'Object',
 	#instVars : [
 		'upgradeFrom',
@@ -37,19 +37,19 @@ Class {
 }
 
 { #category : 'Rowan Upgrade' }
-UpgradeRowanV2 class >> globalNamed: aString [
+UpgradeRowanV3 class >> globalNamed: aString [
 	"return nil if global not defined"
 
 	^ GsSession currentSession objectNamed: aString asSymbol
 ]
 
 { #category : 'Rowan Upgrade' }
-UpgradeRowanV2 class >> logMessage: message [
+UpgradeRowanV3 class >> logMessage: message [
 	GsFile gciLogServer: message
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
+UpgradeRowanV3 >> _analyzeAuditForMissingLoadedNotIdentical [
 	"
 		When we find the pattern of a pair of auditDetails for the same package, behavior 
 		and selector, where one reason is #'missingLoadedMethodDetail' and the other 
@@ -92,7 +92,7 @@ UpgradeRowanV2 >> _analyzeAuditForMissingLoadedNotIdentical [
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV2 >> _migrateRowanMigrateFromMethodSource [
+UpgradeRowanV3 >> _migrateRowanMigrateFromMethodSource [
 	^ 'migrateFrom: oldLoadedPackage instVarMap: aMap
 	super migrateFrom: oldLoadedPackage instVarMap: aMap.
 
@@ -103,12 +103,12 @@ UpgradeRowanV2 >> _migrateRowanMigrateFromMethodSource [
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV2 >> _migrateRowanMigrateFromMethodSourceSelector [
+UpgradeRowanV3 >> _migrateRowanMigrateFromMethodSourceSelector [
 	^ 'migrateFrom:instVarMap:'
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> adoptGemstoneBase [
+UpgradeRowanV3 >> adoptGemstoneBase [
 	"classes that are new relative to the original GemStone version, need to be adopted prior to release"
 
 	self gemstoneVersion >= '3.6.4' asRwGemStoneVersionNumber
@@ -200,16 +200,73 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 ]
 
 { #category : 'upgrade rowan' }
-UpgradeRowanV2 >> adoptRowan [
+UpgradeRowanV3 >> adoptRowan [
 	"classes that are new relative to original Rowan version"
 
 	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
-		ifTrue: [ "nothing yet" ]
+		ifTrue: [ 
+			"GsFileIn changed shape (again) in 3.7.2"
+			{'currentPackage:'.
+			'currentProject:'.
+			'currentPackage'.
+			'currentProject'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'GsFileIn') compiledMethodAt: selector) rowanPackageName
+						= Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'GsFileIn'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ].	"
+			New extension methods in packages different from class package for 3.7.2"
+			{'_compareProperty:propertyVaue:againstBaseValue:'.
+			'gs_symbolDictionary'.
+			'gs_symbolDictionary:'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'RwTraitDefinition') compiledMethodAt: selector)
+						rowanPackageName = Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'RwTraitDefinition'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Loader-Extensions-OnlyV2' ] ].
+			{'addMovedClassToPatchSet:'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'RwTraitMove') compiledMethodAt: selector) rowanPackageName
+						= Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'RwTraitMove'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Loader-Extensions-OnlyV2' ] ].
+			{'addMovedMethodToPatchSet:'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'RwTraitMethodMove') compiledMethodAt: selector)
+						rowanPackageName = Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'RwTraitMethodMove'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Loader-Extensions-OnlyV2' ] ].
+			{'disownFromLoaded:'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'RwGsLoadedSymbolDictTrait') compiledMethodAt: selector)
+						rowanPackageName = Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'RwGsLoadedSymbolDictTrait'
+								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ]
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> auditForProjectsNamed: theProjectNames [
+UpgradeRowanV3 >> auditForProjectsNamed: theProjectNames [
 	audit := KeyValueDictionary new.
 	theProjectNames
 		do: [ :prjName | 
@@ -220,13 +277,13 @@ UpgradeRowanV2 >> auditForProjectsNamed: theProjectNames [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> commit [
+UpgradeRowanV3 >> commit [
 	self shouldCommit
 		ifTrue: [ System commit ]
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> countAuditErrors [
+UpgradeRowanV3 >> countAuditErrors [
 	auditErrors ifNil: [ auditErrors := 0 ].
 	errorMessages := nil.
 	audit
@@ -239,14 +296,14 @@ UpgradeRowanV2 >> countAuditErrors [
 ]
 
 { #category : 'upgrade customer' }
-UpgradeRowanV2 >> customerProjectNames [
+UpgradeRowanV3 >> customerProjectNames [
 	^ (self globalNamed: 'Rowan') projectNames
 		removeAllPresent: self rowanProjectNames;
 		yourself
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> customerRepairDifferentMethodCategory: auditDetail [
+UpgradeRowanV3 >> customerRepairDifferentMethodCategory: auditDetail [
 	"different method categories are repaired by moving the method to the expected category"
 
 	self
@@ -254,7 +311,7 @@ UpgradeRowanV2 >> customerRepairDifferentMethodCategory: auditDetail [
 ]
 
 { #category : 'upgrade customer' }
-UpgradeRowanV2 >> customerRepairMap [
+UpgradeRowanV3 >> customerRepairMap [
 	"List of audit errors that would be expected in customer code if methods were 
 		removed from classes managed by Rowan without updating the Rowan 
 		metadata, as happens during upgradeImage"
@@ -275,7 +332,7 @@ UpgradeRowanV2 >> customerRepairMap [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> customerRepairMissingCompiledMethod: auditDetail [
+UpgradeRowanV3 >> customerRepairMissingCompiledMethod: auditDetail [
 	"missing compiled methods (because upgradeImage has removed them) can be repaired by 
 		removing the associated loaded method, which will allow the method to be loaded 
 		into the image, when project is reloaded"
@@ -289,7 +346,7 @@ UpgradeRowanV2 >> customerRepairMissingCompiledMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> customerRepairMissingLoadedMethod: auditDetail [
+UpgradeRowanV3 >> customerRepairMissingLoadedMethod: auditDetail [
 	"missing loaded methods are a special case of missing compiled method, 
 		where the compiled method was initially removed and then replaced 
 		by a new compiled method thus losing the reference the loaded method, 
@@ -304,7 +361,7 @@ UpgradeRowanV2 >> customerRepairMissingLoadedMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> customerRepairNonIdenticalMethod: auditDetail [
+UpgradeRowanV3 >> customerRepairNonIdenticalMethod: auditDetail [
 	"nonIdentical methods (because upgradeImage has removed and recompiled the 
 		compiled method, leaving the loaded method referencing a dangling compiled 
 		method reference) can be repaired by slicing the new compiled method into 
@@ -320,7 +377,7 @@ UpgradeRowanV2 >> customerRepairNonIdenticalMethod: auditDetail [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> cypressClassNames [
+UpgradeRowanV3 >> cypressClassNames [
 	"Rowan v1.2.13 Cypress class names"
 
 	^ {'CypressLoaderErrorNotification'.
@@ -411,13 +468,13 @@ UpgradeRowanV2 >> cypressClassNames [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> errorMessages [
+UpgradeRowanV3 >> errorMessages [
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
 
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> gemstoneBaseRepairClassesNotIdentical: auditDetail [
+UpgradeRowanV3 >> gemstoneBaseRepairClassesNotIdentical: auditDetail [
 	"classes not identical when the loadedClass is referencing an older version of class whose shape 
 		changed during upgradeImage of GemStone, can be repaired by adopting the class into a 
 		package ... and when the definition for the new version of the class is loaded the class will be 
@@ -429,7 +486,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairClassesNotIdentical: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> gemstoneBaseRepairDifferentMethodCategory: auditDetail [
+UpgradeRowanV3 >> gemstoneBaseRepairDifferentMethodCategory: auditDetail [
 	"different method categories are repaired by moving the method to the expected category"
 
 	self
@@ -437,7 +494,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairDifferentMethodCategory: auditDetail [
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> gemstoneBaseRepairMap [
+UpgradeRowanV3 >> gemstoneBaseRepairMap [
 	"List of audit errors that would be expected in gemsteBaseImage code if methods were 
 		removed from classes managed by Rowan without updating the Rowan 
 		metadata, as happens during upgradeImage"
@@ -462,7 +519,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMap [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> gemstoneBaseRepairMissingCompiledMethod: auditDetail [
+UpgradeRowanV3 >> gemstoneBaseRepairMissingCompiledMethod: auditDetail [
 	"missing compiled methods (because upgradeImage has removed them) can be repaired by 
 		removing the associated loaded method, which will allow the method to be loaded 
 		into the image, when project is reloaded"
@@ -476,7 +533,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingCompiledMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
+UpgradeRowanV3 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 	"missing loaded methods are a special case of missing compiled method, 
 		where the compiled method was initially removed and then replaced 
 		by a new compiled method thus losing the reference the loaded method, 
@@ -491,7 +548,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> gemstoneBaseRepairNonIdenticalMethod: auditDetail [
+UpgradeRowanV3 >> gemstoneBaseRepairNonIdenticalMethod: auditDetail [
 	"nonIdentical methods (because upgradeImage has removed and recompiled the 
 		compiled method, leaving the loaded method referencing a dangling compiled 
 		method reference) can be repaired by slicing the new compiled method into 
@@ -507,29 +564,29 @@ UpgradeRowanV2 >> gemstoneBaseRepairNonIdenticalMethod: auditDetail [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> gemstoneVersion [
+UpgradeRowanV3 >> gemstoneVersion [
 	^ self gsVersion asRwGemStoneVersionNumber
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> globalNamed: aString [
+UpgradeRowanV3 >> globalNamed: aString [
 	"return nil if global not defined"
 
 	^ self class globalNamed: aString
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> gsVersion [
+UpgradeRowanV3 >> gsVersion [
 	^ System gemVersionReport at: 'gsVersion'
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> logMessage: message [
+UpgradeRowanV3 >> logMessage: message [
 	self class logMessage: message
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV2 >> migrateRowan [
+UpgradeRowanV3 >> migrateRowan [
 	"RwLoadedPackage has a new instance variable loadedTraits"
 
 	| oldVersion instances |
@@ -543,7 +600,7 @@ UpgradeRowanV2 >> migrateRowan [
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> moveCypressClassesToGlobals: cypressClassNames [
+UpgradeRowanV3 >> moveCypressClassesToGlobals: cypressClassNames [
 	"upgradeImage moves Cypress* classes in Globals to ObsoleteClasses
 		(associated with upgrade from 3.4.x), so we need to restore the 
 		Cypress classes currently used by v1.2.x"
@@ -555,17 +612,17 @@ UpgradeRowanV2 >> moveCypressClassesToGlobals: cypressClassNames [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> projectsHome [
+UpgradeRowanV3 >> projectsHome [
 	^ projectsHome ifNil: [ projectsHome := '$ROWAN_PROJECTS_HOME' ]
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> projectsHome: aPathString [
+UpgradeRowanV3 >> projectsHome: aPathString [
 	projectsHome := aPathString
 ]
 
 { #category : 'upgrade customer' }
-UpgradeRowanV2 >> reloadCustomer [
+UpgradeRowanV3 >> reloadCustomer [
 	| customerProjectNames |
 	customerProjectNames := self customerProjectNames reject: [:projectName | projectName = 'UnPackaged' ].
 	customerProjectNames
@@ -575,7 +632,7 @@ UpgradeRowanV2 >> reloadCustomer [
 ]
 
 { #category : 'upgrade gemstoneBaseImage' }
-UpgradeRowanV2 >> reloadGemstoneBase [
+UpgradeRowanV3 >> reloadGemstoneBase [
 	| project platformConditionalAttributes projectName loadSpecSet projectDefinitionSet  |
 	projectName := 'gemstoneBaseImage'.
 	self upgradeUnPackagedProject.
@@ -612,7 +669,7 @@ UpgradeRowanV2 >> reloadGemstoneBase [
 ]
 
 { #category : 'upgrade rowan' }
-UpgradeRowanV2 >> reloadRowan [
+UpgradeRowanV3 >> reloadRowan [
 	| project platformConditionalAttributes loadSpecSet projectDefinitionSet |
 	self adoptRowan.
 	project := Rowan projectNamed: 'Rowan'.
@@ -630,7 +687,7 @@ UpgradeRowanV2 >> reloadRowan [
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> repairAuditFailures: repairMap [
+UpgradeRowanV3 >> repairAuditFailures: repairMap [
 	errorMessages := nil.
 	audit
 		keysAndValuesDo: [ :packageName :auditReport | 
@@ -677,7 +734,7 @@ UpgradeRowanV2 >> repairAuditFailures: repairMap [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageName [
+UpgradeRowanV3 >> repairClassesNotIdentical: className inPackageNamed: packageName [
 	| loadedClass loadedPackage theClass |
 	loadedPackage := (self globalNamed: 'Rowan') image
 		loadedPackageNamed: packageName.
@@ -702,7 +759,11 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 	(loadedPackage loadedClasses includesKey: className)
 		ifTrue: [ loadedPackage loadedClasses removeKey: className ]
 		ifFalse: [ loadedPackage loadedClassExtensions removeKey: className ].	"remove the orphaned loaded class"
-	Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName.	"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+	loadedClass isLoadedClassExtension
+		ifTrue: [  ]
+		ifFalse: [ 
+			"adopt the class into packageName ...when gemstonBaseImage loaded, the loaded class is expected to be moved to the correct package"
+			Rowan packageTools adopt adoptClass: theClass intoPackageNamed: packageName ].
 	self
 		logMessage:
 			'  Repair classes not identical: ' , loadedClass name , ' for package '
@@ -711,7 +772,7 @@ UpgradeRowanV2 >> repairClassesNotIdentical: className inPackageNamed: packageNa
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairDifferentMethodCategory: auditDetail [
+UpgradeRowanV3 >> repairDifferentMethodCategory: auditDetail [
 	"different method categories are repaired by moving the method to the expected category"
 
 	self
@@ -723,7 +784,7 @@ UpgradeRowanV2 >> repairDifferentMethodCategory: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairDifferentMethodCategory: methodSpec expectedCategory: category inBehavior: aBehavior inPackageNamed: packageName [
+UpgradeRowanV3 >> repairDifferentMethodCategory: methodSpec expectedCategory: category inBehavior: aBehavior inPackageNamed: packageName [
 	"missing compiled methods (because upgradeImage has removed them) can be repaired by 
 		removing the associated loaded method, which will allow the method to be loaded 
 		into the image, when project is reloaded"
@@ -741,24 +802,24 @@ UpgradeRowanV2 >> repairDifferentMethodCategory: methodSpec expectedCategory: ca
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> repairedByReload [
+UpgradeRowanV3 >> repairedByReload [
 	^ repairedByReload ifNil: [ repairedByReload := 0 ].
 
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> repairedCount [
+UpgradeRowanV3 >> repairedCount [
 	^ repairedCount ifNil: [ repairedCount := 0 ].
 
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairedWhenDefinitionsReloaded:ignoredMethod [ 
+UpgradeRowanV3 >> repairedWhenDefinitionsReloaded:ignoredMethod [ 
 	repairedByReload := self repairedByReload + 1
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
+UpgradeRowanV3 >> repairLoadedPackageNotInRegistry: auditDetail [
 	"loadedPackageNotInRegistry occur because a symbol dictionary where 
 		the package is registered is no longer in the symbol list. To repair
 		we put the symbol dictionary in the transient symbol list and disown
@@ -785,7 +846,7 @@ UpgradeRowanV2 >> repairLoadedPackageNotInRegistry: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingCompiledMethod: auditDetail [
+UpgradeRowanV3 >> repairMissingCompiledMethod: auditDetail [
 	"missing compiled methods (because upgradeImage has removed them) can be repaired by 
 		removing the associated loaded method, which will allow the method to be loaded 
 		into the image, when project is reloaded"
@@ -799,7 +860,7 @@ UpgradeRowanV2 >> repairMissingCompiledMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingCompiledMethod: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+UpgradeRowanV3 >> repairMissingCompiledMethod: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 	"missing compiled methods (because upgradeImage has removed them) can be repaired by 
 		removing the associated loaded method, which will allow the method to be loaded 
 		into the image, when project is reloaded"
@@ -835,7 +896,7 @@ UpgradeRowanV2 >> repairMissingCompiledMethod: methodSpec inClassNamed: classNam
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingLoadedMethod: auditDetail [
+UpgradeRowanV3 >> repairMissingLoadedMethod: auditDetail [
 	"missing loaded methods are a special case of missing compiled method, 
 		where the compiled method was initially removed and then replaced 
 		by a new compiled method thus losing the reference the loaded method, 
@@ -850,7 +911,7 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+UpgradeRowanV3 >> repairMissingLoadedMethod: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 	"There are two use cases for missing loaded methods:
 		1. the reference to the loaded method from the compiled method is missing,
 			but the loaded method itself is present
@@ -948,14 +1009,14 @@ UpgradeRowanV2 >> repairMissingLoadedMethod: methodSpec inClassNamed: className 
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingLoadedNotIdentical: candidateDetailMap [
+UpgradeRowanV3 >> repairMissingLoadedNotIdentical: candidateDetailMap [
 	| repairedDetails |
 	repairedDetails := IdentitySet new.
 	^ repairedDetails
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairMissingLoadedNotIdenticalFor: theSelector detailDict: detailDict repairedDetails: repairedDetails forPackageName: packageName andBehavior: aBehavior [
+UpgradeRowanV3 >> repairMissingLoadedNotIdenticalFor: theSelector detailDict: detailDict repairedDetails: repairedDetails forPackageName: packageName andBehavior: aBehavior [
 	"
 		When we find the pattern of a pair of auditDetails for the same package, class 
 		and class, where one reason is #'missingLoadedMethodDetail' and the other 
@@ -1000,7 +1061,7 @@ UpgradeRowanV2 >> repairMissingLoadedNotIdenticalFor: theSelector detailDict: de
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairNonIdenticalMethod: auditDetail [
+UpgradeRowanV3 >> repairNonIdenticalMethod: auditDetail [
 	"nonIdentical methods (because upgradeImage has removed and recompiled the 
 		compiled method, leaving the loaded method referencing a dangling compiled 
 		method reference) can be repaired by slicing the new compiled method into 
@@ -1016,7 +1077,7 @@ UpgradeRowanV2 >> repairNonIdenticalMethod: auditDetail [
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+UpgradeRowanV3 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 	"nonIdentical methods (because upgradeImage has removed and recompiled the 
 		compiled method, leaving the loaded method referencing a dangling compiled 
 		method reference) can be repaired by slicing the new compiled method into 
@@ -1072,7 +1133,7 @@ UpgradeRowanV2 >> repairNonIdenticalMethodFor: methodSpec inClassNamed: classNam
 ]
 
 { #category : 'upgrade' }
-UpgradeRowanV2 >> repairSummary [
+UpgradeRowanV3 >> repairSummary [
 	self logMessage: 'REPAIR SUMMARY'.
 	self
 		logMessage: 'Repaired ' , self repairedCount printString , ' audit failures'.
@@ -1083,7 +1144,7 @@ UpgradeRowanV2 >> repairSummary [
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV2 >> rowanMigrateTo [
+UpgradeRowanV3 >> rowanMigrateTo [
 	"RwLoadedPackage has a new instance variable loadedTraits, set up for migration but do not run the migration"
 
 	| oldVersion |
@@ -1096,12 +1157,24 @@ UpgradeRowanV2 >> rowanMigrateTo [
 ]
 
 { #category : 'upgrade rowan' }
-UpgradeRowanV2 >> rowanProjectNames [
+UpgradeRowanV3 >> rowanProjectNames [
 	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
 ]
 
+{ #category : 'repair' }
+UpgradeRowanV3 >> rowanRepairClassesNotIdentical: auditDetail [
+	"classes not identical when the loadedClass is referencing an older version of class whose shape 
+		changed during upgradeImage of GemStone, can be repaired by adopting the class into a 
+		package ... and when the definition for the new version of the class is loaded the class will be 
+		moved to the correct package"
+
+	self
+		repairClassesNotIdentical: auditDetail loadedClass name
+		inPackageNamed: auditDetail loadedClass loadedPackage name
+]
+
 { #category : 'upgrade rowan' }
-UpgradeRowanV2 >> rowanRepairMap [
+UpgradeRowanV3 >> rowanRepairMap [
 	"List of audit errors that would be expected in Rowan code if methods were 
 		removed from classes managed by Rowan without updating the Rowan 
 		metadata, as happens during upgradeImage"
@@ -1109,6 +1182,7 @@ UpgradeRowanV2 >> rowanRepairMap [
 	| repairMap |
 	repairMap := Dictionary new.
 	repairMap
+		at: #'classesNotIdentical' put: #'rowanRepairClassesNotIdentical:';
 		at: #'methodsNotIdentical' put: #'repairNonIdenticalMethod:';
 		at: #'differentMethodCategory' put: #'repairDifferentMethodCategory:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
@@ -1121,7 +1195,7 @@ UpgradeRowanV2 >> rowanRepairMap [
 ]
 
 { #category : 'private' }
-UpgradeRowanV2 >> selectorFromMethodSpec: methodSpec [
+UpgradeRowanV3 >> selectorFromMethodSpec: methodSpec [
 	| index |
 	index := methodSpec indexOfSubCollection: ' >> ' startingAt: 1.
 	^ (methodSpec copyFrom: index + 4 to: methodSpec size) asSymbol
@@ -1129,36 +1203,63 @@ UpgradeRowanV2 >> selectorFromMethodSpec: methodSpec [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> shouldCommit [
+UpgradeRowanV3 >> shouldCommit [
 	^ shouldCommit ifNil: [ shouldCommit := false ]
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> shouldCommit: object [
+UpgradeRowanV3 >> shouldCommit: object [
 	shouldCommit := object
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> skip [
+UpgradeRowanV3 >> skip [
 	^ skip ifNil: [ skip := true ]
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> skipCount [
+UpgradeRowanV3 >> skipCount [
 	^ skipCount ifNil: [ skipCount := 0 ]
 
 ]
 
 { #category : 'repair' }
-UpgradeRowanV2 >> skipRepair: auditDetail [
+UpgradeRowanV3 >> skipRepair: auditDetail [
 	skipCount := self skipCount + 1
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
+UpgradeRowanV3 >> step_0_5_migrateRowan [
+	"Migrate instances of Rowan objects that have changed shape with this version of Rowan"
+
+	"If you choose to combine the required Rowan migration with your own, then the your migration 
+		should be performed at this point during the Rowan upgrae, and see migrateRowan for migration 
+		pattern to be used for Rowan. The method selector _migrateRowanMigrateFromMethodSourceSelector
+		should be removed from RwGsLoadedSymbolDictPackage after migration is complete."
+
+	self logMessage: 'migrate Rowan'.
+	self migrateRowan.
+	self commit
+]
+
+{ #category : 'steps' }
+UpgradeRowanV3 >> step_1_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
 	self logMessage: ' repair ROWAN audit failures'.
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"New version of GsFileIn (again) ... old version added to ObsoleteClasses during upgradeImage. Cross project impacts, so to the disown now."
+			((Rowan globalNamed: 'ObsoleteClasses')
+				at: #'ObsoleteGsFileIn'
+				ifAbsent: [  ])
+				ifNotNil: [ :obsoleteGsFileInClass | 
+					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
+						ifTrue: [ 
+							self logMessage: 'Disown ObsoleteGsFileIn extensions methods from project Rowan'.
+							Rowan packageTools disown disownClassExtensionMethodsInClass: obsoleteGsFileInClass forProjectNamed: 'Rowan' ] ] ].
+
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.
 	audit isEmpty
@@ -1172,7 +1273,7 @@ UpgradeRowanV2 >> step_1_repairRowanAuditFailures [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
+UpgradeRowanV3 >> step_2_repairGemstoneBaseAuditFailures [
 	"Use the gemstoneBaseImage project audit to repair the damaged Rowan metadata"
 
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
@@ -1190,7 +1291,7 @@ UpgradeRowanV2 >> step_2_repairGemstoneBaseAuditFailures [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
+UpgradeRowanV3 >> step_3_repairCustomerAuditFailures [
 	"Use the Rowan project audit to repair any damaged customer metadata, caused by the removal of base extension methods"
 
 	self logMessage: ' repair CUSTOMER audit failures'.
@@ -1207,21 +1308,7 @@ UpgradeRowanV2 >> step_3_repairCustomerAuditFailures [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_4_1_migrateRowan [
-	"Migrate instances of Rowan objects that have changed shape with this version of Rowan"
-
-	"If you choose to combine the required Rowan migration with your own, then the your migration 
-		should be performed at this point during the Rowan upgrae, and see migrateRowan for migration 
-		pattern to be used for Rowan. The method selector _migrateRowanMigrateFromMethodSourceSelector
-		should be removed from RwGsLoadedSymbolDictPackage after migration is complete."
-
-	self logMessage: 'migrate Rowan'.
-	self migrateRowan.
-	self commit
-]
-
-{ #category : 'steps' }
-UpgradeRowanV2 >> step_4_reloadRowan [
+UpgradeRowanV3 >> step_4_reloadRowan [
 	"Reload the Rowan project to repair those audit failures repaired by a reload"
 
 	self logMessage: 'reload Rowan'.
@@ -1230,7 +1317,7 @@ UpgradeRowanV2 >> step_4_reloadRowan [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_5_reloadGemstoneBase [
+UpgradeRowanV3 >> step_5_reloadGemstoneBase [
 	"Reload the gemstoneBaseImage project to repair those audit failures repaired by a reload and to install platform-specific changes"
 
 	self logMessage: 'reload gemstoneBaseImage project'.
@@ -1239,7 +1326,7 @@ UpgradeRowanV2 >> step_5_reloadGemstoneBase [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_6_reloadCustomer [
+UpgradeRowanV3 >> step_6_reloadCustomer [
 	"Reload the Customer projects to repair those audit failures repaired by a reload and to install platform-specific changes"
 
 	self logMessage: 'reload Customer projects'.
@@ -1248,7 +1335,7 @@ UpgradeRowanV2 >> step_6_reloadCustomer [
 ]
 
 { #category : 'steps' }
-UpgradeRowanV2 >> step_7_finalAudit [
+UpgradeRowanV3 >> step_7_finalAudit [
 	self logMessage: 'Final Audit'.
 	self auditForProjectsNamed: (self globalNamed: 'Rowan') projectNames.
 	self countAuditErrors.
@@ -1260,18 +1347,18 @@ UpgradeRowanV2 >> step_7_finalAudit [
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> upgradeFrom [
+UpgradeRowanV3 >> upgradeFrom [
 	upgradeFrom ifNil: [ self error: 'upgradeFrom must be defined' ].
 	^ upgradeFrom
 ]
 
 { #category : 'accessing' }
-UpgradeRowanV2 >> upgradeFrom: object [
+UpgradeRowanV3 >> upgradeFrom: object [
 	upgradeFrom := object
 ]
 
 { #category : 'upgrade UnPackaged' }
-UpgradeRowanV2 >> upgradeUnPackagedProject [
+UpgradeRowanV3 >> upgradeUnPackagedProject [
 	(self gemstoneVersion >= '3.7.0' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
 		ifTrue: [ 

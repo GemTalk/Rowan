@@ -54,6 +54,7 @@ EXAMPLES
 %
 input
 	$GEMSTONE/upgrade/bootstrap/UpgradeRowanV3.gs
+	$GEMSTONE/upgrade/bootstrap/RowanV3.gs
 %
 specs
 [
@@ -99,10 +100,12 @@ doit
 			yourself ].
 	Rowan projectTools disown disownProjectNamed: 'RowanUpgrade'. "remove Rowan metadata and leave class in transient symbol dict"
 
-	upgrader := (self globalNamed: 'UpgradeRowanV2') new.
+	upgrader := (self globalNamed: 'UpgradeRowanV3') new.
 	upgrader
 		upgradeFrom: self upgradeFrom;
 		shouldCommit: self commit.
+	self rowanMigrate
+		ifTrue: [ upgrader step_0_5_migrateRowan ].
 	self rowanRepair
 		ifTrue: [ upgrader step_1_repairRowanAuditFailures ].
 	self gemstoneBaseRepair
@@ -111,8 +114,6 @@ doit
 		ifTrue: [ upgrader step_3_repairCustomerAuditFailures ].
 	self rowanReload
 		ifTrue: [ upgrader step_4_reloadRowan ].
-	self rowanMigrate
-		ifTrue: [ upgrader step_4_1_migrateRowan ].
 	self gemstoneBaseReload
 		ifTrue: [ upgrader step_5_reloadGemstoneBase ].
 	self customerReload
