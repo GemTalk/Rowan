@@ -348,6 +348,23 @@ UpgradeRowanV2 >> adoptRowan [
 								adoptMethod: selector
 								inClassNamed: 'GsFileIn'
 								isMeta: false
+								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ].
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"GsFileIn changed shape (again) in 3.7.2"
+			{'currentPackage:'.
+			'currentProject:'.
+			'currentPackage'.
+			'currentProject'}
+				do: [ :selector | 
+					((Rowan globalNamed: 'GsFileIn') compiledMethodAt: selector) rowanPackageName
+						= Rowan unpackagedName
+						ifTrue: [ 
+							Rowan packageTools adopt
+								adoptMethod: selector
+								inClassNamed: 'GsFileIn'
+								isMeta: false
 								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ]
 ]
 
