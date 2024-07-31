@@ -16,7 +16,7 @@ RwGsLoadedSymbolDictClass >> _classBasedProperties [
 	"Answer the list of properties that are derived from the class instance itself"
 
 	^ #(  #'category' #'classinstvars'  #'name' #'type' #'classvars' #'comment' #'gs_constraints' #'instvars'  #'gs_options' 
-			#'pools' #'superclass' #'gs_SymbolDictionary' #traits #classTraits)
+			#'pools' #'superclass' #'gs_SymbolDictionary')
 ]
 
 { #category : 'methods' }

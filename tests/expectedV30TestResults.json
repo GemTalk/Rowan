@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 8,
 		"failures" : 10,
-		"passed" : 1166,
-		"summary" : "1184 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1342.97s",
-		"tests" : 1184,
-		"time" : 1342.968
+		"passed" : 1170,
+		"summary" : "1188 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1363.32s",
+		"tests" : 1188,
+		"time" : 1363.316
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -636,6 +636,18 @@
 		{
 			"className" : "RwAdoptToolApiTest",
 			"status" : "passed",
+			"selector" : "testAdoptTrait_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
+			"selector" : "testAdoptTrait_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwAdoptToolApiTest",
+			"status" : "passed",
 			"selector" : "testAdopt_issue481_A",
 			"time" : "0"
 		},
@@ -943,6 +955,12 @@
 			"className" : "RwDisownToolApiTest",
 			"status" : "passed",
 			"selector" : "testDisownExtensionMethods",
+			"time" : "0"
+		},
+		{
+			"className" : "RwDisownToolApiTest",
+			"status" : "passed",
+			"selector" : "testDisownExtensionMethods_A",
 			"time" : "0"
 		},
 		{
@@ -5640,12 +5658,6 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
-			"selector" : "testSpec_0085_03_to_03_removeTrait",
-			"time" : "0"
-		},
-		{
-			"className" : "RwRowanSample9V3Test",
-			"status" : "passed",
 			"selector" : "testSpec_0085_03_to_04",
 			"time" : "0"
 		},
@@ -5658,6 +5670,12 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0085_03_to_06_removeTrait",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSpec_0085_04",
 			"time" : "0"
 		},
@@ -5665,6 +5683,12 @@
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
 			"selector" : "testSpec_0085_05",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0085_06",
 			"time" : "0"
 		},
 		{
@@ -7120,5 +7144,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-07-03T16:54:30.613711-07:00"
+	"timeStamp" : "2024-07-31T14:54:40.999272-07:00"
 }
