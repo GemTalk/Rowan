@@ -365,7 +365,15 @@ UpgradeRowanV2 >> adoptRowan [
 								adoptMethod: selector
 								inClassNamed: 'GsFileIn'
 								isMeta: false
-								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ]
+								intoPackageNamed: 'Rowan-GemStone-Kernel-36x' ] ] ].
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.0' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"GsFileinPackager is a new class in 3.7.0 ... put into package Rowan-GemStone-Core (symbol dictionary RowanKernel) 
+				and it will be moved to final resting place during reload"
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'GsFileinPackager')
+				intoPackageNamed: 'Rowan-GemStone-Core' ]
 ]
 
 { #category : 'upgrade' }
