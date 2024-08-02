@@ -7765,19 +7765,15 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 	className1 := 'RowanSample9TestCase'.
 	className2 := 'RowanSample9Class1'.
 
-	loadedProjects := self 
-		_testUnmanagedSpec_0057: true 
-		packageName1: packageName1 
-		packageName2: packageName2 
-		className1: className1 
-		className2: className2.
-
-"validate"
+	loadedProjects := self
+		_testUnmanagedSpec_0057: true
+		packageName1: packageName1
+		packageName2: packageName2
+		className1: className1
+		className2: className2.	"validate"
 	project := loadedProjects at: 1.
 	self _runTestSuiteForProject: project.
-	audit := project audit.
-
-"run reports"
+	audit := project audit.	"run reports"
 	reports := {(Rowan gemstoneTools topaz
 		unmanagedClassesAndMethodsReportForSymbolDictionaries: Rowan image symbolList).
 	(Rowan gemstoneTools topaz
@@ -7801,15 +7797,18 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 									ar
 										do: [ :infoAr | 
 											"ignore superDoit classes - need two for short period of time ... the spelling error fixed in latest superDoit version"
-											unexpected := (#(SuperDoit_trasientSymbolDictionary SuperDoit_transientSymbolDictionary) includes: (infoAr at: 1) name) not ] ].
+											unexpected := (#(#'SuperDoit_trasientSymbolDictionary' #'SuperDoit_transientSymbolDictionary')
+												includes: (infoAr at: 1) name) not ] ].
 							unexpected
 								ifTrue: [ 
 									self
 										assert: false
 										description:
-											'The class ' , (classDetails at: 'class') name asString
+											'The method ' , (methodDetails at: 'method') printString
 												, ' is unexpectedly unpackaged' ] ] ] ].
-	self assert: audit isEmpty description: 'Unexpected audit failure ... need category: intercept'
+	self
+		assert: audit isEmpty
+		description: 'Unexpected audit failure ... need category: intercept'
 ]
 
 { #category : 'tests' }
