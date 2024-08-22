@@ -140,12 +140,15 @@ UpgradeRowanV2 >> _adoptUpgradeFromPre372To372 [
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: className)
 				intoPackageNamed: 'Filein3B' ].
-	#('GenerateGsTestClass')
-		do: [ :className | 
-			"eventually remove, since they're here as a test"
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: className)
-				intoPackageNamed: 'Filein2Streams' ].
+	(Rowan globalNamed: 'GenerateGsTestClass')
+		ifNotNil: [ 
+			"REMOVE ME ... JUST A TEST in 3.7.2"
+			#('GenerateGsTestClass')
+				do: [ :className | 
+					"eventually remove, since they're here as a test"
+					Rowan packageTools adopt
+						adoptClass: (Rowan globalNamed: className)
+						intoPackageNamed: 'Filein2Streams' ] ].
 	#('AbstractTrait' 'Trait' 'ClassTrait' 'GsTraitImpl')
 		do: [ :className | 
 			"Ultimate package is Filein2Traits, but that package is now in 3.7.2 ... use Filein2Streams for now"
