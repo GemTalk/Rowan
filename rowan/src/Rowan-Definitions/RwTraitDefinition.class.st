@@ -133,6 +133,31 @@ RwTraitDefinition >> compareAgainstBase: aDefinition using: aModificationClass [
 	^ modification
 ]
 
+{ #category : 'DEBUG' }
+RwTraitDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass [
+	| keys |
+	keys := myDictionary keys.	"keys is already a copy"
+	keys addAll: baseDictionary keys.
+	keys
+		do: [ :key | 
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [  ].
+			before := before
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			after := myDictionary at: key ifAbsent: [  ].
+			after := after
+				ifNil: [ elementClass new ]
+				ifNotNil: [ :def | 
+					"at this point convert loaded thing to a real definition"
+					def asDefinition ].
+			modification := after compareAgainstBase: before.
+			modification isEmpty
+				ifFalse: [ anElementsModification addElementModification: modification ] ]
+]
+
 { #category : 'accessing' }
 RwTraitDefinition >> instVarNames [
 	^ properties at: #'instvars' ifAbsent: [ #() ]

@@ -13,6 +13,7 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'rowanMigrate'.
 	SuperDoitOptionalOptionWithNoArg long: 'rowanRepair'.
 	SuperDoitOptionalOptionWithNoArg long: 'skip'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'debugUpgrade'.
 }
 %
 usage
@@ -38,6 +39,7 @@ OPTIONS
                              running the script
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
+  --debugUpgrade=<option>    Option may be test, or a number between1 and 5
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
@@ -47,6 +49,9 @@ EXAMPLES
   $basename --debug <script-arguments>       <topaz-arguments>
   $basename <script-arguments>               <topaz-arguments>
 
+  $basename --upgradeFrom=3.6.3  --commit --rowanRepair --rowanReload \
+            --gemstoneBaseRepair --gemstoneBaseReload --customerRepair \
+            --customerReload --audit --debugGem --debugUpgrade=test
   $basename --upgradeFrom=3.6.3  --commit --rowanRepair --rowanReload \
             --gemstoneBaseRepair --gemstoneBaseReload --customerRepair \
             --customerReload --audit
@@ -104,6 +109,11 @@ doit
 	upgrader
 		upgradeFrom: self upgradeFrom;
 		shouldCommit: self commit.
+	self debugUpgrade 
+		ifNotNil: [ :debugOption | 
+			UserGlobals at: #DEBUG_UPGRADE put: debugOption.
+			self stdout nextPutAll: '	#DEBUG_UPGRADE=', (UserGlobals at: #DEBUG_UPGRADE); lf. 
+			].
 	self rowanMigrate
 		ifTrue: [ upgrader step_0_5_migrateRowan ].
 	self rowanRepair

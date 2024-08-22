@@ -302,6 +302,5 @@ RwGsImagePatchVisitor_V2 >> visitTraitModification: aTraitModification [
 
 { #category : 'visting' }
 RwGsImagePatchVisitor_V2 >> visitTraitsModification: aTraitsModification [
-	true
-		ifTrue: [ aTraitsModification elementsModified do: [ :each | each acceptVisitor: self ] ]
+	aTraitsModification elementsModified do: [ :each | each acceptVisitor: self ]
 ]

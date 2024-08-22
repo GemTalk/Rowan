@@ -8707,7 +8707,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_01 [
 			details
 				unmanagedMethodsDo: [
 				"no unpackaged methods"
-				self assert: false details: 'Unexpected unmanaged class or methods' ] ]
+				self assert: false description: 'Unexpected unmanaged class or methods' ] ]
 ]
 
 { #category : 'tests' }
@@ -8795,7 +8795,7 @@ RwRowanSample9Test >> testUnmanagedSpec_0057_03 [
 			details
 				unmanagedMethodsDo: [ 
 				"no unpackaged methods"
-				self assert: false details: 'Unexpected unmanaged class or methods' ] ]
+				self assert: false description: 'Unexpected unmanaged class or methods' ] ]
 ]
 
 { #category : 'tests' }

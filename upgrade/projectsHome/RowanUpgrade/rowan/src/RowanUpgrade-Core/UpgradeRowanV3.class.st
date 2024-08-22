@@ -94,12 +94,15 @@ UpgradeRowanV3 >> _analyzeAuditForMissingLoadedNotIdentical [
 { #category : 'migrate rowan' }
 UpgradeRowanV3 >> _migrateRowanMigrateFromMethodSource [
 	^ 'migrateFrom: oldLoadedPackage instVarMap: aMap
+	| ivIndex |
+	ivIndex := self class allInstVarNames indexOfIdentical: #''loadedTraits''.
 	super migrateFrom: oldLoadedPackage instVarMap: aMap.
-
-  self
-    instVarAt: (self class allInstVarNames indexOfIdentical: #''loadedTraits'')
-    put: StringKeyValueDictionary new.
-	^ self'
+	(self instVarAt: ivIndex)
+		ifNil: [ 
+			self 
+				instVarAt: ivIndex
+				put: StringKeyValueDictionary new.
+				^ self ]'
 ]
 
 { #category : 'migrate rowan' }
@@ -189,14 +192,24 @@ UpgradeRowanV3 >> adoptGemstoneBase [
 					"target package is Filein2Traits, but it doesn't exist at this point in time"
 					Rowan packageTools adopt
 						adoptClass: (Rowan globalNamed: className)
+						intoPackageNamed: 'Filein2Streams' ] ].
+	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber <= '3.7.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"REMOVE ME ... JUST A TEST in 3.7.2 -- HOWEVER, this is where adopts will need to be done if Traits are used in 3.7.2"
+			(Rowan globalNamed: 'GenerateGsTestTrait')
+				ifNotNil: [ 
+					"REMOVE ME ... JUST A TEST in 3.7.2"
+					Rowan packageTools adopt
+						adoptTrait: (Rowan globalNamed: 'GenerateGsTestTrait')
 						intoPackageNamed: 'Filein2Streams' ].
-			Rowan packageTools adopt
-				adoptTrait: (Rowan globalNamed: 'GenerateGsTestTrait')
-				intoPackageNamed: 'Filein2Streams'.	"REMOVE ME ... JUST A TEST"
 
-			Rowan packageTools adopt
-				adoptClass: (Rowan globalNamed: 'GenerateGsTestClass')
-				intoPackageNamed: 'Filein2Streams'	"REMOVE ME ... JUST A TEST" ]
+			(Rowan globalNamed: 'GenerateGsTestClass')
+				ifNotNil: [ 
+					"REMOVE ME ... JUST A TEST in 3.7.2"
+					Rowan packageTools adopt
+						adoptClass: (Rowan globalNamed: 'GenerateGsTestClass')
+						intoPackageNamed: 'Filein2Streams' ] ]
 ]
 
 { #category : 'upgrade rowan' }
@@ -1237,7 +1250,7 @@ UpgradeRowanV3 >> step_0_5_migrateRowan [
 		pattern to be used for Rowan. The method selector _migrateRowanMigrateFromMethodSourceSelector
 		should be removed from RwGsLoadedSymbolDictPackage after migration is complete."
 
-	self logMessage: 'migrate Rowan'.
+	self logMessage: ' migrate Rowan'.
 	self migrateRowan.
 	self commit
 ]
@@ -1258,7 +1271,9 @@ UpgradeRowanV3 >> step_1_repairRowanAuditFailures [
 					obsoleteGsFileInClass rowanProjectName ~= Rowan unpackagedName
 						ifTrue: [ 
 							self logMessage: 'Disown ObsoleteGsFileIn extensions methods from project Rowan'.
-							Rowan packageTools disown disownClassExtensionMethodsInClass: obsoleteGsFileInClass forProjectNamed: 'Rowan' ] ] ].
+							Rowan packageTools disown
+								disownClassExtensionMethodsInClass: obsoleteGsFileInClass
+								forProjectNamed: 'Rowan' ] ] ].
 
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.

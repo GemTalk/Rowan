@@ -504,7 +504,6 @@ RwGsPatchSet_V2 >> addAddedProject: aProjectDefinition [
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addAddedTrait: aTraitDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
-
 	currentProjectDefinition := aProjectDefinition.
 	addedTraits
 		add:
@@ -1103,7 +1102,6 @@ RwGsPatchSet_V2 >> addPatchedInstanceTraitMethod: aInstanceMethodDefinition inTr
 
 { #category : 'building' }
 RwGsPatchSet_V2 >> addPatchedTraitChanged: aTraitModificationChange [
-
 	changedTraits add: aTraitModificationChange
 ]
 
@@ -1161,14 +1159,20 @@ RwGsPatchSet_V2 >> addTraitModification: aRwTraitModification toPatchSetInPackag
 							"if the trait is packaged, then it must be in another project, signal notification"
 							aProjectDefinition name ~= aLoadedTrait loadedProject name
 								ifTrue: [ 
-									((Globals at: #RwExistingVisitorAddingExistingTraitNotification) new
+									((Globals at: #'RwExistingVisitorAddingExistingTraitNotification') new
 										incomingProject: aProjectDefinition;
 										incomingPackage: aPackage;
 										loadedTrait: aLoadedTrait;
 										theTrait: trait;
 										traitDefinition: aRwTraitModification after;
 										loadedProject: aLoadedTrait loadedProject;
-										yourself) signal ] ] ].
+										yourself) signal ]
+								ifFalse: [ 
+									"if the trait is packaged and NOT in a different project, then Houston we have a problem"
+									self
+										error:
+											'There is trait addition being performed for a trait that is already packaged in '
+												, aPackage name ] ] ].
 			self
 				addAddedTrait: aRwTraitModification after
 				inPackage: aPackage
@@ -1186,8 +1190,7 @@ RwGsPatchSet_V2 >> addTraitModification: aRwTraitModification toPatchSetInPackag
 				addPatchedTraitModification: aRwTraitModification
 				inPackage: aPackage
 				inProject: aProjectDefinition
-				toPatchSet: self.
-			 ]
+				toPatchSet: self ]
 ]
 
 { #category : 'private - applying' }
@@ -1844,8 +1847,7 @@ RwGsPatchSet_V2 >> updateChangedTraits [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> updateClassesWithTraits [
-
-	classesWithTraits do: [:each | each updateClassWithTraits: self tempSymbols ].
+	classesWithTraits do: [ :each | each updateClassWithTraits: self tempSymbols ]
 ]
 
 { #category : 'private - applying' }

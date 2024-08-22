@@ -3730,6 +3730,86 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0085_trait_upgrade_simulation [
+	"spec_0085 removeAll methods from class and trait; add methods back to trait and class using direct method compiles, then run an audit ... in the current upgrade, it looks like we are adding the trait twice ..."
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects project audit class trait diff srcDiff1 srcDiff2 projectDefBefore projectDefAfter |
+	loadSpec := self _loadSpecNamed: 'spec_0085'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	projectNames
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].	"
+
+	resolve project"
+	loadSpec
+		customConditionalAttributes:
+			{'C01'.
+			'T01'.
+			'Tr01'}.
+	loadSpecs := loadSpec resolve.	"
+
+	load project: C01, T01, Tr01"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.	"
+
+	validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.	"
+
+	remove all methods from  trait and class -- simulating upgrade image process"
+
+	projectDefBefore := project asDefinition copy.
+
+	audit := project audit.
+	audit isEmpty
+		ifFalse: [ audit halt ].
+
+	class := Rowan globalNamed: 'RowanSample9V3Class1'.
+	trait := Rowan globalNamed: 'RowanSample9V3Trait1'.
+
+	trait removeAllMethods.
+	trait classTrait removeAllMethods.
+	class removeAllMethods.
+	class class removeAllMethods.
+
+	audit := project audit.
+	audit isEmpty
+		ifFalse: [ self error: 'First audit failure' ].	"
+
+	diffs do show up for classes, and traits don't have diffs defined yet"
+	srcDiff1 := Rowan projectTools diff patchesForProjectNamed: projectName.	"
+
+	add the methods back"
+	class class compileMethod: 'civ1 ^ civ1' category: 'accessing' environmentId: 0.
+	class compileMethod: 'cv1 ^ Cv1' category: 'accessing' environmentId: 0.
+	class compileMethod: 'iv1 ^ iv1' category: 'accessing' environmentId: 0.
+
+	trait classTrait compile: 'civ1_t ^civ1' category: 'accessing'.
+	trait compile: 'cv1_t ^Cv1' category: 'accessing'.
+	trait compile: 'iv1_t ^iv1' category: 'accessing'.
+
+	projectDefAfter := project asDefinition copy.	"
+
+	diffs do show up for classes, and traits don't have diffs defined yet"
+	srcDiff2 := Rowan projectTools diff patchesForProjectNamed: projectName.
+
+	audit := project audit.	"
+	audit runs clean because the method compiles are all Rowan safe ... new packaged methods are created"
+	audit isEmpty
+		ifFalse: [ self error: 'Second audit failure' ].
+
+	diff := projectDefAfter compareAgainstBase: projectDefBefore
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 

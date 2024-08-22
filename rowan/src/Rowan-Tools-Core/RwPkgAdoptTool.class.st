@@ -25,10 +25,13 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 	classExtension
 		ifFalse: [ 
 			[ 
-			(Rowan image validClassCategory: theClass category forLoadedPackage: loadedPackage)
+			(Rowan image
+				validClassCategory: theClass category
+				forLoadedPackage: loadedPackage)
 				ifFalse: [ 
 					(RwAdoptClassCategoryPackageConventionViolationErrorNotification
-						classNamed: className classCategory: theClass category
+						classNamed: className
+						classCategory: theClass category
 						packageConvention: loadedProject packageConvention
 						intoPackageNamed: packageName) signal.
 					^ self	"if exception resumed then we'll skip the adopt operation for this class" ].
@@ -56,12 +59,14 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
-					registry
-						adoptCompiledMethod: theCompiledMethod
-						classExtension: classExtension
-						for: theBehavior
-						protocol: (theBehavior categoryOfSelector: methodSelector)
-						toPackageNamed: packageName ] ].
+					theCompiledMethod isFromTrait not
+						ifTrue: [ 
+							registry
+								adoptCompiledMethod: theCompiledMethod
+								classExtension: classExtension
+								for: theBehavior
+								protocol: (theBehavior categoryOfSelector: methodSelector)
+								toPackageNamed: packageName ] ] ].
 
 	theBehavior := theClass class.
 	classSelectors
@@ -80,12 +85,14 @@ RwPkgAdoptTool >> adoptClass: theClass classExtension: classExtension instanceSe
 					nil ].
 			theCompiledMethod
 				ifNotNil: [ 
-					registry
-						adoptCompiledMethod: theCompiledMethod
-						classExtension: classExtension
-						for: theBehavior
-						protocol: (theBehavior categoryOfSelector: methodSelector)
-						toPackageNamed: packageName ] ]
+					theCompiledMethod isFromTrait not
+						ifTrue: [ 
+							registry
+								adoptCompiledMethod: theCompiledMethod
+								classExtension: classExtension
+								for: theBehavior
+								protocol: (theBehavior categoryOfSelector: methodSelector)
+								toPackageNamed: packageName ] ] ]
 ]
 
 { #category : 'smalltalk api' }

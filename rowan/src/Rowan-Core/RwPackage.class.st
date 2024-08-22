@@ -26,7 +26,17 @@ RwPackage >> definedClasses [
 
 { #category : 'accessing' }
 RwPackage >> definedClassNames [
-	^ self _loadedPackage loadedClasses keys
+	^ self _loadedPackage loadedClasses keys asSet
+]
+
+{ #category : 'accessing' }
+RwPackage >> definedTraitNames [
+	^ self _loadedPackage loadedTraits keys asSet
+]
+
+{ #category : 'accessing' }
+RwPackage >> definedTraits [
+	^ self error: 'not yet implemented'
 ]
 
 { #category : 'accessing' }
@@ -39,7 +49,7 @@ RwPackage >> extendedClasses [
 
 { #category : 'accessing' }
 RwPackage >> extendedClassNames [
-	^ self _loadedPackage loadedClassExtensions keys
+	^ self _loadedPackage loadedClassExtensions keys asSet
 ]
 
 { #category : 'testing' }
