@@ -6,15 +6,51 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 8,
-		"failures" : 10,
-		"passed" : 1171,
-		"summary" : "1189 Tests with 10 Failures, 8 Errors and 0 DeprecationWarnings in 1435.90s",
-		"tests" : 1189,
-		"time" : 1435.899
+		"errors" : 12,
+		"failures" : 16,
+		"passed" : 1295,
+		"summary" : "1323 Tests with 16 Failures, 12 Errors and 0 DeprecationWarnings in 1372.45s",
+		"tests" : 1323,
+		"time" : 1372.455
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_jadeServerCanonicalLocation",
+			"time" : "0"
+		},
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_jadeServerExists",
+			"time" : "0"
+		},
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_jadeServerHierarchyValid",
+			"time" : "0"
+		},
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_rowanCanFindJadeServer",
+			"time" : "0"
+		},
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_serviceUsesCanonicalJadeServer",
+			"time" : "0"
+		},
+		{
+			"className" : "JadeServerTest",
+			"status" : "passed",
+			"selector" : "test_updateFromSton",
+			"time" : "0"
+		},
 		{
 			"className" : "RBFormatterTests",
 			"status" : "passed",
@@ -529,6 +565,774 @@
 			"className" : "RBSmallDictionaryTest",
 			"status" : "passed",
 			"selector" : "testValuesDo",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_disableBreakpointsInterface",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_execCompileError",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_execNilContext",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_expressionSelector",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_initializeAutoCommit",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_initializeBreakPointsAreDisabled",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_loadedPackageExists",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_matchingPattern",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "errors",
+			"selector" : "test_maxPrint",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_methodHistory",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_play",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanAnsweringServiceTest",
+			"status" : "passed",
+			"selector" : "test_setAutoCommit",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanBrowserServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileClassWithClassSelected",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanBrowserServiceTest",
+			"status" : "passed",
+			"selector" : "test_flipAutoCommit",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanBrowserServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanBrowserServiceTest",
+			"status" : "passed",
+			"selector" : "test_windowsRegistry",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanBrowserServiceTest2",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_addCategory",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_behavior",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classComment",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classFromName",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_classHierarchy",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_classHierarchyClassSide",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classWasDeleted",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileClassInitializer",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileMethodNoCategory",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_dirtyState",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_dirtyStateNewProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_equality",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_fileOutClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_instVarNamesIsArray",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_methodHistoryAdd",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_methodHistoryInitialize",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_nameIsString",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_rowanCompileGone",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_selectedMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_setClassCommentDuringMetaclassRefresh",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_setSuperSubIndicators",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompile",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileClassSide",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileOnClassWithoutMetaSet",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileWithoutMetaSet",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_zzz",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugBlanksOnly",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugEmptyString",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugStringBarInString",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugStringLeadingWhitespace",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugStringNoTemps",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_debugStringTemps",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_malformed",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDebuggerServiceTest",
+			"status" : "passed",
+			"selector" : "test_saveUniqueProcess",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDictionaryServiceTest",
+			"status" : "passed",
+			"selector" : "test_insertRemoveDictionary",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanDictionaryServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanFileTest",
+			"status" : "errors",
+			"selector" : "test_fileIn",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanFileTest",
+			"status" : "errors",
+			"selector" : "test_fileInDoesNotWarn",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanFileTest",
+			"status" : "passed",
+			"selector" : "test_fileServiceAttributes",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanFileTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_classNameIsString",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_isTestMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_reformatSource",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_runMethodTest",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanMethodServiceTest",
+			"status" : "passed",
+			"selector" : "test_setDefinedClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_classHierarchy",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileAndSelectClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileAndSelectClassDifferentPackage",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileClassSelectsPackageAndClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "passed",
+			"selector" : "test_packageWasDeleted",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanPackageServiceTest",
+			"status" : "errors",
+			"selector" : "test_testClassesIncludesExtensions",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "testProjectName",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_addPackage",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_commandResultSessionTemp",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_createProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_loadedGitProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_unloadNotLoadedProjectDoesNotWalkback",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanProjectServiceTest",
+			"status" : "passed",
+			"selector" : "test_updateAddsCommandResult",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_dontUseFileStream",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_hierarchyImplementors",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_hierarchyImplementorsGetsAllSubclasses",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_hierarchySenders",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_implementors",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_projectLog",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanQueryServicesTest",
+			"status" : "passed",
+			"selector" : "test_senders",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_addCategory",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_addedProjectNotOnDisk",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_behavior",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classComment",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classFromName",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_classHierarchy",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_classHierarchyClassSide",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_classWasDeleted",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileClassInitializer",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_compileMethodNoCategory",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_dirtyState",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_dirtyStateNewProject",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_equality",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_fileOutClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_instVarNamesIsArray",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_isTestCase",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_methodHistoryAdd",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_methodHistoryInitialize",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_nameIsString",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_rowanCompileGone",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_runClassService",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_selectedMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_setClassCommentDuringMetaclassRefresh",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "failures",
+			"selector" : "test_setSuperSubIndicators",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_setTestClass",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompile",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileClassSide",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileOnClassWithoutMetaSet",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_simpleCompileWithoutMetaSet",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_testSelectors",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanTestClassServiceTest",
+			"status" : "passed",
+			"selector" : "test_zzz",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanVersionTest",
+			"status" : "passed",
+			"selector" : "test_isAbstract",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanVersionTest",
+			"status" : "passed",
+			"selector" : "test_majorVersion",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanVersionTest",
+			"status" : "passed",
+			"selector" : "test_minorVersion",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanVersionTest",
+			"status" : "passed",
+			"selector" : "test_patchVersion",
+			"time" : "0"
+		},
+		{
+			"className" : "RowanVersionTest",
+			"status" : "passed",
+			"selector" : "test_version",
 			"time" : "0"
 		},
 		{
@@ -7150,5 +7954,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-08-16T12:56:06.862711-07:00"
+	"timeStamp" : "2024-08-28T19:17:17.241741-07:00"
 }

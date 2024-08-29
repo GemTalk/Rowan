@@ -248,8 +248,10 @@ loadProjectSpecs
 			loadSpec projectsHome: externalsStBase ].
 		rowanProject := Rowan projectNamed: 'Rowan'.
 		loadSpecs := rowanProject loadedLoadSpecifications.
+		(Rowan projectNamed: 'RowanClientServices') loadedLoadSpecifications 
+			do: [:loadSpec | loadSpecs addLoadSpec: loadSpec ].
 		loadSpecs do: [:loadSpec |
-			loadSpec specName = 'Rowan'
+			((loadSpec specName = 'Rowan') or: [ loadSpec specName = 'RowanClientServices' ])
 				ifTrue: [
 					loadSpec
 						gitUrl: 'file:', externalsStBase, '/', loadSpec projectAlias ]
@@ -326,7 +328,7 @@ method
 buildTestSuite: testSuiteName segment: segmentNameOrNil
 	| systemTestSuite |
 	systemTestSuite := TestSuite named: testSuiteName.
-	{ 'Rowan' . 'STON' . 'Cypress' }
+	{ 'Rowan' . 'STON' . 'Cypress' . 'RowanClientServices' }
 		do: [:projectName |
 		segmentNameOrNil 
 			ifNil: [ 
