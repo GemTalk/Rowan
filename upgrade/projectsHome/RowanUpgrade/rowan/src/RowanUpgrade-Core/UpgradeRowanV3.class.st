@@ -311,7 +311,7 @@ UpgradeRowanV3 >> countAuditErrors [
 { #category : 'upgrade customer' }
 UpgradeRowanV3 >> customerProjectNames [
 	^ (self globalNamed: 'Rowan') projectNames
-		removeAllPresent: self rowanProjectNames;
+		removeAllPresent: self rowanProjectNames ", self gemstoneBaseProjectNames";
 		yourself
 ]
 
@@ -484,6 +484,13 @@ UpgradeRowanV3 >> cypressClassNames [
 UpgradeRowanV3 >> errorMessages [
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
 
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV3 >> gemstoneBaseProjectNames [
+	"The list of projects that are in the standard base image ... excluding Rowan"
+
+	^ #('Announcements' 'FileSystemGs' 'gemstoneBaseImage' 'RemoteServiceReplication' 'RowanClientServices')
 ]
 
 { #category : 'repair' }
@@ -679,6 +686,28 @@ UpgradeRowanV3 >> reloadGemstoneBase [
 									"skip initialization"
 									ex resume: false ]
 								ifFalse: [ ex resume: true ] ] ] ]
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV3 >> reloadGemStoneProjects [
+	"reload the base gemstone projects, excluding gemstoneBaseImage"
+
+	| project platformConditionalAttributes loadSpecSet projectDefinitionSet |
+	(self gemstoneBaseProjectNames copyWithout: 'gemstoneBaseImage')
+		do: [ :projectName | 
+			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
+			project := Rowan projectNamed: projectName.
+			platformConditionalAttributes := project platformConditionalAttributes
+				collect: [ :attribute | 
+					"replace old GemStone version with current GemStone version"
+					(attribute isKindOf: RwGemStoneVersionNumber)
+						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
+						ifFalse: [ attribute ] ].
+			loadSpecSet := project loadedLoadSpecifications.
+			projectDefinitionSet := loadSpecSet read: platformConditionalAttributes.
+			[ projectDefinitionSet load ]
+				on: CompileWarning
+				do: [ :ex | ex resume ] ]
 ]
 
 { #category : 'upgrade rowan' }
@@ -1171,7 +1200,9 @@ UpgradeRowanV3 >> rowanMigrateTo [
 
 { #category : 'upgrade rowan' }
 UpgradeRowanV3 >> rowanProjectNames [
-	^ #('Rowan' 'STON' 'RowanClientServices' 'Cypress' 'FileSystemGs')
+	"The list of projects that are managed in the Rowan repository"
+
+	^ #('Rowan' 'STON' 'Cypress')
 ]
 
 { #category : 'repair' }
@@ -1337,6 +1368,9 @@ UpgradeRowanV3 >> step_5_reloadGemstoneBase [
 
 	self logMessage: 'reload gemstoneBaseImage project'.
 	self reloadGemstoneBase.
+false ifTrue: [ 
+	self reloadGemStoneProjects.
+].
 	self commit
 ]
 

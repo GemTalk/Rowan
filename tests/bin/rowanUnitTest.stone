@@ -11,6 +11,9 @@ options
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsSandbox'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'testSegment'.
+
+	SuperDoitOptionalOptionWithNoArg long: 'skipTests'.
+	SuperDoitOptionalOptionWithNoArg long: 'skipTestRun'.
 }
 %
 usage
@@ -73,6 +76,8 @@ OPTIONS
   --rowanProjectsSandbox=<directory-path>
                              Location used by tests when cloning git repositores. 
                              By default, $ROWAN_PROJECTS_SANDBOX. MUST BE DEFINED.
+  --skipTests                Do not load projects and do not run tests.
+  --skipTestRun              Load projects, but do not run tests.
   --testSegment=<segment-id>
                              Currently there are five test segments defined: base,
                              sample9V2, sample9V3, generatorV2, and generatorV3. The 
@@ -244,8 +249,10 @@ loadProjectSpecs
 	warnings := {}.
 	[ 
 		| loadSpecs rowanProject |
-		self preDoitSpecLoad: [:loadSpec |
-			loadSpec projectsHome: externalsStBase ].
+	self skipTestRun
+		ifFalse: [ 
+			self preDoitSpecLoad: [:loadSpec |
+				loadSpec projectsHome: externalsStBase ] ].
 		rowanProject := Rowan projectNamed: 'Rowan'.
 		loadSpecs := rowanProject loadedLoadSpecifications.
 		(Rowan projectNamed: 'RowanClientServices') loadedLoadSpecifications 
@@ -435,7 +442,21 @@ writeFailingExpectedResultsSummaryReport: runner reporter: reporter expectedSamp
 %
 doit
 	| runner testSuiteSample passingStatus  stdoutReporter |
+	self skipTests
+		ifTrue: [ 
+			"Not running unit tests, the test passes"
+			self _writeTestStatus: 'TEST STATUS:: passes unit tests not run'.
+			self 
+				writeTestDone: 'passes with unit tests skipped'.
+			^ self noResult ].
 	self loadProjectSpecs.
+	self skipTestRun
+		ifTrue: [ 
+			"Reload projects, but do not run unit tests, the test passes"
+			self _writeTestStatus: 'TEST STATUS:: passes unit projects loaded, unit tests not run'.
+			self 
+				writeTestDone: 'passes with projects loaded, unit tests skipped'.
+			^ self noResult ].
 	self isColorful ifNotNil: [:aBoolString | (self globalNamed: 'GsTestStatsCI') isColorful: aBoolString = 'true' ].
 	"run tests"
 	runner := self runTestSuite: 'Rowan projects Test Suite'.
