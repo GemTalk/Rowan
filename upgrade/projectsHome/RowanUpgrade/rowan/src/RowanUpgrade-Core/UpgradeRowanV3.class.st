@@ -311,7 +311,7 @@ UpgradeRowanV3 >> countAuditErrors [
 { #category : 'upgrade customer' }
 UpgradeRowanV3 >> customerProjectNames [
 	^ (self globalNamed: 'Rowan') projectNames
-		removeAllPresent: self rowanProjectNames ", self gemstoneBaseProjectNames";
+		removeAllPresent: self rowanProjectNames , self gemstoneBaseProjectNames;
 		yourself
 ]
 
@@ -692,22 +692,33 @@ UpgradeRowanV3 >> reloadGemstoneBase [
 UpgradeRowanV3 >> reloadGemStoneProjects [
 	"reload the base gemstone projects, excluding gemstoneBaseImage"
 
-	| project platformConditionalAttributes loadSpecSet projectDefinitionSet |
+	| loadSpecSet |
+	loadSpecSet := RwLoadSpecSet new.
+	projectsHome := '$GEMSTONE/projects'.
 	(self gemstoneBaseProjectNames copyWithout: 'gemstoneBaseImage')
 		do: [ :projectName | 
+			| loadSpec project platformConditionalAttributes |
 			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
 			project := Rowan projectNamed: projectName.
+			loadSpec := project loadSpecification.
+			loadSpecSet addLoadSpec: loadSpec.
+			loadSpec
+				projectsHome: projectsHome;
+				readOnlyDiskUrl:
+						'file:'
+								,
+									(projectsHome , '/' , loadSpec projectAlias) asFileReference pathString;
+				yourself.
 			platformConditionalAttributes := project platformConditionalAttributes
 				collect: [ :attribute | 
 					"replace old GemStone version with current GemStone version"
 					(attribute isKindOf: RwGemStoneVersionNumber)
 						ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
 						ifFalse: [ attribute ] ].
-			loadSpecSet := project loadedLoadSpecifications.
-			projectDefinitionSet := loadSpecSet read: platformConditionalAttributes.
-			[ projectDefinitionSet load ]
-				on: CompileWarning
-				do: [ :ex | ex resume ] ]
+			loadSpec customConditionalAttributes: platformConditionalAttributes ].
+	[ loadSpecSet load ]
+		on: CompileWarning
+		do: [ :ex | ex resume ]
 ]
 
 { #category : 'upgrade rowan' }
@@ -1323,7 +1334,7 @@ UpgradeRowanV3 >> step_2_repairGemstoneBaseAuditFailures [
 	"Use the gemstoneBaseImage project audit to repair the damaged Rowan metadata"
 
 	self logMessage: ' repair gemstoneBaseImage audit failures'.
-	self auditForProjectsNamed: {'gemstoneBaseImage'}.
+	self auditForProjectsNamed: self gemstoneBaseProjectNames.
 	self logMessage: ' repairing gemstoneBaseImage audit failures'.
 	audit isEmpty
 		ifFalse: [ 
@@ -1368,9 +1379,7 @@ UpgradeRowanV3 >> step_5_reloadGemstoneBase [
 
 	self logMessage: 'reload gemstoneBaseImage project'.
 	self reloadGemstoneBase.
-false ifTrue: [ 
 	self reloadGemStoneProjects.
-].
 	self commit
 ]
 
