@@ -641,6 +641,42 @@ UpgradeRowanV3 >> projectsHome: aPathString [
 	projectsHome := aPathString
 ]
 
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV3 >> readBaseImageSHA [
+	| lineCount |
+	lineCount := 0.
+	'$GEMSTONE/version.txt' asFileReference
+		readStreamDo: [ :stream | 
+			[ stream atEnd ]
+				whileFalse: [ 
+					| line |
+					line := stream nextLine.
+					lineCount := lineCount + 1.
+					lineCount = 2
+						ifTrue: [ ^ line substringsSpace at: 4 ] ] ]
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV3 >> readExternalProjectSHAS [
+	| keyMap projectSHAMap |
+	keyMap := Dictionary new.	"map between the externals sha project key and the base project name"
+	keyMap
+		at: 'RowanClientServicesV3' put: 'RowanClientServices';
+		at: 'RowanV3' put: 'Rowan';
+		yourself.
+	projectSHAMap := Dictionary new.
+	'$GEMSTONE/externals.sha.txt' asFileReference
+		readStreamDo: [ :stream | 
+			[ stream atEnd ]
+				whileFalse: [ 
+					| line projectKey projectSHAKey |
+					line := stream nextLine substringsSpace.
+					projectKey := line at: 1.
+					projectSHAKey := keyMap at: projectKey ifAbsent: [ projectKey ].
+					projectSHAMap at: projectSHAKey put: (line at: 2) ] ].
+	^ projectSHAMap
+]
+
 { #category : 'upgrade customer' }
 UpgradeRowanV3 >> reloadCustomer [
 	| customerProjectNames |
@@ -1370,6 +1406,7 @@ UpgradeRowanV3 >> step_4_reloadRowan [
 
 	self logMessage: 'reload Rowan'.
 	self reloadRowan.
+	self updateRowanProjectCommitIds.
 	self commit
 ]
 
@@ -1380,6 +1417,7 @@ UpgradeRowanV3 >> step_5_reloadGemstoneBase [
 	self logMessage: 'reload gemstoneBaseImage project'.
 	self reloadGemstoneBase.
 	self reloadGemStoneProjects.
+	self updateGemStoneProjectCommitIds.
 	self commit
 ]
 
@@ -1402,6 +1440,39 @@ UpgradeRowanV3 >> step_7_finalAudit [
 			self
 				error:
 					'Final Audit did not run clean ... repair audit errors before proceeding' ]
+]
+
+{ #category : 'upgrade gemstoneBaseImage' }
+UpgradeRowanV3 >> updateGemStoneProjectCommitIds [
+	"extract the full SHA from the external.sha.txt file; and set the commit id using  the first 9 digits of the SHA"
+
+	| projectSHAMap baseImageSHA |
+	projectSHAMap := self readExternalProjectSHAS.
+	baseImageSHA := self readBaseImageSHA.
+	projectSHAMap at: 'gemstoneBaseImage' put: baseImageSHA.
+	self gemstoneBaseProjectNames
+		do: [ :projectName | 
+			| project sha |
+			project := Rowan projectNamed: projectName.
+			sha := projectSHAMap at: projectName.
+			project commitId: (sha copyFrom: 1 to: 9) ]
+]
+
+{ #category : 'upgrade rowan' }
+UpgradeRowanV3 >> updateRowanProjectCommitIds [
+	"extract the full SHA from the external.sha.txt file; and set the commit id using  the first 9 digits of the SHA"
+
+	| projectSHAMap |
+	projectSHAMap := self readExternalProjectSHAS.
+	self rowanProjectNames
+		do: [ :projectName | 
+			| project sha shaProjectName |
+			(projectName = 'STON' or: [ projectName = 'Cypress' ])
+				ifTrue: [ shaProjectName := 'Rowan' ]
+				ifFalse: [ shaProjectName := projectName ].
+			project := Rowan projectNamed: projectName.
+			sha := projectSHAMap at: shaProjectName.
+			project commitId: (sha copyFrom: 1 to: 9) ]
 ]
 
 { #category : 'accessing' }
