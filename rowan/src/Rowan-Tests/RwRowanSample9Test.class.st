@@ -1003,43 +1003,6 @@ RwRowanSample9Test >> testAuditMissingCompiledMethod [
 ]
 
 { #category : 'migration tests' }
-RwRowanSample9Test >> testAutomaticMigration_gitolite [
-
-	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
-
-	| loadSpec instanceMap |
-	true
-		ifTrue: [ 
-			"This test randomly fails and is not actually testing anything interesting ... leaving test in place in case we find out there really is something important causing the intermittent failures"
-			^ self ].
-	loadSpec := self 
-		_migrationLoadSpecNamed:  'spec_0034' 
-		projectName: 'RowanSample9' 
-		projectAlias: 'RowanSample9_Automatic_Migration' 
-		gitUrl: 'git@git.gemtalksystems.com:RowanSample9.git'.
-
-	instanceMap := self 
-		_testMigration: loadSpec 
-		instanceMigrator:RwGsInstanceMigrator aggressiveMigration.
-
-"validate migration"
-	instanceMap
-		keysAndValuesDo: [ :instance :assoc | 
-			| ivNames ar oldClass className class |
-			ar := assoc key.
-			oldClass := assoc value.
-			className := ar at: 1.
-			class := Rowan globalNamed: className.
-			self assert: oldClass ~= class.
-			self assert: instance class == class.
-			ivNames := ar at: 2.
-			1 to: ivNames size do: [ :index | 
-				| ivName |
-				ivName := ivNames at: index.
-				self assert: (instance perform: ivName) == ivName ] ]
-]
-
-{ #category : 'migration tests' }
 RwRowanSample9Test >> testDeferredMigration_gitlab [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after deferred migration ..."

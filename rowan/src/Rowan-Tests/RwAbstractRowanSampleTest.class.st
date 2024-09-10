@@ -72,6 +72,28 @@ RwAbstractRowanSampleTest class >> _clearLoadSpecSessionCache [
 ]
 
 { #category : 'private' }
+RwAbstractRowanSampleTest class >> _currentUserHasGitHubSSHKey [
+	| cmdLine userName errorFile stdoutFile |
+	cmdLine := '/usr/bin/ssh -T git@github.com'.
+	userName := (System gemEnvironmentVariable: 'USER') ifNil: [ 'NoUser' ].
+	errorFile := FileReference
+		newTempFilePrefix: 'sshError_for_' , userName
+		suffix: '.err'.
+	stdoutFile := FileReference
+		newTempFilePrefix: 'sshOutput_for_' , userName
+		suffix: '.out'.
+	[ 
+	GsHostProcess new
+		commandLine: cmdLine;
+		stderrPath: errorFile fullName;
+		stdoutPath: stdoutFile fullName;
+		executeWithInput: nil ]
+		on: ChildError
+		do: [ :ex | ^ false ].
+	^ true
+]
+
+{ #category : 'private' }
 RwAbstractRowanSampleTest class >> _loadSpecNamed: specName [
 	"
 		self _clearLoadSpecSessionCache
@@ -147,6 +169,15 @@ RwAbstractRowanSampleTest class >> _rowanSample9ProjectName [
 { #category : 'private' }
 RwAbstractRowanSampleTest class >> _symbolDictionaryNames [
 	^ super _symbolDictionaryNames , {'RowanSample9Class1'}
+]
+
+{ #category : 'testing' }
+RwAbstractRowanSampleTest class >> currentUserHasGitHubSSHKey [
+	"answer true if the current user has a GitHub ssh key. Used to determine whether a git url should use ssh url or https url"
+
+	^ SessionTemps current
+		at: #'CurrentUserHasGitHubSSHKey'
+		ifAbsentPut: [ self _currentUserHasGitHubSSHKey ]
 ]
 
 { #category : 'private' }
