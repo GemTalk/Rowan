@@ -732,6 +732,7 @@ RwLoadSpecificationV2 >> resolveProject [
 
 	"if the project directory already exists on disk, then read the project definition(s) from disk"
 
+	(RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification for: self) signal. "opportunity for a user to modify the reciever"
 	^ RwResolvedProjectV2 loadSpecification: self
 ]
 

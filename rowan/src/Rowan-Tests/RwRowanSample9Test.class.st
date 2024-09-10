@@ -280,7 +280,11 @@ RwRowanSample9Test >> _processIssue705: resolvedProject componentNamed: componen
 	loadSpec projectsHome:  self _testRowanProjectsSandbox.
 
 "collect set of specs that will be required by the component component"
-	requiredLoadSpecs := loadSpec resolve.
+	requiredLoadSpecs := [ loadSpec resolve ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "arrange for the projects required by currently loaded component to be unloaded"
 	loadSpecSet := (Rowan projectNamed: resolvedProject name) loadedLoadSpecifications.
@@ -1599,6 +1603,10 @@ RwRowanSample9Test >> testIssue_549_errorCondition [
 		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
 
 "resolve project"
+	self class currentUserHasGitHubSSHKey
+		ifFalse: [
+			"have to use https: url"
+			loadSpec gitUrl: 'https://github.com/dalehenrich/RowanSample9.git'  ].
 	resolvedProject1 := loadSpec resolveProject.
 	resolvedProject1 repository checkout: 'issue_549'.	"tag pointing to inconsistent checkout"
 	[ resolvedProject1 read ]
@@ -1698,12 +1706,15 @@ RwRowanSample9Test >> testIssue_587 [
 
 	"https://github.com/dalehenrich/Rowan/issues/587"
 
-	| loadSpec projectName resolvedProject loadedProjects project  audit |
+	| loadSpec projectName resolvedProject loadedProjects project  audit gitUrl |
+	gitUrl := self class currentUserHasGitHubSSHKey
+		ifTrue: [  'git@github.com:dalehenrich/RowanSample9.git' ]
+		ifFalse: [ 'https://github.com/dalehenrich/RowanSample9.git' ].
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_Issue_493' 
-		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
+		gitUrl: gitUrl.
 
 	projectName := loadSpec projectName.
 
@@ -3541,12 +3552,15 @@ RwRowanSample9Test >> testIssue493_RowanSample2 [
 
 	"using the migration tests set of definitions"
 
-	| loadSpec projectName resolvedProject loadedProjects project  audit |
+	| loadSpec projectName resolvedProject loadedProjects project  audit gitUrl |
+	gitUrl := self class currentUserHasGitHubSSHKey
+		ifTrue: [  'git@github.com:dalehenrich/RowanSample9.git' ]
+		ifFalse: [ 'https://github.com/dalehenrich/RowanSample9.git' ].
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9' 
 		projectAlias: 'RowanSample9_Issue_493' 
-		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
+		gitUrl: gitUrl.
 
 	projectName := loadSpec projectName.
 
@@ -3741,79 +3755,6 @@ RwRowanSample9Test >> testIssue514 [
 			self assert: classModification classMethodsModification isEmpty.
 			propertyModValidationBlock value: classModification propertiesModification ];
 		visit: projectSetModification.
-]
-
-{ #category : 'tests' }
-RwRowanSample9Test >> testIssue515_RowanSample2 [
-
-	"https://github.com/GemTalk/Rowan/issues/515"
-
-	"duplicate of RwRowanSample2Test debug: #testIssue515"
-
-	"using the migration tests set of definitions"
-
-	| loadSpec projectName resolvedProject loadedProjects project  audit loadSpec2 resolvedProject2 hitError errorDescription |
-	loadSpec := self 
-		_migrationLoadSpecNamed:  'spec_0035' 
-		projectName: 'RowanSample9' 
-		projectAlias: 'RowanSample9'
-		gitUrl: 'git@github.com:dalehenrich/RowanSample9.git'.
-
-	projectName := loadSpec projectName.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-"we want to clone the repository using the specified gitUrl"
-	loadSpec repositoryRoot ensureDeleteAll.
-
-"Issue #493: use _symbolDictionaryName for initial load"
-	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project - migration_step_1"
-	loadedProjects := resolvedProject load.
-
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-
-"checkout and load - migration_step_2"
-	resolvedProject := project asDefinition.
-	resolvedProject 
-		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
-		checkout: 'spec_0036';
-		read;
-		load.
-
-	self assert: (audit := project audit) isEmpty.
-
-"load spec_0011 using RowanSample1 project name and RowanSample9Class1 dictionary"
-	loadSpec2 := loadSpec copy;
-		projectName: 'RowanSample1' ;
-		projectAlias: 'RowanSample9';
-		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9Class1';
-		revision: 'spec_0011';
-		yourself.
-
-	projectName := loadSpec projectName.
-
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
-
-	resolvedProject2 := loadSpec2 resolveStrict.
-	hitError := false.
-	[loadedProjects := resolvedProject2 load] 
-		on: Error 
-		do: [:ex |
-			errorDescription := ex description.
-			errorDescription = 'UserDefinedError: A class (RowanSample9Class1) may not be installed in a symbol dictionary (RowanSample9Class1  with the same name.' ifTrue: [ hitError := true ] ].
-	self 
-		assert: hitError 
-		description: 'Unexpected pass with error description: ', errorDescription printString	"watch out ... jadeite won't behave well with class and symbol dictionary of same name ... but that's okay"
 ]
 
 { #category : 'tests' }
@@ -5553,7 +5494,12 @@ RwRowanSample9Test >> testIssue838_01 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "load spec_0078"
-	loadedProjects := loadSpec_0001	load.		"loaded project"
+	loadedProjects := [ loadSpec_0001	load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].		"loaded project"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpec_0002 .
 	resolvedSpecs := loadSpec_0002 resolve. 	"clone project"
 
 "change spec_0001 to point at spec_0002 checkout"
@@ -5619,9 +5565,11 @@ RwRowanSample9Test >> testIssue838_02 [
 					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
 
 "clone spec_0073B"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec_0073B.
 	resolvedSpecs := loadSpec_0073B resolve. 	
 
 "load spec_0078"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec_0073A.
 	loadedProjects := loadSpec_0073A	load.
 
 "validate"
@@ -5714,9 +5662,11 @@ RwRowanSample9Test >> testIssue838_03 [
 					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
 
 "clone spec_0073B"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec_0073B.
 	resolvedSpecs := loadSpec_0073B resolve. 	
 
 "load spec_0078"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec_0073A.
 	loadedProjects := loadSpec_0073A	load.
 
 "validate"
@@ -5821,6 +5771,7 @@ RwRowanSample9Test >> testIssue840_01 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve projects - expected"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec.
 	loadSpecs := loadSpec
 		projectsHome: projectsHome;
 		resolve.
@@ -5860,6 +5811,7 @@ RwRowanSample9Test >> testIssue840_02 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve projects - expected"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec.
 	loadSpecs := loadSpec
 		projectsHome: projectsHome;
 		projectAlias: projectName, '0073';
@@ -5905,6 +5857,7 @@ RwRowanSample9Test >> testIssue840_03 [
 					ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ] ].
 
 "load spec_0078A"
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded:  loadSpec_0073A.
 	loadedProjects := loadSpec_0073A load.		"loaded project"
 
 "extract the loaded specs"
@@ -6071,7 +6024,11 @@ RwRowanSample9Test >> testRemoveSubclassOfClassWithNewVersion [
 	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
 
 "resolve project and ensure desired branch is checked out"
-	resolvedProject := loadSpec resolveStrict.
+	resolvedProject := [ loadSpec resolveStrict ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "load project - migration_step_1"
 	loadedProjects := resolvedProject load.
@@ -6159,6 +6116,7 @@ RwRowanSample9Test >> testSpec_0000 [
 
 	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
 
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpecification .
 	resolvedProject := loadSpecification resolveProject. "project is read from disk on resolve"
 ]
 
@@ -6178,6 +6136,7 @@ RwRowanSample9Test >> testSpec_0001_A [
 
 	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
 
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpecification.
 	resolvedProject := loadSpecification resolveProject. "project is read from disk on resolve"
 	resolvedProject
 		addPackagesNamed: {(loadSpecification projectName , '-Core')}
@@ -6202,6 +6161,7 @@ RwRowanSample9Test >> testSpec_0001_B [
 	(self _testRowanProjectsSandbox / loadSpecification projectName) ensureDeleteAll.
 
 
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpecification.
 	resolvedProject := loadSpecification resolveProject.
 
 	resolvedRepository := resolvedProject repository.
@@ -7937,7 +7897,11 @@ RwRowanSample9Test >> testSpec_0060_1 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -7984,7 +7948,11 @@ RwRowanSample9Test >> testSpec_0060_2 [
 	project checkout: 'spec_0060'.
 
 "reload project - reread all projects from disk (restore to original) ... new approved way of reloading when specs are to be read from disk ... duplicate original load expression"
-	loadedProjects := loadSpec load.
+	[ loadedProjects := loadSpec load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -8168,7 +8136,11 @@ RwRowanSample9Test >> testSpec_0064_2 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -8257,7 +8229,11 @@ RwRowanSample9Test >> testSpec_0064_3 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -8345,7 +8321,11 @@ RwRowanSample9Test >> testSpec_0064_4 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -8425,7 +8405,11 @@ RwRowanSample9Test >> testSpec_0064_5 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self

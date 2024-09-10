@@ -115,7 +115,11 @@ RwRowanSample9V3Test >> testIssue700_0 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	project := loadedProjects projectNamed: projectName.
 	requiredProject := loadedProjects projectNamed: requiredProjectName.
 
@@ -193,7 +197,11 @@ RwRowanSample9V3Test >> testIssue700_1 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	project := loadedProjects projectNamed: projectName.
 	requiredProject := loadedProjects projectNamed: requiredProjectName.
 
@@ -262,8 +270,12 @@ RwRowanSample9V3Test >> testIssue701_requiredProjectSet [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
-
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
+		
 "validate"
 	self
 		_standard_validate: resolvedProject
@@ -320,8 +332,11 @@ RwRowanSample9V3Test >> testIssue704_1 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
-
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 "validate"
 	self
 		_standard_validate: resolvedProject
@@ -396,7 +411,11 @@ RwRowanSample9V3Test >> testIssue704_2 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "validate"
 	self
@@ -471,7 +490,11 @@ RwRowanSample9V3Test >> testIssue705 [
 	resolvedProject := loadSpec resolveProject.
 
 "load Bridge component"
-	loadedProjects := resolvedProject load.
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"
@@ -560,7 +583,11 @@ RwRowanSample9V3Test >> testIssue707_01 [
 		(self _testRowanProjectsSandbox / pn ) ensureDeleteAll ].
 
 "load load spec - load primary project (associated with load  spec) AND required projects"
-	loadedProjects := loadSpec load.
+	[ loadedProjects := loadSpec load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	primaryProject := Rowan projectNamed: projectName.
 
 "validate"
@@ -732,7 +759,11 @@ RwRowanSample9V3Test >> testIssue714_1 [
 
 "load (resolve(clone)/load) projectName1"
 	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
-	loadedProjects := loadSpec1 load.
+	loadedProjects := [ loadSpec1 load] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "validate"
 	self
@@ -786,7 +817,11 @@ RwRowanSample9V3Test >> testIssue714_2 [
 
 "load (resolveProject(clone)/load) projectName1"
 	loadSpec1 projectsHome: self _testRowanProjectsSandbox.
-	loadedProjects := loadSpec1 load.
+	loadedProjects := [ loadSpec1 load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "validate"
 	self
@@ -861,9 +896,13 @@ RwRowanSample9V3Test >> testIssue714_3 [
 		yourself.
 
 "load loadSpec using loadSpec1 (should clone along the way)"
-	loadedProjects := loadSpecSet 
+	loadedProjects := [ loadSpecSet 
 		addLoadSpec: loadSpec1;
-		load.
+		load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "validate"
 	self
@@ -920,7 +959,11 @@ RwRowanSample9V3Test >> testIssue715_01 [
 	resolvedProject := loadSpec read.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	loadedProjects := [ resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 
 "validate"
 	self
@@ -1026,7 +1069,11 @@ RwRowanSample9V3Test >> testIssue715_02 [
 	resolvedProject := loadSpec read.
 
 "load project - matches what is on disk"
-	loadedProjects := resolvedProject load.
+	loadedProjects :=  [resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"
@@ -1097,7 +1144,11 @@ RwRowanSample9V3Test >> testIssue715_03 [
 	resolvedProject := loadSpec read.
 
 "load project - matches what is on disk"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+		on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+		do: [:ex | 
+			self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+			ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"
@@ -1188,6 +1239,7 @@ RwRowanSample9V3Test >> testIssue724 [
 	projectsHomeA ensureCreateDirectory.
 	loadSpecA projectsHome: projectsHomeA.
 	loadSpecA revision: 'spec_0075'.
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpecA.
 	loadSpecs := loadSpecA resolve.
 	loadedProjects := loadSpecs load.
 
@@ -1205,6 +1257,7 @@ RwRowanSample9V3Test >> testIssue724 [
 
 	loadSpecB projectsHome: projectsHomeB.
 	self deny: (projectsHomeB / loadSpecB projectName) exists.
+	self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpecB.
 	loadSpecs := loadSpecB resolve.
 	self assert: (projectsHomeB / loadSpecB projectName) exists.
 
@@ -1518,7 +1571,11 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_03 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve"
-	loadSpecs := loadSpec resolve.
+	[ loadSpecs := loadSpec resolve ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	theSpec :=  (loadSpecs specForProjectNamed: projectName).
@@ -1565,7 +1622,11 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_04 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve"
-	loadSpecs := loadSpec resolve.
+	[ loadSpecs := loadSpec resolve ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	theSpec :=  (loadSpecs specForProjectNamed: projectName).
@@ -1611,7 +1672,11 @@ RwRowanSample9V3Test >> testLoadSpec_resolve_05 [
 			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
 
 "resolve"
-	loadSpecs := loadSpec resolve.
+	loadSpecs := [ loadSpec resolve ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	theSpec :=  (loadSpecs specForProjectNamed: projectName).
@@ -1662,7 +1727,11 @@ RwRowanSample9V3Test >> testSpec_0065 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -1699,7 +1768,11 @@ RwRowanSample9V3Test >> testSpec_0066 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -1738,7 +1811,11 @@ RwRowanSample9V3Test >> testSpec_0067 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -1777,7 +1854,11 @@ RwRowanSample9V3Test >> testSpec_0068 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self
@@ -1824,7 +1905,11 @@ RwRowanSample9V3Test >> testSpec_0069_Bridge [
 	resolvedProject := bridgeLoadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"
@@ -1876,7 +1961,11 @@ RwRowanSample9V3Test >> testSpec_0069_Child [
 	resolvedProject := childLoadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"
@@ -1928,7 +2017,11 @@ RwRowanSample9V3Test >> testSpec_0069_Parent [
 	resolvedProject := parentLoadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 	project := Rowan projectNamed: projectName.
 
 "validate"

@@ -16,8 +16,8 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 		public git repositories and those are also guarded by a 'dhenrich' test ... Restoring old
 		behavior, since QA tests fail with new behavior."
 
-	(System gemEnvironmentVariable: 'USER') ~= 'dhenrich'
-		ifTrue: [ 
+	self  currentUserHasGitHubSSHKey
+		ifFalse: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ 
 					loadSpecification
@@ -42,7 +42,7 @@ RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 												gitUrl:
 													'https://github.com/dalehenrich/' , self _rowanSample12ProjectName , '.git' ]
 										ifFalse: [ self error: 'cannot convert load spec project url to use https://' ] ] ] ] ]
-		ifFalse: [ 
+		ifTrue: [ 
 			(loadSpecification projectUrl includesString: 'RowanSample9')
 				ifTrue: [ 
 					loadSpecification
@@ -178,6 +178,34 @@ RwAbstractRowanSampleTest class >> currentUserHasGitHubSSHKey [
 	^ SessionTemps current
 		at: #'CurrentUserHasGitHubSSHKey'
 		ifAbsentPut: [ self _currentUserHasGitHubSSHKey ]
+]
+
+{ #category : 'private' }
+RwAbstractRowanSampleTest >> _convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpec [
+	"convert git url from ssh to https"
+
+	| gitUrl url locator path |
+	self class currentUserHasGitHubSSHKey
+		ifTrue: [ 
+			"no need to convert ... all urls will work fine"
+			^ self ].
+	gitUrl := loadSpec gitUrl.
+	gitUrl
+		ifNil: [ 
+			"not a git project"
+			^ self ].
+	url := gitUrl asRwUrl.
+	url scheme
+		ifNotNil: [ 
+			"unrecognized scheme ... let the chips fall where they may"
+			^ self ].
+	locator := url locator.
+	(locator beginsWith: 'git@github.com:')
+		ifFalse: [ 
+			"unrecognized scheme ... let the chips fall where they may"
+			^ self ].
+	path := locator copyFrom: 'git@github.com:' size + 1 to: locator size.
+	loadSpec gitUrl: 'https://github.com/' , path	"convert to https:"
 ]
 
 { #category : 'private' }

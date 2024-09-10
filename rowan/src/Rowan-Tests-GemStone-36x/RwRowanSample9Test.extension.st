@@ -74,6 +74,82 @@ RwRowanSample9Test >> testIssue345 [
 ]
 
 { #category : '*rowan-tests-gemstone-36x' }
+RwRowanSample9Test >> testIssue515_RowanSample2 [
+
+	"https://github.com/GemTalk/Rowan/issues/515"
+
+	"duplicate of RwRowanSample2Test debug: #testIssue515"
+
+	"using the migration tests set of definitions"
+
+	| loadSpec projectName resolvedProject loadedProjects project  audit loadSpec2 resolvedProject2 hitError errorDescription gitUrl |
+	gitUrl := self class currentUserHasGitHubSSHKey
+		ifTrue: [  'git@github.com:dalehenrich/RowanSample9.git' ]
+		ifFalse: [ 'https://github.com/dalehenrich/RowanSample9.git' ].
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9' 
+		projectAlias: 'RowanSample9'
+		gitUrl: gitUrl.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"we want to clone the repository using the specified gitUrl"
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"Issue #493: use _symbolDictionaryName for initial load"
+	loadSpec gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_1"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout and load - migration_step_2"
+	resolvedProject := project asDefinition.
+	resolvedProject 
+		gemstoneSetDefaultSymbolDictNameTo: self _symbolDictionaryName;
+		checkout: 'spec_0036';
+		read;
+		load.
+
+	self assert: (audit := project audit) isEmpty.
+
+"load spec_0011 using RowanSample1 project name and RowanSample9Class1 dictionary"
+	loadSpec2 := loadSpec copy;
+		projectName: 'RowanSample1' ;
+		projectAlias: 'RowanSample9';
+		gemstoneSetDefaultSymbolDictNameTo: 'RowanSample9Class1';
+		revision: 'spec_0011';
+		yourself.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	resolvedProject2 := loadSpec2 resolveStrict.
+	hitError := false.
+	[loadedProjects := resolvedProject2 load] 
+		on: Error 
+		do: [:ex |
+			errorDescription := ex description.
+			errorDescription = 'UserDefinedError: A class (RowanSample9Class1) may not be installed in a symbol dictionary (RowanSample9Class1  with the same name.' ifTrue: [ hitError := true ] ].
+	self 
+		assert: hitError 
+		description: 'Unexpected pass with error description: ', errorDescription printString	"watch out ... jadeite won't behave well with class and symbol dictionary of same name ... but that's okay"
+]
+
+{ #category : '*rowan-tests-gemstone-36x' }
 RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/586"
