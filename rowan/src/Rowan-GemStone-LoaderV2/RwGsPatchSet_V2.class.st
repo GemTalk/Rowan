@@ -243,10 +243,13 @@ RwGsPatchSet_V2 >> _createNewSymbolList [
 	self loadSymbolList
 		do: [ :symDict | 
 			| newSymDict |
-			newSymDict := SymbolDictionary new
-				name: symDict name;
-				yourself.
-			new addLast: newSymDict ].
+			symDict name
+				ifNotNil: [ :nm | 
+					"Rowan cannot do much with a nameless symbol dictionary"
+					newSymDict := SymbolDictionary new
+						name: symDict name;
+						yourself.
+					new addLast: newSymDict ] ].
 	^ new
 ]
 

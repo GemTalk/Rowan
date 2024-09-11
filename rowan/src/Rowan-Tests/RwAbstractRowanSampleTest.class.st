@@ -11,10 +11,8 @@ Class {
 RwAbstractRowanSampleTest class >> _adjustSpecForIssue805: loadSpecification [
 	"https://github.com/GemTalk/Rowan/issues/805"
 
-	"Have to use https for project url if NOT dhenrich ... public SSH key has to be registered on 
-		github to use ssh urls ... there ARE some tests that MUST be able to push to certain
-		public git repositories and those are also guarded by a 'dhenrich' test ... Restoring old
-		behavior, since QA tests fail with new behavior."
+	"If current user does not have an ssh key for github, then convert the url to https format. This allows users to 
+		clone projects from github, which is the main requirement for tests"
 
 	self  currentUserHasGitHubSSHKey
 		ifFalse: [ 
@@ -73,6 +71,10 @@ RwAbstractRowanSampleTest class >> _clearLoadSpecSessionCache [
 
 { #category : 'private' }
 RwAbstractRowanSampleTest class >> _currentUserHasGitHubSSHKey [
+	"return true if the current user has a valid ssh key for github"
+
+	"https://stackoverflow.com/questions/67401113/how-to-identify-github-user-with-ssh-key"
+
 	| cmdLine userName errorFile stdoutFile |
 	cmdLine := '/usr/bin/ssh -T git@github.com'.
 	userName := (System gemEnvironmentVariable: 'USER') ifNil: [ 'NoUser' ].
@@ -89,7 +91,7 @@ RwAbstractRowanSampleTest class >> _currentUserHasGitHubSSHKey [
 		stdoutPath: stdoutFile fullName;
 		executeWithInput: nil ]
 		on: ChildError
-		do: [ :ex | ^ false ].
+		do: [ :ex | ^ ex status = 1 ].
 	^ true
 ]
 

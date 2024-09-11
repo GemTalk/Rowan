@@ -357,6 +357,11 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 		load spec_0001 and then do a push and pull without error."
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project className class |
+
+	RwAbstractRowanSampleTest currentUserHasGitHubSSHKey 
+		ifFalse: [
+			"push access requires an ssh key -- pass the test"
+			^ self ].
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -385,9 +390,10 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 "do git push and pull without error"
 	Rowan gemstoneTools topaz
 		gitPullProject: projectName remote: 'origin' branch: 'spec_0001'.
-	(System gemEnvironmentVariable: 'USER') = 'dhenrich'
+	"(System gemEnvironmentVariable: 'USER') = 'dhenrich' -- revert if users other than dhenrich  get errors"
+	RwAbstractRowanSampleTest currentUserHasGitHubSSHKey
 		ifTrue: [
-			"I'm the only one guaranteed to be able to push to the project ... for test coverage"
+			"User must have an ssh key to push to github"
 			Rowan gemstoneTools topaz
 				gitPushProject: projectName remote: 'origin' branch: 'spec_0001' ].
 ]

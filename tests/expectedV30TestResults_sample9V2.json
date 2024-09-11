@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 0,
 		"failures" : 1,
-		"passed" : 174,
-		"summary" : "175 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 322.56s",
-		"tests" : 175,
-		"time" : 322.565
+		"passed" : 173,
+		"summary" : "174 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 135.63s",
+		"tests" : 174,
+		"time" : 135.634
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -37,12 +37,6 @@
 			"className" : "RwRowanSample9V2Test",
 			"status" : "passed",
 			"selector" : "testAuditMissingCompiledMethod",
-			"time" : "0"
-		},
-		{
-			"className" : "RwRowanSample9V2Test",
-			"status" : "passed",
-			"selector" : "testAutomaticMigration_gitolite",
 			"time" : "0"
 		},
 		{
@@ -1066,5 +1060,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-05-10T20:37:28.996079-07:00"
+	"timeStamp" : "2024-09-10T17:04:08.995158-07:00"
 }
