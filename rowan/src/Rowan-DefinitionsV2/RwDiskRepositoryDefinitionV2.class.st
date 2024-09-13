@@ -82,7 +82,9 @@ RwDiskRepositoryDefinitionV2 >> repositoryRoot [
 					url scheme = 'file'
 						ifTrue: [ fileRef := url pathString asFileReference ] ].
 			fileRef
-				ifNil: [ fileRef := self projectsHome / self name ].
+				ifNil: [ 
+					self projectsHome 
+						ifNotNil: [:pHome | fileRef := pHome / self name ] ].
 			 self canBeWritten
 				ifTrue: [ repositoryRoot := fileRef ]
 				ifFalse: [ fileRef ] ]

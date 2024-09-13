@@ -17,6 +17,60 @@ RwGitTool >> _shouldLog [
 ]
 
 { #category : 'smalltalk api' }
+RwGitTool >> convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpec [
+	"convert git url from ssh to https"
+
+	| gitUrl url locator path |
+	self currentUserHasGitHubSSHKey
+		ifTrue: [ 
+			"no need to convert ... all urls will work fine"
+			^ self ].
+	gitUrl := loadSpec gitUrl.
+	gitUrl
+		ifNil: [ 
+			"not a git project"
+			^ self ].
+	url := gitUrl asRwUrl.
+	url scheme
+		ifNotNil: [ 
+			"unrecognized scheme ... let the chips fall where they may"
+			^ self ].
+	locator := url locator.
+	(locator beginsWith: 'git@github.com:')
+		ifFalse: [ 
+			"unrecognized scheme ... let the chips fall where they may"
+			^ self ].
+	path := locator copyFrom: 'git@github.com:' size + 1 to: locator size.
+	loadSpec gitUrl: 'https://github.com/' , path	"convert to https:"
+]
+
+{ #category : 'smalltalk api' }
+RwGitTool >> currentUserHasGitHubSSHKey [
+	"return true if the current user has a valid ssh key for github"
+
+	"https://stackoverflow.com/questions/67401113/how-to-identify-github-user-with-ssh-key"
+
+	| cmdLine userName errorFile stdoutFile |
+	cmdLine := '/usr/bin/ssh -T git@github.com'.
+	userName := (System gemEnvironmentVariable: 'USER') ifNil: [ 'NoUser' ].
+	errorFile := FileReference
+		newTempFilePrefix: 'sshError_for_' , userName
+		suffix: '.err'.
+	stdoutFile := FileReference
+		newTempFilePrefix: 'sshOutput_for_' , userName
+		suffix: '.out'.
+	[ 
+	GsHostProcess new
+		commandLine: cmdLine;
+		stderrPath: errorFile fullName;
+		stdoutPath: stdoutFile fullName;
+		executeWithInput: nil ]
+		on: ChildError
+		do: [ :ex | ^ ex status = 1 ].
+	^ true
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitaddIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'add' in: gitRepoPath with: args

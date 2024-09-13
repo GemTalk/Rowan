@@ -768,7 +768,11 @@ UpgradeRowanV3 >> reloadRowan [
 			(attribute isKindOf: RwGemStoneVersionNumber)
 				ifTrue: [ (System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber ]
 				ifFalse: [ attribute ] ].
-	loadSpecSet := project loadedLoadSpecifications.
+	[ loadSpecSet := project loadedLoadSpecifications ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       Rowan gitTools convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ]. 
 	projectDefinitionSet := loadSpecSet read: platformConditionalAttributes.
 	[ projectDefinitionSet load ]
 		on: CompileWarning

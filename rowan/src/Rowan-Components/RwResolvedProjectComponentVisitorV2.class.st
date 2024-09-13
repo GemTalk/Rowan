@@ -47,9 +47,7 @@ RwResolvedProjectComponentVisitorV2 class >> _readProjectsForProject: resolvedPr
 				do: [ :loadSpec | 
 					| theResolvedProject projectsHome |
 					"derive resolved project from the load spec ... project load specs are read from the rowan/projects directory"
-					projectsHome := (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
-						ifNil: [ pp projectsHome ].
-
+					projectsHome := loadSpec projectsHome ifNil: [ pp projectsHome ].
 					loadSpec relativeRepositoryRoot isEmpty
 						ifFalse: [ 
 							"using an embedded project"

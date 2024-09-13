@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 12,
-		"failures" : 16,
-		"passed" : 1293,
-		"summary" : "1321 Tests with 16 Failures, 12 Errors and 0 DeprecationWarnings in 1481.37s",
+		"errors" : 14,
+		"failures" : 12,
+		"passed" : 1295,
+		"summary" : "1321 Tests with 12 Failures, 14 Errors and 0 DeprecationWarnings in 1580.65s",
 		"tests" : 1321,
-		"time" : 1481.365
+		"time" : 1580.647
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -623,7 +623,7 @@
 		},
 		{
 			"className" : "RowanAnsweringServiceTest",
-			"status" : "errors",
+			"status" : "passed",
 			"selector" : "test_maxPrint",
 			"time" : "0"
 		},
@@ -707,13 +707,13 @@
 		},
 		{
 			"className" : "RowanClassServiceTest",
-			"status" : "failures",
+			"status" : "passed",
 			"selector" : "test_classHierarchy",
 			"time" : "0"
 		},
 		{
 			"className" : "RowanClassServiceTest",
-			"status" : "failures",
+			"status" : "passed",
 			"selector" : "test_classHierarchyClassSide",
 			"time" : "0"
 		},
@@ -1145,13 +1145,13 @@
 		},
 		{
 			"className" : "RowanTestClassServiceTest",
-			"status" : "failures",
+			"status" : "passed",
 			"selector" : "test_classHierarchy",
 			"time" : "0"
 		},
 		{
 			"className" : "RowanTestClassServiceTest",
-			"status" : "failures",
+			"status" : "passed",
 			"selector" : "test_classHierarchyClassSide",
 			"time" : "0"
 		},
@@ -7942,5 +7942,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-09-11T11:10:50.230158-07:00"
+	"timeStamp" : "2024-09-12T15:35:02.313121-07:00"
 }
