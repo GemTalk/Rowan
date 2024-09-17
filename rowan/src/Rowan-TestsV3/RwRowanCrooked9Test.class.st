@@ -31,10 +31,14 @@ RwRowanCrooked9Test class >> _checkoutBranchNamed: branchName [
 		ifNil: [ 
 			repositoryRoot exists
 				ifFalse: [ 
+					| gitUrl |
+					gitUrl := gitTools currentUserHasGitHubSSHKey
+						ifTrue: [  'git@github.com:dalehenrich/RowanCrooked9.git' ]
+						ifFalse: [  'https://github.com/dalehenrich/RowanCrooked9.git' ].
 					"clone the project"
 					gitTools
 						gitcloneIn: gitRoot pathString
-						with: 'git@github.com:dalehenrich/RowanCrooked9.git' ] ].
+						with: gitUrl ] ].
 	branchPulledDict := SessionTemps current
 		at: self _gitPullSessionCacheKey
 		ifAbsentPut: [ Dictionary new ].
@@ -48,7 +52,6 @@ RwRowanCrooked9Test class >> _checkoutBranchNamed: branchName [
 				yourself.
 			branchPulledDict at: branchName put: true ].
 	^ branchName
-
 ]
 
 { #category : 'private' }

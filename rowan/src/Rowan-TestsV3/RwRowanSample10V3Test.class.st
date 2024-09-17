@@ -68,7 +68,11 @@ RwRowanSample10V3Test >> testSpec_0004 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self

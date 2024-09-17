@@ -39,7 +39,11 @@ RwRowanSample11Test >> testIndexCards [
 	projectSpecification := self _rowanSample10_0000_load_spec.
 	projectSpecification repositoryRoot ensureDeleteAll.
 	projectSpecification revision: 'master'.
-	projectSpecification resolveStrict.
+	[ projectSpecification resolveStrict  ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 	indexCards := (projectSpecification repositoryRoot / 'indexCards') files
 		collect: [ :file | 
@@ -137,7 +141,11 @@ RwRowanSample11Test >> testSpec_0004 [
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-	loadedProjects := resolvedProject load.
+	[ loadedProjects := resolvedProject load ] 
+               on: RwAdjustLoadSpecBeforeProjectCloneOrLoadNotification
+              do: [:ex | 
+                       self _convertSSHGitUrlIntoHTTPSUrlIfNeeded: ex loadSpecification.
+                       ex resume  ].
 
 "validate"
 	self

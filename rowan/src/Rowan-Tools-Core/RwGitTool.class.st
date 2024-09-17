@@ -26,10 +26,12 @@ RwGitTool >> convertSSHGitUrlIntoHTTPSUrlIfNeeded: loadSpec [
 			"no need to convert ... all urls will work fine"
 			^ self ].
 	gitUrl := loadSpec gitUrl.
-	gitUrl
-		ifNil: [ 
-			"not a git project"
-			^ self ].
+	loadSpec projectUrl
+		ifNotNil: [ :projectUrl | 
+			projectUrl ~= gitUrl
+				ifTrue: [ 
+					"not a git project no need for changing anything"
+					^ self ] ].
 	url := gitUrl asRwUrl.
 	url scheme
 		ifNotNil: [ 
