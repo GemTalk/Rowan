@@ -8,9 +8,10 @@ Warning >> defaultAction [
 	any text specified as the argument of the #signal: message."
 
   | response |
+  GsNotifyInteraction interactionsEnabled ifFalse: [ ^ super defaultAction ].
   response := (GsNotifyInteraction
     prompt:
-      self description withoutGemstoneLineEndings , ' Press ''Proceed'' to continue.'
+      self description withoutGemstoneLineEndings , ' Press ''Yes'' to continue.'
     confirm: 'Proceed'
     cancel: 'Debug'
     abort: 'Cancel') signal.

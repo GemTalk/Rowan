@@ -1,3 +1,13 @@
+"
+Returns true or false, depending upon whether or not 'Yes"" or 'No' button pressed.
+
+GsInteraction enableInteractions.
+GsInteraction disableInteractions.
+GsInteraction interactionsEnabled.
+self confirm: 'message'.
+
+Handler available in JadeiteForPharo
+"
 Class {
 	#name : 'GsConfirmInteraction',
 	#superclass : 'GsInteraction',

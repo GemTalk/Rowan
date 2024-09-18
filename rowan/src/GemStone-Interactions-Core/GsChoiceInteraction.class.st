@@ -1,3 +1,16 @@
+"
+GsInteraction enableInteractions.
+GsInteraction disableInteractions.
+GsInteraction interactionsEnabled.
+
+(GsChoiceInteraction 
+	prompt: 'prompt' 
+	labels: {'label'} 
+	values: {'value'} 
+	lines: {'line'}) signal.
+	
+No handler available in JadeiteForPharo
+"
 Class {
 	#name : 'GsChoiceInteraction',
 	#superclass : 'GsInteraction',

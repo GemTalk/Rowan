@@ -46,7 +46,7 @@ GsInteractionHandler >> defaultBlock [
       defaultBlock := [ :interaction | 
       self
         error:
-          'No handler defined for ' , interaction class name asString , ' interaction.' ] ].
+          'No interactive handler defined for ' , interaction class name asString , ' interaction.' ] ].
   ^ defaultBlock
 ]
 
@@ -85,37 +85,51 @@ GsInteractionHandler >> inspectBlock: anObject [
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithChoice: interaction [
-  ^ self choiceBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ interaction ].
+	^ self choiceBlock value: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithConfirm: interaction [
-  ^ self confirmBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ false ].
+	^ self confirmBlock value: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithExplore: interaction [
-  ^ self interactWithInspect: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ false ].
+	^ self interactWithInspect: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithInform: interaction [
-  ^ self informBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ false ].
+	^ self informBlock value: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithInspect: interaction [
-  ^ self inspectBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ interaction theObject ].
+	^ self inspectBlock value: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithMultiLineText: interaction [
-  ^ self multiLineTextBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ interaction theObject ].
+	^ self multiLineTextBlock value: interaction
 ]
 
 { #category : 'interactions' }
 GsInteractionHandler >> interactWithText: interaction [
-  ^ self textBlock value: interaction
+	interaction interactionsEnabled
+		ifFalse: [ ^ interaction theObject ].
+	^ self textBlock value: interaction
 ]
 
 { #category : 'accessing' }

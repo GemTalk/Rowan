@@ -1,3 +1,13 @@
+"
+Returns true when 'OK'  button pressed.
+
+GsInteraction enableInteractions.
+GsInteraction disableInteractions.
+GsInteraction interactionsEnabled.
+self inform: 'message'.
+
+Handler available in JadeiteForPharo
+"
 Class {
 	#name : 'GsInformInteraction',
 	#superclass : 'GsInteraction',

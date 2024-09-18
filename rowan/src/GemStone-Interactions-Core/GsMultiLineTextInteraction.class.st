@@ -1,3 +1,14 @@
+"
+GsInteraction enableInteractions.
+GsInteraction disableInteractions.
+GsInteraction interactionsEnabled.
+
+(GsMultiLineTextInteraction prompt: 'prompt') signal.
+(GsMultiLineTextInteraction prompt: 'prompt with template'  template: 'template') signal.
+(GsMultiLineTextInteraction requestPassword: 'password') signal.
+	
+No handler available in JadeiteForPharo
+"
 Class {
 	#name : 'GsMultiLineTextInteraction',
 	#superclass : 'GsTextInteraction',

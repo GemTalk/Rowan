@@ -1,3 +1,13 @@
+"
+Opens an inspector on the reciever of the #inspect message.
+
+GsInteraction enableInteractions.
+GsInteraction disableInteractions.
+GsInteraction interactionsEnabled.
+{1 . 2 . 3} inspect.
+
+Handler available in JadeiteForPharo
+"
 Class {
 	#name : 'GsInspectInteraction',
 	#superclass : 'GsInteraction',

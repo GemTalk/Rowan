@@ -14,7 +14,7 @@ GsInteractionRequest class >> signal: aGsInteraction [
 
 { #category : 'signaling' }
 GsInteractionRequest >> defaultAction [
-  ^ self interaction defaultActionFor: self
+	^ self interaction defaultActionFor: self
 ]
 
 { #category : 'Compatibility' }

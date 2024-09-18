@@ -7,6 +7,21 @@ Class {
 	#category : 'GemStone-Interactions-Core'
 }
 
+{ #category : 'preferences' }
+GsInteraction class >> disableInteractions [
+	SessionTemps current at: #'GsInteractionsEnabled' put:  false
+]
+
+{ #category : 'preferences' }
+GsInteraction class >> enableInteractions [
+	SessionTemps current at: #'GsInteractionsEnabled' put:  true
+]
+
+{ #category : 'preferences' }
+GsInteraction class >> interactionsEnabled [
+	^ (SessionTemps current at: #'GsInteractionsEnabled' otherwise: nil) == true
+]
+
 { #category : 'accessing' }
 GsInteraction >> defaultActionBlock [
   defaultActionBlock
@@ -27,6 +42,12 @@ GsInteraction >> defaultActionBlock: anObject [
 { #category : 'interacting' }
 GsInteraction >> defaultActionFor: anInteractionRequest [
   ^ self defaultActionBlock value: anInteractionRequest
+]
+
+{ #category : 'testing' }
+GsInteraction >> interactionsEnabled [
+
+	^ self class interactionsEnabled
 ]
 
 { #category : 'interacting' }
