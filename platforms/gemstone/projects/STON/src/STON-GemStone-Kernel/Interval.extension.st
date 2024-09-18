@@ -1,6 +1,6 @@
 Extension { #name : 'Interval' }
 
-{ #category : '*Rowan-GemStone-Kernel' }
+{ #category : '*ston-gemstone-kernel' }
 Interval class >> fromSton: stonReader [
 	| result values |
 	values := OrderedCollection new.
@@ -10,7 +10,7 @@ Interval class >> fromSton: stonReader [
 	^result
 ]
 
-{ #category : '*Rowan-GemStone-Kernel' }
+{ #category : '*ston-gemstone-kernel' }
 Interval >> stonOn: stonWriter [
   stonWriter
     writeObject: self
