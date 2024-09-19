@@ -329,15 +329,22 @@ RwAbstractTest >> handleConfirmationDuring: aBlock [
 
 { #category : 'private' }
 RwAbstractTest >> handleInformDuring: aBlock interactionBlock: interactionBlock [
+	"expect an interaction"
 
-	"expect a confirmation"
-
+	| savedInteractionState |
+	savedInteractionState := GsInteraction interactionsEnabled.
+	[ 
+	GsInteraction enableInteractions.
 	aBlock
 		on: GsInteractionRequest
 		do: [ :ex | 
 			ex
 				response:
-					(ex interaction interactWith: (self gsInteractionInformHandler: interactionBlock)) ]
+					(ex interaction
+						interactWith: (self gsInteractionInformHandler: interactionBlock)) ] ]
+		ensure: [ 
+			savedInteractionState
+				ifFalse: [ GsInteraction disableInteractions ] ]
 ]
 
 { #category : 'support' }
