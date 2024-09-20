@@ -16,7 +16,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 						'symbolDictName' : 'Globals'
 					},
 					'Rowan-GemStone-3215' : {
-						'symbolDictName' : 'Globals'
+						'symbolDictName' : 'RowanTools'
 					}
 				}
 			}

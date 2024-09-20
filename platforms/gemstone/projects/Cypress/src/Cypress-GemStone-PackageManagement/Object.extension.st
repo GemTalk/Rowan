@@ -1,6 +1,6 @@
 Extension { #name : 'Object' }
 
-{ #category : '*Cypress-PackageManagement' }
+{ #category : '*Cypress-GemStone-PackageManagement' }
 Object >> _writeCypressJsonOn: fileStream [
 	"Private method which may be removed in a future GemStone version."
 

@@ -1,13 +1,13 @@
 Extension { #name : 'Dictionary' }
 
-{ #category : '*Cypress-PackageManagement' }
+{ #category : '*Cypress-GemStone-PackageManagement' }
 Dictionary >> _writeCypressJsonOn: fileStream [
 	"Private method which may be removed in a future GemStone version."
 
 	self _writeCypressJsonOn: fileStream indent: 0
 ]
 
-{ #category : '*Cypress-PackageManagement' }
+{ #category : '*Cypress-GemStone-PackageManagement' }
 Dictionary >> _writeCypressJsonOn: aStream indent: startIndent [
 	"Private method which may be removed in a future GemStone version."
 

@@ -7,11 +7,23 @@ RwSimpleProjectLoadComponentV2 {
 		'Cypress-Comparison',
 		'Cypress-Definitions',
 		'Cypress-Environmental-Tools',
+		'Cypress-GemStone-PackageManagement',
 		'Cypress-GemStoneFileServer',
 		'Cypress-MesssageDigest',
 		'Cypress-Network-Url',
 		'Cypress-PackageManagement',
 		'Cypress-Structure'
 	],
-	#comment : 'Single component for Cypress project'
+		#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'allusers' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Cypress-GemStone-PackageManagement' : {
+						'symbolDictName' : 'Globals'
+					}
+				}
+			}
+		}
+	},
+#comment : 'Single component for Cypress project'
 }

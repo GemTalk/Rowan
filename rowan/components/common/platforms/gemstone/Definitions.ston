@@ -16,7 +16,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-Cypress-Kernel' : {
-						'symbolDictName' : 'Globals'
+						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-GemStone-Definitions' : {
 						'symbolDictName' : 'RowanTools'

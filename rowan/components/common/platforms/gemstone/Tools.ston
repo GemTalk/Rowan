@@ -16,7 +16,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 						'symbolDictName' : 'RowanTools'
 					},
 					'Rowan-Tools-Kernel' : {
-						'symbolDictName' : 'Globals'
+						'symbolDictName' : 'RowanTools'
 					}
 				}
 			}

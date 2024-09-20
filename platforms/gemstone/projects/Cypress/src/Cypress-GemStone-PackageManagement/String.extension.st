@@ -1,6 +1,6 @@
 Extension { #name : 'String' }
 
-{ #category : '*Cypress-PackageManagement' }
+{ #category : '*Cypress-GemStone-PackageManagement' }
 String >> _writeCypressJsonOn: aStream indent: startIndent [
 	"Private method which may be removed in a future GemStone version."
 
