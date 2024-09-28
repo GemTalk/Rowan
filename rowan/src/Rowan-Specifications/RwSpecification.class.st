@@ -43,7 +43,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 				do: [ :ex | 
 					self
 						error:
-							'error creating load spec' , url printString , ' see '
+							'error creating load spec ' , url printString , ' see '
 								, downoadedFile pathString , ' for details' ] ]
 				ensure: [ 
 					curlErrorFile ensureDelete.
