@@ -86,6 +86,82 @@ _____
 ]
 
 { #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_4_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+    RowanSample9V3-Tests
+ -- Changed Classes --
+    RowanSample9V3Class1
+ -- Added Methods --
+    RowanSample9V3Class1>>newVar
+    RowanSample9V3TestCase>>testNewVar
+ -- Changed Methods --
+    RowanSample9V3Class1>>foo
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_5_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+    RowanSample9V3-Tests
+    RowanSample9V3-Traits
+ -- Changed Classes --
+    RowanSample9V3Class1
+ -- Changed Traits --
+    RowanSample9V3Trait1
+ -- Added Methods --
+    RowanSample9V3Class1>>newVar
+    RowanSample9V3TestCase>>testNewVar
+ -- Changed Methods --
+    RowanSample9V3Class1>>foo
+ -- Deleted Trait Methods --
+    RowanSample9V3Trait1>>cv1
+ -- Added Trait Methods --
+    RowanSample9V3Trait1>>newVar
+ -- Changed Trait Methods --
+    RowanSample9V3Trait1 class>>civ1
+    RowanSample9V3Trait1>>iv1
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_6_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+    RowanSample9V3-Tests
+    RowanSample9V3-Traits
+ -- Changed Classes --
+    RowanSample9V3Class1
+ -- Changed Traits --
+    RowanSample9V3Trait1
+ -- Added Methods --
+    RowanSample9V3Class1>>newVar
+    RowanSample9V3TestCase>>testNewVar
+ -- Changed Methods --
+    RowanSample9V3Class1>>foo
+ -- Deleted Trait Methods --
+    RowanSample9V3Trait1>>cv1
+ -- Added Trait Methods --
+    RowanSample9V3Trait1>>newVar
+ -- Changed Trait Methods --
+    RowanSample9V3Trait1>>iv1
+_____
+'
+]
+
+{ #category : 'private' }
 RwRowanSample9V3Test >> _modificationInstance_issue976: diff filterTrailingLf: filterTrailingLf label1: label1 label2: label2 [
 	| visitor reportString |
 	reportString := String
@@ -1549,7 +1625,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 	"move method to different category ...  add iv to class ... add new package ...????"
 	"https://github.com/GemTalk/Rowan/issues/936"
 	
-	| diff label1 label2 loadSpec project1 project2 reportString package classDefinition  methodDefs  methodDef   |
+	| diff label1 label2 loadSpec project1 project2 reportString package classDefinition  methodDefs  methodDef instVarNames  traitDefinition classMethodDefs  classMethodDef |
 "start with spec_0084 ... with traits"
 	loadSpec := self _loadSpecNamed: 'spec_0084'.
 	project1 := loadSpec read.
@@ -1570,8 +1646,8 @@ RwRowanSample9V3Test >> testIssue936_2 [
 	methodDefs := classDefinition instanceMethodDefinitions.
 	methodDef := methodDefs at:  #foo.
 	methodDef source: methodDef source copy lf .	"add a trailing LF"
-	diff := project2 compareAgainstBase: project1.
 "report with traiing lf showing up as diff"
+	diff := project2 compareAgainstBase: project1.
 	reportString := self 
 		_modificationInstance_issue976: diff 
 		filterTrailingLf: false 
@@ -1585,7 +1661,68 @@ RwRowanSample9V3Test >> testIssue936_2 [
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_3_report.
-"add a method, change a method ... class and traits"
+"change class; add a method; change a method "
+	instVarNames := classDefinition instVarNames copy.
+	instVarNames add: 'newVar'.
+	classDefinition instVarNames: instVarNames.
+	methodDefs := classDefinition instanceMethodDefinitions.
+"change method"
+	methodDef := methodDefs at:  #foo.
+	methodDef source: 'foo "comment" ^ 1'. "add comment remove LF"
+"add method"
+	classDefinition
+		addInstanceMethod: 'newVar ^ newVar' 
+		protocol: 'accessing'.
+	package := project2 packageNamed: 'RowanSample9V3-Tests'.
+	classDefinition := package classDefinitionNamed: 'RowanSample9V3TestCase'.
+"add test method"
+	classDefinition
+		addInstanceMethod: 'testNewVar self assert: RowanSample9V3Class1 new newVar = nil'
+		protocol: 'tests'.
+"report ..."
+	diff := project2 compareAgainstBase: project1.
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: false 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_4_report.
+"change trait; add a method; change a method; add LF to method"
+	package := project2 packageNamed: 'RowanSample9V3-Traits'.
+	traitDefinition := package traitDefinitionNamed: 'RowanSample9V3Trait1'.
+"new inst var"
+	instVarNames := traitDefinition instVarNames copy.
+	instVarNames add: 'newVar'.
+	traitDefinition instVarNames: instVarNames.
+"new method"
+	traitDefinition 
+		addInstanceMethod: 'newVar ^ newVar'
+		protocol: 'accessing'.
+	classMethodDefs := traitDefinition classMethodDefinitions.
+	classMethodDef := classMethodDefs at: #civ1.
+	classMethodDef source:  classMethodDef source copy lf.
+"modify method"
+	methodDefs := traitDefinition instanceMethodDefinitions.
+	methodDef := methodDefs at: #iv1.
+	methodDef source: 'iv1 "comment" ^ iv1'.
+"delete method"
+	traitDefinition removeInstanceMethod: #'cv1'.
+"report ...  don't fillter lf"
+	diff := project2 compareAgainstBase: project1.
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: false 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_5_report.
+"report ...  fillter lf"
+	diff := project2 compareAgainstBase: project1.
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: true 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_6_report.
 ]
 
 { #category : 'tests' }

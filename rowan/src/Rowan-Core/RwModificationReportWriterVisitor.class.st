@@ -76,6 +76,9 @@ Class {
 		'changedMethods',
 		'changedMethodExtensions',
 		'deletedMethods',
+		'addedTraitMethods',
+		'changedTraitMethods',
+		'deletedTraitMethods',
 		'classDefPackageNameMap',
 		'classExtPackageNameMap',
 		'classInitializationDefinitions',
@@ -412,9 +415,23 @@ RwModificationReportWriterVisitor >> addedProjects [
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> addedTrait: aTraitModification [
-
-
 	self addedTraits add:  aTraitModification after name
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> addedTraitMethod: aTraitMethodModification [
+	self addedTraitMethods
+		add:
+			currentTraitDefinition name
+				,
+					(aTraitMethodModification isMeta
+						ifTrue: [ ' class>>' ]
+						ifFalse: [ '>>' ]) , aTraitMethodModification after selector
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> addedTraitMethods [
+	^ addedTraitMethods ifNil: [ addedTraitMethods := Set new ]
 ]
 
 { #category : 'accessing' }
@@ -449,7 +466,7 @@ RwModificationReportWriterVisitor >> changedClasses [
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedClassExtension: aClassExtensionModification [
 	currentClassExtension := aClassExtensionModification after.
-	aClassExtensionModification sModification
+	aClassExtensionModification isModification
 		ifTrue: [ self changedClassExtensions add: currentClassExtension ].
 	self processClassExtension: aClassExtensionModification
 ]
@@ -533,6 +550,26 @@ RwModificationReportWriterVisitor >> changedTrait: aTraitModification [
 	currentTraitDefinition := aTraitModification after.
 	self changedTraits add: currentTraitDefinition.
 	self processTrait: aTraitModification
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> changedTraitMethod: aMethodTraitModification [
+	(self checkForSourceDiffWithoutTrailingLf: aMethodTraitModification)
+		ifTrue: [ 
+			"ignore the methodModification if source differs only by a trailing LF"
+			^ self ].
+	self changedTraitMethods
+		add:
+			currentTraitDefinition name
+				,
+					(aMethodTraitModification isMeta
+						ifTrue: [ ' class>>' ]
+						ifFalse: [ '>>' ]) , aMethodTraitModification after selector
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedTraitMethods [
+	^ changedTraitMethods ifNil: [ changedTraitMethods := Set new ]
 ]
 
 { #category : 'actions' }
@@ -667,6 +704,23 @@ RwModificationReportWriterVisitor >> deletedProject: aProjectModification [
 RwModificationReportWriterVisitor >> deletedProjects [ 
 
 ^ deletedProjects ifNil: [ deletedProjects := Set new]
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> deletedTraitMethod: aMethodTraitModification [
+	self deletedTraitMethods
+		add:
+			currentTraitDefinition name
+				,
+					(aMethodTraitModification isMeta
+						ifTrue: [ ' class>>' ]
+						ifFalse: [ '>>' ]) , aMethodTraitModification before selector
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> deletedTraitMethods [ 
+
+^ deletedTraitMethods ifNil: [ deletedTraitMethods := Set new]
 ]
 
 { #category : 'accessing' }
@@ -948,11 +1002,11 @@ RwModificationReportWriterVisitor >> report [
 			self bufferedStream
 				nextPutAll: ' -- Changed Traits --';
 				lf.
-			self changedTraits asSortedCollection
+			(self changedTraits asSortedCollection: [ :a :b | a name <= b name ])
 				do: [ :each | 
 					self bufferedStream
 						nextPutAll: '    ';
-						nextPutAll: each;
+						nextPutAll: each name;
 						lf ] ].
 	self deletedMethods isEmpty
 		ifFalse: [ 
@@ -993,6 +1047,39 @@ RwModificationReportWriterVisitor >> report [
 				nextPutAll: ' -- Changed Method Extensions --';
 				lf.
 			self changedMethodExtensions asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self deletedTraitMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Deleted Trait Methods --';
+				lf.
+			self deletedTraitMethods asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self addedTraitMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Added Trait Methods --';
+				lf.
+			self addedTraitMethods asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self changedTraitMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Trait Methods --';
+				lf.
+			self changedTraitMethods asSortedCollection
 				do: [ :each | 
 					self bufferedStream
 						nextPutAll: '    ';
@@ -1280,5 +1367,21 @@ RwModificationReportWriterVisitor >> visitMethodModification: aMethodModificatio
 RwModificationReportWriterVisitor >> visitMethodsModification: aMethodsModification [
 
 	aMethodsModification elementsModified
+		do: [:each | each acceptVisitor: self]
+]
+
+{ #category : 'visiting' }
+RwModificationReportWriterVisitor >> visitTraitMethodModification: aTraitMethodModification [
+	aTraitMethodModification isAddition
+		ifTrue: [ ^ self addedTraitMethod: aTraitMethodModification ].
+	aTraitMethodModification isDeletion
+		ifTrue: [ ^ self deletedTraitMethod: aTraitMethodModification ].
+	^ self changedTraitMethod: aTraitMethodModification
+]
+
+{ #category : 'visiting' }
+RwModificationReportWriterVisitor >> visitTraitMethodsModification: aTraitMethodsModification [
+
+	aTraitMethodsModification elementsModified
 		do: [:each | each acceptVisitor: self]
 ]
