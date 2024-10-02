@@ -20,11 +20,11 @@ RwRowanSample9V3Test class >> _rowanSample9ProjectName [
 ]
 
 { #category : 'private' }
-RwRowanSample9V3Test >> _issue976_report [
+RwRowanSample9V3Test >> _issue976_1_report [
 ^'REPORT spec_0005 loading into spec_0001
  -- Changed Projects --
     RowanSample9V3
--- Deleted Packages --
+ -- Deleted Packages --
     RowanSample9V3-Core
  -- Added Packages --
     RowanSample9V3-Core1
@@ -35,8 +35,6 @@ RwRowanSample9V3Test >> _issue976_report [
     RowanSample9V3Class1
     RowanSample9V3IdentityKeyValueDictionary
  -- Changed Classes --
-    RowanSample9V3Class1
-    RowanSample9V3IdentityKeyValueDictionary
     RowanSample9V3TestCase
  -- Deleted Methods --
     RowanSample9V3TestCase>>test
@@ -52,6 +50,63 @@ RwRowanSample9V3Test >> _issue976_report [
     RowanSample9V3TestCase>>testSymbolDicts
 _____
 '
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_1_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_2_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+ -- Changed Methods --
+    RowanSample9V3Class1>>foo
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_2_3_report [
+	^ 'REPORT spec_0084_2 loading into spec_0084_1
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _modificationInstance_issue976: diff filterTrailingLf: filterTrailingLf label1: label1 label2: label2 [
+	| visitor reportString |
+	reportString := String
+		streamContents: [ :stringStream | 
+			ZnBufferedWriteStream
+				on: stringStream
+				do: [ :bufferedStream | 
+					visitor := RwModificationReportWriterVisitor new
+						_bufferedStream: bufferedStream;
+						filterTrailingLf: filterTrailingLf;
+						reportFileHeader:
+								'REPORT ' , label2 , ' loading into ' , label1
+										,
+											'
+';
+						reportFileFooter:
+								'_____
+';
+						yourself ].
+			visitor visit: diff ].
+	^ reportString
 ]
 
 { #category : 'private' }
@@ -1451,7 +1506,7 @@ RwRowanSample9V3Test >> testIssue929 [
 ]
 
 { #category : 'tests' }
-RwRowanSample9V3Test >> testIssue936 [
+RwRowanSample9V3Test >> testIssue936_1 [
 	"Rowan should produce human readable differences differences report" 
 	
 	"https://github.com/GemTalk/Rowan/issues/936"
@@ -1485,7 +1540,52 @@ RwRowanSample9V3Test >> testIssue936 [
 ';
 	 		yourself].
 		visitor visit: diff ].
-	self assert: reportString equals: self _issue976_report
+	self assert: reportString equals: self _issue976_1_report
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testIssue936_2 [
+	"Rowan should produce human readable differences differences report" 
+	"move method to different category ...  add iv to class ... add new package ...????"
+	"https://github.com/GemTalk/Rowan/issues/936"
+	
+	| diff label1 label2 loadSpec project1 project2 reportString package classDefinition  methodDefs  methodDef   |
+"start with spec_0084 ... with traits"
+	loadSpec := self _loadSpecNamed: 'spec_0084'.
+	project1 := loadSpec read.
+	project2 := loadSpec read.
+	label1 := 'spec_0084_1'.
+	label2:= 'spec_0084_2'.
+"compare project to itself"
+	diff := project2 compareAgainstBase: project1.	
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: false 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_1_report.
+"add trailing lf to method"
+	package := project2 packageNamed: 'RowanSample9V3-Core'.
+	classDefinition := package classDefinitionNamed: 'RowanSample9V3Class1'.
+	methodDefs := classDefinition instanceMethodDefinitions.
+	methodDef := methodDefs at:  #foo.
+	methodDef source: methodDef source copy lf .	"add a trailing LF"
+	diff := project2 compareAgainstBase: project1.
+"report with traiing lf showing up as diff"
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: false 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_2_report.
+"report with traiing lf filtered out"
+	reportString := self 
+		_modificationInstance_issue976: diff 
+		filterTrailingLf: true 
+		label1: label1 
+		label2: label2.
+	self assert: reportString equals: self _issue976_2_3_report.
+"add a method, change a method ... class and traits"
 ]
 
 { #category : 'tests' }

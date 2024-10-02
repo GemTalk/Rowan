@@ -434,7 +434,9 @@ RwModificationReportWriterVisitor >> bufferedStream [
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedClass: aClassModification [
 	currentClassDefinition := aClassModification after.
-	self changedClasses add: currentClassDefinition.
+	(aClassModification isModification
+		and: [ aClassModification propertiesModification isEmpty not ])
+		ifTrue: [ self changedClasses add: currentClassDefinition ].
 	self processClass: aClassModification
 ]
 
@@ -446,9 +448,9 @@ RwModificationReportWriterVisitor >> changedClasses [
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedClassExtension: aClassExtensionModification [
-
 	currentClassExtension := aClassExtensionModification after.
-	self changedClassExtensions add: currentClassExtension.
+	aClassExtensionModification sModification
+		ifTrue: [ self changedClassExtensions add: currentClassExtension ].
 	self processClassExtension: aClassExtensionModification
 ]
 
@@ -499,9 +501,9 @@ RwModificationReportWriterVisitor >> changedMethods [
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedPackage: aPackageModification [
-
 	currentPackageDefinition := aPackageModification after.
-	self changedPackages add: currentPackageDefinition.
+	aPackageModification isModification
+		ifTrue: [ self changedPackages add: currentPackageDefinition ].
 	self processPackage: aPackageModification
 ]
 
@@ -514,7 +516,8 @@ RwModificationReportWriterVisitor >> changedPackages [
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedProject: aProjectModification [
 	currentProjectDefinition := aProjectModification after.
-	self changedProjects add: currentProjectDefinition.
+	aProjectModification isModification
+		ifTrue: [ self changedProjects add: currentProjectDefinition ].
 	self processProject: aProjectModification
 ]
 
@@ -792,7 +795,7 @@ RwModificationReportWriterVisitor >> processTrait: aTraitModification [
 		ifFalse: [ aTraitModification classMethodsModification acceptVisitor: self ]
 ]
 
-{ #category : 'class writing' }
+{ #category : 'reporting' }
 RwModificationReportWriterVisitor >> report [
 	bufferedStream ifNil: [ self _setBufferedStreamFor: self reportFilename ].
 	self bufferedStream nextPutAll: self reportFileHeader.
@@ -833,7 +836,7 @@ RwModificationReportWriterVisitor >> report [
 	self deletedPackages isEmpty
 		ifFalse: [ 
 			self bufferedStream
-				nextPutAll: '-- Deleted Packages --';
+				nextPutAll: ' -- Deleted Packages --';
 				lf.
 			self deletedPackages asSortedCollection
 				do: [ :each | 
