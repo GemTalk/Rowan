@@ -20,6 +20,41 @@ RwRowanSample9V3Test class >> _rowanSample9ProjectName [
 ]
 
 { #category : 'private' }
+RwRowanSample9V3Test >> _issue976_report [
+^'REPORT spec_0005 loading into spec_0001
+ -- Changed Projects --
+    RowanSample9V3
+-- Deleted Packages --
+    RowanSample9V3-Core
+ -- Added Packages --
+    RowanSample9V3-Core1
+    RowanSample9V3-Core2
+ -- Changed Packages --
+    RowanSample9V3-Tests
+ -- Added Classes --
+    RowanSample9V3Class1
+    RowanSample9V3IdentityKeyValueDictionary
+ -- Changed Classes --
+    RowanSample9V3Class1
+    RowanSample9V3IdentityKeyValueDictionary
+    RowanSample9V3TestCase
+ -- Deleted Methods --
+    RowanSample9V3TestCase>>test
+ -- Added Methods --
+    RowanSample9V3Class1 class>>bar
+    RowanSample9V3Class1>>foo
+    RowanSample9V3IdentityKeyValueDictionary class>>bar
+    RowanSample9V3IdentityKeyValueDictionary>>foo
+    RowanSample9V3TestCase>>test1
+    RowanSample9V3TestCase>>test2
+    RowanSample9V3TestCase>>test3
+    RowanSample9V3TestCase>>test4
+    RowanSample9V3TestCase>>testSymbolDicts
+_____
+'
+]
+
+{ #category : 'private' }
 RwRowanSample9V3Test >> _spec_0079Name [
 	"as part of the work on https://github.com/GemTalk/Rowan/issues/920; changes to filetree writer have been made to improve Rowan's 
 		fidelity to the GsDevKit filetree format. These changes have been recently introduced in Rowan 3.  We have to leave spec_0079 for older 
@@ -1413,6 +1448,44 @@ RwRowanSample9V3Test >> testIssue929 [
 		assert: hitError
 		description:
 			'Expected to hit an error while adding invalid instance method source'
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testIssue936 [
+	"Rowan should produce human readable differences differences report" 
+	
+	"https://github.com/GemTalk/Rowan/issues/936"
+	
+	| diff visitor label1 label2 loadSpec project1 project2 reportString  |
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9V3/refs/heads/spec_0001/rowan/specs/spec_0001.ston'.
+	loadSpec
+		projectAlias: loadSpec projectName, '_1';
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself .
+	project1 := loadSpec read.
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9V3/refs/heads/spec_0005/rowan/specs/spec_0005.ston'.
+	loadSpec
+		projectAlias: loadSpec projectName, '_2';
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself .
+	project2 := loadSpec read.
+	label1 := 'spec_0001'.
+	label2:= 'spec_0005'.
+	diff := project2 compareAgainstBase: project1.
+	
+	reportString := String streamContents: [ :stringStream | 
+		ZnBufferedWriteStream on: stringStream do: [ : bufferedStream |
+		visitor := RwModificationReportWriterVisitor new
+	 		_bufferedStream: bufferedStream;
+	 		reportFileHeader:'REPORT ', label2, ' loading into ', label1, '
+';
+	 		reportFileFooter: '_____
+';
+	 		yourself].
+		visitor visit: diff ].
+	self assert: reportString equals: self _issue976_report
 ]
 
 { #category : 'tests' }

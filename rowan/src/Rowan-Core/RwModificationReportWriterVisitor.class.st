@@ -60,6 +60,9 @@ Class {
 		'addedClasses',
 		'changedClasses',
 		'deletedClasses',
+		'addedClassExtensions',
+		'changedClassExtensions',
+		'deletedClassExtensions',
 		'addedPackages',
 		'changedPackages',
 		'deletedPackages',
@@ -71,11 +74,13 @@ Class {
 		'deletedTraits',
 		'addedMethods',
 		'changedMethods',
+		'changedMethodExtensions',
 		'deletedMethods',
 		'classDefPackageNameMap',
 		'classExtPackageNameMap',
 		'classInitializationDefinitions',
-		'repositoryRootPath'
+		'repositoryRootPath',
+		'filterTrailingLf'
 	],
 	#classVars : [
 		'Character_lf'
@@ -86,6 +91,11 @@ Class {
 { #category : 'initialization' }
 RwModificationReportWriterVisitor class >> initialize [
 	self _addInvariantClassVar: #Character_lf value: Character lf
+]
+
+{ #category : 'private exporting' }
+RwModificationReportWriterVisitor >> _bufferedStream: aZnBufferedWriteStream [
+	bufferedStream := aZnBufferedWriteStream
 ]
 
 { #category : 'private exporting' }
@@ -340,7 +350,8 @@ RwModificationReportWriterVisitor >> _writeClassTypeMessage: classDefinition on:
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> addedClass: aClassModification [
 	currentClassDefinition := aClassModification after.
-	self addedClasses add: aClassModification after
+	self addedClasses add: currentClassDefinition.
+	self processClass: aClassModification
 ]
 
 { #category : 'accessing' }
@@ -351,7 +362,14 @@ RwModificationReportWriterVisitor >> addedClasses [
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> addedClassExtension: aClassExtensionModification [
-	currentClassExtension := aClassExtensionModification
+	currentClassExtension := aClassExtensionModification after.
+	self addedClassExtensions add: aClassExtensionModification after
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> addedClassExtensions [ 
+
+^ addedClassExtensions ifNil: [ addedClassExtensions := Set new]
 ]
 
 { #category : 'actions' }
@@ -416,30 +434,141 @@ RwModificationReportWriterVisitor >> bufferedStream [
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedClass: aClassModification [
 	currentClassDefinition := aClassModification after.
+	self changedClasses add: currentClassDefinition.
 	self processClass: aClassModification
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedClasses [
+
+	^changedClasses ifNil: [ changedClasses := Set new ]
 ]
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedClassExtension: aClassExtensionModification [
 
 	currentClassExtension := aClassExtensionModification after.
-
+	self changedClassExtensions add: currentClassExtension.
 	self processClassExtension: aClassExtensionModification
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedClassExtensions [
+	^ changedClassExtensions ifNil: [ changedClassExtensions := Set new ]
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> changedMethod: aMethodModification [
+	(self checkForSourceDiffWithoutTrailingLf: aMethodModification)
+		ifTrue: [ 
+			"ignore the methodModification if source differs only by a trailing LF"
+			^ self ].
+	self changedMethods
+		add:
+			currentClassDefinition name
+				,
+					(aMethodModification isMeta
+						ifTrue: [ ' class>>' ]
+						ifFalse: [ '>>' ]) , aMethodModification after selector
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> changedMethodExtension: aMethodModification [
+	(self checkForSourceDiffWithoutTrailingLf: aMethodModification)
+		ifTrue: [ 
+			"ignore the methodModification source differs only by a trailing LF"
+			^ self ].
+	self changedMethodExtensions
+		add:
+			currentClassExtension name
+				,
+					(aMethodModification isMeta
+						ifTrue: [ ' class>>' ]
+						ifFalse: [ '>>' ]) , aMethodModification after selector
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedMethodExtensions [
+	^ changedMethodExtensions ifNil: [ changedMethodExtensions := Set new ]
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedMethods [
+	^ changedMethods ifNil: [ changedMethods := Set new ]
 ]
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedPackage: aPackageModification [
 
 	currentPackageDefinition := aPackageModification after.
+	self changedPackages add: currentPackageDefinition.
 	self processPackage: aPackageModification
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedPackages [ 
+
+^ changedPackages ifNil: [ changedPackages := Set new]
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> changedProject: aProjectModification [
+	currentProjectDefinition := aProjectModification after.
+	self changedProjects add: currentProjectDefinition.
+	self processProject: aProjectModification
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> changedProjects [ 
+
+^ changedProjects ifNil: [ changedProjects := Set new]
 ]
 
 { #category : 'actions' }
 RwModificationReportWriterVisitor >> changedTrait: aTraitModification [
 
 	currentTraitDefinition := aTraitModification after.
-
+	self changedTraits add: currentTraitDefinition.
 	self processTrait: aTraitModification
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> changedTraits [
+
+	^changedTraits ifNil: [ changedTraits := Set new ]
+]
+
+{ #category : 'private' }
+RwModificationReportWriterVisitor >> checkForSourceDiffWithoutTrailingLf: aMethodModification [
+	"Answer true if the only difference  for the method is  a trailing lf"
+
+	| beforeSource afterSource afterHasLastLf beforeHasLastLf before after |
+	aMethodModification propertiesModification isEmpty
+		ifFalse: [ 
+			"properties modification is present, so trailing lf is not a deciding factor"
+			^ false ].
+	self filterTrailingLf
+		ifFalse: [ 
+			"not filtering for trailing lf"
+			^ false ].
+	before := beforeSource := aMethodModification before source.
+	after := afterSource := aMethodModification after source.
+	afterHasLastLf := beforeHasLastLf := false.
+	beforeSource last = Character lf
+		ifTrue: [ 
+			"remove trailing lf"
+			beforeHasLastLf := true.
+			before := beforeSource copyFrom: 1 to: beforeSource size - 1 ].
+	afterSource last = Character lf
+		ifTrue: [ 
+			"remove trailing lf"
+			afterHasLastLf := true.
+			after := afterSource copyFrom: 1 to: afterSource size - 1 ].
+	afterHasLastLf == beforeHasLastLf
+		ifTrue: [ 
+			"if they do or do not have  a trailing lf, then the original comparison applies -- the method is changed"
+			^ false ].
+	^ after = before	"answer whether or not the source (wihtout trailing lf) is equal or not"
 ]
 
 { #category : 'accessing' }
@@ -486,6 +615,16 @@ RwModificationReportWriterVisitor >> deletedClass: aClassModification [
 { #category : 'accessing' }
 RwModificationReportWriterVisitor >> deletedClasses [
 	^ deletedClasses ifNil: [ deletedClasses := Set new ]
+]
+
+{ #category : 'actions' }
+RwModificationReportWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+	self deletedClassExtensions add: aClassExtensionModification before name
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> deletedClassExtensions [
+	^ deletedClassExtensions ifNil: [ deletedClassExtensions := Set new ]
 ]
 
 { #category : 'actions' }
@@ -565,37 +704,67 @@ RwModificationReportWriterVisitor >> filenameExtension: aString [
 	filenameExtension := aString
 ]
 
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> filterTrailingLf [
+	^ filterTrailingLf ifNil: [ filterTrailingLf := false ]
+]
+
+{ #category : 'accessing' }
+RwModificationReportWriterVisitor >> filterTrailingLf: aBool [
+	filterTrailingLf := aBool
+]
+
 { #category : 'class writing' }
 RwModificationReportWriterVisitor >> processClass: aClassModification [
 	| classDefinition clsName |
 	classDefinition := aClassModification after.
-	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: [  ])
-		ifNotNil: [ 
-			self
-				error:
-					'duplicate class definition for ' , clsName printString , ' encountered.' ].
-	self classDefinitions at: classDefinition name put: classDefinition.
+	self classDefinitions at: (clsName := classDefinition name) ifAbsent: [  
+	self classDefinitions at: classDefinition name put: classDefinition].
 
 	self classDefPackageNameMap
 		at: classDefinition name
 		put: currentPackageDefinition name.
 
+	currentClassDefinition := classDefinition.
 	currentClassDefinition instanceMethodDefinitions isEmpty
 		ifTrue: [ 
 			"nothing to do"
 			 ]
-		ifFalse: [ aClassModification instanceMethodsModification acceptVisitor: self ].
+		ifFalse: [ aClassModification instanceMethodsModification  acceptVisitor: self ].
 	currentClassDefinition classMethodDefinitions isEmpty
 		ifTrue: [ 
 			"nothing to do"
 			 ]
-		ifFalse: [ aClassModification classMethodsModification acceptVisitor: self ]
+		ifFalse: [ aClassModification classMethodsModification  acceptVisitor: self ]
 ]
 
 { #category : 'class writing' }
 RwModificationReportWriterVisitor >> processClassExtension: aClassExtensionModification [
+	| classExtensionDefinition |
+	classExtensionDefinition := aClassExtensionModification after.
+	self classExtensions at: classExtensionDefinition name put: classExtensionDefinition.
 
-	self subclassResponsibility: #processClassExtension:
+	self classDefPackageNameMap
+		at: classExtensionDefinition name
+		put: currentPackageDefinition name.
+
+	currentClassExtension instanceMethodDefinitions isEmpty
+		ifTrue: [ 
+			"nothing to do"
+			 ]
+		ifFalse: [ aClassExtensionModification instanceMethodsModification acceptVisitor: self ].
+	currentClassExtension classMethodDefinitions isEmpty
+		ifTrue: [ 
+			"nothing to do"
+			 ]
+		ifFalse: [ aClassExtensionModification classMethodsModification acceptVisitor: self ]
+]
+
+{ #category : 'package writing' }
+RwModificationReportWriterVisitor >> processPackage: aPackageModification [
+
+	currentPackageDefinition := aPackageModification after.
+	super processPackage: aPackageModification
 ]
 
 { #category : 'class writing' }
@@ -623,9 +792,9 @@ RwModificationReportWriterVisitor >> processTrait: aTraitModification [
 		ifFalse: [ aTraitModification classMethodsModification acceptVisitor: self ]
 ]
 
-{ #category : 'reporting' }
+{ #category : 'class writing' }
 RwModificationReportWriterVisitor >> report [
-	self _setBufferedStreamFor: self reportFilename.
+	bufferedStream ifNil: [ self _setBufferedStreamFor: self reportFilename ].
 	self bufferedStream nextPutAll: self reportFileHeader.
 
 	self deletedProjects isEmpty
@@ -636,7 +805,7 @@ RwModificationReportWriterVisitor >> report [
 			self deletedProjects asSortedCollection
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each;
 						lf ] ].
 	self addedProjects isEmpty
@@ -647,7 +816,18 @@ RwModificationReportWriterVisitor >> report [
 			(self addedProjects asSortedCollection: [ :a :b | a name <= b name ])
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
+						nextPutAll: each name;
+						lf ] ].
+	self changedProjects isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Projects --';
+				lf.
+			(self changedProjects asSortedCollection: [ :a :b | a name <= b name ])
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
 						nextPutAll: each name;
 						lf ] ].
 	self deletedPackages isEmpty
@@ -658,7 +838,7 @@ RwModificationReportWriterVisitor >> report [
 			self deletedPackages asSortedCollection
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each;
 						lf ] ].
 	self addedPackages isEmpty
@@ -669,7 +849,18 @@ RwModificationReportWriterVisitor >> report [
 			(self addedPackages asSortedCollection: [ :a :b | a name <= b name ])
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
+						nextPutAll: each name;
+						lf ] ].
+	self changedPackages isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Packages --';
+				lf.
+			(self changedPackages asSortedCollection: [ :a :b | a name <= b name ])
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
 						nextPutAll: each name;
 						lf ] ].
 	self deletedClasses isEmpty
@@ -680,7 +871,7 @@ RwModificationReportWriterVisitor >> report [
 			self deletedClasses
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each;
 						lf ] ].
 	self addedClasses isEmpty
@@ -691,8 +882,41 @@ RwModificationReportWriterVisitor >> report [
 			(self addedClasses asSortedCollection: [ :a :b | a name <= b name ])
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each name;
+						lf ] ].
+	self changedClasses isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Classes --';
+				lf.
+			(self changedClasses asSortedCollection: [ :a :b | a name <= b name ])
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each name;
+						lf ] ].
+	self addedClassExtensions isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Added Class Extensions --';
+				lf.
+			(self addedClassExtensions asSortedCollection: [ :a :b | a name <= b name ])
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each name;
+						lf ] ].
+	self deletedClassExtensions isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Deleted Class Extensions --';
+				lf.
+			self deletedClassExtensions asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
 						lf ] ].
 	self deletedTraits isEmpty
 		ifFalse: [ 
@@ -702,7 +926,7 @@ RwModificationReportWriterVisitor >> report [
 			self deletedTraits asSortedCollection
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each;
 						lf ] ].
 	self addedTraits isEmpty
@@ -713,9 +937,64 @@ RwModificationReportWriterVisitor >> report [
 			self addedTraits asSortedCollection
 				do: [ :each | 
 					self bufferedStream
-						tab;
+						nextPutAll: '    ';
 						nextPutAll: each;
-						lf ] ].	"---"
+						lf ] ].
+	self changedTraits isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Traits --';
+				lf.
+			self changedTraits asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self deletedMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Deleted Methods --';
+				lf.
+			self deletedMethods asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self addedMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Added Methods --';
+				lf.
+			self addedMethods asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self changedMethods isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Methods --';
+				lf.
+			self changedMethods asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
+	self changedMethodExtensions isEmpty
+		ifFalse: [ 
+			self bufferedStream
+				nextPutAll: ' -- Changed Method Extensions --';
+				lf.
+			self changedMethodExtensions asSortedCollection
+				do: [ :each | 
+					self bufferedStream
+						nextPutAll: '    ';
+						nextPutAll: each;
+						lf ] ].
 	self bufferedStream nextPutAll: self reportFileFooter.
 
 	self bufferedStream
@@ -949,8 +1228,27 @@ RwModificationReportWriterVisitor >> visit: aPackageSetModification [
 ]
 
 { #category : 'visiting' }
-RwModificationReportWriterVisitor >> visitExtensionMethodModification: aMethodExtensionModification [
+RwModificationReportWriterVisitor >> visitClassModification: aClassModification [
 
+	aClassModification isAddition
+		ifTrue: [ self addedClass: aClassModification ] .
+	aClassModification isDeletion
+		ifTrue: [ self deletedClass: aClassModification ].
+(aClassModification instanceMethodsModification isEmpty and: [ aClassModification classMethodsModification isEmpty ])
+	ifTrue: [
+		"no instance or class modifications, check to see if the only Property modification is for 'gs_SymbolDictionary' "
+		| propertiesModification elementsModified |
+		propertiesModification := aClassModification propertiesModification.
+		elementsModified := propertiesModification elementsModified.
+		(elementsModified size = 1 and: [ (elementsModified at: #'gs_SymbolDictionary' ifAbsent: []) notNil])
+			ifTrue: [
+				" #'gs_symbolDictionary' property is not written to disk, so we can skip this class"
+				^ self ]].
+	^ self changedClass: aClassModification
+]
+
+{ #category : 'visiting' }
+RwModificationReportWriterVisitor >> visitExtensionMethodModification: aMethodExtensionModification [
 	aMethodExtensionModification isAddition
 		ifTrue: [ ^ self addedMethodExtension: aMethodExtensionModification ] .
 	aMethodExtensionModification isDeletion
