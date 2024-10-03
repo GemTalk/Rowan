@@ -162,6 +162,67 @@ _____
 ]
 
 { #category : 'private' }
+RwRowanSample9V3Test >> _issue976_3_1_report [
+	^ 'REPORT spec_0066 loading into spec_0001
+ -- Added Projects --
+    RowanSample10
+    RowanSample11
+    RowanSample12
+ -- Changed Projects --
+    RowanSample9V3
+ -- Added Packages --
+    RowanSample10-Core
+    RowanSample10-Tests
+    RowanSample11-Core
+    RowanSample11-Tests
+    RowanSample12-Core
+    RowanSample12-Tests
+ -- Changed Packages --
+    RowanSample9V3-Core
+ -- Added Classes --
+    RowanSample10Class1
+    RowanSample10TestCase
+    RowanSample11Class1
+    RowanSample11TestCase
+    RowanSample12Class1
+    RowanSample12TestCase
+    RowanSample9V3Class2
+    RowanSample9V3Class3
+    RowanSample9V3Class4
+ -- Added Methods --
+    RowanSample10Class1>>foo
+    RowanSample10TestCase>>test
+    RowanSample11Class1>>foo
+    RowanSample11TestCase>>test
+    RowanSample12Class1>>foo
+    RowanSample12TestCase>>test
+    RowanSample9V3Class2>>foo
+    RowanSample9V3Class3>>foo
+    RowanSample9V3Class4>>foo
+_____
+'
+]
+
+{ #category : 'private' }
+RwRowanSample9V3Test >> _issue976_3_2_report [
+	^ 'REPORT spec_0001 loading into spec_0066
+ -- Deleted Projects --
+    RowanSample10
+    RowanSample11
+    RowanSample12
+ -- Changed Projects --
+    RowanSample9V3
+ -- Changed Packages --
+    RowanSample9V3-Core
+ -- Deleted Classes --
+    RowanSample9V3Class4
+    RowanSample9V3Class3
+    RowanSample9V3Class2
+_____
+'
+]
+
+{ #category : 'private' }
 RwRowanSample9V3Test >> _modificationInstance_issue976: diff filterTrailingLf: filterTrailingLf label1: label1 label2: label2 [
 	| visitor reportString |
 	reportString := String
@@ -1646,7 +1707,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 	methodDefs := classDefinition instanceMethodDefinitions.
 	methodDef := methodDefs at:  #foo.
 	methodDef source: methodDef source copy lf .	"add a trailing LF"
-"report with traiing lf showing up as diff"
+"REPORT with traiing lf showing up as diff"
 	diff := project2 compareAgainstBase: project1.
 	reportString := self 
 		_modificationInstance_issue976: diff 
@@ -1654,14 +1715,14 @@ RwRowanSample9V3Test >> testIssue936_2 [
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_2_report.
-"report with traiing lf filtered out"
+"REPORT with traiing lf filtered out"
 	reportString := self 
 		_modificationInstance_issue976: diff 
 		filterTrailingLf: true 
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_3_report.
-"change class; add a method; change a method "
+"CHANGE CLASS; add a method; change a method "
 	instVarNames := classDefinition instVarNames copy.
 	instVarNames add: 'newVar'.
 	classDefinition instVarNames: instVarNames.
@@ -1679,7 +1740,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 	classDefinition
 		addInstanceMethod: 'testNewVar self assert: RowanSample9V3Class1 new newVar = nil'
 		protocol: 'tests'.
-"report ..."
+"REPORT ..."
 	diff := project2 compareAgainstBase: project1.
 	reportString := self 
 		_modificationInstance_issue976: diff 
@@ -1687,7 +1748,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_4_report.
-"change trait; add a method; change a method; add LF to method"
+"CHANGE TRAIT; add a method; change a method; add LF to method"
 	package := project2 packageNamed: 'RowanSample9V3-Traits'.
 	traitDefinition := package traitDefinitionNamed: 'RowanSample9V3Trait1'.
 "new inst var"
@@ -1707,7 +1768,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 	methodDef source: 'iv1 "comment" ^ iv1'.
 "delete method"
 	traitDefinition removeInstanceMethod: #'cv1'.
-"report ...  don't fillter lf"
+"REPORT ...  don't fillter lf"
 	diff := project2 compareAgainstBase: project1.
 	reportString := self 
 		_modificationInstance_issue976: diff 
@@ -1715,7 +1776,7 @@ RwRowanSample9V3Test >> testIssue936_2 [
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_5_report.
-"report ...  fillter lf"
+"REPORT ...  fillter lf"
 	diff := project2 compareAgainstBase: project1.
 	reportString := self 
 		_modificationInstance_issue976: diff 
@@ -1723,6 +1784,58 @@ RwRowanSample9V3Test >> testIssue936_2 [
 		label1: label1 
 		label2: label2.
 	self assert: reportString equals: self _issue976_2_6_report.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V3Test >> testIssue936_3 [
+	"reports involving multiple projects" 
+	
+	"https://github.com/GemTalk/Rowan/issues/936"
+	
+	| diff visitor label1 label2 loadSpec projectSet1 projectSet2 reportString  |
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9V3/refs/heads/spec_0001/rowan/specs/spec_0001.ston'.
+	loadSpec
+		projectAlias: loadSpec projectName, '_1';
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself .
+	projectSet1 := loadSpec readProjectSet.
+	loadSpec := RwSpecification fromUrl: 'https://raw.githubusercontent.com/dalehenrich/RowanSample9V3/refs/heads/spec_0066/rowan/specs/spec_0066.ston'.
+	loadSpec
+		projectAlias: loadSpec projectName, '_2';
+		projectsHome: self _testRowanProjectsSandbox;
+		repositoryResolutionPolicy: #'strict';
+		yourself .
+	projectSet2 := loadSpec readProjectSet.
+	label1 := 'spec_0001'.
+	label2:= 'spec_0066'.
+	diff := projectSet2 compareAgainstBase: projectSet1.
+	
+	reportString := String streamContents: [ :stringStream | 
+		ZnBufferedWriteStream on: stringStream do: [ : bufferedStream |
+		visitor := RwModificationReportWriterVisitor new
+	 		_bufferedStream: bufferedStream;
+	 		reportFileHeader:'REPORT ', label2, ' loading into ', label1, '
+';
+	 		reportFileFooter: '_____
+';
+	 		yourself].
+		visitor visit: diff ].
+	self assert: reportString equals: self _issue976_3_1_report.
+"reverse the comparison"	
+	diff := projectSet1 compareAgainstBase: projectSet2.
+	
+	reportString := String streamContents: [ :stringStream | 
+		ZnBufferedWriteStream on: stringStream do: [ : bufferedStream |
+		visitor := RwModificationReportWriterVisitor new
+	 		_bufferedStream: bufferedStream;
+	 		reportFileHeader:'REPORT ', label1, ' loading into ', label2, '
+';
+	 		reportFileFooter: '_____
+';
+	 		yourself].
+		visitor visit: diff ].
+	self assert: reportString equals: self _issue976_3_2_report.
 ]
 
 { #category : 'tests' }

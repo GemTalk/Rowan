@@ -857,7 +857,7 @@ RwModificationReportWriterVisitor >> report [
 	self deletedProjects isEmpty
 		ifFalse: [ 
 			self bufferedStream
-				nextPutAll: '-- Deleted Projects --';
+				nextPutAll: ' -- Deleted Projects --';
 				lf.
 			self deletedProjects asSortedCollection
 				do: [ :each | 
@@ -1321,9 +1321,9 @@ RwModificationReportWriterVisitor >> visit: aPackageSetModification [
 RwModificationReportWriterVisitor >> visitClassModification: aClassModification [
 
 	aClassModification isAddition
-		ifTrue: [ self addedClass: aClassModification ] .
+		ifTrue: [ ^ self addedClass: aClassModification ] .
 	aClassModification isDeletion
-		ifTrue: [ self deletedClass: aClassModification ].
+		ifTrue: [ ^ self deletedClass: aClassModification ].
 (aClassModification instanceMethodsModification isEmpty and: [ aClassModification classMethodsModification isEmpty ])
 	ifTrue: [
 		"no instance or class modifications, check to see if the only Property modification is for 'gs_SymbolDictionary' "

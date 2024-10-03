@@ -1162,6 +1162,16 @@ RwResolvedProjectV2 >> projectVersion: aStringOrVersion [
 	^ self _projectSpecification projectVersion: aStringOrVersion
 ]
 
+{ #category : 'comparing' }
+RwResolvedProjectV2 >> propertiesForCompare [
+	^ projectDefinition propertiesForCompare
+]
+
+{ #category : 'comparing' }
+RwResolvedProjectV2 >> propertyForCompareAt: aKey ifAbsent: absentBlock [
+	^ projectDefinition propertyForCompareAt: aKey ifAbsent: absentBlock
+]
+
 { #category : 'actions' }
 RwResolvedProjectV2 >> read [
 	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the current load specification"
