@@ -134,7 +134,7 @@ UpgradeRowanV2 >> _adoptUpgradeFromPre372To372 [
 
 	"Adopt the new classes added in 3.7.2"
 
-	#('RcKeyValueNorebuildDictionary' 'GsSshPrivateKey' 'GsSshPublicKey')
+	#('RcKeyValueNoRebuildDictionary' 'GsSshPrivateKey' 'GsSshPublicKey')
 		do: [ :className | 
 			"new classes in 3.7.2 that need to be adopted"
 			Rowan packageTools adopt
