@@ -179,10 +179,10 @@ UpgradeRowanV3 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.7.2' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.2' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"RcKeyValueNorebuildDictionary,  GsSshPrivateKey, GsSshPublicKey, AbstratTrait, Trait ClassTrait, GsTraitImpl are new classes in 3.7.2 that need 
+			"RcKeyValueNoRebuildDictionary,  GsSshPrivateKey, GsSshPublicKey, AbstratTrait, Trait ClassTrait, GsTraitImpl are new classes in 3.7.2 that need 
 				to be adopted (along with all of their methods) before reloading 
 				GemStone packages."
-			#('RcKeyValueNorebuildDictionary' 'GsSshPrivateKey' 'GsSshPublicKey')
+			#('RcKeyValueNoRebuildDictionary' 'GsSshPrivateKey' 'GsSshPublicKey')
 				do: [ :className | 
 					Rowan packageTools adopt
 						adoptClass: (Rowan globalNamed: className)
