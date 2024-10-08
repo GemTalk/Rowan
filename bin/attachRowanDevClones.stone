@@ -39,6 +39,7 @@ attachRowanProjects: projectsHome
 		'FileSystemGs' .
 		'RemoteServiceReplication' .
 		'RowanClientServices' .
+		'STON' .
 	}
 		do: [:projectName |
 			"pick up the extra rowan3 projects"

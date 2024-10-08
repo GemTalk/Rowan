@@ -2,8 +2,7 @@ RwSimpleProjectLoadComponentV2 {
 	#name : 'Rowan',
 	#condition : 'common',
 	#projectNames : [
-		'Cypress',
-		'STON'
+		'Cypress'
 	],
 	#componentNames : [
 		'common/AST',
