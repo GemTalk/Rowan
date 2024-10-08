@@ -1,0 +1,21 @@
+RwLoadSpecificationV2 {
+	#specName : 'STON',
+	#projectName : 'STON',
+	#gitUrl : 'git@github.com:GemTalk/STON.git',
+	#revision : 'master',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core',
+		'Tests'
+	],
+	#customConditionalAttributes : [ ],
+	#groupNames : [ ],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'STON originally based on GemStone 3.5 port of STON (https://github.com/GsDevKit/ston). Current version extracted from Rowan:58f3684e4 (Rowan 3)'
+}
