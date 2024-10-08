@@ -64,5 +64,9 @@ doit
 		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/FileSystemGs'.
 	(Rowan projectNamed: 'FileSystemGs')
 		loadProjectSet: Rowan platformConditionalAttributes, #('tests' ).
+	(Rowan projectNamed: 'STON') 
+		gitRepositoryRoot: '$ROWAN_PROJECTS_HOME/STON'.
+	(Rowan projectNamed: 'STON')
+		loadProjectSet: Rowan platformConditionalAttributes, #('tests' ).
 	^ System commit
 %
