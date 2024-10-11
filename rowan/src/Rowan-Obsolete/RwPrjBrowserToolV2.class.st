@@ -1379,7 +1379,7 @@ RwPrjBrowserToolV2 >> moveMethod: methodSelector forClassNamed: className isMeta
 		isMeta: isMeta
 		ifAbsent: [ ].
 
-	destinationLoadedPackage := (hybridPackageName at: 1) = $*
+	destinationLoadedPackage := (((hybridPackageName at: 1) = $*) and: [ loadedMethodToBeMoved loadedProject packageConvention ~= 'Rowan'] )
 		ifTrue: [ 
 			Rowan image
 				loadedHybridPackageNamed: hybridPackageName
