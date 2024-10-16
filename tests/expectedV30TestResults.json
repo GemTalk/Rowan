@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 11,
+		"errors" : 10,
 		"failures" : 12,
-		"passed" : 1300,
-		"summary" : "1323 Tests with 12 Failures, 11 Errors and 0 DeprecationWarnings in 1465.09s",
+		"passed" : 1301,
+		"summary" : "1323 Tests with 12 Failures, 10 Errors and 0 DeprecationWarnings in 1547.34s",
 		"tests" : 1323,
-		"time" : 1465.085
+		"time" : 1547.342
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -1007,7 +1007,7 @@
 		},
 		{
 			"className" : "RowanPackageServiceTest",
-			"status" : "errors",
+			"status" : "passed",
 			"selector" : "test_testClassesIncludesExtensions",
 			"time" : "0"
 		},
@@ -7954,5 +7954,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-10-07T12:41:48.861203-07:00"
+	"timeStamp" : "2024-10-15T17:59:49.281306-07:00"
 }
