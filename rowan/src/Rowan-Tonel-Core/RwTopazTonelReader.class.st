@@ -182,9 +182,11 @@ RwTopazTonelReader >> createClassFrom: anArray [
   ].
   comment := anArray at: 2 .
   type := dict at: #type otherwise: nil .
-  (sess symbolList dictionaryAndAssociationOf: name asSymbol) ifNotNil:[:ary |
-    oldClass := (ary at: 2) _value  .
-    intoDict := (ary at: 1) 
+  (sess symbolList dictionariesAndAssociationsOf: name asSymbol) ifNotNil:[:ary | | pair |
+    ary size > 1 ifTrue:[ Error signal:'More than one definition in symbolList for ', name ].
+    pair := ary at: 1 .
+    oldClass := (pair at: 2) _value  .
+    intoDict := (pair at: 1) 
   ].
   intoDict ifNil:[ 
     intoDict := ((System myUserProfile userId = 'SystemUser') and:[ sess isSolo not]) 
