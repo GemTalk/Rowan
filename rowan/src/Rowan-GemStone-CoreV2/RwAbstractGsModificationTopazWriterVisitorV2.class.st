@@ -47,6 +47,7 @@ RwAbstractGsModificationTopazWriterVisitorV2 >> _setBufferedStreamFor: filename 
 
 	| encodedStream |
 	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
+	encodedStream truncate.
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 ]
 

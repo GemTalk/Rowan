@@ -1,0 +1,76 @@
+#!/usr/bin/env superdoit_rowan3_solo
+options
+{
+SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
+SuperDoitRequiredOptionWithRequiredArg long: 'loadSpec' short: 'l'.
+SuperDoitRequiredOptionWithRequiredArg long: 'fileName' short: 'f'.
+}
+%
+usage
+-----
+USAGE
+      $basename <spec-url> <topaz-file-name> [--projectAlias=<project-alias> ] \
+      [--projectsHome=<projects-home-directory>] --loadSpec=<spec-url> \
+      --fileName=<topaz-file-name> <package-names>
+
+DESCRIPTION
+  Read the project denoted by <spec-url> from disk and export only the named 
+  <package-names> to a .gs file name <topaz-file-path>.
+
+OPTIONS
+  <package-names>      The list of packages to be exported.
+  --loadSpec=<spec-url>
+                       Url referencing the load spec of the project, the load.
+                       Spec is used to read the project from disk.
+  --fileName=<topaz-file-name>
+                       Full name of the topaz .gs file
+  --projectsHome=<projects-home-directory>
+                       The directory where the project is located. By default,
+                       $ROWAN_PROJECTS_HOME.
+  --projectAlias=<project-alias>
+                       The name of the project directory on disk, if different
+                       than the project name in the load spec.
+                       
+  -h, --help           Display usage message
+  -D, --debug          Bring up topaz debugger in the event of a script error.
+
+EXAMPLES
+  $basename -h
+  $basename --loadSpec=file:$ROWAN_PROJECTS_HOME/MyProject/rowan/specs/MyProject.ston \
+            --fileName=$ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
+            MyProject-Tests
+  $basename --loadSpec=file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
+            --fileName=$ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
+            --projectsHome=/home/daleh/projects/ MyProject-Tests
+  $basename --loadSpec=file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
+            --fileName=$ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
+            --projectsHome=/home/daleh/projects/ \
+            --projectAlias=MyProjectV3 MyProject-Tests
+
+-----
+%
+doit
+	| loadSpecUrl loadSpec resolvedProject topazFilename projectSet projectAlias projectName packageNamesMap |
+	loadSpecUrl := self loadSpec.
+	topazFilename := self fileName.
+	loadSpec := RwSpecification fromUrl: loadSpecUrl.
+	projectName := loadSpec projectName.
+	projectAlias := self projectAlias ifNil: [ projectName ]. 
+	loadSpec
+		diskUrl: 'file://', self projectsHome asFileReference fullName, '/', projectAlias;
+		projectsHome: self projectsHome;
+		yourself.
+	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, Rowan platformConditionalAttributes) read.
+	self positionalArgs size < 1 
+		ifTrue: [ self error: 'Expected at least one package name.' ].
+	packageNamesMap := Dictionary new.
+	packageNamesMap at: topazFilename put: self positionalArgs asSet.
+	(projectSet projectNamed: projectName)
+		exportTopazFormatTo: topazFilename 
+		logClassCreation: false 
+		excludeClassInitializers: false 
+		excludeRemoveAllMethods: true
+		usingPackageNamesMap: packageNamesMap.
+	^ self noResult.
+%

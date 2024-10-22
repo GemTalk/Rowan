@@ -103,6 +103,7 @@ RwGsModificationTopazPackageWriterVisitorV2 >> _setBufferedStreamFor: filename e
 
 	| encodedStream |
 	encodedStream := (self packagesRoot / filename, extension) writeStreamEncoded: 'utf8'.
+	encodedStream truncate.
 	bufferedStream := ZnBufferedWriteStream on: encodedStream
 ]
 
