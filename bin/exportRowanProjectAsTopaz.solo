@@ -2,12 +2,13 @@
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
 }
 %
 usage
 -----
 USAGE
-      $basename <spec-url> <topaz-file-name> [--projectsHome=<projects-home-directory>]
+      $basename <spec-url> <topaz-file-name> [--projectAlias=<project-alias> ] [--projectsHome=<projects-home-directory>]
 
 DESCRIPTION
   Read the project denoted by <spec-url> from disk and export it to a .gs file name
@@ -20,6 +21,9 @@ OPTIONS
   --projectsHome=<projects-home-directory>
                        The directory where the project is located. By default,
                        $ROWAN_PROJECTS_HOME.
+  --projectAlias=<project-alias>
+                       The name of the project directory on disk, if different
+                       than the project name in the load spec.
                        
   -h, --help           Display usage message
   -D, --debug          Bring up topaz debugger in the event of a script error.
@@ -31,11 +35,15 @@ EXAMPLES
   $basename file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
             $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
             --projectsHome=/home/daleh/projects/
+  $basename file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
+            $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
+            --projectsHome=/home/daleh/projects/ \
+            --projectAlias=MyProjectV3
 
 -----
 %
 doit
-	| loadSpecUrl args loadSpec resolvedProject topazFilename projectSet projectName |
+	| loadSpecUrl args loadSpec resolvedProject topazFilename projectSet projectAlias projectName |
 	args := self positionalArgs.
 	args size ~= 2
 		ifTrue: [
@@ -45,11 +53,12 @@ doit
 	topazFilename := args removeFirst.
 	loadSpec := RwSpecification fromUrl: loadSpecUrl.
 	projectName := loadSpec projectName.
+	projectAlias := self projectAlias ifNil: [ projectName ]. 
 	loadSpec
-		diskUrl: 'file://', self projectsHome asFileReference fullName, '/', projectName;
+		diskUrl: 'file://', self projectsHome asFileReference fullName, '/', projectAlias;
 		projectsHome: self projectsHome;
 		yourself.
-	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, { 'common' . '3.7.0' asRwGemStoneVersionNumber}) read.
+	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, Rowan platformConditionalAttributes) read.
 	(projectSet projectNamed: projectName)
 		exportTopazFormatTo: topazFilename 
 		logClassCreation: false 
