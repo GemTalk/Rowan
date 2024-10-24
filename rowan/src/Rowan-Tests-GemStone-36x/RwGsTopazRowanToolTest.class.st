@@ -400,15 +400,24 @@ RwGsTopazRowanToolTest >> testTopazGitSupport_02 [
 
 { #category : 'project support' }
 RwGsTopazRowanToolTest >> testTopazListPackageNames [
-	"return the list of loaded packages for given project"
+	"in 3.7.3, STON has been moved to the base and the STON tests are not loaded as part of the Rowan test suite ... 
+		but the STON tests can be present in an image if the STON tests are manually loaded ... so cover both cases"
 
-	| x |
-	self
-		assert:
-			(x := Rowan gemstoneTools topaz listPackagesForProjectNamed: 'STON') sort
-				=
-					#('STON-GemStone-Tests' 'STON-Tests' 'STON-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase' 'STON-Tests-36x' 'STON-GemStone-Kernel' 'STON-GemStone-Kernel36x')
-						sort
+	| stonPackages |
+	stonPackages := (Rowan gemstoneTools topaz listPackagesForProjectNamed: 'STON')
+		sort.
+	stonPackages
+		=
+			#('STON-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase' 'STON-GemStone-Tests' 'STON-Tests' 'STON-Tests-36x' 'STON-GemStone-Kernel' 'STON-GemStone-Kernel36x')
+				sort
+		ifFalse: [ 
+			"STON test packages not loaded?"
+			self
+				assert:
+					stonPackages
+						=
+							#('STON-Core' 'STON-GemStoneCommon' 'STON-GemStoneBase' 'STON-GemStone-Kernel' 'STON-GemStone-Kernel36x')
+								sort ]
 ]
 
 { #category : 'project support' }
