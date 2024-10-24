@@ -65,7 +65,7 @@ doit
 	self positionalArgs size < 1 
 		ifTrue: [ self error: 'Expected at least one package name.' ].
 	packageNamesMap := Dictionary new.
-	packageNamesMap at: topazFilename put: self positionalArgs asSet.
+	packageNamesMap at: topazFilename asFileReference base put: self positionalArgs asSet.
 	(projectSet projectNamed: projectName)
 		exportTopazFormatTo: topazFilename 
 		logClassCreation: false 
