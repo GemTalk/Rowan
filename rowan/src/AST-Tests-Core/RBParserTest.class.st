@@ -434,7 +434,7 @@ RBParserTest >> testPrimitives [
 
 { #category : 'tests' }
 RBParserTest >> testProtectedPrimitives [
-  self assert: (GemStoneParameters parseTreeFor: #'_getArg:key:') isPrimitive.
+  self assert: (Object parseTreeFor: #'_objectSecurityPolicy:') isPrimitive.
   #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <protected primitive: 123> ^true' true))
     do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
 ]
