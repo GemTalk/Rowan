@@ -3640,7 +3640,6 @@ RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
 	traitDef := (definedProject packageNamed: projectName, '-Tr01') 
 		removeTraitNamed: 'RowanSample9V3Trait1'.
 	packageName := projectName, '-C01'.
-	traitDef packageName: packageName.
 	(definedProject packageNamed: packageName) addTraitDefinition: traitDef.
 
 "load project"

@@ -170,17 +170,6 @@ RwTraitDefinition >> instVarNames: arrayOfInstanceVariableNames [
 ]
 
 { #category : 'accessing' }
-RwTraitDefinition >> packageName [
-	"category is the name of the field that the packageName is stored under on disk"
-
-	^ properties
-		at: #'packageName'
-		ifAbsent: [ 
-			"recursion protection"
-			properties at: #'category' ifAbsent: [  ] ]
-]
-
-{ #category : 'accessing' }
-RwTraitDefinition >> packageName: aPackageName [
-	^ properties at: #'packageName' put: aPackageName asString
+RwTraitDefinition >> packageName: ignored [
+	"packageName is a Pharo property ... for Rowan this property is not explicityly stored in the trait definition ... on disk the property is written to maintain compatibiity with Pharo"
 ]
