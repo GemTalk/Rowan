@@ -25,26 +25,6 @@ RwTraitDefinition class >> newForTraitNamed: traitName instvars: instvars classi
 		instanceMethodDefinitions: Dictionary new
 ]
 
-{ #category : 'instance creation' }
-RwTraitDefinition class >> newForTraitNamed: traitName instvars: instvars classinstvars: classinstvars classvars: classvars category: category packageName: packageName [
-	| propertiesDictionary |
-	propertiesDictionary := SymbolDictionary new.
-	propertiesDictionary
-		at: #'name' put: traitName asString;
-		at: #'classinstvars' put: (classinstvars collect: [ :each | each asString ]);
-		at: #'classvars' put: (classvars collect: [ :each | each asString ]);
-		at: #'instvars' put: (instvars collect: [ :each | each asString ]);
-		yourself.
-	category
-		ifNotNil: [ propertiesDictionary at: #'category' put: category asString ].
-	packageName
-		ifNotNil: [ propertiesDictionary at: #'packageName' put: packageName asString ].
-	^ self
-		withProperties: propertiesDictionary
-		classMethodDefinitions: Dictionary new
-		instanceMethodDefinitions: Dictionary new
-]
-
 { #category : 'private' }
 RwTraitDefinition >> _methodDefinitionClass [
 	^ RwTraitMethodDefinition

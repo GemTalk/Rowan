@@ -141,9 +141,16 @@ RwTestProjectLibraryGeneratorTestV3 >> testLibrarySample9V3UniqueGenerator [
 		genSpec_0080: commitComment;
 		genSpec_0081: commitComment;
 		genSpec_0082: commitComment;
+"
+	as of https://github.com/GemTalk/Rowan/issues/938, the following 3 specs are not expected to work with Rowan 3:
 		genSpec_0083: commitComment;
 		genSpec_0084: commitComment;
 		genSpec_0085: commitComment;
+	Instead the following 3 specs are expected work correctly:
+"
+		genSpec_0086: commitComment;
+		genSpec_0087: commitComment;
+		genSpec_0088: commitComment;
 		yourself
 ]
 
