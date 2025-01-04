@@ -792,6 +792,43 @@ RwResolvedProjectV2 >> export [
 ]
 
 { #category : 'exporting' }
+RwResolvedProjectV2 >> exportClassIfChanged: classFileStream className: className inPackageName: packageName isExtension: isExtension packagesRoot: packagesRoot packageFormat: packageFormat packageConvention: packageConvention [
+	| propertiesFileRef visitor writerVisitorClass package classDef |
+	propertiesFileRef := packagesRoot / 'properties' , 'st'.
+	propertiesFileRef exists
+		ifFalse: [ 
+			propertiesFileRef
+				writeStreamDo: [ :fileStream | 
+					fileStream truncate.
+					fileStream
+						nextPutAll: '{ ';
+						lf;
+						tab;
+						nextPutAll: '#format : ' , packageFormat printString , ',';
+						lf;
+						tab;
+						nextPutAll: '#convention : ' , packageConvention printString;
+						lf;
+						nextPutAll: '}';
+						lf ] ].
+	writerVisitorClass := packageFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitorV2 ]
+		ifFalse: [ self error: 'exportClassIfChanged is only supported for tonel format packages' ].
+	visitor := writerVisitorClass new.
+	package := self packageNamed: packageName.
+	isExtension
+		ifTrue: [ 
+			classDef := package classExtensionDefinitionNamed: className.
+			visitor _writeClassExtension: classDef on: classFileStream ]
+		ifFalse: [ 
+			classDef := package classDefinitionNamed: className.
+			visitor _writeClassDefinition: classDef on: classFileStream ].
+	visitor
+		_writeClassSideMethodDefinitions: classDef on: classFileStream;
+		_writeInstanceSideMethodDefinitions: classDef on: classFileStream
+]
+
+{ #category : 'exporting' }
 RwResolvedProjectV2 >> exportComponents [
 	self _projectComponents export: self componentsRoot
 ]
