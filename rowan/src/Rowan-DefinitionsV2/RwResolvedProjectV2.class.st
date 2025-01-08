@@ -667,6 +667,18 @@ RwResolvedProjectV2 >> checkout: aCommittish [
 	^ self _projectRepository checkout: aCommittish
 ]
 
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> checkTonelClassMethodOrder [
+	^ (self dynamicInstVarAt: #'checkTonelClassMethodOrder') ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+RwResolvedProjectV2 >> checkTonelClassMethodOrder: aBoolean [
+	"true means that it is an error if method selectors in a tonel class file are not in canonical order"
+
+	self dynamicInstVarAt: #'checkTonelClassMethodOrder' put: aBoolean
+]
+
 { #category : 'project definition' }
 RwResolvedProjectV2 >> comment [
 	^ self loadSpecification comment
@@ -1289,6 +1301,7 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 				ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
+		checkTonelClassMethodOrder: self checkTonelClassMethodOrder;
 		packageNames: packageNames;
 		visit: self
 ]
@@ -1314,6 +1327,7 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 				ifFalse: [ RwRepositoryResolvedProjectFiletreeReaderVisitorV2 ] ].
 	^ visitorClass new
 		compileWhileReading: self compileWhileReading;
+		checkTonelClassMethodOrder: self checkTonelClassMethodOrder;
 		packageNamesBlock: packageNamesBlock;
 		visit: self
 ]

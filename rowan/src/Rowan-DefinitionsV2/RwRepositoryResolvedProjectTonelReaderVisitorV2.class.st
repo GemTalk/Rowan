@@ -189,8 +189,11 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 	| fileReference |
 	fileReference := file asFileReference.
 	fileReference readStreamDo: [:fileStream |
-		[ | definitions |
-		  definitions := (RwTonelParser on: fileStream forReader: self) start.
+		[ | definitions tonelParser |
+		tonelParser := RwTonelParser on: fileStream forReader: self.
+		(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
+			ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+		  definitions := tonelParser start.
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addClassMethodDefinition: mDef ].
@@ -205,15 +208,18 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
   ].
 ]
 
-{ #category : '(as yet unclassified)' }
+{ #category : 'class reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage: packageName [
 	| fileReference |
 	fileReference := file asFileReference.
 	fileReference
 		readStreamDo: [ :fileStream | 
 			[ 
-			| definitions clsDef projectDef |
-			definitions := (RwTonelParser on: fileStream forReader: self) start.
+			| definitions clsDef projectDef tonelParser |
+			tonelParser := RwTonelParser on: fileStream forReader: self.
+			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
+				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			definitions := tonelParser start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
@@ -247,15 +253,18 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 					ex pass ] ]
 ]
 
-{ #category : '(as yet unclassified)' }
+{ #category : 'class reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage: packageName [
 	| fileReference |
 	fileReference := file asFileReference.
 	fileReference
 		readStreamDo: [ :fileStream | 
 			[ 
-			| definitions traitDef projectDef |
-			definitions := (RwTonelParser on: fileStream forReader: self) start.
+			| definitions traitDef projectDef tonelParser |
+			tonelParser := RwTonelParser on: fileStream forReader: self.
+			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
+				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			definitions := tonelParser start.
 			traitDef := currentTraitDefinition
 				ifNotNil: [ :def | 
 					currentClassDefinition
