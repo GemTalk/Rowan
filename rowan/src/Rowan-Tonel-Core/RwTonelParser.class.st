@@ -50,7 +50,9 @@ Class {
 	#instVars : [
 		'packageReader',
 		'stream',
-		'lastSelectorParsed'
+		'lastSelectorParsed',
+		'classSelectors',
+		'selectors'
 	],
 	#classVars : [
 		'Character_lf'
@@ -423,6 +425,7 @@ RwTonelParser >> methodDefList [
 	meths := {}.
 	result := {classMeths.
 	meths}.
+	[ 
 	[ stream atEnd ]
 		whileFalse: [ 
 			self
@@ -430,25 +433,43 @@ RwTonelParser >> methodDefList [
 					isMeta
 						ifTrue: [ classMeths add: mDef ]
 						ifFalse: [ meths add: mDef ].	"skip possible spaces at the end"
-					self separator ] ].
+					self separator ] ] ]
+		on: Error
+		do: [ :ex | 
+			lastSelectorParsed
+				ifNotNil: [ 
+					| str |
+					str := ex details ifNil: [ '' ].
+					ex
+						details:
+							str , ', last method parsed: ' , lastSelectorParsed printString ex pass ] ].
 	^ result
 ]
 
 { #category : 'private factory' }
 RwTonelParser >> newMethodDefinitionFrom: anArray [
-	| metadata className meta selector source categ fourth fourthTwo |
+	| metadata className meta selector source categ fourth fourthTwo selsSet |
 	metadata := (anArray at: 2) ifNil: [ Dictionary new ].
 	className := ((fourth := anArray at: 4) at: 1) at: 1.
 	[ Metaclass3 _validateNewClassName: className asSymbol ]
 		on: Error
 		do: [ :ex | self error: 'Invalid class name ' , className printString ].
-	meta := ((fourth at: 1) at: 2) ~~ nil .
+	meta := ((fourth at: 1) at: 2) ~~ nil.
 	selector := self extractSelector: (fourthTwo := fourth at: 2) trimBoth.
+	selsSet := meta
+		ifTrue: [ 
+			selectors ifNil: [ selectors := SymbolSet new ].
+			selectors ]
+		ifFalse: [ 
+			classSelectors ifNil: [ classSelectors := SymbolSet new ].
+			classSelectors ].
+	(selsSet includes: selector)
+		ifTrue: [ self error: 'Duplicate selector ' , selector ].
+	selsSet add: selector.
 	self _checkMethodOrderFor: selector isMeta: meta.
-	source := String new .
-  source addAll: fourthTwo .
+	source := String new.
+	source addAll: fourthTwo.
 	(anArray at: 5) ifNotEmpty: [ :src | source addAll: src ].
-
 	categ := metadata
 		at: #'category'
 		ifAbsent: [ 
@@ -615,7 +636,7 @@ RwTonelParser >> typeDef [
 						try: [ 
 							| typeMetadata normalizedMetadata |
 							typeMetadata := self metadata.
-							normalizedMetadata := Dictionary new.
+							normalizedMetadata := SymbolDictionary new.
 							typeMetadata
 								keysAndValuesDo: [ :key :value | normalizedMetadata at: key asLowercase asSymbol put: value ].
 							normalizedMetadata ] ])}

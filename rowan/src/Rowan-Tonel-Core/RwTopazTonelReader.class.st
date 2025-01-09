@@ -134,7 +134,7 @@ RwTopazTonelReader class >> topazReadTonelStream: tonelStream envId: envId [
 	"Used in implementation of the topaz TFILE command.
    Read a single tonel format class from a stream and compile the methods on that stream. 
    It file is  a class.st file, 
-   creation of the class is attempted by RwTopazTonelReader >> createClassFrom:"
+   creation of the class is attempted by createClassFrom:"
 
 	RwTonelParser
 		parseStream: tonelStream
@@ -156,8 +156,9 @@ RwTopazTonelReader >> createClassFrom: anArray [
   | dict instVars classVars superN name categ knownKeys xKeys sess intoDict 
     oldClass theClass  options type keys superCls classInstVars comment resOop | 
   dict := anArray at: 6 .
+  "keys are lowercase here, keys tonel files are case-insenstive"
   knownKeys := IdentitySet withAll:#( name superclass instvars classvars classinstvars 
-                                           category gs_options type gs_reservedoop ).
+                                           category gs_options type gs_reservedoop traits classtraits  ).
   keys := IdentitySet new .
   dict keys do:[:k|  keys add: k asSymbol ].
   (xKeys := keys - knownKeys) size > 0 
@@ -237,7 +238,57 @@ RwTopazTonelReader >> createClassFrom: anArray [
     GsFile gciLogServer:'--- new class: ' , theClass definition .
     Error signal:'new version of ', name, ' created'.
   ].
+  (dict at: #traits otherwise:nil) ifNotNil:[:v | | list | list := v .
+    v _isArray ifFalse:[ list := { v } ].
+    list do:[:aName | theClass addTrait: (intoDict at: aName asSymbol) ].
+  ].
+  (dict at: #classtraits otherwise:nil) ifNotNil:[:v | | list | list := v .
+    v _isArray ifFalse:[ list := { v } ].
+    list do:[:expr | theClass addClassTrait: expr evaluate ]. "expr is like 'BtreePlusInteriorTrait classTrait'"
+  ].
   comment ifNotNil:[ theClass comment: comment ].
+]
+
+{ #category : 'tonel parser interface' }
+RwTopazTonelReader >> createTraitFrom: anArray [
+  "Execute Trait creation.  
+   The typical use cases are filein of tonel files from tests/ernie , 
+   or slowfilein or patching of a base image using topaz.
+   Signal an error if the creation creates a new version of the trait .
+   If the trait is not found in the symbolList and we are SystemUser and not in a solo session,
+   the arg to inDictionary: will be Globals, 
+   else the arg will be UserGlobals of the current session."
+
+  | dict instVars classVars name knownKeys xKeys sess intoDict 
+    oldClass theClass  keys classInstVars | 
+  dict := anArray at: 6 .
+  knownKeys := IdentitySet withAll:#( name instvars classvars classinstvars category ). "lowercase"
+  keys := IdentitySet new .
+  dict keys do:[:k|  keys add: k asSymbol ].
+  (xKeys := keys - knownKeys) size > 0 
+    ifTrue:[ Error signal:'unknown keys ', (Array withAll: xKeys) printString ].
+  sess := GsCurrentSession currentSession .
+  name := dict at: #name .
+  self theClassName: name .
+  instVars := dict at: #instvars otherwise: #() .
+  classVars := dict at: #classvars otherwise: #() .
+  classInstVars := dict at: #classinstvars otherwise: #() .
+  (sess symbolList dictionariesAndAssociationsOf: name asSymbol) ifNotNil:[:ary | | pair |
+    ary size > 1 ifTrue:[ Error signal:'More than one definition in symbolList for ', name ].
+    pair := ary at: 1 .
+    oldClass := (pair at: 2) _value  .
+    intoDict := (pair at: 1) 
+  ].
+  intoDict ifNil:[ 
+    intoDict := ((System myUserProfile userId = 'SystemUser') and:[ sess isSolo not]) 
+               ifTrue:[ Globals ] 
+              ifFalse:[ (sess resolveSymbol: #UserGlobals) _value ].
+  ].
+  theClass := Trait name: name instVars: instVars classVars: classVars 
+         classInstVars: classInstVars inDictionary: intoDict .
+  oldClass ifNotNil:[
+    theClass == oldClass ifFalse:[ Error signal:'attempt to create a new version of Trait ', name].
+  ].
 ]
 
 { #category : 'accessing' }
@@ -254,7 +305,7 @@ RwTopazTonelReader >> environmentId: object [
 RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
 	"for topaz TFILE and TMETHOD commands, compile the method instead of creating a method definition"
 
-	| behavior symbolList |
+	| behavior symbolList cls |
 	symbolList := GsCurrentSession currentSession symbolList.
 	(self theClassName notNil and: [ className ~= self theClassName ]) "tmethod command uses className to identify the target class" 
 		ifTrue: [ 
@@ -263,13 +314,22 @@ RwTopazTonelReader >> newMethodDefinitionForClassNamed: className classIsMeta: m
 					'The name of the class (', className printString, ') specified for the method ' , selector printString
 						, ' does not match the name of class (', self theClassName printString, ') declared in this tonel class file' ].
 	behavior := symbolList objectNamed: className asSymbol.
-	meta
-		ifTrue: [ behavior := behavior class ].
-	behavior
-		compileMethod: source
-		dictionaries: symbolList
-		category: category
-		environmentId: self environmentId
+  cls := behavior .
+  cls class == Trait ifTrue:[ | traitImpl |
+    environmentId == 0 ifFalse:[ Error signal:'envId > 0 not implemented for Traits' ].
+    traitImpl := cls traitImpl .
+    meta ifTrue:[
+      traitImpl compileClassMethod: source category: category
+    ] ifFalse:[
+      traitImpl compileMethod: source category: category
+    ]
+  ] ifFalse:[
+	  meta ifTrue: [ cls := cls class ].
+	  cls compileMethod: source
+		   dictionaries: symbolList
+		   category: category
+		   environmentId: environmentId
+  ]
 ]
 
 { #category : 'tonel parser interface' }
@@ -277,13 +337,16 @@ RwTopazTonelReader >> newTypeDefinitionFrom: anArray [
   | knd |
   (knd := anArray at: 4) = 'Class' ifTrue:[
     self createClassFrom: anArray
-  ] ifFalse:[
-    knd = 'Extension' ifTrue:[ | name dict |
-      dict := anArray at: 6 .
-      name := dict at: #name .
-      theClassName := name .
-    ] ifFalse:[ Error signal: 'uknown tonel file kind ', knd printString ]
-  ].
+    ] ifFalse:[
+  knd = 'Extension' ifTrue:[ | name dict |
+    dict := anArray at: 6 .
+    name := dict at: #name .
+    theClassName := name .
+    ] ifFalse:[ 
+  knd = 'Trait' ifTrue:[ 
+    self createTraitFrom: anArray .
+    ] ifFalse:[ Error signal: 'uknown tonel file kind ', knd printString 
+  ]].]
 ]
 
 { #category : 'method definition' }
