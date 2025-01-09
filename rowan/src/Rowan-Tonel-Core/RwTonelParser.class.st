@@ -113,14 +113,39 @@ RwTonelParser class >> writeStreamClass [
 ]
 
 { #category : 'private' }
-RwTonelParser >> _checkMethodOrderFor: selector [
-	| col |
+RwTonelParser >> _checkMethodOrderFor: selector isMeta: isMeta [
+	| col sawClassMethods sawInstanceMethods |
 	self checkTonelClassMethodOrder
 		ifFalse: [ ^ self ].
-	col := self dynamicInstVarAt: #'checkTonelSelectors'.
+	sawClassMethods := (self dynamicInstVarAt: #'sawClassMethods') ifNil: [ false ].
+	sawInstanceMethods := (self dynamicInstVarAt: #'sawInstanceMethods')
+		ifNil: [ false ].
+	col := isMeta
+		ifTrue: [ 
+			sawInstanceMethods
+				ifTrue: [ 
+					self
+						error:
+							'The class method ' , selector
+								,
+									' is out of order - class methods must come before instance methods in a tonel class file.' ].
+			self dynamicInstVarAt: #'sawClassMethods' put: true.
+			self dynamicInstVarAt: #'checkTonelClassSelectors' ]
+		ifFalse: [ 
+			self dynamicInstVarAt: #'sawInstanceMethods' put: true.
+			self dynamicInstVarAt: #'checkTonelInstanceSelectors' ].
 	col add: selector.
 	col last = selector
-		ifFalse: [ self error: 'The method ' , selector , ' is out of order' ]
+		ifFalse: [ 
+			self
+				error:
+					'The '
+						,
+							(isMeta
+								ifTrue: [ 'class ' ]
+								ifFalse: [ 'instance ' ]) , 'method ' , selector
+						,
+							' is out of order - run the $ARCHBASE/build/canonicalizeTonelFiles.sh to canonicalize the file.' ]
 ]
 
 { #category : 'accessing' }
@@ -138,7 +163,10 @@ RwTonelParser >> checkTonelClassMethodOrder: aBoolean [
 	aBoolean
 		ifTrue: [ 
 			self
-				dynamicInstVarAt: #'checkTonelSelectors'
+				dynamicInstVarAt: #'checkTonelInstanceSelectors'
+				put: (SortedCollection sortBlock: [ :a :b | a _unicodeLessThan: b ]).
+			self
+				dynamicInstVarAt: #'checkTonelClassSelectors'
 				put: (SortedCollection sortBlock: [ :a :b | a _unicodeLessThan: b ]) ]
 ]
 
@@ -416,7 +444,7 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 		do: [ :ex | self error: 'Invalid class name ' , className printString ].
 	meta := ((fourth at: 1) at: 2) ~~ nil .
 	selector := self extractSelector: (fourthTwo := fourth at: 2) trimBoth.
-	self _checkMethodOrderFor: selector.
+	self _checkMethodOrderFor: selector isMeta: meta.
 	source := String new .
   source addAll: fourthTwo .
 	(anArray at: 5) ifNotEmpty: [ :src | source addAll: src ].

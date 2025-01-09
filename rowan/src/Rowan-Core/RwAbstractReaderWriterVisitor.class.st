@@ -439,6 +439,10 @@ RwAbstractReaderWriterVisitor >> validateClassCategory: aClassDefinition forPack
 
 	"signal an error if the protocol does not conform to the convention for the current project"
 
+	aClassDefinition isClassExtension 
+		ifTrue: [ 
+			"no need to validate category for a class extension definition"
+			^ self ].
 	(Rowan image
 		validClassCategory: aClassDefinition category
 		forPackageConvention: self packageConvention
