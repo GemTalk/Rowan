@@ -215,13 +215,14 @@ RwRowanCrooked9Test >> testIssue896_2 [
 	errorHit := false.
 	[ crookedProject := loadSpec resolve load ]
 		on: Error
-		do: [ :ex | 
+		do: [ :ex |  
+			| errorMessage |
+			errorMessage := ex printString.
 			errorHit := true.
 			self
 				assert:
-					(ex messageText
-						beginsWith:
-							'Duplicate definition of foo in RowanSample9V3Class1 [1] near line 17') ].
+					(errorMessage beginsWith:
+							'a RwTonelParseError occurred (error 2710), Duplicate selector foo, last method parsed: ''foo'',  near line 18 in file') ].
 	self assert: errorHit description: 'expected error not encountered'
 ]
 

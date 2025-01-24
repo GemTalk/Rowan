@@ -442,8 +442,8 @@ RwTonelParser >> methodDefList [
 					str := ex details ifNil: [ '' ].
 					ex
 						details:
-							str , ', last method parsed: ' , lastSelectorParsed printString.
-					 ex pass ] ].
+							str , ', last method parsed: ' , lastSelectorParsed printString  ].
+			ex pass ].
 	^ result
 ]
 

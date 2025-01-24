@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.2",
+	"gsVersion" : "3.7.3",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 10,
 		"failures" : 12,
-		"passed" : 1301,
-		"summary" : "1323 Tests with 12 Failures, 10 Errors and 0 DeprecationWarnings in 1547.34s",
-		"tests" : 1323,
-		"time" : 1547.342
+		"passed" : 1299,
+		"summary" : "1321 Tests with 12 Failures, 10 Errors and 0 DeprecationWarnings in 1805.97s",
+		"tests" : 1321,
+		"time" : 1805.972
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -670,12 +670,6 @@
 			"time" : "0"
 		},
 		{
-			"className" : "RowanBrowserServiceTest2",
-			"status" : "passed",
-			"selector" : "test_isAbstract",
-			"time" : "0"
-		},
-		{
 			"className" : "RowanClassServiceTest",
 			"status" : "passed",
 			"selector" : "test_addCategory",
@@ -1045,12 +1039,6 @@
 			"className" : "RowanProjectServiceTest",
 			"status" : "passed",
 			"selector" : "test_isAbstract",
-			"time" : "0"
-		},
-		{
-			"className" : "RowanProjectServiceTest",
-			"status" : "passed",
-			"selector" : "test_loadedGitProject",
 			"time" : "0"
 		},
 		{
@@ -7954,5 +7942,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2024-10-15T17:59:49.281306-07:00"
+	"timeStamp" : "2025-01-23T12:36:58.861963-08:00"
 }
