@@ -50,6 +50,7 @@ Class {
 	#instVars : [
 		'packageReader',
 		'stream',
+		'filePath',
 		'lastSelectorParsed',
 		'classSelectors',
 		'selectors'
@@ -73,12 +74,17 @@ RwTonelParser class >> lineEnding [
 ]
 
 { #category : 'instance creation' }
-RwTonelParser class >> on: aStream forReader: aTonelReader [
-	^ self new 
+RwTonelParser class >> on: aStream filePath: filePathStringOrNil forReader: aTonelReader [
+	^ self new
+		filePath: filePathStringOrNil;
 		stream: aStream;
 		packageReader: aTonelReader;
 		yourself
+]
 
+{ #category : 'instance creation' }
+RwTonelParser class >> on: aStream forReader: aTonelReader [
+	^ self on: aStream filePath: aStream wrappedStreamName forReader: aTonelReader
 ]
 
 { #category : 'instance creation' }
@@ -272,6 +278,18 @@ RwTonelParser >> extractSelector: aString [
 			ex pass ]
 ]
 
+{ #category : 'accessing' }
+RwTonelParser >> filePath [
+	^ filePath ifNil: [ ^ '' ]
+]
+
+{ #category : 'accessing' }
+RwTonelParser >> filePath: filePathString [
+	"set the name of the tonel file that is being read .. may be nil ... used in error messages"
+
+	filePath := filePathString
+]
+
 { #category : 'testing' }
 RwTonelParser >> isEnter: aCharacter [
   | cp |
@@ -410,7 +428,7 @@ RwTonelParser >> methodDef: aBlock [
 
   (def := self newMethodDefinitionFrom: ar )
     offset: offset
-    inFile: stream wrappedStreamName .
+    inFile: self filePath .
 
   aBlock
     value: (((ar at: 4) at: 1) at: 2) ~~ nil
@@ -490,8 +508,13 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 
 { #category : 'private factory' }
 RwTonelParser >> newTypeDefinitionFrom: anArray [
-	^ self packageReader newTypeDefinitionFrom: anArray
+	"add stream name and position information to the newly created definition, to provide better error information down stream"
 
+	| offset def |
+	offset := stream position.
+	def := self packageReader newTypeDefinitionFrom: anArray.
+	def offset: offset inFile: self filePath.
+	^ def
 ]
 
 { #category : 'accessing' }

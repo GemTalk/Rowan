@@ -281,6 +281,14 @@ RwAbstractClassDefinition >> name: aString [
 
 ]
 
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> offset: anInteger inFile: aFileName [
+	"these properties are used when handling a CompileError or a tonel parse error."
+
+	properties at: #'_gsFileOffset' put: anInteger.
+	properties at: #'_gsFileName' put: aFileName
+]
+
 { #category : 'copying' }
 RwAbstractClassDefinition >> postCopy [
 

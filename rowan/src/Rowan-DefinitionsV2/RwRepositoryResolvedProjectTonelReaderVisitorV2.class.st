@@ -190,7 +190,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 	fileReference := file asFileReference.
 	fileReference readStreamDo: [:fileStream |
 		[ | definitions tonelParser |
-		tonelParser := RwTonelParser on: fileStream forReader: self.
+		tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 		(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 			ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
 		  definitions := tonelParser start.
@@ -216,7 +216,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions clsDef projectDef tonelParser |
-			tonelParser := RwTonelParser on: fileStream forReader: self.
+			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
 			definitions := tonelParser start.
@@ -261,7 +261,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions traitDef projectDef tonelParser |
-			tonelParser := RwTonelParser on: fileStream forReader: self.
+			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
 			definitions := tonelParser start.

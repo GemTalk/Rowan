@@ -1593,7 +1593,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 		category: packageName2
 		options: #()
 	] on: Error do: [:ex |
-		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		self assert: (ex description beginsWith: 'UserDefinedError: A class definition and class extension definition for the same class ''Issue123Class'' found in package Issue123-Extensions ').
 		hasError := true ].
 
 	self assert: hasError description: 'Expected an error'
@@ -1669,7 +1669,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		category: packageName2
 		options: #().
 	] on: Error do: [:ex |
-		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		self assert: (ex description beginsWith: 'UserDefinedError: A class definition and class extension definition for the same class ''Issue123Class'' found in package Issue123-Extensions').
 		hasError := true ].
 
 	self assert: hasError description: 'Expected an error'
@@ -1749,7 +1749,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 		category: packageName2
 		options: #().
 	] on: Error do: [:ex |
-		self assert: ex description equals: 'UserDefinedError: The class Issue123Class has extension methods for the package Issue123-Extensions, so the class cannot be added to the package Issue123-Extensions without violating the restriction that extension category names must not match the class package name.'.
+		self assert: (ex description beginsWith: 'UserDefinedError: A class definition and class extension definition for the same class ''Issue123Class'' found in package Issue123-Extensions').
 		hasError := true ].
 
 	self assert: hasError description: 'Expected an error'

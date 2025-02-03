@@ -10,6 +10,15 @@ Class {
 }
 
 { #category : 'error handling' }
+RwRepositoryComponentProjectReaderVisitor class >> fileNameStringForDefinition: anRwDefinition [
+	"used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
+
+	(anRwDefinition propertyAt: #'_gsFileName' ifAbsent: nil)
+		ifNotNil: [ :fName | ^ fName ].
+	^ '  (Unable to file name )'
+]
+
+{ #category : 'error handling' }
 RwRepositoryComponentProjectReaderVisitor class >> lineNumberStringForDefinition: anRwDefinition [
 	"used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
 

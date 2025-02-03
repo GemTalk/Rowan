@@ -46,15 +46,118 @@ RwPackageDefinition class >> withProperties: properties classDefinitions: classD
 		yourself
 ]
 
+{ #category : 'private' }
+RwPackageDefinition >> _checkForDuplicateClassDefinitionFor: aClassDefinition [
+	"Check to see if there is already a ClassExtensionDefinition or TraitDefinition matching aClassDefinition already declared in this package"
+
+	| className |
+	className := aClassDefinition key.
+	{{classExtensions.
+	'class'.
+	'class extension definition'}.
+	{traitDefinitions.
+	'trait'.
+	'trait definition'}}
+		do: [ :ar | 
+			| definitionDictionary label descriptor |
+			definitionDictionary := ar at: 1.
+			descriptor := ar at: 2.
+			label := ar at: 3.
+			(definitionDictionary includesKey: className)
+				ifTrue: [ 
+					| nam message |
+					nam := [ ' found in package ' , self name , ' (' ]
+						on: Error
+						do: [ :ex | '' ].
+					message := 'A class definition and ' , label , ' for the same '
+						, descriptor , ' ' , className printString , nam
+						,
+							(RwRepositoryComponentProjectReaderVisitor
+								fileNameStringForDefinition: aClassDefinition) asFileReference parent
+								fullName
+						,
+							'). Only a SINGLE, class definition or class extension definition or trait definition is allowed in the same package'.
+					self error: message ] ]
+]
+
+{ #category : 'private' }
+RwPackageDefinition >> _checkForDuplicateClassExtensionFor: aClassExtensionDefinition [
+	"Check to see if there is already a ClassDefinition or TraitDefinition matching aClassDefinition already declared in this package"
+
+	| className |
+	className := aClassExtensionDefinition key.
+	{{classDefinitions.
+	'class'.
+	'class definition'}.
+	{traitDefinitions.
+	'trait'.
+	'trait definition'}}
+		do: [ :ar | 
+			| definitionDictionary label descriptor |
+			definitionDictionary := ar at: 1.
+			descriptor := ar at: 2.
+			label := ar at: 3.
+			(definitionDictionary includesKey: className)
+				ifTrue: [ 
+					| nam message |
+					nam := [ ' found in package' , self name , ' ' ]
+						on: Error
+						do: [ :ex | '' ].
+					message := 'A class extension definition and ' , label , ' for the same '
+						, descriptor , ' ' , className printString , nam
+						,
+							(RwRepositoryComponentProjectReaderVisitor
+								fileNameStringForDefinition: aClassExtensionDefinition) asFileReference
+								parent fullName
+						,
+							'). Only a SINGLE, class definition or class extension definition or trait definition is allowed in the same package'.
+					self error: message ] ]
+]
+
+{ #category : 'private' }
+RwPackageDefinition >> _checkForDuplicateTraitDefinitionFor: aTraitDefinition [
+	"Check to see if there is already a ClassExtensionDefinition or ClassDefinition matching aTraitDefinition already declared in this package"
+
+	| className |
+	className := aTraitDefinition key.
+	{{classExtensions.
+	'class'.
+	'class extension definition'}.
+	{classDefinitions.
+	'class'.
+	'class definition'}}
+		do: [ :ar | 
+			| definitionDictionary label descriptor |
+			definitionDictionary := ar at: 1.
+			descriptor := ar at: 2.
+			label := ar at: 3.
+			(definitionDictionary includesKey: className)
+				ifTrue: [ 
+					| nam message |
+					nam := [ ' found in package ' , self name , ' (' ]
+						on: Error
+						do: [ :ex | '' ].
+					message := 'A trait definition and ' , label , ' for the same '
+						, descriptor , ' ' , className printString , nam
+						,
+							(RwRepositoryComponentProjectReaderVisitor
+								fileNameStringForDefinition: aTraitDefinition) asFileReference parent
+								fullName
+						,
+							'). Only a SINGLE, class definition or class extension definition or trait definition is allowed in the same package'.
+					self error: message ] ]
+]
+
 { #category : 'accessing' }
 RwPackageDefinition >> addClassDefinition: aClassDefinition [
-
+	self _checkForDuplicateClassDefinitionFor: aClassDefinition.
 	^ self addDefinition: aClassDefinition to: classDefinitions
 ]
 
 { #category : 'accessing' }
 RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
 
+	self _checkForDuplicateClassExtensionFor: aClassExtensionDefinition.
 	^ self addDefinition: aClassExtensionDefinition to: classExtensions
 ]
 
@@ -231,6 +334,7 @@ RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
 				error:
 					'The package name of trait (' , aTraitDefinition packageName
 						, '), must match the name of the receiver (' , self name , ').' ].
+	self _checkForDuplicateTraitDefinitionFor: aTraitDefinition.
 	^ self addDefinition: aTraitDefinition to: traitDefinitions
 ]
 

@@ -1611,8 +1611,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsD [
 			options: #()
 	] on: Error do: [:ex |
 		self 
-			assert: ex description 
-			equals: 'UserDefinedError: The class SimpleHybrid1 has extension methods for the package HybridC-Extensions, so the class cannot be added to the package HybridC-Extensions without violating the restriction that extension category names must not match the class package name.'.
+			assert: (ex description beginsWith: 'UserDefinedError: A class definition and class extension definition for the same class ''SimpleHybrid1'' found in package HybridC-Extensions').
 		hadError := true ].
 	self assert: hadError description: 'Expected and error'.
 ]
@@ -1679,8 +1678,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsE [
 			options: #()
 	] on: Error do: [:ex |
 		self 
-			assert: ex description 
-			equals: 'UserDefinedError: The class SimpleHybrid1 has extension methods for the package HybridC-Extensions, so the class cannot be added to the package HybridC-Extensions without violating the restriction that extension category names must not match the class package name.'.
+			assert: (ex description beginsWith: 'UserDefinedError: A class definition and class extension definition for the same class ''SimpleHybrid1'' found in package HybridC-Extensions ').
 		hadError := true ].
 	self assert: hadError description: 'Expected and error'.
 ]
