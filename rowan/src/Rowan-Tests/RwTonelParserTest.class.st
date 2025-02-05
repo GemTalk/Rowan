@@ -165,26 +165,71 @@ RwTonelParserTest >> testMetadata [
 
 { #category : 'tests' }
 RwTonelParserTest >> testMethod [
-	self 
-		assertParse: 'Object>>name' 
-		rule: #method
-		equals: #(('Object' nil) 'name').
-		
-	self 
-		assertParse: 'Object >> name: aString' 
-		rule: #method
-		equals: #(('Object' nil) 'name: aString').
-		
-	self 
-		assertParse: 'Object >> name: aString [ I do not care ]' 
-		rule: #method
-		equals: #(('Object' nil) 'name: aString').
-		
-	self 
-		assertParse: 'Object class >> name: aString' 
-		rule: #method
-		equals: #(('Object' 'class') 'name: aString').
+	| gotError |
+	self
+		assertParse: 'Object>>name'
+		rule: #'method'
+		equals: #(#('Object' nil) 'name').
 
+	self
+		assertParse: 'Object >> name: aString'
+		rule: #'method'
+		equals: #(#('Object' nil) 'name: aString').
+
+	self
+		assertParse: 'Object >> name: aString [ I do not care ]'
+		rule: #'method'
+		equals: #(#('Object' nil) 'name: aString').
+
+	self
+		assertParse: 'Object class >> name: aString'
+		rule: #'method'
+		equals: #(#('Object' 'class') 'name: aString').
+	gotError := false.
+	[ 
+	self
+		assertParse: 'Object class >name: aString'
+		rule: #'method'
+		equals: 'single > ... expect error' ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert: ex printString
+				equals:
+					'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ].
+	gotError := false.
+	[ 
+	self
+		assertParse: 'Object class  name: aString ['
+		rule: #'method'
+		equals: 'single > ... expect error' ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert: ex printString
+				equals:
+					'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ].
+	gotError := false.
+	[ 
+	self
+		assertParse: 'Object class name: aString'
+		rule: #'method'
+		equals: 'single > ... expect error' ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert: ex printString
+				equals:
+					'a RwTonelParseError occurred (error 2710), empty selector string'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ]
 ]
 
 { #category : 'tests' }

@@ -345,7 +345,7 @@ RwTonelParser >> method [
 	| type selector |
 	
 "if there is a single $> then we read until we find the NEXT ONE"
-	type := self untilIncluding: '>>'.
+	type := self readClassNameForMethod.
 "if there is no leading $[ we read until we find the NEXT ONE"
 	selector := self cleanSelector: (self untilExcludingChar: $[ ).
 	type := type trimBoth substringsSpace . "substrings: ' ' "
@@ -529,6 +529,33 @@ RwTonelParser >> packageReader: aPackageReader [
 
 ]
 
+{ #category : 'private stream' }
+RwTonelParser >> readClassNameForMethod [
+	| expectedChars className rightArrow leftBracket leftBracketChar |
+	rightArrow := leftBracket := false.
+	leftBracketChar := $[.
+	expectedChars := IdentitySet new
+		add: $>;
+		add: leftBracketChar;
+		yourself.
+	className := self
+		upToAnyOf: expectedChars
+		do: [ :ch | 
+			rightArrow := ch = $>.
+			leftBracket := ch = leftBracketChar ].
+	className := className trimBoth.
+	leftBracket
+		ifTrue: [ 
+			rightArrow
+				ifFalse: [ self error: 'missing >> in tonel method source' ] ].
+	rightArrow
+		ifTrue: [ 
+			stream next = $>
+				ifTrue: [ self skipSeparators ]
+				ifFalse: [ self error: 'missing >> in tonel method source' ] ].
+	^ className
+]
+
 { #category : 'private' }
 RwTonelParser >> removeFrom: aString enclosingStart: startChar end: endChar [
 	^ self 
@@ -580,6 +607,14 @@ RwTonelParser >> separator [
 	whileTrue: [ stream next ].
 	^ nil
 
+]
+
+{ #category : 'private stream' }
+RwTonelParser >> skipSeparators [
+[stream atEnd]
+	whileFalse:
+	[stream peek isSeparator ifFalse: [^ self].
+	stream next]
 ]
 
 { #category : 'accessing' }
@@ -666,7 +701,7 @@ RwTonelParser >> typeDef [
 							normalizedMetadata ] ])}
 ]
 
-{ #category : 'private parsing' }
+{ #category : 'private stream' }
 RwTonelParser >> untilExcludingChar: aCharacter [
 	| result |
 	result := stream upTo: aCharacter.
@@ -674,13 +709,20 @@ RwTonelParser >> untilExcludingChar: aCharacter [
 	^ result
 ]
 
-{ #category : 'private parsing' }
-RwTonelParser >> untilIncluding: aCollection [
-	^ stream upToAll: aCollection
+{ #category : 'private stream' }
+RwTonelParser >> upToAnyOf: subcollection do: aBlock [
+"Answer a subcollection from the current access position to the occurrence (if any, but not inclusive) of any object in the collection.
+Evaluate aBlock with this occurence as argument.
+If no matching object is found, don't evaluate aBlock and answer the entire rest of the receiver."
 
+| resultStream ch |
+resultStream := AppendStream on: stream collectionSpecies new.
+[ stream atEnd or: [ (subcollection includes: (ch := stream next)) and: [aBlock value: ch. true] ] ]
+	whileFalse: [ resultStream nextPut: ch ].
+^ resultStream contents
 ]
 
-{ #category : 'private parsing' }
+{ #category : 'private stream' }
 RwTonelParser >> word: aString [
 	| result |
 	result := stream next: aString size.
