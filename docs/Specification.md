@@ -125,7 +125,7 @@ The initial load of a Rowan projet uses a Rowan Load Specification to specify th
 - attaching to a local disk-based project
    - path to project.
 
-[1]: http://www.smalltalksystems.com/publications/_awss97/SSDCL1.HTM
+[1]: http://web.archive.org/web/20220625050504/http://www.smalltalksystems.com/publications/_awss97/SSDCL1.HTM
 [2]: http://www.wiresong.ca/monticello/
 [3]: https://github.com/Metacello/metacello
 
