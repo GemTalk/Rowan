@@ -45,7 +45,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 
 #### Create and Load ComponentDefinitions
 ```smalltalk
-| repo |
+| repo componentDef |
 repo := RwMemoryRepositoryDefinition
 	newNamed: 'Project Repository'
 		repositoryRoot: '/repos/Example'
@@ -70,11 +70,12 @@ componentDef := RwComponentDefinition newNamed: 'Example'.
 
 #### Create and Load in memory Configuration
 ```smalltalk
-	| configurationName projectName packageName |
+	| configurationName projectName packageName configurationDefinition |
 "initialize"
 	configurationName := 'Core'.
 	projectName := 'Project'.
 	packageName := 'Project-Core'.
+        configurationDefinition := nil.
 
 "create configuration"
 	configurationDefinition := (RwConfigurationDefinition 
