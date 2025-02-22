@@ -340,6 +340,7 @@ UpgradeRowanV3 >> customerRepairMap [
 		at: #'missingLoadedMethod' put: #'customerRepairMissingLoadedMethod:';
 		at: #'methodsNotIdentical' put: #'customerRepairNonIdenticalMethod:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
+		at: #'differentCategory' put: #'repairedWhenDefinitionsReloaded:';
 		yourself.
 	^ repairMap
 ]
@@ -486,11 +487,68 @@ UpgradeRowanV3 >> errorMessages [
 
 ]
 
+{ #category : 'repair' }
+UpgradeRowanV3 >> gemstoneBaseClassRepairCategoryWhenDefinitionsReloaded: classAuditDetail [
+	"loaded classes in the (UnPackagedProject cannot be repaired by reload, since they are not reloaded"
+
+	| loadedClass |
+	self
+		logMessage:
+			'In #gemstoneBaseClassRepairCategoryWhenDefinitionsReloaded: for '
+				, classAuditDetail printString.
+	loadedClass := classAuditDetail loadedClass.
+
+	loadedClass loadedPackage name = 'UnPackaged-Globals'
+		ifFalse: [ 
+			"Only UnPackaged-Globals need repair, the rest will be reparied when definition is reloaded"
+			self
+				logMessage:
+					'skipping repair for  ' , loadedClass name printString , ' ... in package: '
+						, loadedClass loadedPackage name.
+			repairedByReload := self repairedByReload + 1.
+			^ self ].	"
+	Update the loaded class to match the class"
+	self
+		logMessage:
+			'updating  category repair for  ' , loadedClass name printString , ' ... in package: '
+				, loadedClass loadedPackage name.
+	repairedByReload := self repairedByReload + 1.
+	loadedClass propertyAt: #category put: loadedClass handle category
+]
+
+{ #category : 'repair' }
+UpgradeRowanV3 >> gemstoneBaseClassRepairCommentWhenDefinitionsReloaded: classAuditDetail [
+	"loaded classes in the (UnPackagedProject cannot be repaired by reload, since they are not reloaded"
+
+	| loadedClass |
+	self
+		logMessage:
+			'In #gemstoneBaseClassRepairCommentWhenDefinitionsReloaded: for '
+				, classAuditDetail printString.
+	loadedClass := classAuditDetail loadedClass.
+	loadedClass loadedPackage name = 'UnPackaged-Globals'
+		ifFalse: [ 
+			"Only UnPackaged-Globals need repair, the rest will be reparied when definition is reloaded"
+			self
+				logMessage:
+					'skipping repair for  ' , loadedClass name printString , ' ... in package: '
+						, loadedClass loadedPackage name.
+			repairedByReload := self repairedByReload + 1.
+			^ self ].	"
+	self
+		logMessage:
+			'updating  comment repair for  ' , loadedClass name printString , ' ... in package: '
+				, loadedClass loadedPackage name.
+	Update the loaded class to match the class"
+	repairedByReload := self repairedByReload + 1.
+	loadedClass propertyAt: #comment put:  loadedClass handle comment
+]
+
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV3 >> gemstoneBaseProjectNames [
 	"The list of projects that are in the standard base image ... excluding Rowan"
 
-	^ #('Announcements' 'FileSystemGs' 'gemstoneBaseImage' 'RemoteServiceReplication' 'RowanClientServices')
+	^ #('Announcements' 'FileSystemGs' 'gemstoneBaseImage' 'RemoteServiceReplication' 'RowanClientServices' 'UnPackaged' )
 ]
 
 { #category : 'repair' }
@@ -532,7 +590,8 @@ UpgradeRowanV3 >> gemstoneBaseRepairMap [
 		at: #'missingLoadedMethod' put: #'gemstoneBaseRepairMissingLoadedMethod:';
 		at: #'methodsNotIdentical' put: #'gemstoneBaseRepairNonIdenticalMethod:';
 		at: #'differentClassInstVars' put: #'repairedWhenDefinitionsReloaded:';
-		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
+		at: #'differentComment' put: #'gemstoneBaseClassRepairCommentWhenDefinitionsReloaded:';
+		at: #'differentCategory' put: #'gemstoneBaseClassRepairCategoryWhenDefinitionsReloaded:';
 		at: #'loadedPackageNotInRegistry' put: #'repairLoadedPackageNotInRegistry:';
 		yourself.
 	^ repairMap
@@ -726,12 +785,12 @@ UpgradeRowanV3 >> reloadGemstoneBase [
 
 { #category : 'upgrade gemstoneBaseImage' }
 UpgradeRowanV3 >> reloadGemStoneProjects [
-	"reload the base gemstone projects, excluding gemstoneBaseImage"
+	"reload the base gemstone projects, excluding gemstoneBaseImage and UnPackaged project"
 
 	| loadSpecSet |
 	loadSpecSet := RwLoadSpecSet new.
 	projectsHome := '$GEMSTONE/projects'.
-	(self gemstoneBaseProjectNames copyWithout: 'gemstoneBaseImage')
+	((self gemstoneBaseProjectNames copyWithout: 'gemstoneBaseImage') copyWithout: 'UnPackaged')
 		do: [ :projectName | 
 			| loadSpec project platformConditionalAttributes |
 			self logMessage: 'gemstoneBaseImage Loading ' , projectName.
@@ -1277,6 +1336,7 @@ UpgradeRowanV3 >> rowanRepairMap [
 		at: #'methodsNotIdentical' put: #'repairNonIdenticalMethod:';
 		at: #'differentMethodCategory' put: #'repairDifferentMethodCategory:';
 		at: #'differentComment' put: #'repairedWhenDefinitionsReloaded:';
+		at: #'differentCategory' put: #'repairedWhenDefinitionsReloaded:';
 		at: #'missingCompiledMethod' put: #'repairMissingCompiledMethod:';
 		at: #'missingLoadedMethod' put: #'repairMissingLoadedMethod:';
 		at: #'missingCompiledMethodsForLoadedClassExtension'
@@ -1450,7 +1510,7 @@ UpgradeRowanV3 >> updateGemStoneProjectCommitIds [
 	projectSHAMap := self readExternalProjectSHAS.
 	baseImageSHA := self readBaseImageSHA.
 	projectSHAMap at: 'gemstoneBaseImage' put: baseImageSHA.
-	self gemstoneBaseProjectNames
+	(self gemstoneBaseProjectNames copyWithout: 'UnPackaged')
 		do: [ :projectName | 
 			| project sha |
 			project := Rowan projectNamed: projectName.
