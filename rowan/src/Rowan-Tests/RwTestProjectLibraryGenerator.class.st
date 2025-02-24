@@ -3405,6 +3405,43 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0081: resolvedProject [
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGenerator >> _addDefinitionsFor_0089: resolvedProject [
+	"Start with spec_0001 and add 6 methods with selectors to test that we are using unicode codepoints for sorting, not unicode sort order."
+
+	| packageName1 packageName3 className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		addInstanceMethod: 'A_bc123      ^self' protocol: 'accessing';
+		addInstanceMethod: '_123Abc 
+	^self' protocol: 'accessing';
+		addClassMethod: '_123abc      
+	^self' protocol: 'accessing';
+		addClassMethod: '_ABC123 ^self' protocol: 'accessing';
+		addClassMethod: '_abc123 ^self' protocol: 'accessing';
+		addClassMethod: 'a_bc123 ^self' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'test3  self assert: ' , className1 , ' new A_bc123'
+			protocol: 'tests';
+		addInstanceMethod: 'test4  self assert: ' , className1 , ' new _123Abc'
+			protocol: 'tests';
+		addInstanceMethod: 'test5  self assert: ' , className1 , ' new _123abc'
+			protocol: 'tests';
+		addInstanceMethod: 'test6  self assert: ' , className1 , ' new _ABC123'
+			protocol: 'tests';
+		addInstanceMethod: 'test7  self assert: ' , className1 , ' new _abc123'
+			protocol: 'tests';
+		addInstanceMethod: 'test8  self assert: ' , className1 , ' new a_bc123'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGenerator >> _addDefinitionsFor: resolvedProject projectName: aProjectName [
 	| className packageName |
 	resolvedProject
@@ -7224,6 +7261,52 @@ RwTestProjectLibraryGenerator >> genSpec_0083: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0079: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification:  resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGenerator >> genSpec_0089: commitMessage [
+	"Start with spec_0001 and add 6 methods with selectors to test that we are using unicode codepoints for sorting, not unicode sort order."
+
+	"https://github.com/GemTalk/Rowan/issues/953"
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0089'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001 and add 6 methods with selectors to test that we are using unicode codepoints for sorting, not unicode sort order.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 89
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(953);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes:  { 'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0089: resolvedProject ].
 
 	self
 		_finishCommitAndPush: specName
