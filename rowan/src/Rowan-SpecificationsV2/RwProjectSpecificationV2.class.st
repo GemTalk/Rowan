@@ -23,28 +23,6 @@ RwProjectSpecificationV2 class >> label [
 	^ 'project specification '
 ]
 
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> _repoType [
-	"direct access to IV ... used by ="
-
-	^ repoType
-]
-
-{ #category : 'private' }
-RwProjectSpecificationV2 >> _validate [
-	"ensure that the data structures within the receiver contain valid information:
-		1. platform implementation is responsible for validating platform structures"
-
-	#(#'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName' #'projectSpecPath')
-		do: [ :messageName | 
-			(self perform: messageName)
-				ifNil: [ 
-					Error
-						signal:
-							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
-	^ true
-]
-
 { #category : 'comparing' }
 RwProjectSpecificationV2 >> = anObject [
 	| lazyEqual |
@@ -70,6 +48,28 @@ RwProjectSpecificationV2 >> = anObject [
 																		and: [ 
 																			self comment = anObject comment
 																				and: [ self loadedCommitId = anObject loadedCommitId ] ] ] ] ] ] ] ] ] ]
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> _repoType [
+	"direct access to IV ... used by ="
+
+	^ repoType
+]
+
+{ #category : 'private' }
+RwProjectSpecificationV2 >> _validate [
+	"ensure that the data structures within the receiver contain valid information:
+		1. platform implementation is responsible for validating platform structures"
+
+	#(#'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'projectName' #'specName' #'projectSpecPath')
+		do: [ :messageName | 
+			(self perform: messageName)
+				ifNil: [ 
+					Error
+						signal:
+							'The instance variable ' , messageName asString printString , ' cannot be nil' ] ].
+	^ true
 ]
 
 { #category : 'accessing' }
@@ -158,14 +158,25 @@ RwProjectSpecificationV2 >> packageConvention [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> packageConvention: aString [
+RwProjectSpecificationV2 >> packageConvention: aStringOrNil [
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
 		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
 		Rowan			- Class category and method protocol are not overloaded with packaging information
 	"
 
-	packageConvention := aString
+	aStringOrNil
+		ifNil: [ 
+			packageConvention := nil.
+			^ self ].
+	(#('RowanHybrid' 'Monticello' 'Rowan') includes: aStringOrNil)
+		ifFalse: [ 
+			self
+				error:
+					'project specification packageConventions field is ' , aStringOrNil printString
+						, ' legal values are: nil, ''RowanHybrid'',  ''Monticello'', or ''Rowan''' ].
+
+	packageConvention := aStringOrNil
 ]
 
 { #category : 'accessing' }
@@ -221,17 +232,6 @@ RwProjectSpecificationV2 >> projectName: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecificationV2 >> projectsPath [
-
-	^ projectsPath
-]
-
-{ #category : 'accessing' }
-RwProjectSpecificationV2 >> projectsPath: aString [
-	projectsPath := aString
-]
-
-{ #category : 'accessing' }
 RwProjectSpecificationV2 >> projectSpecPath [
 
 	^ projectSpecPath
@@ -255,6 +255,17 @@ RwProjectSpecificationV2 >> projectVersion: aStringOrVersion [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecificationV2 >> projectsPath [
+
+	^ projectsPath
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> projectsPath: aString [
+	projectsPath := aString
+]
+
+{ #category : 'accessing' }
 RwProjectSpecificationV2 >> repoType [
 	^ repoType ifNil: [ repoType := #disk ]
 ]
@@ -264,7 +275,11 @@ RwProjectSpecificationV2 >> repoType: aSymbol [
 	"#disk, #git or #none"
 
 	(#(#'disk' #'git' #'none') includes: aSymbol asSymbol)
-		ifFalse: [ self error: 'Unknown repo type ' , aSymbol asSymbol printString ].
+		ifFalse: [ 
+			self
+				error:
+					'Unknown repo type ' , aSymbol asSymbol printString
+						, 'expecting ''disk'', ''git'', or ''none''' ].
 	^ repoType := aSymbol asSymbol
 ]
 

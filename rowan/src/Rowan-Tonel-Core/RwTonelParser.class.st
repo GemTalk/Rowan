@@ -172,10 +172,10 @@ RwTonelParser >> checkTonelClassMethodOrder: aBoolean [
 		ifTrue: [ 
 			self
 				dynamicInstVarAt: #'checkTonelInstanceSelectors'
-				put: (SortedCollection sortBlock: [ :a :b | a _unicodeLessThan: b ]).
+				put: (SortedCollection sortBlock: [ :a :b | (a codePointCompareTo: b ) < 1]).
 			self
 				dynamicInstVarAt: #'checkTonelClassSelectors'
-				put: (SortedCollection sortBlock: [ :a :b | a _unicodeLessThan: b ]) ]
+				put: (SortedCollection sortBlock: [ :a :b | (a codePointCompareTo: b) < 1 ]) ]
 ]
 
 { #category : 'private' }

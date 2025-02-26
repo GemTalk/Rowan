@@ -2,10 +2,22 @@ Class {
 	#name : 'RwProjectSpecificationV3',
 	#superclass : 'RwProjectSpecificationV2',
 	#instVars : [
-		'projectVersion'
+		'projectVersion',
+		'methodSortOrder'
 	],
 	#category : 'Rowan-SpecificationsV2'
 }
+
+{ #category : 'ston' }
+RwProjectSpecificationV3 class >> fromSton: stonReader [
+	"Create a new instance and delegate decoding to instance side.
+	Override only when new instance should be created directly (see implementors). "
+	
+	^ self basicNew
+		initializeForSton;
+		fromSton: stonReader;
+		yourself
+]
 
 { #category : 'comparing' }
 RwProjectSpecificationV3 >> = anObject [
@@ -38,12 +50,41 @@ RwProjectSpecificationV3 >> initialize [
 	packagesPath := 'src'.
 	projectVersion := '1.0.0'.
 	packageConvention := 'RowanHybrid'.
-	packageFormat := 'tonel'
+	packageFormat := 'tonel'.
+	methodSortOrder := 'codePoint' "when creating a new project from scratch `codePoint` is default (see initializeForSton)"
+]
+
+{ #category : 'initialization' }
+RwProjectSpecificationV3 >> initializeForSton [
+	"default value for methodSortOrder depends upon whether or not `methodSortOrder` is explicitly specified or not"
+
+	self initialize.
+	methodSortOrder := 'unicode'	"when loading from STON and methodSortOrder is not explicitly set in ston file, `unicode` is default (""https://github.com/GemTalk/Rowan/issues/953"")"
 ]
 
 { #category : 'ston' }
 RwProjectSpecificationV3 >> instVarNamesInOrderForSton [
-	^ #(#'specName' #'projectName' #'projectVersion' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'comment' #'repoType' #'loadedCommitId')
+	^ #(#'specName' #'projectName' #'projectVersion' #'projectSpecPath' #'componentsPath' #'packagesPath' #'projectsPath' #'specsPath' #'packageFormat' #'packageConvention' #'methodSortOrder' #'comment' #'repoType' #'loadedCommitId')
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV3 >> methodSortOrder [
+	^ methodSortOrder
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV3 >> methodSortOrder: aStringOrNil [
+	aStringOrNil
+		ifNil: [ 
+			methodSortOrder := nil.
+			^ self ].
+	(#('codePoint' 'unicode') includes: aStringOrNil)
+		ifFalse: [ 
+			self
+				error:
+					'project specification sortOrder field is ' , aStringOrNil printString
+						, ' legal values are: nil, ''codePoint'', or ''unicode''' ].
+	methodSortOrder := aStringOrNil
 ]
 
 { #category : 'accessing' }

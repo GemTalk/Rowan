@@ -47,7 +47,7 @@ RwModificationWriterVisitor >> _createFileNameMapForClassesOrPackages: aClassOrP
 			put: def name ]
 		ifFalse: [ 
 		  "tack on postfix to guarantee  file names are unique on case insensitive file systems"
-		  sortedCol := col sort: [ :a :b | a asString _unicodeLessThan: b asString ].
+		  sortedCol := col sort: [ :a :b | (a asString codePointCompareTo: b asString) < 1 ].
 		  (1 to: sortedCol size) do: [ :index | 
 			| def filename |
 			def := sortedCol at: index.
@@ -202,13 +202,6 @@ RwModificationWriterVisitor >> visit: aPackageSetModification [
 ]
 
 { #category : 'visiting' }
-RwModificationWriterVisitor >> visitClassesModification: aClassesModification [
-
-	aClassesModification elementsModified
-		do: [:each | each acceptVisitor: self]
-]
-
-{ #category : 'visiting' }
 RwModificationWriterVisitor >> visitClassExtensionModification: aClassExtensionModification [
 
 	aClassExtensionModification isAddition
@@ -247,6 +240,13 @@ RwModificationWriterVisitor >> visitClassModification: aClassModification [
 ]
 
 { #category : 'visiting' }
+RwModificationWriterVisitor >> visitClassesModification: aClassesModification [
+
+	aClassesModification elementsModified
+		do: [:each | each acceptVisitor: self]
+]
+
+{ #category : 'visiting' }
 RwModificationWriterVisitor >> visitPackageModification: aPackageModification [
 
 	aPackageModification isAddition
@@ -263,13 +263,6 @@ RwModificationWriterVisitor >> visitPackagesModification: aPackagesModification 
 ]
 
 { #category : 'visiting' }
-RwModificationWriterVisitor >> visitProjecteSetModification: aProjectSetModification [
-
-	aProjectSetModification elementsModified
-		do: [ :each | each acceptVisitor: self ]
-]
-
-{ #category : 'visiting' }
 RwModificationWriterVisitor >> visitProjectModification: aProjectModification [
 
 	aProjectModification isAddition
@@ -277,6 +270,13 @@ RwModificationWriterVisitor >> visitProjectModification: aProjectModification [
 	aProjectModification isDeletion
 		ifTrue: [ ^ self deletedProject: aProjectModification ].
 	^ self changedProject: aProjectModification
+]
+
+{ #category : 'visiting' }
+RwModificationWriterVisitor >> visitProjecteSetModification: aProjectSetModification [
+
+	aProjectSetModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
 ]
 
 { #category : 'visiting' }

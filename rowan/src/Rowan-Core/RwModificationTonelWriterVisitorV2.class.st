@@ -235,7 +235,7 @@ RwModificationTonelWriterVisitorV2 >> _writeClassExtension: aClassExtension on: 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _writeClassSideMethodDefinitions: aClassDefinition on: aStream [
 	((aClassDefinition classMethodDefinitions values )
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+		sortWithBlock: [ :a :b | (a selector codePointCompareTo:  b selector) < 1 ])
 		do: [ :each | 
 			self _writeMethodDefinition: each classDefinition: aClassDefinition isMeta: true on: aStream ]
 ]
@@ -243,7 +243,7 @@ RwModificationTonelWriterVisitorV2 >> _writeClassSideMethodDefinitions: aClassDe
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _writeInstanceSideMethodDefinitions: aClassDefinition on: aStream [
 	((aClassDefinition instanceMethodDefinitions values )
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+		sortWithBlock: [ :a :b | (a selector codePointCompareTo:  b selector) < 1 ])
 		do: [ :each | 
 			self _writeMethodDefinition: each classDefinition: aClassDefinition isMeta: false on: aStream ]
 ]
