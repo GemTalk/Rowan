@@ -1,3 +1,10 @@
+"
+RwProjectSpecificationV2 is a project specification that is use by Rowan V2 and Rowan V3 to specify project-specific attributes for Rowan.
+
+Rowan 3 reads and writes projects that use this class.
+
+methodSortOrder is `unicode`
+"
 Class {
 	#name : 'RwProjectSpecificationV2',
 	#superclass : 'RwSpecification',
@@ -150,6 +157,13 @@ RwProjectSpecificationV2 >> loadedCommitId [
 { #category : 'accessing' }
 RwProjectSpecificationV2 >> loadedCommitId: aCommitId [
 	loadedCommitId := aCommitId
+]
+
+{ #category : 'accessing' }
+RwProjectSpecificationV2 >> methodSortOrder [
+	"methods in tonel projects will be sorted in unicode sort order"
+
+	^ 'unicode'
 ]
 
 { #category : 'accessing' }

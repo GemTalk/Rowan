@@ -1,3 +1,8 @@
+"
+RwProjectSpecificationV3 is a project specification that is use by Rowan V3 to specify project-specific attributes for Rowan.
+
+Rowan versions 3.0.0 through 3.3.0 use this class.  Methods in tonel packages are sorted using unicode sort order
+"
 Class {
 	#name : 'RwProjectSpecificationV3',
 	#superclass : 'RwProjectSpecificationV2',

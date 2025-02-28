@@ -18,9 +18,23 @@ RwAbstractResolvedObjectV2 class >> new [
 
 { #category : 'instance creation' }
 RwAbstractResolvedObjectV2 class >> newV2 [
-	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+	"Create a new project that uses project spec and component classes that are default  for Rowan v2; read and written by Rowan v3"
 
 	^ self basicNew initializeV2
+]
+
+{ #category : 'instance creation' }
+RwAbstractResolvedObjectV2 class >> newV3 [
+	"Create a new project that uses project spec and component classes that default for  Rowan v3; read and written by Rowan v4"
+
+	^ self basicNew initializeV3
+]
+
+{ #category : 'instance creation' }
+RwAbstractResolvedObjectV2 class >> newV4 [
+	"Create a new project that uses project spec and component classes that are default for Rowan v4"
+
+	^ self basicNew initializeV4
 ]
 
 { #category : 'private' }
@@ -159,15 +173,30 @@ RwAbstractResolvedObjectV2 >> groupNames: anArray [
 RwAbstractResolvedObjectV2 >> initialize [
 	"Create a new project that uses Rowan v3 project spec and component classes"
 
+	self initializeV3
+]
+
+{ #category : 'initialization' }
+RwAbstractResolvedObjectV2 >> initializeV2 [
+	"Create a new project that uses project spec and component classes that are default  for Rowan v2; read and written by Rowan v3"
+
+	projectSpecification := RwProjectSpecificationV2 new.
+	loadSpecification := RwLoadSpecificationV2 new.
+]
+
+{ #category : 'initialization' }
+RwAbstractResolvedObjectV2 >> initializeV3 [
+	"Create a new project that uses Rowan v3 project spec and component classes default for  Rowan v3; read and written by Rowan v4"
+
 	projectSpecification := RwProjectSpecificationV3 new.
 	loadSpecification := RwLoadSpecificationV2 new.
 ]
 
 { #category : 'initialization' }
-RwAbstractResolvedObjectV2 >> initializeV2 [
-	"Create a new project that uses project spec and component classes that are compatible with Rowan v2"
+RwAbstractResolvedObjectV2 >> initializeV4 [
+	"Create a new project that uses Rowan v3 project spec and component classes  default for  Rowan v4; read and written by Rowan v3"
 
-	projectSpecification := RwProjectSpecificationV2 new.
+	projectSpecification := RwProjectSpecificationV4 new.
 	loadSpecification := RwLoadSpecificationV2 new.
 ]
 
