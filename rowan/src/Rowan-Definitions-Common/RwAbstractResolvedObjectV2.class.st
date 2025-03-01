@@ -24,13 +24,6 @@ RwAbstractResolvedObjectV2 class >> newV2 [
 ]
 
 { #category : 'instance creation' }
-RwAbstractResolvedObjectV2 class >> newV3 [
-	"Create a new project that uses project spec and component classes that default for  Rowan v3; read and written by Rowan v4"
-
-	^ self basicNew initializeV3
-]
-
-{ #category : 'instance creation' }
 RwAbstractResolvedObjectV2 class >> newV4 [
 	"Create a new project that uses project spec and component classes that are default for Rowan v4"
 
@@ -196,6 +189,7 @@ RwAbstractResolvedObjectV2 >> initializeV3 [
 RwAbstractResolvedObjectV2 >> initializeV4 [
 	"Create a new project that uses Rowan v3 project spec and component classes  default for  Rowan v4; read and written by Rowan v3"
 
+	self initialize.
 	projectSpecification := RwProjectSpecificationV4 new.
 	loadSpecification := RwLoadSpecificationV2 new.
 ]

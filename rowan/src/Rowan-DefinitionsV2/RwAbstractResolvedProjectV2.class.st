@@ -194,6 +194,12 @@ RwAbstractResolvedProjectV2 >> customConditionalAttributes: anArray [
 ]
 
 { #category : 'accessing' }
+RwAbstractResolvedProjectV2 >> methodSortOrder [
+
+	^ projectSpecification methodSortOrder
+]
+
+{ #category : 'accessing' }
 RwAbstractResolvedProjectV2 >> packageConvention [
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name

@@ -1,0 +1,10 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'common/v3/Core',
+	#condition : 'v3',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan-CoreV4'
+	],
+	#comment : 'Organize all v3/v4 core classes under one component'
+}

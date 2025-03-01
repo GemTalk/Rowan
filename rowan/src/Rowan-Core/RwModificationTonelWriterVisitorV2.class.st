@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwModificationTonelWriterVisitorV2',
 	#superclass : 'RwModificationCypressFamilyWriterVisitorV2',
+	#instVars : [
+		'methodSortBlock'
+	],
 	#category : 'Rowan-Core'
 }
 
@@ -234,18 +237,26 @@ RwModificationTonelWriterVisitorV2 >> _writeClassExtension: aClassExtension on: 
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _writeClassSideMethodDefinitions: aClassDefinition on: aStream [
-	((aClassDefinition classMethodDefinitions values )
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+	(aClassDefinition classMethodDefinitions values
+		sortWithBlock: self methodSortBlock)
 		do: [ :each | 
-			self _writeMethodDefinition: each classDefinition: aClassDefinition isMeta: true on: aStream ]
+			self
+				_writeMethodDefinition: each
+				classDefinition: aClassDefinition
+				isMeta: true
+				on: aStream ]
 ]
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _writeInstanceSideMethodDefinitions: aClassDefinition on: aStream [
-	((aClassDefinition instanceMethodDefinitions values )
-		sortWithBlock: [ :a :b | a selector _unicodeLessThan: b selector ])
+	(aClassDefinition instanceMethodDefinitions values
+		sortWithBlock: self methodSortBlock)
 		do: [ :each | 
-			self _writeMethodDefinition: each classDefinition: aClassDefinition isMeta: false on: aStream ]
+			self
+				_writeMethodDefinition: each
+				classDefinition: aClassDefinition
+				isMeta: false
+				on: aStream ]
 ]
 
 { #category : 'class writing' }
@@ -327,6 +338,20 @@ RwModificationTonelWriterVisitorV2 >> deletedClassExtension: aClassExtensionModi
 	currentClassExtension := aClassExtensionModification before.
 
 	self _classExtensionSourceFile ensureDelete
+]
+
+{ #category : 'accessing' }
+RwModificationTonelWriterVisitorV2 >> methodSortBlock [
+	^ methodSortBlock
+		ifNil: [ 
+			methodSortBlock := currentProjectDefinition methodSortOrder = 'codePoint'
+				ifTrue: [ [ :a :b | (a selector codePointCompareTo: b selector) < 1 ] ]
+				ifFalse: [ [ :a :b | a selector _unicodeLessThan: b selector ] ] ]
+]
+
+{ #category : 'accessing' }
+RwModificationTonelWriterVisitorV2 >> methodSortBlock: object [
+	methodSortBlock := object
 ]
 
 { #category : 'class writing' }

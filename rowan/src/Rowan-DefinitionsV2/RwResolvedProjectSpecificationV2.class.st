@@ -20,6 +20,12 @@ RwResolvedProjectSpecificationV2 >> export [
 ]
 
 { #category : 'accessing' }
+RwResolvedProjectSpecificationV2 >> methodSortOrder [
+
+	^ projectSpecification methodSortOrder
+]
+
+{ #category : 'accessing' }
 RwResolvedProjectSpecificationV2 >> packageFormat: aString [
 	self _projectSpecification packageFormat: aString
 ]
