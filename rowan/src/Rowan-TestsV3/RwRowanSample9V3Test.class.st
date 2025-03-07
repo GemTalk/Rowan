@@ -3810,6 +3810,34 @@ RwRowanSample9V3Test >> testSpec_0085_trait_upgrade_simulation [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testSpec_0089 [
+	"spec_0089 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/953"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects  |
+	loadSpec := self _loadSpecNamed: 'spec_0089'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+
+"validate"
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testSwitchRepository_591 [
 	"https://github.com/GemTalk/Rowan/issues/591"
 

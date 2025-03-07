@@ -109,3 +109,8 @@ Class {
 RwTestProjectLibraryGeneratorV4 >> _createNewProject: aString [
 	^ Rowan newV4ProjectNamed: aString
 ]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV4 >> primaryProjectName [
+	^ 'RowanSample9V4'
+]

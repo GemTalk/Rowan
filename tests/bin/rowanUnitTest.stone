@@ -80,14 +80,16 @@ OPTIONS
   --skipTestRun              Load projects, but do not run tests.
   --testSegment=<segment-id>
                              Currently there are five test segments defined: base,
-                             sample9V2, sample9V3, generatorV2, and generatorV3. The 
-                             RwTestProjectLibraryGeneratorTest, 
-                             RwTestProjectLibraryGeneratorTestV3, RwRowanSample9V2Test, 
-                             and RwRowanSample9V3Test tests each take a significant 
-                             amount of time to run. By running the four segments in 
-                             parallel the overal elapsed time of the full test suite 
-                             is significantly reduced. With no testSegment specified 
-                             all 5 segments are run in sequence in the same gem.
+                             sample9V2, sample9V3, sample9V4, generatorV2, generatorV3, 
+                             and generatorV4. The RwTestProjectLibraryGeneratorTest, 
+                             RwTestProjectLibraryGeneratorTestV3, RwTestProjectLibraryGeneratorTestV4, 
+                             RwRowanSample9V2Test, RwRowanSample9V3Test, and 
+                             RwRowanSample9V4Test tests each take a significant 
+                             amount of time to run. By running the four segments
+                             in parallel the overal elapsed time of the full 
+                             test suite is significantly reduced. With no testSegment 
+                             specified all 7 segments are run in sequence in the 
+                             same gem.
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
 
@@ -101,6 +103,7 @@ EXAMPLES
   $basename --resultDir=segment1 --testSegment=base --expectedResults=expectedTestResults_base.json -- -L -I .topazini
   $basename --resultDir=segment2 --testSegment=sample9V2 --expectedResults=expectedTestResults_sample9V2.json -- -L -I .topazini
   $basename --resultDir=segment3 --testSegment=sample9V3 --expectedResults=expectedTestResults_sample9V3.json -- -L -I .topazini
+  $basename --resultDir=segment4 --testSegment=sample9V4 --expectedResults=expectedTestResults_sample9V4.json -- -L -I .topazini
 
 -----
 %
@@ -350,7 +353,7 @@ buildTestSuite: testSuiteName segment: segmentNameOrNil
 							ifTrue: [ 
 								self 
 									testSuiteForProject: projectName 
-									excludingClassesNamed: {'RwRowanSample9V2Test' . 'RwRowanSample9V3Test' . 'RwTestProjectLibraryGeneratorTest' . 'RwTestProjectLibraryGeneratorTestV3'} ]
+									excludingClassesNamed: {'RwRowanSample9V2Test' . 'RwRowanSample9V3Test' . 'RwRowanSample9V4Test' . 'RwTestProjectLibraryGeneratorTest' . 'RwTestProjectLibraryGeneratorTestV3' . 'RwTestProjectLibraryGeneratorTestV4'} ]
 							ifFalse: [ (Rowan projectNamed: projectName) testSuite ].
 						systemTestSuite addTests: testSuite tests ]
 					ifFalse: [
@@ -360,13 +363,20 @@ buildTestSuite: testSuiteName segment: segmentNameOrNil
 									ifTrue: [ systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V2Test') suite tests ]
 									ifFalse: [ 
 										segmentName = 'sample9V3'
-											ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V3Test') suite tests  ] 
-											ifFalse: [
-												 segmentName = 'generatorV2'
-													ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTest') suite tests  ] 
-													ifFalse: [ segmentName = 'generatorV3'
-														ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTestV3') suite tests  ] 
-														ifFalse: [self error: 'Unknown test segment ', segmentName printString ] ] ] ] ] ] ] ].
+											ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V3Test') suite tests  ]
+                      ifFalse: [
+												segmentName = 'sample9V4'
+													ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwRowanSample9V4Test') suite tests  ] 
+													ifFalse: [
+												 		segmentName = 'generatorV2'
+															ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTest') suite tests  ] 
+															ifFalse: [
+																segmentName = 'generatorV3'
+																	ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTestV3') suite tests  ]
+																	ifFalse: [
+																		segmentName = 'generatorV4'
+																			ifTrue: [  systemTestSuite addTests: (Rowan globalNamed: 'RwTestProjectLibraryGeneratorTestV4') suite tests  ] 
+																			ifFalse: [ self error: 'Unknown test segment ', segmentName printString ] ] ] ] ] ] ] ] ] ].
 	^ systemTestSuite
 %
 method
