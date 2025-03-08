@@ -20,6 +20,13 @@ RwRowanSample9V3Test class >> _rowanSample9ProjectName [
 ]
 
 { #category : 'private' }
+RwRowanSample9V3Test >> _rowanSampleProjectBaseName [
+	"project base name"
+	
+	^ 'RowanSample9V3'
+]
+
+{ #category : 'private' }
 RwRowanSample9V3Test >> _spec_0079Name [
 	"as part of the work on https://github.com/GemTalk/Rowan/issues/920; changes to filetree writer have been made to improve Rowan's 
 		fidelity to the GsDevKit filetree format. These changes have been recently introduced in Rowan 3.  We have to leave spec_0079 for older 
@@ -1252,7 +1259,7 @@ systemTraits installedTraits |
 	self assert: (audit := project audit) isEmpty.
 	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
 	(ClassOrganizer new traits) includes: trait1.
-	class1 :=  Rowan globalNamed: 'RowanSample9V3Class1'.
+	class1 :=  Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
 	self assert: class1 new iv1 equals: nil.
 	self assert: class1 civ1 equals: nil.
 
@@ -2752,11 +2759,11 @@ RwRowanSample9V3Test >> testSpec_0084 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	(ClassOrganizer new traits) includes: trait1.
-	self assert: trait1 category equals:  'RowanSample9V3-Traits'.
+	self assert: trait1 category equals:  self _rowanSampleProjectBaseName, '-Traits'.
 	
-	class1 :=  Rowan globalNamed: 'RowanSample9V3Class1'.
+	class1 :=  Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
 	self assert: class1 new iv1 equals: nil.
 	self assert: (class1 categoryOfSelector: #iv1) equals: #'accessing'.
 	self assert: (class1 categoryOfSelector: #cv1) equals: #'accessing'.
@@ -2821,8 +2828,8 @@ RwRowanSample9V3Test >> testSpec_0084 [
 
 	self assert: (audit := project audit) isEmpty not.
 	self assert: audit size equals: 1.
-	self assert: ((audit at: 'RowanSample9V3-Traits') at: trait1 name) size equals: 1.
-	self assert: (((audit at: 'RowanSample9V3-Traits') at: trait1 name) at: 1) reason 
+	self assert: ((audit at: (self _rowanSampleProjectBaseName, '-Traits')) at: trait1 name) size equals: 1.
+	self assert: (((audit at: (self _rowanSampleProjectBaseName, '-Traits')) at: trait1 name) at: 1) reason 
 			equals: #missingGemStoneTraitForLoadedTrait
 ]
 
@@ -2837,8 +2844,8 @@ RwRowanSample9V3Test >> testSpec_0084_forceDelete [
 	projectName := loadSpec projectName.
 	projectNames := {projectName }.
 
-	traitName := 'RowanSample9V3Trait1'.
-	className := 'RowanSample9V3Class1'.
+	traitName := self _rowanSampleProjectBaseName, 'Trait1'.
+	className := self _rowanSampleProjectBaseName, 'Class1'.
 
 	projectNames do: [:pn | 
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
@@ -3346,10 +3353,10 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_05 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	class1 := Rowan globalNamed: 'RowanSample9V3Class1'.
+	class1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
 	self assert: class1 classHistory size equals: 1.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
 
@@ -3367,10 +3374,10 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_05 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	class1 := Rowan globalNamed: 'RowanSample9V3Class1'.
+	class1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
 	self assert: class1 classHistory size equals: 2.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
 ]
@@ -3405,10 +3412,10 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_06_removeTrait [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	class1 := Rowan globalNamed: 'RowanSample9V3Class1'.
+	class1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
 	self assert: class1 classHistory size equals: 1.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
 
@@ -3426,7 +3433,7 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_06_removeTrait [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: trait1 isNil description: 'trait1 is unexpectedly present'.
 	self assert: class1 traits asArray equals: #().
 	self assert: class1 classTraits asArray equals: #().
@@ -3772,8 +3779,8 @@ RwRowanSample9V3Test >> testSpec_0085_trait_upgrade_simulation [
 	audit isEmpty
 		ifFalse: [ audit halt ].
 
-	class := Rowan globalNamed: 'RowanSample9V3Class1'.
-	trait := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	class := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
+	trait := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 
 	trait removeAllMethods.
 	trait classTrait removeAllMethods.

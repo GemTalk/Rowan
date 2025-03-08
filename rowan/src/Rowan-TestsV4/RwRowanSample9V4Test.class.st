@@ -19,6 +19,13 @@ RwRowanSample9V4Test class >> _rowanSample9ProjectName [
 	^ 'RowanSample9V4'
 ]
 
+{ #category : 'private' }
+RwRowanSample9V4Test >> _rowanSampleProjectBaseName [
+	"project base name"
+	
+	^ 'RowanSample9V4'
+]
+
 { #category : 'tests' }
 RwRowanSample9V4Test >> testIssue705 [
 	"load Bridge, Child, Parent, Bridge, Parent, Child, Bridge sequentially"
