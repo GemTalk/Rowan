@@ -17,6 +17,8 @@ RwRowanSample12TestProjectLibraryGenerator new
 	genSpec_0004: commitComment;
 	genSpec_0005: commitComment;
 	genSpec_0006: commitComment;
+	genSpec_0007: commitComment;
+	genSpec_0008: commitComment;
 	yourself
 "
 Class {
@@ -62,7 +64,7 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedP
 	componentName := 'Core'.
 	packageName := projectName , '-' , componentName.
 	className := projectName , 'ConcreteClass1'.
-	requiredProjectName := 'RowanSample9V3'.
+	requiredProjectName := 'RowanSample9V4'.
 	requiredComponentName := 'Parent'.
 	requiredSpecName := requiredProjectName , '_' , requiredComponentName.
 	requiredRevision := 'spec_0069'.

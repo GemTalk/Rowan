@@ -106,8 +106,232 @@ Class {
 }
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0069_Bridge: resolvedProject [
+	"Start with spec_0000 (RowanSample9V4) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
+
+The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:spec_0007 requires RowanSample9V4:spec_0069 and has a RowanSample12ConcreteClass1 class that suclasses AbstractRowanSample9ParentClass1. 
+
+The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
+
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0007 that requires RowanSample9V3:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
+
+Each of the components in RowanSample9V3:spec_0069 has a corresponding test case that confirms the class structure."
+
+	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec1 requiredRevision1 requiredProjectName1 requiredLoadSpec2 requiredRevision2 requiredProjectName2 requiredSpecName1 requiredSpecName2 |
+	componentName1 := 'Bridge'.
+
+	requiredProjectName1 := 'RowanSample11'.
+	requiredSpecName1 := requiredProjectName1 , '_' , componentName1.
+	requiredRevision1 := 'spec_0005'.
+	requiredProjectName2 := 'RowanSample12'.
+	requiredSpecName2 := requiredProjectName2 , '_' , componentName1.
+	requiredRevision2 := 'spec_0007'.
+
+	packageName1 := projectName , '-' , componentName1.
+
+	className1 := 'Abstract' , projectName , componentName1 , 'Class1'.
+	superclassName1 := 'AbstractRowanSample11', componentName1, 'Class1'.
+
+	resolvedProject specName: componentName1.
+
+	(resolvedProject addLoadComponentNamed: componentName1 comment: '')
+		addProjectNamed: requiredSpecName1;
+		addProjectNamed: requiredSpecName2.
+	resolvedProject
+		removeComponentNames:
+			{'Child'.
+			'Parent'}.	"this is dependent upon the order that this method is called"
+	resolvedProject addPackageNamed: packageName1 toComponentNamed: componentName1.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: superclassName1
+		category: packageName1)
+		addInstanceMethod: 'foo ^ 1' protocol: 'accessing';
+		yourself.
+
+	componentName2 := 'tests/' , componentName1.
+	packageName2 := projectName , '-' , componentName1 , '-Tests'.
+	className2 := projectName , 'Tests'.
+	superclassName2 := 'TestCase'.
+
+	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
+	resolvedProject
+		addComponentNamed: componentName2
+		toComponentNamed: componentName1.
+	resolvedProject addPackageNamed: packageName2 toComponentNamed: componentName2.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: superclassName2
+		category: packageName2)
+		addInstanceMethod: 'testClass1 self assert: RowanSample12ConcreteClass1 new foo = 1'
+			protocol: 'tests';
+		yourself.
+
+	requiredLoadSpec1 := RwLoadSpecificationV2 new
+		specName: requiredSpecName1;
+		projectName: requiredProjectName1;
+		revision: requiredRevision1;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName1 , '.git';
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	requiredLoadSpec1 exportTo: resolvedProject projectsRoot.
+
+	requiredLoadSpec2 := RwLoadSpecificationV2 new
+		specName: requiredSpecName2;
+		projectName: requiredProjectName2;
+		revision: requiredRevision2;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName2 , '.git';
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	requiredLoadSpec2 exportTo: resolvedProject projectsRoot
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0069_Parent: resolvedProject [
+	"Start with spec_0000 (RowanSample9) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
+
+The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:spec_0007 requires RowanSample9:spec_0069 and has a RowanSample12ConcreteClass1 class that suclasses AbstractRowanSample9ParentClass1. 
+
+The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
+
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0007. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0007 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
+
+Each of the components in RowanSample9:spec_0069 has a corresponding test case that confirms the class structure."
+
+	| componentName1 superclassName1 packageName1 className1 componentName2 superclassName2 packageName2 className2 requiredLoadSpec requiredRevision requiredProjectName requiredSpecName |
+
+	componentName1 := 'Parent'.
+
+	requiredProjectName := 'RowanSample12'.
+	requiredSpecName := requiredProjectName, '_', componentName1.
+	requiredRevision := 'spec_0008'.
+
+	packageName1 := projectName , '-' , componentName1.
+
+	className1 := 'Abstract' , projectName , componentName1, 'Class1'.
+	superclassName1 := 'Object'.
+
+	resolvedProject specName: componentName1.
+
+	(resolvedProject addLoadComponentNamed: componentName1 comment: '')
+		addProjectNamed: requiredSpecName.
+	resolvedProject
+		removeComponentNames:
+			{'Child'.
+			'Bridge'}.	"make sure that only Parent component is listed in component names"
+	resolvedProject addPackageNamed: packageName1 toComponentNamed: componentName1.
+	((resolvedProject packageNamed: packageName1)
+		addClassNamed: className1
+		super: superclassName1
+		category: packageName1)
+		addInstanceMethod: 'foo self subclassResponsibility: #foo'
+			protocol: 'accessing';
+		yourself.
+
+	componentName2 := 'tests/' , componentName1.
+	packageName2 := projectName , '-' , componentName1 , '-Tests'.
+	className2 := projectName , 'Tests'.
+	superclassName2 := 'TestCase'.
+
+	resolvedProject addSubcomponentNamed: componentName2 condition: 'tests'.
+	resolvedProject
+		addComponentNamed: componentName2
+		toComponentNamed: componentName1.
+	resolvedProject addPackageNamed: packageName2 toComponentNamed: componentName2.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: className2
+		super: superclassName2
+		category: packageName2)
+		addInstanceMethod:
+				'testClass1 self assert: RowanSample12ConcreteClass1 new foo = 1'
+			protocol: 'tests';
+		yourself.
+
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredSpecName;
+		projectName: requiredProjectName;
+		revision: requiredRevision;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+		componentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName1;
+		yourself.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot.
+
+	^ resolvedProject loadSpecification copy "canonical load spec for spec_0069"
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV4 >> _createNewProject: aString [
 	^ Rowan newV4ProjectNamed: aString
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV4 >> genSpec_0069: commitMessage [
+	"Start with spec_0000 (RowanSample9) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
+
+The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:spec_0007 requires RowanSample9V4:spec_0069 and has a RowanSample12ConcreteClass1 class that suclasses AbstractRowanSample9ParentClass1. 
+
+The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
+
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0007 that requires RowanSample9V4:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
+
+Each of the components in RowanSample9V4:spec_0069 has a corresponding test case that confirms the class structure."
+
+	"https://github.com/GemTalk/Rowan/issues/705"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title canonicalLoadSpec |
+	postfix := '0069'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0000'.
+	title := 'Start with spec_0000 (RowanSample9) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
+
+The Parent package has an AbstractRowanSample9ParentClass1 class. RowanSample12:spec_0007 requires RowanSample9V4:spec_0069 and has a RowanSample12ConcreteClass1 class that suclasses AbstractRowanSample9ParentClass1. 
+
+The Child package has a concrete class that subclasses RowanSample10Class1, making RowanSample10:spec0001 a required project. 
+
+The Bridge package has an AbstractRowanSample9BridgeClass1 class that is a subclass of AbstractRowanSample11ParentClass1 from RowanSample11:spec_0005. The class AbstractRowanSample9BridgeClass1 has subclass RowanSample12ConcreteClass1 from the project RowanSample12:spec_0007 that requires RowanSample9:spec_0069. AbstractRowanSample9BridgeClass1 has a method #foo that is implemented with subclassResponsibility and #foo is defined in RowanSample12ConcreteClass1.
+
+Each of the components in RowanSample9V4:spec_0069 has a corresponding test case that confirms the class structure.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 69
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(705);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		packageConvention: 'Rowan';
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | canonicalLoadSpec := self _addDefinitionsFor_0069: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: canonicalLoadSpec
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
 ]
 
 { #category : 'private' }
