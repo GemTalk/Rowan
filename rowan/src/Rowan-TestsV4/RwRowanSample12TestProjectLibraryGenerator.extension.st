@@ -174,7 +174,7 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 	resolvedRepository := self
 		_genSpecFor: specName
 		definedProject: definedProject
-		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject ].
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0005: resolvedProject requiredProjectName: 'RowanSample9V4' ].
 
 	self
 		_finishCommitAndPush: specName

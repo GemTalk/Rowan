@@ -58,13 +58,19 @@ RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0003: resolvedP
 
 { #category : 'private' }
 RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject [
+	^ self
+		_addDefinitionsFor_0005: resolvedProject
+		requiredProjectName: 'RowanSample9V3'
+]
+
+{ #category : 'private' }
+RwRowanSample12TestProjectLibraryGenerator >> _addDefinitionsFor_0005: resolvedProject requiredProjectName: requiredProjectName [
 	"Start with spec_0000. The class RowanSample12ConcreteClass1 subclasses AbstractRowanSample9ParentClass1 in RowanSample9:spec_0069, component Parent. RowanSample9. RowanSample9:spec_0069 componant Parent has the test. This spec requires RowanSample9:spec_0069."
 
-	| className packageName requiredLoadSpec requiredSpecName requiredProjectName componentName requiredRevision requiredComponentName |
+	| className packageName requiredLoadSpec requiredSpecName componentName requiredRevision requiredComponentName |
 	componentName := 'Core'.
 	packageName := projectName , '-' , componentName.
 	className := projectName , 'ConcreteClass1'.
-	requiredProjectName := 'RowanSample9V4'.
 	requiredComponentName := 'Parent'.
 	requiredSpecName := requiredProjectName , '_' , requiredComponentName.
 	requiredRevision := 'spec_0069'.
