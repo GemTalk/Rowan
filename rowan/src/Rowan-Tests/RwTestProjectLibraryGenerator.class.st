@@ -3415,27 +3415,27 @@ RwTestProjectLibraryGenerator >> _addDefinitionsFor_0089: resolvedProject [
 	className2 := projectName , 'TestCase'.
 
 	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
-		addInstanceMethod: 'A_bc123      ^self' protocol: 'accessing';
+		addInstanceMethod: 'A_bc123      ^true' protocol: 'accessing';
 		addInstanceMethod: '_123Abc 
-	^self' protocol: 'accessing';
+	^true' protocol: 'accessing';
 		addClassMethod: '_123abc      
-	^self' protocol: 'accessing';
-		addClassMethod: '_ABC123 ^self' protocol: 'accessing';
-		addClassMethod: '_abc123 ^self' protocol: 'accessing';
-		addClassMethod: 'a_bc123 ^self' protocol: 'accessing';
+	^true' protocol: 'accessing';
+		addClassMethod: '_ABC123 ^true' protocol: 'accessing';
+		addClassMethod: '_abc123 ^true' protocol: 'accessing';
+		addClassMethod: 'a_bc123 ^true' protocol: 'accessing';
 		yourself.
 	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
 		addInstanceMethod: 'test3  self assert: ' , className1 , ' new A_bc123'
 			protocol: 'tests';
 		addInstanceMethod: 'test4  self assert: ' , className1 , ' new _123Abc'
 			protocol: 'tests';
-		addInstanceMethod: 'test5  self assert: ' , className1 , ' new _123abc'
+		addInstanceMethod: 'test5  self assert: ' , className1 , ' _123abc'
 			protocol: 'tests';
-		addInstanceMethod: 'test6  self assert: ' , className1 , ' new _ABC123'
+		addInstanceMethod: 'test6  self assert: ' , className1 , ' _ABC123'
 			protocol: 'tests';
-		addInstanceMethod: 'test7  self assert: ' , className1 , ' new _abc123'
+		addInstanceMethod: 'test7  self assert: ' , className1 , ' _abc123'
 			protocol: 'tests';
-		addInstanceMethod: 'test8  self assert: ' , className1 , ' new a_bc123'
+		addInstanceMethod: 'test8  self assert: ' , className1 , ' a_bc123'
 			protocol: 'tests';
 		yourself.
 	^ resolvedProject

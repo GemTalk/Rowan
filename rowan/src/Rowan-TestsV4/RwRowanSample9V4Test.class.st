@@ -19,6 +19,13 @@ RwRowanSample9V4Test class >> _rowanSample9ProjectName [
 	^ 'RowanSample9V4'
 ]
 
+{ #category : 'testing' }
+RwRowanSample9V4Test class >> shouldInheritSelectors [
+  "Me and my subclasses inherit selectors"
+
+  ^ true
+]
+
 { #category : 'private' }
 RwRowanSample9V4Test >> _rowanSampleProjectBaseName [
 	"project base name"
