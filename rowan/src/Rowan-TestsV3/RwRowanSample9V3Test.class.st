@@ -2908,7 +2908,7 @@ RwRowanSample9V3Test >> testSpec_0085_01 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'
@@ -2944,7 +2944,7 @@ RwRowanSample9V3Test >> testSpec_0085_01_to_02 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -2992,7 +2992,7 @@ RwRowanSample9V3Test >> testSpec_0085_01_to_03 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -3040,7 +3040,7 @@ RwRowanSample9V3Test >> testSpec_0085_02 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 ]
 
@@ -3074,7 +3074,7 @@ RwRowanSample9V3Test >> testSpec_0085_02_to_01 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -3122,7 +3122,7 @@ RwRowanSample9V3Test >> testSpec_0085_02_to_03 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -3170,7 +3170,7 @@ RwRowanSample9V3Test >> testSpec_0085_03 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 ]
 
@@ -3204,7 +3204,7 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_01 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -3252,7 +3252,7 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_02 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 "resolve project"
@@ -3300,7 +3300,7 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_04 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
 
@@ -3318,7 +3318,7 @@ RwRowanSample9V3Test >> testSpec_0085_03_to_04 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_2'
 ]
@@ -3469,7 +3469,7 @@ RwRowanSample9V3Test >> testSpec_0085_04 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_2'
 ]
@@ -3504,7 +3504,7 @@ RwRowanSample9V3Test >> testSpec_0085_05 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'
@@ -3598,7 +3598,7 @@ RwRowanSample9V3Test >> testSpec_0085_export [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'.
@@ -3639,13 +3639,13 @@ RwRowanSample9V3Test >> testSpec_0085_move_trait_to_package [
 		expectedProjectNames: projectNames.
 	packageName := projectName, '-Tr01'.
 	(Rowan image loadedPackageNamed: packageName) 
-		loadedTraitNamed: 'RowanSample9V3Trait1'
+		loadedTraitNamed: self _rowanSampleProjectBaseName, 'Trait1'
 		ifAbsent: [ self assert: false description: 'Loaded trait RowanSample9V3Trait1 not present'].
 
 "move a trait from Tr01 to C01"
 	definedProject := project defined.
 	traitDef := (definedProject packageNamed: projectName, '-Tr01') 
-		removeTraitNamed: 'RowanSample9V3Trait1'.
+		removeTraitNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	packageName := projectName, '-C01'.
 	traitDef packageName: packageName.
 	(definedProject packageNamed: packageName) addTraitDefinition: traitDef.
@@ -3693,15 +3693,15 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 		expectedProjectNames: projectNames.
 	packageName := projectName, '-Tr02'.
 	(Rowan image loadedPackageNamed: packageName) 
-		loadedTraitNamed: 'RowanSample9V3Trait1'
+		loadedTraitNamed: self _rowanSampleProjectBaseName, 'Trait1'
 		ifAbsent: [ self assert: false description: 'Loaded trait RowanSample9V3Trait1 not present'].
 
 "remove iv from trait and class"
 	definedProject := project defined.
 	classDef := (definedProject packageNamed: projectName, '-C02') 
-		classDefinitionNamed:'RowanSample9V3Class1'.
+		classDefinitionNamed:self _rowanSampleProjectBaseName, 'Class1'.
 	traitDef := (definedProject packageNamed: projectName, '-Tr02') 
-		traitDefinitionNamed: 'RowanSample9V3Trait1'.
+		traitDefinitionNamed: self _rowanSampleProjectBaseName, 'Trait1'.
 	traitIvNames := traitDef instVarNames copy.
 	classIvNames := classDef instVarNames copy.
 	self assert: traitIvNames equals: classIvNames.
@@ -3713,10 +3713,10 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 	classDef  removeInstanceMethod: #'iv2'.
 	classDef instVarNames: traitIvNames.
 	testClassDef := (definedProject packageNamed: projectName, '-C-T02')
-		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
+		classExtensionDefinitionNamed:self _rowanSampleProjectBaseName, 'TestCase'.
 	testClassDef removeInstanceMethod: #'testIv2'.
 	testClassDef := (definedProject packageNamed: projectName, '-Tr-T02')
-		classExtensionDefinitionNamed:'RowanSample9V3TestCase'.
+		classExtensionDefinitionNamed:self _rowanSampleProjectBaseName, 'TestCase'.
 	testClassDef removeInstanceMethod: #'testIv2_t'.
 
 "load project"
@@ -3730,7 +3730,7 @@ RwRowanSample9V3Test >> testSpec_0085_trait_shape_change_01 [
 		expectedProjectNames: projectNames.
 	Rowan image 
 		loadedTraitMethod: #'iv1_t' 
-		inTraitNamed: 'RowanSample9V3Trait1' 
+		inTraitNamed: self _rowanSampleProjectBaseName, 'Trait1' 
 		isMeta: false 
 		ifFound: [:loadedTraitMethod | ]
 		ifAbsent: [self assert: false description: 'missing loaded trait method ''iv1''' ]
