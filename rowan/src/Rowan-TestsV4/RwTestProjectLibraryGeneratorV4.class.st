@@ -106,6 +106,13 @@ Class {
 }
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0068: resolvedProject [
+	"Start with spec_0067 (RowanSample9V4) and spec_0006 (RowanSample10V3, RowanSample11, RowanSample12); recursive required project chain; RowanSample9V4 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V4; class hierarchy runs RowanSample9V4Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V4Class1"
+
+	self _addDefinitionsFor_0068: resolvedProject revision: 'spec_0006'
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0069_Bridge: resolvedProject [
 	"Start with spec_0000 (RowanSample9V4) and add Parent, Child and Bridge top-level components with corresponding packages. The Bridge component is not expected to be loaded with the Parent component, because it has a required project conflict.
 

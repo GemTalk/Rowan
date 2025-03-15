@@ -212,6 +212,34 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0067: resolvedProject spec
 RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject [
 	"Start with spec_0067 (RowanSample9V3) and spec_0004 (RowanSample10V3, RowanSample11, RowanSample12); recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
 
+	self _addDefinitionsFor_0068: resolvedProject revision: 'spec_0004'
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject requiredProjectName: requiredProjectName revision: revision [
+	"Generate a project load specificaion for the given requiredProjectName and export the project load spec into the projects directory ofthe resolvedProject"
+
+	"only expected to be sent from the required projects as the name of the branch (revision) is specific to the external project)"
+
+	| requiredLoadSpec componentName |
+	resolvedProject projectsRoot ensureCreateDirectory.
+	componentName := 'Core'.
+	requiredLoadSpec := RwLoadSpecificationV2 new
+		specName: requiredProjectName;
+		projectName: requiredProjectName;
+		revision: revision;
+		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
+		componentNames: {componentName};
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		customConditionalAttributes: {'tests'};
+		yourself.
+	requiredLoadSpec exportTo: resolvedProject projectsRoot
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject revision: revision [
+	"add a required project load spec for RowanSample10V3 using the specified revision (spec_0004 or spec_0006); add a class (className) that will be subclassed in RowanSample10V3"
+
 	| className packageName requiredLoadSpec requiredProjectName componentName |
 	resolvedProject projectsRoot ensureCreateDirectory.
 	packageName := projectName , '-Core'.
@@ -222,7 +250,7 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject [
 	requiredLoadSpec := RwLoadSpecificationV2 new
 		specName: requiredProjectName;
 		projectName: requiredProjectName;
-		revision: 'spec_0004';
+		revision: revision;
 		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
 		componentNames: {componentName};
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
@@ -238,27 +266,6 @@ RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject [
 		comment: 'I am an example class')
 		addInstanceMethod: 'foo ^1' protocol: 'accessing';
 		yourself
-]
-
-{ #category : 'private' }
-RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0068: resolvedProject requiredProjectName: requiredProjectName [
-	"Start with spec_0003; part of recursive required project chain; RowanSample9V3 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V3; class hierarchy runs RowanSample9V3Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V3Class1"
-
-	"only expected to be sent from the required projects as the name of the branch is the only change (spec_0004)"
-
-	| requiredLoadSpec componentName |
-	resolvedProject projectsRoot ensureCreateDirectory.
-	componentName := 'Core'.
-	requiredLoadSpec := RwLoadSpecificationV2 new
-		specName: requiredProjectName;
-		projectName: requiredProjectName;
-		revision: 'spec_0004';
-		gitUrl: 'git@github.com:dalehenrich/' , requiredProjectName , '.git';
-		componentNames: {componentName};
-		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
-		customConditionalAttributes: {'tests'};
-		yourself.
-	requiredLoadSpec exportTo: resolvedProject projectsRoot
 ]
 
 { #category : 'private' }
