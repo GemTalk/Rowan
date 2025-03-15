@@ -1,11 +1,14 @@
 # Rowan
 
-Rowan is a new project/package manager for Smalltalk that supports FileTree and Tonel repositories.
+Rowan is a project/package manager for Smalltalk that supports FileTree and Tonel repositories.
 
-## Rowan Alpha release - masterV2.3
-With the release of [GemStone 3.6.4](https://gemtalksystems.com/products/gs64/versions36x/), an extent with Rowan pre-installed is included in the product tree ($GEMSTONE/bin/extent0.rowan.dbf).
+### Rowan and JadeiteForPharo are still under active development
 
-## Jadeite: IDE for Rowan
-The IDE for Rowan is [Jadeite Oscar-3.1.1-pre-release4](https://github.com/GemTalk/Jadeite/releases/tag/Oscar-3.1.1-pre-release4).
+## Rowan for internal GemStone version; branch masterV3.3
+This is a development branch for an as yet released GemStone version.
 
+## JadeiteForPharo: IDE for Rowan3
+The IDE for Rowan is [Jadeite For Pharo](https://github.com/GemTalk/JadeiteForPharo) .
+
+## QUESTIONS??
 Send mail to the [GemStone-Smalltalk mailing list](https://lists.gemtalksystems.com/mailman/listinfo/gemstone-smalltalk) if you have questions.
