@@ -12,6 +12,12 @@ If you are new to GemStone, then you might consider taking a look at [GsDevKit_s
 ## Rowan branch masterV3.4
 Development branch for internal development ... not net released.
 
+## GemStone version to Rowan branch map 
+
+| GemStone Version |  Rowan Branch  |
+| ---------------- | -------------- |
+|     `3.7.2`      |   `masterV3.2` |
+
 ## JadeiteForPharo: IDE for Rowan3
 The IDE for Rowan is [Jadeite For Pharo](https://github.com/GemTalk/JadeiteForPharo) .
 
