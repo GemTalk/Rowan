@@ -184,3 +184,59 @@ RwRowanSample12TestProjectLibraryGenerator >> genSpec_0008: commitMessage [
 		resolvedRepository: resolvedRepository
 		commitMessage: commitMessage
 ]
+
+{ #category : '*rowan-testsv4' }
+RwRowanSample12TestProjectLibraryGenerator >> genSpec_0009: commitMessage [
+	"Start with spec_0003; part of recursive required project chain; RowanSample9V4 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V4; class hierarchy runs RowanSample9V4Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V4Class1"
+
+	"https://github.com/GemTalk/Rowan/issues/701"
+	"https://github.com/GemTalk/Rowan/issues/861"
+	"https://github.com/GemTalk/Rowan/issues/953"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0009'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0003'.
+	title := 'Start with spec_0003; part of recursive required project chain; RowanSample9V4 requires RowanSample10V3; RowanSample10V3 requires RowanSample11; RowanSample11 requires RowanSample12; RowanSamplle12 requires RowanSample9V4; class hierarchy runs RowanSample9V4Class2->RowanSample12Class1>RowanSample11Class1>RowanSample10V3Class1>RowanSample9V4Class1'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 9
+		derivedFrom: derivedFrom
+		comment: 'recursive required project chain')
+		rowanIssues: #(701 861 953);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		packageConvention: 'Rowan';
+		comment: title;
+		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | 
+			self
+				_addDefinitionsFor_0067: resolvedProject
+				specName: 'spec_0068'
+				requiredProjectName: 'RowanSample9V4'
+				superClassBaseName: 'Class2' ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]

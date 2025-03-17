@@ -19,6 +19,7 @@ RwRowanSample12TestProjectLibraryGenerator new
 	genSpec_0006: commitComment;
 	genSpec_0007: commitComment;
 	genSpec_0008: commitComment;
+	genSpec_0009: commitComment;
 	yourself
 "
 Class {
