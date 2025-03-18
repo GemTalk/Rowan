@@ -10,7 +10,7 @@ If you are new to GemStone, then you might consider taking a look at [GsDevKit_s
 
 
 ## Rowan branch masterV3.4
-Development branch for internal development ... not net released.
+Development branch for internal development (3.7.4) ... not net released.
 
 ## GemStone version to Rowan branch map 
 
