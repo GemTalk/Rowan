@@ -811,7 +811,7 @@ RwPrjBrowserTool >> moveClassNamed: className toPackage: packageName [
 		then only unpackaged methods (class and instance side) are moved to the new package."
 
 	| class |
-	class := Rowan globalNamed: className.
+	class := Rowan globalNamed: className ifAbsent: [ self error: 'The class named ', className, ' cannot be moved, because it does not exist'].
 	(self _loadedClassNamed: className ifAbsent: [  ])
 		ifNil: [ 
 			| instanceSelectors classSelectors classPackageName |

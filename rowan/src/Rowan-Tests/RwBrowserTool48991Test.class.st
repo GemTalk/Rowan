@@ -285,6 +285,7 @@ RwBrowserTool48991Test >> testDeleteExtensionMethod [
 
 { #category : 'tests' }
 RwBrowserTool48991Test >> testDeleteGlobalExtensionMethod [
+	"WARNING ... this test uses session methods and seems to randomly fail at the moment ... functional session methods aren't on the immediate menu"
 
 	| projectName packageNames className packageName1 testClass testInstance browserTool audit project|
 	projectName := 'Simple Browser'.
@@ -438,7 +439,12 @@ RwBrowserTool48991Test >> testMoveClass [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := self _browserTool.
+	browserTool := 
+false ifTrue: [
+	Rowan projectTools browser
+] ifFalse: [
+	browserTool := self _browserTool
+].
 
 	packagedClass := browserTool
 		addOrUpdateClassDefinition: className
@@ -505,7 +511,12 @@ RwBrowserTool48991Test >> testMoveClass_old [
 	project := Rowan projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
 
-	browserTool := Rowan projectTools browser.
+	browserTool := 
+false ifTrue: [
+	Rowan projectTools browser
+] ifFalse: [
+	browserTool := self _browserTool
+].
 
 	packagedClass := browserTool
 		addOrUpdateClassDefinition: className
