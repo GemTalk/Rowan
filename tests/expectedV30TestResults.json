@@ -6,12 +6,12 @@
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
-		"errors" : 11,
+		"errors" : 10,
 		"failures" : 13,
-		"passed" : 1553,
-		"summary" : "1577 Tests with 13 Failures, 11 Errors and 0 DeprecationWarnings in 2565.28s",
-		"tests" : 1577,
-		"time" : 2565.284
+		"passed" : 1555,
+		"summary" : "1578 Tests with 13 Failures, 10 Errors and 0 DeprecationWarnings in 2357.50s",
+		"tests" : 1578,
+		"time" : 2357.504
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -2431,6 +2431,12 @@
 			"className" : "RwLoadSpecificationV2Test",
 			"status" : "passed",
 			"selector" : "testIssue_530_3",
+			"time" : "0"
+		},
+		{
+			"className" : "RwLoadSpecificationV2Test",
+			"status" : "passed",
+			"selector" : "testIssue_942",
 			"time" : "0"
 		},
 		{
@@ -9478,5 +9484,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-03-17T16:42:16.040093-07:00"
+	"timeStamp" : "2025-03-19T14:54:17.143065-07:00"
 }
