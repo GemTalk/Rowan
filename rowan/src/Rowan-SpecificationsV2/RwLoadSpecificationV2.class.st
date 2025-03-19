@@ -190,12 +190,16 @@ RwLoadSpecificationV2 >> acceptVisitor: aVisitor [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> addComponentNamed: componentName [
+	(componentNames includes: componentName)
+		ifTrue: [ 
+			"make sure that we eliminate any duplicate component names (https://github.com/GemTalk/Rowan/issues/942)"
+			^ self ].
 	componentNames add: componentName
 ]
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> addComponentNames: anArray [
-	"add to the existing component names"
+	"add to the existing component names. make sure that we eliminate any duplicate component names (https://github.com/GemTalk/Rowan/issues/942)"
 
 	| set |
 	set := self componentNames asSet.
@@ -235,7 +239,9 @@ RwLoadSpecificationV2 >> componentNames [
 
 { #category : 'accessing' }
 RwLoadSpecificationV2 >> componentNames: anArray [
-	componentNames := anArray asArray
+	"make sure that we eliminate any duplicate component names (https://github.com/GemTalk/Rowan/issues/942)"
+
+	componentNames := anArray asSet asArray
 ]
 
 { #category : 'accessing' }

@@ -349,6 +349,31 @@ RwLoadSpecificationV2Test >> testIssue_530_3 [
 ]
 
 { #category : 'tests' }
+RwLoadSpecificationV2Test >> testIssue_942 [
+	"https://github.com/GemTalk/Rowan/issues/942"
+
+	"should not allow specification of duplicate component names"
+
+	| projectName loadSpecification duplicate specName |
+	projectName := 'RowanIssue942'.
+	specName := projectName , 'Core'.
+	loadSpecification := RwLoadSpecificationV2 new
+		projectName: projectName;
+		specName: specName;
+		yourself.
+	duplicate := 'duplicate'.
+	loadSpecification
+		componentNames:
+			{duplicate.
+			duplicate}.
+	self assert: loadSpecification componentNames size equals: 1.
+	loadSpecification addComponentNamed: duplicate.
+	self assert: loadSpecification componentNames size equals: 1.
+	loadSpecification addComponentNames: {duplicate}.
+	self assert: loadSpecification componentNames size equals: 1.
+]
+
+{ #category : 'tests' }
 RwLoadSpecificationV2Test >> testMissingRevision [
 	"error coverage for invalid load specs"
 
