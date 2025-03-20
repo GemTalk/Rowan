@@ -76,11 +76,65 @@ RwClsExtensionAuditTool >> auditCompiledMethods: aLoadedClassExtension forClass:
 											'The loaded class extension is empty for: ' , aLoadedClassExtension name) ] ]
 				ifFalse: [ 
 					aLoadedClassExtension loadedProject packageConvention = 'Monticello'
-						ifTrue: [ self error: 'Monticlello package conventions not yet supported' ].
-					self
-						error:
-							'Unknonwn package convention'
-								, aLoadedClassExtension loadedProject packageConvention printString ] ]
+						ifTrue: [ 
+							| extensionCategoryBase |
+							extensionCategoryBase := '*', (aLoadedClassExtension loadedPackage
+								 name asLowercase).
+							{aClass.
+							(aClass class)}
+								do: [ :aBehavior | 
+									| categoryDict |
+									categoryDict := aBehavior rwMethodCategories.
+									categories := categoryDict
+										ifNil: [ #() ]
+										ifNotNil: [ :catDict | catDict keys ].
+									(categories
+										detect: [ :each | each asString beginsWith: extensionCategoryBase ]
+										ifNone: [  ])
+										ifNotNil: [ :aCategory | 
+											self
+												auditMonticelloCategory: aCategory
+												forBehavior: aBehavior
+												loadedClass: aLoadedClassExtension.
+											aClass rowanPackageName = Rowan unpackagedName
+												ifTrue: [ 
+													"In an unpackaged class, we must audit the extension categories.
+										Every selector in the extension category is expected to be be 
+										packaged for Metacello. Packaged class is covered by 
+										RwClsAuditTool >> auditCompiledMethods:forClass:"
+													(categoryDict at: aCategory)
+														do: [ :aSelector | 
+															self
+																auditSelector: aSelector
+																inCategory: aCategory
+																forBehavior: aBehavior
+																loadedClass: aLoadedClassExtension ] ] ]
+										ifNil: [ 
+											(aBehavior isMeta
+												ifTrue: [ aLoadedClassExtension loadedClassMethods ]
+												ifFalse: [ aLoadedClassExtension loadedInstanceMethods ]) notEmpty
+												ifTrue: [ 
+													self theAuditDetails
+														add:
+															((RwAuditMethodCategoryDetail
+																for: aLoadedClassExtension
+																message:
+																	'Missing '
+																		,
+																			(aBehavior isMeta
+																				ifTrue: [ 'class' ]
+																				ifFalse: [ 'instance' ])
+																		, ' method extension category named ' , extensionCategoryBase
+																		, ' for: ' , aLoadedClassExtension name)
+																reason: #'missingExtensionCategory';
+																category: extensionCategoryBase;
+																behavior: aBehavior;
+																yourself) ] ] ] ]
+						ifFalse: [ 
+							self
+								error:
+									'Unknonwn package convention'
+										, aLoadedClassExtension loadedProject packageConvention printString ] ] ]
 ]
 
 { #category : 'audit' }

@@ -151,7 +151,7 @@ RwRowanCrooked9Test >> testIssue820 [
 							(rowanProjectsSandbox / theProjectName / 'rowan' / 'specs' / theProjectName
 								, 'ston') pathString
 				projectsHome: rowanProjectsSandbox) load projectNamed: theProjectName.
-			packageConvention ~= 'Monticello'
+			true "packageConvention ~= 'Monticello'"
 				ifTrue: [ 
 					"audit for Monticello packaage convention not yet supported (https://github.com/GemTalk/Rowan/issues/829)"
 					self assert: (audit := loadedProject audit) isEmpty ].

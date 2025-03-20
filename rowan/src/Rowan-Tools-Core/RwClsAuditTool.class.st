@@ -19,7 +19,11 @@ RwClsAuditTool >> auditCategory: category forBehavior: aBehavior loadedClass: aL
 				forBehavior: aBehavior
 				loadedClass: aLoadedClass ].
 	packageConvention = 'Monticello'
-		ifTrue: [ self error: 'Monticlello package conventions not yet supported' ]
+		ifTrue: [ 
+			^ self
+				auditMonticelloCategory: category
+				forBehavior: aBehavior
+				loadedClass: aLoadedClass ]
 ]
 
 { #category : 'audit' }

@@ -89,6 +89,45 @@ RwClsCommonAuditTool >> auditLoadedMethod: aLoadedMethod forBehavior: aBehavior 
 ]
 
 { #category : 'audit' }
+RwClsCommonAuditTool >> auditMonticelloCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
+	| aPackage |
+	"must be an extension. Do basic checks"
+	aPackage := category copyFrom: 2 to: category size.
+	(category notEmpty and: [ category first == $* ])
+		ifTrue: [ 
+			"must be an extension category. See if package exists"
+			(aPackage asLowercase beginsWith: aBehavior rowanPackageName asLowercase)
+				ifTrue: [ 
+					"aLoadedClass name , ' #' , category asString -> 'Extension category name can not be same as class package' "
+					self theAuditDetails
+						add:
+							((RwAuditMethodCategoryDetail
+								for: aLoadedClass
+								message:
+									'For class (' , aBehavior printString , ') extension category name <' , category
+										, '>  must not match class package name ('
+										, aBehavior rowanPackageName , ').')
+								reason: #'rowanMonticelloExtensionCategoryMatchesClassPackage';
+								category: category;
+								behavior: aBehavior;
+								yourself) ] ]
+		ifFalse: [ 
+			aLoadedClass isLoadedClassExtension
+				ifTrue: [ 
+					self theAuditDetails
+						add:
+							((RwAuditMethodCategoryDetail
+								for: aLoadedClass
+								message:
+									'For class (' , aBehavior printString , ') extension category name <' , category
+										, '>  must begin with a `*`.')
+								reason: #'rowanMonticelloExtensionCategoryFormatError';
+								category: category;
+								behavior: aBehavior;
+								yourself) ] ]
+]
+
+{ #category : 'audit' }
 RwClsCommonAuditTool >> auditRowanHybridCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
 	| aPackage |
 	"must be an extension. Do basic checks"
