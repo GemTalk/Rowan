@@ -100,7 +100,7 @@ RwPackageDefinition >> _checkForDuplicateClassExtensionFor: aClassExtensionDefin
 			(definitionDictionary includesKey: className)
 				ifTrue: [ 
 					| nam message |
-					nam := [ ' found in package' , self name , ' ' ]
+					nam := [ ' found in package' , self name , ' (' ]
 						on: Error
 						do: [ :ex | '' ].
 					message := 'A class extension definition and ' , label , ' for the same '
