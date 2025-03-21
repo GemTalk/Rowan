@@ -88,11 +88,13 @@ RwTopazTonelReader class >> topazReadTonelFile: filePath envId: envId [
 	| warningsEnabled |
 	warningsEnabled := Notification signallingEnabled.
 	[ 
-	| gsfile stream errBlk warnBlk |
+	| gsfile stream errBlk warnBlk fData |
 	Notification enableSignalling.	"compile warnings can be logged"
 	gsfile := GsFile openReadOnServer: filePath.
 	gsfile ifNil: [ self error: 'file ' , filePath printString , ' not found' ].
-	stream := ReadStreamPortable on: gsfile contents.
+  fData := gsfile contentsAsUtf8 .
+  fData := StringConfiguration == Unicode16 ifTrue:[ fData decodeToUnicode ] ifFalse:[ fData decodeToString ].
+  stream := ReadStreamPortable on: fData .
 	gsfile close.
 	errBlk := [ :ex | 
 	(ex isKindOf: CompileError)
