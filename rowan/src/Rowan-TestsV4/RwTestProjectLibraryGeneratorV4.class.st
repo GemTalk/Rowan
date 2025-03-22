@@ -97,6 +97,7 @@ RwTestProjectLibraryGeneratorV4 new
 	genSpec_0084: commitComment;
 	genSpec_0085: commitComment;
 	genSpec_0089: commitComment;
+	genSpec_0090: commitComment;
 	yourself
 "
 Class {
@@ -273,6 +274,48 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0090: resolvedProject [
+	"Start with spec_0089 , add extension methods to an existing class; then add a BaselineOf in a Pharo package"
+
+	| packageName1 packageName2 packageName3 packageName4 className1 |
+	resolvedProject packageConvention: 'Monticello'.
+	
+	className1 := projectName , 'Class1'.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Pharo'.
+	packageName3 := projectName , '-' , 'Tests'.
+	packageName4 := projectName , '-' , 'Extensions'.
+	
+	resolvedProject componentNames: {}.
+	resolvedProject
+		removeComponentNamed: 'Core';
+		addLoadComponentNamed: 'Core'
+			comment: 'Top-level component for loading the application';
+		addComponentStructureFor: 'Core'
+			startingAtComponentNamed: 'Core'
+			pathNameArray:
+				{'platform'.
+				'pharo'}
+			conditionPathArray:
+				{'common'.
+				{'pharo'}}
+			comment: 'Component for loading pharo-specific packages';
+		addComponentNamed: 'tests/Tests' toComponentNamed: 'Core';
+		addPackageNamed: packageName3 toComponentNamed: 'tests/Tests';
+		addPackageNamed: packageName2 toComponentNamed: 'platform/pharo/Core';
+		addPackageNamed: packageName1 toComponentNamed: 'Core';
+		addPackageNamed: packageName4 toComponentNamed: 'Core';
+		yourself.
+	((resolvedProject packageNamed: packageName4)
+		addClassExtensionNamed: className1)
+		addInstanceMethod:
+				'extensionMethod ^ self'
+			protocol: '*' , packageName4 asLowercase, '-core';
+			yourself.
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV4 >> _createNewProject: aString [
 	^ Rowan newV4ProjectNamed: aString
 ]
@@ -335,6 +378,51 @@ Each of the components in RowanSample9V4:spec_0069 has a corresponding test case
 	self
 		_finishCommitAndPush: specName
 		loadSpecification: canonicalLoadSpec
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV4 >> genSpec_0090: commitMessage [
+	"Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project."
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0090'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0089'.
+	title := 'Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 90
+		derivedFrom: derivedFrom
+		comment: 'Intended for internal Monticello package convention testing ... the presence of the BaselineOf is to make testing with Pharo possible')
+		rowanIssues: #(829);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0090: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
 		indexCard: indexCard
 		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
 		resolvedRepository: resolvedRepository
