@@ -283,7 +283,7 @@ RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0090: resolvedProject [
 	className1 := projectName , 'Class1'.
 
 	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Pharo'.
+	packageName2 := 'BaselineOf', projectName.
 	packageName3 := projectName , '-' , 'Tests'.
 	packageName4 := projectName , '-' , 'Extensions'.
 	
@@ -312,6 +312,17 @@ RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0090: resolvedProject [
 		addInstanceMethod:
 				'extensionMethod ^ self'
 			protocol: '*' , packageName4 asLowercase, '-core';
+			yourself.
+	((resolvedProject packageNamed: packageName2)
+		addClassNamed: 'BaselineOf', projectName super: 'BaselineOf' category: packageName2)
+		addInstanceMethod:
+				'baseline: spec
+	<baseline>
+	spec for: #pharo do: [
+		spec
+			package: ''RowanSample9V4-Core'';
+			yourself ]'
+			protocol: 'baselines';
 			yourself.
 ]
 
