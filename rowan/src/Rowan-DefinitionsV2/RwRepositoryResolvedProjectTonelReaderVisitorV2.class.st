@@ -189,7 +189,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 	| fileReference |
 	fileReference := file asFileReference.
 	fileReference readStreamDo: [:fileStream |
-		[ | definitions tonelParser |
+		[ | definitions  packageDef tonelParser |
 		tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 		(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 			ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
@@ -200,8 +200,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
-      self checkMethodDefinitions: currentClassExtension .
-    ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
+		self checkMethodDefinitions: currentClassExtension .
+		packageDef := currentProjectDefinition packageNamed: packageName.
+		currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: currentClassExtension ]    ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
       ex addText: (self class lineNumberStringForOffset: fileStream position fileName: fileReference fullName).
       ex pass .
     ].
@@ -215,7 +216,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 	fileReference
 		readStreamDo: [ :fileStream | 
 			[ 
-			| definitions clsDef projectDef tonelParser |
+			| definitions clsDef packageDef tonelParser |
 			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
@@ -238,8 +239,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 					mDef propertyAt: '_gsFileName' put: fileReference fullName.
 					clsDef addInstanceMethodDefinition: mDef ].
 			self checkMethodDefinitions: clsDef.
-			projectDef := currentProjectDefinition packageNamed: packageName.
-			currentClassDefinition ifNotNil: [ projectDef addClassDefinition: clsDef ] ]
+			packageDef := currentProjectDefinition packageNamed: packageName.
+			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsDef ] ]
 				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
 					(ex messageText includesString: 'near line')
