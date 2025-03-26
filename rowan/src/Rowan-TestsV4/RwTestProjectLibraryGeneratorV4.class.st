@@ -406,7 +406,15 @@ RwTestProjectLibraryGeneratorV4 >> genSpec_0090: commitMessage [
 	postfix := '0090'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0089'.
-	title := 'Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project.'.
+	title := 'Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project.
+### Example Metacello load expression
+```
+Metacello new
+  repository: ''tonel:///export/bosch1/users/dhenrich/_stones/37x/stones/rowan3_dev_g/sandbox/RowanSample9V4/src'';
+  baseline: ''RowanSample9V4'';
+  load: #().
+```
+'.
 
 	indexCard := (self
 		_createCard: postfix
@@ -430,6 +438,11 @@ RwTestProjectLibraryGeneratorV4 >> genSpec_0090: commitMessage [
 		_genSpecFor: specName
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0090: resolvedProject ].
+
+	resolvedRepository gitRoot / '.project'
+		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
+			fileStream nextPutAll: '{ ''srcDirectory'' :  ''src'' }' ].
 
 	self
 		_finishCommitAndPush: specName
