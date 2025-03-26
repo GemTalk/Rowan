@@ -9,6 +9,13 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
+{ #category : 'accessing' }
+RwRepositoryComponentProjectReaderVisitor class >> expectedGsClassPropertyKeys [
+	"list of class properties that are used by GemStone ... any keys not in this list are considered foreign keys and are propogated to disk when class definition is written"
+
+	^ #(#'type' #'name' #'superclass' #'super' #'instvars' #'classinstvars' #'classvars' #'category' #'_gsFileOffset' #'_gsFileName' #'commentstamp' #'traits' #'classtraits' #'gs_options' #'gs_reservedoop' #'gs_constraints')
+]
+
 { #category : 'error handling' }
 RwRepositoryComponentProjectReaderVisitor class >> fileNameStringForDefinition: anRwDefinition [
 	"used when handling STONReaderError,  TonelParseError, CompileError, CompileWarning"
@@ -91,7 +98,7 @@ RwRepositoryComponentProjectReaderVisitor >> compileWhileReading: aBoolean [
 
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
-	| metadata typeField typeValue |
+	| metadata typeField typeValue metaKeys expectedKeys foreignKeys  |
 	metadata := anArray sixth.
 	currentTraitDefinition := currentClassExtension := nil.
 	typeField := metadata at: #'type' ifAbsent: [ #'normal' ].
@@ -124,6 +131,12 @@ IGNORED		pools: (metadata at: #'pools' ifAbsent: [ #() ])
 		ifNotNil: [ :traitsSpecString | currentClassDefinition propertyAt: #'traits' put: traitsSpecString ].
 	(metadata at: #'classtraits' ifAbsent: [  ])
 		ifNotNil: [ :classTraitsSpecString | currentClassDefinition propertyAt: #'classTraits' put: classTraitsSpecString ].
+	metaKeys := metadata keys.
+	expectedKeys := self class expectedGsClassPropertyKeys.
+	foreignKeys := Array new.
+	metaKeys do: [:mKey | (expectedKeys includes: mKey) ifFalse: [ foreignKeys add: (metadata associationAt: mKey) ] ].
+	foreignKeys isEmpty
+		ifFalse: [ currentClassDefinition gs_foreignKeys: foreignKeys ].
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_reservedOop: (metadata at: #'gs_reservedoop' ifAbsent: [ '' ]);

@@ -87,6 +87,22 @@ RwClassDefinition >> gs_constraints: constraintsArray [
 ]
 
 { #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_foreignKeys [
+
+	^self properties
+				at: #'gs_foreignKeys'
+				ifAbsent: [ #() ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_foreignKeys: arrayOfAssociations [
+	"preserve foreignKeys and write to disk"
+
+	(arrayOfAssociations _isArray and: [ arrayOfAssociations isEmpty not ])
+		ifTrue: [ self properties at: #'gs_foreignKeys' put: arrayOfAssociations ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_options [
 
 	^self properties

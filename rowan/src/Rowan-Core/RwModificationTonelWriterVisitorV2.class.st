@@ -160,10 +160,13 @@ RwModificationTonelWriterVisitorV2 >> _typeClassDefinitionOf: aClassDefinition [
 
 	(aClassDefinition gs_reservedOop)
 		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
-
+		
 	definition 		
 		at: #category put: aClassDefinition category.
 	
+	(aClassDefinition gs_foreignKeys)
+		ifNotEmpty: [:foreignKeyArray | foreignKeyArray do: [:foreignKeyAssociation | definition at: foreignKeyAssociation key put: foreignKeyAssociation value asString ] ].
+
 	^ self _toSTON: definition
 ]
 
