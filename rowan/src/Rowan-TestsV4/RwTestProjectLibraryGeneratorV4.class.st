@@ -275,12 +275,13 @@ Each of the components in RowanSample9:spec_0069 has a corresponding test case t
 
 { #category : 'private' }
 RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0090: resolvedProject [
-	"Start with spec_0089 , add extension methods to an existing class; then add a BaselineOf in a Pharo package"
+	"Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project ... add a foreign property (#package) to the classes to be compatible out of the box with Pharo."
 
-	| packageName1 packageName2 packageName3 packageName4 className1 |
+	| packageName1 packageName2 packageName3 packageName4 className1 className2 |
 	resolvedProject packageConvention: 'Monticello'.
 	
 	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
 
 	packageName1 := projectName , '-' , 'Core'.
 	packageName2 := 'BaselineOf', projectName.
@@ -313,6 +314,16 @@ RwTestProjectLibraryGeneratorV4 >> _addDefinitionsFor_0090: resolvedProject [
 				'extensionMethod ^ self'
 			protocol: '*' , packageName4 asLowercase, '-core';
 			yourself.
+	"add #package foreign properties to the two classes to be compatible with Pharo"
+	((resolvedProject packageNamed: packageName1)
+		classDefinitionNamed: className1)
+			gs_foreignKeys: { #package -> packageName1 };
+			yourself.
+	((resolvedProject packageNamed: packageName3)
+		classDefinitionNamed: className2)
+			gs_foreignKeys: { #package -> packageName3 };
+			yourself.
+	"add BaselineOf so Pharo and GemStone can share the project"
 	((resolvedProject packageNamed: packageName2)
 		addClassNamed: 'BaselineOf', projectName super: 'BaselineOf' category: packageName2)
 		addInstanceMethod:
@@ -397,16 +408,16 @@ Each of the components in RowanSample9V4:spec_0069 has a corresponding test case
 
 { #category : 'generators' }
 RwTestProjectLibraryGeneratorV4 >> genSpec_0090: commitMessage [
-	"Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project."
+	"Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project ... add a foreign property (#package) to the classes to be compatible out of the box with Pharo."
 
 	"The method is idempotent with respect to the branches involved, UNLESS something
 		has explicitly changed within the model or the disk format of artefacts."
 
-	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title srcDir |
 	postfix := '0090'.
 	specName := 'spec_' , postfix.
 	derivedFrom := 'spec_0089'.
-	title := 'Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project.
+	title := 'Start with spec_0089 to create the project using Monticello package convention ... add a BaselineOf that can be used by Pharo to read and write the project ... add a foreign property (#package) to the classes to be compatible out of the box with Pharo.
 ### Example Metacello load expression
 ```
 Metacello new
@@ -423,7 +434,7 @@ Metacello new
 		index: 90
 		derivedFrom: derivedFrom
 		comment: 'Intended for internal Monticello package convention testing ... the presence of the BaselineOf is to make testing with Pharo possible')
-		rowanIssues: #(829);
+		rowanIssues: #(829 959);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;
@@ -439,10 +450,17 @@ Metacello new
 		definedProject: definedProject
 		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0090: resolvedProject ].
 
+	"Create Pharo meta data files: .project and src/.properties"
 	resolvedRepository gitRoot / '.project'
 		writeStreamDo: [ :fileStream | 
 			fileStream truncate.
 			fileStream nextPutAll: '{ ''srcDirectory'' :  ''src'' }' ].
+	srcDir := resolvedRepository gitRoot / 'src'.
+	srcDir ensureCreateDirectory.
+	srcDir / '.properties'
+		writeStreamDo: [ :fileStream | 
+			fileStream truncate.
+			fileStream nextPutAll: '{ #format : #tonel }' ].		
 
 	self
 		_finishCommitAndPush: specName
