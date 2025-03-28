@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 10,
 		"failures" : 10,
-		"passed" : 873,
-		"summary" : "893 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 253.62s",
-		"tests" : 893,
-		"time" : 253.619
+		"passed" : 886,
+		"summary" : "906 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 210.24s",
+		"tests" : 906,
+		"time" : 210.238
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -1488,6 +1488,18 @@
 		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
+			"selector" : "testAddMethod_monticello_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testAddMethod_monticello_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
 			"selector" : "testClassCreationTemplate",
 			"time" : "0"
 		},
@@ -1512,6 +1524,24 @@
 		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
+			"selector" : "testCreateClass_Monticello_0",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testCreateClass_Monticello_1",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testCreateClass_Monticello_2",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
 			"selector" : "testDeleteClass",
 			"time" : "0"
 		},
@@ -1530,6 +1560,12 @@
 		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
+			"selector" : "testDeleteComplicatedPackage_Monticello",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
 			"selector" : "testDeleteGlobalExtensionMethod",
 			"time" : "0"
 		},
@@ -1542,6 +1578,12 @@
 		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
+			"selector" : "testDeleteMethod_monticello",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
 			"selector" : "testDeletePackage",
 			"time" : "0"
 		},
@@ -1549,6 +1591,12 @@
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testIsExtensionMethod",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testIsExtensionMethod_Monticello",
 			"time" : "0"
 		},
 		{
@@ -1579,6 +1627,12 @@
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
 			"selector" : "testLoadMultiProjectDefs",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testMonticelloCompileMethod_01",
 			"time" : "0"
 		},
 		{
@@ -1614,7 +1668,19 @@
 		{
 			"className" : "RwBrowserToolApiTest",
 			"status" : "passed",
+			"selector" : "testNewClassVersion_260_change_extension_method_protocol_Monticello",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
 			"selector" : "testNewClassVersion_260_change_extension_method_source",
+			"time" : "0"
+		},
+		{
+			"className" : "RwBrowserToolApiTest",
+			"status" : "passed",
+			"selector" : "testNewClassVersion_260_change_extension_method_source_Monticello",
 			"time" : "0"
 		},
 		{
@@ -2761,6 +2827,18 @@
 			"className" : "RwProjectAuditToolTest",
 			"status" : "passed",
 			"selector" : "testClassBadExtensionName",
+			"time" : "0"
+		},
+		{
+			"className" : "RwProjectAuditToolTest",
+			"status" : "passed",
+			"selector" : "testClassBadMonticelloExtensionName",
+			"time" : "0"
+		},
+		{
+			"className" : "RwProjectAuditToolTest",
+			"status" : "passed",
+			"selector" : "testClassCategoryMonticelloViolation",
 			"time" : "0"
 		},
 		{
@@ -5374,5 +5452,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-03-19T12:40:32.746317-07:00"
+	"timeStamp" : "2025-03-28T14:09:03.950518-07:00"
 }

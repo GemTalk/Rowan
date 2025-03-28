@@ -430,6 +430,41 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadMultiProjectMonticelloDefinition: projectNames packageNames: packageNames defaultSymbolDictName: defaultSymbolDictNames comment: comments className: classNames inPackageName: classPackageNames [
+
+	| projectTools projectSetDefinition |
+	projectTools := Rowan projectTools.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	1 to: projectNames size do: [ :index | 
+		| projectDefinition classDefinition |
+		(Rowan image loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
+			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+		projectDefinition := self
+			_monticelloProjectDefinition: (projectNames at: index)
+			packageNames: (packageNames at: index)
+			defaultSymbolDictName: (defaultSymbolDictNames at: index)
+			comment:
+				'This is a simple project used to work out a "classic" class browser-style API'.
+
+		classDefinition := self _standardClassDefinition: (classNames at: index).
+		classDefinition category: (classPackageNames at: index).
+
+		projectTools edit
+			addClass: classDefinition
+			inPackageNamed: (classPackageNames at: index)
+			inProject: projectDefinition.
+
+		projectSetDefinition addProject: projectDefinition ].
+
+	[ projectTools load loadProjectSetDefinition: projectSetDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadPackageMappedProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
@@ -487,6 +522,33 @@ RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName p
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadSimpleMonticelloProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
+
+	| projectDefinition classDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_monticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	classDefinition := self _simpleClassDefinition: className.
+	classDefinition category: packageName.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName
+		inProject: projectDefinition.
+
+	projectDefinition load
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
 
 	| projectDefinition classDefinition projectTools |
@@ -511,6 +573,35 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 		inProject: projectDefinition.
 
 	projectDefinition load
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _loadStandardMonticelloProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
+
+	| projectDefinition classDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_monticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	classDefinition := self _standardClassDefinition: className.
+	classDefinition category: packageName.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName
+		inProject: projectDefinition.
+
+	[ projectDefinition load ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 ]
 
 { #category : 'private' }
