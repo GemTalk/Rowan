@@ -374,6 +374,27 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadMonticelloProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
+
+	| projectDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_monticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	projectDefinition load.
+
+	^ projectDefinition
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: packageNames defaultSymbolDictName: defaultSymbolDictNames comment: comments className: classNames inPackageName: classPackageNames [
 
 	| projectTools projectSetDefinition |
@@ -519,6 +540,17 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 	[ projectDefinition load ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _monticelloProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
+
+	^ self
+		_monticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		defaultUseSessionMethodsForExtensions: false
+		comment: comment
 ]
 
 { #category : 'private' }

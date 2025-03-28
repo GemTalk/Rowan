@@ -225,6 +225,130 @@ RwBrowserToolApiTest >> testCreateClass [
 ]
 
 { #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClass_Monticello_0 [
+	"expect an audit error"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict audit reasons |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+
+	className := 'SimpleBrowse'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(violateClassCategoryConvention) sort.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClass_Monticello_1 [
+	"expect clean audit"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict audit |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+
+	className := 'SimpleBrowse'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: packageName
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClass_Monticello_2 [
+	"expect clean audit"
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict audit |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+
+	className := 'SimpleBrowse'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: packageName, '-legal'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+]
+
+{ #category : 'tests' }
 RwBrowserToolApiTest >> testCreateClassWithConstraints [
 
 	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x |
@@ -697,6 +821,49 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 		forClassNamed: className1
 		isMeta: true
 		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testMonticelloCompileMethod_01 [
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance project audit |
+	projectName := 'Monticello Project A'.
+	packageName1 := 'MonticelloA-Core'.
+	packageName2 := 'MonticelloA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'Monticello browser project'.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	normalClass := Object
+		rwSubclass: 'SimpleMonticelloNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: (audit := project audit) isEmpty.
+	self assert: normalClass rowanPackageName = packageName1.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
+	self assert: (audit := project audit) isEmpty.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		category: '*' , packageName2, '-extra'
+		packageName: packageName2.
+
+	self assert: (audit := project audit) isEmpty.
+	self assert: (normalClass perform: #'bar') = 'bar'.
+	normalInstance := normalClass new.
+	self assert: (normalInstance perform: #'foo') = 'foo'.
+
+	self assert: fooMethod rowanPackageName = packageName1.
+	self assert: barMethod rowanPackageName = packageName2
 ]
 
 { #category : 'tests' }

@@ -59,6 +59,25 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 ]
 
 { #category : '*rowan-tests-componentsv2-onlyv2' }
+RwBrowserToolTest >> _monticelloProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
+	| componentName resolvedProject |
+	componentName := 'Core'.
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		projectsHome: self _testRowanProjectsSandbox;
+		packageConvention: 'Monticello';
+		gemstoneSetDefaultSymbolDictNameTo: defaultSymbolDictName;
+		gemstoneSetDefaultUseSessionMethodsForExtensionsTo:
+				defaultUseSessionMethodsForExtensions;
+		comment: comment;
+		addLoadComponentNamed: componentName;
+		addPackagesNamed: packageNames toComponentNamed: componentName;
+		yourself.
+	resolvedProject componentNames: {componentName}.
+	^ resolvedProject
+]
+
+{ #category : '*rowan-tests-componentsv2-onlyv2' }
 RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
 	| componentName resolvedProject |
 	componentName := 'Core'.

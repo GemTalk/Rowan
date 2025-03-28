@@ -89,7 +89,7 @@ RwClsExtensionAuditTool >> auditCompiledMethods: aLoadedClassExtension forClass:
 										ifNil: [ #() ]
 										ifNotNil: [ :catDict | catDict keys ].
 									(categories
-										detect: [ :each | each asString beginsWith: extensionCategoryBase ]
+										detect: [ :each | each asString asLowercase beginsWith: extensionCategoryBase ]
 										ifNone: [  ])
 										ifNotNil: [ :aCategory | 
 											self

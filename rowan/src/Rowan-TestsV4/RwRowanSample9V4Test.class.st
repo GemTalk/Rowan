@@ -131,3 +131,34 @@ RwRowanSample9V4Test >> testIssue705 [
 			ifPresent: [:p | 
 				self assert: false description: 'project ', pn printString, ' is still loaded'] ]
 ]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testSpec_0090 [
+	"spec_0090 should load cleanly"
+
+	"https://github.com/GemTalk/Rowan/issues/829"
+	"https://github.com/GemTalk/Rowan/issues/959"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects  project audit |
+	loadSpec := self _loadSpecNamed: 'spec_0090'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+]

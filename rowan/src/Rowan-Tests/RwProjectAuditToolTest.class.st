@@ -475,6 +475,113 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassBadMonticelloExtensionName [
+
+	| packageTools projectName packageNames className packageName1 packageName2 theClass
+		fooMethod audit reasons |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extensions'.
+	packageNames := {packageName1 . packageName2}.
+	className := 'AuditClass'.
+
+	self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+
+	self assert: theClass rowanPackageName = packageName1.
+
+	theClass 
+		rwCompileMethod: 'bar ^bar'
+	    category: 'Accessing' "'*'  packageName1 asLowercase".
+
+	fooMethod := theClass
+		rwCompileExtensionMethod: 'foo ^''foo'''
+		package: packageName2.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) isEmpty.
+ 
+ "lets break it"
+	fooMethod := theClass
+		compileMethod: 'foo ^2'
+		dictionaries: Rowan image symbolList
+		category: ('*' , packageName1 asLowercase) asSymbol
+		intoMethodDict: nil
+		intoCategories: nil
+		environmentId: 0.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed:  projectName) size = 2.
+
+	reasons := ((audit at: packageName1) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(missingLoadedMethod rowanMonticelloExtensionCategoryMatchesClassPackage) sort.
+
+	reasons := ((audit at: packageName2) at: className) collect: [:auditDetail | auditDetail reason].
+	self assert: reasons size equals: 2.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(differentMethodCategory methodsNotIdentical) sort.
+
+"
+	self assert: ( y := x at: packageName1) notNil; 
+		assert: y size = 1;
+		assert: (y at: className) size = 1;
+		assert: (y := x at: packageName2 ) notNil;
+		assert: y size = 1;
+		assert: (y at: className) size = 1
+"
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testClassCategoryMonticelloViolation [
+	| packageTools projectName packageNames className packageName theClass audit reasons resolvedProject |
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName := 'Audit-Core'.
+	packageNames := {packageName}.
+	className := 'AuditClass'.
+
+	resolvedProject := self
+		_loadMonticelloProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	self assert: theClass rowanPackageName = packageName.
+
+	theClass _category: 'blue'. "cheat to bypass category: validation"
+
+	audit := Rowan projectTools audit auditForProjectNamed: projectName.
+	self deny: audit isEmpty.
+	reasons := (((audit at: packageName) at: className) collect: [:auditDetail | auditDetail reason]) asArray.
+	self
+		assert: reasons asSet asArray sort
+		equals: #(violateClassCategoryConvention differentCategory) sort.
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassCategoryViolation [
 	| packageTools projectName packageNames className packageName theClass audit reasons resolvedProject |
 	packageTools := Rowan packageTools.

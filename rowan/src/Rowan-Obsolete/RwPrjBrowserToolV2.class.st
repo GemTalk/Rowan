@@ -363,7 +363,17 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 													'The supplied method protocol ' , protocol printString
 														,
 															' does not follow the expected package convention for ''RowanHybrid''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
-								ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
+								ifFalse: [ 
+									packageConvention = 'Monticello'
+										ifTrue: [ 
+											(protocol asLowercase beginsWith: '*' , packageName asLowercase)
+												ifTrue: [ 
+													self
+														error:
+															'The supplied method protocol ' , protocol printString
+																,
+																	' does not follow the expected package convention for ''Monticello''. The protocol indicates an extension method for the package in which the class resides, which is not an extension method' ] ]
+										ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ] ].
 					^ updateBlock value: classDef value: projectDef ]
 				ifFalse: [ 
 					"the named package is different from the class definition package"
@@ -395,7 +405,19 @@ RwPrjBrowserToolV2 >> addOrUpdateMethod: methodSource dictionaries: aSymbolList 
 									'The supplied method protocol ' , protocol printString
 										, ' does not follow the expected package convention '
 										, expectedProtocol printString , ' for ''RowanHybrid''' ] ]
-				ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ].
+				ifFalse: [ 
+					packageConvention = 'Monticello'
+						ifTrue: [ 
+							| expectedProtocol |
+							expectedProtocol := loadedPackage asExtensionName.
+							(protocol asLowercase beginsWith: expectedProtocol)
+								ifFalse: [ 
+									self
+										error:
+											'The supplied method protocol ' , protocol printString
+												, ' does not follow the expected package convention '
+												, expectedProtocol printString , ' for ''Monticello''' ] ]
+						ifFalse: [ self error: 'Unsupported packageConvention ' , packageConvention printString ] ] ].
 
 	classExtensionDef := packageDefinition classExtensions
 		at: className
