@@ -100,6 +100,46 @@ RwProjectSpecificationV2 >> componentsPath: aString [
 	componentsPath := aString
 ]
 
+{ #category : 'copying' }
+RwProjectSpecificationV2 >> copyAsV3 [
+	"copy all of the raw ivs from the receiver to an instance of RwProjectSpecificationV3"
+
+	^ RwProjectSpecificationV3 new
+		comment: self comment;
+		componentsPath: self componentsPath;
+		loadedCommitId: self loadedCommitId;
+		packageConvention: self packageConvention;
+		packageFormat: self packageFormat;
+		packagesPath: self packagesPath;
+		projectName: self projectName;
+		projectSpecPath: self projectSpecPath;
+		projectsPath: self projectsPath;
+		_repoType: self _repoType;
+		specName: self specName;
+		specsPath: self specsPath;
+		yourself
+]
+
+{ #category : 'copying' }
+RwProjectSpecificationV2 >> copyAsV4 [
+	"copy all of the raw ivs from the receiver to an instance of RwProjectSpecificationV4 ... to conform to method sort order in tonel spec -- WARNING the method sort order of any existing tonel files may radically change"
+
+	^ RwProjectSpecificationV4 new
+		comment: self comment;
+		componentsPath: self componentsPath;
+		loadedCommitId: self loadedCommitId;
+		packageConvention: self packageConvention;
+		packageFormat: self packageFormat;
+		packagesPath: self packagesPath;
+		projectName: self projectName;
+		projectSpecPath: self projectSpecPath;
+		projectsPath: self projectsPath;
+		_repoType: self _repoType;
+		specName: self specName;
+		specsPath: self specsPath;
+		yourself
+]
+
 { #category : 'exporting' }
 RwProjectSpecificationV2 >> exportTo: directoryReference [
 	| filePath |

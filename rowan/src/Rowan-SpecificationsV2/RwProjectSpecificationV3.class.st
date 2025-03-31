@@ -12,9 +12,43 @@ Class {
 	#category : 'Rowan-SpecificationsV2'
 }
 
+{ #category : 'private' }
+RwProjectSpecificationV3 >> _projectVersion: anObject [
+	"set iv without error checking ... used by copyAsV4"
+
+	projectVersion := anObject
+]
+
+{ #category : 'private' }
+RwProjectSpecificationV3 >> _repoType: anObject [
+	"set iv without error checking ... used by copyAsV4 and copyAsV3"
+
+	repoType := anObject
+]
+
 { #category : 'comparing' }
 RwProjectSpecificationV3 >> = anObject [
 	^ super = anObject and: [ self projectVersion = anObject projectVersion ]
+]
+
+{ #category : 'copying' }
+RwProjectSpecificationV3 >> copyAsV3 [
+	"copy all of the raw ivs from the receiver to an instance of RwProjectSpecificationV3 ..."
+
+	^ super copyAsV3
+		_projectVersion:
+				(self instVarAt: (self class allInstVarNames indexOf: #'projectVersion'));
+		yourself
+]
+
+{ #category : 'copying' }
+RwProjectSpecificationV3 >> copyAsV4 [
+	"copy all of the raw ivs from the receiver to an instance of RwProjectSpecificationV4 ... to conform to method sort order in tonel spec -- WARNING the method sort order of any existing tonel files may radically change"
+
+	^ super copyAsV4
+		_projectVersion:
+				(self instVarAt: (self class allInstVarNames indexOf: #'projectVersion'));
+		yourself
 ]
 
 { #category : 'comparing' }
