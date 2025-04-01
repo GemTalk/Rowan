@@ -1370,6 +1370,48 @@ RwRowanSample9V3Test >> testIssue929 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V3Test >> testIssue943 [
+	"read project from disk (resolved project)  add a new package and move a class to a new package; export to disk; reread from disk and BOOM"
+	
+	"https://github.com/GemTalk/Rowan/issues/943"
+	
+	| loadSpec projectName resolvedProject pharoComponentName pharoPackageName className sourcePackage  classDefinition pharoPackage |
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
+
+	projectName := loadSpec projectName.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"modify the defined project and add a new 'Pharo' component and package"
+	pharoComponentName := 'Pharo'.
+	resolvedProject 
+		addLoadComponentNamed: pharoComponentName 
+		comment: 'placeholder component, since packages must be managed by a component'.
+	pharoPackageName := projectName, '-Pharo'.
+	className := projectName, 'IdentityKeyValueDictionary'.
+	sourcePackage := resolvedProject packageNamed: projectName, '-Core2'.
+	classDefinition := sourcePackage removeClassNamed: className.
+	classDefinition category: pharoPackageName.
+	pharoPackage := resolvedProject addPackageNamed: pharoPackageName toComponentNamed: pharoComponentName.
+	pharoPackage addClassDefinition: classDefinition.
+"export changes"
+	[ 
+		resolvedProject export.
+	"now load from disk using load spec ... should load cleanly"
+		loadSpec addComponentNamed: pharoComponentName.
+		loadSpec
+			 resolveProject  load.
+	] ensure: [
+		Rowan gitTools performGitCommand: 'restore' in: (self _testRowanProjectsSandbox / projectName ) fullName with: ' .'.
+		 (self _testRowanProjectsSandbox / projectName / 'rowan/components/Pharo.ston' ) ensureDelete.
+		 (self _testRowanProjectsSandbox / projectName / 'src/', projectName, '-Pharo' ) ensureDeleteAll ]
+]
+
+{ #category : 'tests' }
 RwRowanSample9V3Test >> testLoadSpec_read_01 [
 	"RowanSample9:spec_0056 ... RwLoadSpecificationV2>>read: tests" 
 

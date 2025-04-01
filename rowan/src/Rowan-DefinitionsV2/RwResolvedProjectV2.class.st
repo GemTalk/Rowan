@@ -851,8 +851,13 @@ RwResolvedProjectV2 >> exportPackages [
 	  (def := RwProjectSetDefinition new)
 		  addProject: self copy read .
 		def ]
-		on: Error
-		do: [ :ignored | RwProjectSetDefinition new ].
+		on: Error, RwUnreadPackagesErrorNotification
+		do: [ :ex | 
+			(ex isKindOf:  RwUnreadPackagesErrorNotification)
+				ifTrue: [
+					"new package encountered ... not an issue"
+					ex resume ].
+			RwProjectSetDefinition new ].
 	self
 		exportPackages: projectSetDefinition
 		packagesRoot: self packagesRoot
