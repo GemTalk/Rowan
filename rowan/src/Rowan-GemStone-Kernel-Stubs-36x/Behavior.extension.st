@@ -157,3 +157,24 @@ Behavior >> _rwRemoveAllMethods: baseMeths environmentId: envId [
 				ifTrue: [ packagedSels add: sel ] ].
 	packagedSels do: [ :sel | self rwRemoveSelector: sel ]
 ]
+
+{ #category : '*rowan-gemstone-kernel-stubs-36x' }
+Behavior >> _rwRemoveSelector: aString environmentId: envId ifUnpackagedDo: unpackagedBlock [
+
+"Removes the method whose selector is aString from the receiver's method
+ dictionary.  If the selector is not in the method dictionary, generates an
+ error."
+
+| aMeth selector |
+self _validatePrivilege ifFalse:[ ^ nil ].
+selector := Symbol _existingWithAll: aString .
+selector ifNotNil:[
+  aMeth := self compiledMethodAt: selector environmentId: envId.
+  aMeth ifNil: [ ^ unpackagedBlock value ].
+  aMeth isFromRowan ifFalse: [ ^ unpackagedBlock value ].
+  self rwRemoveSelector: selector.
+] ifNil:[
+  ^ self _error: #classErrSelectorNotFound args: { aString } .
+]
+]
+

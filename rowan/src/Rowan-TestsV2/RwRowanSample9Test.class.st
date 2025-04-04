@@ -48,12 +48,12 @@ RwRowanSample9Test >> _auditRemoveAndRecompiledMethods_0081 [
 	packageName1 := 'RowanSample9-Core'.
 	packageName2 := 'RowanSample9-Extensions'.
 	class := Rowan globalNamed: className.
-	class removeSelector: #foo4.
-	class removeSelector: #foo5.
-	class removeSelector: #foo6.
-	class class  removeSelector: #bar.
-	class class  removeSelector: #bar4.
-	class class  removeSelector: #bar5.
+	class _removeUnPackagedSelector: #foo4.
+	class _removeUnPackagedSelector: #foo5.
+	class _removeUnPackagedSelector: #foo6.
+	class class  _removeUnPackagedSelector: #bar.
+	class class  _removeUnPackagedSelector: #bar4.
+	class class  _removeUnPackagedSelector: #bar5.
 "recompile without packaging"
 	class
 		compileMethod:  'foo4 ^4'
@@ -879,8 +879,8 @@ RwRowanSample9Test >> testAuditMissingCompiledMethod [
 	packageName1 := 'RowanSample9-Core'.
 	packageName2 := 'RowanSample9-Extensions'.
 	class := Rowan globalNamed: className.
-	class removeSelector: #foo.
-	class class  removeSelector: #bar.
+	class _removeUnPackagedSelector: #foo.
+	class class  _removeUnPackagedSelector: #bar.
 
 "audit"
 	audit := project audit.

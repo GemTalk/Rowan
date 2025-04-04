@@ -769,7 +769,7 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 						logMessage:
 							'Skipping repair of ' , auditDetail behavior printString , ' >> '
 								, auditDetail selector
-								, ' because .... it''s complicated address in v3.0'.
+								, ' because #895 .... it''s complicated addressed in v3.0'.
 					^ self ].
 			auditDetail selector asString = 'isFromRowan'
 				ifTrue: [ 
@@ -780,6 +780,17 @@ UpgradeRowanV2 >> gemstoneBaseRepairMissingLoadedMethod: auditDetail [
 								, auditDetail selector
 								,
 									' because .... it needs to be packaged as part of Rowan at a later step'.
+					^ self ] ].
+	auditDetail behavior = Behavior
+		ifTrue: [ 
+			auditDetail selector asString = '_rwRemoveSelector:environmentId:ifUnpackagedDo:'
+				ifTrue: [ 
+					"https://github.com/GemTalk/Rowan/issues/895 - similar"
+					self
+						logMessage:
+							'Skipping repair of ' , auditDetail behavior printString , ' >> '
+								, auditDetail selector
+								, ' because #895 .... it''s complicated addressed in v3.0'.
 					^ self ] ].
 	self
 		repairMissingLoadedMethod:
