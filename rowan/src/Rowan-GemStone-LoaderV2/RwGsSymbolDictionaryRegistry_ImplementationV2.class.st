@@ -77,10 +77,9 @@ RwGsSymbolDictionaryRegistry_ImplementationV2 class >> _doDeleteCompiledMethod: 
 
 	| selector |
 	selector := compiledMethod selector.
-	behavior removeSelector: selector asString environmentId: 0.
+	behavior _removeUnPackagedSelector: selector asString environmentId: 0.
 
 	^ registryInstance
-
 ]
 
 { #category : 'private' }
