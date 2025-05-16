@@ -2,36 +2,57 @@
 options
 {
 SuperDoitOptionalOptionWithRequiredArg long: 'archBase'.
+SuperDoitOptionalOptionWithNoArg long: 'gemstoneOnly'.
+SuperDoitOptionalOptionWithNoArg long: 'rowanOnly'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 }
 %
 usage
 -----
 USAGE 
-  $basename [--help | -h] [--debug | -D] [OPTIONS]
+  $basename [--help | -h] [--debug | -D] [--gemstoneOnly] [--rowanOnly] \
+  [--archbase=<gemstone-checkout-root>] \
+  [--projectsHome=<path-to-Rowan-git-projecs-directory>]
 
 DESCRIPTION
-  Attach the standard Rowan development projects in the stone to git clones:
-    gemstoneBaseImage to $ARCHBASE/image, if ARCHBASE env var defined
-    Rowan             to $ROWAN_PROJECTS_HOME/Rowan
-    RowanClientServices to $ROWAN_PROJECTS_HOME/RowanClientServices
-    
-  and reload Rowan, including tests.
+  
+  Attach the standard Rowan development project git repositories:
+    gemstoneBaseImage       (--archbase required)
+    Rowan                   (--projectsHome)
+    Announcements
+    FileSystemGs
+    RemoveServiceReplication
+    RowanClientServices
+  to the stone, to allow development of these projects in JadeiteForPharo.
 
+ 
 OPTIONS
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
+  --archbase=<gemstone-checkout-root>
+                             Define the path to the root Directory of the GemStone
+                             git repository. If not specified, the gemstoneBaseImage
+                             project will not be attached.
+  --gemstoneOnly             If specified the only the gemstoneBaseImage project will
+                             be attached and loaded.
+  --rowanOnly                If specified only the Rowan projects will be attached and 
+                             loaded
+  --projectsHome=<path-to-Rowan-git-projecs-directory>
+                             Path to the directory where the standard Rowan git projects
+                             are located. Not needed if --gemstoneOnly option is used. 
 
 EXAMPLES
   $basename -h
   $basename --help -- -L -I .topazini
   $basename --projectsHome=$GS_HOME/shared/repos 
   $basename --projectsHome=/home/dhenrich/work/m_37x_externals_st --archBase=/home/dhenrich/work/m_37x
+  $basename --gemstoneOnly --archBase=/home/dhenrich/work/m_37x
 -----
 %
 method
 attachRowanProjects: projectsHome
 	| rowanProject loadSpecs projectNames |
+	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
 	rowanProject := Rowan projectNamed: 'Rowan'.
 	loadSpecs := rowanProject loadedLoadSpecifications.
 	{
@@ -48,30 +69,70 @@ attachRowanProjects: projectsHome
 					loadSpec :=  project loadSpecification.
 					loadSpecs addLoadSpec: loadSpec ] ].
 	loadSpecs do: [:loadSpec |
-		| relRoot |
+		| relRoot projectAlias |
+		projectAlias := loadSpec projectName = 'RowanClientServices'
+			ifTrue: [ 
+				(System gemVersionAt: 'gsVersion') asRwGemStoneVersionNumber >= ('3.7.2' asRwGemStoneVersionNumber)
+					ifTrue: [ 
+						"RowanClientServices is the only project that needs a projectAlias"
+						'RowanClientServicesV3']
+					ifFalse: [ loadSpec projectAlias ] ]
+			ifFalse: [ loadSpec projectAlias ].
 		relRoot := loadSpec relativeRepositoryRoot.
 		relRoot isEmpty
 			ifTrue: [ 
 				loadSpec 
 					projectsHome: projectsHome;
-					gitUrl: 'file:', ((projectsHome, '/', loadSpec projectAlias) asFileReference pathString);
+					gitUrl: 'file:', ((projectsHome, '/', projectAlias) asFileReference pathString);
 					yourself  ]
 			ifFalse: [
 						"embedded Rowan project" 
 						loadSpec
-							gitUrl: 'file:', (((projectsHome, '/', loadSpec projectAlias) asFileReference / relRoot) pathString);
+							gitUrl: 'file:', (((projectsHome, '/', projectAlias) asFileReference / relRoot) pathString);
 							projectsHome: projectsHome;
 							yourself ].
-		loadSpec addCustomConditionalAttributes: #('tests' 'testsv2' 'obsolete') ].
+		loadSpec addCustomConditionalAttributes: #('tests' 'testsV2') ].
  	projectNames := loadSpecs load projectNames asArray sort. 
 	self logMessage: 'Rowan projects attached and reloaded: '.
 	projectNames do: [:each |
 		self logMessage: '	', each ]
 %
 doit
-	| rowanProject loadSpecs gitUrl projectsHome |
+	| rowanProject loadSpecs projectsHome |
+	self logMessage: 'Rowan version: ', Rowan versionString.
 	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
+	self rowanOnly
+		ifFalse: [
+			(self archBase
+				ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
+				ifNotNil: [:value | value ])
+					ifNil: [
+						self gemstoneOnly
+							ifFalse: [ self error: '--archbase option required when using --gemstoneOnly option' ]. 
+						self logMessage: 'ARCHBASE not set, so gemstoneBaseImage project not attached and not loaded']
+					ifNotNil: [:value |
+						"attach gemstoneBaseImage project"
+						| loadSpec gitUrl |
+						System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString.
+						self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString.
+				 		loadSpec := (Rowan projectNamed: 'gemstoneBaseImage') loadSpecification.
+						gitUrl := loadSpec gitUrl.
+						(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
+								ifTrue: [ 
+									"project already attached, so reload"
+									loadSpec
+										addCustomConditionalAttributes: #('tests' 'obsolete');
+										load.
+									self logMessage: 'gemstoneBaseImage reloaded' ] 
+								ifFalse: [
+									loadSpec
+										gitUrl: 'file:', ('$ARCHBASE' asFileReference pathString);
+										projectSpecFile: 'image/rowan/project_attached.ston';
+										addCustomConditionalAttributes: #('tests' 'obsolete');
+										load.
+									self logMessage: 'gemstoneBaseImage project attached and reloaded' ] ].
+			self gemstoneOnly ifTrue: [ ^ System commit ] ].
 	self projectsHome
 		ifNotNil: [:value |
 			projectsHome := value asFileReference pathString.
@@ -80,33 +141,6 @@ doit
 			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
 				ifNotNil: [:value | projectsHome := value asFileReference pathString ]
 				ifNil: [ self error: 'The env var $ROWAN_PROJECTS_HOME is expected to be defined, or the --projectsHome option used.' ] ].
-	self logMessage: 'Using ROWAN_PROJECTS_HOME = ', '$ROWAN_PROJECTS_HOME' asFileReference pathString.
-	self logMessage: 'Rowan version: ', Rowan versionString.
-	(self archBase
-		ifNil: [ System gemEnvironmentVariable: 'ARCHBASE' ]
-		ifNotNil: [:value | value ])
-		ifNil: [ self logMessage: 'ARCHBASE not set, so gemstoneBaseImage project not attached and not loaded']
-		ifNotNil: [:value |
-			"attach gemstoneBaseImage project"
-			| loadSpec |
-			System gemEnvironmentVariable: 'ARCHBASE' put: value asFileReference pathString.
-			self logMessage: 'Using ARCHBASE = ', '$ARCHBASE' asFileReference pathString.
-		 	loadSpec := (Rowan projectNamed: 'gemstoneBaseImage') loadSpecification.
-			gitUrl := loadSpec gitUrl.
-			(gitUrl notNil and: [gitUrl beginsWith: 'file:'])
-					ifTrue: [ 
-						"project already attached, so reload"
-						loadSpec
-							addCustomConditionalAttributes: #('tests');
-							load.
-						self logMessage: 'gemstoneBaseImage reloaded' ] 
-					ifFalse: [
-						loadSpec
-							gitUrl: 'file:', ('$ARCHBASE' asFileReference pathString);
-							projectSpecFile: 'image/rowan/project_attached.ston';
-							addCustomConditionalAttributes: #('tests');
-							load.
-						self logMessage: 'gemstoneBaseImage project attached and reloaded' ] ].
 	self attachRowanProjects: projectsHome.
 	^ System commit
 %
