@@ -9,8 +9,8 @@ If you are interested in taking Rowan and JadeiteForPharo for a spin, please do,
 If you are new to GemStone, then you might consider taking a look at [GsDevKit_stones](https://github.com/GsDevKit/GsDevKit_stones). There are [several example scripts](https://github.com/GsDevKit/GsDevKit_stones/tree/v2.1/tests) that you can use for inspiration. 
 
 
-## Rowan branch masterV3.4
-Development branch for internal development (3.7.4) ... not net released.
+## Rowan branch masterV3.5
+Development branch for internal development (3.7.5) ... not net released.
 
 ## GemStone version to Rowan branch map 
 
