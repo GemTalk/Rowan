@@ -102,6 +102,7 @@ doit
 	self logMessage: 'Rowan version: ', Rowan versionString.
 	(Rowan version >= (RwSemanticVersionNumber fromString: '3.0.0'))
 		ifFalse: [ self error: 'This script should be run in Rowan v3.0 or later'].
+	(self rowanOnly and: [self gemstoneOnly]) ifTrue: [ self error: 'Use only one of the options: --rowanOnly or --gemstoneOnly' ].
 	self rowanOnly
 		ifFalse: [
 			(self archBase
