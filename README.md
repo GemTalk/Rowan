@@ -17,6 +17,7 @@ Development branch for internal development (3.7.5) ... not net released.
 | GemStone | Rowan        |
 | -------- | ------------ |
 | `3.7.2`  | [masterV3.2](https://github.com/GemTalk/Rowan/tree/masterV3.2) |
+| `3.7.4`  | [masterV3.4](https://github.com/GemTalk/Rowan/tree/masterV3.4) |
 
 ## JadeiteForPharo: IDE for Rowan3
 The IDE for Rowan is [Jadeite For Pharo](https://github.com/GemTalk/JadeiteForPharo) .
