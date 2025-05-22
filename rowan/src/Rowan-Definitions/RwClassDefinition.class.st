@@ -166,10 +166,10 @@ RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePa
 	thePackageConvention = 'Rowan'
 		ifTrue: [ ^ self ].
 	thePackageConvention = 'Monticello'
-		ifTrue: [ self error: 'not yet implemented' ].
-	thePackageConvention ~= 'RowanHybrid'
-		ifTrue: [ self error: 'unknown package convention' ].
-	self category: newPackageName
+		ifTrue: [ ^ self category: newPackageName  ].
+	thePackageConvention = 'RowanHybrid'
+		ifTrue: [ ^ self category: newPackageName ].
+	self error: 'unknown package convention ', thePackageConvention printString 
 ]
 
 { #category : 'accessing' }
