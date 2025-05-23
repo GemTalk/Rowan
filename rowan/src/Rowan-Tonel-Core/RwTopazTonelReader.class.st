@@ -160,7 +160,7 @@ RwTopazTonelReader >> createClassFrom: anArray [
   dict := anArray at: 6 .
   "keys are lowercase here, keys tonel files are case-insenstive"
   knownKeys := IdentitySet withAll:#( name superclass instvars classvars classinstvars 
-                                           category gs_options type gs_reservedoop traits classtraits  ).
+                     category gs_options type gs_reservedoop traits classtraits package ).
   keys := IdentitySet new .
   dict keys do:[:k|  keys add: k asSymbol ].
   (xKeys := keys - knownKeys) size > 0 
