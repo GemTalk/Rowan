@@ -10,7 +10,8 @@ Class {
 	#superclass : 'RwLoadedThing',
 	#instVars : [
 		'loadedClass',
-		'classIsMeta'
+		'classIsMeta',
+		'isDirty'
 	],
 	#category : 'Rowan-Loader'
 }
@@ -27,6 +28,13 @@ RwLoadedMethod >> asDefinition [
 RwLoadedMethod >> classIsMeta [
 
 	^classIsMeta
+]
+
+{ #category : 'testing' }
+RwLoadedMethod >> isDirty [
+	"a method is dirty if it has changes that are not written to disk"
+
+	^  isDirty
 ]
 
 { #category : 'comparing' }
@@ -58,6 +66,21 @@ RwLoadedMethod >> loadedClass: aLoadedClass [
 RwLoadedMethod >> loadedPackage [
 
 	^self loadedClass loadedPackage
+]
+
+{ #category : 'private' }
+RwLoadedMethod >> markDirty [
+	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
+
+	isDirty := true.
+	self markPackageDirty
+]
+
+{ #category : 'private' }
+RwLoadedMethod >> markNotDirty [
+	"I have been changed to be consistent with my source, so mark not dirty."
+
+	isDirty ifTrue: [ isDirty := false]
 ]
 
 { #category : 'private' }

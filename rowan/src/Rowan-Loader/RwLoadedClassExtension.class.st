@@ -138,6 +138,14 @@ RwLoadedClassExtension >> loadedPackage: aLoadedPackage [
 ]
 
 { #category : 'private' }
+RwLoadedClassExtension >> markNotDirty [
+	"I have been changed to be consistent with my source, mark my methods as not dirty."
+	
+	self loadedInstanceMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].	
+	self loadedClassMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].
+]
+
+{ #category : 'private' }
 RwLoadedClassExtension >> markPackageDirty [
 
 	loadedPackage markDirty

@@ -34,6 +34,52 @@ RwRowanSample9V4Test >> _rowanSampleProjectBaseName [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V4Test >> testIssue276 [
+
+	"https://github.com/dalehenrich/Rowan/issues/276"
+
+	"take isDurty through it's paces"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 loadedClass |
+	loadSpec := self _loadSpecNamed: 'spec_0005'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	resolvedProject := loadSpec resolveProject.
+
+"load project"
+	loadedProjects := resolvedProject load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self
+		_standard_validate: resolvedProject
+		loadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+"initial state check ... nothing dirty"
+	loadedClass := Rowan image loadedClassNamed: className1.
+	self deny: loadedClass isDirty.
+	loadedClass loadedInstanceMethods valuesDo: [:loadedMethod | 
+		self deny: loadedMethod isDirty ].
+	loadedClass loadedClassMethods valuesDo: [:loadedMethod | 
+		self deny: loadedMethod isDirty ].
+	loadedClass := Rowan image loadedClassNamed: className2.
+	self deny: loadedClass isDirty
+]
+
+{ #category : 'tests' }
 RwRowanSample9V4Test >> testIssue705 [
 	"load Bridge, Child, Parent, Bridge, Parent, Child, Bridge sequentially"
 

@@ -104,7 +104,8 @@ RwGsLoadedSymbolDictClass >> initialize [
 
 	super initialize.
 	loadedInstanceMethods := StringKeyValueDictionary new.
-	loadedClassMethods := StringKeyValueDictionary new
+	loadedClassMethods := StringKeyValueDictionary new.
+	isDirty := false
 ]
 
 { #category : 'initialization' }
