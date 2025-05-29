@@ -93,12 +93,31 @@ UpgradeRowanV3 >> _analyzeAuditForMissingLoadedNotIdentical [
 
 { #category : 'migrate rowan' }
 UpgradeRowanV3 >> _migrateRowanMigrateFromMethodSource [
+	"in 3.7.5, RwLoadedPackage, RwLoadedClass and RwLoadedMethod, have a new instance variable #isDirty"
+
+	^ 'migrateFrom: oldLoadedPackage instVarMap: aMap
+	| ivIndex |
+	ivIndex := self class allInstVarNames indexOfIdentical: #''isDirty''.
+	super migrateFrom: oldLoadedPackage instVarMap: aMap.
+	(self instVarAt: ivIndex)
+		ifNil: [ 
+			self 
+				instVarAt: ivIndex
+				put: false.
+				^ self ]'
+]
+
+{ #category : 'migrate rowan' }
+UpgradeRowanV3 >> _migrateRowanMigrateFromMethodSourcePre372 [
+	"in 3.7.2, RwLoadedPackage has a new instance variable loadedTraits"
+
 	^ 'migrateFrom: oldLoadedPackage instVarMap: aMap
 	| ivIndex |
 	ivIndex := self class allInstVarNames indexOfIdentical: #''loadedTraits''.
 	super migrateFrom: oldLoadedPackage instVarMap: aMap.
 	(self instVarAt: ivIndex)
 		ifNil: [ 
+			"loadedTraits"
 			self 
 				instVarAt: ivIndex
 				put: StringKeyValueDictionary new.
@@ -665,17 +684,39 @@ UpgradeRowanV3 >> logMessage: message [
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV3 >> migrateRowan [
-	"RwLoadedPackage has a new instance variable loadedTraits"
+UpgradeRowanV3 >> migrateRowanFromPre375 [
+	"driver to migrate instances of RwLoadedPackage, RwLoadedClass and RwLoadedMethod"
 
-	| oldVersion instances |
-	oldVersion := self rowanMigrateTo.
-	instances := SystemRepository listInstances: {oldVersion}.
-	(instances at: 1) do: [ :instance | instance migrate ].
-	(instances at: 1) do: [ :instance | instance loadedTraits ].
-	(instances at: 1) collect: [ :instance | instance loadedTraits ].
-	RwGsLoadedSymbolDictPackage
-		removeSelector: self _migrateRowanMigrateFromMethodSourceSelector
+	"in 3.7.2, RwLoadedPackage has a new instance variable loadedTraits"
+
+	"in 3.7.5, RwLoadedPackage, RwLoadedClass and RwLoadedMethod, have a new instance variable isDirty"
+
+	| oldVersions instances rwClass  |
+	oldVersions := self rowanMigrateTo375.	"set up for migration and return a list of the old class versions"
+	instances := SystemRepository listInstances: oldVersions.
+	1 to: oldVersions size do: [:i |
+		(instances at: i) do: [ :instance | instance migrate ].	"migrate each of the instances for the class version"
+		(instances at: i)
+			do: [ :instance | 
+				(instance respondsTo: #'loadedTraits')
+					ifTrue: [ instance loadedTraits ].
+				instance isDirty ] ].
+	RwLoadedThing removeSelector: self _migrateRowanMigrateFromMethodSourceSelector.
+	self upgradeFrom asRwGemStoneVersionNumber <= '3.7.2' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			RwGsLoadedSymbolDictPackage
+				removeSelector: self _migrateRowanMigrateFromMethodSourceSelector ].
+false  ifTrue: [ 
+	rwClass := Rowan globalNamed: 'RwLoadedClass'.
+	rwClass
+		compileMethod: 'markNotDirty
+	"I have been changed to be consistent with my source, so mark not dirty and mark my methods as not dirty."
+
+	isDirty ifTrue: [ isDirty := false ].
+	self loadedInstanceMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].	
+	self loadedClassMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].'.
+].
+	System commit.
 ]
 
 { #category : 'upgrade' }
@@ -1292,16 +1333,49 @@ UpgradeRowanV3 >> repairSummary [
 ]
 
 { #category : 'migrate rowan' }
-UpgradeRowanV3 >> rowanMigrateTo [
-	"RwLoadedPackage has a new instance variable loadedTraits, set up for migration but do not run the migration"
+UpgradeRowanV3 >> rowanMigrateTo375 [
+	"set up to migrate the instances"
 
-	| oldVersion |
-	RwGsLoadedSymbolDictPackage
-		compileMethod: self _migrateRowanMigrateFromMethodSource.
+	"in 3.7.2, RwLoadedPackage has a new instance variable loadedTraits"
+
+	"in 3.7.5, RwLoadedPackage, RwLoadedClass and RwLoadedMethod, have a new instance variable isDirty"
+
+	| oldVersions oldVersion |
+	RwLoadedThing compileMethod: self _migrateRowanMigrateFromMethodSource.
+	self upgradeFrom asRwGemStoneVersionNumber <= '3.7.2' asRwGemStoneVersionNumber
+		ifTrue: [ 
+			"RwGsLoadedSymbolDictPackage has new #loadedTraits instance variable"
+			RwGsLoadedSymbolDictPackage
+				compileMethod: self _migrateRowanMigrateFromMethodSourcePre372 ].
+	oldVersion := RwLoadedPackage classHistory at: 1.
+	oldVersion migrateTo: RwLoadedPackage.
+	oldVersions := {}.
+	oldVersions add: oldVersion.
+	System commit.
+	oldVersion := RwLoadedClass classHistory at: 1.
+	oldVersion migrateTo: RwLoadedClass.
+	oldVersions add: oldVersion.
+	System commit.
+	oldVersion := RwLoadedMethod classHistory at: 1.
+	oldVersion migrateTo: RwLoadedMethod.
+	oldVersions add: oldVersion.
+	System commit.
 	oldVersion := RwGsLoadedSymbolDictPackage classHistory at: 1.
 	oldVersion migrateTo: RwGsLoadedSymbolDictPackage.
+	oldVersions add: oldVersion.
 	System commit.
-	^ oldVersion
+	oldVersion := RwGsLoadedSymbolDictClass classHistory at: 1.
+	oldVersion migrateTo: RwGsLoadedSymbolDictClass.
+	oldVersions add: oldVersion.
+	System commit.
+	oldVersion := RwGsLoadedSymbolDictMethod classHistory at: 1.
+	oldVersion migrateTo: RwGsLoadedSymbolDictMethod.
+	oldVersions add: oldVersion.
+	oldVersion := RwGsLoadedSymbolDictTraitMethod classHistory at: 1.
+	oldVersion migrateTo: RwGsLoadedSymbolDictTraitMethod.
+	oldVersions add: oldVersion.
+	System commit.
+	^ oldVersions
 ]
 
 { #category : 'upgrade rowan' }
@@ -1383,13 +1457,14 @@ UpgradeRowanV3 >> skipRepair: auditDetail [
 UpgradeRowanV3 >> step_0_5_migrateRowan [
 	"Migrate instances of Rowan objects that have changed shape with this version of Rowan"
 
-	"If you choose to combine the required Rowan migration with your own, then the your migration 
-		should be performed at this point during the Rowan upgrae, and see migrateRowan for migration 
-		pattern to be used for Rowan. The method selector _migrateRowanMigrateFromMethodSourceSelector
-		should be removed from RwGsLoadedSymbolDictPackage after migration is complete."
+	"If you choose to combine the required Rowan migration with your own, implement your own migration step method
+		and performed it at this point during the Rowan upgrade, See migrateRowanFromPre375 for migration 
+		pattern to be used. The method selector _migrateRowanMigrateFromMethodSourceSelector
+		should be removed from RwLoadedThing and RwGsLoadedSymbolDictPackage after migration is complete."
 
 	self logMessage: ' migrate Rowan'.
-	self migrateRowan.
+	(self upgradeFrom asRwGemStoneVersionNumber < '3.7.5' asRwGemStoneVersionNumber)
+		ifTrue: [ self migrateRowanFromPre375 ].
 	self commit
 ]
 

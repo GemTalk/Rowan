@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.4",
+	"gsVersion" : "3.7.5",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 0,
 		"failures" : 1,
-		"passed" : 251,
-		"summary" : "252 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 546.11s",
-		"tests" : 252,
-		"time" : 546.109
+		"passed" : 252,
+		"summary" : "253 Tests with 1 Failures, 0 Errors and 0 DeprecationWarnings in 561.91s",
+		"tests" : 253,
+		"time" : 561.912
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -127,6 +127,12 @@
 			"className" : "RwRowanSample9V4Test",
 			"status" : "passed",
 			"selector" : "testIssue230",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V4Test",
+			"status" : "passed",
+			"selector" : "testIssue276",
 			"time" : "0"
 		},
 		{
@@ -1528,5 +1534,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-04-01T13:33:32.176775-07:00"
+	"timeStamp" : "2025-05-27T13:46:07.112923-07:00"
 }

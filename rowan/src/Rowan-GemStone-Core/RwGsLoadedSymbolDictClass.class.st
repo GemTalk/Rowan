@@ -105,7 +105,8 @@ RwGsLoadedSymbolDictClass >> initialize [
 	super initialize.
 	loadedInstanceMethods := StringKeyValueDictionary new.
 	loadedClassMethods := StringKeyValueDictionary new.
-	isDirty := false
+	"A new class is dirty until it has been shown to be identical to a repository on disk."
+	isDirty := true
 ]
 
 { #category : 'initialization' }
