@@ -218,6 +218,59 @@ RwRowanSample9V4Test >> testIssue705 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_A [
+	"notiication of method compilation errors, when new superclass instVar collides with temp var in subclass ... step A - clean load with no errors"
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0034' 
+		projectName: 'RowanSample9V4' 
+		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
+"checkout migration_step_1 branch; read and load"
+	project checkout: 'spec_0035'.
+	resolvedProject read; load.
+
+"checkout migration_step_2 branch; read and load"
+	project checkout: 'spec_0036'.
+	project asDefinition
+		read;
+		load: RwGsInstanceMigrator aggressiveMigration.
+
+	self assert: (audit := project audit) isEmpty.
+
+"self halt."
+]
+
+{ #category : 'tests' }
 RwRowanSample9V4Test >> testSpec_0090 [
 	"spec_0090 should load cleanly"
 
