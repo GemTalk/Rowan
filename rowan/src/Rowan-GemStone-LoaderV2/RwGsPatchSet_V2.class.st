@@ -1277,8 +1277,14 @@ RwGsPatchSet_V2 >> applyForNewClassVersions: anInstanceMigrator [
 				ifTrue: [ 
 					deleteNewVersionMethods add: patch.
 					deletedMethods remove: patch ] ].
-	self apply
-
+	[self apply] on: CompileError do: [:ex |
+		(RwCompileErrorCompilingMethodsForNewClassVersionNotification new
+			compileError:  ex;
+			signal)
+			ifTrue: [ "method compile will be handled later"]
+			 ifFalse: [ 
+				"signal the compile error"
+				ex pass ] ].
 ]
 
 { #category : 'accessing' }

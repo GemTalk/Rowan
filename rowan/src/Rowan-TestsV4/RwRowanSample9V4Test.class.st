@@ -304,12 +304,11 @@ RwRowanSample9V4Test >> testIssue962_A [
 
 { #category : 'tests' }
 RwRowanSample9V4Test >> testIssue962_B [
-	"notification of method compilation errors, when new superclass instVar collides with temp var in subclass ... step 2 - boom.
-		Provide a Rowan project load stack to compare with JfP stack"
+	"notification of method compilation errors, when new superclass instVar collides with temp var in subclass ... step 2 - boom"
 
 	"https://github.com/dalehenrich/Rowan/issues/962"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition compileErrorHit notificationHit |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9V4' 
@@ -344,14 +343,93 @@ RwRowanSample9V4Test >> testIssue962_B [
 "step_1 ;  add a method to RowanSample9Classb that will cause compile error when spec_0036 is loaded"
 	definedProject := project defined.
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
-	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
+	classDefinition 
+		addInstanceMethodDefinition:
+			(RwMethodDefinition newForSelector: 'boom' protocol: 'boom' source: 'boom | ivar2 | ivar2 := 1').
 	definedProject  load. "should load cleanly"
 "step_2;  checkout and load spec_0036 -- boom"
 	project checkout: 'spec_0036'.
 	definedProject := project defined read.
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
 	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
-	definedProject  load. "boom"
+	compileErrorHit := notificationHit := false.
+	[
+		[ definedProject  load ] 
+			on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+			do: [:ex |  
+				notificationHit := true.
+				ex resume:  false. "signal compile error"
+				ex resume: true. "method compile error will be handled later" ]
+		] on: CompileError do: [:ex | compileErrorHit  := true] .
+	self assert: notificationHit description: 'expected notification not hit'.
+	self assert: compileErrorHit description: 'expected compile error not hit'
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_C [
+	"notification of method compilation errors, when new superclass instVar collides with temp var in subclass ... step 2 -  handle notifications"
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit methodClass sourceString replacementSource |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9V4' 
+		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+	
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	
+"step_1 ;  add a method to RowanSample9Classb that will cause compile error when spec_0036 is loaded"
+	definedProject := project defined.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition 
+		addInstanceMethodDefinition:
+			(RwMethodDefinition newForSelector: 'boom' protocol: 'boom' source: 'boom | ivar2 | ivar2 := 1').
+	definedProject  load. "should load cleanly"
+"step_2;  checkout and load spec_0036 -- handle notification, collect method info, compile new method after load"
+	project checkout: 'spec_0036'.
+	definedProject := project defined read.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
+	notificationHit := false.
+	[ definedProject  load ] 
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [:ex |  
+			| compileError |
+			notificationHit := true.
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := (compileError gsArguments at: 3)  halt.
+			ex resume: true. "method compile error will be handled later"  ].
+	self assert: notificationHit description: 'expected notification not hit'.
+	replacementSource := 'boom | temp2 | temp2 := 1'.
+	methodClass compileMethod: replacementSource category: 'boom'.
+	self assert: (audit := project audit) isEmpty.
+	self halt.
 ]
 
 { #category : 'tests' }
