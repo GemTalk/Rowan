@@ -144,7 +144,6 @@ RwRowanSample9Test >> testIssue586_move_class_to_symbolDict_2 [
 		AND changing class version (load spec_0034)"
 
 	| loadSpec projectName projectNames resolvedProject loadedProjects project ar className class symDict registry |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0001'.
 
 	projectName := loadSpec projectName.
@@ -183,7 +182,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject 
 		checkout: 'spec_0034';
 		gemstoneSetDefaultSymbolDictNameTo: self _sampleSymbolDictionaryName2.
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"

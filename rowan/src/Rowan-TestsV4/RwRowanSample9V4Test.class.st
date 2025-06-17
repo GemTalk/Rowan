@@ -223,7 +223,7 @@ RwRowanSample9V4Test >> testIssue962_A [
 
 	"https://github.com/dalehenrich/Rowan/issues/962"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  instances theClass  classes |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0034' 
 		projectName: 'RowanSample9V4' 
@@ -249,25 +249,109 @@ RwRowanSample9V4Test >> testIssue962_A [
 
 "load project - migration_step_0"
 	loadedProjects := resolvedProject load.
-
+	
 "validate"
 	self assert: loadedProjects size = 1.
 	project := loadedProjects projectNamed: projectName.
 	self assert: (audit := project audit) isEmpty.
-
-"checkout migration_step_1 branch; read and load"
+	
+"checkout migration_step_1 branch; read and load - spec_0035"
 	project checkout: 'spec_0035'.
 	resolvedProject read; load.
 
-"checkout migration_step_2 branch; read and load"
+	theClass := (GsSession currentSession objectNamed: 'CypressTestData') at: #'RowanSample9ClassA'.
+	classes := Dictionary new.
+	classes at: '1' put: theClass.
+	instances := Dictionary new.
+	instances at: '1' put: { 
+		theClass new
+			a: 'a';
+			ivar1: 1;
+			yourself }.
+	
+"checkout migration_step_2 branch; read and load - spec_0036"
 	project checkout: 'spec_0036'.
 	project asDefinition
 		read;
-		load: RwGsInstanceMigrator aggressiveMigration.
+		load.
 
 	self assert: (audit := project audit) isEmpty.
+	
+	theClass := (GsSession currentSession objectNamed: 'CypressTestData') at: #'RowanSample9ClassA'.
+	classes at: '2' put: theClass.
+	instances at: '2' put: { 
+		theClass new
+			a: 'a';
+			ivar1: 1;
+			yourself }.
 
-"self halt."
+"checkout migration_step_3 branch; read and load - back to spec_0035 "
+	project checkout: 'spec_0035'.
+	project asDefinition
+		read;
+		load.
+
+	self assert: (audit := project audit) isEmpty.
+	
+	theClass := (GsSession currentSession objectNamed: 'CypressTestData') at: #'RowanSample9ClassA'.
+	classes at: '3' put: theClass.
+	instances at: '3' put: { 
+		theClass new
+			a: 'a';
+			ivar1: 1;
+			yourself }
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_B [
+	"notification of method compilation errors, when new superclass instVar collides with temp var in subclass ... step 2 - boom.
+		Provide a Rowan project load stack to compare with JfP stack"
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9V4' 
+		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+	
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	
+"step_1 ;  add a method to RowanSample9Classb that will cause compile error when spec_0036 is loaded"
+	definedProject := project defined.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
+	definedProject  load. "should load cleanly"
+"step_2;  checkout and load spec_0036 -- boom"
+	project checkout: 'spec_0036'.
+	definedProject := project defined read.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
+	definedProject  load. "boom"
 ]
 
 { #category : 'tests' }

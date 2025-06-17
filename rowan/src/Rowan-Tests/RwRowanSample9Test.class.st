@@ -6491,7 +6491,6 @@ RwRowanSample9Test >> testSpec_0008 [
 	"https://github.com/dalehenrich/Rowan/issues/493"
 
 	| loadSpec projectName resolvedProject loadedProjects |
-UserGlobals at: #ConditionalHalt put: false.
 	loadSpec := self _loadSpecNamed: 'spec_0008'.
 
 	projectName := loadSpec projectName.
@@ -6503,7 +6502,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	resolvedProject := loadSpec resolveProject.
 
 "load project"
-UserGlobals at: #ConditionalHalt put: false.
 	loadedProjects := resolvedProject load.
 
 "validate"
