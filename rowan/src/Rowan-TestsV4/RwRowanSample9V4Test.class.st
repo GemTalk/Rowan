@@ -371,7 +371,7 @@ RwRowanSample9V4Test >> testIssue962_C [
 
 	"https://github.com/dalehenrich/Rowan/issues/962"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit methodClass sourceString replacementSource |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9V4' 
@@ -416,20 +416,23 @@ RwRowanSample9V4Test >> testIssue962_C [
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
 	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
 	notificationHit := false.
+	methodErrors := {}.
 	[ definedProject  load ] 
 		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
 		do: [:ex |  
-			| compileError |
+			| compileError methodClass sourceString  |
 			notificationHit := true.
 			compileError := ex compileError.
 			sourceString := compileError sourceString.
-			methodClass := (compileError gsArguments at: 3)  halt.
+			methodClass := (compileError gsArguments at: 3) .
+			methodErrors add: {methodClass . sourceString}.
 			ex resume: true. "method compile error will be handled later"  ].
 	self assert: notificationHit description: 'expected notification not hit'.
 	replacementSource := 'boom | temp2 | temp2 := 1'.
-	methodClass compileMethod: replacementSource category: 'boom'.
+	self assert: (methodErrors size= 1) description: 'Only one compile error expected'.
+	methodErrors do: [:ar |
+		(ar at: 1) compileMethod: replacementSource category: 'boom' environmentId: 0].
 	self assert: (audit := project audit) isEmpty.
-	self halt.
 ]
 
 { #category : 'tests' }
