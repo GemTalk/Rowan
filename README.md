@@ -10,7 +10,7 @@ If you are new to GemStone, then you might consider taking a look at [GsDevKit_s
 
 
 ## Rowan branch masterV3.4
-Development branch for GemStone 3.7.4.
+To be used with GemStone 3.7.4.1.
 
 ## GemStone version to Rowan branch map 
 
