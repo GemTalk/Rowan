@@ -14,10 +14,10 @@ Development branch for GemStone 3.7.4.
 
 ## GemStone version to Rowan branch map 
 
-| GemStone | Rowan        |
-| -------- | ------------ |
-| `3.7.2`  | [masterV3.2](https://github.com/GemTalk/Rowan/tree/masterV3.2) |
-| `3.7.4`  | [masterV3.2](https://github.com/GemTalk/Rowan/tree/masterV3.4) |
+| GemStone   | Rowan        |
+| ---------- | ------------ |
+| `3.7.2`    | [masterV3.2](https://github.com/GemTalk/Rowan/tree/masterV3.2) |
+| `3.7.4.1`  | [masterV3.2](https://github.com/GemTalk/Rowan/tree/masterV3.4) |
 
 ## JadeiteForPharo: IDE for Rowan3
 The IDE for Rowan is [Jadeite For Pharo](https://github.com/GemTalk/JadeiteForPharo) .
