@@ -415,6 +415,8 @@ false ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap
 	definedProject := project defined read.
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
 	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_3 | xxx | xxx := 1'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_4 | ivar2 | ivar2 := 3'  protocol: 'boom'.
 	notificationHit := false.
 	methodErrors := {}.
 	[ definedProject  load ] 
@@ -430,7 +432,7 @@ false ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap
 false ifTrue: [ self halt: 'step 2 - RowanSample9ClassB >> boom will not compile, RowanSample9ClassB >> boom_3 is new' ].
 	self assert: notificationHit description: 'expected notification not hit'.
 	replacementSource := ' | temp2 | temp2 := 1'.
-	self assert: (methodErrors size= 2) description: 'Two compile errors expected'.
+	self assert: (methodErrors size= 2) description: 'Three compile errors expected, only ', (methodErrors size) printString, ' hit'.
 	source := {}.
 	methodErrors do: [:ar |
 		source add: (ar at: 2).
@@ -492,8 +494,10 @@ false ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap
 	project checkout: 'spec_0036'.
 	definedProject := project defined read.
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'xxx | xxx | xxx := 1'  protocol: 'no boom'.
 	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
-	classDefinition addInstanceMethod: 'boom_3 | xxx | xxx := 1'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_3 | ivar2 | ivar2 := 2'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_4 | ivar2 | ivar2 := 3'  protocol: 'boom'.
 	notificationHit := false.
 	methodErrors := {}.
 	[ definedProject  load ] 
@@ -509,7 +513,7 @@ false ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap
 false ifTrue: [ self halt: 'step 2 - RowanSample9ClassB >> boom will not compile, RowanSample9ClassB >> boom_3 is new' ].
 	self assert: notificationHit description: 'expected notification not hit'.
 	replacementSource := ' | temp2 | temp2 := 1'.
-	self assert: (methodErrors size= 2) description: 'Two compile errors expected'.
+	self assert: (methodErrors size= 3) description: 'Three compile errors expected'.
 	source := {}.
 	methodErrors do: [:ar |
 		source add: (ar at: 2).

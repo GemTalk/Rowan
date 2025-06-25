@@ -1277,14 +1277,7 @@ RwGsPatchSet_V2 >> applyForNewClassVersions: anInstanceMigrator [
 				ifTrue: [ 
 					deleteNewVersionMethods add: patch.
 					deletedMethods remove: patch ] ].
-	[self apply] on: CompileError do: [:ex |
-		(RwCompileErrorCompilingMethodsForNewClassVersionNotification new
-			compileError:  ex;
-			signal)
-			ifTrue: [ "method compile will be handled later"]
-			 ifFalse: [ 
-				"signal the compile error"
-				ex pass ] ].
+	self apply
 ]
 
 { #category : 'accessing' }
@@ -1312,9 +1305,21 @@ RwGsPatchSet_V2 >> commit [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
+	[ 
 	aMethodAdditionPatch
 		compileUsingNewClassesSymbolList: self createdClasses
-		andExistingClasses: self tempSymbols
+		andExistingClasses: self tempSymbols ]
+		on: CompileError
+		do: [ :ex | 
+			(RwCompileErrorCompilingMethodsForNewClassVersionNotification new
+				compileError: ex;
+				signal)
+				ifTrue: [ 
+					"method compile will be handled later"
+					 aMethodAdditionPatch dynamicInstVarAt: #hasCompileError put: ex]
+				ifFalse: [ 
+					"signal the compile error"
+					ex pass ] ]
 ]
 
 { #category : 'private - applying' }

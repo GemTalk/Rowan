@@ -7,6 +7,7 @@ Class {
 { #category : 'installing' }
 RwGsMethodAdditionSymbolDictPatchV2 >> installMethod [
 
+(self dynamicInstVarAt: #hasCompileError) ifNotNil: [:msg |^self ].
 	self symbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: behavior
