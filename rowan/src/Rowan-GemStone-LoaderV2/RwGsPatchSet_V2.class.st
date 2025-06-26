@@ -1712,6 +1712,14 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> removeDeletedMethods [
+	addedMethods
+		do: [ :each | 
+			(each dynamicInstVarAt: #'hasCompileError')
+				ifNotNil: [ 
+					each
+						deleteMethodNewClassesSymbolList: self createdClasses
+						andExistingClasses: self tempSymbols 
+						deletedMethodPatches: deletedMethods ] ].
 	deletedMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
