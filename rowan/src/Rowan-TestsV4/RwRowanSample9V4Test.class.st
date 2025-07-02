@@ -370,88 +370,7 @@ RwRowanSample9V4Test >> testIssue962_C [
 
 	"https://github.com/dalehenrich/Rowan/issues/962"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors theSource source |
-	loadSpec := self 
-		_migrationLoadSpecNamed:  'spec_0035' 
-		projectName: 'RowanSample9V4' 
-		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
-		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
-
-	projectName := loadSpec projectName.
-	projectNames := {projectName}.
-
-	packageName1 := projectName , '-' , 'Core'.
-	packageName2 := projectName , '-' , 'Tests'.
-	className1 := projectName , 'Class1'.
-	className2 := projectName , 'IdentityKeyValueDictionary'.
-
-	projectNames do: [:pn | 
-		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
-			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
-
-	loadSpec repositoryRoot ensureDeleteAll.
-
-"resolve project"
-	resolvedProject := loadSpec resolveStrict.
-
-"load project - migration_step_0"
-	loadedProjects := resolvedProject load.
-	
-"validate"
-	self assert: loadedProjects size = 1.
-	project := loadedProjects projectNamed: projectName.
-	self assert: (audit := project audit) isEmpty.
-	
-"step_1 ;  add a method to RowanSample9Classb that will cause compile error when spec_0036 is loaded"
-	definedProject := project defined.
-	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
-	classDefinition 
-		addInstanceMethodDefinition:
-			(RwMethodDefinition newForSelector: 'boom' protocol: 'boom' source: 'boom | ivar2 | ivar2 := 1').
-	definedProject  load. "should load cleanly"
-false ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap'].
-"step_2;  checkout and load spec_0036 -- handle notification, collect method info, compile new method after load"
-	project checkout: 'spec_0036'.
-	definedProject := project defined read.
-	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
-	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
-	classDefinition addInstanceMethod: 'boom_3 | xxx | xxx := 1'  protocol: 'boom'.
-	classDefinition addInstanceMethod: 'boom_4 | ivar2 | ivar2 := 3'  protocol: 'boom'.
-	notificationHit := false.
-	methodErrors := {}.
-	[ definedProject  load ] 
-		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
-		do: [:ex |  
-			| compileError methodClass sourceString  |
-			notificationHit := true.
-			compileError := ex compileError.
-			sourceString := compileError sourceString.
-			methodClass := (compileError gsArguments at: 3) .
-			methodErrors add: {methodClass . sourceString}.
-			ex resume: true. "method compile error will be handled later"  ].
-false ifTrue: [ self halt: 'step 2 - RowanSample9ClassB >> boom will not compile, RowanSample9ClassB >> boom_3 is new' ].
-	self assert: notificationHit description: 'expected notification not hit'.
-	replacementSource := ' | temp2 | temp2 := 1'.
-	self assert: (methodErrors size= 2) description: 'Three compile errors expected, only ', (methodErrors size) printString, ' hit'.
-	source := {}.
-	methodErrors do: [:ar |
-		source add: (ar at: 2).
-		theSource := ((ar at:2) beginsWith: 'boom_2' )
-			ifTrue: ['boom_2 ', replacementSource]
-			ifFalse: ['boom ', replacementSource].
-		source add: theSource.
-		(ar at: 1) compileMethod: theSource category: 'boom' environmentId: 0].
-	self assert: (audit := project audit) isEmpty.
-]
-
-{ #category : 'tests' }
-RwRowanSample9V4Test >> testIssue962_D [
-	"notification of method compilation errors, when new superclass instVar collides with temp var in subclass ... step 2 -  handle notifications"
-
-	"https://github.com/dalehenrich/Rowan/issues/962"
-
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors theSource source methods_step_1 methods_step_2 theClass debug |
-	debug := false.
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors theSource source methods_step_1 methods_step_2 theClass  |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9V4' 
@@ -493,7 +412,6 @@ RwRowanSample9V4Test >> testIssue962_D [
 	self assert: (audit := project audit) isEmpty.
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
 	methods_step_1 := classDefinition instanceMethodDefinitions keys asArray.
-debug ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap - need audit to run clean before repairing methods'].
 "step_2;  checkout and load spec_0036 -- handle notification, collect method info, compile new method after load"
 	project checkout: 'spec_0036'.
 	theClass := Rowan globalNamed: classDefinition name.
@@ -516,11 +434,8 @@ debug ifTrue: [ self halt: 'step 1 -- RowanSample9ClassB >> boom with ivar2 trap
 			methodErrors add: {methodClass . sourceString}.
 			ex resume: true. "method compile error will be handled later"  ].
 	methods_step_2 := classDefinition instanceMethodDefinitions keys asArray.
-debug ifTrue: [ self halt: 'step 2 - RowanSample9ClassB >> boom will not compile, RowanSample9ClassB >> boom_3 is new' ].
 	self assert: notificationHit description: 'expected notification not hit'.
-false ifTrue: [
-	"audit would be expected to fail at this point"
-	self assert: (audit := project audit) isEmpty].
+	self assert: (audit := project audit) isEmpty.
 	replacementSource := '  "replacement source ... expected to compile without error"'.
 	self assert: (methodErrors size= 3) description: 'Three compile errors expected'.
 	source := {}.

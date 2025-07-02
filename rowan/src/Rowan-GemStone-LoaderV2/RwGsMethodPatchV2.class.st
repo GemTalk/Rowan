@@ -60,15 +60,24 @@ RwGsMethodPatchV2 >> className [
 
 { #category : 'accessing' }
 RwGsMethodPatchV2 >> compiledMethod [
-
 	^ compiledMethod
 		ifNil: [ 
-			| methodDictionary |
-			methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
+			| methodDictionary theBehavior |
+			theBehavior := (self dynamicInstVarAt: #'originalClassVersion')
+				ifNil: [ behavior ].
+			methodDictionary := (theBehavior persistentMethodDictForEnv: 0)
+				ifNil: [ Dictionary new ].
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
-				ifAbsent: [ self error: 'internal error - compiled method not present in method dictionary' ] ]
+				ifAbsent: [ 
+					(self dynamicInstVarAt: #'originalClassVersion')
+						ifNotNil: []
+						ifNil: [ 
+							self
+								error:
+									'internal error - compiled method ' , theBehavior name , '>>' , selector
+										, ' not present in method dictionary' ] ] ]
 ]
 
 { #category : 'compiling' }
