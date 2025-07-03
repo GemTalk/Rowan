@@ -1278,7 +1278,6 @@ RwGsPatchSet_V2 >> applyForNewClassVersions: anInstanceMigrator [
 					deleteNewVersionMethods add: patch.
 					deletedMethods remove: patch ] ].
 	self apply
-
 ]
 
 { #category : 'accessing' }
@@ -1306,9 +1305,23 @@ RwGsPatchSet_V2 >> commit [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
+	[ 
 	aMethodAdditionPatch
 		compileUsingNewClassesSymbolList: self createdClasses
-		andExistingClasses: self tempSymbols
+		andExistingClasses: self tempSymbols ]
+		on: CompileError
+		do: [ :ex | 
+			(RwCompileErrorCompilingMethodsForNewClassVersionNotification new
+				compileError: ex;
+				signal)
+				ifTrue: [ 
+					"method compile will be handled later"
+					 aMethodAdditionPatch 
+						dynamicInstVarAt: #hasCompileError put: ex;
+						dynamicInstVarAt: #originalClassVersion put: (self tempSymbols at: aMethodAdditionPatch className)]
+				ifFalse: [ 
+					"signal the compile error"
+					ex pass ] ]
 ]
 
 { #category : 'private - applying' }
@@ -1701,6 +1714,33 @@ RwGsPatchSet_V2 >> removeDeletedClassesFromTempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSet_V2 >> removeDeletedMethods [
+	| classNames |
+	addedMethods
+		do: [ :methodAddPatch | 
+			(methodAddPatch dynamicInstVarAt: #'hasCompileError')
+				ifNotNil: [ 
+					true
+						ifTrue: [ 
+							classNames
+								ifNil: [ 
+									classNames := Set new.
+									classesWithNewVersions
+										do: [ :patch | classNames add: patch classDefinition key ] ].
+
+							(classNames includes: methodAddPatch className)
+								ifTrue: [
+									"methodAddPatch is referencing the new version of the class!!! Should be refing the old version ... 
+										that's where the compiledMethod associated with the loaded method for this guy is located" 
+									deleteNewVersionMethods add: methodAddPatch.
+										
+		methodAddPatch primeBehaviorNewClassesSymbolList: self createdClasses
+		andExistingClasses: tempSymbols.
+ ] ]
+						ifFalse: [ 
+							methodAddPatch
+								deleteMethodNewClassesSymbolList: self createdClasses
+								andExistingClasses: self tempSymbols
+								deletedMethodPatches: deletedMethods ] ] ].
 	deletedMethods
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
@@ -1715,7 +1755,7 @@ RwGsPatchSet_V2 >> removeDeletedMethods [
 		do: [ :methodDeletionPatch | 
 			methodDeletionPatch
 				deleteNewVersionMethodNewClassesSymbolList: self createdClasses
-				andExistingClasses: self tempSymbols ]
+				andExistingClasses: self tempSymbols]
 ]
 
 { #category : 'private - applying' }

@@ -7,6 +7,7 @@ Class {
 { #category : 'installing' }
 RwGsMethodExtensionSymbolDictPatchV2 >> installMethod [
 
+(self dynamicInstVarAt: #hasCompileError) ifNotNil: [:msg | self halt ].
 	self symbolDictionaryRegistry
 		addExtensionCompiledMethod: compiledMethod
 		for: behavior

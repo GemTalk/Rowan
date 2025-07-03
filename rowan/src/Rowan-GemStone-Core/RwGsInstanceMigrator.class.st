@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'migrationEnabled',
 		'maxThreads',
-		'maxCpuPercentage'
+		'maxCpuPercentage',
+		'clearClassHistoryAfterMigrate'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -30,6 +31,17 @@ RwGsInstanceMigrator class >> noMigration [
 	^ self new
 		migrationEnabled: false;
 		yourself
+]
+
+{ #category : 'accessing' }
+RwGsInstanceMigrator >> clearClassHistoryAfterMigrate [
+	^ clearClassHistoryAfterMigrate
+		ifNil: [ clearClassHistoryAfterMigrate := false ]
+]
+
+{ #category : 'accessing' }
+RwGsInstanceMigrator >> clearClassHistoryAfterMigrate: object [
+	clearClassHistoryAfterMigrate := object
 ]
 
 { #category : 'accessing' }
@@ -60,7 +72,6 @@ RwGsInstanceMigrator >> maxThreads: anObject [
 
 { #category : 'migration' }
 RwGsInstanceMigrator >> migrateInstancesOf: aClassArray [
-
 	| instancesArray classCount |
 	self migrationEnabled
 		ifFalse: [ ^ self ].
@@ -81,9 +92,14 @@ RwGsInstanceMigrator >> migrateInstancesOf: aClassArray [
 		history := class classHistory.
 		instanceCount > 0
 			ifTrue: [ class migrateInstances: instances to: history last ].
-		[ 1 < history size ] whileTrue: [ | cl | cl := history first. cl classHistory removeVersion: cl ].
+		self clearClassHistoryAfterMigrate
+			ifTrue: [ 
+				[ 1 < history size ]
+					whileTrue: [ 
+						| cl |
+						cl := history first.
+						cl classHistory removeVersion: cl ] ].
 		classCount := classCount + 1 ]
-
 ]
 
 { #category : 'accessing' }
