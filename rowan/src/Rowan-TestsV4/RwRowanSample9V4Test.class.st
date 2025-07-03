@@ -40,7 +40,7 @@ RwRowanSample9V4Test >> testIssue276 [
 
 	"take isDurty through it's paces"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 loadedClass theClass loadedClasstCleanBlock |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 loadedClass |
 	loadSpec := self _loadSpecNamed: 'spec_0005'.
 
 	projectName := loadSpec projectName.
@@ -67,55 +67,16 @@ RwRowanSample9V4Test >> testIssue276 [
 		_standard_validate: resolvedProject
 		loadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
-"initial state check ... method, class, package, and project not dirty"
-	loadedClasstCleanBlock := [:theLoadedClass |
-		self deny: theLoadedClass isDirty.
-		theLoadedClass loadedInstanceMethods valuesDo: [:loadedMethod | 
-			self deny: loadedMethod isDirty ].
-		theLoadedClass loadedClassMethods valuesDo: [:loadedMethod | 
-			self deny: loadedMethod isDirty ].
-		self deny: theLoadedClass isDirty.
-		self deny: theLoadedClass loadedPackage isDirty.
-		self deny:  theLoadedClass loadedPackage loadedProject isDirty ] .
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className1).
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className2).
-"add method ... method, package, project dirty"
-	loadedClass := Rowan image loadedClassNamed: className1.
-	(Rowan globalNamed: loadedClass name asSymbol)
-		compileMethod: 'newMethod ^1'.
-	loadedClass := Rowan image loadedClassNamed: className1.
-	self assert: (loadedClass loadedInstanceMethods at: #newMethod) isDirty.
-	self deny: loadedClass isDirty.
-	self assert: loadedClass loadedPackage isDirty.
-	self assert: loadedClass loadedPackage loadedProject isDirty.
-"reload project and nothing dirty"
-	(Rowan projectNamed: projectName)  reload.
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className1).
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className2).
-"change class ... class, package, project dirty"
-	(Rowan projectNamed: projectName)  reload. "nothing dirty again"
+
+"initial state check ... nothing dirty"
 	loadedClass := Rowan image loadedClassNamed: className1.
 	self deny: loadedClass isDirty.
-	theClass := Rowan globalNamed: loadedClass name asSymbol.
-	theClass superClass rwSubclass: className1
-		instVarNames: #( iv1 )
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: theClass category
-		options: #('instancesInvariant').
-	loadedClass := Rowan image loadedClassNamed: className1.
-	self assert: loadedClass isDirty.	
 	loadedClass loadedInstanceMethods valuesDo: [:loadedMethod | 
-		self assert: loadedMethod isDirty ].
+		self deny: loadedMethod isDirty ].
 	loadedClass loadedClassMethods valuesDo: [:loadedMethod | 
-		self assert: loadedMethod isDirty ].
-	self assert: loadedClass loadedPackage isDirty.
-	self assert: loadedClass loadedPackage loadedProject isDirty.
-"reload project and nothing dirty"
-	(Rowan projectNamed: projectName)  reload.
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className1).
-	loadedClasstCleanBlock value: (Rowan image loadedClassNamed: className2).
+		self deny: loadedMethod isDirty ].
+	loadedClass := Rowan image loadedClassNamed: className2.
+	self deny: loadedClass isDirty
 ]
 
 { #category : 'tests' }

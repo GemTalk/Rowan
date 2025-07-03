@@ -30,8 +30,7 @@ RwGsLoadedSymbolDictMethod >> handleClassDeletion [
 RwGsLoadedSymbolDictMethod >> initialize [
 
 	super initialize.
-	"A new method is dirty until it has been shown to be identical to a repository on disk."
-	isDirty := true
+	isDirty := false
 ]
 
 { #category : 'accessing' }
