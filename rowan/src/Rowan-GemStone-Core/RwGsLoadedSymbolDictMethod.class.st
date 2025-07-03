@@ -26,13 +26,6 @@ RwGsLoadedSymbolDictMethod >> handleClassDeletion [
 	self unpackageMethod
 ]
 
-{ #category : 'initialization' }
-RwGsLoadedSymbolDictMethod >> initialize [
-
-	super initialize.
-	isDirty := false
-]
-
 { #category : 'accessing' }
 RwGsLoadedSymbolDictMethod >> key [
 

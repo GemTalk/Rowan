@@ -209,13 +209,7 @@ RwLoadedPackage >> markDirty [
 RwLoadedPackage >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
 
-	isDirty
-		ifFalse: [ 
-			"If I'm not dirty, my loadedClasses are not dirty"
-			^ self ].
-	isDirty := false.
-	self loadedClasses values do: [ :loadedClass | loadedClass markNotDirty ].
-	self loadedClassExtensions values do: [ :loadedClass | loadedClass markNotDirty ]
+	isDirty := false
 ]
 
 { #category : 'private' }

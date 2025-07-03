@@ -8,8 +8,7 @@ Class {
 	#instVars : [
 		'loadedPackage',
 		'loadedInstanceMethods',
-		'loadedClassMethods',
-		'isDirty'
+		'loadedClassMethods'
 	],
 	#category : 'Rowan-Loader'
 }
@@ -117,13 +116,6 @@ RwLoadedClass >> isClassExtension [
 ]
 
 { #category : 'testing' }
-RwLoadedClass >> isDirty [
-	"a class is dirty if it has changes that are not written to disk"
-
-	^  isDirty
-]
-
-{ #category : 'testing' }
 RwLoadedClass >> isEmpty [
 
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
@@ -198,23 +190,6 @@ RwLoadedClass >> loadedPackage [
 RwLoadedClass >> loadedPackage: aLoadedPackage [
 
 	loadedPackage := aLoadedPackage
-]
-
-{ #category : 'private' }
-RwLoadedClass >> markDirty [
-	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
-
-	isDirty := true.
-	self markPackageDirty
-]
-
-{ #category : 'private' }
-RwLoadedClass >> markNotDirty [
-	"I have been changed to be consistent with my source, so mark not dirty and mark my methods as not dirty."
-
-	isDirty ifTrue: [ isDirty := false ].
-	self loadedInstanceMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].	
-	self loadedClassMethods valuesDo: [:loadedMethod | loadedMethod markNotDirty ].
 ]
 
 { #category : 'private' }
