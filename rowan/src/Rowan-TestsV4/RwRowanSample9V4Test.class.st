@@ -367,6 +367,200 @@ RwRowanSample9V4Test >> testIssue962_C [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_D [
+	"notification of method compilation errors, when using Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options: code path compiled in a regular method -- testIssue962_E uses an anonymous method and there are apparently differences in exception handling."
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors theSource source theClass  |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9V4' 
+		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+	
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	
+"step_1 ;  add a method to RowanSample9ClassB that will cause compile error when an iv is removed from the class using Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options:"
+	definedProject := project defined.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition 
+		addInstanceMethodDefinition:
+			(RwMethodDefinition newForSelector: 'boom' protocol: 'boom' source: 'boom | ivar2 | ivar2 := 1').
+	definedProject  load. "should load cleanly"
+	self assert: (audit := project audit) isEmpty.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+"step_2;  add method to RowanSample9ClassB that will result in compile errors during  step_3: temp var that collides with instance variable ivar3 and we'll remove referenced instance variable ivar1"
+	project checkout: 'spec_0036'.
+	theClass := Rowan globalNamed: classDefinition name.
+	definedProject := project defined read.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'xxx | xxx | xxx := 1'  protocol: 'no boom'.
+	classDefinition addInstanceMethod: 'boom | ivar3 | ivar3 := 1'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_3 | ivar3 | ivar3 := 2'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_4 | ivar3 | ivar3 := 3'  protocol: 'boom'.
+	definedProject  load.
+	self assert: (audit := project audit) isEmpty.	
+"step_3;  add iv to  to RowanSample9Class to trigger compile errors in subclasses of RowanSample9Class"
+	notificationHit := false.
+	methodErrors := {}.
+	[ Object rwSubclass: 'RowanSample9Class'
+		instVarNames: #(  ivar0 ivar3)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: 'RowanSample9V4-Core'
+		options: #(). ] 
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [:ex |  
+			| compileError methodClass sourceString  |
+			notificationHit := true.
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := (compileError gsArguments at: 3) .
+			methodErrors add: {methodClass . sourceString . compileError}.
+			ex resume: true. "method compile error will be handled later"  ].
+	self assert: notificationHit description: 'expected notification not hit'.
+	self assert: (audit := project audit) isEmpty.
+	replacementSource := '  "replacement source ... expected to compile without error"'.
+	self assert: (methodErrors size= 7) description: 'Seven compile errors expected'.
+	source := {}.
+	methodErrors do: [:ar |
+		| selector |
+		source add: (ar at: 1).
+		source add: (ar at: 1) name.
+		source add: (ar at: 2).
+		selector := Rowan platform parseSelectorFrom: (ar at: 2) passCompileError: false.
+		theSource := ((selector asSymbol  keywords at: 1) endsWith: ':')
+			ifTrue: [ selector, ' temp ', replacementSource ]
+			ifFalse: [ selector, replacementSource ].
+		source add: theSource.
+		(ar at: 1) compileMethod: theSource category: 'boom' environmentId: 0].
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_E [
+	"notification of method compilation errors, when using Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options: code path ... compiled as an anonymous method -- testIssue962_D uses the same expression comiled in-line in the method  there are apparently differences in exception handling."
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition notificationHit replacementSource methodErrors theSource source theClass classDefinitionString anonymousMethod |
+	loadSpec := self 
+		_migrationLoadSpecNamed:  'spec_0035' 
+		projectName: 'RowanSample9V4' 
+		projectAlias: 'RowanSample9V4_NotificationOfCompileErrors' 
+		gitUrl: 'https://github.com/dalehenrich/RowanSample9V4.git'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName}.
+
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'IdentityKeyValueDictionary'.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec repositoryRoot ensureDeleteAll.
+
+"resolve project"
+	resolvedProject := loadSpec resolveStrict.
+
+"load project - migration_step_0"
+	loadedProjects := resolvedProject load.
+	
+"validate"
+	self assert: loadedProjects size = 1.
+	project := loadedProjects projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	
+"step_1 ;  add a method to RowanSample9ClassB that will cause compile error when an iv is removed from the class using Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options:"
+	definedProject := project defined.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition 
+		addInstanceMethodDefinition:
+			(RwMethodDefinition newForSelector: 'boom' protocol: 'boom' source: 'boom | ivar2 | ivar2 := 1').
+	definedProject  load. "should load cleanly"
+	self assert: (audit := project audit) isEmpty.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+"step_2;  add method to RowanSample9ClassB that will result in compile errors during  step_3: temp var that collides with instance variable ivar3 and we'll remove referenced instance variable ivar1"
+	project checkout: 'spec_0036'.
+	theClass := Rowan globalNamed: classDefinition name.
+	definedProject := project defined read.
+	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
+	classDefinition addInstanceMethod: 'xxx | xxx | xxx := 1'  protocol: 'no boom'.
+	classDefinition addInstanceMethod: 'boom | ivar3 | ivar3 := 1'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_3 | ivar3 | ivar3 := 2'  protocol: 'boom'.
+	classDefinition addInstanceMethod: 'boom_4 | ivar3 | ivar3 := 3'  protocol: 'boom'.
+	definedProject  load.
+	self assert: (audit := project audit) isEmpty.	
+"step_3;  add iv to  to RowanSample9Class to trigger compile errors in subclasses of RowanSample9Class"
+	notificationHit := false.
+	methodErrors := {}.
+	classDefinitionString := 'Object rwSubclass: ''RowanSample9Class''
+		instVarNames: #(  ivar0 ivar3)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''RowanSample9V4-Core''
+		options: #()'. 
+	anonymousMethod := classDefinitionString _compileInContext: nil symbolList: Rowan image symbolList.
+	[ anonymousMethod	_executeInContext: nil ] 
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [:ex |  
+			| compileError methodClass sourceString  |
+			notificationHit := true.
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := (compileError gsArguments at: 3) .
+			methodErrors add: {methodClass . sourceString . compileError}.
+			ex resume: true. "method compile error will be handled later"  ]. 
+	self assert: notificationHit description: 'expected notification not hit'.
+	self assert: (audit := project audit) isEmpty.
+	replacementSource := '  "replacement source ... expected to compile without error"'.
+	self assert: (methodErrors size= 7) description: 'Seven compile errors expected'.
+	source := {}.
+	methodErrors do: [:ar |
+		| selector |
+		source add: (ar at: 1).
+		source add: (ar at: 1) name.
+		source add: (ar at: 2).
+		selector := Rowan platform parseSelectorFrom: (ar at: 2) passCompileError: false.
+		theSource := ((selector asSymbol  keywords at: 1) endsWith: ':')
+			ifTrue: [ selector, ' temp ', replacementSource ]
+			ifFalse: [ selector, replacementSource ].
+		source add: theSource.
+		(ar at: 1) compileMethod: theSource category: 'boom' environmentId: 0].
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
 RwRowanSample9V4Test >> testSpec_0090 [
 	"spec_0090 should load cleanly"
 
