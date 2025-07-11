@@ -263,7 +263,7 @@ RwRowanSample9V4Test >> testIssue962_2 [
 
 	methodErrors := {}.	"
 remove iv `c` and cv CVt`"
-	[  Object rwSubclass: 'RowanSample9Class'
+	[  Object rwSubclass: projectName , 'Class1'
 		instVarNames: #(   a b )
 		classVars: #(Cvr CVs)
 		classInstVars: #( s t )
