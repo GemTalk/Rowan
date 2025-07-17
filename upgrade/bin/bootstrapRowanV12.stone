@@ -2,15 +2,13 @@
 options
 {
 	SuperDoitOptionalOptionWithNoArg long: 'legacyStreams'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'projectName' default: 'Rowan'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'rowanProjectsHome'.
 }
 %
 usage
 -----
 USAGE 
-  $basename [--help | -h] [--debug | -D] [--legacyStreams] \
-            [--rowanProjectsHome=<directory-path>]
+  $basename [--help | -h] [--debug | -D] [OPTIONS]
 
 DESCRIPTION
   Install Rowan v1.2 into a fresh extent0.dbf. 
@@ -21,16 +19,12 @@ OPTIONS
                              script error
   --legacyStreams            Before Rowan is installed, execute Stream class>>
                              installLegacyStreamImplementation.
-  --projectName=<rowan-project-name>
-                             Name of the git directory containing the Rowan v1 checkout.
-                             'Rowan' is the default.
   --rowanProjectsHome=<directory-path>
                              Parent directory of the Rowan v1.2 git project.
 
 EXAMPLES
   $basename --help 
   $basename --legacyStreams --rowanProjectsHome=$GS_HOME/shared/repos
-  $basename --legacyStreams --projectName=RowanV1 --rowanProjectsHome=$GS_HOME/shared/repos
 -----
 %
 instvars
@@ -62,7 +56,7 @@ fileinRowanV12
 			Stream installLegacyStreamImplementation.
 			System commit ].
 	GsFileIn
-		fromServerPath: rowanProjectsHome, '/', self projectName, '/platforms/gemstone/topaz/upgrade/3.7.5/RowanV12.gs'.
+		fromServerPath: rowanProjectsHome, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
 	System commit.
 %
 method
@@ -71,10 +65,10 @@ adoptRowan
 	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
 	gitRepoPath := rowanProjectsHome, '/Rowan'.
 	{
-		{'file:', rowanProjectsHome, '/', self projectName, '/rowan/specs/Rowan.ston'}.
-		{'file:', rowanProjectsHome, '/', self projectName, '/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:', rowanProjectsHome, '/', self projectName, '/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
-		{'file:', rowanProjectsHome, '/', self projectName, '/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/rowan/specs/Rowan.ston'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Default'}.
+		{'file:', rowanProjectsHome, '/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
 	}
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
