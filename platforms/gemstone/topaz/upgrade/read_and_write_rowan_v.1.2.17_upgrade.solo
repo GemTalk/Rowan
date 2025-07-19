@@ -92,7 +92,13 @@ doit
 		loadSpecs := loadSpec
 			projectsHome: projectsHome;
 			resolve.
-		loadSpecs do: [:ls | ls addCustomConditionalAttributes: #('deprecated' 'jadeServer' 'tests') ].
+		loadSpecs do: [:ls | 
+			(ls projectName = 'STON' and: [
+				self gemstoneVersion asRwGemStoneVersionNumber >= '3.7.5' asRwGemStoneVersionNumber ])
+						ifTrue: [ 
+							"include full STON code base for 3.7.5 and beyond"
+							ls addCustomConditionalAttributes: {'ston'}  ].
+			ls addCustomConditionalAttributes: {'deprecated' . 'jadeServer' . 'tests'} ].
 		theProjectSetDefinition := loadSpecs read: platformConditionalAttributes.
 		theProjectSetDefinition
 			do: [:projectDefinition |	
