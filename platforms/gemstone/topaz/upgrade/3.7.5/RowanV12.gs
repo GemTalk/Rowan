@@ -63,7 +63,7 @@ removeallclassmethods CypressJsonError
 doit
 (Error
 	subclass: 'CypressLoaderError'
-	instVarNames: #( exception patchOperation )
+	instVarNames: #(exception patchOperation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -94,7 +94,7 @@ removeallclassmethods CypressLoaderError
 doit
 (Error
 	subclass: 'CypressLoaderMissingClasses'
-	instVarNames: #( requirementsMap )
+	instVarNames: #(requirementsMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -109,45 +109,6 @@ true.
 
 removeallmethods CypressLoaderMissingClasses
 removeallclassmethods CypressLoaderMissingClasses
-
-doit
-(Error
-	subclass: 'STONReaderError'
-	instVarNames: #( streamPosition )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONReaderError
-removeallclassmethods STONReaderError
-
-doit
-(Error
-	subclass: 'STONWriterError'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. ';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONWriterError
-removeallclassmethods STONWriterError
 
 doit
 (Error
@@ -193,7 +154,7 @@ removeallclassmethods RwGemStoneVersionNumber
 doit
 (Magnitude
 	subclass: 'RwSemanticVersionNumber'
-	instVarNames: #( normalVersion preReleaseVersion buildVersion )
+	instVarNames: #(normalVersion preReleaseVersion buildVersion)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -553,7 +514,7 @@ removeallclassmethods RwSemanticVersionNumber
 doit
 (Notification
 	subclass: 'CypressLoaderErrorNotification'
-	instVarNames: #( exception patchOperation )
+	instVarNames: #(exception patchOperation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -582,7 +543,7 @@ removeallclassmethods CypressLoaderErrorNotification
 doit
 (Notification
 	subclass: 'GsInteractionRequest'
-	instVarNames: #( interaction )
+	instVarNames: #(interaction)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -619,7 +580,7 @@ removeallclassmethods RwNotification
 doit
 (RwNotification
 	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
-	instVarNames: #( errorMessage )
+	instVarNames: #(errorMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -637,7 +598,7 @@ removeallclassmethods RwAddUpdateRemoveMethodForUnpackagedClassNotification
 doit
 (RwNotification
 	subclass: 'RwDeleteClassFromSystemNotification'
-	instVarNames: #( candidateClass )
+	instVarNames: #(candidateClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -655,7 +616,7 @@ removeallclassmethods RwDeleteClassFromSystemNotification
 doit
 (RwNotification
 	subclass: 'RwExecuteClassInitializeMethodsAfterLoadNotification'
-	instVarNames: #( candidateClass )
+	instVarNames: #(candidateClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -673,7 +634,7 @@ removeallclassmethods RwExecuteClassInitializeMethodsAfterLoadNotification
 doit
 (RwNotification
 	subclass: 'RwExistingAssociationWithSameKeyNotification'
-	instVarNames: #( errorMessage )
+	instVarNames: #(errorMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -691,7 +652,7 @@ removeallclassmethods RwExistingAssociationWithSameKeyNotification
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
-	instVarNames: #( classDefinition loadedProject )
+	instVarNames: #(classDefinition loadedProject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -709,7 +670,7 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 doit
 (RwNotification
 	subclass: 'RwPerformingUnpackagedEditNotification'
-	instVarNames: #( informMessage )
+	instVarNames: #(informMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -749,7 +710,7 @@ removeallclassmethods TonelShouldIgnore
 doit
 (Object
 	subclass: 'CypressAbstractPackageFiler'
-	instVarNames: #( repository packageDirectory packageStructure )
+	instVarNames: #(repository packageDirectory packageStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -922,7 +883,7 @@ doit
 	subclass: 'CypressAbstractPackageWriter'
 	instVarNames: #()
 	classVars: #()
-	classInstVars: #( specials )
+	classInstVars: #(specials)
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -996,7 +957,7 @@ removeallclassmethods CypressStrictFileTreeFormatDoNothingPackageWriter
 doit
 (CypressAbstractPackageWriter
 	subclass: 'TonelCypressWriter'
-	instVarNames: #( snapshot sourceDir packageDir writer )
+	instVarNames: #(snapshot sourceDir packageDir writer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1015,7 +976,7 @@ removeallclassmethods TonelCypressWriter
 doit
 (CypressAbstractPackageFiler
 	subclass: 'TonelCypressReader'
-	instVarNames: #( packageName definitions directoryPath )
+	instVarNames: #(packageName definitions directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1034,8 +995,8 @@ removeallclassmethods TonelCypressReader
 doit
 (Object
 	subclass: 'CypressAbstractRepository'
-	instVarNames: #( url properties readerClass writerClass )
-	classVars: #( DefaultCopyrightNotice )
+	instVarNames: #(url properties readerClass writerClass)
+	classVars: #(DefaultCopyrightNotice)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1053,7 +1014,7 @@ removeallclassmethods CypressAbstractRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressAbstractFileoutRepository'
-	instVarNames: #( directoryPath )
+	instVarNames: #(directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1118,7 +1079,7 @@ removeallclassmethods CypressTopazRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressDictionaryRepository'
-	instVarNames: #( dictionary )
+	instVarNames: #(dictionary)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1137,7 +1098,7 @@ removeallclassmethods CypressDictionaryRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressFileSystemRepository'
-	instVarNames: #( directoryPath )
+	instVarNames: #(directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1156,7 +1117,7 @@ removeallclassmethods CypressFileSystemRepository
 doit
 (CypressFileSystemRepository
 	subclass: 'CypressFileSystemGitRepository'
-	instVarNames: #( remoteUrl )
+	instVarNames: #(remoteUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1200,7 +1161,7 @@ doit
 (Object
 	subclass: 'CypressFileUtilities'
 	instVarNames: #()
-	classVars: #( Current )
+	classVars: #(Current)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1237,7 +1198,7 @@ removeallclassmethods CypressGemStoneDirectoryUtilities
 doit
 (Object
 	subclass: 'CypressGsGeneralDependencySorter'
-	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	instVarNames: #(candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1256,7 +1217,7 @@ removeallclassmethods CypressGsGeneralDependencySorter
 doit
 (Object
 	subclass: 'CypressJsonParser'
-	instVarNames: #( stream )
+	instVarNames: #(stream)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1294,7 +1255,7 @@ removeallclassmethods CypressObject
 doit
 (CypressObject
 	subclass: 'CypressAbstractPackageInformation'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1313,7 +1274,7 @@ removeallclassmethods CypressAbstractPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressConflictingPackageInformation'
-	instVarNames: #( conflictsWith )
+	instVarNames: #(conflictsWith)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1332,7 +1293,7 @@ removeallclassmethods CypressConflictingPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressEclipsedPackageInformation'
-	instVarNames: #( eclipsedBy )
+	instVarNames: #(eclipsedBy)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1351,7 +1312,7 @@ removeallclassmethods CypressEclipsedPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressKnownPackageInformation'
-	instVarNames: #( repositories digests )
+	instVarNames: #(repositories digests)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1408,7 +1369,7 @@ removeallclassmethods CypressDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints )
+	instVarNames: #(category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1427,7 +1388,7 @@ removeallclassmethods CypressClassDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressMethodDefinition'
-	instVarNames: #( category classIsMeta className selector source )
+	instVarNames: #(category classIsMeta className selector source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1446,7 +1407,7 @@ removeallclassmethods CypressMethodDefinition
 doit
 (CypressMethodDefinition
 	subclass: 'RwCypressMethodDefinition'
-	instVarNames: #( isExtensionMethod )
+	instVarNames: #(isExtensionMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1464,7 +1425,7 @@ removeallclassmethods RwCypressMethodDefinition
 doit
 (CypressObject
 	subclass: 'CypressDefinitionIndex'
-	instVarNames: #( definitionMap )
+	instVarNames: #(definitionMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1483,7 +1444,7 @@ removeallclassmethods CypressDefinitionIndex
 doit
 (CypressObject
 	subclass: 'CypressDependencySorter'
-	instVarNames: #( orderedItems provided required )
+	instVarNames: #(orderedItems provided required)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1520,7 +1481,7 @@ removeallclassmethods CypressEnvironmentDependencySorter
 doit
 (CypressObject
 	subclass: 'CypressLoader'
-	instVarNames: #( additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable )
+	instVarNames: #(additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1539,7 +1500,7 @@ removeallclassmethods CypressLoader
 doit
 (CypressLoader
 	subclass: 'CypressEnvironmentLoader'
-	instVarNames: #( defaultEnvironmentId lookupSymbolList compilationSymbolList )
+	instVarNames: #(defaultEnvironmentId lookupSymbolList compilationSymbolList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1557,7 +1518,7 @@ removeallclassmethods CypressEnvironmentLoader
 doit
 (CypressObject
 	subclass: 'CypressPackageDefinition'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1576,7 +1537,7 @@ removeallclassmethods CypressPackageDefinition
 doit
 (CypressPackageDefinition
 	subclass: 'CypressEnvironmentPackageDefinition'
-	instVarNames: #( lookupSymbolList )
+	instVarNames: #(lookupSymbolList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1600,7 +1561,7 @@ removeallclassmethods CypressEnvironmentPackageDefinition
 doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
+	instVarNames: #(name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1642,7 +1603,7 @@ removeallclassmethods CypressPackageInformation
 doit
 (CypressObject
 	subclass: 'CypressPatch'
-	instVarNames: #( operations )
+	instVarNames: #(operations)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1680,7 +1641,7 @@ removeallclassmethods CypressPatchOperation
 doit
 (CypressPatchOperation
 	subclass: 'CypressAddition'
-	instVarNames: #( definition )
+	instVarNames: #(definition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1699,7 +1660,7 @@ removeallclassmethods CypressAddition
 doit
 (CypressPatchOperation
 	subclass: 'CypressModification'
-	instVarNames: #( modification obsoletion )
+	instVarNames: #(modification obsoletion)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1718,7 +1679,7 @@ removeallclassmethods CypressModification
 doit
 (CypressPatchOperation
 	subclass: 'CypressRemoval'
-	instVarNames: #( definition )
+	instVarNames: #(definition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1737,7 +1698,7 @@ removeallclassmethods CypressRemoval
 doit
 (CypressObject
 	subclass: 'CypressSnapshot'
-	instVarNames: #( definitions )
+	instVarNames: #(definitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1756,7 +1717,7 @@ removeallclassmethods CypressSnapshot
 doit
 (CypressObject
 	subclass: 'CypressStructure'
-	instVarNames: #( name properties packageStructure )
+	instVarNames: #(name properties packageStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1775,7 +1736,7 @@ removeallclassmethods CypressStructure
 doit
 (CypressStructure
 	subclass: 'CypressClassStructure'
-	instVarNames: #( instanceMethods classMethods comment isClassExtension )
+	instVarNames: #(instanceMethods classMethods comment isClassExtension)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1794,7 +1755,7 @@ removeallclassmethods CypressClassStructure
 doit
 (CypressStructure
 	subclass: 'CypressMethodStructure'
-	instVarNames: #( source isMetaclass classStructure )
+	instVarNames: #(source isMetaclass classStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1831,7 +1792,7 @@ removeallclassmethods RwCypressMethodStructure
 doit
 (CypressStructure
 	subclass: 'CypressPackageStructure'
-	instVarNames: #( classes extensions )
+	instVarNames: #(classes extensions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1868,7 +1829,7 @@ removeallclassmethods RwCypressPackageStructure
 doit
 (Object
 	subclass: 'CypressPackageComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals )
+	instVarNames: #(directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1887,7 +1848,7 @@ removeallclassmethods CypressPackageComparator
 doit
 (Object
 	subclass: 'CypressPackageManager'
-	instVarNames: #( knownPackages knownRepositories packageInformationList )
+	instVarNames: #(knownPackages knownRepositories packageInformationList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1906,8 +1867,8 @@ removeallclassmethods CypressPackageManager
 doit
 (Object
 	subclass: 'CypressPackageManager2'
-	instVarNames: #( knownRepositories packageInformationList )
-	classVars: #( SavedPackageManagers )
+	instVarNames: #(knownRepositories packageInformationList)
+	classVars: #(SavedPackageManagers)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1925,7 +1886,7 @@ removeallclassmethods CypressPackageManager2
 doit
 (Object
 	subclass: 'CypressPackageManager3'
-	instVarNames: #( knownRepositories defaultSymbolDictionaryName resolvedPackageReferences )
+	instVarNames: #(knownRepositories defaultSymbolDictionaryName resolvedPackageReferences)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1944,7 +1905,7 @@ removeallclassmethods CypressPackageManager3
 doit
 (CypressPackageManager3
 	subclass: 'CypressEnvironmentPackageManager'
-	instVarNames: #( defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId )
+	instVarNames: #(defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1962,7 +1923,7 @@ removeallclassmethods CypressEnvironmentPackageManager
 doit
 (Object
 	subclass: 'CypressPackageStringComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations )
+	instVarNames: #(directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1981,7 +1942,7 @@ removeallclassmethods CypressPackageStringComparator
 doit
 (Object
 	subclass: 'CypressReference'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2002,7 +1963,7 @@ removeallclassmethods CypressReference
 doit
 (CypressReference
 	subclass: 'CypressPackageReference'
-	instVarNames: #( package branch )
+	instVarNames: #(package branch)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2023,7 +1984,7 @@ removeallclassmethods CypressPackageReference
 doit
 (CypressPackageReference
 	subclass: 'CypressResolvedReference'
-	instVarNames: #( repository )
+	instVarNames: #(repository)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2044,7 +2005,7 @@ removeallclassmethods CypressResolvedReference
 doit
 (Object
 	subclass: 'CypressUrl'
-	instVarNames: #( fragment )
+	instVarNames: #(fragment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2065,7 +2026,7 @@ removeallclassmethods CypressUrl
 doit
 (CypressUrl
 	subclass: 'CypressFileUrl'
-	instVarNames: #( host path isAbsolute )
+	instVarNames: #(host path isAbsolute)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2209,7 +2170,7 @@ removeallclassmethods CypressFileTreeReadOnlyFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressGitFileUrl'
-	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
+	instVarNames: #(projectPath projectBranchOrTag repositoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2323,7 +2284,7 @@ removeallclassmethods CypressTopazUrl
 doit
 (CypressUrl
 	subclass: 'CypressGenericUrl'
-	instVarNames: #( schemeName locator )
+	instVarNames: #(schemeName locator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2386,7 +2347,7 @@ removeallclassmethods CypressMailtoUrl
 doit
 (CypressUrl
 	subclass: 'CypressHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password )
+	instVarNames: #(schemeName authority path query port username password)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2426,8 +2387,8 @@ removeallclassmethods CypressFtpUrl
 doit
 (CypressHierarchicalUrl
 	subclass: 'CypressHttpUrl'
-	instVarNames: #( realm )
-	classVars: #( Passwords )
+	instVarNames: #(realm)
+	classVars: #(Passwords)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -2474,7 +2435,7 @@ removeallclassmethods CypressHttpsUrl
 doit
 (Object
 	subclass: 'CypressVersionReference'
-	instVarNames: #( name package author branch versionNumber )
+	instVarNames: #(name package author branch versionNumber)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2495,7 +2456,7 @@ removeallclassmethods CypressVersionReference
 doit
 (Object
 	subclass: 'GsInteraction'
-	instVarNames: #( defaultActionBlock )
+	instVarNames: #(defaultActionBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2513,7 +2474,7 @@ removeallclassmethods GsInteraction
 doit
 (GsInteraction
 	subclass: 'GsChoiceInteraction'
-	instVarNames: #( prompt labels values lines )
+	instVarNames: #(prompt labels values lines)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2531,7 +2492,7 @@ removeallclassmethods GsChoiceInteraction
 doit
 (GsInteraction
 	subclass: 'GsConfirmInteraction'
-	instVarNames: #( prompt confirm cancel abort )
+	instVarNames: #(prompt confirm cancel abort)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2567,7 +2528,7 @@ removeallclassmethods GsNotifyInteraction
 doit
 (GsInteraction
 	subclass: 'GsInformInteraction'
-	instVarNames: #( message )
+	instVarNames: #(message)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2585,7 +2546,7 @@ removeallclassmethods GsInformInteraction
 doit
 (GsInteraction
 	subclass: 'GsInspectInteraction'
-	instVarNames: #( theObject )
+	instVarNames: #(theObject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2621,7 +2582,7 @@ removeallclassmethods GsExploreInteraction
 doit
 (GsInteraction
 	subclass: 'GsTextInteraction'
-	instVarNames: #( prompt template requestPassword )
+	instVarNames: #(prompt template requestPassword)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2657,7 +2618,7 @@ removeallclassmethods GsMultiLineTextInteraction
 doit
 (Object
 	subclass: 'GsInteractionHandler'
-	instVarNames: #( choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock )
+	instVarNames: #(choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2675,7 +2636,7 @@ removeallclassmethods GsInteractionHandler
 doit
 (Object
 	subclass: 'GsTonelOrderedDictionary'
-	instVarNames: #( size keys values )
+	instVarNames: #(size keys values)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2694,8 +2655,8 @@ removeallclassmethods GsTonelOrderedDictionary
 doit
 (Object
 	subclass: 'JadeServer'
-	instVarNames: #( classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult )
-	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64 )
+	instVarNames: #(classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult)
+	classVars: #(ExternalInteger GciError GsObject OopType32 OopType64)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: UserGlobals
@@ -2748,7 +2709,7 @@ removeallclassmethods JadeServer64bit24
 doit
 (JadeServer64bit24
 	subclass: 'JadeServer64bit3x'
-	instVarNames: #( environment )
+	instVarNames: #(environment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2802,7 +2763,7 @@ removeallclassmethods JadeServer64bit35
 doit
 (Object
 	subclass: 'RBParser'
-	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas )
+	instVarNames: #(scanner currentToken nextToken errorBlock source comments pragmas)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2853,7 +2814,7 @@ removeallclassmethods RBPatternParser
 doit
 (Object
 	subclass: 'RBParseTreeRule'
-	instVarNames: #( searchTree owner )
+	instVarNames: #(searchTree owner)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2878,7 +2839,7 @@ removeallclassmethods RBParseTreeRule
 doit
 (RBParseTreeRule
 	subclass: 'RBReplaceRule'
-	instVarNames: #( verificationBlock )
+	instVarNames: #(verificationBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2906,7 +2867,7 @@ removeallclassmethods RBReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBBlockReplaceRule'
-	instVarNames: #( replaceBlock )
+	instVarNames: #(replaceBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2929,7 +2890,7 @@ removeallclassmethods RBBlockReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBStringReplaceRule'
-	instVarNames: #( replaceTree )
+	instVarNames: #(replaceTree)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2953,7 +2914,7 @@ removeallclassmethods RBStringReplaceRule
 doit
 (RBParseTreeRule
 	subclass: 'RBSearchRule'
-	instVarNames: #( answerBlock )
+	instVarNames: #(answerBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2977,8 +2938,8 @@ removeallclassmethods RBSearchRule
 doit
 (Object
 	subclass: 'RBProgramNode'
-	instVarNames: #( parent comments properties )
-	classVars: #( FormatterClass )
+	instVarNames: #(parent comments properties)
+	classVars: #(FormatterClass)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -3018,7 +2979,7 @@ removeallclassmethods RBProgramNode
 doit
 (RBProgramNode
 	subclass: 'RBMethodNode'
-	instVarNames: #( selector selectorParts body source arguments pragmas replacements nodeReplacements )
+	instVarNames: #(selector selectorParts body source arguments pragmas replacements nodeReplacements)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3049,7 +3010,7 @@ removeallclassmethods RBMethodNode
 doit
 (RBMethodNode
 	subclass: 'RBPatternMethodNode'
-	instVarNames: #( isList )
+	instVarNames: #(isList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3073,7 +3034,7 @@ removeallclassmethods RBPatternMethodNode
 doit
 (RBProgramNode
 	subclass: 'RBPragmaNode'
-	instVarNames: #( selector selectorParts arguments isProtected left right )
+	instVarNames: #(selector selectorParts arguments isProtected left right)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3099,7 +3060,7 @@ removeallclassmethods RBPragmaNode
 doit
 (RBPragmaNode
 	subclass: 'RBPatternPragmaNode'
-	instVarNames: #( isList )
+	instVarNames: #(isList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3117,7 +3078,7 @@ removeallclassmethods RBPatternPragmaNode
 doit
 (RBProgramNode
 	subclass: 'RBReturnNode'
-	instVarNames: #( return value )
+	instVarNames: #(return value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3142,7 +3103,7 @@ removeallclassmethods RBReturnNode
 doit
 (RBProgramNode
 	subclass: 'RBSequenceNode'
-	instVarNames: #( leftBar rightBar statements periods temporaries )
+	instVarNames: #(leftBar rightBar statements periods temporaries)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3170,7 +3131,7 @@ removeallclassmethods RBSequenceNode
 doit
 (RBProgramNode
 	subclass: 'RBValueNode'
-	instVarNames: #( parentheses )
+	instVarNames: #(parentheses)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3201,7 +3162,7 @@ removeallclassmethods RBValueNode
 doit
 (RBValueNode
 	subclass: 'RBArrayNode'
-	instVarNames: #( left right statements periods )
+	instVarNames: #(left right statements periods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3226,7 +3187,7 @@ removeallclassmethods RBArrayNode
 doit
 (RBValueNode
 	subclass: 'RBAssignmentNode'
-	instVarNames: #( variable assignment value )
+	instVarNames: #(variable assignment value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3252,7 +3213,7 @@ removeallclassmethods RBAssignmentNode
 doit
 (RBValueNode
 	subclass: 'RBBlockNode'
-	instVarNames: #( left right colons arguments bar body )
+	instVarNames: #(left right colons arguments bar body)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3281,7 +3242,7 @@ removeallclassmethods RBBlockNode
 doit
 (RBBlockNode
 	subclass: 'RBPatternBlockNode'
-	instVarNames: #( valueBlock )
+	instVarNames: #(valueBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3305,7 +3266,7 @@ removeallclassmethods RBPatternBlockNode
 doit
 (RBPatternBlockNode
 	subclass: 'RBPatternWrapperBlockNode'
-	instVarNames: #( wrappedNode )
+	instVarNames: #(wrappedNode)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3345,7 +3306,7 @@ removeallclassmethods RBQueryBlockNode
 doit
 (RBValueNode
 	subclass: 'RBCascadeNode'
-	instVarNames: #( messages semicolons )
+	instVarNames: #(messages semicolons)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3389,7 +3350,7 @@ removeallclassmethods RBLiteralNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralArrayNode'
-	instVarNames: #( isByteArray stop contents start )
+	instVarNames: #(isByteArray stop contents start)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3414,7 +3375,7 @@ removeallclassmethods RBLiteralArrayNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralValueNode'
-	instVarNames: #( token )
+	instVarNames: #(token)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3436,7 +3397,7 @@ removeallclassmethods RBLiteralValueNode
 doit
 (RBValueNode
 	subclass: 'RBMessageNode'
-	instVarNames: #( receiver selector selectorParts arguments )
+	instVarNames: #(receiver selector selectorParts arguments)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3463,7 +3424,7 @@ removeallclassmethods RBMessageNode
 doit
 (RBMessageNode
 	subclass: 'RBPatternMessageNode'
-	instVarNames: #( isList isCascadeList )
+	instVarNames: #(isList isCascadeList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3486,7 +3447,7 @@ removeallclassmethods RBPatternMessageNode
 doit
 (RBValueNode
 	subclass: 'RBVariableNode'
-	instVarNames: #( token )
+	instVarNames: #(token)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3510,7 +3471,7 @@ removeallclassmethods RBVariableNode
 doit
 (RBVariableNode
 	subclass: 'RBPatternVariableNode'
-	instVarNames: #( recurseInto isList isLiteral isStatement isAnything )
+	instVarNames: #(recurseInto isList isLiteral isStatement isAnything)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3565,8 +3526,8 @@ removeallclassmethods RBProgramNodeVisitor
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBConfigurableFormatter'
-	instVarNames: #( codeStream indent lookaheadCode originalSource lineStart inQueryBlock )
-	classVars: #( CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses )
+	instVarNames: #(codeStream indent lookaheadCode originalSource lineStart inQueryBlock)
+	classVars: #(CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -3593,7 +3554,7 @@ removeallclassmethods RBConfigurableFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBFormatter'
-	instVarNames: #( codeStream lineStart firstLineLength tabs inQueryBlock )
+	instVarNames: #(codeStream lineStart firstLineLength tabs inQueryBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3620,7 +3581,7 @@ removeallclassmethods RBFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBParseTreeSearcher'
-	instVarNames: #( searches answer argumentSearches context messages )
+	instVarNames: #(searches answer argumentSearches context messages)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3646,7 +3607,7 @@ removeallclassmethods RBParseTreeSearcher
 doit
 (RBParseTreeSearcher
 	subclass: 'RBParseTreeRewriter'
-	instVarNames: #( tree )
+	instVarNames: #(tree)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3668,7 +3629,7 @@ removeallclassmethods RBParseTreeRewriter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBReadBeforeWrittenTester'
-	instVarNames: #( read checkNewTemps scopeStack )
+	instVarNames: #(read checkNewTemps scopeStack)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3694,9 +3655,9 @@ removeallclassmethods RBReadBeforeWrittenTester
 doit
 (Object
 	subclass: 'RBScanner'
-	instVarNames: #( stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock )
-	classVars: #( PatternVariableCharacter )
-	classInstVars: #( classificationTable )
+	instVarNames: #(stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock)
+	classVars: #(PatternVariableCharacter)
+	classInstVars: #(classificationTable)
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3753,7 +3714,7 @@ removeallclassmethods RBPatternScanner
 doit
 (Object
 	subclass: 'RBSmallDictionary'
-	instVarNames: #( keys values tally )
+	instVarNames: #(keys values tally)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3778,7 +3739,7 @@ removeallclassmethods RBSmallDictionary
 doit
 (Object
 	subclass: 'RBStringReplacement'
-	instVarNames: #( startPosition stopPosition string )
+	instVarNames: #(startPosition stopPosition string)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3804,7 +3765,7 @@ removeallclassmethods RBStringReplacement
 doit
 (Object
 	subclass: 'RBToken'
-	instVarNames: #( sourcePointer comments )
+	instVarNames: #(sourcePointer comments)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3869,7 +3830,7 @@ removeallclassmethods RBShortAssignmentToken
 doit
 (RBToken
 	subclass: 'RBValueToken'
-	instVarNames: #( value )
+	instVarNames: #(value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3988,7 +3949,7 @@ removeallclassmethods RBLiteralArrayToken
 doit
 (RBValueToken
 	subclass: 'RBLiteralToken'
-	instVarNames: #( stopPosition )
+	instVarNames: #(stopPosition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4030,7 +3991,7 @@ removeallclassmethods RBMultiKeywordLiteralToken
 doit
 (RBLiteralToken
 	subclass: 'RBNumberLiteralToken'
-	instVarNames: #( source )
+	instVarNames: #(source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4092,7 +4053,7 @@ doit
 	subclass: 'Rowan'
 	instVarNames: #()
 	classVars: #()
-	classInstVars: #( configuration )
+	classInstVars: #(configuration)
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4112,7 +4073,7 @@ removeallclassmethods Rowan
 doit
 (Object
 	subclass: 'RowanCommandResult'
-	instVarNames: #( executionTime )
+	instVarNames: #(executionTime)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4131,7 +4092,7 @@ removeallclassmethods RowanCommandResult
 doit
 (RowanCommandResult
 	subclass: 'RowanClassCategoryUpdate'
-	instVarNames: #( categories selection )
+	instVarNames: #(categories selection)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4149,7 +4110,7 @@ removeallclassmethods RowanClassCategoryUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanClassesUpdate'
-	instVarNames: #( classNames selectionNames )
+	instVarNames: #(classNames selectionNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4185,7 +4146,7 @@ removeallclassmethods RowanClassHierarchyUpdate
 doit
 (RowanClassesUpdate
 	subclass: 'RowanMethodsUpdate'
-	instVarNames: #( methods methodFilters selectors selectedClass selectedSelectors inheritedClasses inheritedClass type )
+	instVarNames: #(methods methodFilters selectors selectedClass selectedSelectors inheritedClasses inheritedClass type)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4203,7 +4164,7 @@ removeallclassmethods RowanMethodsUpdate
 doit
 (RowanClassesUpdate
 	subclass: 'RowanSuperclassUpdate'
-	instVarNames: #( tabName )
+	instVarNames: #(tabName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4221,7 +4182,7 @@ removeallclassmethods RowanSuperclassUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanClassInfoUpdate'
-	instVarNames: #( oop template category comment )
+	instVarNames: #(oop template category comment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4239,7 +4200,7 @@ removeallclassmethods RowanClassInfoUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanDictionaryUpdate'
-	instVarNames: #( dictionaries selections )
+	instVarNames: #(dictionaries selections)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4257,7 +4218,7 @@ removeallclassmethods RowanDictionaryUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanGlobalsUpdate'
-	instVarNames: #( globals )
+	instVarNames: #(globals)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4275,7 +4236,7 @@ removeallclassmethods RowanGlobalsUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanGsObject'
-	instVarNames: #( gciSession name oopType )
+	instVarNames: #(gciSession name oopType)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4293,7 +4254,7 @@ removeallclassmethods RowanGsObject
 doit
 (RowanGsObject
 	subclass: 'RowanGsMethod'
-	instVarNames: #( behavior behaviorName breakPoints category isReadOnly originalSource source stepPoints unimplementedSelectors warnings )
+	instVarNames: #(behavior behaviorName breakPoints category isReadOnly originalSource source stepPoints unimplementedSelectors warnings)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4311,7 +4272,7 @@ removeallclassmethods RowanGsMethod
 doit
 (RowanCommandResult
 	subclass: 'RowanMethodUpdate'
-	instVarNames: #( gsMethod firstSendOffsets method isOverride isTestClass )
+	instVarNames: #(gsMethod firstSendOffsets method isOverride isTestClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4329,7 +4290,7 @@ removeallclassmethods RowanMethodUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanPackageUpdate'
-	instVarNames: #( packages modifiedPackages selections )
+	instVarNames: #(packages modifiedPackages selections)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4347,7 +4308,7 @@ removeallclassmethods RowanPackageUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanProjectsUpdate'
-	instVarNames: #( projects modifiedProjects selection )
+	instVarNames: #(projects modifiedProjects selection)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4365,7 +4326,7 @@ removeallclassmethods RowanProjectsUpdate
 doit
 (Object
 	subclass: 'RowanInterface'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4419,7 +4380,7 @@ removeallclassmethods RwProject
 doit
 (Object
 	subclass: 'RowanService'
-	instVarNames: #( definition updates command commandArgs updateType organizer )
+	instVarNames: #(definition updates command commandArgs updateType organizer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4450,7 +4411,7 @@ removeallclassmethods RowanService
 doit
 (RowanService
 	subclass: 'RowanAnsweringService'
-	instVarNames: #( answer )
+	instVarNames: #(answer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4474,7 +4435,7 @@ removeallclassmethods RowanAnsweringService
 doit
 (RowanService
 	subclass: 'RowanAutoCommitService'
-	instVarNames: #( autoCommit )
+	instVarNames: #(autoCommit)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4493,7 +4454,7 @@ removeallclassmethods RowanAutoCommitService
 doit
 (RowanService
 	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses )
+	instVarNames: #(projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4513,7 +4474,7 @@ removeallclassmethods RowanBrowserService
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName )
+	instVarNames: #(name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4534,7 +4495,7 @@ removeallclassmethods RowanClassService
 doit
 (RowanService
 	subclass: 'RowanDebuggerService'
-	instVarNames: #( initialProcessOop processes )
+	instVarNames: #(initialProcessOop processes)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4552,7 +4513,7 @@ removeallclassmethods RowanDebuggerService
 doit
 (RowanService
 	subclass: 'RowanDictionaryService'
-	instVarNames: #( name classes hierarchyServices globals defaultTemplate )
+	instVarNames: #(name classes hierarchyServices globals defaultTemplate)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4570,7 +4531,7 @@ removeallclassmethods RowanDictionaryService
 doit
 (RowanService
 	subclass: 'RowanFrameService'
-	instVarNames: #( label method stepPoint vars oop homeMethodSelector homeMethodClassName )
+	instVarNames: #(label method stepPoint vars oop homeMethodSelector homeMethodClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4588,8 +4549,8 @@ removeallclassmethods RowanFrameService
 doit
 (RowanService
 	subclass: 'RowanLoggingService'
-	instVarNames: #( fileName id groupId date time comment services mode location isLogging )
-	classVars: #( Current )
+	instVarNames: #(fileName id groupId date time comment services mode location isLogging)
+	classVars: #(Current)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -4625,7 +4586,7 @@ removeallclassmethods TestLoggingService
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop )
+	instVarNames: #(oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4643,7 +4604,7 @@ removeallclassmethods RowanMethodService
 doit
 (RowanService
 	subclass: 'RowanPackageService'
-	instVarNames: #( projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass )
+	instVarNames: #(projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4661,7 +4622,7 @@ removeallclassmethods RowanPackageService
 doit
 (RowanService
 	subclass: 'RowanProcessService'
-	instVarNames: #( frames oop status )
+	instVarNames: #(frames oop status)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4679,7 +4640,7 @@ removeallclassmethods RowanProcessService
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome )
+	instVarNames: #(name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4697,7 +4658,7 @@ removeallclassmethods RowanProjectService
 doit
 (RowanService
 	subclass: 'RowanQueryService'
-	instVarNames: #( queryResults )
+	instVarNames: #(queryResults)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4733,7 +4694,7 @@ removeallclassmethods RowanTestService
 doit
 (RowanService
 	subclass: 'RowanVariableService'
-	instVarNames: #( oop key value className )
+	instVarNames: #(oop key value className)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4751,7 +4712,7 @@ removeallclassmethods RowanVariableService
 doit
 (Object
 	subclass: 'RowanServicePreferences'
-	instVarNames: #( defaultProjectName )
+	instVarNames: #(defaultProjectName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4769,7 +4730,7 @@ removeallclassmethods RowanServicePreferences
 doit
 (Object
 	subclass: 'RwAbstractConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern patternMatchBlock )
+	instVarNames: #(pattern patternMatchBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4805,7 +4766,7 @@ removeallclassmethods RwGemStoneVersionConfigurationPlatformAttributeMatcher
 doit
 (RwGemStoneVersionConfigurationPlatformAttributeMatcher
 	subclass: 'RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern2 )
+	instVarNames: #(pattern2)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4841,7 +4802,7 @@ removeallclassmethods RwStringConfigurationPlatformAttributeMatcher
 doit
 (Object
 	subclass: 'RwAbstractProjectConfiguration'
-	instVarNames: #( name comment projectName version configurationNames )
+	instVarNames: #(name comment projectName version configurationNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4859,7 +4820,7 @@ removeallclassmethods RwAbstractProjectConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwAbstractProjectLoadConfiguration'
-	instVarNames: #( conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
+	instVarNames: #(conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4895,7 +4856,7 @@ removeallclassmethods RwNestedProjectLoadConfiguration
 doit
 (RwAbstractProjectLoadConfiguration
 	subclass: 'RwProjectLoadConfiguration'
-	instVarNames: #( definedGroupNames )
+	instVarNames: #(definedGroupNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4913,7 +4874,7 @@ removeallclassmethods RwProjectLoadConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwProjectCompoundConfiguration'
-	instVarNames: #( packageNames )
+	instVarNames: #(packageNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4931,7 +4892,7 @@ removeallclassmethods RwProjectCompoundConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwProjectConfiguration'
-	instVarNames: #( configNames )
+	instVarNames: #(configNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4952,7 +4913,7 @@ removeallclassmethods RwProjectConfiguration
 doit
 (Object
 	subclass: 'RwAbstractTool'
-	instVarNames: #( specification )
+	instVarNames: #(specification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6102,7 +6063,7 @@ removeallclassmethods RwRepRemoveTool
 doit
 (Object
 	subclass: 'RwClassAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classKey classesModification )
+	instVarNames: #(projectDefinition packageDefinition classKey classesModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6124,7 +6085,7 @@ removeallclassmethods RwClassAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwConfiguration'
-	instVarNames: #( packageInfoSource )
+	instVarNames: #(packageInfoSource)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6158,7 +6119,7 @@ removeallclassmethods RwConfiguration
 doit
 (Object
 	subclass: 'RwDefinition'
-	instVarNames: #( properties )
+	instVarNames: #(properties)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6184,7 +6145,7 @@ removeallclassmethods RwDefinition
 doit
 (RwDefinition
 	subclass: 'RwAbstractClassDefinition'
-	instVarNames: #( classMethodDefinitions instanceMethodDefinitions )
+	instVarNames: #(classMethodDefinitions instanceMethodDefinitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6246,7 +6207,7 @@ removeallclassmethods RwClassExtensionDefinition
 doit
 (RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
-	instVarNames: #( definitions )
+	instVarNames: #(definitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6315,7 +6276,7 @@ removeallclassmethods RwProjectSetDefinition
 doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
-	instVarNames: #( source )
+	instVarNames: #(source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6333,7 +6294,7 @@ removeallclassmethods RwMethodDefinition
 doit
 (RwDefinition
 	subclass: 'RwPackageDefinition'
-	instVarNames: #( classDefinitions classExtensions )
+	instVarNames: #(classDefinitions classExtensions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6355,7 +6316,7 @@ removeallclassmethods RwPackageDefinition
 doit
 (RwDefinition
 	subclass: 'RwProjectDefinition'
-	instVarNames: #( packages )
+	instVarNames: #(packages)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6391,7 +6352,7 @@ removeallclassmethods RwUnmanagedProjectDefinition
 doit
 (Object
 	subclass: 'RwDiskRepositoryGenerator'
-	instVarNames: #( gs_options gs_constraints )
+	instVarNames: #(gs_options gs_constraints)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6409,7 +6370,7 @@ removeallclassmethods RwDiskRepositoryGenerator
 doit
 (Object
 	subclass: 'RwElementsModification'
-	instVarNames: #( elementsModified )
+	instVarNames: #(elementsModified)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6476,7 +6437,7 @@ removeallclassmethods RwClassExtensionsModification
 doit
 (RwElementsModification
 	subclass: 'RwEntitySetModification'
-	instVarNames: #( movedClasses movedMethods )
+	instVarNames: #(movedClasses movedMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6555,7 +6516,7 @@ removeallclassmethods RwMethodsModification
 doit
 (RwMethodsModification
 	subclass: 'RwExtensionMethodsModification'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6630,7 +6591,7 @@ removeallclassmethods RwSourceModification
 doit
 (Object
 	subclass: 'RwEntitySet'
-	instVarNames: #( entities )
+	instVarNames: #(entities)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6733,7 +6694,7 @@ removeallclassmethods RwGsTestImage
 doit
 (Object
 	subclass: 'RwGsImagePatchVisitor'
-	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod )
+	instVarNames: #(patchSet currentProject currentPackage currentClass currentMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6752,7 +6713,7 @@ removeallclassmethods RwGsImagePatchVisitor
 doit
 (Object
 	subclass: 'RwGsImagePatchVisitor_254'
-	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod )
+	instVarNames: #(patchSet currentProject currentPackage currentClass currentMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6771,7 +6732,7 @@ removeallclassmethods RwGsImagePatchVisitor_254
 doit
 (Object
 	subclass: 'RwGsInstanceMigrator'
-	instVarNames: #( migrationEnabled maxThreads maxCpuPercentage )
+	instVarNames: #(migrationEnabled maxThreads maxCpuPercentage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6789,7 +6750,7 @@ removeallclassmethods RwGsInstanceMigrator
 doit
 (RwGsInstanceMigrator
 	subclass: 'RwGsDeferredInstanceMigrator'
-	instVarNames: #( classesToMigrate )
+	instVarNames: #(classesToMigrate)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6807,7 +6768,7 @@ removeallclassmethods RwGsDeferredInstanceMigrator
 doit
 (Object
 	subclass: 'RwGsPatch'
-	instVarNames: #( packageDefinition projectDefinition )
+	instVarNames: #(packageDefinition projectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6826,7 +6787,7 @@ removeallclassmethods RwGsPatch
 doit
 (RwGsPatch
 	subclass: 'RwGsClassPatch'
-	instVarNames: #( classDefinition )
+	instVarNames: #(classDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6849,7 +6810,7 @@ removeallclassmethods RwGsClassPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassAdditionSymbolDictPatch'
-	instVarNames: #( newClass symbolAssociation )
+	instVarNames: #(newClass symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6890,7 +6851,7 @@ removeallclassmethods RwGsClassConstraintsSymDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassDeletionSymbolDictPatch'
-	instVarNames: #( existingClass )
+	instVarNames: #(existingClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6913,7 +6874,7 @@ removeallclassmethods RwGsClassDeletionSymbolDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassExtensionSymbolDictPatch'
-	instVarNames: #( patchClass )
+	instVarNames: #(patchClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6955,7 +6916,7 @@ removeallclassmethods RwGsClassPropertiesSymDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassSymbolDictionaryMoveSymDictPatch'
-	instVarNames: #( classModification )
+	instVarNames: #(classModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6996,7 +6957,7 @@ removeallclassmethods RwGsClassVariableChangeSymbolDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassVersioningPatch'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	instVarNames: #(classModification oldClassVersion newClassVersion symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7019,7 +6980,7 @@ removeallclassmethods RwGsClassVersioningPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassVersioningSymbolDictPatch'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	instVarNames: #(classModification oldClassVersion newClassVersion symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7042,7 +7003,7 @@ removeallclassmethods RwGsClassVersioningSymbolDictPatch
 doit
 (RwGsPatch
 	subclass: 'RwGsMethodPatch'
-	instVarNames: #( isMeta methodDefinition classDefinition behavior selector compiledMethod )
+	instVarNames: #(isMeta methodDefinition classDefinition behavior selector compiledMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7111,7 +7072,7 @@ removeallclassmethods RwGsMethodDeletionSymbolDictPatch
 doit
 (RwGsMethodDeletionSymbolDictPatch
 	subclass: 'RwGsMethodDeletionExtensionSymbolDictPatch'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7170,7 +7131,7 @@ removeallclassmethods RwGsMethodExtensionSymbolDictPatch
 doit
 (RwGsMethodExtensionSymbolDictPatch
 	subclass: 'RwGsMethodExtensionSessionMethodSymbolDictPatch'
-	instVarNames: #( sessionDictsArray methDict catDict pArray )
+	instVarNames: #(sessionDictsArray methDict catDict pArray)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7399,7 +7360,7 @@ removeallclassmethods RwGsProjectAdditionPatch
 doit
 (Object
 	subclass: 'RwGsPatchSet'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages projectsWithPropertyChanges addedClasses deletedClasses deletedClassesMap movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithNewVersions addedMethods deletedMethods deletedExtensionMethods deleteNewVersionMethods movedMethodsMap extendedMethods methodsWithPropertyChanges methodsNeedingRecompile pureMovedMethods tempSymbols createdClasses errors currentProjectDefinition )
+	instVarNames: #(instanceMigrator addedProjects addedPackages deletedPackages projectsWithPropertyChanges addedClasses deletedClasses deletedClassesMap movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithNewVersions addedMethods deletedMethods deletedExtensionMethods deleteNewVersionMethods movedMethodsMap extendedMethods methodsWithPropertyChanges methodsNeedingRecompile pureMovedMethods tempSymbols createdClasses errors currentProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7418,7 +7379,7 @@ removeallclassmethods RwGsPatchSet
 doit
 (Object
 	subclass: 'RwGsPatchSet_254'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition )
+	instVarNames: #(instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7437,7 +7398,7 @@ removeallclassmethods RwGsPatchSet_254
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistry'
-	instVarNames: #( symbolDictionary packageRegistry classRegistry classExtensionRegistry methodRegistry )
+	instVarNames: #(symbolDictionary packageRegistry classRegistry classExtensionRegistry methodRegistry)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7502,8 +7463,8 @@ removeallclassmethods RwGsSymbolDictionaryRegistry_Implementation
 doit
 (Object
 	subclass: 'RwLoadedThing'
-	instVarNames: #( properties name handle )
-	classVars: #( AbsentToken )
+	instVarNames: #(properties name handle)
+	classVars: #(AbsentToken)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -7523,7 +7484,7 @@ removeallclassmethods RwLoadedThing
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClass'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	instVarNames: #(loadedPackage loadedInstanceMethods loadedClassMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7561,7 +7522,7 @@ removeallclassmethods RwGsLoadedSymbolDictClass
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClassExtension'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	instVarNames: #(loadedPackage loadedInstanceMethods loadedClassMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7602,7 +7563,7 @@ removeallclassmethods RwGsLoadedSymbolDictClassExtension
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedMethod'
-	instVarNames: #( loadedClass classIsMeta )
+	instVarNames: #(loadedClass classIsMeta)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7644,7 +7605,7 @@ removeallclassmethods RwGsLoadedSymbolDictMethod
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedPackage'
-	instVarNames: #( repository commitId loadedClasses loadedClassExtensions isDirty loadedProject )
+	instVarNames: #(repository commitId loadedClasses loadedClassExtensions isDirty loadedProject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7684,7 +7645,7 @@ removeallclassmethods RwGsLoadedSymbolDictPackage
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedProject'
-	instVarNames: #( loadedPackages isDirty )
+	instVarNames: #(loadedPackages isDirty)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7720,7 +7681,7 @@ removeallclassmethods RwGsLoadedSymbolDictProject
 doit
 (Object
 	subclass: 'RwMethodAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification )
+	instVarNames: #(projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7742,7 +7703,7 @@ removeallclassmethods RwMethodAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwModification'
-	instVarNames: #( propertiesModification before after )
+	instVarNames: #(propertiesModification before after)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7766,7 +7727,7 @@ removeallclassmethods RwModification
 doit
 (RwModification
 	subclass: 'RwClassModification'
-	instVarNames: #( instanceMethodsModification classMethodsModification )
+	instVarNames: #(instanceMethodsModification classMethodsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7827,7 +7788,7 @@ removeallclassmethods RwClassModificationForcingNewClassVersion
 doit
 (RwModification
 	subclass: 'RwMethodModification'
-	instVarNames: #( sourceModification isMeta classDefinition )
+	instVarNames: #(sourceModification isMeta classDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7852,7 +7813,7 @@ removeallclassmethods RwMethodModification
 doit
 (RwMethodModification
 	subclass: 'RwExtensionMethodModification'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7906,7 +7867,7 @@ removeallclassmethods RwExtensionMethodModificationForNewClassVersion
 doit
 (RwModification
 	subclass: 'RwPackageModification'
-	instVarNames: #( classesModification classExtensionsModification )
+	instVarNames: #(classesModification classExtensionsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7931,7 +7892,7 @@ removeallclassmethods RwPackageModification
 doit
 (RwModification
 	subclass: 'RwProjectModification'
-	instVarNames: #( packagesModification )
+	instVarNames: #(packagesModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7956,7 +7917,7 @@ removeallclassmethods RwProjectModification
 doit
 (Object
 	subclass: 'RwMove'
-	instVarNames: #( projectBefore projectAfter packageBefore packageAfter )
+	instVarNames: #(projectBefore projectAfter packageBefore packageAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7974,7 +7935,7 @@ removeallclassmethods RwMove
 doit
 (RwMove
 	subclass: 'RwClassExtensionMove'
-	instVarNames: #( classExtensionBefore classExtensionAfter )
+	instVarNames: #(classExtensionBefore classExtensionAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7992,7 +7953,7 @@ removeallclassmethods RwClassExtensionMove
 doit
 (RwMove
 	subclass: 'RwClassMove'
-	instVarNames: #( classBefore classAfter )
+	instVarNames: #(classBefore classAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8011,7 +7972,7 @@ removeallclassmethods RwClassMove
 doit
 (RwMove
 	subclass: 'RwMethodMove'
-	instVarNames: #( methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter )
+	instVarNames: #(methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8068,7 +8029,7 @@ removeallclassmethods RwPlatform
 doit
 (RwPlatform
 	subclass: 'RwGsPlatform'
-	instVarNames: #( alternateImageClass enableInstanceMigration instanceMigrator )
+	instVarNames: #(alternateImageClass enableInstanceMigration instanceMigrator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8088,7 +8049,7 @@ removeallclassmethods RwGsPlatform
 doit
 (Object
 	subclass: 'RwProjectLoadConfigurationVisitor'
-	instVarNames: #( packageNames packageMapSpecs visitedConfigurationNames platformAttributes definedGroupNames groupNames configurationNames configurationBasePath )
+	instVarNames: #(packageNames packageMapSpecs visitedConfigurationNames platformAttributes definedGroupNames groupNames configurationNames configurationBasePath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8106,7 +8067,7 @@ removeallclassmethods RwProjectLoadConfigurationVisitor
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadConfigurationAnalysisVisitor'
-	instVarNames: #( visitedConfigurationMap packageToConfigurationMap )
+	instVarNames: #(visitedConfigurationMap packageToConfigurationMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8124,7 +8085,7 @@ removeallclassmethods RwProjectLoadConfigurationAnalysisVisitor
 doit
 (Object
 	subclass: 'RwPropertyModification'
-	instVarNames: #( key oldValue newValue )
+	instVarNames: #(key oldValue newValue)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8210,7 +8171,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwImageSpecification'
-	instVarNames: #( loadedCommitId loadedConfigurationNames loadedGroupNames repositoryUrl )
+	instVarNames: #(loadedCommitId loadedConfigurationNames loadedGroupNames repositoryUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8228,7 +8189,7 @@ removeallclassmethods RwImageSpecification
 doit
 (RwImageSpecification
 	subclass: 'RwPackageProjectImageSpecification'
-	instVarNames: #( loadedPackageNames )
+	instVarNames: #(loadedPackageNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8282,7 +8243,7 @@ removeallclassmethods RwPlatformSpecification
 doit
 (RwPlatformSpecification
 	subclass: 'RwGemStoneSpecification'
-	instVarNames: #( defaultMethodEnv defaultSymbolDictName defaultUseSessionMethodsForExtensions packageNameToPlatformPropertiesMap projectOwnerId )
+	instVarNames: #(defaultMethodEnv defaultSymbolDictName defaultUseSessionMethodsForExtensions packageNameToPlatformPropertiesMap projectOwnerId)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8300,7 +8261,7 @@ removeallclassmethods RwGemStoneSpecification
 doit
 (RwSpecification
 	subclass: 'RwProjectSpecification'
-	instVarNames: #( specName version projectUrl platformSpec configsPath specsPath repoSpec repoPath comment imageSpec defaultConfigurationNames defaultGroupNames )
+	instVarNames: #(specName version projectUrl platformSpec configsPath specsPath repoSpec repoPath comment imageSpec defaultConfigurationNames defaultGroupNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8318,7 +8279,7 @@ removeallclassmethods RwProjectSpecification
 doit
 (RwProjectSpecification
 	subclass: 'RwPackageProjectSpecification'
-	instVarNames: #( packageNames packageNamesInLoadOrder packageNamesToLoad )
+	instVarNames: #(packageNames packageNamesInLoadOrder packageNamesToLoad)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8374,7 +8335,7 @@ removeallclassmethods RwSimpleProjectSpecification
 doit
 (RwSpecification
 	subclass: 'RwReferenceSpecification'
-	instVarNames: #( referenceUrl )
+	instVarNames: #(referenceUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8392,7 +8353,7 @@ removeallclassmethods RwReferenceSpecification
 doit
 (RwSpecification
 	subclass: 'RwRepositorySpecification'
-	instVarNames: #( repositoryRootPath )
+	instVarNames: #(repositoryRootPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8428,7 +8389,7 @@ removeallclassmethods RwDiskRepositorySpecification
 doit
 (RwRepositorySpecification
 	subclass: 'RwGitRepositorySpecification'
-	instVarNames: #( committish committishType remote )
+	instVarNames: #(committish committishType remote)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8446,7 +8407,7 @@ removeallclassmethods RwGitRepositorySpecification
 doit
 (Object
 	subclass: 'RwUrl'
-	instVarNames: #( fragment )
+	instVarNames: #(fragment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8508,7 +8469,7 @@ removeallclassmethods RwUrl
 doit
 (RwUrl
 	subclass: 'RwFileUrl'
-	instVarNames: #( host path isAbsolute )
+	instVarNames: #(host path isAbsolute)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8657,7 +8618,7 @@ removeallclassmethods RwFiletreeUrl
 doit
 (RwFileUrl
 	subclass: 'RwGithubUrl'
-	instVarNames: #( project committish dir )
+	instVarNames: #(project committish dir)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8682,7 +8643,7 @@ removeallclassmethods RwGithubUrl
 doit
 (RwUrl
 	subclass: 'RwGenericUrl'
-	instVarNames: #( schemeName locator )
+	instVarNames: #(schemeName locator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8701,7 +8662,7 @@ removeallclassmethods RwGenericUrl
 doit
 (RwUrl
 	subclass: 'RwHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password )
+	instVarNames: #(schemeName authority path query port username password)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8720,7 +8681,7 @@ removeallclassmethods RwHierarchicalUrl
 doit
 (RwHierarchicalUrl
 	subclass: 'RwSmalltalkRepositoryUrl'
-	instVarNames: #( project committish dir )
+	instVarNames: #(project committish dir)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8791,240 +8752,8 @@ removeallclassmethods RwGitFileTreeUrl
 
 doit
 (Object
-	subclass: 'STON'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STON implements serialization and materialization using the Smalltalk Object Notation format.
- 
-S y n t a x
-
-	value
-	  primitive-value
-	  object-value
-	  reference
-	  nil
-	primitive-value
-	  number
-	  true
-	  false
-	  symbol
-	  string
-	object-value
-	  object
-	  map
-	  list
-	object
-	  classname map
-	  classname list
-	reference
-	  @ int-index-previous-object-value
-	map
-	  {}
-	  { members }
-	members
-	  pair
-	  pair , members
-	pair
-	  string : value
-	  symbol : value
-	  number : value
-	list
-	  []
-	  [ elements ]
-	elements
-	  value 
-	  value , elements
-	string
-	  ''''
-	  '' chars ''
-	chars
-	  char
-	  char chars
-	char
-	  any-printable-ASCII-character-
-	    except-''-"-or-\
-	  \''
-	  \"
-	  \\
-	  \/
-	  \b
-	  \f
-	  \n
-	  \r
-	  \t
-	  \u four-hex-digits
-	symbol
-	  # chars-limited
-	  # '' chars ''
-	chars-limited
-	  char-limited
-	  char-limited chars-limited
-	char-limited
-	  a-z A-Z 0-9 - _ . /
-	classname
-	  uppercase-alpha-char alphanumeric-char
-	number
-	  int
-	  int frac
-	  int exp
-	  int frac exp
-	int
-	  digit
-	  digit1-9 digits 
-	  - digit
-	  - digit1-9 digits
-	frac
-	  . digits
-	exp
-	  e digits
-	digits
-	  digit
-	  digit digits
-	e
-	  e
-	  e+
-	  e-
-	  E
-	  E+
-	  E-
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STON
-removeallclassmethods STON
-
-doit
-(Object
-	subclass: 'STONReader'
-	instVarNames: #( readStream objects classes unresolvedReferences stringStream allowComplexMapKeys stack )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONReader materializes objects using the Smalltalk Object Notation format.
-
-This parser is backwards compatible with standard JSON.';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONReader
-removeallclassmethods STONReader
-
-doit
-(Object
-	subclass: 'STONReference'
-	instVarNames: #( index )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONReference holds a forward reference to another object during materialization.
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONReference
-removeallclassmethods STONReference
-
-doit
-(Object
-	subclass: 'STONStreamWriter'
-	instVarNames: #( writer first )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONStreamWriter helps in streaming writing STON representations.
-This is an abstract class.';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONStreamWriter
-removeallclassmethods STONStreamWriter
-
-doit
-(STONStreamWriter
-	subclass: 'STONListWriter'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONArrayWriter helps in writing array based STON representations.
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONListWriter
-removeallclassmethods STONListWriter
-
-doit
-(STONListWriter
-	subclass: 'STONShortListWriter'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONShortArrayWriter helps in writing short array based STON representations.
-';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONShortListWriter
-removeallclassmethods STONShortListWriter
-
-doit
-(STONStreamWriter
-	subclass: 'STONMapWriter'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONDictionaryWriter helps in writing dictionary based STON representations.';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONMapWriter
-removeallclassmethods STONMapWriter
-
-doit
-(Object
 	subclass: 'STONTestDomainObject'
-	instVarNames: #( created modified integer float description color tags bytes boolean )
+	instVarNames: #(created modified integer float description color tags bytes boolean)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9054,7 +8783,7 @@ removeallclassmethods STONTestDomainObject
 doit
 (Object
 	subclass: 'STONTestUser'
-	instVarNames: #( username password enabled )
+	instVarNames: #(username password enabled)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9116,66 +8845,8 @@ removeallclassmethods STONTestUser3
 
 doit
 (Object
-	subclass: 'STONWriter'
-	instVarNames: #( writeStream prettyPrint newLine jsonMode referencePolicy level objects )
-	classVars: #( STONCharacters STONSimpleSymbolCharacters )
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'STON-Core';
-		comment: 'STONWriter serializes objects using the Smalltalk Object Notation format. 
-
-Customization options are:
-
-- prettyPrint <Boolean> default is false
-	if true, produce pretty printed output
-- jsonMode <Boolean> default is false
-	if true, the follow changes occur
-	- strings are delimited with double quotes
-	- nil is encoded as null
-	- symbols are treated as strings
-	- only STON listClass and STON mapClass instances are allowed as composite objects
-	it is wise to also use either #error or #ignore as referencePolicy to avoid references
-- referencePolicy <#normal|#ignore|#error> default is #normal
-	if #normal, track and count object references and use references to implement sharing and break cycles
-	if #error, track object references and signal STONWriterError when a shared reference is encountered
-	if #ignore, don''t track object references which might loop forever on cycles
- ';
-		immediateInvariant.
-true.
-%
-
-removeallmethods STONWriter
-removeallclassmethods STONWriter
-
-doit
-(STONWriter
-	subclass: 'TonelSTONWriter'
-	instVarNames: #( aliases )
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Tonel-Core';
-		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
-
-- it accept aliasses for classes, so I can say OrderedDictionary -> nil (then I do not have an extra information I do not want). Btw, tonel needs to use ordered dictionaries instead plain dictionaries because output needs to be deterministic, and we want to control the order of attributes we publish.
-- if dictionary has just one element, it prints it in just one line, to have a more compact view.';
-		immediateInvariant.
-true.
-%
-
-removeallmethods TonelSTONWriter
-removeallclassmethods TonelSTONWriter
-
-doit
-(Object
 	subclass: 'TonelParser'
-	instVarNames: #( packageReader stream lastSelectorParsed )
+	instVarNames: #(packageReader stream lastSelectorParsed)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9237,7 +8908,7 @@ removeallclassmethods TonelParser
 doit
 (Object
 	subclass: 'TonelWriter'
-	instVarNames: #( packageWriter )
+	instVarNames: #(packageWriter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9251,6 +8922,28 @@ true.
 
 removeallmethods TonelWriter
 removeallclassmethods TonelWriter
+
+doit
+(STONWriter
+	subclass: 'TonelSTONWriter'
+	instVarNames: #(aliases)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Tonel-Core';
+		comment: 'I''m a modified STON writer to make tonel metadata look as we want.
+
+- it accept aliasses for classes, so I can say OrderedDictionary -> nil (then I do not have an extra information I do not want). Btw, tonel needs to use ordered dictionaries instead plain dictionaries because output needs to be deterministic, and we want to control the order of attributes we publish.
+- if dictionary has just one element, it prints it in just one line, to have a more compact view.';
+		immediateInvariant.
+true.
+%
+
+removeallmethods TonelSTONWriter
+removeallclassmethods TonelSTONWriter
 
 doit
 (TestCase
@@ -9327,7 +9020,7 @@ removeallclassmethods RBParserTest
 doit
 (TestCase
 	subclass: 'RBProgramNodeTest'
-	instVarNames: #( node previous )
+	instVarNames: #(node previous)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9345,7 +9038,7 @@ removeallclassmethods RBProgramNodeTest
 doit
 (TestCase
 	subclass: 'RBSmallDictionaryTest'
-	instVarNames: #( dict )
+	instVarNames: #(dict)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9363,7 +9056,7 @@ removeallclassmethods RBSmallDictionaryTest
 doit
 (TestCase
 	subclass: 'RowanServicesTest'
-	instVarNames: #( defaultProjectDefinition )
+	instVarNames: #(defaultProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9382,7 +9075,7 @@ removeallclassmethods RowanServicesTest
 doit
 (RowanServicesTest
 	subclass: 'RowanAnsweringServiceTest'
-	instVarNames: #( service )
+	instVarNames: #(service)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9618,7 +9311,7 @@ doit
 (RwAbstractTest
 	subclass: 'RwLoadingTest'
 	instVarNames: #()
-	classVars: #( PoolDictionaryDictionary )
+	classVars: #(PoolDictionaryDictionary)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -9894,7 +9587,7 @@ removeallclassmethods RwUnpackagedBrowserApiTest
 doit
 (RwToolTest
 	subclass: 'RwEditToolTest'
-	instVarNames: #( globalBlackList userBlackList sessionBlackList )
+	instVarNames: #(globalBlackList userBlackList sessionBlackList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9930,7 +9623,7 @@ removeallclassmethods RwMoveTest
 doit
 (RwToolTest
 	subclass: 'RwPackageReadWriteTest'
-	instVarNames: #( officialRowanProjectInstance )
+	instVarNames: #(officialRowanProjectInstance)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -10281,7 +9974,7 @@ removeallclassmethods TonelAbstractTest
 doit
 (TonelAbstractTest
 	subclass: 'TonelAbstractWriterTest'
-	instVarNames: #( directory )
+	instVarNames: #(directory)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -10317,7 +10010,7 @@ removeallclassmethods TonelCypressWriterTest
 doit
 (TonelAbstractTest
 	subclass: 'TonelReaderTest'
-	instVarNames: #( directory )
+	instVarNames: #(directory)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -10672,44 +10365,6 @@ requirementsMap: aDictionary
 	 names to a collection of dependent definitions."
 
 	requirementsMap := aDictionary
-%
-
-! Class implementation for 'STONReaderError'
-
-!		Class methods for 'STONReaderError'
-
-category: 'instance creation'
-classmethod: STONReaderError
-signal: aString streamPosition: streamPosition 
-	^ self new
-		streamPosition: streamPosition;
-		signal: aString;
-		yourself
-%
-
-!		Instance methods for 'STONReaderError'
-
-category: 'accessing'
-method: STONReaderError
-messageText
-	^ streamPosition 
-		ifNil: [ 
-			super messageText ] 
-		ifNotNil: [ :pos | 
-			'At character {1}: {2}' format: 
-				(Array with: streamPosition with: super messageText) ]
-%
-
-category: 'accessing'
-method: STONReaderError
-streamPosition
-	^ streamPosition
-%
-
-category: 'accessing'
-method: STONReaderError
-streamPosition: aNumber
-	streamPosition := aNumber
 %
 
 ! Class implementation for 'RwGemStoneVersionNumber'
@@ -40919,7 +40574,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-  ^ '1.2.15'
+  ^ '1.2.16'
 %
 
 ! Class implementation for 'RowanCommandResult'
@@ -70809,701 +70464,6 @@ schemeName
   ^ 'gitfiletree'
 %
 
-! Class implementation for 'STON'
-
-!		Class methods for 'STON'
-
-category: 'convenience'
-classmethod: STON
-fromStream: readStream
-	^ (self reader on: readStream) next
-%
-
-category: 'convenience'
-classmethod: STON
-fromString: string
-  ^ self fromStream: string readStream
-%
-
-category: 'accessing'
-classmethod: STON
-jsonWriter
-	^ STONWriter new
-		  jsonMode: true;
-		  yourself
-%
-
-category: 'accessing'
-classmethod: STON
-listClass
-	^ Array
-%
-
-category: 'accessing'
-classmethod: STON
-mapClass
-	^ Dictionary
-%
-
-category: 'convenience'
-classmethod: STON
-put: object asJsonOnStream: stream
-	(self jsonWriter on: stream) nextPut: object
-%
-
-category: 'convenience'
-classmethod: STON
-put: object asJsonOnStreamPretty: stream
-	(self jsonWriter on: stream)
-		prettyPrint: true; 
-		nextPut: object
-%
-
-category: 'convenience'
-classmethod: STON
-put: object onStream: stream
-	(self writer on: stream) nextPut: object
-%
-
-category: 'convenience'
-classmethod: STON
-put: object onStreamPretty: stream
-	(self writer on: stream)
-		prettyPrint: true; 
-		nextPut: object
-%
-
-category: 'accessing'
-classmethod: STON
-reader
-	^ STONReader new
-%
-
-category: 'convenience'
-classmethod: STON
-toJsonString: object
-  ^ String streamContents: [ :stream | self put: object asJsonOnStream: stream ]
-%
-
-category: 'convenience'
-classmethod: STON
-toJsonStringPretty: object
-  ^ String
-    streamContents: [ :stream | self put: object asJsonOnStreamPretty: stream ]
-%
-
-category: 'convenience'
-classmethod: STON
-toString: object
-  ^ String streamContents: [ :stream | self put: object onStream: stream ]
-%
-
-category: 'convenience'
-classmethod: STON
-toStringPretty: object
-  ^ String streamContents: [ :stream | self put: object onStreamPretty: stream ]
-%
-
-category: 'accessing'
-classmethod: STON
-writer
-	^ STONWriter new
-%
-
-! Class implementation for 'STONReader'
-
-!		Class methods for 'STONReader'
-
-category: 'instance creation'
-classmethod: STONReader
-on: readStream
-	^ self new
-		on: readStream;
-		yourself
-%
-
-!		Instance methods for 'STONReader'
-
-category: 'initialize-release'
-method: STONReader
-allowComplexMapKeys: boolean
-	allowComplexMapKeys := boolean
-%
-
-category: 'testing'
-method: STONReader
-atEnd
-	^ readStream atEnd
-%
-
-category: 'initialize-release'
-method: STONReader
-close
-	readStream ifNotNil: [
-		readStream close.
-		readStream := nil ]
-%
-
-category: 'private'
-method: STONReader
-consumeWhitespace
-	"Strip whitespaces from the input stream."
-
-	[ readStream atEnd not and: [ readStream peek isSeparator ] ]
-		whileTrue: [ readStream next ]
-%
-
-category: 'error handling'
-method: STONReader
-error: aString
-	| streamPosition |
-	"Remain compatible with streams that don't understand #position"
-	streamPosition := [ readStream position ]
-		on: MessageNotUnderstood do: [ nil ].
-	^ STONReaderError signal: aString streamPosition: streamPosition
-%
-
-category: 'private'
-method: STONReader
-expectChar: character
-	"Expect character and consume input and optional whitespace at the end,
-	 throw an error otherwise."
-
-	(self matchChar: character)
-		ifFalse: [ self error: character asString, ' expected' ]
-%
-
-category: 'initialize-release'
-method: STONReader
-initialize
-  objects := IdentityDictionary new.
-  classes := IdentityDictionary new.
-  allowComplexMapKeys := false.
-  stack := OrderedCollection new.
-  unresolvedReferences := 0
-%
-
-category: 'private'
-method: STONReader
-isClassChar: char
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' includes: char
-%
-
-category: 'private'
-method: STONReader
-isClassStartChar: char
-	^ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: char
-%
-
-category: 'private'
-method: STONReader
-isSimpleSymbolChar: char
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includes: char
-%
-
-category: 'private'
-method: STONReader
-match: string do: block
-	"Try to read and consume string and execute block if successful.
-	Else do nothing (but do not back up)"
-
-	(string allSatisfy: [ :each | readStream peekFor: each ])
-		ifTrue: [ 
-			self consumeWhitespace.
-			block value ]
-%
-
-category: 'private'
-method: STONReader
-matchChar: character
-	"Tries to match character, consume input and 
-	answer true if successful and consumes whitespace at the end."
-
-	^ (readStream peekFor: character)
-		ifTrue: [ 
-			self consumeWhitespace.
-			true ]
-		ifFalse: [ false ]
-%
-
-category: 'private'
-method: STONReader
-newReference
-	| index reference |
-	index := objects size + 1.
-	reference := STONReference index: index.
-	objects at: index put: reference.
-	^ reference
-%
-
-category: 'public'
-method: STONReader
-next
-	| object |
-	self consumeWhitespace.
-	object := self parseValue.
-	unresolvedReferences > 0
-		ifTrue: [ self processSubObjectsOf: object ].
-	^ object
-%
-
-category: 'initialize-release'
-method: STONReader
-on: aReadStream
-	readStream := aReadStream
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseCharacter
-  | char |
-  (char := readStream next) = $\
-    ifFalse: [ ^ char ].
-  (#($' $" $/ $\) includes: (char := readStream next))
-    ifTrue: [ ^ char ].
-  char = $b
-    ifTrue: [ ^ Character backspace ].
-  char = $f
-    ifTrue: [ ^ Character newPage ].
-  char = $n
-    ifTrue: [ ^ Character lf ].
-  char = $r
-    ifTrue: [ ^ Character cr ].
-  char = $t
-    ifTrue: [ ^ Character tab ].
-  char = $u
-    ifTrue: [ ^ self parseCharacterHex ].
-  self error: 'invalid escape character \' , (String with: char)
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseCharacterHex
-  | value |
-  value := self parseCharacterHexDigit.
-  3 timesRepeat: [ value := (value bitShift: 4) + self parseCharacterHexDigit ].
-  ^ Character codePoint: value
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseCharacterHexDigit
-	| digit |
-	readStream atEnd ifFalse: [ 
-		digit := readStream next asInteger.
-		(digit between: "$0" 48 and: "$9" 57)
-			ifTrue: [ ^ digit - 48 ].
-		(digit between: "$A" 65 and: "$F" 70)
-			ifTrue: [ ^ digit - 55 ].
-		(digit between: "$a" 97 and: "$f" 102)
-			ifTrue: [ ^ digit - 87 ] ].
-	self error: 'hex-digit expected'
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseClass
-	| className |
-	className := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isClassChar: readStream peek ] ] whileTrue: [ 
-			stream nextPut: readStream next ] ].
-	self consumeWhitespace.
-	^ self lookupClass: className asSymbol
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseConstantDo: block
-	"Parse and consume either true|false|nil|null and execute block 
-	or else do nothing (but do not back up).
-	Hand written implementation to avoid the use of #position:"
-	
-	(readStream peek = $t)
-		ifTrue: [
-			^ self match: 'true' do: [ block value: true ] ].
-	(readStream peek = $f)
-		ifTrue: [
-			^ self match: 'false' do: [ block value: false ] ].
-	(readStream peek = $n)
-		ifTrue: [
-			readStream next.
-			(readStream peek = $i)
-				ifTrue: [
-					self match: 'il' do: [ block value: nil ] ].
-			(readStream peek = $u)
-				ifTrue: [
-					self match: 'ull' do: [ block value: nil ] ] ]
-%
-
-category: 'parsing'
-method: STONReader
-parseList
-	| reference array |
-	reference := self newReference.
-	array := STON listClass streamContents: [ :stream |
-		self parseListDo: [ :each | stream nextPut: each ] ].
-	self setReference: reference to: array.
-	^ array
-%
-
-category: 'parsing'
-method: STONReader
-parseListDo: block
-	| index |
-	self expectChar: $[.
-	(self matchChar: $]) 
-		ifTrue: [ ^ self ].
-	index := 1.
-	[ readStream atEnd ] whileFalse: [
-		block cull: self parseValue cull: index.
-		(self matchChar: $]) 
-			ifTrue: [ ^ self ].
-		index := index + 1.
-		self expectChar: $, ].
-	self error: 'end of list expected'
-%
-
-category: 'parsing'
-method: STONReader
-parseListSingleton
-	| value |
-	value := nil.
-	self parseListDo: [ :each :index |
-		index = 1 ifTrue: [ value := each ] ].
-	^ value
-%
-
-category: 'parsing'
-method: STONReader
-parseMap
-	| map |
-	map := STON mapClass new.
-	self storeReference: map.
-	self parseMapDo: [ :key :value |
-		map at: key put: value ].
-	^ map
-%
-
-category: 'parsing'
-method: STONReader
-parseMapDo: block
-  self expectChar: ${.
-  (self matchChar: $})
-    ifTrue: [ ^ self ].
-  [ readStream atEnd ] whileFalse: [ | name value |
-      name := self parseValue.
-      (allowComplexMapKeys
-        or: [ name isString or: [ name isNumber ] ])
-        ifFalse: [ self error: 'unexpected property name type' ].
-      self expectChar: $:.
-      value := self parseValue.
-      block value: name value: value.
-      (self matchChar: $})
-        ifTrue: [ ^ self ].
-      self expectChar: $, ].
-  self error: 'end of map expected'
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseNumber
-	| negated number |
-	negated := readStream peekFor: $-.
-	number := self parseNumberInteger.
-	(readStream peekFor: $.)
-		ifTrue: [ number := number + self parseNumberFraction ].
-	((readStream peekFor: $e) or: [ readStream peekFor: $E ])
-		ifTrue: [ number := number * self parseNumberExponent ].
-	negated
-		ifTrue: [ number := number negated ].
-	self consumeWhitespace.
-	^ number
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseNumberExponent
-	| number negated |
-	number := 0.
-	(negated := readStream peekFor: $-)
-		ifFalse: [ readStream peekFor: $+ ].
-	[ readStream atEnd not and: [ readStream peek isDigit ] ]
-		whileTrue: [ number := 10 * number + readStream next digitValue ].
-	negated
-		ifTrue: [ number := number negated ].
-	^ 10 raisedTo: number
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseNumberFraction
-	| number power |
-	number := 0.
-	power := 1.0.
-	[ readStream atEnd not and: [ readStream peek isDigit ] ] whileTrue: [
-		number := 10 * number + readStream next digitValue.
-		power := power * 10.0 ].
-	^ number / power
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseNumberInteger
-	| number |
-	number := 0.
-	[ readStream atEnd not and: [ readStream peek isDigit ] ] whileTrue: [ 
-		number := 10 * number + readStream next digitValue ].
-	^ number
-%
-
-category: 'parsing'
-method: STONReader
-parseObject
-	| targetClass reference object |
-	targetClass := self parseClass.
-	reference := self newReference.
-	object := targetClass fromSton: self.
-	self setReference: reference to: object.
-	^ object
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseReference
-	| index |
-	self expectChar: $@.
-	index := self parseNumberInteger.
-	self consumeWhitespace.
-	unresolvedReferences := unresolvedReferences + 1.
-	^ STONReference index: index
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseString
-	^ self parseStringInternal
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseStringInternal
-  | result delimiter |
-  delimiter := readStream next.
-  (delimiter = $' or: [ delimiter = $" ])
-    ifFalse: [ self error: ''' or " expected' ].
-  result := self
-    stringStreamContents: [ :stream | 
-      [ readStream atEnd or: [ readStream peek = delimiter ] ]
-        whileFalse: [ stream nextPut: self parseCharacter ] ].
-  self expectChar: delimiter.
-  ^ result
-%
-
-category: 'parsing-internal'
-method: STONReader
-parseSymbol
-	| string |
-	self expectChar: $#.
-	readStream peek = $'
-		ifTrue: [ ^ self parseStringInternal asSymbol ].
-	string := self stringStreamContents: [ :stream |
-		[ readStream atEnd not and: [ self isSimpleSymbolChar: readStream peek ] ] whileTrue: [
-			stream nextPut: readStream next ] ].
-	string isEmpty
-		ifFalse: [ 
-			self consumeWhitespace.
-			^ string asSymbol ].
-	self error: 'unexpected input'
-%
-
-category: 'parsing'
-method: STONReader
-parseValue
-	| char |
-	readStream atEnd ifFalse: [ 
-		(self isClassStartChar: (char := readStream peek)) 
-			ifTrue: [ ^ self parseObject ].
-		char = ${
-			ifTrue: [ ^ self parseMap ].
-		char = $[
-			ifTrue: [ ^ self parseList ].
-		(char = $' or: [ char = $" ])
-			ifTrue: [ ^ self parseString ].
-		char = $#
-			ifTrue: [ ^ self parseSymbol ].
-		char = $@
-			ifTrue: [ ^ self parseReference ].
-		(char = $- or: [ char isDigit ])
-			ifTrue: [ ^ self parseNumber ].
-		self parseConstantDo: [ :value | ^ value ] ].
-	self error: 'invalid input'
-%
-
-category: 'private'
-method: STONReader
-processSubObjectsOf: object
-  stack addFirst: object.
-  [ stack isEmpty ]
-    whileFalse: [ stack removeFirst stonProcessSubObjects: [ :each | each isStonReference
-            ifTrue: [ self resolveReference: each ]
-            ifFalse: [ each stonContainSubObjects
-                ifTrue: [ stack addFirst: each ]
-                ifFalse: [ each ] ] ] ]
-%
-
-category: 'initialize-release'
-method: STONReader
-reset
-	unresolvedReferences := 0.
-	objects removeAll
-%
-
-category: 'private'
-method: STONReader
-resolveReference: reference
-	^ self resolveReferenceIndex: reference index
-%
-
-category: 'private'
-method: STONReader
-resolveReferenceIndex: index
-	^ objects at: index
-%
-
-category: 'private'
-method: STONReader
-setReference: reference to: object
-	objects at: reference index put: object
-%
-
-category: 'private'
-method: STONReader
-storeReference: object
-	| index |
-	index := objects size + 1.
-	objects at: index put: object.
-	^ index
-%
-
-category: 'private'
-method: STONReader
-stringStreamContents: block
-  stringStream ifNil: [ stringStream := WriteStream on: String new ].
-  stringStream reset.
-  block value: stringStream.
-  ^ stringStream contents
-%
-
-! Class implementation for 'STONReference'
-
-!		Class methods for 'STONReference'
-
-category: 'instance creation'
-classmethod: STONReference
-index: integer
-	^ self new
-		index: integer;
-		yourself
-%
-
-!		Instance methods for 'STONReference'
-
-category: 'comparing'
-method: STONReference
-= anObject
-	^ self class == anObject class and: [ self index = anObject index ]
-%
-
-category: 'comparing'
-method: STONReference
-hash
-	^ index hash
-%
-
-category: 'accessing'
-method: STONReference
-index
-	^ index
-%
-
-category: 'accessing'
-method: STONReference
-index: integer
-	index := integer
-%
-
-category: 'testing'
-method: STONReference
-isStonReference
-	^ true
-%
-
-category: 'printing'
-method: STONReference
-printOn: stream
-	super printOn: stream.
-	stream nextPut: $(; print: index; nextPut: $)
-%
-
-! Class implementation for 'STONStreamWriter'
-
-!		Class methods for 'STONStreamWriter'
-
-category: 'instance creation'
-classmethod: STONStreamWriter
-on: stonWriter
-	^ self new
-		on: stonWriter;
-		yourself
-%
-
-!		Instance methods for 'STONStreamWriter'
-
-category: 'initialize-release'
-method: STONStreamWriter
-initialize
-  first := true
-%
-
-category: 'initialize-release'
-method: STONStreamWriter
-on: stonWriter
-	writer := stonWriter
-%
-
-! Class implementation for 'STONListWriter'
-
-!		Instance methods for 'STONListWriter'
-
-category: 'accessing'
-method: STONListWriter
-add: anObject
-	first ifTrue: [ first := false ] ifFalse: [ writer listElementSeparator ].
-	writer nextPut: anObject
-%
-
-! Class implementation for 'STONShortListWriter'
-
-!		Instance methods for 'STONShortListWriter'
-
-category: 'accessing'
-method: STONShortListWriter
-add: anObject
-	first ifTrue: [ first := false ] ifFalse: [ writer shortListElementSeparator ].
-	writer nextPut: anObject
-%
-
-! Class implementation for 'STONMapWriter'
-
-!		Instance methods for 'STONMapWriter'
-
-category: 'accessing'
-method: STONMapWriter
-at: key put: value
-	first ifTrue: [ first := false ] ifFalse: [ writer mapElementSeparator ].
-	writer encodeKey: key value: value
-%
-
 ! Class implementation for 'STONTestDomainObject'
 
 !		Class methods for 'STONTestDomainObject'
@@ -71844,466 +70804,6 @@ category: 'ston-core'
 method: STONTestUser3
 stonShouldWriteNilInstVars
 	^ true
-%
-
-! Class implementation for 'STONWriter'
-
-!		Class methods for 'STONWriter'
-
-category: 'class initialization'
-classmethod: STONWriter
-initialize
-	self initializeSTONCharacters.
-	self initializeSTONSimpleSymbolCharacters
-%
-
-category: 'class initialization'
-classmethod: STONWriter
-initializeSTONCharacters
-	| escapes |
-	STONCharacters := Array new: 127.
-	32 to: 126 do: [ :each | 
-		STONCharacters at: each + 1 put: #pass ].
-	escapes := #( 8 '\b' 9 '\t' 10 '\n' 12 '\f' 13 '\r' 34 '\"' 39 '\''' 92 '\\' ).
-	1 to: escapes size - 1 by: 2 do: [ :index | 
-		STONCharacters 
-			at: (escapes at: index) + 1
-			put: (escapes at: index + 1) ]
-%
-
-category: 'class initialization'
-classmethod: STONWriter
-initializeSTONSimpleSymbolCharacters
-  "STONSimpleSymbolCharacters asArray collectWithIndex: [ :each :index |
-		each isZero ifTrue: [ (index - 1) asCharacter ] ]."
-
-  STONSimpleSymbolCharacters := (ByteArray new: 256)
-    atAllPut: 1;
-    yourself.
-  1 to: 256 do: [ :each | | char |
-    char := (each - 1) asCharacter.
-    (self isSimpleSymbolChar: char)
-      ifTrue: [ STONSimpleSymbolCharacters at: each put: 0 ] ]
-%
-
-category: 'private'
-classmethod: STONWriter
-isSimpleSymbolChar: char
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includes: char
-%
-
-category: 'instance creation'
-classmethod: STONWriter
-on: writeStream
-	^ self new
-		on: writeStream;
-		yourself
-%
-
-!		Instance methods for 'STONWriter'
-
-category: 'initialize-release'
-method: STONWriter
-close
-	writeStream ifNotNil: [
-		writeStream close.
-		writeStream := nil ]
-%
-
-category: 'private'
-method: STONWriter
-encodeKey: key value: value
-	self nextPut: key.
-	self prettyPrintSpace.
-	writeStream nextPut: $:.
-	self prettyPrintSpace.
-	self nextPut: value
-%
-
-category: 'writing'
-method: STONWriter
-encodeList: elements
-	writeStream nextPut: $[.
-	elements isEmpty
-		ifTrue: [
-			self prettyPrintSpace ]
-		ifFalse: [
-			self indentedDo: [
-				self newlineIndent.
-				elements 
-					do: [ :each | self nextPut: each ]
-					separatedBy: [ self listElementSeparator ] ].
-			self newlineIndent ].
-	writeStream nextPut: $]
-%
-
-category: 'writing'
-method: STONWriter
-encodeMap: pairs
-	| first |
-	first := true.
-	writeStream nextPut: ${.
-	pairs isEmpty
-		ifTrue: [
-			self prettyPrintSpace ]
-		ifFalse: [
-			self indentedDo: [
-				self newlineIndent.
-				pairs keysAndValuesDo: [ :key :value |
-					first 
-						ifTrue: [ first := false ] 
-						ifFalse: [ self mapElementSeparator ].
-					self encodeKey: key value: value ] ].
-			self newlineIndent ].
-	writeStream nextPut: $}
-%
-
-category: 'private'
-method: STONWriter
-encodeString: string
-  | encodedString |
-  encodedString := string.
-  writeStream
-    nextPut:
-      (jsonMode
-        ifTrue: [ $" ]
-        ifFalse: [ $' ]).
-  encodedString do: [ :each | self encodeCharacter: each ].
-  writeStream
-    nextPut:
-      (jsonMode
-        ifTrue: [ $" ]
-        ifFalse: [ $' ])
-%
-
-category: 'private'
-method: STONWriter
-indentedDo: block
-	level := level + 1.
-	block value.
-	level := level - 1
-%
-
-category: 'initialize-release'
-method: STONWriter
-initialize
-  prettyPrint := false.
-  newLine := String with: Character lf.
-  level := 0.
-  referencePolicy := #'normal'.
-  jsonMode := false.
-  objects := IdentityDictionary new
-%
-
-category: 'initialize-release'
-method: STONWriter
-jsonMode: boolean
-	jsonMode := boolean
-%
-
-category: 'private'
-method: STONWriter
-listElementSeparator
-	writeStream nextPut: $,.
-	self newlineIndent
-%
-
-category: 'private'
-method: STONWriter
-mapElementSeparator
-	writeStream nextPut: $,.
-	self newlineIndent
-%
-
-category: 'initialize-release'
-method: STONWriter
-newLine: string
-	newLine := string
-%
-
-category: 'private'
-method: STONWriter
-newlineIndent
-	prettyPrint ifTrue: [ 
-		writeStream nextPutAll: newLine.
-		level timesRepeat: [ writeStream tab ] ]
-%
-
-category: 'public'
-method: STONWriter
-nextPut: anObject
-	anObject stonOn: self
-%
-
-category: 'initialize-release'
-method: STONWriter
-on: aWriteStream
-	writeStream := aWriteStream
-%
-
-category: 'initialize-release'
-method: STONWriter
-prettyPrint: boolean
-	prettyPrint := boolean
-%
-
-category: 'private'
-method: STONWriter
-prettyPrintSpace
-	prettyPrint ifTrue: [ writeStream space ]
-%
-
-category: 'initialize-release'
-method: STONWriter
-referencePolicy: policy
-  (#(#'normal' #'ignore' #'error') includes: policy)
-    ifFalse: [ self error: 'Unknown reference policy: ' , policy printString ].
-  referencePolicy := policy
-%
-
-category: 'initialize-release'
-method: STONWriter
-reset
-	objects removeAll
-%
-
-category: 'private'
-method: STONWriter
-shortListElementSeparator
-	writeStream nextPut: $,.
-	self prettyPrintSpace
-%
-
-category: 'private'
-method: STONWriter
-with: object do: block
-	| index |
-	referencePolicy = #ignore 
-		ifTrue: [ ^ block value ].
-	(index := objects at: object ifAbsent: [ nil ]) notNil
-		ifTrue: [
-			referencePolicy = #error
-				ifTrue: [ ^ STONWriterError signal: 'Shared reference detected' ].
-			self writeReference: index ]
-		ifFalse: [
-			index := objects size + 1.
-			objects at: object put: index.
-			block value ]
-%
-
-category: 'writing'
-method: STONWriter
-writeBoolean: boolean
-	writeStream print: boolean
-%
-
-category: 'writing'
-method: STONWriter
-writeInteger: integer
-	writeStream print: integer
-%
-
-category: 'writing'
-method: STONWriter
-writeList: collection
-	self with: collection do: [ 
-		self encodeList: collection ]
-%
-
-category: 'writing'
-method: STONWriter
-writeMap: hashedCollection
-	self with: hashedCollection do: [ 
-		self encodeMap: hashedCollection ]
-%
-
-category: 'writing'
-method: STONWriter
-writeNull
-	jsonMode
-		ifTrue: [ writeStream nextPutAll: 'null' ]
-		ifFalse: [ writeStream print: nil ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: anObject
-  | instanceVariableNames |
-  (instanceVariableNames := anObject class allInstVarNames) isEmpty
-    ifTrue: [ self writeObject: anObject do: [ self encodeMap: #() ] ]
-    ifFalse: [ self writeObject: anObject streamMap: [ :dictionary | instanceVariableNames
-            do: [ :each | (anObject instVarAt: (instanceVariableNames indexOf: each asSymbol))
-                ifNotNil: [ :value | dictionary at: each asSymbol put: value ]
-                ifNil: [ anObject stonShouldWriteNilInstVars
-                    ifTrue: [ dictionary at: each asSymbol put: nil ] ] ] ] ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: anObject do: block
-	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
-		ifTrue: [ STONWriterError signal: 'Wrong object class for JSON mode' ].
-	self with: anObject do: [
-		writeStream nextPutAll: anObject class stonName.
-		self prettyPrintSpace.
-		block value ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: object listSingleton: element
-	self writeObject: object do: [
-		writeStream nextPut: $[.
-		self 
-			prettyPrintSpace;
-			nextPut: element;
-			prettyPrintSpace.
-		writeStream nextPut: $] ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: object streamList: block
-	self writeObject: object do: [ | listWriter |
-		listWriter := STONListWriter on: self.
-		writeStream nextPut: $[.
-		self indentedDo: [
-			self newlineIndent.
-			block value: listWriter ].
-		self newlineIndent.
-		writeStream nextPut: $] ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: object streamMap: block
-	self writeObject: object do: [ | mapWriter |
-		mapWriter := STONMapWriter on: self.
-		writeStream nextPut: ${.
-		self indentedDo: [
-			self newlineIndent.
-			block value: mapWriter ].
-		self newlineIndent.
-		writeStream nextPut: $} ]
-%
-
-category: 'writing'
-method: STONWriter
-writeObject: object streamShortList: block
-	self writeObject: object do: [ | listWriter |
-		listWriter := STONShortListWriter on: self.
-		writeStream nextPut: $[.
-		self indentedDo: [
-			self prettyPrintSpace.
-			block value: listWriter ].
-		self prettyPrintSpace.
-		writeStream nextPut: $] ]
-%
-
-category: 'writing'
-method: STONWriter
-writeReference: index
-	writeStream
-		nextPut: $@;
-		print: index
-%
-
-category: 'writing'
-method: STONWriter
-writeString: string
-	self encodeString: string
-%
-
-category: 'writing'
-method: STONWriter
-writeSymbol: symbol
-	jsonMode
-		ifTrue: [
-			self writeString: symbol ]
-		ifFalse: [
-			writeStream nextPut: $#.
-			(self isSimpleSymbol: symbol)
-				ifTrue: [
-					writeStream nextPutAll: symbol ]
-				ifFalse: [
-					self encodeString: symbol ] ]
-%
-
-! Class implementation for 'TonelSTONWriter'
-
-!		Instance methods for 'TonelSTONWriter'
-
-category: 'accessing'
-method: TonelSTONWriter
-aliases
-	^ aliases
-%
-
-category: 'accessing'
-method: TonelSTONWriter
-aliases: aDictionary
-	aliases := aDictionary
-%
-
-category: 'private'
-method: TonelSTONWriter
-encodeKey: key value: value
-
-	super encodeKey: key asSymbol
-		value: (value isSymbol ifTrue: [value asString] ifFalse: [value])
-%
-
-category: 'writing'
-method: TonelSTONWriter
-encodeMap: pairs
-	| first |
-	first := true.
-	writeStream nextPut: ${.
-	pairs isEmpty
-		ifTrue: [
-			self prettyPrintSpace ]
-		ifFalse: [
-			self indentedDo: [
-				pairs size = 1 
-					ifTrue: [ self prettyPrintSpace ]
-					ifFalse: [ self newlineIndent ].
-				pairs keysAndValuesDo: [ :key :value |
-					first 
-						ifTrue: [ first := false ] 
-						ifFalse: [ self mapElementSeparator ].
-					self encodeKey: key value: value ] ].
-				pairs size = 1 
-					ifTrue: [ self prettyPrintSpace ]
-					ifFalse: [ self newlineIndent ] ].
-	writeStream nextPut: $}
-%
-
-category: 'initialization'
-method: TonelSTONWriter
-initialize
-	super initialize.
-	self prettyPrint: true.
-	aliases := { TonelWriter orderedDictionaryClass -> nil } asDictionary
-%
-
-category: 'accessing'
-method: TonelSTONWriter
-stonNameFor: aClass
-	^ self aliases 
-		at: aClass 
-		ifAbsent: [ aClass stonName ]
-%
-
-category: 'writing'
-method: TonelSTONWriter
-writeObject: anObject do: block
-	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
-		ifTrue: [ self error: 'wrong object class for JSON mode' ].
-	self with: anObject do: [
-		(self stonNameFor: anObject class) ifNotNil: [ :stonName | 
-			writeStream nextPutAll: stonName.
-			self prettyPrintSpace ].
-		block value ]
 %
 
 ! Class implementation for 'TonelParser'
@@ -73152,6 +71652,83 @@ writePackage: packageName on: aStream
 		<< self  newLine
 %
 
+! Class implementation for 'TonelSTONWriter'
+
+!		Instance methods for 'TonelSTONWriter'
+
+category: 'accessing'
+method: TonelSTONWriter
+aliases
+	^ aliases
+%
+
+category: 'accessing'
+method: TonelSTONWriter
+aliases: aDictionary
+	aliases := aDictionary
+%
+
+category: 'private'
+method: TonelSTONWriter
+encodeKey: key value: value
+
+	super encodeKey: key asSymbol
+		value: (value isSymbol ifTrue: [value asString] ifFalse: [value])
+%
+
+category: 'writing'
+method: TonelSTONWriter
+encodeMap: pairs
+	| first |
+	first := true.
+	writeStream nextPut: ${.
+	pairs isEmpty
+		ifTrue: [
+			self prettyPrintSpace ]
+		ifFalse: [
+			self indentedDo: [
+				pairs size = 1 
+					ifTrue: [ self prettyPrintSpace ]
+					ifFalse: [ self newlineIndent ].
+				pairs keysAndValuesDo: [ :key :value |
+					first 
+						ifTrue: [ first := false ] 
+						ifFalse: [ self mapElementSeparator ].
+					self encodeKey: key value: value ] ].
+				pairs size = 1 
+					ifTrue: [ self prettyPrintSpace ]
+					ifFalse: [ self newlineIndent ] ].
+	writeStream nextPut: $}
+%
+
+category: 'initialization'
+method: TonelSTONWriter
+initialize
+	super initialize.
+	self prettyPrint: true.
+	aliases := { TonelWriter orderedDictionaryClass -> nil } asDictionary
+%
+
+category: 'accessing'
+method: TonelSTONWriter
+stonNameFor: aClass
+	^ self aliases 
+		at: aClass 
+		ifAbsent: [ aClass stonName ]
+%
+
+category: 'writing'
+method: TonelSTONWriter
+writeObject: anObject do: block
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		(self stonNameFor: anObject class) ifNotNil: [ :stonName | 
+			writeStream nextPutAll: stonName.
+			self prettyPrintSpace ].
+		block value ]
+%
+
 ! Class implementation for 'JadeServerTest'
 
 !		Instance methods for 'JadeServerTest'
@@ -73484,6 +72061,18 @@ parseError: each
 		parseExpression: each first 
 		onError: [ :string :pos | ^ self assert: pos = each last ].
 	self assert: false description: 'Parser didn''t fail'
+%
+
+category: 'tests'
+method: RBParserTest
+testAmbiguity
+	"this should be two statements ..."
+
+	| tree |
+	tree := RBParser parseExpression: '1. 1'.
+	self assert: tree statements size = 2.
+	self assert: tree periods size = 1.
+	tree statements do: [ :each | each value == 1 ]
 %
 
 category: 'tests'
@@ -118216,54 +116805,6 @@ sha512Sum
 	^self contents sha512Sum
 %
 
-! Class extensions for 'AbstractDictionary'
-
-!		Class methods for 'AbstractDictionary'
-
-category: '*ston-gemstonecommon'
-classmethod: AbstractDictionary
-fromSton: stonReader
-	"Instances of STON mapClass will be read directly and won't arrive here.
-	Other (sub)classes will use this method."
-	
-	| dictionary |
-	dictionary := self new.
-	stonReader parseMapDo: [ :key :value |
-		dictionary at: key put: value ].
-	^ dictionary
-%
-
-!		Instance methods for 'AbstractDictionary'
-
-category: '*ston-gemstonecommon'
-method: AbstractDictionary
-stonOn: stonWriter
-	"Instances of STON mapClass will be encoded directly, without a class tag.
-	Other (sub)classes will be encoded with a class tag and will use a map representation. "
-	
-	self class == STON mapClass
-		ifTrue: [ 
-			stonWriter writeMap: self ]
-		ifFalse: [ 
-			stonWriter 
-				writeObject: self 
-				do: [ stonWriter encodeMap: self ] ]
-%
-
-category: '*ston-gemstonecommon'
-method: AbstractDictionary
-stonProcessSubObjects: block
-	"Execute block to (potentially) change each of my subObjects.
-	In general, all instance and indexable variables are processed.
-	Overwrite when necessary. Not used when #stonContainSubObjects returns false."
-	(self class isVariable and: [ self class isBytes not and: [self class isIndexable]])
-		ifTrue: [
-			1 to: self _basicSize do: [ :each | |val|			
-									val:= (block value: (self basicAt: each)).
-									self basicAt: each put: val ] ]"
-							super stonProcessSubObjects: block"
-%
-
 ! Class extensions for 'Array'
 
 !		Instance methods for 'Array'
@@ -118759,18 +117300,6 @@ rbStoreOn: aStream
   aStream nextPutAll: self asString
 %
 
-category: '*ston-core'
-method: Boolean
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-core'
-method: Boolean
-stonOn: stonWriter
-	stonWriter writeBoolean: self
-%
-
 category: '*Cypress-PackageManagement'
 method: Boolean
 _writeCypressJsonOn: aStream indent: startIndent
@@ -118780,17 +117309,6 @@ _writeCypressJsonOn: aStream indent: startIndent
 %
 
 ! Class extensions for 'ByteArray'
-
-!		Class methods for 'ByteArray'
-
-category: '*ston-core'
-classmethod: ByteArray
-fromSton: stonReader
-  | singletonString |
-  singletonString := stonReader parseListSingleton.
-  ^ (self new: singletonString size // 2)
-    readHexFrom: singletonString readStream
-%
 
 !		Instance methods for 'ByteArray'
 
@@ -118806,96 +117324,7 @@ byteArrayMap
 	^ map
 %
 
-category: '*ston-gemstonebase'
-method: ByteArray
-readHexFrom: aStream
-  "Initialize the receiver from a hexadecimal string representation"
-
-  | map v ch value |
-  map := '0123456789abcdefABCDEF'.
-  1 to: self size do: [ :i | 
-    ch := aStream next.
-    v := (map indexOf: ch) - 1.
-    ((v between: 0 and: 15) or: [ (v := v - 6) between: 0 and: 15 ])
-      ifFalse: [ 
-        ^ self
-          error:
-            'Hex digit 
-expected' ].
-    value := v bitShift: 4.
-    ch := aStream next.
-    v := (map indexOf: ch) - 1.
-    ((v between: 0 and: 15) or: [ (v := v - 6) between: 0 and: 15 ])
-      ifFalse: [ 
-        ^ self
-          error:
-            'Hex digit 
-expected' ].
-    value := value + v.
-    self at: i put: value ]
-%
-
-category: '*ston-core'
-method: ByteArray
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-gemstonecommon'
-method: ByteArray
-stonOn: stonWriter
-  "Use a hex representation"
-
-  stonWriter writeObject: self listSingleton: self asHexString
-%
-
-! Class extensions for 'Character'
-
-!		Class methods for 'Character'
-
-category: '*ston-core'
-classmethod: Character
-fromSton: stonReader
-	^ stonReader parseListSingleton first
-%
-
-!		Instance methods for 'Character'
-
-category: '*ston-core'
-method: Character
-stonOn: stonWriter
-	stonWriter writeObject: self listSingleton: self asString
-%
-
 ! Class extensions for 'CharacterCollection'
-
-!		Class methods for 'CharacterCollection'
-
-category: '*ston-gemstonecommon'
-classmethod: CharacterCollection
-findFirstInString: aString inSet: inclusionMap startingAt: start
-
-	"Trivial, non-primitive version"
-
-	| i stringSize ascii |
-	inclusionMap size ~= 256
-		ifTrue: [ ^ 0 ].
-
-	i := start.
-	stringSize := aString size.
-	[ 
-	i <= stringSize
-		and: [ 
-			ascii := (aString at: i) asciiValue.
-			ascii < 256
-				ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
-				ifFalse: [ true ] ] ]
-		whileTrue: [ i := i + 1 ].
-
-	i > stringSize
-		ifTrue: [ ^ 0 ].
-	^ i
-%
 
 !		Instance methods for 'CharacterCollection'
 
@@ -118980,12 +117409,6 @@ indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlock
 	ans = 0
 		ifTrue: [ ^ aBlock value ]
 		ifFalse: [ ^ ans ]
-%
-
-category: '*ston-gemstonebase'
-method: CharacterCollection
-isString
-  ^ true
 %
 
 category: '*tonel-gemstonecommon-core'
@@ -119093,21 +117516,6 @@ method: CharacterCollection
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 
 	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
-%
-
-category: '*ston-gemstonecommon'
-method: CharacterCollection
-stonContainSubObjects
-  ^ false
-%
-
-category: '*ston-gemstonecommon'
-method: CharacterCollection
-stonOn: stonWriter
-
-        self isSymbol
-                ifTrue: [stonWriter writeSymbol: self]
-                ifFalse: [stonWriter writeString: self]
 %
 
 category: '*tonel-gemstone-kernel'
@@ -119639,14 +118047,6 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
-%
-
-category: '*ston-core'
-method: Class
-stonName
-	"Override to encode my instances using a different class name."
-	
-	^ self name
 %
 
 category: '*rowan-gemstone-kernel-extensions-36x'
@@ -120253,18 +118653,6 @@ self _validateNewClassName: nameSym .
 
 ! Class extensions for 'Collection'
 
-!		Class methods for 'Collection'
-
-category: '*ston-core'
-classmethod: Collection
-fromSton: stonReader
-	| collection |
-	collection := self new.
-	stonReader parseListDo: [ :each |
-		collection add: each ].
-	^ collection
-%
-
 !		Instance methods for 'Collection'
 
 category: '*tonel-gemstonecommon-core'
@@ -120334,23 +118722,6 @@ sort: aSortBlock
 	and return true if the first element should preceed the second one."
 
 	^ self sortWithBlock: aSortBlock
-%
-
-category: '*ston-core'
-method: Collection
-stonOn: stonWriter
-	stonWriter writeObject: self do: [
-		stonWriter encodeList: self ]
-%
-
-! Class extensions for 'CollisionBucket'
-
-!		Instance methods for 'CollisionBucket'
-
-category: '*ston-gemstonecommon'
-method: CollisionBucket
-stonContainSubObjects 
-	^false
 %
 
 ! Class extensions for 'CypressAddition'
@@ -121317,63 +119688,6 @@ packageNames
 		reject: [ :each | each = '.' or: [ each = '..' ] ]
 %
 
-! Class extensions for 'Date'
-
-!		Class methods for 'Date'
-
-category: '*ston-gemstonecommon'
-classmethod: Date
-fromSton: stonReader
-
-	^ self fromStream: stonReader parseListSingleton readStream usingFormat: #(3 2 1 $- 1 1)
-%
-
-!		Instance methods for 'Date'
-
-category: '*ston-core'
-method: Date
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-gemstonecommon'
-method: Date
-stonOn: stonWriter
-  "Use an ISO style YYYYMMDD representation"
-
-  stonWriter
-    writeObject: self
-    listSingleton: (self asStringUsingFormat: #(3 2 1 $- 1 1 $: false))
-%
-
-! Class extensions for 'DateAndTime'
-
-!		Class methods for 'DateAndTime'
-
-category: '*ston-core'
-classmethod: DateAndTime
-fromSton: stonReader
-  ^ DateAndTime fromString: stonReader parseListSingleton
-%
-
-!		Instance methods for 'DateAndTime'
-
-category: '*ston-core'
-method: DateAndTime
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-gemstonecommon'
-method: DateAndTime
-stonOn: stonWriter
-	"Use an ISO representation with all details"
-	
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self printOn: stream ])
-%
-
 ! Class extensions for 'Dictionary'
 
 !		Instance methods for 'Dictionary'
@@ -121546,12 +119860,6 @@ rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
 	^ aRwSemanticVersonComponent rwSemanticIntegerLessThanSelf: self
 %
 
-category: '*ston-core'
-method: Integer
-stonOn: stonWriter
-	stonWriter writeInteger: self
-%
-
 ! Class extensions for 'Interval'
 
 !		Class methods for 'Interval'
@@ -121588,82 +119896,63 @@ stonOn: stonWriter
 category: '*ast-kernel-core'
 classmethod: Number
 rwFromStream: aStream
-  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D'  'q' | 'Q') ['-' | '+'] Digits
+  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D' | 'q') ['-' | '+'] Digits
    DecimalExponent = ( 'f' | 'F' ) ['-' | '+'] Digits
    Digit = '0' | '1' | '2' | ... | '9'
    Digits = Digit {Digit}
    Exponent = BinaryExponent | DecimalExponent | ScaledDecimalExponent | FixedPointExponent
    FractionalPart = '.' Digits [Exponent]
-   FixedPointExponent = 'p' [ ['-' | '+'] Digits ] 
-   Number = RadixedLiteral | NumericLiteral
-   Numeric = Digit | 'A' | 'B' | ... | 'Z'
+   FixedPointExponent = 'p' [ ['-' | '+'] Digits ]
+   Number = [ - ] RadixedLiteral | [ '-' ] NumericLiteral | RadixedLiteralNegBody
+   Numeric = Digit | 'A' | 'B' | ... e 'Z'
    NumericLiteral = Digits ( [FractionalPart] | [Exponent] )
    Numerics = Numeric { Numeric }
-   RadixedLiteral = Digits ( '#' | 'r' ) ['-'] Numerics
+   RadixedLiteral = Digits ( '#' | 'r' ) Numerics
+   RadixedLiteralNegBody =  Digits ( '#' | 'r' ) '-' Numerics
    ScaledDecimalExponent = 's' [ ['-' | '+'] Digits ]
 "
-  | ch integerPart factor signFound |
+  | ch integerPart sign dCount |
   self _checkReadStream: aStream forClass: CharacterCollection.
-  ch := aStream next.
-  [ ch unicodeIsWhitespace] whileTrue: [ ch := aStream next ].
-  aStream skip: -1.
+  aStream peek unicodeIsWhitespace ifTrue:[
+    [ aStream next unicodeIsWhitespace ] whileTrue.
+    aStream skip: -1.
+  ].
+  (aStream peek == $-) 
+    ifTrue: [ aStream next.  sign := $- .  ]
+    ifFalse: [ (aStream peek isEquivalent: $+) ifTrue: [ aStream next.  sign := $+ ] ].
+  dCount := 0 .
   integerPart := 0.
-  factor := 1.
-  signFound := false.
-  (aStream peek isEquivalent: $-)
+  [ (ch := aStream peek) ~~ nil and: [ ch isDigit ] ] whileTrue: [
+    aStream next.
+    integerPart := integerPart * 10 + ch digitValue .
+    dCount := dCount + 1 
+  ].
+  dCount == 0 ifTrue:[ ^ self _errIncorrectFormat: aStream ].
+  (ch == $r or: [ ch == $# ]) ifTrue: [ "found a radix separator" 
+    aStream next.
+    ^ Integer _fromStream: aStream radix: integerPart sign: sign .
+  ].
+  (ch isEquivalent: (Locale decimalPoint at: 1)) 
     ifTrue: [ 
-      aStream next.
-      signFound := true.
-      factor := -1 ]
-    ifFalse: [ 
-      (aStream peek isEquivalent: $+)
-        ifTrue: [ 
-          aStream next.
-          signFound := true ] ].
-  (aStream atEnd or: [ aStream peek isDigit not ])
-    ifTrue: [ ^ self _errIncorrectFormat: aStream ].
-  [ aStream atEnd not and: [ (ch := aStream peek) isDigit ] ]
-    whileTrue: [ 
-      aStream next.
-      integerPart := integerPart * 10 + ch digitValue ].
-
-  (ch == $r or: [ ch == $# ])
-    ifTrue: [ 
-      "found a radix separator"
-      aStream next.
-      ^ Integer
-        _rwFinishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        radix: integerPart ].
-  (ch isEquivalent: (Locale decimalPoint at: 1))
-    ifTrue: [ 
+      "found a decimal point" 
       | chch |
-		chch := aStream peek2. ".?"
-		chch notNil
-			ifTrue: [
-				"not at eof"
+      chch := aStream peek2. "check character following deciml point"
+      chch notNil
+        ifTrue: [
+				"eof does not follow the decimal point"
 				chch isDigit 
 					ifFalse: [
-						"we're done"
-						^ integerPart * factor ] ].
-	  "found a decimal point, followed by a numeric character."
-      aStream next.
-      ^ BinaryFloat
-        _finishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        integerPart: integerPart ].
-  (#( $e $E $d $D $q $s $p $f $F ) includesIdentical: ch) ifTrue:[ 
-      aStream next.
-      ^ BinaryFloat
-        _finishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        integerPart: integerPart
-        fractionalPart: 0
-        exponent: ch ].
-  ^ integerPart * factor
+						"decimal point is followed by a non-digit, so decimal point should not be treated as part of number"
+                        sign == $- ifTrue:[ ^ 0 - integerPart ].
+						^ integerPart ] ].
+    aStream next.
+    ^ BinaryFloat _finishFromStream: aStream sign: sign integerPart: integerPart 
+  ].
+  (#( $e $E $s $f $F $q $p $d $D ) includesIdentical: ch) ifTrue:[
+    ^ BinaryFloat _finishFromStream: aStream sign: sign integerPart: integerPart .
+  ].
+  sign == $- ifTrue:[ ^ 0 - integerPart ].
+  ^ integerPart
 %
 
 !		Instance methods for 'Number'
@@ -121684,18 +119973,6 @@ rbStoreOn: aStream
   self printOn: aStream
 %
 
-category: '*ston-core'
-method: Number
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-core'
-method: Number
-stonOn: stonWriter
-	stonWriter writeFloat: self asFloat
-%
-
 category: '*Cypress-PackageManagement'
 method: Number
 _writeCypressJsonOn: aStream indent: startIndent
@@ -121706,39 +119983,12 @@ _writeCypressJsonOn: aStream indent: startIndent
 
 ! Class extensions for 'Object'
 
-!		Class methods for 'Object'
-
-category: '*ston-core'
-classmethod: Object
-fromSton: stonReader
-	"Create a new instance and delegate decoding to instance side.
-	Override only when new instance should be created directly (see implementors). "
-	
-	^ self new
-		fromSton: stonReader;
-		yourself
-%
-
 !		Instance methods for 'Object'
 
 category: '*gemstone-interactions-kernel'
 method: Object
 confirm: aString
   ^ (GsConfirmInteraction prompt: aString) signal
-%
-
-category: '*ston-core'
-method: Object
-fromSton: stonReader
-  "Decode non-variable classes from a map of their instance variables and values.
-	Override to customize and add a matching #toSton: (see implementors)."
-
-  self class isVariable
-    ifTrue: [ self subclassResponsibility ]
-    ifFalse: [ | instanceVariableNames |
-      instanceVariableNames := self class allInstVarNames.
-      stonReader
-        parseMapDo: [ :instVarName :value | self instVarAt: (instanceVariableNames indexOf: instVarName asSymbol) put: value ] ]
 %
 
 category: '*gemstone-interactions-kernel'
@@ -121762,24 +120012,6 @@ isCollection
 	"Return true if the receiver is some sort of Collection and responds to basic collection messages such as #size and #do:"
 
 	^ false
-%
-
-category: '*ston-gemstonebase'
-method: Object
-isNumber
-  ^ self _isNumber
-%
-
-category: '*ston-core'
-method: Object
-isStonReference
-	^ false
-%
-
-category: '*ston-gemstonebase'
-method: Object
-isString
-  ^ false
 %
 
 category: '*tonel-gemstone-kernel'
@@ -121822,49 +120054,6 @@ method: Object
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
   ^ self
     error: 'Invalid semantic verson component - should be String or Integer.'
-%
-
-category: '*ston-core'
-method: Object
-stonContainSubObjects
-	"Return true if I contain subObjects that should be processed, false otherwise.
-	Overwrite when necessary. See also #stonProcessSubObjects:"
-	
-	^ true
-%
-
-category: '*ston-core'
-method: Object
-stonOn: stonWriter
-	"Encode non-variable classes with a map of their instance variable and values.
-	Override to customize and add a matching #fromSton: (see implementors)."
-
-	self class isVariable 
-		ifTrue: [
-			self subclassResponsibility ]
-		ifFalse: [
-			stonWriter writeObject: self ]
-%
-
-category: '*ston-gemstonecommon'
-method: Object
-stonProcessSubObjects: block
-  "Execute block to (potentially) change each of my subObjects.
-	In general, all instance and indexable variables are processed.
-	Overwrite when necessary. Not used when #stonContainSubObjects returns false."
-
-  1 to: self class instSize do: [ :each | self instVarAt: each put: (block value: (self instVarAt: each)) ].
-  (self class isVariable and: [ self class isBytes not ])
-    ifTrue: [ 1 to: self _basicSize do: [ :each | self basicAt: each put: (block value: (self basicAt: each)) ] ]
-%
-
-category: '*ston-core'
-method: Object
-stonShouldWriteNilInstVars
-	"Return true if my instance variables that are nil should be written out, 
-	false otherwise. Overwrite when necessary. By default, return false."
-	
-	^ false
 %
 
 category: '*ast-kernel-core'
@@ -123875,23 +122064,6 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 
 !		Class methods for 'SequenceableCollection'
 
-category: '*ston-core'
-classmethod: SequenceableCollection
-fromSton: stonReader
-	^ self streamContents: [ :stream |
-		stonReader parseListDo: [ :each |
-			stream nextPut: each ] ]
-%
-
-category: '*STON-GemStoneBase'
-classmethod: SequenceableCollection
-new: newSize streamContents: blockWithArg
-  | stream |
-  stream := WriteStreamPortable on: (self new: newSize).
-  blockWithArg value: stream.
-  ^ stream contents
-%
-
 category: '*rowan-gemstone-kernel'
 classmethod: SequenceableCollection
 new: size withAll: value
@@ -123902,12 +122074,6 @@ new: size withAll: value
 	^ (self new: size)
 		atAllPut: value;
 		yourself
-%
-
-category: '*STON-GemStoneBase'
-classmethod: SequenceableCollection
-streamContents: blockWithArg
-  ^ self new: 100 streamContents: blockWithArg
 %
 
 !		Instance methods for 'SequenceableCollection'
@@ -124084,14 +122250,6 @@ sort
 	^ self sort: [ :a :b | a <= b ]
 %
 
-category: '*ston-core'
-method: SequenceableCollection
-stonOn: stonWriter
-	self class == STON listClass
-		ifTrue: [ stonWriter writeList: self ]
-		ifFalse: [ super stonOn: stonWriter ]
-%
-
 category: '*tonel-gemstone-kernel'
 method: SequenceableCollection
 third
@@ -124116,136 +122274,6 @@ method: SequenceableCollection
 writeStreamPortable
 
 	^ WriteStreamPortable on: self
-%
-
-! Class extensions for 'STONReader'
-
-!		Class methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-classmethod: STONReader
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONReader'
-
-category: '*ston-gemstonebase'
-method: STONReader
-lookupClass: name
-  ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
-			ifNotNil: [:rowanSymbolDictionary |
-				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
-					ifNotNil: [:cls | ^cls ] ])
-						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
-								detect: [ :cls | cls stonName == name ]
-								ifNone: [
-									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
-										platform serviceClassFor: name)
-											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONReader
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-! Class extensions for 'STONStreamWriter'
-
-!		Class methods for 'STONStreamWriter'
-
-category: '*ston-gemstonebase'
-classmethod: STONStreamWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-! Class extensions for 'STONWriter'
-
-!		Class methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-classmethod: STONWriter
-findFirstInString: aString inSet: inclusionMap startingAt: start
-  "Trivial, non-primitive version"
-
-  | i stringSize ascii |
-  inclusionMap size ~= 256
-    ifTrue: [ ^ 0 ].
-  i := start.
-  stringSize := aString size.
-  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
-      ascii < 256
-        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
-        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
-  i > stringSize
-    ifTrue: [ ^ 0 ].
-  ^ i
-%
-
-category: '*ston-gemstonebase'
-classmethod: STONWriter
-new
-  ^ self basicNew
-    initialize;
-    yourself
-%
-
-!		Instance methods for 'STONWriter'
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-encodeCharacter: char
-  | code encoding |
-  ((code := char codePoint) < 127
-    and: [ (encoding := STONCharacters at: code + 1) notNil ])
-    ifTrue: [ encoding = #'pass'
-        ifTrue: [ writeStream nextPut: char ]
-        ifFalse: [ writeStream nextPutAll: encoding ] ]
-    ifFalse: [ | paddedStream padding digits |
-      paddedStream := WriteStream on: String new.
-      code printOn: paddedStream base: 16 showRadix: false.
-      digits := paddedStream contents.
-      padding := 4 - digits size.
-      writeStream nextPutAll: '\u'.
-      encoding := padding > 0
-        ifTrue: [ ((String new: padding)
-            atAllPut: $0;
-            yourself) , digits ]
-        ifFalse: [ digits ].
-      writeStream nextPutAll: encoding ]
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-isSimpleSymbol: symbol
-  symbol isEmpty
-    ifTrue: [ ^ false ].
-  ^ (self class
-    findFirstInString: symbol
-    inSet: STONSimpleSymbolCharacters
-    startingAt: 1) = 0
-%
-
-category: '*ston-gemstonecommon'
-method: STONWriter
-optimizeForLargeStructures
-  "nothing special for GemStone"
-
-%
-
-category: '*ston-gemstonebase'
-method: STONWriter
-writeFloat: float
-  writeStream nextPutAll: float asString
 %
 
 ! Class extensions for 'STONWriteReadTests'
@@ -124293,18 +122321,6 @@ decodeFromUTF8
  using the minimum character size needed to represent decoded result."
 
  ^ self _decodeFromUtf8: true
-%
-
-category: '*ston-core'
-method: String
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-core'
-method: String
-stonOn: stonWriter
-	stonWriter writeString: self
 %
 
 category: '*Cypress-PackageManagement'
@@ -124359,12 +122375,6 @@ method: Symbol
 rbStoreOn: aStream
   aStream nextPut: $#.
   super rbStoreOn: aStream
-%
-
-category: '*ston-core'
-method: Symbol
-stonOn: stonWriter
-	stonWriter writeSymbol: self
 %
 
 ! Class extensions for 'SymbolDictionary'
@@ -124439,34 +122449,6 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 			"do not leave clone in the symbol list"
 			symbolList remove: clonedSymDict ifAbsent: [] ].
 	^ clonedSymDict
-%
-
-! Class extensions for 'Time'
-
-!		Class methods for 'Time'
-
-category: '*ston-gemstonecommon'
-classmethod: Time
-fromSton: stonReader
-  ^ self fromString: stonReader parseListSingleton usingFormat: #($: true false)
-%
-
-!		Instance methods for 'Time'
-
-category: '*ston-core'
-method: Time
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-gemstonecommon'
-method: Time
-stonOn: stonWriter
-  "Use an ISO style HH:MM:SS representation"
-
-  stonWriter
-    writeObject: self
-    listSingleton: (self asStringUsingFormat: #($: true false))
 %
 
 ! Class extensions for 'TonelAbstractWriterTest'
@@ -124658,18 +122640,6 @@ rbStoreOn: aStream
   aStream nextPutAll: self asString
 %
 
-category: '*ston-core'
-method: UndefinedObject
-stonContainSubObjects 
-	^ false
-%
-
-category: '*ston-core'
-method: UndefinedObject
-stonOn: stonWriter
-	stonWriter writeNull
-%
-
 category: '*rowan-gemstone-kernel-extensions-36x'
 method: UndefinedObject
 subclass: aString 
@@ -124721,26 +122691,6 @@ options: optionsArray
   ^theClass
 %
 
-! Class extensions for 'UnorderedCollection'
-
-!		Instance methods for 'UnorderedCollection'
-
-category: '*ston-gemstonecommon'
-method: UnorderedCollection
-stonProcessSubObjects: block
-	"Execute block to (potentially) change each of my subObjects.
-	In general, all instance and indexable variables are processed.
-	Overwrite when necessary. Not used when #stonContainSubObjects returns false."
-"increase the starting index by 4 because of the private inst vars in UnorderedCollection"
-
-	5 to: self class instSize do: [ :each |
-		self instVarAt: each  put: (block value: (self instVarAt: each)) ].
-	(self class isVariable and: [ self class isBytes not ])
-		ifTrue: [
-			1 to: self _basicSize do: [ :each |
-				self basicAt: each put: (block value: (self basicAt: each)) ] ]
-%
-
 ! Class extensions for 'Warning'
 
 !		Instance methods for 'Warning'
@@ -124779,6 +122729,5 @@ RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwLoadingTest initialize.
-STONWriter initialize.
 true
 %

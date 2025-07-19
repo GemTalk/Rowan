@@ -63,7 +63,7 @@ removeallclassmethods CypressJsonError
 doit
 (Error
 	subclass: 'CypressLoaderError'
-	instVarNames: #( exception patchOperation )
+	instVarNames: #(exception patchOperation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -94,7 +94,7 @@ removeallclassmethods CypressLoaderError
 doit
 (Error
 	subclass: 'CypressLoaderMissingClasses'
-	instVarNames: #( requirementsMap )
+	instVarNames: #(requirementsMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -154,7 +154,7 @@ removeallclassmethods RwGemStoneVersionNumber
 doit
 (Magnitude
 	subclass: 'RwSemanticVersionNumber'
-	instVarNames: #( normalVersion preReleaseVersion buildVersion )
+	instVarNames: #(normalVersion preReleaseVersion buildVersion)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -514,7 +514,7 @@ removeallclassmethods RwSemanticVersionNumber
 doit
 (Notification
 	subclass: 'CypressLoaderErrorNotification'
-	instVarNames: #( exception patchOperation )
+	instVarNames: #(exception patchOperation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -543,7 +543,7 @@ removeallclassmethods CypressLoaderErrorNotification
 doit
 (Notification
 	subclass: 'GsInteractionRequest'
-	instVarNames: #( interaction )
+	instVarNames: #(interaction)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -580,7 +580,7 @@ removeallclassmethods RwNotification
 doit
 (RwNotification
 	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
-	instVarNames: #( errorMessage )
+	instVarNames: #(errorMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -598,7 +598,7 @@ removeallclassmethods RwAddUpdateRemoveMethodForUnpackagedClassNotification
 doit
 (RwNotification
 	subclass: 'RwDeleteClassFromSystemNotification'
-	instVarNames: #( candidateClass )
+	instVarNames: #(candidateClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -616,7 +616,7 @@ removeallclassmethods RwDeleteClassFromSystemNotification
 doit
 (RwNotification
 	subclass: 'RwExecuteClassInitializeMethodsAfterLoadNotification'
-	instVarNames: #( candidateClass )
+	instVarNames: #(candidateClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -634,7 +634,7 @@ removeallclassmethods RwExecuteClassInitializeMethodsAfterLoadNotification
 doit
 (RwNotification
 	subclass: 'RwExistingAssociationWithSameKeyNotification'
-	instVarNames: #( errorMessage )
+	instVarNames: #(errorMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -652,7 +652,7 @@ removeallclassmethods RwExistingAssociationWithSameKeyNotification
 doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
-	instVarNames: #( classDefinition loadedProject )
+	instVarNames: #(classDefinition loadedProject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -670,7 +670,7 @@ removeallclassmethods RwExistingVisitorAddingExistingClassNotification
 doit
 (RwNotification
 	subclass: 'RwPerformingUnpackagedEditNotification'
-	instVarNames: #( informMessage )
+	instVarNames: #(informMessage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -710,7 +710,7 @@ removeallclassmethods TonelShouldIgnore
 doit
 (Object
 	subclass: 'CypressAbstractPackageFiler'
-	instVarNames: #( repository packageDirectory packageStructure )
+	instVarNames: #(repository packageDirectory packageStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -883,7 +883,7 @@ doit
 	subclass: 'CypressAbstractPackageWriter'
 	instVarNames: #()
 	classVars: #()
-	classInstVars: #( specials )
+	classInstVars: #(specials)
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #( #logCreation )
@@ -957,7 +957,7 @@ removeallclassmethods CypressStrictFileTreeFormatDoNothingPackageWriter
 doit
 (CypressAbstractPackageWriter
 	subclass: 'TonelCypressWriter'
-	instVarNames: #( snapshot sourceDir packageDir writer )
+	instVarNames: #(snapshot sourceDir packageDir writer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -976,7 +976,7 @@ removeallclassmethods TonelCypressWriter
 doit
 (CypressAbstractPackageFiler
 	subclass: 'TonelCypressReader'
-	instVarNames: #( packageName definitions directoryPath )
+	instVarNames: #(packageName definitions directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -995,8 +995,8 @@ removeallclassmethods TonelCypressReader
 doit
 (Object
 	subclass: 'CypressAbstractRepository'
-	instVarNames: #( url properties readerClass writerClass )
-	classVars: #( DefaultCopyrightNotice )
+	instVarNames: #(url properties readerClass writerClass)
+	classVars: #(DefaultCopyrightNotice)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1014,7 +1014,7 @@ removeallclassmethods CypressAbstractRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressAbstractFileoutRepository'
-	instVarNames: #( directoryPath )
+	instVarNames: #(directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1079,7 +1079,7 @@ removeallclassmethods CypressTopazRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressDictionaryRepository'
-	instVarNames: #( dictionary )
+	instVarNames: #(dictionary)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1098,7 +1098,7 @@ removeallclassmethods CypressDictionaryRepository
 doit
 (CypressAbstractRepository
 	subclass: 'CypressFileSystemRepository'
-	instVarNames: #( directoryPath )
+	instVarNames: #(directoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1117,7 +1117,7 @@ removeallclassmethods CypressFileSystemRepository
 doit
 (CypressFileSystemRepository
 	subclass: 'CypressFileSystemGitRepository'
-	instVarNames: #( remoteUrl )
+	instVarNames: #(remoteUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1161,7 +1161,7 @@ doit
 (Object
 	subclass: 'CypressFileUtilities'
 	instVarNames: #()
-	classVars: #( Current )
+	classVars: #(Current)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1198,7 +1198,7 @@ removeallclassmethods CypressGemStoneDirectoryUtilities
 doit
 (Object
 	subclass: 'CypressGsGeneralDependencySorter'
-	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	instVarNames: #(candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1217,7 +1217,7 @@ removeallclassmethods CypressGsGeneralDependencySorter
 doit
 (Object
 	subclass: 'CypressJsonParser'
-	instVarNames: #( stream )
+	instVarNames: #(stream)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1255,7 +1255,7 @@ removeallclassmethods CypressObject
 doit
 (CypressObject
 	subclass: 'CypressAbstractPackageInformation'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1274,7 +1274,7 @@ removeallclassmethods CypressAbstractPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressConflictingPackageInformation'
-	instVarNames: #( conflictsWith )
+	instVarNames: #(conflictsWith)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1293,7 +1293,7 @@ removeallclassmethods CypressConflictingPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressEclipsedPackageInformation'
-	instVarNames: #( eclipsedBy )
+	instVarNames: #(eclipsedBy)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1312,7 +1312,7 @@ removeallclassmethods CypressEclipsedPackageInformation
 doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressKnownPackageInformation'
-	instVarNames: #( repositories digests )
+	instVarNames: #(repositories digests)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1369,7 +1369,7 @@ removeallclassmethods CypressDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints )
+	instVarNames: #(category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1388,7 +1388,7 @@ removeallclassmethods CypressClassDefinition
 doit
 (CypressDefinition
 	subclass: 'CypressMethodDefinition'
-	instVarNames: #( category classIsMeta className selector source )
+	instVarNames: #(category classIsMeta className selector source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1407,7 +1407,7 @@ removeallclassmethods CypressMethodDefinition
 doit
 (CypressMethodDefinition
 	subclass: 'RwCypressMethodDefinition'
-	instVarNames: #( isExtensionMethod )
+	instVarNames: #(isExtensionMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1425,7 +1425,7 @@ removeallclassmethods RwCypressMethodDefinition
 doit
 (CypressObject
 	subclass: 'CypressDefinitionIndex'
-	instVarNames: #( definitionMap )
+	instVarNames: #(definitionMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1444,7 +1444,7 @@ removeallclassmethods CypressDefinitionIndex
 doit
 (CypressObject
 	subclass: 'CypressDependencySorter'
-	instVarNames: #( orderedItems provided required )
+	instVarNames: #(orderedItems provided required)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1481,7 +1481,7 @@ removeallclassmethods CypressEnvironmentDependencySorter
 doit
 (CypressObject
 	subclass: 'CypressLoader'
-	instVarNames: #( additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable )
+	instVarNames: #(additions defaultSymbolDictionaryName errors exceptionClass methodAdditions obsoletions provisions removals requirements unloadable)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1500,7 +1500,7 @@ removeallclassmethods CypressLoader
 doit
 (CypressLoader
 	subclass: 'CypressEnvironmentLoader'
-	instVarNames: #( defaultEnvironmentId lookupSymbolList compilationSymbolList )
+	instVarNames: #(defaultEnvironmentId lookupSymbolList compilationSymbolList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1518,7 +1518,7 @@ removeallclassmethods CypressEnvironmentLoader
 doit
 (CypressObject
 	subclass: 'CypressPackageDefinition'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1537,7 +1537,7 @@ removeallclassmethods CypressPackageDefinition
 doit
 (CypressPackageDefinition
 	subclass: 'CypressEnvironmentPackageDefinition'
-	instVarNames: #( lookupSymbolList )
+	instVarNames: #(lookupSymbolList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1561,7 +1561,7 @@ removeallclassmethods CypressEnvironmentPackageDefinition
 doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
+	instVarNames: #(name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1603,7 +1603,7 @@ removeallclassmethods CypressPackageInformation
 doit
 (CypressObject
 	subclass: 'CypressPatch'
-	instVarNames: #( operations )
+	instVarNames: #(operations)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1641,7 +1641,7 @@ removeallclassmethods CypressPatchOperation
 doit
 (CypressPatchOperation
 	subclass: 'CypressAddition'
-	instVarNames: #( definition )
+	instVarNames: #(definition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1660,7 +1660,7 @@ removeallclassmethods CypressAddition
 doit
 (CypressPatchOperation
 	subclass: 'CypressModification'
-	instVarNames: #( modification obsoletion )
+	instVarNames: #(modification obsoletion)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1679,7 +1679,7 @@ removeallclassmethods CypressModification
 doit
 (CypressPatchOperation
 	subclass: 'CypressRemoval'
-	instVarNames: #( definition )
+	instVarNames: #(definition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1698,7 +1698,7 @@ removeallclassmethods CypressRemoval
 doit
 (CypressObject
 	subclass: 'CypressSnapshot'
-	instVarNames: #( definitions )
+	instVarNames: #(definitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1717,7 +1717,7 @@ removeallclassmethods CypressSnapshot
 doit
 (CypressObject
 	subclass: 'CypressStructure'
-	instVarNames: #( name properties packageStructure )
+	instVarNames: #(name properties packageStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1736,7 +1736,7 @@ removeallclassmethods CypressStructure
 doit
 (CypressStructure
 	subclass: 'CypressClassStructure'
-	instVarNames: #( instanceMethods classMethods comment isClassExtension )
+	instVarNames: #(instanceMethods classMethods comment isClassExtension)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1755,7 +1755,7 @@ removeallclassmethods CypressClassStructure
 doit
 (CypressStructure
 	subclass: 'CypressMethodStructure'
-	instVarNames: #( source isMetaclass classStructure )
+	instVarNames: #(source isMetaclass classStructure)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1792,7 +1792,7 @@ removeallclassmethods RwCypressMethodStructure
 doit
 (CypressStructure
 	subclass: 'CypressPackageStructure'
-	instVarNames: #( classes extensions )
+	instVarNames: #(classes extensions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1829,7 +1829,7 @@ removeallclassmethods RwCypressPackageStructure
 doit
 (Object
 	subclass: 'CypressPackageComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals )
+	instVarNames: #(directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1848,7 +1848,7 @@ removeallclassmethods CypressPackageComparator
 doit
 (Object
 	subclass: 'CypressPackageManager'
-	instVarNames: #( knownPackages knownRepositories packageInformationList )
+	instVarNames: #(knownPackages knownRepositories packageInformationList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1867,8 +1867,8 @@ removeallclassmethods CypressPackageManager
 doit
 (Object
 	subclass: 'CypressPackageManager2'
-	instVarNames: #( knownRepositories packageInformationList )
-	classVars: #( SavedPackageManagers )
+	instVarNames: #(knownRepositories packageInformationList)
+	classVars: #(SavedPackageManagers)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -1886,7 +1886,7 @@ removeallclassmethods CypressPackageManager2
 doit
 (Object
 	subclass: 'CypressPackageManager3'
-	instVarNames: #( knownRepositories defaultSymbolDictionaryName resolvedPackageReferences )
+	instVarNames: #(knownRepositories defaultSymbolDictionaryName resolvedPackageReferences)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1905,7 +1905,7 @@ removeallclassmethods CypressPackageManager3
 doit
 (CypressPackageManager3
 	subclass: 'CypressEnvironmentPackageManager'
-	instVarNames: #( defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId )
+	instVarNames: #(defaultSymbolList lookupSymbolList compilationSymbolList defaultEnvironmentId)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1923,7 +1923,7 @@ removeallclassmethods CypressEnvironmentPackageManager
 doit
 (Object
 	subclass: 'CypressPackageStringComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations )
+	instVarNames: #(directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentOperations)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1942,7 +1942,7 @@ removeallclassmethods CypressPackageStringComparator
 doit
 (Object
 	subclass: 'CypressReference'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1963,7 +1963,7 @@ removeallclassmethods CypressReference
 doit
 (CypressReference
 	subclass: 'CypressPackageReference'
-	instVarNames: #( package branch )
+	instVarNames: #(package branch)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1984,7 +1984,7 @@ removeallclassmethods CypressPackageReference
 doit
 (CypressPackageReference
 	subclass: 'CypressResolvedReference'
-	instVarNames: #( repository )
+	instVarNames: #(repository)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2005,7 +2005,7 @@ removeallclassmethods CypressResolvedReference
 doit
 (Object
 	subclass: 'CypressUrl'
-	instVarNames: #( fragment )
+	instVarNames: #(fragment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2026,7 +2026,7 @@ removeallclassmethods CypressUrl
 doit
 (CypressUrl
 	subclass: 'CypressFileUrl'
-	instVarNames: #( host path isAbsolute )
+	instVarNames: #(host path isAbsolute)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2170,7 +2170,7 @@ removeallclassmethods CypressFileTreeReadOnlyFileUrl
 doit
 (CypressAbstractFileUrl
 	subclass: 'CypressGitFileUrl'
-	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
+	instVarNames: #(projectPath projectBranchOrTag repositoryPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2284,7 +2284,7 @@ removeallclassmethods CypressTopazUrl
 doit
 (CypressUrl
 	subclass: 'CypressGenericUrl'
-	instVarNames: #( schemeName locator )
+	instVarNames: #(schemeName locator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2347,7 +2347,7 @@ removeallclassmethods CypressMailtoUrl
 doit
 (CypressUrl
 	subclass: 'CypressHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password )
+	instVarNames: #(schemeName authority path query port username password)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2387,8 +2387,8 @@ removeallclassmethods CypressFtpUrl
 doit
 (CypressHierarchicalUrl
 	subclass: 'CypressHttpUrl'
-	instVarNames: #( realm )
-	classVars: #( Passwords )
+	instVarNames: #(realm)
+	classVars: #(Passwords)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -2435,7 +2435,7 @@ removeallclassmethods CypressHttpsUrl
 doit
 (Object
 	subclass: 'CypressVersionReference'
-	instVarNames: #( name package author branch versionNumber )
+	instVarNames: #(name package author branch versionNumber)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2456,7 +2456,7 @@ removeallclassmethods CypressVersionReference
 doit
 (Object
 	subclass: 'GsInteraction'
-	instVarNames: #( defaultActionBlock )
+	instVarNames: #(defaultActionBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2474,7 +2474,7 @@ removeallclassmethods GsInteraction
 doit
 (GsInteraction
 	subclass: 'GsChoiceInteraction'
-	instVarNames: #( prompt labels values lines )
+	instVarNames: #(prompt labels values lines)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2492,7 +2492,7 @@ removeallclassmethods GsChoiceInteraction
 doit
 (GsInteraction
 	subclass: 'GsConfirmInteraction'
-	instVarNames: #( prompt confirm cancel abort )
+	instVarNames: #(prompt confirm cancel abort)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2528,7 +2528,7 @@ removeallclassmethods GsNotifyInteraction
 doit
 (GsInteraction
 	subclass: 'GsInformInteraction'
-	instVarNames: #( message )
+	instVarNames: #(message)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2546,7 +2546,7 @@ removeallclassmethods GsInformInteraction
 doit
 (GsInteraction
 	subclass: 'GsInspectInteraction'
-	instVarNames: #( theObject )
+	instVarNames: #(theObject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2582,7 +2582,7 @@ removeallclassmethods GsExploreInteraction
 doit
 (GsInteraction
 	subclass: 'GsTextInteraction'
-	instVarNames: #( prompt template requestPassword )
+	instVarNames: #(prompt template requestPassword)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2618,7 +2618,7 @@ removeallclassmethods GsMultiLineTextInteraction
 doit
 (Object
 	subclass: 'GsInteractionHandler'
-	instVarNames: #( choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock )
+	instVarNames: #(choiceBlock confirmBlock informBlock textBlock multiLineTextBlock defaultBlock inspectBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2636,7 +2636,7 @@ removeallclassmethods GsInteractionHandler
 doit
 (Object
 	subclass: 'GsTonelOrderedDictionary'
-	instVarNames: #( size keys values )
+	instVarNames: #(size keys values)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2655,8 +2655,8 @@ removeallclassmethods GsTonelOrderedDictionary
 doit
 (Object
 	subclass: 'JadeServer'
-	instVarNames: #( classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult )
-	classVars: #( ExternalInteger GciError GsObject OopType32 OopType64 )
+	instVarNames: #(classList classOrganizers readStream writeStream selectedClass methodFilterType methodFilters selections methodCommandResult)
+	classVars: #(ExternalInteger GciError GsObject OopType32 OopType64)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: UserGlobals
@@ -2709,7 +2709,7 @@ removeallclassmethods JadeServer64bit24
 doit
 (JadeServer64bit24
 	subclass: 'JadeServer64bit3x'
-	instVarNames: #( environment )
+	instVarNames: #(environment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2763,7 +2763,7 @@ removeallclassmethods JadeServer64bit35
 doit
 (Object
 	subclass: 'RBParser'
-	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas )
+	instVarNames: #(scanner currentToken nextToken errorBlock source comments pragmas)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2814,7 +2814,7 @@ removeallclassmethods RBPatternParser
 doit
 (Object
 	subclass: 'RBParseTreeRule'
-	instVarNames: #( searchTree owner )
+	instVarNames: #(searchTree owner)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2839,7 +2839,7 @@ removeallclassmethods RBParseTreeRule
 doit
 (RBParseTreeRule
 	subclass: 'RBReplaceRule'
-	instVarNames: #( verificationBlock )
+	instVarNames: #(verificationBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2867,7 +2867,7 @@ removeallclassmethods RBReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBBlockReplaceRule'
-	instVarNames: #( replaceBlock )
+	instVarNames: #(replaceBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2890,7 +2890,7 @@ removeallclassmethods RBBlockReplaceRule
 doit
 (RBReplaceRule
 	subclass: 'RBStringReplaceRule'
-	instVarNames: #( replaceTree )
+	instVarNames: #(replaceTree)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2914,7 +2914,7 @@ removeallclassmethods RBStringReplaceRule
 doit
 (RBParseTreeRule
 	subclass: 'RBSearchRule'
-	instVarNames: #( answerBlock )
+	instVarNames: #(answerBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2938,8 +2938,8 @@ removeallclassmethods RBSearchRule
 doit
 (Object
 	subclass: 'RBProgramNode'
-	instVarNames: #( parent comments properties )
-	classVars: #( FormatterClass )
+	instVarNames: #(parent comments properties)
+	classVars: #(FormatterClass)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -2979,7 +2979,7 @@ removeallclassmethods RBProgramNode
 doit
 (RBProgramNode
 	subclass: 'RBMethodNode'
-	instVarNames: #( selector selectorParts body source arguments pragmas replacements nodeReplacements )
+	instVarNames: #(selector selectorParts body source arguments pragmas replacements nodeReplacements)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3010,7 +3010,7 @@ removeallclassmethods RBMethodNode
 doit
 (RBMethodNode
 	subclass: 'RBPatternMethodNode'
-	instVarNames: #( isList )
+	instVarNames: #(isList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3034,7 +3034,7 @@ removeallclassmethods RBPatternMethodNode
 doit
 (RBProgramNode
 	subclass: 'RBPragmaNode'
-	instVarNames: #( selector selectorParts arguments isProtected left right )
+	instVarNames: #(selector selectorParts arguments isProtected left right)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3060,7 +3060,7 @@ removeallclassmethods RBPragmaNode
 doit
 (RBPragmaNode
 	subclass: 'RBPatternPragmaNode'
-	instVarNames: #( isList )
+	instVarNames: #(isList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3078,7 +3078,7 @@ removeallclassmethods RBPatternPragmaNode
 doit
 (RBProgramNode
 	subclass: 'RBReturnNode'
-	instVarNames: #( return value )
+	instVarNames: #(return value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3103,7 +3103,7 @@ removeallclassmethods RBReturnNode
 doit
 (RBProgramNode
 	subclass: 'RBSequenceNode'
-	instVarNames: #( leftBar rightBar statements periods temporaries )
+	instVarNames: #(leftBar rightBar statements periods temporaries)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3131,7 +3131,7 @@ removeallclassmethods RBSequenceNode
 doit
 (RBProgramNode
 	subclass: 'RBValueNode'
-	instVarNames: #( parentheses )
+	instVarNames: #(parentheses)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3162,7 +3162,7 @@ removeallclassmethods RBValueNode
 doit
 (RBValueNode
 	subclass: 'RBArrayNode'
-	instVarNames: #( left right statements periods )
+	instVarNames: #(left right statements periods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3187,7 +3187,7 @@ removeallclassmethods RBArrayNode
 doit
 (RBValueNode
 	subclass: 'RBAssignmentNode'
-	instVarNames: #( variable assignment value )
+	instVarNames: #(variable assignment value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3213,7 +3213,7 @@ removeallclassmethods RBAssignmentNode
 doit
 (RBValueNode
 	subclass: 'RBBlockNode'
-	instVarNames: #( left right colons arguments bar body )
+	instVarNames: #(left right colons arguments bar body)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3242,7 +3242,7 @@ removeallclassmethods RBBlockNode
 doit
 (RBBlockNode
 	subclass: 'RBPatternBlockNode'
-	instVarNames: #( valueBlock )
+	instVarNames: #(valueBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3266,7 +3266,7 @@ removeallclassmethods RBPatternBlockNode
 doit
 (RBPatternBlockNode
 	subclass: 'RBPatternWrapperBlockNode'
-	instVarNames: #( wrappedNode )
+	instVarNames: #(wrappedNode)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3306,7 +3306,7 @@ removeallclassmethods RBQueryBlockNode
 doit
 (RBValueNode
 	subclass: 'RBCascadeNode'
-	instVarNames: #( messages semicolons )
+	instVarNames: #(messages semicolons)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3350,7 +3350,7 @@ removeallclassmethods RBLiteralNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralArrayNode'
-	instVarNames: #( isByteArray stop contents start )
+	instVarNames: #(isByteArray stop contents start)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3375,7 +3375,7 @@ removeallclassmethods RBLiteralArrayNode
 doit
 (RBLiteralNode
 	subclass: 'RBLiteralValueNode'
-	instVarNames: #( token )
+	instVarNames: #(token)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3397,7 +3397,7 @@ removeallclassmethods RBLiteralValueNode
 doit
 (RBValueNode
 	subclass: 'RBMessageNode'
-	instVarNames: #( receiver selector selectorParts arguments )
+	instVarNames: #(receiver selector selectorParts arguments)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3424,7 +3424,7 @@ removeallclassmethods RBMessageNode
 doit
 (RBMessageNode
 	subclass: 'RBPatternMessageNode'
-	instVarNames: #( isList isCascadeList )
+	instVarNames: #(isList isCascadeList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3447,7 +3447,7 @@ removeallclassmethods RBPatternMessageNode
 doit
 (RBValueNode
 	subclass: 'RBVariableNode'
-	instVarNames: #( token )
+	instVarNames: #(token)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3471,7 +3471,7 @@ removeallclassmethods RBVariableNode
 doit
 (RBVariableNode
 	subclass: 'RBPatternVariableNode'
-	instVarNames: #( recurseInto isList isLiteral isStatement isAnything )
+	instVarNames: #(recurseInto isList isLiteral isStatement isAnything)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3526,8 +3526,8 @@ removeallclassmethods RBProgramNodeVisitor
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBConfigurableFormatter'
-	instVarNames: #( codeStream indent lookaheadCode originalSource lineStart inQueryBlock )
-	classVars: #( CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses )
+	instVarNames: #(codeStream indent lookaheadCode originalSource lineStart inQueryBlock)
+	classVars: #(CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -3554,7 +3554,7 @@ removeallclassmethods RBConfigurableFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBFormatter'
-	instVarNames: #( codeStream lineStart firstLineLength tabs inQueryBlock )
+	instVarNames: #(codeStream lineStart firstLineLength tabs inQueryBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3581,7 +3581,7 @@ removeallclassmethods RBFormatter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBParseTreeSearcher'
-	instVarNames: #( searches answer argumentSearches context messages )
+	instVarNames: #(searches answer argumentSearches context messages)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3607,7 +3607,7 @@ removeallclassmethods RBParseTreeSearcher
 doit
 (RBParseTreeSearcher
 	subclass: 'RBParseTreeRewriter'
-	instVarNames: #( tree )
+	instVarNames: #(tree)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3629,7 +3629,7 @@ removeallclassmethods RBParseTreeRewriter
 doit
 (RBProgramNodeVisitor
 	subclass: 'RBReadBeforeWrittenTester'
-	instVarNames: #( read checkNewTemps scopeStack )
+	instVarNames: #(read checkNewTemps scopeStack)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3655,9 +3655,9 @@ removeallclassmethods RBReadBeforeWrittenTester
 doit
 (Object
 	subclass: 'RBScanner'
-	instVarNames: #( stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock )
-	classVars: #( PatternVariableCharacter )
-	classInstVars: #( classificationTable )
+	instVarNames: #(stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock)
+	classVars: #(PatternVariableCharacter)
+	classInstVars: #(classificationTable)
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -3714,7 +3714,7 @@ removeallclassmethods RBPatternScanner
 doit
 (Object
 	subclass: 'RBSmallDictionary'
-	instVarNames: #( keys values tally )
+	instVarNames: #(keys values tally)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3739,7 +3739,7 @@ removeallclassmethods RBSmallDictionary
 doit
 (Object
 	subclass: 'RBStringReplacement'
-	instVarNames: #( startPosition stopPosition string )
+	instVarNames: #(startPosition stopPosition string)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3765,7 +3765,7 @@ removeallclassmethods RBStringReplacement
 doit
 (Object
 	subclass: 'RBToken'
-	instVarNames: #( sourcePointer comments )
+	instVarNames: #(sourcePointer comments)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3830,7 +3830,7 @@ removeallclassmethods RBShortAssignmentToken
 doit
 (RBToken
 	subclass: 'RBValueToken'
-	instVarNames: #( value )
+	instVarNames: #(value)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3949,7 +3949,7 @@ removeallclassmethods RBLiteralArrayToken
 doit
 (RBValueToken
 	subclass: 'RBLiteralToken'
-	instVarNames: #( stopPosition )
+	instVarNames: #(stopPosition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3991,7 +3991,7 @@ removeallclassmethods RBMultiKeywordLiteralToken
 doit
 (RBLiteralToken
 	subclass: 'RBNumberLiteralToken'
-	instVarNames: #( source )
+	instVarNames: #(source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4053,7 +4053,7 @@ doit
 	subclass: 'Rowan'
 	instVarNames: #()
 	classVars: #()
-	classInstVars: #( configuration )
+	classInstVars: #(configuration)
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #( #logCreation )
@@ -4073,7 +4073,7 @@ removeallclassmethods Rowan
 doit
 (Object
 	subclass: 'RowanCommandResult'
-	instVarNames: #( executionTime )
+	instVarNames: #(executionTime)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4092,7 +4092,7 @@ removeallclassmethods RowanCommandResult
 doit
 (RowanCommandResult
 	subclass: 'RowanClassCategoryUpdate'
-	instVarNames: #( categories selection )
+	instVarNames: #(categories selection)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4110,7 +4110,7 @@ removeallclassmethods RowanClassCategoryUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanClassesUpdate'
-	instVarNames: #( classNames selectionNames )
+	instVarNames: #(classNames selectionNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4146,7 +4146,7 @@ removeallclassmethods RowanClassHierarchyUpdate
 doit
 (RowanClassesUpdate
 	subclass: 'RowanMethodsUpdate'
-	instVarNames: #( methods methodFilters selectors selectedClass selectedSelectors inheritedClasses inheritedClass type )
+	instVarNames: #(methods methodFilters selectors selectedClass selectedSelectors inheritedClasses inheritedClass type)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4164,7 +4164,7 @@ removeallclassmethods RowanMethodsUpdate
 doit
 (RowanClassesUpdate
 	subclass: 'RowanSuperclassUpdate'
-	instVarNames: #( tabName )
+	instVarNames: #(tabName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4182,7 +4182,7 @@ removeallclassmethods RowanSuperclassUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanClassInfoUpdate'
-	instVarNames: #( oop template category comment )
+	instVarNames: #(oop template category comment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4200,7 +4200,7 @@ removeallclassmethods RowanClassInfoUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanDictionaryUpdate'
-	instVarNames: #( dictionaries selections )
+	instVarNames: #(dictionaries selections)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4218,7 +4218,7 @@ removeallclassmethods RowanDictionaryUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanGlobalsUpdate'
-	instVarNames: #( globals )
+	instVarNames: #(globals)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4236,7 +4236,7 @@ removeallclassmethods RowanGlobalsUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanGsObject'
-	instVarNames: #( gciSession name oopType )
+	instVarNames: #(gciSession name oopType)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4254,7 +4254,7 @@ removeallclassmethods RowanGsObject
 doit
 (RowanGsObject
 	subclass: 'RowanGsMethod'
-	instVarNames: #( behavior behaviorName breakPoints category isReadOnly originalSource source stepPoints unimplementedSelectors warnings )
+	instVarNames: #(behavior behaviorName breakPoints category isReadOnly originalSource source stepPoints unimplementedSelectors warnings)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4272,7 +4272,7 @@ removeallclassmethods RowanGsMethod
 doit
 (RowanCommandResult
 	subclass: 'RowanMethodUpdate'
-	instVarNames: #( gsMethod firstSendOffsets method isOverride isTestClass )
+	instVarNames: #(gsMethod firstSendOffsets method isOverride isTestClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4290,7 +4290,7 @@ removeallclassmethods RowanMethodUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanPackageUpdate'
-	instVarNames: #( packages modifiedPackages selections )
+	instVarNames: #(packages modifiedPackages selections)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4308,7 +4308,7 @@ removeallclassmethods RowanPackageUpdate
 doit
 (RowanCommandResult
 	subclass: 'RowanProjectsUpdate'
-	instVarNames: #( projects modifiedProjects selection )
+	instVarNames: #(projects modifiedProjects selection)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4326,7 +4326,7 @@ removeallclassmethods RowanProjectsUpdate
 doit
 (Object
 	subclass: 'RowanInterface'
-	instVarNames: #( name )
+	instVarNames: #(name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4380,7 +4380,7 @@ removeallclassmethods RwProject
 doit
 (Object
 	subclass: 'RowanService'
-	instVarNames: #( definition updates command commandArgs updateType organizer )
+	instVarNames: #(definition updates command commandArgs updateType organizer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4411,7 +4411,7 @@ removeallclassmethods RowanService
 doit
 (RowanService
 	subclass: 'RowanAnsweringService'
-	instVarNames: #( answer )
+	instVarNames: #(answer)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4435,7 +4435,7 @@ removeallclassmethods RowanAnsweringService
 doit
 (RowanService
 	subclass: 'RowanAutoCommitService'
-	instVarNames: #( autoCommit )
+	instVarNames: #(autoCommit)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4454,7 +4454,7 @@ removeallclassmethods RowanAutoCommitService
 doit
 (RowanService
 	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses )
+	instVarNames: #(projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries selectedClass newCachedSelectors newCachedClasses)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4474,7 +4474,7 @@ removeallclassmethods RowanBrowserService
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName )
+	instVarNames: #(name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4495,7 +4495,7 @@ removeallclassmethods RowanClassService
 doit
 (RowanService
 	subclass: 'RowanDebuggerService'
-	instVarNames: #( initialProcessOop processes )
+	instVarNames: #(initialProcessOop processes)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4513,7 +4513,7 @@ removeallclassmethods RowanDebuggerService
 doit
 (RowanService
 	subclass: 'RowanDictionaryService'
-	instVarNames: #( name classes hierarchyServices globals defaultTemplate )
+	instVarNames: #(name classes hierarchyServices globals defaultTemplate)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4531,7 +4531,7 @@ removeallclassmethods RowanDictionaryService
 doit
 (RowanService
 	subclass: 'RowanFrameService'
-	instVarNames: #( label method stepPoint vars oop homeMethodSelector homeMethodClassName )
+	instVarNames: #(label method stepPoint vars oop homeMethodSelector homeMethodClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4549,8 +4549,8 @@ removeallclassmethods RowanFrameService
 doit
 (RowanService
 	subclass: 'RowanLoggingService'
-	instVarNames: #( fileName id groupId date time comment services mode location isLogging )
-	classVars: #( Current )
+	instVarNames: #(fileName id groupId date time comment services mode location isLogging)
+	classVars: #(Current)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -4586,7 +4586,7 @@ removeallclassmethods TestLoggingService
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop )
+	instVarNames: #(oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource firstReference renamedName isMethodForBlock homeMethodOop)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4604,7 +4604,7 @@ removeallclassmethods RowanMethodService
 doit
 (RowanService
 	subclass: 'RowanPackageService'
-	instVarNames: #( projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass )
+	instVarNames: #(projectDefinition packageName name isDirty classes defaultTemplate projectName testClasses hierarchyServices selectedClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4622,7 +4622,7 @@ removeallclassmethods RowanPackageService
 doit
 (RowanService
 	subclass: 'RowanProcessService'
-	instVarNames: #( frames oop status )
+	instVarNames: #(frames oop status)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4640,7 +4640,7 @@ removeallclassmethods RowanProcessService
 doit
 (RowanService
 	subclass: 'RowanProjectService'
-	instVarNames: #( name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome )
+	instVarNames: #(name sha branch isSkew isDirty packages changes existsOnDisk isLoaded projectUrl rowanProjectsHome)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4658,7 +4658,7 @@ removeallclassmethods RowanProjectService
 doit
 (RowanService
 	subclass: 'RowanQueryService'
-	instVarNames: #( queryResults )
+	instVarNames: #(queryResults)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4694,7 +4694,7 @@ removeallclassmethods RowanTestService
 doit
 (RowanService
 	subclass: 'RowanVariableService'
-	instVarNames: #( oop key value className )
+	instVarNames: #(oop key value className)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4712,7 +4712,7 @@ removeallclassmethods RowanVariableService
 doit
 (Object
 	subclass: 'RowanServicePreferences'
-	instVarNames: #( defaultProjectName )
+	instVarNames: #(defaultProjectName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4730,7 +4730,7 @@ removeallclassmethods RowanServicePreferences
 doit
 (Object
 	subclass: 'RwAbstractConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern patternMatchBlock )
+	instVarNames: #(pattern patternMatchBlock)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4766,7 +4766,7 @@ removeallclassmethods RwGemStoneVersionConfigurationPlatformAttributeMatcher
 doit
 (RwGemStoneVersionConfigurationPlatformAttributeMatcher
 	subclass: 'RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher'
-	instVarNames: #( pattern2 )
+	instVarNames: #(pattern2)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4802,7 +4802,7 @@ removeallclassmethods RwStringConfigurationPlatformAttributeMatcher
 doit
 (Object
 	subclass: 'RwAbstractProjectConfiguration'
-	instVarNames: #( name comment projectName version configurationNames )
+	instVarNames: #(name comment projectName version configurationNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4820,7 +4820,7 @@ removeallclassmethods RwAbstractProjectConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwAbstractProjectLoadConfiguration'
-	instVarNames: #( conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers )
+	instVarNames: #(conditionalPackages conditionalPackageMatchers conditionalPackageMapSpecs conditionalPackageMapSpecMatchers)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4856,7 +4856,7 @@ removeallclassmethods RwNestedProjectLoadConfiguration
 doit
 (RwAbstractProjectLoadConfiguration
 	subclass: 'RwProjectLoadConfiguration'
-	instVarNames: #( definedGroupNames )
+	instVarNames: #(definedGroupNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4874,7 +4874,7 @@ removeallclassmethods RwProjectLoadConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwProjectCompoundConfiguration'
-	instVarNames: #( packageNames )
+	instVarNames: #(packageNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4892,7 +4892,7 @@ removeallclassmethods RwProjectCompoundConfiguration
 doit
 (RwAbstractProjectConfiguration
 	subclass: 'RwProjectConfiguration'
-	instVarNames: #( configNames )
+	instVarNames: #(configNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -4913,7 +4913,7 @@ removeallclassmethods RwProjectConfiguration
 doit
 (Object
 	subclass: 'RwAbstractTool'
-	instVarNames: #( specification )
+	instVarNames: #(specification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6063,7 +6063,7 @@ removeallclassmethods RwRepRemoveTool
 doit
 (Object
 	subclass: 'RwClassAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classKey classesModification )
+	instVarNames: #(projectDefinition packageDefinition classKey classesModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6085,7 +6085,7 @@ removeallclassmethods RwClassAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwConfiguration'
-	instVarNames: #( packageInfoSource )
+	instVarNames: #(packageInfoSource)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6119,7 +6119,7 @@ removeallclassmethods RwConfiguration
 doit
 (Object
 	subclass: 'RwDefinition'
-	instVarNames: #( properties )
+	instVarNames: #(properties)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6145,7 +6145,7 @@ removeallclassmethods RwDefinition
 doit
 (RwDefinition
 	subclass: 'RwAbstractClassDefinition'
-	instVarNames: #( classMethodDefinitions instanceMethodDefinitions )
+	instVarNames: #(classMethodDefinitions instanceMethodDefinitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6207,7 +6207,7 @@ removeallclassmethods RwClassExtensionDefinition
 doit
 (RwDefinition
 	subclass: 'RwDefinitionSetDefinition'
-	instVarNames: #( definitions )
+	instVarNames: #(definitions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6276,7 +6276,7 @@ removeallclassmethods RwProjectSetDefinition
 doit
 (RwDefinition
 	subclass: 'RwMethodDefinition'
-	instVarNames: #( source )
+	instVarNames: #(source)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6294,7 +6294,7 @@ removeallclassmethods RwMethodDefinition
 doit
 (RwDefinition
 	subclass: 'RwPackageDefinition'
-	instVarNames: #( classDefinitions classExtensions )
+	instVarNames: #(classDefinitions classExtensions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6316,7 +6316,7 @@ removeallclassmethods RwPackageDefinition
 doit
 (RwDefinition
 	subclass: 'RwProjectDefinition'
-	instVarNames: #( packages )
+	instVarNames: #(packages)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6352,7 +6352,7 @@ removeallclassmethods RwUnmanagedProjectDefinition
 doit
 (Object
 	subclass: 'RwDiskRepositoryGenerator'
-	instVarNames: #( gs_options gs_constraints )
+	instVarNames: #(gs_options gs_constraints)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6370,7 +6370,7 @@ removeallclassmethods RwDiskRepositoryGenerator
 doit
 (Object
 	subclass: 'RwElementsModification'
-	instVarNames: #( elementsModified )
+	instVarNames: #(elementsModified)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6437,7 +6437,7 @@ removeallclassmethods RwClassExtensionsModification
 doit
 (RwElementsModification
 	subclass: 'RwEntitySetModification'
-	instVarNames: #( movedClasses movedMethods )
+	instVarNames: #(movedClasses movedMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6516,7 +6516,7 @@ removeallclassmethods RwMethodsModification
 doit
 (RwMethodsModification
 	subclass: 'RwExtensionMethodsModification'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6591,7 +6591,7 @@ removeallclassmethods RwSourceModification
 doit
 (Object
 	subclass: 'RwEntitySet'
-	instVarNames: #( entities )
+	instVarNames: #(entities)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6694,7 +6694,7 @@ removeallclassmethods RwGsTestImage
 doit
 (Object
 	subclass: 'RwGsImagePatchVisitor'
-	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod )
+	instVarNames: #(patchSet currentProject currentPackage currentClass currentMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6713,7 +6713,7 @@ removeallclassmethods RwGsImagePatchVisitor
 doit
 (Object
 	subclass: 'RwGsImagePatchVisitor_254'
-	instVarNames: #( patchSet currentProject currentPackage currentClass currentMethod )
+	instVarNames: #(patchSet currentProject currentPackage currentClass currentMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6732,7 +6732,7 @@ removeallclassmethods RwGsImagePatchVisitor_254
 doit
 (Object
 	subclass: 'RwGsInstanceMigrator'
-	instVarNames: #( migrationEnabled maxThreads maxCpuPercentage )
+	instVarNames: #(migrationEnabled maxThreads maxCpuPercentage)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6750,7 +6750,7 @@ removeallclassmethods RwGsInstanceMigrator
 doit
 (RwGsInstanceMigrator
 	subclass: 'RwGsDeferredInstanceMigrator'
-	instVarNames: #( classesToMigrate )
+	instVarNames: #(classesToMigrate)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6768,7 +6768,7 @@ removeallclassmethods RwGsDeferredInstanceMigrator
 doit
 (Object
 	subclass: 'RwGsPatch'
-	instVarNames: #( packageDefinition projectDefinition )
+	instVarNames: #(packageDefinition projectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6787,7 +6787,7 @@ removeallclassmethods RwGsPatch
 doit
 (RwGsPatch
 	subclass: 'RwGsClassPatch'
-	instVarNames: #( classDefinition )
+	instVarNames: #(classDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6810,7 +6810,7 @@ removeallclassmethods RwGsClassPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassAdditionSymbolDictPatch'
-	instVarNames: #( newClass symbolAssociation )
+	instVarNames: #(newClass symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6851,7 +6851,7 @@ removeallclassmethods RwGsClassConstraintsSymDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassDeletionSymbolDictPatch'
-	instVarNames: #( existingClass )
+	instVarNames: #(existingClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6874,7 +6874,7 @@ removeallclassmethods RwGsClassDeletionSymbolDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassExtensionSymbolDictPatch'
-	instVarNames: #( patchClass )
+	instVarNames: #(patchClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6916,7 +6916,7 @@ removeallclassmethods RwGsClassPropertiesSymDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassSymbolDictionaryMoveSymDictPatch'
-	instVarNames: #( classModification )
+	instVarNames: #(classModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6957,7 +6957,7 @@ removeallclassmethods RwGsClassVariableChangeSymbolDictPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassVersioningPatch'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	instVarNames: #(classModification oldClassVersion newClassVersion symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -6980,7 +6980,7 @@ removeallclassmethods RwGsClassVersioningPatch
 doit
 (RwGsClassPatch
 	subclass: 'RwGsClassVersioningSymbolDictPatch'
-	instVarNames: #( classModification oldClassVersion newClassVersion symbolAssociation )
+	instVarNames: #(classModification oldClassVersion newClassVersion symbolAssociation)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7003,7 +7003,7 @@ removeallclassmethods RwGsClassVersioningSymbolDictPatch
 doit
 (RwGsPatch
 	subclass: 'RwGsMethodPatch'
-	instVarNames: #( isMeta methodDefinition classDefinition behavior selector compiledMethod )
+	instVarNames: #(isMeta methodDefinition classDefinition behavior selector compiledMethod)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7072,7 +7072,7 @@ removeallclassmethods RwGsMethodDeletionSymbolDictPatch
 doit
 (RwGsMethodDeletionSymbolDictPatch
 	subclass: 'RwGsMethodDeletionExtensionSymbolDictPatch'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7131,7 +7131,7 @@ removeallclassmethods RwGsMethodExtensionSymbolDictPatch
 doit
 (RwGsMethodExtensionSymbolDictPatch
 	subclass: 'RwGsMethodExtensionSessionMethodSymbolDictPatch'
-	instVarNames: #( sessionDictsArray methDict catDict pArray )
+	instVarNames: #(sessionDictsArray methDict catDict pArray)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7360,7 +7360,7 @@ removeallclassmethods RwGsProjectAdditionPatch
 doit
 (Object
 	subclass: 'RwGsPatchSet'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages projectsWithPropertyChanges addedClasses deletedClasses deletedClassesMap movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithNewVersions addedMethods deletedMethods deletedExtensionMethods deleteNewVersionMethods movedMethodsMap extendedMethods methodsWithPropertyChanges methodsNeedingRecompile pureMovedMethods tempSymbols createdClasses errors currentProjectDefinition )
+	instVarNames: #(instanceMigrator addedProjects addedPackages deletedPackages projectsWithPropertyChanges addedClasses deletedClasses deletedClassesMap movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithNewVersions addedMethods deletedMethods deletedExtensionMethods deleteNewVersionMethods movedMethodsMap extendedMethods methodsWithPropertyChanges methodsNeedingRecompile pureMovedMethods tempSymbols createdClasses errors currentProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7379,7 +7379,7 @@ removeallclassmethods RwGsPatchSet
 doit
 (Object
 	subclass: 'RwGsPatchSet_254'
-	instVarNames: #( instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition )
+	instVarNames: #(instanceMigrator addedProjects addedPackages deletedPackages movedPackages projectsWithPropertyChanges addedClasses deletedClasses movedClasses movedClassesMap extendedClasses classesWithPropertyChanges classesWithSymbolDictionaryChanges classesWithClassVariableChanges classesWithConstraintChanges classesWithNewVersions addedMethods deletedMethods deleteNewVersionMethods movedMethods extendedMethods methodsWithPropertyChanges methodsNeedingRecompile tempSymbols createdClasses errors currentProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7398,7 +7398,7 @@ removeallclassmethods RwGsPatchSet_254
 doit
 (Object
 	subclass: 'RwGsSymbolDictionaryRegistry'
-	instVarNames: #( symbolDictionary packageRegistry classRegistry classExtensionRegistry methodRegistry )
+	instVarNames: #(symbolDictionary packageRegistry classRegistry classExtensionRegistry methodRegistry)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7463,8 +7463,8 @@ removeallclassmethods RwGsSymbolDictionaryRegistry_Implementation
 doit
 (Object
 	subclass: 'RwLoadedThing'
-	instVarNames: #( properties name handle )
-	classVars: #( AbsentToken )
+	instVarNames: #(properties name handle)
+	classVars: #(AbsentToken)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -7484,7 +7484,7 @@ removeallclassmethods RwLoadedThing
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClass'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	instVarNames: #(loadedPackage loadedInstanceMethods loadedClassMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7522,7 +7522,7 @@ removeallclassmethods RwGsLoadedSymbolDictClass
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedClassExtension'
-	instVarNames: #( loadedPackage loadedInstanceMethods loadedClassMethods )
+	instVarNames: #(loadedPackage loadedInstanceMethods loadedClassMethods)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7563,7 +7563,7 @@ removeallclassmethods RwGsLoadedSymbolDictClassExtension
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedMethod'
-	instVarNames: #( loadedClass classIsMeta )
+	instVarNames: #(loadedClass classIsMeta)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7605,7 +7605,7 @@ removeallclassmethods RwGsLoadedSymbolDictMethod
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedPackage'
-	instVarNames: #( repository commitId loadedClasses loadedClassExtensions isDirty loadedProject )
+	instVarNames: #(repository commitId loadedClasses loadedClassExtensions isDirty loadedProject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7645,7 +7645,7 @@ removeallclassmethods RwGsLoadedSymbolDictPackage
 doit
 (RwLoadedThing
 	subclass: 'RwLoadedProject'
-	instVarNames: #( loadedPackages isDirty )
+	instVarNames: #(loadedPackages isDirty)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7681,7 +7681,7 @@ removeallclassmethods RwGsLoadedSymbolDictProject
 doit
 (Object
 	subclass: 'RwMethodAdditionOrRemoval'
-	instVarNames: #( projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification )
+	instVarNames: #(projectDefinition packageDefinition classDefinitionOrExtension methodKey isMeta methodsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7703,7 +7703,7 @@ removeallclassmethods RwMethodAdditionOrRemoval
 doit
 (Object
 	subclass: 'RwModification'
-	instVarNames: #( propertiesModification before after )
+	instVarNames: #(propertiesModification before after)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7727,7 +7727,7 @@ removeallclassmethods RwModification
 doit
 (RwModification
 	subclass: 'RwClassModification'
-	instVarNames: #( instanceMethodsModification classMethodsModification )
+	instVarNames: #(instanceMethodsModification classMethodsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7788,7 +7788,7 @@ removeallclassmethods RwClassModificationForcingNewClassVersion
 doit
 (RwModification
 	subclass: 'RwMethodModification'
-	instVarNames: #( sourceModification isMeta classDefinition )
+	instVarNames: #(sourceModification isMeta classDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7813,7 +7813,7 @@ removeallclassmethods RwMethodModification
 doit
 (RwMethodModification
 	subclass: 'RwExtensionMethodModification'
-	instVarNames: #( extendedClassName )
+	instVarNames: #(extendedClassName)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7867,7 +7867,7 @@ removeallclassmethods RwExtensionMethodModificationForNewClassVersion
 doit
 (RwModification
 	subclass: 'RwPackageModification'
-	instVarNames: #( classesModification classExtensionsModification )
+	instVarNames: #(classesModification classExtensionsModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7892,7 +7892,7 @@ removeallclassmethods RwPackageModification
 doit
 (RwModification
 	subclass: 'RwProjectModification'
-	instVarNames: #( packagesModification )
+	instVarNames: #(packagesModification)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7917,7 +7917,7 @@ removeallclassmethods RwProjectModification
 doit
 (Object
 	subclass: 'RwMove'
-	instVarNames: #( projectBefore projectAfter packageBefore packageAfter )
+	instVarNames: #(projectBefore projectAfter packageBefore packageAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7935,7 +7935,7 @@ removeallclassmethods RwMove
 doit
 (RwMove
 	subclass: 'RwClassExtensionMove'
-	instVarNames: #( classExtensionBefore classExtensionAfter )
+	instVarNames: #(classExtensionBefore classExtensionAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7953,7 +7953,7 @@ removeallclassmethods RwClassExtensionMove
 doit
 (RwMove
 	subclass: 'RwClassMove'
-	instVarNames: #( classBefore classAfter )
+	instVarNames: #(classBefore classAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -7972,7 +7972,7 @@ removeallclassmethods RwClassMove
 doit
 (RwMove
 	subclass: 'RwMethodMove'
-	instVarNames: #( methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter )
+	instVarNames: #(methodBefore methodAfter isMeta classOrExtensionBefore classOrExtensionAfter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8029,7 +8029,7 @@ removeallclassmethods RwPlatform
 doit
 (RwPlatform
 	subclass: 'RwGsPlatform'
-	instVarNames: #( alternateImageClass enableInstanceMigration instanceMigrator )
+	instVarNames: #(alternateImageClass enableInstanceMigration instanceMigrator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8049,7 +8049,7 @@ removeallclassmethods RwGsPlatform
 doit
 (Object
 	subclass: 'RwProjectLoadConfigurationVisitor'
-	instVarNames: #( packageNames packageMapSpecs visitedConfigurationNames platformAttributes definedGroupNames groupNames configurationNames configurationBasePath )
+	instVarNames: #(packageNames packageMapSpecs visitedConfigurationNames platformAttributes definedGroupNames groupNames configurationNames configurationBasePath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8067,7 +8067,7 @@ removeallclassmethods RwProjectLoadConfigurationVisitor
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadConfigurationAnalysisVisitor'
-	instVarNames: #( visitedConfigurationMap packageToConfigurationMap )
+	instVarNames: #(visitedConfigurationMap packageToConfigurationMap)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8085,7 +8085,7 @@ removeallclassmethods RwProjectLoadConfigurationAnalysisVisitor
 doit
 (Object
 	subclass: 'RwPropertyModification'
-	instVarNames: #( key oldValue newValue )
+	instVarNames: #(key oldValue newValue)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8171,7 +8171,7 @@ removeallclassmethods RwSpecification
 doit
 (RwSpecification
 	subclass: 'RwImageSpecification'
-	instVarNames: #( loadedCommitId loadedConfigurationNames loadedGroupNames repositoryUrl )
+	instVarNames: #(loadedCommitId loadedConfigurationNames loadedGroupNames repositoryUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8189,7 +8189,7 @@ removeallclassmethods RwImageSpecification
 doit
 (RwImageSpecification
 	subclass: 'RwPackageProjectImageSpecification'
-	instVarNames: #( loadedPackageNames )
+	instVarNames: #(loadedPackageNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8243,7 +8243,7 @@ removeallclassmethods RwPlatformSpecification
 doit
 (RwPlatformSpecification
 	subclass: 'RwGemStoneSpecification'
-	instVarNames: #( defaultMethodEnv defaultSymbolDictName defaultUseSessionMethodsForExtensions packageNameToPlatformPropertiesMap projectOwnerId )
+	instVarNames: #(defaultMethodEnv defaultSymbolDictName defaultUseSessionMethodsForExtensions packageNameToPlatformPropertiesMap projectOwnerId)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8261,7 +8261,7 @@ removeallclassmethods RwGemStoneSpecification
 doit
 (RwSpecification
 	subclass: 'RwProjectSpecification'
-	instVarNames: #( specName version projectUrl platformSpec configsPath specsPath repoSpec repoPath comment imageSpec defaultConfigurationNames defaultGroupNames )
+	instVarNames: #(specName version projectUrl platformSpec configsPath specsPath repoSpec repoPath comment imageSpec defaultConfigurationNames defaultGroupNames)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8279,7 +8279,7 @@ removeallclassmethods RwProjectSpecification
 doit
 (RwProjectSpecification
 	subclass: 'RwPackageProjectSpecification'
-	instVarNames: #( packageNames packageNamesInLoadOrder packageNamesToLoad )
+	instVarNames: #(packageNames packageNamesInLoadOrder packageNamesToLoad)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8335,7 +8335,7 @@ removeallclassmethods RwSimpleProjectSpecification
 doit
 (RwSpecification
 	subclass: 'RwReferenceSpecification'
-	instVarNames: #( referenceUrl )
+	instVarNames: #(referenceUrl)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8353,7 +8353,7 @@ removeallclassmethods RwReferenceSpecification
 doit
 (RwSpecification
 	subclass: 'RwRepositorySpecification'
-	instVarNames: #( repositoryRootPath )
+	instVarNames: #(repositoryRootPath)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8389,7 +8389,7 @@ removeallclassmethods RwDiskRepositorySpecification
 doit
 (RwRepositorySpecification
 	subclass: 'RwGitRepositorySpecification'
-	instVarNames: #( committish committishType remote )
+	instVarNames: #(committish committishType remote)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8407,7 +8407,7 @@ removeallclassmethods RwGitRepositorySpecification
 doit
 (Object
 	subclass: 'RwUrl'
-	instVarNames: #( fragment )
+	instVarNames: #(fragment)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8469,7 +8469,7 @@ removeallclassmethods RwUrl
 doit
 (RwUrl
 	subclass: 'RwFileUrl'
-	instVarNames: #( host path isAbsolute )
+	instVarNames: #(host path isAbsolute)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8618,7 +8618,7 @@ removeallclassmethods RwFiletreeUrl
 doit
 (RwFileUrl
 	subclass: 'RwGithubUrl'
-	instVarNames: #( project committish dir )
+	instVarNames: #(project committish dir)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8643,7 +8643,7 @@ removeallclassmethods RwGithubUrl
 doit
 (RwUrl
 	subclass: 'RwGenericUrl'
-	instVarNames: #( schemeName locator )
+	instVarNames: #(schemeName locator)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8662,7 +8662,7 @@ removeallclassmethods RwGenericUrl
 doit
 (RwUrl
 	subclass: 'RwHierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password )
+	instVarNames: #(schemeName authority path query port username password)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8681,7 +8681,7 @@ removeallclassmethods RwHierarchicalUrl
 doit
 (RwHierarchicalUrl
 	subclass: 'RwSmalltalkRepositoryUrl'
-	instVarNames: #( project committish dir )
+	instVarNames: #(project committish dir)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8753,7 +8753,7 @@ removeallclassmethods RwGitFileTreeUrl
 doit
 (Object
 	subclass: 'STONTestDomainObject'
-	instVarNames: #( created modified integer float description color tags bytes boolean )
+	instVarNames: #(created modified integer float description color tags bytes boolean)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8783,7 +8783,7 @@ removeallclassmethods STONTestDomainObject
 doit
 (Object
 	subclass: 'STONTestUser'
-	instVarNames: #( username password enabled )
+	instVarNames: #(username password enabled)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8846,7 +8846,7 @@ removeallclassmethods STONTestUser3
 doit
 (Object
 	subclass: 'TonelParser'
-	instVarNames: #( packageReader stream lastSelectorParsed )
+	instVarNames: #(packageReader stream lastSelectorParsed)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8908,7 +8908,7 @@ removeallclassmethods TonelParser
 doit
 (Object
 	subclass: 'TonelWriter'
-	instVarNames: #( packageWriter )
+	instVarNames: #(packageWriter)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -8926,7 +8926,7 @@ removeallclassmethods TonelWriter
 doit
 (STONWriter
 	subclass: 'TonelSTONWriter'
-	instVarNames: #( aliases )
+	instVarNames: #(aliases)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9020,7 +9020,7 @@ removeallclassmethods RBParserTest
 doit
 (TestCase
 	subclass: 'RBProgramNodeTest'
-	instVarNames: #( node previous )
+	instVarNames: #(node previous)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9038,7 +9038,7 @@ removeallclassmethods RBProgramNodeTest
 doit
 (TestCase
 	subclass: 'RBSmallDictionaryTest'
-	instVarNames: #( dict )
+	instVarNames: #(dict)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9056,7 +9056,7 @@ removeallclassmethods RBSmallDictionaryTest
 doit
 (TestCase
 	subclass: 'RowanServicesTest'
-	instVarNames: #( defaultProjectDefinition )
+	instVarNames: #(defaultProjectDefinition)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9075,7 +9075,7 @@ removeallclassmethods RowanServicesTest
 doit
 (RowanServicesTest
 	subclass: 'RowanAnsweringServiceTest'
-	instVarNames: #( service )
+	instVarNames: #(service)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9311,7 +9311,7 @@ doit
 (RwAbstractTest
 	subclass: 'RwLoadingTest'
 	instVarNames: #()
-	classVars: #( PoolDictionaryDictionary )
+	classVars: #(PoolDictionaryDictionary)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: RowanKernel
@@ -9587,7 +9587,7 @@ removeallclassmethods RwUnpackagedBrowserApiTest
 doit
 (RwToolTest
 	subclass: 'RwEditToolTest'
-	instVarNames: #( globalBlackList userBlackList sessionBlackList )
+	instVarNames: #(globalBlackList userBlackList sessionBlackList)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9623,7 +9623,7 @@ removeallclassmethods RwMoveTest
 doit
 (RwToolTest
 	subclass: 'RwPackageReadWriteTest'
-	instVarNames: #( officialRowanProjectInstance )
+	instVarNames: #(officialRowanProjectInstance)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -9974,7 +9974,7 @@ removeallclassmethods TonelAbstractTest
 doit
 (TonelAbstractTest
 	subclass: 'TonelAbstractWriterTest'
-	instVarNames: #( directory )
+	instVarNames: #(directory)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -10010,7 +10010,7 @@ removeallclassmethods TonelCypressWriterTest
 doit
 (TonelAbstractTest
 	subclass: 'TonelReaderTest'
-	instVarNames: #( directory )
+	instVarNames: #(directory)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -40574,7 +40574,7 @@ version
 category: 'public'
 classmethod: Rowan
 versionString
-  ^ '1.2.15'
+  ^ '1.2.16'
 %
 
 ! Class implementation for 'RowanCommandResult'
@@ -72061,6 +72061,18 @@ parseError: each
 		parseExpression: each first 
 		onError: [ :string :pos | ^ self assert: pos = each last ].
 	self assert: false description: 'Parser didn''t fail'
+%
+
+category: 'tests'
+method: RBParserTest
+testAmbiguity
+	"this should be two statements ..."
+
+	| tree |
+	tree := RBParser parseExpression: '1. 1'.
+	self assert: tree statements size = 2.
+	self assert: tree periods size = 1.
+	tree statements do: [ :each | each value == 1 ]
 %
 
 category: 'tests'
@@ -119884,82 +119896,63 @@ stonOn: stonWriter
 category: '*ast-kernel-core'
 classmethod: Number
 rwFromStream: aStream
-  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D'  'q' | 'Q') ['-' | '+'] Digits
+  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D' | 'q') ['-' | '+'] Digits
    DecimalExponent = ( 'f' | 'F' ) ['-' | '+'] Digits
    Digit = '0' | '1' | '2' | ... | '9'
    Digits = Digit {Digit}
    Exponent = BinaryExponent | DecimalExponent | ScaledDecimalExponent | FixedPointExponent
    FractionalPart = '.' Digits [Exponent]
-   FixedPointExponent = 'p' [ ['-' | '+'] Digits ] 
-   Number = RadixedLiteral | NumericLiteral
-   Numeric = Digit | 'A' | 'B' | ... | 'Z'
+   FixedPointExponent = 'p' [ ['-' | '+'] Digits ]
+   Number = [ - ] RadixedLiteral | [ '-' ] NumericLiteral | RadixedLiteralNegBody
+   Numeric = Digit | 'A' | 'B' | ... e 'Z'
    NumericLiteral = Digits ( [FractionalPart] | [Exponent] )
    Numerics = Numeric { Numeric }
-   RadixedLiteral = Digits ( '#' | 'r' ) ['-'] Numerics
+   RadixedLiteral = Digits ( '#' | 'r' ) Numerics
+   RadixedLiteralNegBody =  Digits ( '#' | 'r' ) '-' Numerics
    ScaledDecimalExponent = 's' [ ['-' | '+'] Digits ]
 "
-  | ch integerPart factor signFound |
+  | ch integerPart sign dCount |
   self _checkReadStream: aStream forClass: CharacterCollection.
-  ch := aStream next.
-  [ ch unicodeIsWhitespace] whileTrue: [ ch := aStream next ].
-  aStream skip: -1.
+  aStream peek unicodeIsWhitespace ifTrue:[
+    [ aStream next unicodeIsWhitespace ] whileTrue.
+    aStream skip: -1.
+  ].
+  (aStream peek == $-) 
+    ifTrue: [ aStream next.  sign := $- .  ]
+    ifFalse: [ (aStream peek isEquivalent: $+) ifTrue: [ aStream next.  sign := $+ ] ].
+  dCount := 0 .
   integerPart := 0.
-  factor := 1.
-  signFound := false.
-  (aStream peek isEquivalent: $-)
+  [ (ch := aStream peek) ~~ nil and: [ ch isDigit ] ] whileTrue: [
+    aStream next.
+    integerPart := integerPart * 10 + ch digitValue .
+    dCount := dCount + 1 
+  ].
+  dCount == 0 ifTrue:[ ^ self _errIncorrectFormat: aStream ].
+  (ch == $r or: [ ch == $# ]) ifTrue: [ "found a radix separator" 
+    aStream next.
+    ^ Integer _fromStream: aStream radix: integerPart sign: sign .
+  ].
+  (ch isEquivalent: (Locale decimalPoint at: 1)) 
     ifTrue: [ 
-      aStream next.
-      signFound := true.
-      factor := -1 ]
-    ifFalse: [ 
-      (aStream peek isEquivalent: $+)
-        ifTrue: [ 
-          aStream next.
-          signFound := true ] ].
-  (aStream atEnd or: [ aStream peek isDigit not ])
-    ifTrue: [ ^ self _errIncorrectFormat: aStream ].
-  [ aStream atEnd not and: [ (ch := aStream peek) isDigit ] ]
-    whileTrue: [ 
-      aStream next.
-      integerPart := integerPart * 10 + ch digitValue ].
-
-  (ch == $r or: [ ch == $# ])
-    ifTrue: [ 
-      "found a radix separator"
-      aStream next.
-      ^ Integer
-        _rwFinishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        radix: integerPart ].
-  (ch isEquivalent: (Locale decimalPoint at: 1))
-    ifTrue: [ 
+      "found a decimal point" 
       | chch |
-		chch := aStream peek2. ".?"
-		chch notNil
-			ifTrue: [
-				"not at eof"
+      chch := aStream peek2. "check character following deciml point"
+      chch notNil
+        ifTrue: [
+				"eof does not follow the decimal point"
 				chch isDigit 
 					ifFalse: [
-						"we're done"
-						^ integerPart * factor ] ].
-	  "found a decimal point, followed by a numeric character."
-      aStream next.
-      ^ BinaryFloat
-        _finishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        integerPart: integerPart ].
-  (#( $e $E $d $D $q $s $p $f $F ) includesIdentical: ch) ifTrue:[ 
-      aStream next.
-      ^ BinaryFloat
-        _finishFromStream: aStream
-        signFound: signFound
-        factor: factor
-        integerPart: integerPart
-        fractionalPart: 0
-        exponent: ch ].
-  ^ integerPart * factor
+						"decimal point is followed by a non-digit, so decimal point should not be treated as part of number"
+                        sign == $- ifTrue:[ ^ 0 - integerPart ].
+						^ integerPart ] ].
+    aStream next.
+    ^ BinaryFloat _finishFromStream: aStream sign: sign integerPart: integerPart 
+  ].
+  (#( $e $E $s $f $F $q $p $d $D ) includesIdentical: ch) ifTrue:[
+    ^ BinaryFloat _finishFromStream: aStream sign: sign integerPart: integerPart .
+  ].
+  sign == $- ifTrue:[ ^ 0 - integerPart ].
+  ^ integerPart
 %
 
 !		Instance methods for 'Number'
