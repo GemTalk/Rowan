@@ -5,9 +5,9 @@
 doit
 (Object
 	subclass: 'UpgradeRowanV12'
-	instVarNames: #( audit repairedCount skipCount repairedByReload errorMessages auditErrors projectsHome skip shouldCommit )
-	classVars: #(  )
-	classInstVars: #(  )
+	instVarNames: #(audit repairedCount skipCount repairedByReload errorMessages auditErrors projectsHome skip shouldCommit)
+	classVars: #()
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #()
