@@ -61,7 +61,7 @@ EXAMPLES
 -----
 %
 input
-$GEMSTONE/rowan/upgrade/v12/UpgradeRowanV12.gs
+$GEMSTONE/projects/RowanV3/upgrade/v12/UpgradeRowanV12.gs
 %
 method
 checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
