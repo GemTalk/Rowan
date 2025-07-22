@@ -161,6 +161,7 @@ customerRepairMap
 			put: #'customerRepairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 %
@@ -314,12 +315,26 @@ errorMessages
 ^ errorMessages ifNil: [ errorMessages := Bag new ].
 %
 
+category: 'accessing'
+method: UpgradeRowanV12
+gemstoneVersion
+	"run during upgrade, so CharacterCollection>>asRwGemStoneVersionNumber may not be functional"
+
+	^ RwGemStoneVersionNumber fromString: self gsVersion
+%
+
 category: 'private'
 method: UpgradeRowanV12
 globalNamed: aString
 	"return nil if global not defined"
 
 	^ self class globalNamed: aString
+%
+
+category: 'accessing'
+method: UpgradeRowanV12
+gsVersion
+	^ System gemVersionReport at: 'gsVersion'
 %
 
 category: 'private'
@@ -429,6 +444,57 @@ repairedWhenDefinitionsReloaded:ignoredMethod inClassNamed: ignoredClassName inP
 
 category: 'repair'
 method: UpgradeRowanV12
+repairMissingLoadedClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
+%
+
+category: 'repair'
+method: UpgradeRowanV12
+repairMissingLoadedInstanceMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
+	^ self repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: false inPackageNamed: packageName
+%
+
+category: 'repair'
+method: UpgradeRowanV12
+repairMissingLoadedMethodFor: methodSpec inClassNamed: className isMeta: isMeta inPackageNamed: packageName
+	| loadedMethod loadedClass loadedPackage loadedProject selector theClass theBehavior 
+		newCompiledMethod registryInstance existing |
+
+	self
+		logMessage:
+			'  Repairing missing loaded method...'.
+
+	loadedPackage := (self globalNamed: 'Rowan') image loadedPackageNamed: packageName.
+	loadedClass := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ self error: 'No loaded class or loaded extension class found for ', className printString ].
+	selector := self selectorFromMethodSpec: methodSpec.
+	loadedProject := loadedClass loadedProject.
+	theClass := self globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	newCompiledMethod := theBehavior compiledMethodAt: selector.
+
+"create new loaded method"
+	registryInstance := (self globalNamed: 'Rowan') image loadedRegistryForPackageNamed: packageName.
+	existing := registryInstance methodRegistry at: newCompiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ registryInstance error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
+	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	loadedClass addLoadedMethod: loadedMethod.
+
+	self
+		logMessage:
+			'  Repair missing loaded method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
+	repairedCount := self repairedCount + 1.
+%
+
+category: 'repair'
+method: UpgradeRowanV12
 repairNonIdenticalClassMethodFor: methodSpec inClassNamed: className inPackageNamed: packageName
 	^ self repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: true inPackageNamed: packageName
 %
@@ -470,6 +536,11 @@ repairNonIdenticalMethodFor: methodSpec inClassNamed: className isMeta: isMeta i
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
+	self
+		logMessage:
+			'  Repair nonidentical method: '
+				, theBehavior printString , '>>' , selector , ' for package '
+				, packageName.
 	repairedCount := self repairedCount + 1.
 %
 
@@ -514,6 +585,7 @@ rowanRepairMap
 			put: #'repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 %
@@ -574,7 +646,7 @@ step_1_installRowan
 	self moveCypressClassesToGlobals: self cypressClassNames.
 	self logMessage: 'Installing RowanV12.gs'.
 	rowanBootstrapPath := self projectsHome
-		, '/Rowan/platforms/gemstone/topaz/upgrade/3.6.2/RowanV12.gs'.
+		, '/Rowan/platforms/gemstone/topaz/upgrade/' , self gsVersion , '/RowanV12.gs'.
 	(self globalNamed: 'GsFileIn') fromServerPath: rowanBootstrapPath.
 	self logMessage: 'Installed Rowan from ' , rowanBootstrapPath.
 	self commit
@@ -613,7 +685,14 @@ step_4_reloadRowan
 
 	self logMessage: 'reload Rowan'.
 	self reloadRowan.
-	self commit
+	self commit.
+	self logMessage: ' post ROWAN reload audit'.
+	self auditForProjectsNamed: self rowanProjectNames.
+	audit isEmpty
+		ifFalse: [ 
+			self
+				error:
+					'post ROWAN reload audit did not run clean ... contact GemStone support' ]
 %
 
 category: 'steps'
