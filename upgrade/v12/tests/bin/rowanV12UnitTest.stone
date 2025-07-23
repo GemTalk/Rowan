@@ -7,7 +7,7 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'legacyStreams'.
 	SuperDoitOptionalOptionWithNoArg long: 'skipLoad'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'externalsStBase'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'expectedResults' default: '$GEMSTONE/projects/RowanV3/v12/tests/expectedV12TestResultsV1.2.17.json'.
 	SuperDoitOptionalOptionWithRequiredArg long: 'isColorful'.
 	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir'.
 }
@@ -461,10 +461,11 @@ doit
 				ifFalse: [
 					"test failures, does not return"
 					self writeFailingTestResultsSummaryReport: runner reporter: stdoutReporter ] ]
-		ifNotNil: [:expectedResultsPath |
+		ifNotNil: [:expectedResultsPath  |
 			"with expected test results, pass/failure depends up matching expected results"
-			| expectedSample dummyStream |
-			expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: expectedResultsPath.
+			| expectedSample dummyStream thePath |
+			thePath := expectedResultsPath asFileReference pathString.	"resolve env variables"
+			expectedSample := (self globalNamed: 'GsTestSuiteSample') fromJson: thePath.
 			passingStatus := 'passes matching expected results'.
 			dummyStream := WriteStream on: String new.
 			(testSuiteSample compareTo: expectedSample on: dummyStream)
