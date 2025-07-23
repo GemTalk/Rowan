@@ -1,0 +1,66 @@
+#!/usr/bin/env superdoit_rowan3_solo
+options
+{
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'projectName' default: 'Rowan'.
+}
+%
+usage
+-----
+USAGE 
+  $basename [--help | -h] [--debug | -D] [--projectsHome=<directory>] \
+            [--projectName=<Rowan3-clone-directoryName>]
+
+DESCRIPTION
+  Read and write the RowanV12Upgrade to upgrade/v12/UpgradeRowanV12.gs in a 
+  RowanV3 clone.
+
+OPTIONS
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a 
+                             script error
+  --projectsHome=<director>  path to parent directory of the target RowanV3 clone. 
+                             $ROWAN_PROJECTS_HOME is used by default.
+  --projectName=<name-of-the-RowanV3-directory>
+                             name of the RowanV3 clone directory. 
+                             'Rowan' by default
+
+EXAMPLES
+  $basename --help 
+  $basename 
+  $basename --projectsHome=/bosch1/users/dhenrich/_stones/37x/stones/gs_375/v12 \
+            --projectName=RowanV1
+-----
+%
+doit
+	| projectRoot loadSpecPath spec loadSpecs projectSetDefinition projectSetModification topazFileHeader visitor
+	  topazFileNameMap fileoutRoot |
+
+	projectRoot := self projectsHome, '/', self projectName.
+	loadSpecPath :=  projectRoot, '/upgrade/projectsHome/RowanV12Upgrade/rowan/specs/RowanV12Upgrade.ston'.
+	spec := (RwSpecification fromUrl: 'file:', loadSpecPath)
+		projectsHome: projectRoot, '/upgrade/projectsHome';
+		yourself.
+	loadSpecs := spec resolve.
+	projectSetDefinition := loadSpecs read.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+self halt.
+	topazFileNameMap := Dictionary new.
+	topazFileNameMap at:'UpgradeRowanV12'  put: { 'RowanV12Upgrade-Core' }.
+	topazFileHeader := '! Copyright (C) GemTalk Systems 1986-', Date today year printString, '.  All Rights Reserved.
+'.
+	fileoutRoot := (projectRoot, '/upgrade/v12') asFileReference.
+	visitor := RwGsModificationTopazWriterVisitorV2 new
+		logCreation: false;
+		excludeClassInitializers: true;
+		excludeRemoveAllMethods: false;
+		repositoryRootPath: fileoutRoot;
+		topazFilenamePackageNamesMap: (Dictionary new
+			at:'UpgradeRowanV12' put: {'RowanV12Upgrade-Core'};
+			yourself);
+		topazFileHeader: topazFileHeader;
+		yourself.
+	visitor visit: projectSetModification.
+	^ true
+%
