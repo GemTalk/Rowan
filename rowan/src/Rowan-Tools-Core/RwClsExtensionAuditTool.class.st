@@ -74,4 +74,5 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				]
 		].
 		^res
+
 ]

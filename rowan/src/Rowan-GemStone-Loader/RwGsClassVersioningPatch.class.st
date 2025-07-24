@@ -28,6 +28,7 @@ RwGsClassVersioningPatch class >> addPatchedClassModification: aClassModificatio
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
 		toPatchSet: aRwGsPatchSet
+
 ]
 
 { #category : 'patching' }
@@ -41,6 +42,7 @@ RwGsClassVersioningPatch class >> addPatchedClassModificationForcingNewClassVers
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
 		toPatchSet: aRwGsPatchSet
+
 ]
 
 { #category : 'instance creation' }
@@ -50,6 +52,7 @@ RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDef
 		classModification: aClassModification;
 		packageDefinition: aPackageDefinition;
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -216,6 +219,7 @@ RwGsClassVersioningPatch >> classModification: aClassModification [
 
 	classModification := aClassModification.
 	classDefinition := classModification after
+
 ]
 
 { #category : 'actions' }
@@ -227,12 +231,14 @@ RwGsClassVersioningPatch >> createClassFor: aPatchSet [
 	newClassVersion := super createClassFor: aPatchSet.
 	symbolAssociation := self resolveName: newClassVersion name.
 	^ newClassVersion
+
 ]
 
 { #category : 'accessing' }
 RwGsClassVersioningPatch >> oldClassDefinition [
 
 	^ classModification before
+
 ]
 
 { #category : 'versioning' }
@@ -241,6 +247,7 @@ RwGsClassVersioningPatch >> oldClassVersion [
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
+
 ]
 
 { #category : 'actions' }
@@ -251,4 +258,5 @@ RwGsClassVersioningPatch >> updateSymbolAssociation [
 			"no newClassVersion created when property modifications applied .. not a problem"
 			^self ].
 	symbolAssociation value: newClassVersion
+
 ]

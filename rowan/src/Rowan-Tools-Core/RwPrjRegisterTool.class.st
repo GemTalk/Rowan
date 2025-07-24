@@ -9,6 +9,7 @@ RwPrjRegisterTool >> registerSpecification: aRwSpecification [
 
   self specification: aRwSpecification.
   ^ specification register
+
 ]
 
 { #category : 'smalltalk api' }

@@ -12,9 +12,11 @@ Class {
 { #category : 'testing' }
 RBSpecialCharacterToken >> isSpecial [
 	^true
+
 ]
 
 { #category : 'private' }
 RBSpecialCharacterToken >> length [
 	^1
+
 ]

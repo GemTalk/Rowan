@@ -8,6 +8,7 @@ Class {
 RwPrjAuditTool >> auditAll [
 	
 	^self auditAllForUser: System myUserProfile userId
+
 ]
 
 { #category : 'other' }
@@ -18,6 +19,7 @@ RwPrjAuditTool >> auditAllForUser: aUserId [
 				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
 	].
 	^res
+
 ]
 
 { #category : 'other' }
@@ -40,6 +42,7 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 						(Rowan packageTools audit auditForPackage: loadedPackage) 
 							ifNotEmpty: [:aColl | res at: loadedPackage name put: aColl ] ] ].	
 	^res
+
 ]
 
 { #category : 'other' }

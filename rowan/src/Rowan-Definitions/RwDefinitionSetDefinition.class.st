@@ -22,36 +22,42 @@ RwDefinitionSetDefinition >> addDefinition: aDefinition [
 	(definitions includesKey: key)
 		ifTrue: [ self error: 'Duplicate definition ' ].
 	definitions at: key put: aDefinition
+
 ]
 
 { #category : 'accessing' }
 RwDefinitionSetDefinition >> definitionNames [
 
 	^ self definitions keys asArray
+
 ]
 
 { #category : 'accessing' }
 RwDefinitionSetDefinition >> definitions [
 
 	^ definitions
+
 ]
 
 { #category : 'accessing' }
 RwDefinitionSetDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
 	^ definitions at: aKey ifAbsent: absentBlock
+
 ]
 
 { #category : 'deriving' }
 RwDefinitionSetDefinition >> deriveLoadedThings [
 
 	self subclassResponsibility: #'deriveLoadedThings'
+
 ]
 
 { #category : 'enumerating' }
 RwDefinitionSetDefinition >> do: aBlock [
 
 	^ self definitions do: aBlock
+
 ]
 
 { #category : 'initialization' }
@@ -59,6 +65,7 @@ RwDefinitionSetDefinition >> initialize [
 
 	super initialize.
 	definitions := Dictionary new
+
 ]
 
 { #category : 'testing' }
@@ -67,6 +74,7 @@ RwDefinitionSetDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
 	^ super isEmpty & definitions isEmpty
+
 ]
 
 { #category : 'properties' }
@@ -75,12 +83,14 @@ RwDefinitionSetDefinition >> key [
 	But PackageSets have no container, so we don't expect them to have a key."
 
 	^nil
+
 ]
 
 { #category : 'accessing' }
 RwDefinitionSetDefinition >> keys [
 
 	^ definitions keys
+
 ]
 
 { #category : 'copying' }
@@ -95,10 +105,12 @@ RwDefinitionSetDefinition >> postCopy [
 RwDefinitionSetDefinition >> printOn: aStream [
 
 	aStream nextPutAll: self asString
+
 ]
 
 { #category : 'accessing' }
 RwDefinitionSetDefinition >> size [
 
 	^ definitions size
+
 ]

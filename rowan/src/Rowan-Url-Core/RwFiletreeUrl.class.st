@@ -34,6 +34,7 @@ RwFiletreeUrl >> printOn: aStream [
     nextPut: $:.
   aStream nextPutAll: '//'.
   aStream nextPutAll: self pathString
+
 ]
 
 { #category : 'private-initialization' }
@@ -54,4 +55,5 @@ RwFiletreeUrl >> privateInitializeFromText: aString [
         ifTrue: [ pathString := bare copyFrom: 3 to: bare size ]
         ifFalse: [ pathString := bare ] ].
   self initializeFromPathString: pathString
+
 ]

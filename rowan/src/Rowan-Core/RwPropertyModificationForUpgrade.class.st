@@ -14,4 +14,5 @@ RwPropertyModificationForUpgrade >> isEmpty [
 	which forces the modification to be applied"
 
 	^ false
+
 ]

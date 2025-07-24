@@ -31,11 +31,13 @@ RBBlockNode class >> arguments: argNodes body: sequenceNode [
 		arguments: argNodes;
 		body: sequenceNode;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
 RBBlockNode class >> body: sequenceNode [ 
 	^self arguments: #() body: sequenceNode
+
 ]
 
 { #category : 'comparing' }
@@ -47,11 +49,13 @@ RBBlockNode >> = anObject [
 	1 to: self arguments size
 		do: [:i | (self arguments at: i) = (anObject arguments at: i) ifFalse: [^false]].
 	^true
+
 ]
 
 { #category : 'visitor' }
 RBBlockNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptBlockNode: self
+
 ]
 
 { #category : 'accessing' }
@@ -59,6 +63,7 @@ RBBlockNode >> allArgumentVariables [
 	^(self argumentNames asOrderedCollection)
 		addAll: super allArgumentVariables;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -66,32 +71,38 @@ RBBlockNode >> allDefinedVariables [
 	^(self argumentNames asOrderedCollection)
 		addAll: super allDefinedVariables;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> argumentNames [
 	^self arguments collect: [:each | each name]
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> arguments [
 	^arguments
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> arguments: argCollection [ 
 	arguments := argCollection.
 	arguments do: [:each | each parent: self]
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> bar [
 	^ bar
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> bar: anInteger [
 	bar := anInteger
+
 ]
 
 { #category : 'accessing' }
@@ -100,32 +111,38 @@ RBBlockNode >> blockVariables [
 	vars := super blockVariables asOrderedCollection.
 	vars addAll: self argumentNames.
 	^vars
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> body [
 	^body
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> body: stmtsNode [ 
 	body := stmtsNode.
 	body parent: self
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> children [
 	^self arguments copyWith: self body
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> colons [
 	^ colons
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> colons: anArray [ 
 	colons := anArray
+
 ]
 
 { #category : 'matching' }
@@ -134,16 +151,19 @@ RBBlockNode >> copyInContext: aDictionary [
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		body: (self body copyInContext: aDictionary);
 		yourself
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> defines: aName [ 
 	^arguments anySatisfy: [:each | each name = aName]
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> directlyUses: aNode [ 
 	^false
+
 ]
 
 { #category : 'comparing' }
@@ -159,36 +179,43 @@ RBBlockNode >> equalTo: anObject withMapping: aDictionary [
 		ifFalse: [^false].
 	self arguments do: [:each | aDictionary removeKey: each name].
 	^true
+
 ]
 
 { #category : 'comparing' }
 RBBlockNode >> hash [
 	^ (self hashForCollection: self arguments) bitXor: self body hash
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> isBlock [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> isImmediateNode [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> isLast: aNode [ 
 	^body isLast: aNode
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> left [
 	^ left
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> left: anInteger [
 	left := anInteger
+
 ]
 
 { #category : 'matching' }
@@ -199,11 +226,13 @@ RBBlockNode >> match: aNode inContext: aDictionary [
 		against: aNode arguments
 		inContext: aDictionary) 
 			and: [body match: aNode body inContext: aDictionary]
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> needsParenthesis [
 	^false
+
 ]
 
 { #category : 'copying' }
@@ -211,16 +240,19 @@ RBBlockNode >> postCopy [
 	super postCopy.
 	self arguments: (self arguments collect: [ :each | each copy ]).
 	self body: self body copy
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> precedence [
 	^0
+
 ]
 
 { #category : 'testing' }
 RBBlockNode >> references: aVariableName [ 
 	^body references: aVariableName
+
 ]
 
 { #category : 'replacing' }
@@ -228,31 +260,37 @@ RBBlockNode >> replaceNode: aNode withNode: anotherNode [
 	body == aNode ifTrue: [self body: anotherNode].
 	self arguments: (arguments 
 				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> right [
 	^ right
+
 ]
 
 { #category : 'accessing-token' }
 RBBlockNode >> right: anInteger [
 	right := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> startWithoutParentheses [
 	^left
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> statementComments [
 	^self comments
+
 ]
 
 { #category : 'accessing' }
 RBBlockNode >> stopWithoutParentheses [
 	^right
+
 ]
 
 { #category : 'testing' }
@@ -264,4 +302,5 @@ RBBlockNode >> uses: aNode [
 				includes: parent selector) not 
 				or: [parent isUsed]]
 		ifFalse: [self isUsed]
+
 ]

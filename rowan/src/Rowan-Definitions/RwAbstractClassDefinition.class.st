@@ -16,6 +16,7 @@ RwAbstractClassDefinition class >> withProperties: propertiesDictionary classMet
 		classMethodDefinitions: classMethodDefinitions;
 		instanceMethodDefinitions: instanceMethodDefinitions;
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -29,24 +30,28 @@ RwAbstractClassDefinition >> _classNameForCompare: aDefinition [
 RwAbstractClassDefinition >> _methodsModificationClass [
 
 	self subclassResponsibility: #'__methodsModificationClass'
+
 ]
 
 { #category : 'private' }
 RwAbstractClassDefinition >> _modificationClass [
 
 	self subclassResponsibility: #'_modificationClass'
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
 	self addDefinition: aMethodDefinition to: classMethodDefinitions
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> addInstanceMethodDefinition: aMethodDefinition [
 
 	self addDefinition: aMethodDefinition to: instanceMethodDefinitions
+
 ]
 
 { #category : 'private' }
@@ -57,18 +62,21 @@ RwAbstractClassDefinition >> addMethodDefinition: aMethodDefinition to: aDiction
 	(aDictionary includesKey: selector)
 		ifTrue: [self error: 'Duplicate selector in behavior'].
 	aDictionary at: selector put: aMethodDefinition
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> classMethodDefinitions [
 
 	^classMethodDefinitions
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> classMethodDefinitions: dictionaryOfDefinitions [
 
 	classMethodDefinitions := dictionaryOfDefinitions
+
 ]
 
 { #category : 'comparing' }
@@ -99,6 +107,7 @@ RwAbstractClassDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+
 ]
 
 { #category : 'comparing' }
@@ -179,6 +188,7 @@ RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictiona
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+
 ]
 
 { #category : 'comparing' }
@@ -198,6 +208,7 @@ RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictiona
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+
 ]
 
 { #category : 'comparing' }
@@ -227,6 +238,7 @@ RwAbstractClassDefinition >> compareDictionary: myDictionary againstBaseDictiona
 								classDefinition: self.
 							modification isEmpty
 								ifFalse: [ anElementsModification addElementModification: modification ] ] ] ]
+
 ]
 
 { #category : 'initialization' }
@@ -235,18 +247,21 @@ RwAbstractClassDefinition >> initialize [
 	super initialize.
 	classMethodDefinitions := Dictionary new.
 	instanceMethodDefinitions := Dictionary new
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> instanceMethodDefinitions [
 
 	^instanceMethodDefinitions
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> instanceMethodDefinitions: dictionaryOfDefinitions [
 
 	instanceMethodDefinitions := dictionaryOfDefinitions
+
 ]
 
 { #category : 'testing' }
@@ -261,12 +276,14 @@ RwAbstractClassDefinition >> isEmpty [
 
 	^super isEmpty & classMethodDefinitions isEmpty
 		& instanceMethodDefinitions isEmpty
+
 ]
 
 { #category : 'private' }
 RwAbstractClassDefinition >> key [
 
 	^properties at: 'name' ifAbsent: [nil]
+
 ]
 
 { #category : 'accessing' }
@@ -313,10 +330,12 @@ RwAbstractClassDefinition >> removeInstanceMethod: selector [
 RwAbstractClassDefinition >> updateClassMethodDefinition: aMethodDefinition [
 
 	self updateDefinition: aMethodDefinition in: classMethodDefinitions
+
 ]
 
 { #category : 'accessing' }
 RwAbstractClassDefinition >> updateInstanceMethodDefinition: aMethodDefinition [
 
 	self updateDefinition: aMethodDefinition in: instanceMethodDefinitions
+
 ]

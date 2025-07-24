@@ -18,6 +18,7 @@ Class {
 RwGsClassDeletionSymbolDictPatch class >> for: aClassDefinition [
 
 	^self new classDefinition: aClassDefinition
+
 ]
 
 { #category : 'actions' }
@@ -26,6 +27,7 @@ RwGsClassDeletionSymbolDictPatch >> addToNewClassesByName: aDictionary [
 	"noop"
 
 	
+
 ]
 
 { #category : 'deleting' }

@@ -50,6 +50,7 @@ Class {
 RowanClassService class >> basicForClassNamed: className [ 
 	"Don't get method services. Efficient for classes with many methods"
 	^self new basicForClassNamed: className
+
 ]
 
 { #category : 'instance creation' }
@@ -83,6 +84,7 @@ RowanClassService class >> forClassNamed: className package: packageName [
 RowanClassService class >> minimalForClassNamed: className [ 
 	"Don't get method services. Efficient for classes with many methods"
 	^self new minimalForClassNamed: className
+
 ]
 
 { #category : 'comparing' }
@@ -91,6 +93,7 @@ RowanClassService >> = classService [
 	^classService isClassService
 			ifTrue: [  name asString = classService name asString and: [meta = classService meta]]
 			ifFalse: [^false]
+
 ]
 
 { #category : 'client commands' }
@@ -101,12 +104,14 @@ RowanClassService >> addCategory: string [
 	theClass := self theClass.
 	meta ifTrue:[theClass := theClass class]. 
 	theClass addCategory: string.
+
 ]
 
 { #category : 'constants' }
 RowanClassService >> addSubclassWarningString [
 
 	^'Superclass is not packaged. Enter the desired package name'
+
 ]
 
 { #category : 'client commands' }
@@ -118,6 +123,7 @@ RowanClassService >> allSubclassServices [
   hierarchyServices at: #'expand' put: subclassServices.
   (hierarchyServices at: #'expand')
     do: [ :classService | classService allSubclassServices ]
+
 ]
 
 { #category : 'Accessing' }
@@ -132,12 +138,14 @@ RowanClassService >> allTests [
 										class: (theClass whichClassIncludesSelector: selector asString)
 										meta: false
 										organizer: organizer].
+
 ]
 
 { #category : 'testing' }
 RowanClassService >> arePackageAndProjectClean [
 
 	^self packageIsDirty not and:[self projectIsDirty not]
+
 ]
 
 { #category : 'initialization' }
@@ -148,6 +156,7 @@ RowanClassService >> basicForClassNamed: className [
 	theClass := self theClass. 
 	theClass isNil ifTrue:[oop := nil. ^self].
 	self basicRefreshFrom: theClass.
+
 ]
 
 { #category : 'initialization' }
@@ -172,6 +181,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
+
 ]
 
 { #category : 'Accessing' }
@@ -181,6 +191,7 @@ RowanClassService >> behavior [
 	behavior := self theClass. 
 	meta == true ifTrue:[behavior := behavior class].
 	^behavior
+
 ]
 
 { #category : 'client commands' }
@@ -188,18 +199,21 @@ RowanClassService >> classComment: string [
 	| theClass |
 	theClass := self theClass. 
 	theClass rwComment: string.
+
 ]
 
 { #category : 'rowan' }
 RowanClassService >> classCreationTemplate [
 	
 	^self browserTool classCreationTemplateForClass: self theClass hybridBrowser: true.
+
 ]
 
 { #category : 'client commands' }
 RowanClassService >> classHierarchy [
 	hierarchyServices := self classHierarchy: (Array with: self theClass). 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'Accessing' }
@@ -210,6 +224,7 @@ RowanClassService >> classHierarchyNames [
 	hierarchyServices keys do:[:classService | 
 		classService == #nil ifFalse:[names add: classService name]].
 	^names
+
 ]
 
 { #category : 'Accessing' }
@@ -230,6 +245,7 @@ RowanClassService >> classOrMeta [
 	^meta 
 			ifTrue:[self theClass class] 
 			ifFalse: [self theClass].
+
 ]
 
 { #category : 'instance creation' }
@@ -246,6 +262,7 @@ RowanClassService >> classServiceFromOop: anOop [
 					classService fastRefresh]]
 		ifFalse:[
 			classService minimalRefreshFrom: theClass]
+
 ]
 
 { #category : 'Accessing' }
@@ -304,6 +321,7 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 					do: [:ex | ex resume ] .
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
+
 ]
 
 { #category : 'client commands' }
@@ -336,6 +354,7 @@ RowanClassService >> copyClassTo: newClassName [
   newClassService update.
   (RowanPackageService new name: newClassService packageName) update.
   (RowanDictionaryService new name: dictionaryName) update
+
 ]
 
 { #category : 'Updating' }
@@ -349,6 +368,7 @@ RowanClassService >> definedPackageName: newValue [
 RowanClassService >> expand: boolean [
 
 	expand := boolean
+
 ]
 
 { #category : 'client commands' }
@@ -366,6 +386,7 @@ RowanClassService >> fastRefresh [
 				stepPoints: Array new.
 			].
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -378,6 +399,7 @@ RowanClassService >> fileoutCategories: array [
 		self behavior fileOutCategory: category on: ws]. 
 	answeringService answer: ws contents. 
 	RowanCommandResult addResult: answeringService.
+
 ]
 
 { #category : 'client commands' }
@@ -389,6 +411,7 @@ RowanClassService >> fileoutClass [
 	ws nextPutAll: self behavior fileOutClass. 
 	answeringService answer: ws contents. 
 	RowanCommandResult addResult: answeringService.
+
 ]
 
 { #category : 'client commands' }
@@ -401,6 +424,7 @@ RowanClassService >> fileoutMethods: array [
 		self behavior fileOutMethod: methodService selector on: ws]. 
 	answeringService answer: ws contents. 
 	RowanCommandResult addResult: answeringService.
+
 ]
 
 { #category : 'Accessing' }
@@ -422,6 +446,7 @@ RowanClassService >> forClassNamed: className [
 	self name: className. 
 	theClass := self theClass. 
 	self refreshFrom: theClass.
+
 ]
 
 { #category : 'client commands' }
@@ -439,17 +464,20 @@ RowanClassService >> fullHierarchy [
       classService := (self classServiceFromOop: subclass asOop) meta: meta.
       (hierarchyServices at: #'expand') add: classService.
       classService allSubclassServices ]
+
 ]
 
 { #category : 'comparing' }
 RowanClassService >> hash [
 	^self name hash bitXor: meta hash
+
 ]
 
 { #category : 'Accessing' }
 RowanClassService >> hierarchyServices [
 
 	^hierarchyServices
+
 ]
 
 { #category : 'initialization' }
@@ -463,6 +491,7 @@ RowanClassService >> initialize [
 	methods := Array new.
 	isInSymbolList := true.
 	categories := Array new.
+
 ]
 
 { #category : 'initialization' }
@@ -472,6 +501,7 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 	theFilters := SortedCollection new.
 	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category asString].
 	categories := theFilters asOrderedCollection.
+
 ]
 
 { #category : 'initialization' }
@@ -482,6 +512,7 @@ RowanClassService >> initializeTestMethodsFor: aClass [
 		testSelectors := aClass thisClass suite tests collect:[:method | method selector]. 
 		methods do:[:methodService | 
 			methodService isTestMethod: (testSelectors includes: methodService selector)]].
+
 ]
 
 { #category : 'initialization' }
@@ -491,6 +522,7 @@ RowanClassService >> initializeVariablesFor: classOrMeta [
 	theFilters := SortedCollection new.
 	theFilters addAll: (classOrMeta allInstVarNames collect:[:instVar | instVar asString]).
 	variables := theFilters asOrderedCollection.
+
 ]
 
 { #category : 'Accessing' }
@@ -509,6 +541,7 @@ RowanClassService >> instVarNames: newValue [
 RowanClassService >> isClassService [
 
 	^true
+
 ]
 
 { #category : 'Updating' }
@@ -521,18 +554,21 @@ RowanClassService >> isExtension: boolean [
 { #category : 'Updating' }
 RowanClassService >> isNewClass: boolean [
 	isNewClass := boolean
+
 ]
 
 { #category : 'Updating' }
 RowanClassService >> isTestCase [
 
 	^isTestCase
+
 ]
 
 { #category : 'Updating' }
 RowanClassService >> isTestCase: aBoolean [
 
 	isTestCase := aBoolean
+
 ]
 
 { #category : 'Accessing' }
@@ -554,6 +590,7 @@ RowanClassService >> methods [
 
 	"for testing"
 	^methods
+
 ]
 
 { #category : 'private' }
@@ -563,6 +600,7 @@ RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResul
 	methodService := RowanMethodService forGsNMethod: gsNMethod organizer: organizer. 
 	methodService compilationWarnings: compilationResult value.
 	^methodService
+
 ]
 
 { #category : 'private' }
@@ -571,6 +609,7 @@ RowanClassService >> methodServicesFor: classOrMeta organizer: theOrganizer [
 	methods addAll: (classOrMeta selectors collect:[:sel | 
 			RowanMethodService 
 				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
+
 ]
 
 { #category : 'private' }
@@ -581,6 +620,7 @@ RowanClassService >> methodsIn: theClass categories: theCategories [
 	theCategories do:[:category |
 		selectors addAll: (theClass selectorsIn: category)]. 
 	^methods select:[:methodService | selectors includes: methodService selector]
+
 ]
 
 { #category : 'testing' }
@@ -588,6 +628,7 @@ RowanClassService >> methodsNamed: selector [
 	"For testing. Multiple because class could have both instance and class methods"
 
 	^methods select:[:methodService | methodService selector = selector]
+
 ]
 
 { #category : 'initialization' }
@@ -597,6 +638,7 @@ RowanClassService >> minimalForClassNamed: className [
 	self name: className. 
 	theClass := self theClass. 
 	self minimalRefreshFrom: theClass.
+
 ]
 
 { #category : 'initialization' }
@@ -616,6 +658,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	self setIsTestCase.
+
 ]
 
 { #category : 'client commands' }
@@ -627,6 +670,7 @@ RowanClassService >> moveMethods: methodServices to: category [
 			methodService category: category].
 	self update. 
 	self selectedMethods: methodServices.
+
 ]
 
 { #category : 'Accessing' }
@@ -638,12 +682,14 @@ RowanClassService >> name [
 { #category : 'Updating' }
 RowanClassService >> name: newValue [
 	name := newValue asString
+
 ]
 
 { #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
 	^Rowan image symbolList objectNamed: aString asSymbol
+
 ]
 
 { #category : 'client commands' }
@@ -662,6 +708,7 @@ RowanClassService >> oneLevelClassHierarchy [
       classService := (self classServiceFromOop: subclass asOop) meta: meta.
       (hierarchyServices at: #'expand') add: classService ].
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'Accessing' }
@@ -683,6 +730,7 @@ RowanClassService >> packageIsDirty [
 	behavior := self theClass.
 	behavior rowanPackageName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
+
 ]
 
 { #category : 'Accessing' }
@@ -717,6 +765,7 @@ RowanClassService >> printOn: aStream [
 	super printOn: aStream. 
 	aStream nextPut: $:. 
 	aStream nextPutAll: (name ifNil: [nil printString])
+
 ]
 
 { #category : 'testing' }
@@ -726,17 +775,20 @@ RowanClassService >> projectIsDirty [
 	behavior := self theClass.
 	behavior rowanProjectName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
+
 ]
 
 { #category : 'other' }
 RowanClassService >> projectName [
 
 	^projectName
+
 ]
 
 { #category : 'Updating' }
 RowanClassService >> projectName: newValue [
 	projectName := newValue
+
 ]
 
 { #category : 'initialization' }
@@ -764,6 +816,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 	]].
 	self initializeTestMethodsFor: classOrMeta thisClass. 
 	self setVisibleTests. "methods must be available"
+
 ]
 
 { #category : 'client commands' }
@@ -775,6 +828,7 @@ RowanClassService >> removeCategories: theCategories [
 	theCategories do: [:category |
 		theClass rwRemoveCategory: category.
 		].
+
 ]
 
 { #category : 'client commands' }
@@ -791,6 +845,7 @@ RowanClassService >> removeMethods: methodsToRemove [
 	self updateTests.
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
+
 ]
 
 { #category : 'rowan' }
@@ -809,6 +864,7 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
 		on: RwPerformingUnpackagedEditNotification
 		do: [:ex | ex resume ]
+
 ]
 
 { #category : 'client commands' }
@@ -823,6 +879,7 @@ RowanClassService >> renameCategoryFrom: old to: new [
 	methods := methods select:[:methodService | affectedSelectors includes: methodService selector].
 	self moveMethods: methods to: new.
 	self removeCategories: (Array with: old)
+
 ]
 
 { #category : 'client commands' }
@@ -866,6 +923,7 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
     methodService renamedName: oldClassName.
     newMethods add: methodService ].
   RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods)
+
 ]
 
 { #category : 'private' }
@@ -878,12 +936,14 @@ RowanClassService >> replaceSubString: old in: string with: new [
 		offset := offset + new size. 
 	].
 	^newSource
+
 ]
 
 { #category : 'rowan' }
 RowanClassService >> rowanProjectName [
 
 	^projectName
+
 ]
 
 { #category : 'client commands' }
@@ -898,6 +958,7 @@ RowanClassService >> runClassTests: classService [
 	self tests do:[:methodService |
 			behavior debug: methodService selector]. 
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
+
 ]
 
 { #category : 'client commands' }
@@ -909,6 +970,7 @@ RowanClassService >> runMethodTests: methodServices [
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
 			behavior debug: methodService selector]].
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
+
 ]
 
 { #category : 'client commands' }
@@ -948,33 +1010,39 @@ RowanClassService >> saveMethodSource: source category: category [
   self updateDirtyState.
   self updateTests.
   self updateSymbols: gsNMethod _selectorPool asArray , (Array with: methodService selector)
+
 ]
 
 { #category : 'other' }
 RowanClassService >> selectedMethods [
 	"client side selection. Used after a method compile" 
 	^selectedMethods
+
 ]
 
 { #category : 'Updating' }
 RowanClassService >> selectedMethods: theMethods [
 	selectedMethods := theMethods
+
 ]
 
 { #category : 'Accessing' }
 RowanClassService >> selectedPackageServices [
 	^selectedPackageServices
+
 ]
 
 { #category : 'Updating' }
 RowanClassService >> selectedPackageServices: newValue [
 	selectedPackageServices := newValue
+
 ]
 
 { #category : 'Accessing' }
 RowanClassService >> selectors [
 
 	^methods collect:[:methodService | methodService selector]
+
 ]
 
 { #category : 'perform' }
@@ -988,11 +1056,13 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
     ifFalse: [ self update ].
   wasClean
     ifTrue: [ self updatePackageProject ]
+
 ]
 
 { #category : 'Accessing' }
 RowanClassService >> setComment [
   comment := self theClass thisClass rwComment
+
 ]
 
 { #category : 'private' }
@@ -1002,6 +1072,7 @@ RowanClassService >> setDictionary: classOrMeta [
 		dictionaryName := dictionaryList isEmpty 
 		ifTrue:[String new]
 		ifFalse:[dictionaryList first first name asString].
+
 ]
 
 { #category : 'Updating' }
@@ -1015,6 +1086,7 @@ RowanClassService >> setIsTestCase [
 RowanClassService >> setIsTestCaseCommand [
 
 	self setIsTestCase.
+
 ]
 
 { #category : 'client commands' }
@@ -1022,6 +1094,7 @@ RowanClassService >> setVisibleTests [
 	visibleTests := SortedCollection sortBlock: [:x :y | x selector < y selector]. 
 	visibleTests addAll: self allTests.
 	visibleTests := visibleTests asArray.
+
 ]
 
 { #category : 'client commands' }
@@ -1038,6 +1111,7 @@ RowanClassService >> subclassCreationTemplate [
         className: 'NewSubclass'
         category: newClassPackageName).
   RowanCommandResult addResult: answerService
+
 ]
 
 { #category : 'private' }
@@ -1048,6 +1122,7 @@ RowanClassService >> subclassServices: subclasses [
 	sortedSubclasses := SortedCollection sortBlock: [:x :y | x name < y name]. 
 	sortedSubclasses addAll: subclasses. 
 	^(sortedSubclasses collect:[:cls | (self classServiceFromOop: cls asOop) meta: meta]) asArray.
+
 ]
 
 { #category : 'Accessing' }
@@ -1090,6 +1165,7 @@ RowanClassService >> template: newValue [
 RowanClassService >> tests [
 
 	^methods select:[:methodService | methodService selector asString matchPattern: #('test' $*)]
+
 ]
 
 { #category : 'instance creation' }
@@ -1100,12 +1176,14 @@ RowanClassService >> theClass [
 	(Rowan globalNamed: name) ifNil:[isInSymbolList := false]. 
 	theClass ifNil: [^nil]. 
 	^theClass thisClass
+
 ]
 
 { #category : 'updates' }
 RowanClassService >> update [
 
 	self updateClass.
+
 ]
 
 { #category : 'updates' }
@@ -1120,6 +1198,7 @@ RowanClassService >> updateClass [
 	theClass isBehavior ifFalse:[oop := theClass asOop. ^self].
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'updates' }
@@ -1130,6 +1209,7 @@ RowanClassService >> updateDirtyState [
 		RowanCommandResult addResult: packageService].
 	projectService := RowanProjectService newNamed: self theClass rowanProjectName. 
 	RowanCommandResult addResult: projectService.
+
 ]
 
 { #category : 'updates' }
@@ -1141,6 +1221,7 @@ RowanClassService >> updateLatest [
       RowanCommandResult addResult: self.
       ^ self ]) value asOop.
   super updateLatest
+
 ]
 
 { #category : 'private' }
@@ -1151,6 +1232,7 @@ RowanClassService >> updateMethodsAfterRenameFrom: oldClassName to: newClassName
         renamedName: oldClassName;
         className: newClassName. 
       RowanCommandResult addResult: methodService ]
+
 ]
 
 { #category : 'updates' }
@@ -1161,6 +1243,7 @@ RowanClassService >> updatePackageProject [
 	packageService update. 
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
+
 ]
 
 { #category : 'private' }
@@ -1171,6 +1254,7 @@ RowanClassService >> updateSubclassesAfterRenameOf: newClass [
       | subclassService |
       subclassService := RowanClassService minimalForClassNamed: subclass name.
       RowanCommandResult addResult: subclassService ]
+
 ]
 
 { #category : 'updates' }
@@ -1180,6 +1264,7 @@ RowanClassService >> updateSymbols: newSymbols [
   browserService newCachedSelectors addAll: newSymbols.
   browserService updateType: #'addCachedSymbols:'. 
   RowanCommandResult addResult: browserService
+
 ]
 
 { #category : 'updates' }
@@ -1191,6 +1276,7 @@ RowanClassService >> updateTests [
     name: packageName;
     yourself) testClasses.
   RowanCommandResult addResult: self update
+
 ]
 
 { #category : 'Accessing' }
@@ -1221,15 +1307,18 @@ RowanClassService >> versions: newValue [
 RowanClassService >> visibleTests [
 
 	^visibleTests
+
 ]
 
 { #category : 'testing' }
 RowanClassService >> wasDeleted [
 	^(Rowan globalNamed: name) isNil
+
 ]
 
 { #category : 'Accessing' }
 RowanClassService >> wasRemoved: boolean [
 
 	wasRemoved := boolean
+
 ]

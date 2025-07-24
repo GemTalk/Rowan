@@ -34,11 +34,13 @@ RowanDebuggerService >> debugStringFrom: aString [
         nextPut: char ].
   newStream nextPutAll: debugStream upToEnd.
   ^ newStream contents
+
 ]
 
 { #category : 'perform' }
 RowanDebuggerService >> servicePerform: symbol withArguments: collection [
 	^self perform: symbol withArguments: collection.
+
 ]
 
 { #category : 'other' }
@@ -53,4 +55,5 @@ RowanDebuggerService >> update [
   ProcessorScheduler scheduler waitingProcesses
     do: [ :each | processes add: (RowanProcessService onWaitingProcess: each) ].
   RowanCommandResult addResult: self
+
 ]

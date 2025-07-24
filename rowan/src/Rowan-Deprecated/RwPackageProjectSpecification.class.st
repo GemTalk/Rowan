@@ -25,6 +25,7 @@ Class {
 RwPackageProjectSpecification >> imageSpec [
 
 	^ imageSpec ifNil: [ imageSpec := RwPackageProjectImageSpecification new ]
+
 ]
 
 { #category : 'accessing' }
@@ -48,4 +49,5 @@ RwPackageProjectSpecification >> postCopy [
   super postCopy.
   packageNames := packageNames copy.
   packageNamesToLoad := packageNamesToLoad copy
+
 ]

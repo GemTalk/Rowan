@@ -8,6 +8,7 @@ Class {
 RwMethodModificationForNewClassVersion >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitMethodModificationForNewClassVersion: self
+
 ]
 
 { #category : 'patching' }
@@ -48,4 +49,5 @@ RwMethodModificationForNewClassVersion >> addModificationToPatchSetForNewClassVe
 						inClass: self classDefinition
 						inPackage: aPackage
 						inProject: aProjectDefinition ] ].
+
 ]

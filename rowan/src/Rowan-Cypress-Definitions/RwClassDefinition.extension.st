@@ -4,28 +4,33 @@ Extension { #name : 'RwClassDefinition' }
 RwClassDefinition >> category [
 
 	^ properties at: 'category' ifAbsent: [  ]
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> category: aString [
 
 	^ properties at: 'category' put: aString
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> classInstVarNames [
   ^ properties at: 'classinstvars'
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> classInstVarNames: anArray [
 
 	^ properties at: 'classinstvars' put: anArray
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> comment [
   ^ properties at: 'comment' ifAbsent: ['']
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
@@ -64,6 +69,7 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 { #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> poolDictionaryNames [
   ^ properties at: 'pools'
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
@@ -73,6 +79,7 @@ RwClassDefinition >> subclassType [
   type = 'normal'
     ifTrue: [ ^ '' ].
   ^ type
+
 ]
 
 { #category : '*rowan-cypress-definitions' }
@@ -80,4 +87,5 @@ RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
   ^ self new
     fromCypressClassStructure: aCypressClassStructure;
     yourself
+
 ]

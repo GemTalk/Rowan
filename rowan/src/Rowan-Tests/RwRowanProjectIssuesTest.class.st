@@ -414,6 +414,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -460,6 +461,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass2 comment = comment.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -516,6 +518,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -578,6 +581,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -642,6 +646,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -691,6 +696,7 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -743,6 +749,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -795,6 +802,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'a new comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -848,6 +856,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'a new comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -912,6 +921,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -978,6 +988,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
 	self assert: theClass2 comment = 'a new comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -1049,6 +1060,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
 	self assert: theClass2 comment = 'a new comment'.
+
 ]
 
 { #category : 'tests-issue 114' }
@@ -1114,6 +1126,7 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	self assert: theClass1 new foo = 2.
 	self assert: theClass1 new ivar1 isNil.
 	self assert: theClass2 new foo = 2.
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1302,6 +1315,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1358,6 +1372,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1416,6 +1431,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1490,6 +1506,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1544,6 +1561,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
+
 ]
 
 { #category : 'tests-issue 123' }
@@ -1601,6 +1619,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
+
 ]
 
 { #category : 'tests-issue 125' }
@@ -1642,6 +1661,7 @@ RwRowanProjectIssuesTest >> testIssue125_1 [
 
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase)
+
 ]
 
 { #category : 'tests-issue 125' }
@@ -1683,6 +1703,7 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 
 	self assert: theClass new foo = 1.
 	self assert: (x := (theClass categoryOfSelector: #foo) asString) = 'accessing'
+
 ]
 
 { #category : 'tests-issue 125' }
@@ -1726,6 +1747,7 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName3 asLowercase).
+
 ]
 
 { #category : 'tests-issue 165' }
@@ -1772,6 +1794,7 @@ RwRowanProjectIssuesTest >> testIssue165 [
 	self assert: (Rowan projectNames includes: projectName).		"project is visible"
 	self deny: (Rowan packageNames includes: packageName1).	"package is NOT visible"
 	self deny: (Rowan globalNamed: className) notNil.				"class is NOT visible"
+
 ]
 
 { #category : 'tests-issue 185' }
@@ -4099,6 +4122,7 @@ RwRowanProjectIssuesTest >> testIssue24_addProject [
 	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_26/'.
 
 	self _writeProjectNamed: projectName
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4119,6 +4143,7 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 	self _removePackageNamed: packageName from: projectName.
 
 	self _writeProjectNamed: projectName.
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4148,6 +4173,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	self _removeClassNamed: className fromProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4193,6 +4219,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4244,6 +4271,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	theClass := Rowan image objectNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4277,6 +4305,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4312,6 +4341,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4342,6 +4372,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName2 inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
+
 ]
 
 { #category : 'tests-issue 24' }
@@ -4375,6 +4406,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 
 	self _writeProjectNamed: projectName1.
 	self _writeProjectNamed: projectName2.
+
 ]
 
 { #category : 'tests-issue 255' }
@@ -5035,6 +5067,7 @@ RwRowanProjectIssuesTest >> testIssue263 [
 				ensure: [ 
 					Object rwRemoveSelector: #'bar'.
 					Boolean rwRemoveSelector: #'bar']
+
 ]
 
 { #category : 'tests-issue 275' }
@@ -7361,6 +7394,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 353' }
@@ -7457,6 +7491,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 353' }
@@ -7587,6 +7622,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 353' }
@@ -7719,6 +7755,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 393' }
@@ -7821,6 +7858,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 393' }
@@ -7954,6 +7992,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 
 "validate"
 	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
+
 ]
 
 { #category : 'tests-issue 393' }
@@ -8085,6 +8124,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 
 "validate"
 	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
+
 ]
 
 { #category : 'tests-issue 393' }
@@ -8176,6 +8216,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 40' }
@@ -8227,6 +8268,7 @@ RwRowanProjectIssuesTest >> testIssue40 [
 
 	self assert: theClass2 cvar1 = 1.
 	self assert: theClass2 cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 41' }
@@ -8271,6 +8313,7 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 41' }
@@ -8303,6 +8346,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 41' }
@@ -8410,6 +8454,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 41' }
@@ -8506,6 +8551,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 41' }
@@ -8566,6 +8612,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -8691,6 +8738,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_1 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -8817,6 +8865,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_2 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -8969,6 +9018,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_3 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -9169,6 +9219,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_4 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -9375,6 +9426,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_5 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 467' }
@@ -9581,6 +9633,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests-issue 498' }
@@ -9669,6 +9722,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_1 [
 	constraintBlock1 value: (Rowan globalNamed: className3).
 	constraintBlock2 value: (Rowan globalNamed: className3).
 	constraintBlock3 value: (Rowan globalNamed: className3).
+
 ]
 
 { #category : 'tests-issue 498' }
@@ -9778,6 +9832,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_2 [
 	constraintBlock1 value: (Rowan globalNamed: className3).
 	constraintBlock2 value: (Rowan globalNamed: className3).
 	constraintBlock3 value: (Rowan globalNamed: className3).
+
 ]
 
 { #category : 'tests-issue 498' }
@@ -9906,6 +9961,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_3 [
 	constraintBlock1 value: (Rowan globalNamed: className3).
 	constraintBlock2 value: (Rowan globalNamed: className3).
 	constraintBlock3 value: (Rowan globalNamed: className3).
+
 ]
 
 { #category : 'tests-issue 72' }

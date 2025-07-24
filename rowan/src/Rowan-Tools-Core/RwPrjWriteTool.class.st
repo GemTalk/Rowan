@@ -42,6 +42,7 @@ RwPrjWriteTool >> _loadedPackagesNamed: someNames forProject: projectDefinition 
 RwPrjWriteTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForWrite: aRwSpecification
+
 ]
 
 { #category : 'smalltalk api' }
@@ -62,6 +63,7 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification
 			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
 			repo writePackageStructure: packageStructure ].
 	^ specification
+
 ]
 
 { #category : 'smalltalk api' }

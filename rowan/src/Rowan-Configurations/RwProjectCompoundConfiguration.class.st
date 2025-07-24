@@ -71,6 +71,7 @@ RwProjectCompoundConfiguration >> resolvePackageNames [
 	| visitedConfigurationNames |
 	visitedConfigurationNames := Set new.
 	^ self resolvePackageNames: visitedConfigurationNames
+
 ]
 
 { #category : 'load support' }
@@ -84,4 +85,5 @@ RwProjectCompoundConfiguration >> resolvePackageNames: visitedConfigurationNames
 	self _configurations
 		do: [ :config | thePackageNames addAll: (config resolvePackageNames: visitedConfigurationNames) ].
 	^ thePackageNames
+
 ]

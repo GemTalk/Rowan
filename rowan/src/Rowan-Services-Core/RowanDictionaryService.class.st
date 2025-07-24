@@ -19,23 +19,27 @@ RowanDictionaryService >> classHierarchy [
 	"reuse behavior in package service for now" 
 	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'Updating' }
 RowanDictionaryService >> defaultTemplate: newValue [
 	defaultTemplate := newValue
+
 ]
 
 { #category : 'command support' }
 RowanDictionaryService >> genericClassCreationTemplate [
 
 	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: nil packageName: nil
+
 ]
 
 { #category : 'initialization' }
 RowanDictionaryService >> initialize [
 
 	self setDefaultTemplate
+
 ]
 
 { #category : 'client commands' }
@@ -46,21 +50,25 @@ RowanDictionaryService >> insertAt: index [
 	theDictionary at: name asSymbol put: theDictionary. 
 	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
+
 ]
 
 { #category : 'testing' }
 RowanDictionaryService >> isDictionaryService [
   ^ true
+
 ]
 
 { #category : 'accessing' }
 RowanDictionaryService >> name [
 	^name
+
 ]
 
 { #category : 'accessing' }
 RowanDictionaryService >> name: object [
 	name := object
+
 ]
 
 { #category : 'client commands' }
@@ -69,6 +77,7 @@ RowanDictionaryService >> removeClass: classService [
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
+
 ]
 
 { #category : 'client commands' }
@@ -85,6 +94,7 @@ RowanDictionaryService >> removeGlobalNamed: symbol [
 	dictionary ifNotNil: [
 		dictionary removeKey: symbol ifAbsent:[]].
 	self update.
+
 ]
 
 { #category : 'perform' }
@@ -93,12 +103,14 @@ RowanDictionaryService >> servicePerform: symbol withArguments: collection [
     ifTrue: [ ^ self handleDeletedService ].
   super servicePerform: symbol withArguments: collection.
   self update
+
 ]
 
 { #category : 'client commands' }
 RowanDictionaryService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
+
 ]
 
 { #category : 'updates' }
@@ -137,9 +149,11 @@ RowanDictionaryService >> update [
                 with: printString) ] ].
   globals := sorted asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'testing' }
 RowanDictionaryService >> wasDeleted [
   ^ (Rowan globalNamed: name) isNil
+
 ]

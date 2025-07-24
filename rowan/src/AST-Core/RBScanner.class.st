@@ -48,16 +48,19 @@ RBScanner class >> classificationTable [
 	classificationTable isNil 
 		ifTrue: [ self initializeClassificationTable ].
 	^ classificationTable
+
 ]
 
 { #category : 'class initialization' }
 RBScanner class >> initialize [
 	self initializeClassificationTable
+
 ]
 
 { #category : 'class initialization' }
 RBScanner class >> initializeChars: characters to: aSymbol [ 
 	characters do: [:c | classificationTable at: c asInteger put: aSymbol]
+
 ]
 
 { #category : 'class initialization' }
@@ -79,6 +82,7 @@ RBScanner class >> initializeClassificationTable [
     initializeChars:
       (((1 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isSeparator ])
     to: #'separator'
+
 ]
 
 { #category : 'class initialization' }
@@ -91,6 +95,7 @@ RBScanner class >> initializeUnderscore [
         ifTrue: [ #'alphabetic' ]
         ifFalse: [ #'special' ])
 "
+
 ]
 
 { #category : 'testing' }
@@ -103,6 +108,7 @@ RBScanner class >> isSelector: aSymbol [
 	token isLiteralToken ifFalse: [^false].
 	token value isEmpty ifTrue: [^false].
 	^scanner atEnd
+
 ]
 
 { #category : 'testing' }
@@ -113,11 +119,13 @@ RBScanner class >> isVariable: aString [
 	token isIdentifier ifFalse: [^false].
 	(token start = 1 and: [token stop = aString size]) ifFalse: [^false].
 	^(aString includes: $.) not
+
 ]
 
 { #category : 'instance creation' }
 RBScanner class >> new [
   ^ super new
+
 ]
 
 { #category : 'instance creation' }
@@ -128,6 +136,7 @@ RBScanner class >> on: aStream [
 		step;
 		stripSeparators.
 	^str
+
 ]
 
 { #category : 'instance creation' }
@@ -139,16 +148,19 @@ RBScanner class >> on: aStream errorBlock: aBlock [
 		step;
 		stripSeparators.
 	^str
+
 ]
 
 { #category : 'accessing' }
 RBScanner class >> patternVariableCharacter [
 	^ PatternVariableCharacter
+
 ]
 
 { #category : 'testing' }
 RBScanner >> atEnd [
 	^characterType = #eof
+
 ]
 
 { #category : 'private' }
@@ -163,6 +175,7 @@ RBScanner >> classify: aCharacter [
 				ifTrue: [#alphabetic]
 				ifFalse: [aCharacter isSqueakSeparator ifTrue: [#separator] ifFalse: [nil]]].
 	^classificationTable at: index
+
 ]
 
 { #category : 'accessing' }
@@ -172,25 +185,30 @@ RBScanner >> contents [
 	[ self atEnd ]
 		whileFalse: [ contentsStream nextPut: self next ].
 	^ contentsStream contents
+
 ]
 
 { #category : 'error handling' }
 RBScanner >> errorBlock [
 	^errorBlock isNil ifTrue: [[:message :position | ]] ifFalse: [errorBlock]
+
 ]
 
 { #category : 'accessing' }
 RBScanner >> errorBlock: aBlock [ 
 	errorBlock := aBlock
+
 ]
 
 { #category : 'error handling' }
 RBScanner >> errorPosition [
 	^stream position
+
 ]
 
 { #category : 'accessing' }
 RBScanner >> flush [
+
 ]
 
 { #category : 'accessing' }
@@ -200,16 +218,19 @@ RBScanner >> getComments [
 	oldComments := comments.
 	comments := OrderedCollection new: 1.
 	^oldComments
+
 ]
 
 { #category : 'testing' }
 RBScanner >> isReadable [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBScanner >> isWritable [
 	^false
+
 ]
 
 { #category : 'accessing' }
@@ -224,6 +245,7 @@ RBScanner >> next [
 	self stripSeparators.
 	token comments: self getComments.
 	^token
+
 ]
 
 { #category : 'accessing' }
@@ -232,6 +254,7 @@ RBScanner >> nextPut: anObject [
 	implement this message."
 
 	self shouldNotImplement
+
 ]
 
 { #category : 'initialize-release' }
@@ -240,6 +263,7 @@ RBScanner >> on: aStream [
 	stream := aStream.
 	classificationTable := self class classificationTable.
 	comments := OrderedCollection new
+
 ]
 
 { #category : 'private' }
@@ -247,6 +271,7 @@ RBScanner >> previousStepPosition [
 	^characterType = #eof 
 		ifTrue: [stream position]
 		ifFalse: [stream position - 1]
+
 ]
 
 { #category : 'private-scanning' }
@@ -254,6 +279,7 @@ RBScanner >> scanAnySymbol [
 	characterType = #alphabetic ifTrue: [^self scanSymbol].
 	characterType = #binary ifTrue: [^self scanBinary: RBLiteralToken].
 	^RBToken new
+
 ]
 
 { #category : 'private-scanning' }
@@ -267,6 +293,7 @@ RBScanner >> scanBinary: aClass [
 	val := buffer contents.
 	val := val asSymbol.
 	^aClass value: val start: tokenStart
+
 ]
 
 { #category : 'private-scanning' }
@@ -294,6 +321,7 @@ RBScanner >> scanIdentifierOrKeyword [
   name = 'nil'
     ifTrue: [ ^ RBLiteralToken value: nil start: tokenStart stop: self previousStepPosition ].
   ^ RBIdentifierToken value: name start: tokenStart
+
 ]
 
 { #category : 'private-scanning' }
@@ -316,6 +344,7 @@ RBScanner >> scanKeyword [
 				value: name asSymbol
 				start: tokenStart
 				stop: tokenStart + name size - 1]
+
 ]
 
 { #category : 'private-scanning' }
@@ -336,6 +365,7 @@ RBScanner >> scanLiteral [
 	currentCharacter = $#
 		ifTrue: [ ^ self scanLiteral ].
 	self scannerError: 'Expecting a literal type'
+
 ]
 
 { #category : 'private-scanning' }
@@ -346,6 +376,7 @@ RBScanner >> scanLiteralArrayToken [
 				start: tokenStart.
 	self step.
 	^token
+
 ]
 
 { #category : 'private-scanning' }
@@ -358,6 +389,7 @@ RBScanner >> scanLiteralCharacter [
 				stop: stream position.
 	self step.	"char"
 	^token
+
 ]
 
 { #category : 'private-scanning' }
@@ -374,6 +406,7 @@ RBScanner >> scanLiteralString [
 		value: buffer contents
 		start: tokenStart
 		stop: self previousStepPosition
+
 ]
 
 { #category : 'private-scanning' }
@@ -381,6 +414,7 @@ RBScanner >> scanName [
 	[characterType = #alphabetic or: [characterType = #digit]] whileTrue: 
 			[buffer nextPut: currentCharacter.
 			self step]
+
 ]
 
 { #category : 'error handling' }
@@ -389,6 +423,7 @@ RBScanner >> scannerError: aString [
 
 	self errorBlock value: aString value: self errorPosition.
 	self error: aString
+
 ]
 
 { #category : 'private-scanning' }
@@ -407,6 +442,7 @@ RBScanner >> scanNumber [
 		start: start
 		stop: stop
 		source: string
+
 ]
 
 { #category : 'private-scanning' }
@@ -422,6 +458,7 @@ RBScanner >> scanPathName [
     whileTrue: [ 
       buffer nextPut: currentCharacter.
       self step ]
+
 ]
 
 { #category : 'private-scanning' }
@@ -438,6 +475,7 @@ RBScanner >> scanPatternVariable [
 			buffer nextPut: currentCharacter.
 			self step].
 	^self scanIdentifierOrKeyword
+
 ]
 
 { #category : 'private-scanning' }
@@ -456,6 +494,7 @@ RBScanner >> scanSpecialCharacter [
 	character := currentCharacter.
 	self step.
 	^RBSpecialCharacterToken value: character start: tokenStart
+
 ]
 
 { #category : 'private-scanning' }
@@ -464,6 +503,7 @@ RBScanner >> scanStringSymbol [
 	literalToken := self scanLiteralString.
 	literalToken value: literalToken value asSymbol.
 	^literalToken
+
 ]
 
 { #category : 'private-scanning' }
@@ -477,6 +517,7 @@ RBScanner >> scanSymbol [
 		value: buffer contents asSymbol
 		start: tokenStart
 		stop: self previousStepPosition
+
 ]
 
 { #category : 'accessing' }
@@ -494,6 +535,7 @@ RBScanner >> scanToken [
 	currentCharacter = $# ifTrue: [^self scanLiteral].
 	currentCharacter = $$ ifTrue: [^self scanLiteralCharacter].
 	^self scannerError: 'Unknown character'
+
 ]
 
 { #category : 'private' }
@@ -505,6 +547,7 @@ RBScanner >> step [
 	currentCharacter := stream next.
 	characterType := self classify: currentCharacter.
 	^currentCharacter
+
 ]
 
 { #category : 'private-scanning' }
@@ -517,6 +560,7 @@ RBScanner >> stripComment [
 	stop := stream position.
 	self step.
 	comments add: (start to: stop)
+
 ]
 
 { #category : 'private-scanning' }
@@ -525,4 +569,5 @@ RBScanner >> stripSeparators [
 	[[characterType = #separator] whileTrue: [self step].
 	currentCharacter = $"] 
 			whileTrue: [self stripComment]
+
 ]

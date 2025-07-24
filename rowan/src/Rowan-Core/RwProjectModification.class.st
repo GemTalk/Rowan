@@ -20,6 +20,7 @@ Class {
 RwProjectModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitProjectModification: self
+
 ]
 
 { #category : 'initialization' }
@@ -29,12 +30,14 @@ RwProjectModification >> initialize [
 
 	super initialize.
 	packagesModification := #()
+
 ]
 
 { #category : 'testing' }
 RwProjectModification >> isEmpty [
 
 	^ super isEmpty & packagesModification isEmpty
+
 ]
 
 { #category : 'accessing' }

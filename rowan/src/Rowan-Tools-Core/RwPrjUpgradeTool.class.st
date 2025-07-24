@@ -40,6 +40,7 @@ RwPrjUpgradeTool >> _doProjectSetUpgrade: projectSetDefinition instanceMigrator:
 				processedClassNames add: theClassName ].
 	"trim the stack"
 	^ self _doProjectSetUpgrade: copiedProjectSetDef instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
+
 ]
 
 { #category : 'private' }
@@ -76,6 +77,7 @@ RwPrjUpgradeTool >> _upgradeProjectSetDefinition: projectSetDefinitionToLoad ins
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
+
 ]
 
 { #category : 'utilities' }
@@ -103,4 +105,5 @@ RwPrjUpgradeTool >> upgradeProjectFromSpecUrl: fileUrlOrString [
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
+
 ]

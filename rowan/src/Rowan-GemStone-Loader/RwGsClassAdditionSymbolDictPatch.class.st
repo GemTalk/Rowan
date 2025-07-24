@@ -30,6 +30,7 @@ RwGsClassAdditionSymbolDictPatch >> createClassFor: aPatchSet [
 	newClass := super createClassFor: aPatchSet.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
 	^ newClass
+
 ]
 
 { #category : 'actions' }
@@ -58,4 +59,5 @@ RwGsClassAdditionSymbolDictPatch >> oldClassVersion [
 	"We are adding a new class, so there is no old version."
 
 	^nil
+
 ]

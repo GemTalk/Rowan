@@ -111,6 +111,7 @@ RwProjectConfigurationsTest >> _expectedRowan_LoadPackageNames [
 				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
 				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
+
 ]
 
 { #category : 'private' }

@@ -7,4 +7,5 @@ Class {
 { #category : 'commands' }
 RwClassTool class >> clas [
   ^ RwClsDiffTool new
+
 ]

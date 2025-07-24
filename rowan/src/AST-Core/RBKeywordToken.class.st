@@ -10,9 +10,11 @@ Class {
 { #category : 'testing' }
 RBKeywordToken >> isKeyword [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBKeywordToken >> isPatternVariable [
 	^value first = RBScanner patternVariableCharacter
+
 ]

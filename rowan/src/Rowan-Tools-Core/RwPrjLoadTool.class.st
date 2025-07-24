@@ -116,6 +116,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
+
 ]
 
 { #category : 'private' }
@@ -149,6 +150,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ]].
 	^ diff
+
 ]
 
 { #category : 'load project definitions' }
@@ -159,6 +161,7 @@ RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 	projectSetDefinition addDefinition: projectDefinition.
 
 	^ self loadProjectSetDefinition: projectSetDefinition
+
 ]
 
 { #category : 'load project by spec url' }
@@ -201,6 +204,7 @@ RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString withConfigurations: con
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
+
 ]
 
 { #category : 'load project by spec url' }
@@ -217,6 +221,7 @@ RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString  withConfigurations: co
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
+
 ]
 
 { #category : 'load project by name' }
@@ -244,6 +249,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed [
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
 	^ self loadProjectNamed: projectNamed instanceMigrator: Rowan platform instanceMigrator
+
 ]
 
 { #category : 'load project by name' }

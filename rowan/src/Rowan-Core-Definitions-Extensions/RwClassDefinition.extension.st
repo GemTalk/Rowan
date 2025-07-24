@@ -4,10 +4,12 @@ Extension { #name : 'RwClassDefinition' }
 RwClassDefinition >> _methodsModificationClass [
 
 	^ RwMethodsModification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
 RwClassDefinition >> _modificationClass [
 
 	^ RwClassModification
+
 ]

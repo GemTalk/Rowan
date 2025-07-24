@@ -19,6 +19,7 @@ RwEntitySet class >> withAll: somePackageRefs [
 		initialize;
 		addAll: somePackageRefs;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -27,6 +28,7 @@ RwEntitySet >> addAll: aRwDefinitionOrRwLoadedThingCollection [
 	aRwDefinitionOrRwLoadedThingCollection
 		do: [ :entity | entities at: entity name put: entity ].
 	^ aRwDefinitionOrRwLoadedThingCollection
+
 ]
 
 { #category : 'definitions' }
@@ -36,6 +38,7 @@ RwEntitySet >> asDefinitionSet [
 	result := RwDefinitionSetDefinition new.
 	entities do: [ :entity | result addDefinition: entity asDefinition ].
 	^ result
+
 ]
 
 { #category : 'definitions' }
@@ -45,6 +48,7 @@ RwEntitySet >> asPackageDefinitionSet [
 	result := RwPackageSetDefinition new.
 	entities do: [ :entity | result addDefinition: entity asDefinition ].
 	^ result
+
 ]
 
 { #category : 'definitions' }
@@ -54,28 +58,33 @@ RwEntitySet >> asProjectDefinitionSet [
 	result := RwProjectSetDefinition new.
 	entities do: [ :entity | result addDefinition: entity asDefinition ].
 	^ result
+
 ]
 
 { #category : 'enumeration' }
 RwEntitySet >> do: aBlock [
 
 	^ entities do: aBlock
+
 ]
 
 { #category : 'accessing' }
 RwEntitySet >> entities [
 
 	^ entities
+
 ]
 
 { #category : 'initialization' }
 RwEntitySet >> initialize [
 
 	entities := Dictionary new
+
 ]
 
 { #category : 'accessing' }
 RwEntitySet >> size [
 
 	^ entities size
+
 ]

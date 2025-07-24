@@ -16,11 +16,13 @@ RwPrjPullTool >> doGitPull: remote [
 			| currentBranchName |
 			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
 			gitTool gitpullIn: gitRootPath with: remote , ' ' , currentBranchName ]
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjPullTool >> pullSpecification: aRwSpecification [
   ^ self pullSpecification: aRwSpecification remote: nil
+
 ]
 
 { #category : 'smalltalk api' }
@@ -31,6 +33,7 @@ RwPrjPullTool >> pullSpecification: aRwSpecification remote: remoteOrNil [
     ifNil: [ remote := specification repoSpec remote ]
     ifNotNil: [ remote := remoteOrNil ].
   ^ specification pullForTool: self remote: remote
+
 ]
 
 { #category : 'smalltalk api' }
@@ -38,6 +41,7 @@ RwPrjPullTool >> pullSpecUrl: aSpecUrlString [
   ^ self
     pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: nil
+
 ]
 
 { #category : 'smalltalk api' }
@@ -45,4 +49,5 @@ RwPrjPullTool >> pullSpecUrl: aSpecUrlString remote: remote [
   ^ self
     pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: remote
+
 ]

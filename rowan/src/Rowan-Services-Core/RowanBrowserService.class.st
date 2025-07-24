@@ -31,6 +31,7 @@ RowanBrowserService >> abortTransaction [
   autoCommitService autoCommit: autoCommitState.
   self updateProjects.
   self updateDictionaries
+
 ]
 
 { #category : 'client commands' }
@@ -45,6 +46,7 @@ RowanBrowserService >> abortTransactionAndUpdateServices: services [
           service
             organizer: organizer;
             updateLatest ] ]
+
 ]
 
 { #category : 'client commands' }
@@ -52,6 +54,7 @@ RowanBrowserService >> allClasses [
 	allClasses := self basicAllClasses.
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands support' }
@@ -68,6 +71,7 @@ RowanBrowserService >> basicAllClasses [
           service projectName: class rowanProjectName.
           service ]).
   ^ theClasses asArray
+
 ]
 
 { #category : 'client commands' }
@@ -77,12 +81,14 @@ RowanBrowserService >> classHierarchy [
 	hierarchyServices := self classHierarchy: theClasses. 
 	updateType := #classHierarchyUpdate:browser:. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'private' }
 RowanBrowserService >> classHierarchy: theClasses [
   hierarchyServices := super classHierarchy: theClasses.
   ^ hierarchyServices
+
 ]
 
 { #category : 'client commands' }
@@ -98,6 +104,7 @@ RowanBrowserService >> classHierarchyForDictionariesNamed: dictionaryNames [
   hierarchyServices := self classHierarchy: theClasses.
   updateType := #'classHierarchyUpdate:browser:'.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -117,6 +124,7 @@ RowanBrowserService >> classHierarchyForPackagesNamed: packageNames [
   hierarchyServices := self classHierarchy: theClasses.
   updateType := #'classHierarchyUpdate:browser:'.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -127,6 +135,7 @@ RowanBrowserService >> compileClass: definitionString [
     _compileInContext: nil
     symbolList: Rowan image symbolList.
   SessionTemps current at: #'jadeiteCompileClassMethod' put: anonymousMethod
+
 ]
 
 { #category : 'client commands support' }
@@ -139,6 +148,7 @@ RowanBrowserService >> confirmDuplicateName: definitionString [
         ifFalse: [ 
           (self confirm: 'Class name is already an object. Continue?')
             ifFalse: [ ^ Error signal: 'Class not compiled. Name already exists.' ] ] ]
+
 ]
 
 { #category : 'client commands' }
@@ -151,6 +161,7 @@ RowanBrowserService >> defaultClassHierarchy [
 	].
 	updateType := #classHierarchyUpdate:browser:. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -162,6 +173,7 @@ RowanBrowserService >> findRemovedServices: services [
 				RowanCommandResult addResult: service.
 		]
 	].
+
 ]
 
 { #category : 'initialize' }
@@ -169,26 +181,31 @@ RowanBrowserService >> initialize [
   super initialize.
   newCachedSelectors := Array new.
   newCachedClasses := Array new
+
 ]
 
 { #category : 'accessing' }
 RowanBrowserService >> newCachedClasses [
 	^newCachedClasses
+
 ]
 
 { #category : 'accessing' }
 RowanBrowserService >> newCachedClasses: object [
 	newCachedClasses := object
+
 ]
 
 { #category : 'accessing' }
 RowanBrowserService >> newCachedSelectors [
 	^newCachedSelectors
+
 ]
 
 { #category : 'accessing' }
 RowanBrowserService >> newCachedSelectors: object [
 	newCachedSelectors := object
+
 ]
 
 { #category : 'window registry' }
@@ -197,6 +214,7 @@ RowanBrowserService >> openWindows [
 	"for testing"
 
 	^SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[]
+
 ]
 
 { #category : 'client commands' }
@@ -234,6 +252,7 @@ RowanBrowserService >> packagesWithTests [
   updateType := #'testPackages:'.
   testPackages := testPackages asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -261,6 +280,7 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
   updateType := #'none'.
   self updateSymbols: (Array with: theClass name asString).
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -272,6 +292,7 @@ RowanBrowserService >> releaseWindowHandle: integer [
     at: #'rowanServicesWindowRegistry'
     ifAbsent: [ ^ self ].
   registry removeKey: integer ifAbsent: [  ]
+
 ]
 
 { #category : 'client commands' }
@@ -288,6 +309,7 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
         ifTrue: [ service updateLatest ] ].
   answeringService := RowanAnsweringService new organizer: organizer.
   answeringService updateAutocompleteSymbols
+
 ]
 
 { #category : 'client commands' }
@@ -302,6 +324,7 @@ RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
 		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
 			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
 	self updateDictionaries.
+
 ]
 
 { #category : 'client commands' }
@@ -324,6 +347,7 @@ RowanBrowserService >> removeMethods: methodServices [
 		self error: 'These selectors were not removed - ', (notRemoved collect:[:ea | ea selector]) printString].
 	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -334,23 +358,27 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 	| dictionary |
 	dictionary := SessionTemps current at: #rowanServicesWindowRegistry ifAbsentPut: [Dictionary new].
 	dictionary at: integer put: (Object _objectForOop: oop).
+
 ]
 
 { #category : 'other' }
 RowanBrowserService >> selectedClass [
 
 	^selectedClass
+
 ]
 
 { #category : 'other' }
 RowanBrowserService >> selectedClass: object [
 
 	selectedClass := object
+
 ]
 
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
+
 ]
 
 { #category : 'client commands' }
@@ -362,11 +390,13 @@ RowanBrowserService >> unloadProjectsNamed: array [
       project
         ifNotNil: [ Rowan projectTools delete deleteProjectNamed: projectName ] ].
   self updateProjects
+
 ]
 
 { #category : 'update' }
 RowanBrowserService >> update [
 	self updateProjects
+
 ]
 
 { #category : 'client commands' }
@@ -377,6 +407,7 @@ RowanBrowserService >> updateDictionaries [
 	updateType ifNil: [updateType := OrderedCollection new]. 
 	updateType add: #dictionaryListUpdate:.
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -389,10 +420,12 @@ RowanBrowserService >> updateProjects [
     collect: [ :project | RowanProjectService newNamed: project name ].
   updateType := Array with: updateType with: #'projectsUpdate:browser:'. "temporary hack" 
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'update' }
 RowanBrowserService >> updateSymbols: classNames [
   newCachedClasses addAll: classNames.
   updateType := #'addCachedSymbols:'
+
 ]

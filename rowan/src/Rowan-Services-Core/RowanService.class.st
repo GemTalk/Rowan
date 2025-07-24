@@ -31,12 +31,14 @@ Class {
 RowanService class >> autoCommit [
 
 	^SessionTemps current at: #'Jadeite_AutoCommit' ifAbsentPut: [false]
+
 ]
 
 { #category : 'autocommit' }
 RowanService class >> breakPointsAreEnabled [
 
 	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
+
 ]
 
 { #category : 'autocommit' }
@@ -44,6 +46,7 @@ RowanService class >> flipAutoCommit [
 	| newValue |
 	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
 	^self setAutoCommit: newValue
+
 ]
 
 { #category : 'instance creation' }
@@ -71,11 +74,13 @@ RowanService class >> sampleService [
 RowanService class >> setAutoCommit: object [
 
 	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
+
 ]
 
 { #category : 'autocommit' }
 RowanService class >> setBreakPointsAreEnabled: boolean [
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
+
 ]
 
 { #category : 'accessing' }
@@ -84,6 +89,7 @@ RowanService class >> version [
 	Failure to do so will prevent logins"
 
   ^ 3091
+
 ]
 
 { #category : 'other' }
@@ -93,6 +99,7 @@ RowanService >> answer: anObject [
 	answeringService := RowanAnsweringService new. 
 	answeringService answer: anObject. 
 	RowanCommandResult addResult: answeringService.
+
 ]
 
 { #category : 'rowan' }
@@ -123,6 +130,7 @@ RowanService >> classHierarchy: theClasses [
         put:
           (value asSet asSortedCollection: [ :x :y | x name < y name ]) asArray ].
   ^ hierarchyServices
+
 ]
 
 { #category : 'accessing' }
@@ -152,6 +160,7 @@ RowanService >> commandArgs: anArray [
 	"for tests" 
 
 	commandArgs := anArray
+
 ]
 
 { #category : 'symbol dictionaries' }
@@ -178,6 +187,7 @@ RowanService >> createSymbolDictionaryNamed: aName [
 	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
+
 ]
 
 { #category : 'symbol dictionaries' }
@@ -233,12 +243,14 @@ RowanService >> extendHierarchies: hierarchies [
 					extendedHierarchies add: (hierarchy copy add: sub; yourself)
 				]]].
 	^extendedHierarchies
+
 ]
 
 { #category : 'perform' }
 RowanService >> handleDeletedService [
   self updateType: #'removed:'.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'commands support' }
@@ -267,63 +279,74 @@ RowanService >> hierarchiesByLevel: hierarchies [
 				]].
 			dict].
 	^levels
+
 ]
 
 { #category : 'initialization' }
 RowanService >> initialize [
+
 ]
 
 { #category : 'testing' }
 RowanService >> isClassService [
 
 	^false
+
 ]
 
 { #category : 'testing' }
 RowanService >> isDictionaryService [
 
 	^false
+
 ]
 
 { #category : 'testing' }
 RowanService >> isMethodService [
 
 	^false
+
 ]
 
 { #category : 'testing' }
 RowanService >> isPackageService [
 
 	^false
+
 ]
 
 { #category : 'testing' }
 RowanService >> isProjectService [
 
 	^false
+
 ]
 
 { #category : 'testing' }
 RowanService >> isUpdating [
 
 	^command == #update
+
 ]
 
 { #category : 'perform' }
 RowanService >> isUpdatingButFoundToBeDeleted [
   ^ self command == #'update' and: [ self wasDeleted ]
+
 ]
 
 { #category : 'accessing' }
 RowanService >> jadeiteServer [
 
 	^(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer
+
 ]
 
 { #category : 'accessing' }
 RowanService >> organizer: anOrganizer [
 
 	organizer := anOrganizer.
+
 ]
 
 { #category : 'rowan' }
@@ -347,6 +370,7 @@ RowanService >> removeSymbolDictionaryNamed: aName [
 	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
+
 ]
 
 { #category : 'other' }
@@ -383,6 +407,7 @@ RowanService >> rowanProjectName [
 	even if they are not truly packaged" 
 
 	^nil
+
 ]
 
 { #category : 'samples' }
@@ -407,6 +432,7 @@ RowanService >> servicePerform: symbol withArguments: collection [
   symbol == #'update'
     ifTrue: [ ^ self ].
   ^ super perform: symbol withArguments: collection
+
 ]
 
 { #category : 'commands support' }
@@ -443,6 +469,7 @@ them in the newServices temporary for look up"
                 ifTrue: [ service expand: true ]
                 ifFalse: [ service expand: false ].
               service ]) ]
+
 ]
 
 { #category : 'replication' }
@@ -457,6 +484,7 @@ RowanService >> stonOn: stonWriter [
                     (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
                         ifNotNil: [:value | dictionary at: each asSymbol put: value]
                         ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
+
 ]
 
 { #category : 'replication' }
@@ -495,12 +523,14 @@ RowanService >> symbolDictionaryNamed: aName [
 
 { #category : 'initialization' }
 RowanService >> update [
+
 ]
 
 { #category : 'update' }
 RowanService >> updateInternalService: updatedService [
 
 	"no internally held services to update"
+
 ]
 
 { #category : 'update' }
@@ -509,18 +539,21 @@ RowanService >> updateLatest [
 	to their loaded version"
 
   self update
+
 ]
 
 { #category : 'accessing' }
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+
 ]
 
 { #category : 'testing' }
 RowanService >> wasDeleted [
 
 	^false
+
 ]
 
 { #category : 'fileout' }
@@ -550,4 +583,5 @@ RowanService >> writeFileOutHeaderOn: stream [
 		nextPutAll: '!';
 		cr;
 		flush
+
 ]

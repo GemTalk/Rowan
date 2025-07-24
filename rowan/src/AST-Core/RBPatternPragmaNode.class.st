@@ -12,6 +12,7 @@ RBPatternPragmaNode class >> selectorParts: keywordTokens arguments: valueNodes 
 	^ (keywordTokens anySatisfy: [ :each | each isPatternVariable ]) 
 		ifTrue: [ super selectorParts: keywordTokens arguments: valueNodes ]
 		ifFalse: [ RBPragmaNode selectorParts: keywordTokens arguments: valueNodes ]
+
 ]
 
 { #category : 'matching' }
@@ -26,16 +27,19 @@ RBPatternPragmaNode >> copyInContext: aDictionary [
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternPragmaNode >> isPatternNode [
 	^ true
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternPragmaNode >> isSelectorList [
 	^ isList
+
 ]
 
 { #category : 'matching' }
@@ -46,6 +50,7 @@ RBPatternPragmaNode >> match: aNode inContext: aDictionary [
 		^ (aDictionary at: selectorParts first value ifAbsentPut: [ aNode selector ]) = aNode selector
 			and: [ (aDictionary at: arguments first ifAbsentPut: [ aNode arguments ]) = aNode arguments ] ].
 	^ self matchArgumentsAgainst: aNode inContext: aDictionary
+
 ]
 
 { #category : 'matching' }
@@ -58,11 +63,13 @@ RBPatternPragmaNode >> matchArgumentsAgainst: aNode inContext: aDictionary [
 		(first match: second inContext: aDictionary) 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'private' }
 RBPatternPragmaNode >> matchingClass [
 	^ RBPragmaNode
+
 ]
 
 { #category : 'matching' }
@@ -78,12 +85,14 @@ RBPatternPragmaNode >> matchSelectorAgainst: aNode inContext: aDictionary [
 		keyword = second value 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'initialization' }
 RBPatternPragmaNode >> selectorParts: keywordTokens arguments: valueNodes [ 
 	super selectorParts: keywordTokens arguments: valueNodes.
 	isList := (keywordTokens first value at: 2) == self listCharacter
+
 ]
 
 { #category : 'accessing' }
@@ -91,4 +100,5 @@ RBPatternPragmaNode >> sentMessages [
 	^ super sentMessages
 		remove: self selector ifAbsent: [ ];
 		yourself
+
 ]

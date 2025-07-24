@@ -57,6 +57,7 @@ The project project has been registered with Rowan at the existing location .'.
 								, gitRepoPath printString ] ].
 	(Rowan fileUtilities directoryExists: gitRootPath)
 		ifFalse: [ Rowan fileUtilities ensureDirectoryExists: gitRootPath ]
+
 ]
 
 { #category : 'smalltalk api' }
@@ -121,4 +122,5 @@ RwPrjCloneTool >> specification: aRwSpecification [
   "let the validation run before sending #register"
 
   ^ (super specification: aRwSpecification) register
+
 ]

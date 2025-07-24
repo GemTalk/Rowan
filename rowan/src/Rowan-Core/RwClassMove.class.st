@@ -20,6 +20,7 @@ RwClassMove class >> classBefore: beforeClassDefinition classAfter: afterClassDe
 		packageBefore: beforePackageDefinition;
 		packageAfter: afterPackageDefinition;
 		yourself
+
 ]
 
 { #category : 'instance creation' }

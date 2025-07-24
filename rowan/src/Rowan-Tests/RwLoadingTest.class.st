@@ -19,6 +19,7 @@ Class {
 RwLoadingTest class >> debug [
 
 	^self allTestSelectors do: [:selector | self debug: selector]
+
 ]
 
 { #category : 'initlization' }
@@ -44,18 +45,21 @@ RwLoadingTest class >> initialize [
 		at: #'Radish3' put: 2;
 		name: #'PoolDictionary3';
 		yourself)} do: [ :pd | PoolDictionaryDictionary at: pd name put: pd ]
+
 ]
 
 { #category : 'running' }
 RwLoadingTest class >> run [
 
 	^self suite run
+
 ]
 
 { #category : 'private' }
 RwLoadingTest >> _symbolDictionaryName [
 
 	^ self _unmanagedDictionaryName
+
 ]
 
 { #category : 'support - simple definitions' }
@@ -83,6 +87,7 @@ RwLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 										with: 'protocol' -> 'accessing')
 								source: ivName , ': anObject ' , ivName , ' := anObject') ].
 	^ result
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -172,6 +177,7 @@ RwLoadingTest >> basicClassMethodsForClass: className [
       {{#'classMeth'.
       'accessing'.
       ('classMeth ^''classMeth for class ''' , className printString)}}
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -181,6 +187,7 @@ RwLoadingTest >> basicInstanceMethodsForClass: className [
       {{#'instanceMeth'.
       'accessing'.
       ('instanceMeth ^''instanceMeth for class ''' , className printString)}}
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -200,6 +207,7 @@ RwLoadingTest >> classExtentionsInstanceMethodsForClass2: className inPackage: p
 			{{#'foo'.
 			'*', packageName.
 			'foo ^ ''foo'''}}
+
 ]
 
 { #category : 'support - classExtensions definitions' }
@@ -224,6 +232,7 @@ RwLoadingTest >> classExtionsClassDefinitions1: packageName className: className
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classExtensions definitions' }
@@ -240,6 +249,7 @@ RwLoadingTest >> classExtionsClassDefinitions2: packageName className: className
 						instanceMethodDefinitions:
 							(self classExtentionsInstanceMethodsForClass2: className inPackage: packageName));
 		yourself
+
 ]
 
 { #category : 'support - classInitialization definitions' }
@@ -260,6 +270,7 @@ RwLoadingTest >> classInitializationClassMethodsForClass1: className [
       		'accessing'.
       		('classInstVar2 ^ classInstVar2' )}.
 		}
+
 ]
 
 { #category : 'support - classInitialization definitions' }
@@ -280,6 +291,7 @@ RwLoadingTest >> classInitializationClassMethodsForClass2: className [
       		'accessing'.
       		('classInstVar2 ^ classInstVar2' )}.
 		}
+
 ]
 
 { #category : 'support - classInitialization definitions' }
@@ -320,6 +332,7 @@ RwLoadingTest >> classInstVarChangeClassDefinitions1: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
@@ -343,6 +356,7 @@ RwLoadingTest >> classInstVarChangeClassDefinitions2: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
@@ -368,6 +382,7 @@ RwLoadingTest >> classInstVarChangeClassDefinitions3: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
@@ -393,31 +408,37 @@ RwLoadingTest >> classInstVarChangeClassDefinitions4: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
 RwLoadingTest >> classInstVarChangesClassDefinitions1: packageName [
 	^ self classInstVarChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
 RwLoadingTest >> classInstVarChangesClassDefinitions2: packageName [
 	^ self classInstVarChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
 RwLoadingTest >> classInstVarChangesClassDefinitions3: packageName [
 	^ self classInstVarChangeClassDefinitions3: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
 RwLoadingTest >> classInstVarChangesClassDefinitions4: packageName [
 	^ self classInstVarChangeClassDefinitions4: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classProperyChange definitions' }
 RwLoadingTest >> classPropertyChangeClassDefinitions1: packageName [
   ^ self classPropertyChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classProperyChange definitions' }
@@ -456,11 +477,13 @@ RwLoadingTest >> classPropertyChangeClassDefinitions1: packageName in: classDefi
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classProperyChange definitions' }
 RwLoadingTest >> classPropertyChangeClassDefinitions2: packageName [
   ^ self classPropertyChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classProperyChange definitions' }
@@ -499,6 +522,7 @@ RwLoadingTest >> classPropertyChangeClassDefinitions2: packageName in: classDefi
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
@@ -522,6 +546,7 @@ RwLoadingTest >> classVarChangeClassDefinitions1: packageName in: classDefinitio
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
@@ -545,6 +570,7 @@ RwLoadingTest >> classVarChangeClassDefinitions2: packageName in: classDefinitio
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
@@ -570,6 +596,7 @@ RwLoadingTest >> classVarChangeClassDefinitions3: packageName in: classDefinitio
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
@@ -595,26 +622,31 @@ RwLoadingTest >> classVarChangeClassDefinitions4: packageName in: classDefinitio
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
 RwLoadingTest >> classVarChangesClassDefinitions1: packageName [
 	^ self classVarChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
 RwLoadingTest >> classVarChangesClassDefinitions2: packageName [
 	^ self classVarChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
 RwLoadingTest >> classVarChangesClassDefinitions3: packageName [
 	^ self classVarChangeClassDefinitions3: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVarChanges definitions' }
 RwLoadingTest >> classVarChangesClassDefinitions4: packageName [
 	^ self classVarChangeClassDefinitions4: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -624,11 +656,13 @@ RwLoadingTest >> classVersionChangeAssociationInstanceMethodsForClass3: classNam
 			{{#'customValue'.
 			'accessing'.
 			'customValue ^value'}}
+
 ]
 
 { #category : 'support - classVersionChanges' }
 RwLoadingTest >> classVersionChangeClassDefinitions1: packageName [
 	^ self classVersionChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -712,11 +746,13 @@ RwLoadingTest >> classVersionChangeClassDefinitions1: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVersionChanges' }
 RwLoadingTest >> classVersionChangeClassDefinitions2: packageName [
 	^ self classVersionChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -800,11 +836,13 @@ RwLoadingTest >> classVersionChangeClassDefinitions2: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVersionChanges' }
 RwLoadingTest >> classVersionChangeClassDefinitions3: packageName [
 	^ self classVersionChangeClassDefinitions3: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -896,6 +934,7 @@ RwLoadingTest >> classVersionChangeClassDefinitions3: packageName in: classDefin
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -905,6 +944,7 @@ RwLoadingTest >> classVersionChangeClassInstVarMethodsForClass3: className [
 			{{#'classInstVar1'.
 			'accessing'.
 			'classInstVar1 ^classInstVar1'}}
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -914,6 +954,7 @@ RwLoadingTest >> classVersionChangeClassVarMethodsForClass3: className [
 			{{#'classVar1'.
 			'accessing'.
 			'classVar1 ^ClassVar1'}}
+
 ]
 
 { #category : 'support - classVersionChanges' }
@@ -923,6 +964,7 @@ RwLoadingTest >> classVersionChangeInstVarMethodsForClass3: className [
 			{{#'instVar1'.
 			'accessing'.
 			'instVar1 ^instVar1'}}
+
 ]
 
 { #category : 'support - combined definitions' }
@@ -941,6 +983,7 @@ RwLoadingTest >> combinedClassMethodsForClass1: className [
       {#'testClassMethod3'.
       'xxx'.
       'testClassMethod3 ^ 1'}}
+
 ]
 
 { #category : 'support - combined definitions' }
@@ -956,6 +999,7 @@ RwLoadingTest >> combinedClassMethodsForClass2: className [
       {#'testClassMethod3'.
       'yyy'.
       'testClassMethod3 ^ 2'}}
+
 ]
 
 { #category : 'support - combined definitions' }
@@ -971,6 +1015,7 @@ RwLoadingTest >> combinedInstanceMethodsForClass1: className [
       {#'testInstanceMethod3'.
       'xxx'.
       'testInstanceMethod3 ^ 1'}}
+
 ]
 
 { #category : 'support - combined definitions' }
@@ -983,6 +1028,7 @@ RwLoadingTest >> combinedInstanceMethodsForClass2: className [
       {#'testInstanceMethod3'.
       'yyy'.
       'testInstanceMethod3 ^ 2'}}
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -1000,6 +1046,7 @@ RwLoadingTest >> definitionOfBasicClassNamed: className superclass: superclassNa
         inPackage: packageName)
     classMethodDefinitions: (self basicClassMethodsForClass: className)
     instanceMethodDefinitions: (self basicInstanceMethodsForClass: className)
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -1011,6 +1058,7 @@ RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars
     instvars: instvars
     gs_options: gs_options
     inPackage: packageName
+
 ]
 
 { #category : 'support - classInitialization definitions' }
@@ -1022,6 +1070,7 @@ RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage:
         inPackage: packageName)
     classMethodDefinitions: classMethodDefinitions
     instanceMethodDefinitions: Dictionary new
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1039,6 +1088,7 @@ RwLoadingTest >> definitionOfMethodDeletionClassNamed: className inPackage: pack
         inPackage: packageName)
     classMethodDefinitions: classMethodDefinitions
     instanceMethodDefinitions: instanceMethodDefinitions
+
 ]
 
 { #category : 'support - basic definitions' }
@@ -1049,6 +1099,7 @@ RwLoadingTest >> definitionOfNormalClassNamed: className inPackage: packageName 
     instvars: {}
     gs_options: {}
     inPackage: packageName
+
 ]
 
 { #category : 'support - simple definitions' }
@@ -1058,12 +1109,14 @@ RwLoadingTest >> definitionOfSimpleClassNamed: name inPackage: packageName [
 		withProperties: (self propertiesForSimpleClassNamed: name inPackage: packageName)
 		classMethodDefinitions: (self sillyClassMethodsForClassNamed: name)
 		instanceMethodDefinitions: (self accessorMethodsForSimpleClassNamed: name)
+
 ]
 
 { #category : 'running' }
 RwLoadingTest >> expectedFailures [
 
 	^ {#'testPoolDictionaryChanges'}
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
@@ -1087,6 +1140,7 @@ RwLoadingTest >> instVarChangeClassDefinitions1: packageName in: classDefinition
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
@@ -1110,6 +1164,7 @@ RwLoadingTest >> instVarChangeClassDefinitions2: packageName in: classDefinition
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
@@ -1135,6 +1190,7 @@ RwLoadingTest >> instVarChangeClassDefinitions3: packageName in: classDefinition
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
@@ -1160,26 +1216,31 @@ RwLoadingTest >> instVarChangeClassDefinitions4: packageName in: classDefinition
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
 RwLoadingTest >> instVarChangesClassDefinitions1: packageName [
 	^ self instVarChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
 RwLoadingTest >> instVarChangesClassDefinitions2: packageName [
 	^ self instVarChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
 RwLoadingTest >> instVarChangesClassDefinitions3: packageName [
 	^ self instVarChangeClassDefinitions3: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - instVarChanges definitions' }
 RwLoadingTest >> instVarChangesClassDefinitions4: packageName [
 	^ self instVarChangeClassDefinitions4: packageName in: Dictionary new
+
 ]
 
 { #category : 'support' }
@@ -1207,6 +1268,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1219,6 +1281,7 @@ RwLoadingTest >> methodDeletionClassMethodsForClass1: className [
       {#'testClassMethodSurvivor'.
       'class method to be kept'.
       'testClassMethodSurvivor ^ true'}}
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1228,6 +1291,7 @@ RwLoadingTest >> methodDeletionClassMethodsForClass2: className [
       {{#'testClassMethodSurvivor'.
       'class method to be kept'.
       'testClassMethodSurvivor ^ true'}}
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1240,6 +1304,7 @@ RwLoadingTest >> methodDeletionInstanceMethodsForClass1: className [
       {#'testInstanceMethodSurvivor'.
       'instance method to be kept'.
       'testInstanceMethodSurvivor ^ true'}}
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1249,6 +1314,7 @@ RwLoadingTest >> methodDeletionInstanceMethodsForClass2: className [
       {{#'testInstanceMethodSurvivor'.
       'instance method to be kept'.
       'testInstanceMethodSurvivor ^ true'}}
+
 ]
 
 { #category : 'support - methodDeletion definitions' }
@@ -1279,6 +1345,7 @@ RwLoadingTest >> methodProtocolChangeClassMethodsForClass1: className [
       {#'testClassMethod2'.
       'protocol A'.
       'testClassMethod2 ^ true'}}
+
 ]
 
 { #category : 'support - methodProtocolChange definitions' }
@@ -1291,6 +1358,7 @@ RwLoadingTest >> methodProtocolChangeClassMethodsForClass2: className [
       {#'testClassMethod2'.
       'protocol B'.
       'testClassMethod2 ^ true'}}
+
 ]
 
 { #category : 'support - methodProtocolChange definitions' }
@@ -1303,6 +1371,7 @@ RwLoadingTest >> methodProtocolChangeInstanceMethodsForClass1: className [
       {#'testInstanceMethod2'.
       'protocol A'.
       'testInstanceMethod2 ^ true'}}
+
 ]
 
 { #category : 'support - methodProtocolChange definitions' }
@@ -1315,6 +1384,7 @@ RwLoadingTest >> methodProtocolChangeInstanceMethodsForClass2: className [
       {#'testInstanceMethod2'.
       'protocol B'.
       'testInstanceMethod2 ^ true'}}
+
 ]
 
 { #category : 'support - methodProtocolChange definitions' }
@@ -1324,6 +1394,7 @@ RwLoadingTest >> methodProtocolChangePackageDefinition: packageName className: c
     className: className
     instanceMethodDefinitions: instanceMethodDefinitions
     classMethodDefinitions: classMethodDefinitions
+
 ]
 
 { #category : 'support - simple definitions' }
@@ -1369,6 +1440,7 @@ RwLoadingTest >> poolDictionaryChangeClassDefinitions1: packageName in: classDef
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
@@ -1392,6 +1464,7 @@ RwLoadingTest >> poolDictionaryChangeClassDefinitions2: packageName in: classDef
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
@@ -1417,6 +1490,7 @@ RwLoadingTest >> poolDictionaryChangeClassDefinitions3: packageName in: classDef
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
@@ -1442,26 +1516,31 @@ RwLoadingTest >> poolDictionaryChangeClassDefinitions4: packageName in: classDef
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
 RwLoadingTest >> poolDictionaryChangesClassDefinitions1: packageName [
 	^ self poolDictionaryChangeClassDefinitions1: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
 RwLoadingTest >> poolDictionaryChangesClassDefinitions2: packageName [
 	^ self poolDictionaryChangeClassDefinitions2: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
 RwLoadingTest >> poolDictionaryChangesClassDefinitions3: packageName [
 	^ self poolDictionaryChangeClassDefinitions3: packageName in: Dictionary new
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
 RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 	^ self poolDictionaryChangeClassDefinitions4: packageName in: Dictionary new
+
 ]
 
 { #category : 'private' }
@@ -1497,6 +1576,7 @@ RwLoadingTest >> propertiesForClassNamed: className super: superClassName instva
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -1516,6 +1596,7 @@ RwLoadingTest >> propertiesForClassNamed: className super: superClassName instva
 		type: type
 		gs_options: gs_options
 		inPackage: packageName
+
 ]
 
 { #category : 'support - simple definitions' }
@@ -1539,6 +1620,7 @@ RwLoadingTest >> propertiesForSimpleClassNamed: className inPackage: packageName
 		at: 'superclass' put: 'Object';
 		at: 'type' put: 'normal'.
 	^ dict
+
 ]
 
 { #category : 'support - classInitialization definitions' }
@@ -1554,6 +1636,7 @@ RwLoadingTest >> propertiesOfClassInitializationClassNamed: className inPackage:
     type: 'normal'
     gs_options: {}
     inPackage: packageName
+
 ]
 
 { #category : 'support - simple definitions' }
@@ -1565,6 +1648,7 @@ RwLoadingTest >> sillyClassMethodsForClassNamed: name [
 								with: 'protocol' -> 'silliness')
 						source: 'sillyMessage
 	^ ''You have sent a silly message to the class '' , name')
+
 ]
 
 { #category : 'support - singleClassVersionChange definitions' }
@@ -1590,6 +1674,7 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions1: packageName classNam
 						instanceMethodDefinitions:
 							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''foo''')}));
 		yourself
+
 ]
 
 { #category : 'support - singleClassVersionChange definitions' }
@@ -1617,6 +1702,7 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions2: packageName classNam
 						instanceMethodDefinitions:
 							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''foo''')}));
 		yourself
+
 ]
 
 { #category : 'support - singleClassVersionChange definitions' }
@@ -1644,6 +1730,7 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions3: packageName classNam
 						instanceMethodDefinitions:
 							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''bar''')}));
 		yourself
+
 ]
 
 { #category : 'support - singleClassVersionChange definitions' }
@@ -1671,6 +1758,7 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions4: packageName classNam
 						instanceMethodDefinitions:
 							(self methodDefsFromSpec: {#(#'foo' 'fooing' 'foo ^''foo''')}));
 		yourself
+
 ]
 
 { #category : 'tests' }
@@ -1718,6 +1806,7 @@ RwLoadingTest >> testClassAdd [
 			"expected to find a loaded class"
 			self assert: false ].
 	self assert: testClass == loadedClass handle
+
 ]
 
 { #category : 'tests' }
@@ -1877,6 +1966,7 @@ RwLoadingTest >> testClassInitialization2 [
 	self assert: testClass classVar = 1.
 	self assert: testClass classInstVar1 = 1.
 	self assert: testClass classInstVar2 = 2
+
 ]
 
 { #category : 'tests' }
@@ -2328,6 +2418,7 @@ RwLoadingTest >> testMethodDelete [
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
 		assert: testInstance testInstanceMethodSurvivor
+
 ]
 
 { #category : 'tests' }
@@ -2376,6 +2467,7 @@ RwLoadingTest >> testMethodProtocolChange [
 		assert: testClass testClassMethod2;
 		assert: testInstance testInstanceMethod1;
 		assert: testInstance testInstanceMethod2
+
 ]
 
 { #category : 'tests' }

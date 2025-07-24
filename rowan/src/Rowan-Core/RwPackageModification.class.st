@@ -21,6 +21,7 @@ Class {
 RwPackageModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitPackageModification: self
+
 ]
 
 { #category : 'Accessing' }
@@ -54,6 +55,7 @@ RwPackageModification >> initialize [
 	super initialize.
 	classesModification := #().
 	classExtensionsModification := #()
+
 ]
 
 { #category : 'testing' }
@@ -61,4 +63,5 @@ RwPackageModification >> isEmpty [
 
 	^super isEmpty & classesModification isEmpty
 		& classExtensionsModification isEmpty
+
 ]

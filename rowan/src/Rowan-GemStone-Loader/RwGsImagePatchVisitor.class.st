@@ -18,12 +18,14 @@ Class {
 RwGsImagePatchVisitor class >> new [
 
 	^super new initialize
+
 ]
 
 { #category : 'private' }
 RwGsImagePatchVisitor >> _patchSetClass [
 
 	^ RwGsPatchSet
+
 ]
 
 { #category : 'private' }
@@ -41,6 +43,7 @@ RwGsImagePatchVisitor >> addAddedProject: aProjectDefinition [
 
 	currentProject := aProjectDefinition.
 	patchSet addAddedProject: currentProject
+
 ]
 
 { #category : 'private' }
@@ -97,12 +100,14 @@ RwGsImagePatchVisitor >> addClassExtensions: classExtensions [
 						inClass: classDefinition
 						inPackage: currentPackage
 						inProject: currentProject ] ]
+
 ]
 
 { #category : 'private' }
 RwGsImagePatchVisitor >> addDeletedPackage: aPackageDefinition [
 
 	self deletePackages: {aPackageDefinition}
+
 ]
 
 { #category : 'private' }
@@ -110,6 +115,7 @@ RwGsImagePatchVisitor >> addPackages: packageDefinitions [
 
 	packageDefinitions
 		do: [:packageDefinition | self addAddedpackage: packageDefinition]
+
 ]
 
 { #category : 'private' }
@@ -135,6 +141,7 @@ RwGsImagePatchVisitor >> deleteClasses: classDefinitions [
 						inClass: classDefinition
 						inPackage: currentPackage
 						inProject: currentProject ] ]
+
 ]
 
 { #category : 'private' }
@@ -161,12 +168,14 @@ RwGsImagePatchVisitor >> deletePackages: packageDefinitions [
 								inClass: classExtension
 								inPackage: packageDefinition
 								inProject: currentProject ] ] ]
+
 ]
 
 { #category : 'initialization' }
 RwGsImagePatchVisitor >> initialize [
 
 	patchSet := self _patchSetClass new
+
 ]
 
 { #category : 'accessing' }
@@ -179,6 +188,7 @@ RwGsImagePatchVisitor >> patchSet [
 RwGsImagePatchVisitor >> visit: aPackageSetModification [
 
 	^aPackageSetModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -186,6 +196,7 @@ RwGsImagePatchVisitor >> visitClassesModification: aClassesModification [
 
 	aClassesModification elementsModified
 		do: [:each | each acceptVisitor: self]
+
 ]
 
 { #category : 'visting' }
@@ -198,6 +209,7 @@ RwGsImagePatchVisitor >> visitClassExtensionModification: aClassExtensionModific
 	currentClass := aClassExtensionModification after.
 	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
 	aClassExtensionModification classMethodsModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -205,6 +217,7 @@ RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassExtensionsModif
 
 	aClassExtensionsModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
+
 ]
 
 { #category : 'visting' }
@@ -217,6 +230,7 @@ RwGsImagePatchVisitor >> visitClassModification: aClassModification [
 	currentClass := aClassModification after.
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -229,6 +243,7 @@ RwGsImagePatchVisitor >> visitClassModificationForcingNewVersion: aClassModifica
 	currentClass := aClassModification after.
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -238,6 +253,7 @@ RwGsImagePatchVisitor >> visitExtensionMethodModification: anExtensionMethodModi
 		addModificationToPatchSet: patchSet
 		inPackage: currentPackage
 		inProject: currentProject
+
 ]
 
 { #category : 'visting' }
@@ -247,6 +263,7 @@ RwGsImagePatchVisitor >> visitExtensionMethodModificationForNewClassVersion: aMe
 		addExtensionModificationToPatchSetForNewClassVersion: patchSet
 		inPackage: currentPackage
 		inProject: currentProject
+
 ]
 
 { #category : 'visting' }
@@ -254,6 +271,7 @@ RwGsImagePatchVisitor >> visitExtensionMethodsModification: anExtensionMethodsMo
 
 	anExtensionMethodsModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
+
 ]
 
 { #category : 'visting' }
@@ -263,6 +281,7 @@ RwGsImagePatchVisitor >> visitMethodModification: aMethodModification [
 		addModificationToPatchSet: patchSet
 		inPackage: currentPackage
 		inProject: currentProject
+
 ]
 
 { #category : 'visting' }
@@ -272,6 +291,7 @@ RwGsImagePatchVisitor >> visitMethodModificationForNewClassVersion: aMethodModif
 		addModificationToPatchSetForNewClassVersion: patchSet
 		inPackage: currentPackage
 		inProject: currentProject
+
 ]
 
 { #category : 'visting' }
@@ -279,6 +299,7 @@ RwGsImagePatchVisitor >> visitMethodsModification: aMethodsModification [
 
 	aMethodsModification elementsModified
 		do: [:each | each acceptVisitor: self]
+
 ]
 
 { #category : 'visting' }
@@ -309,12 +330,14 @@ RwGsImagePatchVisitor >> visitPackageSetModification: aPackageSetModification [
 
 	aPackageSetModification elementsModified
 		do: [:each | each acceptVisitor: self]
+
 ]
 
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitPackagesModification: aPackagesModification [
 
 	aPackagesModification elementsModified do: [ :each | each acceptVisitor: self ]
+
 ]
 
 { #category : 'visting' }
@@ -322,6 +345,7 @@ RwGsImagePatchVisitor >> visitProjecteSetModification: aProjectSetModification [
 
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
+
 ]
 
 { #category : 'visting' }

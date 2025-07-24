@@ -24,6 +24,7 @@ RwModification class >> before: beforeDefinition after: afterDefinition [
 		before: beforeDefinition;
 		after: afterDefinition;
 		yourself
+
 ]
 
 { #category : 'Accessing' }
@@ -55,30 +56,35 @@ RwModification >> initialize [
 	"Dummy that understands isEmpty for printing"
 
 	propertiesModification := RwPropertiesModification new
+
 ]
 
 { #category : 'testing' }
 RwModification >> isAddition [
 
 	^before isEmpty
+
 ]
 
 { #category : 'testing' }
 RwModification >> isDeletion [
 
 	^after isEmpty
+
 ]
 
 { #category : 'testing' }
 RwModification >> isEmpty [
 
 	^propertiesModification isEmpty
+
 ]
 
 { #category : 'testing' }
 RwModification >> isModification [
 
 	^after isEmpty not and: [ before isEmpty not ]
+
 ]
 
 { #category : 'Accessing' }
@@ -87,6 +93,7 @@ RwModification >> key [
 	| beforeKey |
 	beforeKey := before key.
 	^beforeKey ifNil: [after key] ifNotNil: [beforeKey]
+
 ]
 
 { #category : 'Printing' }
@@ -94,6 +101,7 @@ RwModification >> printOn: aStream [
 
 	super printOn: aStream.
 	self isEmpty ifTrue: [aStream nextPutAll: ' (empty)']
+
 ]
 
 { #category : 'Accessing' }

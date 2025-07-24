@@ -10,6 +10,7 @@ RowanMethodServiceTest >> setUp [
 	super setUp.
 	self createServicesTestClass. 
 	self loadServicesTestProject.
+
 ]
 
 { #category : 'constants' }
@@ -26,6 +27,7 @@ RowanMethodServiceTest >> stepPoint1Source [
 	array size.
 			"^6"
 	^array'
+
 ]
 
 { #category : 'constants' }
@@ -50,6 +52,7 @@ RowanMethodServiceTest >> stepPoint2Source [
 	array size.
 			"^7"
 	^array'
+
 ]
 
 { #category : 'constants' }
@@ -74,6 +77,7 @@ RowanMethodServiceTest >> stepPoint3Source [
 	oop := aGsProcess asOop.  
 								"^9"
 	status := aString.'
+
 ]
 
 { #category : 'support' }
@@ -81,6 +85,7 @@ RowanMethodServiceTest >> tearDown [
 
 	self unloadServicesTestProject.
 	super tearDown.
+
 ]
 
 { #category : 'tests' }
@@ -100,6 +105,7 @@ RowanMethodServiceTest >> test_classNameIsString [
 	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
 	self assert: (methodService className isKindOf: String).
 	self assert: methodService className = 'RowanMethodServiceTest'.
+
 ]
 
 { #category : 'tests' }
@@ -112,6 +118,7 @@ RowanMethodServiceTest >> test_isTestMethod [
 	self assert: methodService isTestMethod. 
 	methodService := RowanMethodService forGsNMethod: (RowanMethodService compiledMethodAt: #initialize) organizer: organizer.
 	self deny: methodService isTestMethod.
+
 ]
 
 { #category : 'tests' }
@@ -129,6 +136,7 @@ RowanMethodServiceTest >> test_reformatSource [
   abc := 1.
   abc := abc + abc.
   ^ abc'
+
 ]
 
 { #category : 'tests' }
@@ -148,4 +156,5 @@ RowanMethodServiceTest >> test_runMethodTest [
 	classService saveMethodSource: 'testMethod2  1 zork' category: 'failing test'.
 	methodService runTest: #testMethod2 inClassName: self servicesDefaultTestClassName.
 	self assert: methodService testResult equals: 'error'.
+
 ]

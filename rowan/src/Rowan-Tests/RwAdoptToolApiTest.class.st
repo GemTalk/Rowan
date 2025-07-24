@@ -19,6 +19,7 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_A: audit 
 			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
 			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded classmethod ') ]] ] ] ].
 	self assert: unexpectedFailures isEmpty
+
 ]
 
 { #category : 'private' }
@@ -29,6 +30,7 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_B: audit 
 	self _validateExpectedMonticelloConventionFailure_389: audit packageName: packageName className: className.
 	audit removeKey: packageName.
 	self assert: audit isEmpty
+
 ]
 
 { #category : 'private' }
@@ -45,6 +47,7 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389: audit pa
 	"extension categories not named according to Monticello conventions (no leading $*)"
 	unexpectedFailures := failures reject: [:each | (each value = 'Missing instance method extension category ') or: [ each value = 'Missing class method extension category ' ] ].
 	self assert: unexpectedFailures isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -285,6 +288,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_1 [
 
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty. " with bug: 'AdoptedClass #*adopt-core'->'Missing instance method extension category '"
+
 ]
 
 { #category : 'tests' }
@@ -359,6 +363,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_2 [
 
 "audit --> category not correct according to Monticello conventions"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty. " with bug: 'AdoptedClass #*adopt-core'->'Missing instance method extension category '"
+
 ]
 
 { #category : 'tests' }
@@ -440,6 +445,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: expectedFailure size = 1.
 	self assert: expectedFailure first key =  'AdoptedClass #*adopt-core'.
 	self assert: expectedFailure first value = 'Extension category name can not be same as class package'.
+
 ]
 
 { #category : 'tests' }
@@ -517,6 +523,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
 	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageNames className: className
+
 ]
 
 { #category : 'tests' }
@@ -588,6 +595,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_B [
 	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self _validateExpectedMonticelloConventionFailure_389_B: audit packageName: packageName className: className.
+
 ]
 
 { #category : 'tests' }
@@ -668,6 +676,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_C [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -743,6 +752,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_D [
 	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 	self _validateExpectedMonticelloConventionFailure_389_B: audit packageName: packageName className: className
+
 ]
 
 { #category : 'tests' }

@@ -16,4 +16,5 @@ GsMultiLineTextInteraction >> interactWith: anObject [
   "
 
   ^ anObject interactWithMultiLineText: self
+
 ]

@@ -13,6 +13,7 @@ Class {
 RwProjectSetModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitProjecteSetModification: self
+
 ]
 
 { #category : 'private - moves' }

@@ -24,6 +24,7 @@ RwUrlTest class >> testParseNoErrors [
   'msw://chaos.resnet.gatech.edu:9000/testbook?top'.
   'telnet:chaos.resnet.gatech.edu'}
     do: [ :urlString | RwUrl fromString: urlString ]
+
 ]
 
 { #category : 'private' }
@@ -43,6 +44,7 @@ RwUrlTest >> sampleUrlStrings [
   'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'.
   'msw://chaos.resnet.gatech.edu:9000/testbook?top'.
   'telnet:chaos.resnet.gatech.edu'}
+
 ]
 
 { #category : 'tests' }
@@ -73,4 +75,5 @@ RwUrlTest >> testAsRwUrl [
       RwUrl fromString: urlString.
       url := urlString asRwUrl.
       self assert: url printString = urlString ]
+
 ]

@@ -32,6 +32,7 @@ self halt.
 RwGsLoadedSymbolDictProject >> projectOwnerId [
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
+
 ]
 
 { #category : 'specifiction' }
@@ -48,10 +49,12 @@ RwGsLoadedSymbolDictProject >> propertiesForDefinition [
 	props := super propertiesForDefinition.
 	props at: 'spec' put: handle.
 	^ props
+
 ]
 
 { #category : 'properties' }
 RwGsLoadedSymbolDictProject >> specification [
 
 	^ handle
+
 ]

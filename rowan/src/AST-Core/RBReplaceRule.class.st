@@ -22,20 +22,24 @@ Class {
 { #category : 'matching' }
 RBReplaceRule >> canMatch: aProgramNode [ 
 	^verificationBlock value: aProgramNode
+
 ]
 
 { #category : 'matching' }
 RBReplaceRule >> foundMatchFor: aProgramNode [ 
 	self subclassResponsibility
+
 ]
 
 { #category : 'initialize-release' }
 RBReplaceRule >> initialize [
 	super initialize.
 	verificationBlock := [:aNode | true]
+
 ]
 
 { #category : 'matching' }
 RBReplaceRule >> replace: aProgramNode with: newNode [ 
 	aProgramNode replaceMethodSource: newNode
+
 ]

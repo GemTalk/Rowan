@@ -21,6 +21,7 @@ Class {
 RwLoadedThing class >> absentToken [
 
 	^AbsentToken
+
 ]
 
 { #category : 'class initialization' }
@@ -28,6 +29,7 @@ RwLoadedThing class >> initialize [
   "RwLoadedThing initialize"
 
   AbsentToken := '<absent>'
+
 ]
 
 { #category : 'instance creation' }
@@ -37,12 +39,14 @@ RwLoadedThing class >> newNamed: aName [
 		initialize;
 		initializeForName: aName;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> absentToken [
 
 	^AbsentToken
+
 ]
 
 { #category : 'private' }
@@ -53,6 +57,7 @@ RwLoadedThing >> definitionsFor: loadedThings [
 	loadedThings
 		do: [:loadedThing | result at: loadedThing key put: loadedThing asDefinition].
 	^result
+
 ]
 
 { #category : 'accessing' }
@@ -60,6 +65,7 @@ RwLoadedThing >> handle [
 	"Answer a reference to the platform-specific image object for which I hold information."
 
 	^handle
+
 ]
 
 { #category : 'accessing' }
@@ -75,30 +81,35 @@ RwLoadedThing >> handle: anObject [
 RwLoadedThing >> initialize [
 
 	properties := Dictionary new
+
 ]
 
 { #category : 'initialization' }
 RwLoadedThing >> initializeForName: aName [
 
 	name := aName
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> loadedPackage [
 
 	^ self subclassResponsibility: #'loadedPackage'
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> loadedProject [
 
 	^ self loadedPackage loadedProject
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> name [
 
 	^name
+
 ]
 
 { #category : 'accessing' }
@@ -106,6 +117,7 @@ RwLoadedThing >> name: aString [
 
 	self markPackageDirty.
 	name := aString
+
 ]
 
 { #category : 'printing' }
@@ -117,24 +129,28 @@ RwLoadedThing >> printOn: aStream [
 			[aStream
 				space;
 				nextPutAll: name]
+
 ]
 
 { #category : 'private' }
 RwLoadedThing >> propertiesForDefinition [
 
 	^properties copy
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> propertyAt: propertyName [
 
 	^properties at: propertyName ifAbsent: [AbsentToken]
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> propertyAt: propertyName ifAbsent: aBlock [
 
 	^properties at: propertyName ifAbsent: aBlock
+
 ]
 
 { #category : 'accessing' }
@@ -143,6 +159,7 @@ RwLoadedThing >> propertyAt: propertyName put: aValue [
 
 	self markPackageDirty.
 	^properties at: propertyName put: aValue
+
 ]
 
 { #category : 'accessing' }
@@ -150,10 +167,12 @@ RwLoadedThing >> removeProperty: propertyName [
 
 	self markPackageDirty.
 	^properties removeKey: propertyName ifAbsent: [AbsentToken]
+
 ]
 
 { #category : 'accessing' }
 RwLoadedThing >> setPropertiesTo: aDictionary [
 
 	properties := aDictionary copy
+
 ]

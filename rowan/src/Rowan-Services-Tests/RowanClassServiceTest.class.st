@@ -145,12 +145,14 @@ RowanClassServiceTest >> createHierarchyWithNonResolvableClass [
   self assert: class3 instVarNames = #(ivar4 ivar3).
   self assert: class3 superClass == oldClass2.
   self assert: oldClass3 == class3.
+
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> servicesClassInstance [
 
 	^self servicesDefaultClassName evaluate perform: #new
+
 ]
 
 { #category : 'support' }
@@ -158,6 +160,7 @@ RowanClassServiceTest >> setUp [
 	super setUp.
 	self createServicesTestClass.
 	self loadServicesTestProject.
+
 ]
 
 { #category : 'support' }
@@ -165,6 +168,7 @@ RowanClassServiceTest >> tearDown [
 
 	self unloadServicesTestProject.
 	super tearDown.
+
 ]
 
 { #category : 'tests' }
@@ -176,6 +180,7 @@ RowanClassServiceTest >> test_addCategory [
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 
 	classService addCategory: 'fnoodle'.
 	self assert: (behavior categoryNames includes: #fnoodle).
+
 ]
 
 { #category : 'tests' }
@@ -203,6 +208,7 @@ RowanClassServiceTest >> test_addedProjectNotOnDisk [
 	self deny: projectService existsOnDisk.
 	self deny: projectService isSkew]
 		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Azer')]
+
 ]
 
 { #category : 'tests' }
@@ -213,6 +219,7 @@ RowanClassServiceTest >> test_behavior [
 	self assert: classService behavior equals: Array.
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
 	self assert: classService behavior equals: OrderedCollection class
+
 ]
 
 { #category : 'tests' }
@@ -223,6 +230,7 @@ RowanClassServiceTest >> test_classComment [
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 
 	classService classComment: 'This is a test'. 
 	self assert: behavior comment equals: 'This is a test'
+
 ]
 
 { #category : 'tests' }
@@ -233,6 +241,7 @@ RowanClassServiceTest >> test_classFromName [
 	self assert: classService theClass equals: Array.
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
 	self assert: classService theClass equals: OrderedCollection
+
 ]
 
 { #category : 'tests' }
@@ -254,6 +263,7 @@ RowanClassServiceTest >> test_classHierarchy [
 	rowanServiceService := (hierarchy at: objectClassService) first. 
 	self assert: rowanServiceService name equals: 'RowanService'.
 	self assert: (hierarchy at: rowanServiceService) first name equals: 'RowanClassService'.
+
 ]
 
 { #category : 'tests' }
@@ -272,6 +282,7 @@ RowanClassServiceTest >> test_classHierarchyClassSide [
 	rowanServiceService := (hierarchy at: objectClassService) first. 
 	self assert: rowanServiceService name equals: 'RowanService'.
 	self assert: (hierarchy at: rowanServiceService) first name equals: 'RowanClassService'.
+
 ]
 
 { #category : 'tests' }
@@ -297,6 +308,7 @@ RowanClassServiceTest >> test_classWasDeleted [
     ensure: [ 
       self unloadServicesTestProject.
       System commitTransaction ]
+
 ]
 
 { #category : 'test method compilation' }
@@ -322,6 +334,7 @@ RowanClassServiceTest >> test_compileClassInitializer [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+
 ]
 
 { #category : 'test method compilation' }
@@ -342,6 +355,7 @@ RowanClassServiceTest >> test_compileMethodNoCategory [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+
 ]
 
 { #category : 'test method compilation' }
@@ -360,6 +374,7 @@ RowanClassServiceTest >> test_dirtyState [
 	self assert: (RowanPackageService new name: 'RowanSample1-Core') isDirty.]
 			ensure: [
 				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+
 ]
 
 { #category : 'test method compilation' }
@@ -380,6 +395,7 @@ RowanClassServiceTest >> test_dirtyStateNewProject [
   classService := RowanClassService forClassNamed: 'RowanServicesTestClass'.
   classService saveMethodSource: selector asString , ' ^123' category: 'abc' ]
     ensure: [ Rowan projectTools browser removeClassNamed: 'RowanServicesTestClass' ]
+
 ]
 
 { #category : 'tests' }
@@ -395,6 +411,7 @@ RowanClassServiceTest >> test_equality [
 	self deny: classService1 equals: (RowanPackageService forPackageNamed: 'Rowan-Services-Tests').
 	self deny: classService1 equals: (RowanProjectService newNamed: 'Rowan').
 	self deny: classService1 equals: (RowanMethodService forSelector: #test_equality class: RowanClassServiceTest meta: false organizer: ClassOrganizer new)
+
 ]
 
 { #category : 'tests' }
@@ -405,6 +422,7 @@ RowanClassServiceTest >> test_instVarNamesIsArray [
 	
 	classService := RowanClassService forClassNamed: 'UnauthorizedObjectStub' meta: false. 
 	self assert: (classService instVarNames isKindOf: Array).
+
 ]
 
 { #category : 'tests' }
@@ -436,6 +454,7 @@ RowanClassServiceTest >> test_nameIsString [
 	self assert: (classService name isKindOf: String).
 	classService := RowanClassService minimalForClassNamed: #RowanClassService.
 	self assert: (classService name isKindOf: String).
+
 ]
 
 { #category : 'test method compilation' }
@@ -448,6 +467,7 @@ RowanClassServiceTest >> test_rowanCompileGone [
 	anywhere." 
 
 	self assert: (ClassOrganizer new referencesToLiteral: '#rowanCompile' evaluate) first isEmpty
+
 ]
 
 { #category : 'test method compilation' }
@@ -466,6 +486,7 @@ RowanClassServiceTest >> test_selectedMethod [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+
 ]
 
 { #category : 'tests' }
@@ -483,6 +504,7 @@ RowanClassServiceTest >> test_setClassCommentDuringMetaclassRefresh [
     oop: meta asOop.
   metaClassService fastRefresh.
   self assert: metaClassService comment equals: 'This is a test'
+
 ]
 
 { #category : 'test method compilation' }
@@ -521,6 +543,7 @@ RowanClassServiceTest >> test_setSuperSubIndicators [
 	]
 			ensure: [
 				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+
 ]
 
 { #category : 'test method compilation' }
@@ -543,6 +566,7 @@ RowanClassServiceTest >> test_simpleCompile [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+
 ]
 
 { #category : 'test method compilation' }
@@ -565,6 +589,7 @@ RowanClassServiceTest >> test_simpleCompileClassSide [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).]
+
 ]
 
 { #category : 'test method compilation' }
@@ -586,6 +611,7 @@ RowanClassServiceTest >> test_simpleCompileOnClassWithoutMetaSet [
 		ensure: [
 			classService removeSelector: selector ifAbsent: [].
 			self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).]
+
 ]
 
 { #category : 'test method compilation' }
@@ -604,4 +630,5 @@ RowanClassServiceTest >> test_simpleCompileWithoutMetaSet [
 	self assert: methodService first meta equals: false. "we created an instance method"
 	self assert: methodService first category equals: 'testing'.
 	self assert: (self servicesClassInstance perform: selector).
+
 ]

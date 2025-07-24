@@ -16,4 +16,5 @@ CypressTonelRepository >> packageNames [
 				ifFalse: [ aGsFileStat isDirectory not ] ])
 		collect: [ :each | utils localNameFrom: each ])
 		reject: [ :each | each = '.' or: [ each = '..' ] ]
+
 ]

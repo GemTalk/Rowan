@@ -39,17 +39,20 @@ RowanProjectService class >> newNamed: aString [
 	inst name: aString.
 	inst refresh.
 	^inst
+
 ]
 
 { #category : 'accessing' }
 RowanProjectService >> _isSkew [
 
 	^isSkew
+
 ]
 
 { #category : 'comparing' }
 RowanProjectService >> = projectService [
 	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
+
 ]
 
 { #category : 'client commands' }
@@ -60,6 +63,7 @@ RowanProjectService >> addPackageNamed: packageName [
 		self update.
 		^self answer: #added.].
 	self answer: #duplicatePackage
+
 ]
 
 { #category : 'initialization' }
@@ -79,6 +83,7 @@ RowanProjectService >> basicRefresh [
 	projectUrl := self rowanProjectUrl. 
 	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'accessing' }
@@ -111,6 +116,7 @@ RowanProjectService >> changes [
 				alternateName: nil)].
 	self refresh.
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -131,6 +137,7 @@ RowanProjectService >> commitWithMessage: message [
 	Rowan projectTools commit
 		commitProjectNamed: name
 		message: message.
+
 ]
 
 { #category : 'examples' }
@@ -168,11 +175,13 @@ RowanProjectService >> defaultProjectName: aString [
 RowanProjectService >> existsOnDisk [
 
 	^existsOnDisk
+
 ]
 
 { #category : 'comparing' }
 RowanProjectService >> hash [
 	^self name hash
+
 ]
 
 { #category : 'initialization' }
@@ -180,6 +189,7 @@ RowanProjectService >> initialize [
 
 	super initialize. 
 	packages := Array new
+
 ]
 
 { #category : 'rowan' }
@@ -204,6 +214,7 @@ RowanProjectService >> isSkew [
 	self existsOnDisk ifFalse:[^false]. 
 	repositorySha := [self repositorySha] on: Error do:[:ex | repositorySha := 'not on disk'].
 	^self sha ~= repositorySha
+
 ]
 
 { #category : 'client commands' }
@@ -213,6 +224,7 @@ RowanProjectService >> loadProjectNamed: aName [
 		on: Warning
 		do: [ :ex | Transcript cr; show: ex description. ex resume ].
 	RowanBrowserService new updateProjects.
+
 ]
 
 { #category : 'rowan' }
@@ -247,6 +259,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		gitRootPath: rootPath
 		useSsh: useSsh.
 	(RowanBrowserService new organizer: organizer) updateProjects.
+
 ]
 
 { #category : 'rowan' }
@@ -258,6 +271,7 @@ RowanProjectService >> packageNames [
 	ifFalse:[
 		"list of visible packageNames for current user and named project"
 		Rowan image packageNamesForLoadedProjectNamed: name ]
+
 ]
 
 { #category : 'rowan' }
@@ -295,6 +309,7 @@ RowanProjectService >> printOn: aStream [
 	super printOn: aStream. 
 	aStream nextPut: $:. 
 	aStream nextPutAll: (name ifNil: [nil printString])
+
 ]
 
 { #category : 'testing' }
@@ -303,6 +318,7 @@ RowanProjectService >> projectIsLoaded [
 	^(Rowan image
 		loadedProjectNamed: name
 		ifAbsent: []) notNil
+
 ]
 
 { #category : 'rowan' }
@@ -323,12 +339,14 @@ RowanProjectService >> projects [
 RowanProjectService >> projectUrl [
 
 	^projectUrl
+
 ]
 
 { #category : 'accessing' }
 RowanProjectService >> projectUrl: anObject [
 
 	projectUrl := anObject
+
 ]
 
 { #category : 'client commands' }
@@ -360,6 +378,7 @@ RowanProjectService >> refresh [
 	self basicRefresh. 
 	isLoaded ifTrue:[
 		packages := self packageServices].
+
 ]
 
 { #category : 'client commands' }
@@ -374,6 +393,7 @@ RowanProjectService >> reloadProject [
   self update.
   RowanCommandResult addResult: self.
   RowanBrowserService new packagesWithTests
+
 ]
 
 { #category : 'rowan' }
@@ -411,12 +431,14 @@ RowanProjectService >> rowanDirty [
 RowanProjectService >> rowanProjectName [
 
 	^name
+
 ]
 
 { #category : 'rowan' }
 RowanProjectService >> rowanProjectUrl [
 
 	^(RwProject newNamed: name) projectUrl
+
 ]
 
 { #category : 'rowan' }
@@ -440,12 +462,14 @@ RowanProjectService >> servicePerform: symbol withArguments: collection [
     ifTrue: [ ^ self handleDeletedService ].
   super servicePerform: symbol withArguments: collection.
   self update
+
 ]
 
 { #category : 'client commands' }
 RowanProjectService >> setDefaultProject [
 
 	self class defaultProjectName: name
+
 ]
 
 { #category : 'rowan' }
@@ -454,6 +478,7 @@ RowanProjectService >> setExistsOnDisk [
 	determining if a project exists on disk." 
 
 	existsOnDisk := (RwProject newNamed: name) existsOnDisk.
+
 ]
 
 { #category : 'accessing' }
@@ -485,6 +510,7 @@ RowanProjectService >> unload [
 { #category : 'update' }
 RowanProjectService >> update [
 	self refresh.
+
 ]
 
 { #category : 'update' }
@@ -501,11 +527,13 @@ RowanProjectService >> updateInternalService: updatedService [
 		packageService = updatedService ifTrue:[
 			packages at: index put: updatedService
 		]].
+
 ]
 
 { #category : 'testing' }
 RowanProjectService >> wasDeleted [
   ^ self projectIsLoaded not
+
 ]
 
 { #category : 'client commands' }

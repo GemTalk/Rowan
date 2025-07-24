@@ -30,11 +30,13 @@ RBSequenceNode class >> leftBar: leftInteger temporaries: variableNodes rightBar
 			temporaries: variableNodes
 			rightBar: rightInteger;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
 RBSequenceNode class >> statements: statementNodes [ 
 	^self temporaries: #() statements: statementNodes
+
 ]
 
 { #category : 'instance creation' }
@@ -43,6 +45,7 @@ RBSequenceNode class >> temporaries: variableNodes statements: statementNodes [
 		temporaries: variableNodes;
 		statements: statementNodes;
 		yourself
+
 ]
 
 { #category : 'comparing' }
@@ -60,11 +63,13 @@ RBSequenceNode >> = anObject [
 	1 to: self statements size
 		do: [:i | (self statements at: i) = (anObject statements at: i) ifFalse: [^false]].
 	^true
+
 ]
 
 { #category : 'visitor' }
 RBSequenceNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptSequenceNode: self
+
 ]
 
 { #category : 'adding nodes' }
@@ -76,6 +81,7 @@ RBSequenceNode >> addNode: aNode [
 		add: aNode;
 		yourself.
 	^ aNode
+
 ]
 
 { #category : 'adding nodes' }
@@ -89,6 +95,7 @@ RBSequenceNode >> addNode: aNode before: anotherNode [
 		yourself.
 	aNode parent: self.
 	^ aNode
+
 ]
 
 { #category : 'adding nodes' }
@@ -98,6 +105,7 @@ RBSequenceNode >> addNodeFirst: aNode [
 		addFirst: aNode;
 		yourself.
 	^ aNode
+
 ]
 
 { #category : 'adding nodes' }
@@ -109,12 +117,14 @@ RBSequenceNode >> addNodes: aCollection [
 		addAll: aCollection;
 		yourself.
 	^ aCollection
+
 ]
 
 { #category : 'adding nodes' }
 RBSequenceNode >> addNodes: aCollection before: anotherNode [
 	aCollection do: [ :each | self addNode: each before: anotherNode ].
 	^ aCollection
+
 ]
 
 { #category : 'adding nodes' }
@@ -124,6 +134,7 @@ RBSequenceNode >> addNodesFirst: aCollection [
 		addAllFirst: aCollection;
 		yourself.
 	^ aCollection
+
 ]
 
 { #category : 'accessing' }
@@ -137,6 +148,7 @@ RBSequenceNode >> addReturn [
 	statements at: statements size put: node.
 	node parent: self.
 	^ node
+
 ]
 
 { #category : 'adding nodes' }
@@ -146,11 +158,13 @@ RBSequenceNode >> addSelfReturn [
 		ifTrue: [ ^ self statements last ].
 	node := RBReturnNode value: (RBVariableNode named: 'self').
 	^ self addNode: node
+
 ]
 
 { #category : 'adding nodes' }
 RBSequenceNode >> addTemporariesNamed: aCollection [
 	^ aCollection collect: [ :each | self addTemporaryNamed: each ]
+
 ]
 
 { #category : 'adding nodes' }
@@ -160,6 +174,7 @@ RBSequenceNode >> addTemporaryNamed: aString [
 	variableNode parent: self.
 	temporaries := temporaries copyWith: variableNode.
 	^ variableNode
+
 ]
 
 { #category : 'accessing' }
@@ -167,6 +182,7 @@ RBSequenceNode >> allDefinedVariables [
 	^(self temporaryNames asOrderedCollection)
 		addAll: super allDefinedVariables;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -174,6 +190,7 @@ RBSequenceNode >> allTemporaryVariables [
 	^(self temporaryNames asOrderedCollection)
 		addAll: super allTemporaryVariables;
 		yourself
+
 ]
 
 { #category : 'querying' }
@@ -185,6 +202,7 @@ RBSequenceNode >> bestNodeFor: anInterval [
 			[(temporaries isEmpty and: [statements size == 1]) 
 				ifTrue: [^statements first]].
 	^node
+
 ]
 
 { #category : 'accessing' }
@@ -193,6 +211,7 @@ RBSequenceNode >> children [
 		addAll: self temporaries;
 		addAll: self statements;
 		yourself
+
 ]
 
 { #category : 'matching' }
@@ -201,16 +220,19 @@ RBSequenceNode >> copyInContext: aDictionary [
 		temporaries: (self copyList: self temporaries inContext: aDictionary);
 		statements: (self copyList: self statements inContext: aDictionary);
 		yourself
+
 ]
 
 { #category : 'testing' }
 RBSequenceNode >> defines: aName [ 
 	^temporaries anySatisfy: [:each | each name = aName]
+
 ]
 
 { #category : 'testing' }
 RBSequenceNode >> directlyUses: aNode [ 
 	^false
+
 ]
 
 { #category : 'comparing' }
@@ -226,11 +248,13 @@ RBSequenceNode >> equalTo: anObject withMapping: aDictionary [
 	self temporaries
 		do: [:each | aDictionary removeKey: each name ifAbsent: []].
 	^true
+
 ]
 
 { #category : 'comparing' }
 RBSequenceNode >> hash [
 	^ (self hashForCollection: self temporaries) bitXor: (self hashForCollection: self statements)
+
 ]
 
 { #category : 'private' }
@@ -239,12 +263,14 @@ RBSequenceNode >> indexOfNode: aNode [
 
 	^(1 to: statements size) detect: [:each | (statements at: each) == aNode]
 		ifNone: [statements indexOf: aNode]
+
 ]
 
 { #category : 'initialize-release' }
 RBSequenceNode >> initialize [
 	super initialize.
 	periods := statements := temporaries := #()
+
 ]
 
 { #category : 'testing' }
@@ -256,26 +282,31 @@ RBSequenceNode >> isLast: aNode [
 			[last isMessage and: 
 					[(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: last selector) 
 						and: [last arguments anySatisfy: [:each | each isLast: aNode]]]]
+
 ]
 
 { #category : 'testing' }
 RBSequenceNode >> isSequence [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBSequenceNode >> lastIsReturn [
 	^statements notEmpty and: [statements last lastIsReturn]
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> leftBar [
 	^ leftBar
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> leftBar: anInteger [
 	leftBar := anInteger
+
 ]
 
 { #category : 'initialize-release' }
@@ -283,6 +314,7 @@ RBSequenceNode >> leftBar: leftInteger temporaries: variableNodes rightBar: righ
 	leftBar := leftInteger.
 	self temporaries: variableNodes.
 	rightBar := rightInteger
+
 ]
 
 { #category : 'matching' }
@@ -296,6 +328,7 @@ RBSequenceNode >> match: aNode inContext: aDictionary [
 					matchList: statements
 					against: aNode statements
 					inContext: aDictionary]
+
 ]
 
 { #category : 'accessing' }
@@ -306,16 +339,19 @@ RBSequenceNode >> methodComments [
 	(parent notNil and: [parent isBlock]) 
 		ifTrue: [parent arguments do: [:each | methodComments addAll: each comments]].
 	^methodComments asSortedCollection: [:a :b | a first < b first]
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> periods [
 	^ periods
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> periods: anArray [
 	periods := anArray
+
 ]
 
 { #category : 'copying' }
@@ -323,11 +359,13 @@ RBSequenceNode >> postCopy [
 	super postCopy.
 	self temporaries: (self temporaries collect: [ :each | each copy ]).
 	self statements: (self statements collect: [ :each | each copy ])
+
 ]
 
 { #category : 'testing' }
 RBSequenceNode >> references: aVariableName [ 
 	^statements anySatisfy: [:each | each references: aVariableName]
+
 ]
 
 { #category : 'replacing' }
@@ -342,16 +380,19 @@ RBSequenceNode >> removeDeadCode [
 					[self clearReplacements.
 					statements removeAtIndex: i]].
 	super removeDeadCode
+
 ]
 
 { #category : 'replacing' }
 RBSequenceNode >> removeNode: aNode [
 	self replaceNode: aNode withNodes: #()
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> removeTemporaryNamed: aName [ 
 	temporaries := temporaries reject: [:each | each name = aName]
+
 ]
 
 { #category : 'replacing' }
@@ -360,6 +401,7 @@ RBSequenceNode >> replaceNode: aNode withNode: anotherNode [
 				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]]).
 	self temporaries: (temporaries 
 				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+
 ]
 
 { #category : 'replacing' }
@@ -374,16 +416,19 @@ RBSequenceNode >> replaceNode: aNode withNodes: aCollection [
 		do: [:i | newStatements add: (statements at: i)].
 	aCollection do: [:each | each parent: self].
 	statements := newStatements
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> rightBar [
 	^ rightBar
+
 ]
 
 { #category : 'accessing-token' }
 RBSequenceNode >> rightBar: anInteger [
 	rightBar := anInteger
+
 ]
 
 { #category : 'accessing' }
@@ -391,39 +436,46 @@ RBSequenceNode >> start [
 	^leftBar isNil 
 		ifTrue: [statements isEmpty ifTrue: [1] ifFalse: [statements first start]]
 		ifFalse: [leftBar]
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> statements [
 	^statements
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> statements: stmtCollection [ 
 	statements := stmtCollection.
 	statements do: [:each | each parent: self]
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> stop [
 	^(periods isEmpty ifTrue: [0] ifFalse: [periods last]) 
 		max: (statements isEmpty ifTrue: [0] ifFalse: [statements last stop])
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> temporaries [
 	^temporaries
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> temporaries: tempCollection [ 
 	temporaries := tempCollection.
 	temporaries do: [:each | each parent: self]
+
 ]
 
 { #category : 'accessing' }
 RBSequenceNode >> temporaryNames [
 	^temporaries collect: [:each | each name]
+
 ]
 
 { #category : 'accessing' }
@@ -431,6 +483,7 @@ RBSequenceNode >> temporaryVariables [
 	^(super temporaryVariables asOrderedCollection)
 		addAll: self temporaryNames;
 		yourself
+
 ]
 
 { #category : 'testing' }
@@ -438,6 +491,7 @@ RBSequenceNode >> uses: aNode [
 	statements isEmpty ifTrue: [^false].
 	aNode == statements last ifFalse: [^false].
 	^self isUsed
+
 ]
 
 { #category : 'querying' }
@@ -449,4 +503,5 @@ RBSequenceNode >> whichNodeIsContainedBy: anInterval [
 			[(temporaries isEmpty and: [statements size == 1]) 
 				ifTrue: [^statements first]].
 	^node
+
 ]

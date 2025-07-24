@@ -37,6 +37,7 @@ RwGenericUrl >> locator [
 RwGenericUrl >> pathForDirectory [
 
 	^self locator
+
 ]
 
 { #category : 'printing' }

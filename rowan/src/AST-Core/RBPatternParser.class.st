@@ -11,11 +11,13 @@ Class {
 { #category : 'private-classes' }
 RBPatternParser >> messageNodeClass [
 	^RBPatternMessageNode
+
 ]
 
 { #category : 'private-classes' }
 RBPatternParser >> methodNodeClass [
 	^RBPatternMethodNode
+
 ]
 
 { #category : 'private-parsing' }
@@ -29,6 +31,7 @@ RBPatternParser >> parseLiteralByteArrayObject [
 					[self step.
 					^node]].
 	^super parseLiteralByteArrayObject
+
 ]
 
 { #category : 'private-parsing' }
@@ -44,6 +47,7 @@ RBPatternParser >> parsePatternBlock: aClass [
 	node right: currentToken start.
 	self step.
 	^node
+
 ]
 
 { #category : 'private-parsing' }
@@ -64,6 +68,7 @@ RBPatternParser >> parsePragmaLiteral [
             yourself ].
       ^ node ].
   ^ super parsePragmaLiteral
+
 ]
 
 { #category : 'private-parsing' }
@@ -81,6 +86,7 @@ RBPatternParser >> parsePrimitiveLiteral [
 						start: currentToken start
 						stop: currentToken stop].
 	^super parsePrimitiveLiteral
+
 ]
 
 { #category : 'private-parsing' }
@@ -88,6 +94,7 @@ RBPatternParser >> parsePrimitiveObject [
 	currentToken isPatternBlock 
 		ifTrue: [^self parsePatternBlock: RBPatternBlockNode].
 	^super parsePrimitiveObject
+
 ]
 
 { #category : 'private-parsing' }
@@ -106,6 +113,7 @@ RBPatternParser >> parseUnaryMessage [
 			whileTrue: [node := self parseUnaryMessageWith: node].
 	self addCommentsTo: node.
 	^node
+
 ]
 
 { #category : 'private' }
@@ -113,19 +121,23 @@ RBPatternParser >> patchLiteralArrayToken [
 	(currentToken isIdentifier and: [currentToken isPatternVariable]) 
 		ifTrue: [^self].
 	super patchLiteralArrayToken
+
 ]
 
 { #category : 'private-classes' }
 RBPatternParser >> pragmaNodeClass [
 	^RBPatternPragmaNode
+
 ]
 
 { #category : 'accessing' }
 RBPatternParser >> scannerClass [
 	^RBPatternScanner
+
 ]
 
 { #category : 'private-classes' }
 RBPatternParser >> variableNodeClass [
 	^RBPatternVariableNode
+
 ]

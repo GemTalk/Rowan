@@ -8,12 +8,14 @@ Class {
 RBFormatterTests >> formatClass: aClass [
 	aClass selectors
 		do: [ :each | self formatClass: aClass selector: each ]
+
 ]
 
 { #category : 'private' }
 RBFormatterTests >> formatClass: aClass selector: aSymbol [
 	self formatters
 		do: [ :each | self formatClass: aClass selector: aSymbol formatter: each ]
+
 ]
 
 { #category : 'private' }
@@ -25,6 +27,7 @@ RBFormatterTests >> formatClass: aClass selector: aSymbol formatter: aFormatterC
 		parseMethod: (aFormatterClass new format: tree1)
 		onError: [ :err :pos | self assert: false ].
 	self assert: tree1 = tree2
+
 ]
 
 { #category : 'private' }
@@ -36,6 +39,7 @@ RBFormatterTests >> formatMethodSource: source expected: expectedArray [
       formatMethodSource: source
       formatter: formatter
       expected: (expectedArray at: index) ]
+
 ]
 
 { #category : 'private' }
@@ -50,11 +54,13 @@ self assert: x size = expected size.
 1 to: x size do: [:index | | z y | self assert: (z := x at: index) = (y := expected at: index) ].
   self assert: x = expected.
   self assert: tree1 = tree2
+
 ]
 
 { #category : 'accessing' }
 RBFormatterTests >> formatters [
 	^ Array with: RBFormatter with: RBConfigurableFormatter
+
 ]
 
 { #category : 'testing' }
@@ -66,6 +72,7 @@ RBFormatterTests >> testCoreSystem [
       self
         formatClass: class;
         formatClass: class class ]
+
 ]
 
 { #category : 'testing' }
@@ -76,6 +83,7 @@ RBFormatterTests >> testIndexingSystem [
           class ifNotNilself
             formatClass: class;
             formatClass: class class ] ]
+
 ]
 
 { #category : 'testing' }
@@ -131,4 +139,5 @@ RBFormatterTests >> testQueryBlocks [
 	nsc select: {:person | (person.isMale) & (person.firstName = ''Casey'')}'.
       'select: nsc
   nsc select: { :person | (person.isMale) & (person.firstName = ''Casey'') }'}
+
 ]

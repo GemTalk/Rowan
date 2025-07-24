@@ -22,6 +22,7 @@ RwSymbolDictionaryTest >> _applyBenignPropertiesTo: existingClass [
 		options: #().
 	self assert: newClass == existingClass.	"not supposed to create a new class version"
 	^ newClass
+
 ]
 
 { #category : 'private' }
@@ -43,6 +44,7 @@ RwSymbolDictionaryTest >> _applyClassNewVersionChangesTo: existingClass [
 		options: #().
 	self assert: newClass ~~ existingClass.	"supposed to create a new class version"
 	^ newClass
+
 ]
 
 { #category : 'private' }
@@ -63,18 +65,21 @@ RwSymbolDictionaryTest >> _applyClassVariableChangeTo: existingClass [
 		options: #().
 	self assert: newClass == existingClass.	"not supposed to create a new class version"
 	^ newClass
+
 ]
 
 { #category : 'private' }
 RwSymbolDictionaryTest >> _classComment [
 
 	^ 'a comment'
+
 ]
 
 { #category : 'private' }
 RwSymbolDictionaryTest >> _classVars [
 
 	^ #('ClassVar1')
+
 ]
 
 { #category : 'private' }
@@ -88,6 +93,7 @@ RwSymbolDictionaryTest >> _compileMethodIn: behavior source: sourceString dictio
 		intoCategories: nil
 		intoPragmas: nil
 		environmentId: 0
+
 ]
 
 { #category : 'private' }
@@ -105,12 +111,14 @@ RwSymbolDictionaryTest >> _createClassNamed: className superclassName: superclas
 		newVersionOf: nil
 		description: ''
 		options: #()
+
 ]
 
 { #category : 'private' }
 RwSymbolDictionaryTest >> _instVars [
 
 	^ #('ivar1')
+
 ]
 
 { #category : 'tests' }
@@ -468,6 +476,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInGlobalsExtension [
 	"extend a class that is NOT owned by user, i.e., the class is in Globals and the user is DataCurator"
 
 	
+
 ]
 
 { #category : 'tests' }
@@ -548,6 +557,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInUserExtension [
 	"extend a class that is owned by user, but not in the same symbol dictionary as package"
 
 	
+
 ]
 
 { #category : 'tests' }

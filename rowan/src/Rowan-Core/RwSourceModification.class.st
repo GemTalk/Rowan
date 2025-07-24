@@ -11,4 +11,5 @@ Class {
 RwSourceModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitSourceModification: self
+
 ]

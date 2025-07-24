@@ -34,6 +34,7 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
 		instanceMethodDefinitions: Dictionary new
+
 ]
 
 { #category : 'accessing' }
@@ -41,17 +42,20 @@ RwClassDefinition >> classType [
 	"Legal types are normal, variable, and bytes."
 
 	^self propertyAt: 'type' ifAbsent: ['normal']
+
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> classVarNames [
   ^ properties at: 'classvars'
+
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> classVarNames: anArrayOfClassVarNames [
 
 	^ properties at: 'classvars' put: anArrayOfClassVarNames
+
 ]
 
 { #category : 'accessing' }
@@ -64,22 +68,26 @@ RwClassDefinition >> comment: aString [
 RwClassDefinition >> instVarNames [
 
 	^ properties at: 'instvars'
+
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 
 	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> superclassName [
 
 	^self propertyAt: 'superclass' ifAbsent: [self propertyAt: 'super']
+
 ]
 
 { #category : 'accessing' }
 RwClassDefinition >> superclassName: aString [
 
 	^ self propertyAt: 'superclass' put: aString
+
 ]

@@ -62,4 +62,5 @@ RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aMethodMove newClassVe
 		toPackageNamed: aMethodMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
+
 ]

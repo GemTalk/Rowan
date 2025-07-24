@@ -30,6 +30,7 @@ RwBrowserToolApiTest >> _expectedClassCreationTemplate [
 	packageName: ''MyPackage''
 	options: #()
 '
+
 ]
 
 { #category : 'private' }
@@ -70,6 +71,7 @@ RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
 	category: ''MyClasses''
 	options: #()
 '
+
 ]
 
 { #category : 'tests' }
@@ -133,6 +135,7 @@ RwBrowserToolApiTest >> testAddMethod [
 	self assert: gsNMethod == compiledMethod.
 	self assert: compiledMethod rowanProjectName = projectName.
 	self assert: compiledMethod rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests' }
@@ -181,6 +184,7 @@ RwBrowserToolApiTest >> testClassCreationTemplate [
 	self
 		assert: template = (x := self _expectedAssociationCreationTemplate)
 		description: 'incorrect class creation template'
+
 ]
 
 { #category : 'tests' }
@@ -216,6 +220,7 @@ RwBrowserToolApiTest >> testCreateClass [
 
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: className) == testClass
+
 ]
 
 { #category : 'tests' }
@@ -329,6 +334,7 @@ RwBrowserToolApiTest >> testDeleteClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
+
 ]
 
 { #category : 'tests' }
@@ -893,6 +899,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
+
 ]
 
 { #category : 'tests' }
@@ -941,6 +948,7 @@ RwBrowserToolApiTest >> testDeleteGlobalExtensionMethod [
 			packageDef name = packageName1
 				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
 		forClassExtensionsIn: className
+
 ]
 
 { #category : 'tests' }
@@ -1007,6 +1015,7 @@ RwBrowserToolApiTest >> testDeleteMethod [
 						assert: classDef instanceMethodDefinitions size = 1;
 						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
 		forClassNamed: className
+
 ]
 
 { #category : 'tests' }
@@ -1048,6 +1057,7 @@ RwBrowserToolApiTest >> testDeletePackage [
 	testProjectDefinition := browserTool projectNamed: projectName.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -1238,6 +1248,7 @@ RwBrowserToolApiTest >> testIssue471_1 [
   self assert: class3 instVarNames = #(ivar4 ivar3).
   self assert: class3 superClass == oldClass2.
   self assert: oldClass3 == class3.
+
 ]
 
 { #category : 'tests' }
@@ -1373,6 +1384,7 @@ RwBrowserToolApiTest >> testIssue471_2 [
   self assert: class3 instVarNames = #(ivar4 ivar3).
   self assert: class3 superClass == oldClass2.
   self assert: oldClass3 == class3.
+
 ]
 
 { #category : 'tests' }
@@ -1455,6 +1467,7 @@ RwBrowserToolApiTest >> testIssue817_1 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -1537,6 +1550,7 @@ RwBrowserToolApiTest >> testIssue817_2 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -1620,6 +1634,7 @@ RwBrowserToolApiTest >> testIssue817_3 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = SmallInteger.
+
 ]
 
 { #category : 'tests' }
@@ -1702,6 +1717,7 @@ Object rwSubclass: className
 	self assert: (testSymDict at: className) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
 ]
 
 { #category : 'tests' }
@@ -1791,6 +1807,7 @@ Object rwSubclass: className
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -1873,6 +1890,7 @@ RwBrowserToolApiTest >> testIssue817_6 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -1956,6 +1974,7 @@ RwBrowserToolApiTest >> testIssue818 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -2038,6 +2057,7 @@ Object rwSubclass: subclassName
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) isNil.
+
 ]
 
 { #category : 'tests' }
@@ -2119,6 +2139,7 @@ RwBrowserToolApiTest >> testIssue819_2 [
 	self assert: (testSymDict at: subclassName) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Integer.
+
 ]
 
 { #category : 'tests' }
@@ -2177,6 +2198,7 @@ Object rwSubclass: 'SimpleBrowseWithConstraints'
 	self assert: (testSymDict at: className) == testClass.
 
 	self assert: (x := testClass _constraintOn: #ivar1) = Object.
+
 ]
 
 { #category : 'tests' }
@@ -3855,6 +3877,7 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_change_extension_meth
 	self assert: sessionMethodsSeen.
 
 	self error: 'Force error, since this test randomly fails with an error ... session method implementation is not stable and not expected to work'
+
 ]
 
 { #category : 'tests' }
@@ -4030,6 +4053,7 @@ RwBrowserToolApiTest >> testNewClassVersion_session_method_unchanged_extension_m
 	self assert: sessionMethodsSeen.
 
 	self error: 'Force error, since this test randomly fails with an error ... session method implementation is not stable and not expected to work'
+
 ]
 
 { #category : 'tests' }
@@ -4121,6 +4145,7 @@ RwBrowserToolApiTest >> testNewClassVersionA [
 				isMeta: true
 				inPackageNamed: project1PackageName2 ]
 		raise: CompileError
+
 ]
 
 { #category : 'tests' }
@@ -4462,6 +4487,7 @@ RwBrowserToolApiTest >> testRenameClass_1 [
   self assert: (class3 class compiledMethodAt: #extensionClassMethod3) rowanPackageName = packageName2.
   self assert: class3 superClass == class2.
   self assert: oldClass3 ~~ class3. "renamed class"
+
 ]
 
 { #category : 'tests' }
@@ -4630,6 +4656,7 @@ RwBrowserToolApiTest >> testRenameClass_2 [
   self assert: (class3 class compiledMethodAt: #extensionClassMethod3) rowanPackageName = packageName2.
   self assert: class3 superClass == class4.
   self assert: oldClass3 ~~ class3. "subclass of renamed class"
+
 ]
 
 { #category : 'tests' }
@@ -4798,6 +4825,7 @@ RwBrowserToolApiTest >> testRenameClass_3 [
   self assert: (class3 class compiledMethodAt: #extensionClassMethod3) rowanPackageName = packageName2.
   self assert: class3 superClass == class4.
   self assert: oldClass3 ~~ class3. "subclass of renamed class"
+
 ]
 
 { #category : 'tests' }
@@ -4946,6 +4974,7 @@ RwBrowserToolApiTest >> testRenameClass_4 [
 
 "validate"
   validateBlock value: class1 value: class2 value: class3.
+
 ]
 
 { #category : 'tests' }
@@ -5094,6 +5123,7 @@ RwBrowserToolApiTest >> testRenameClass_5 [
 
 "validate"
    validateBlock value: class1 value: class2 value: class3.
+
 ]
 
 { #category : 'tests' }
@@ -5272,4 +5302,5 @@ true ifTrue: [ ^self ].	"early exit for now"
           (extraMethods at: className ifAbsentPut: [ Dictionary new ])
             at: selector put: ar ] ] ].
   true ifTrue: [ self assert: extraMethods size = 0 ] ].
+
 ]

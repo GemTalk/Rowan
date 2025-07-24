@@ -24,6 +24,7 @@ RowanQueryServicesTest >> test_dontUseFileStream [
   self
     assert: results first selector
     equals: #'installStreamImplementationFrom:'
+
 ]
 
 { #category : 'tests' }
@@ -38,6 +39,7 @@ RowanQueryServicesTest >> test_hierarchyImplementors [
 	queryService queryResults do:[:methodService |
 		self assert: methodService selector equals: #isEmpty.
 		self assert: (hierarchyClassNames includes: methodService className asString)].
+
 ]
 
 { #category : 'tests' }
@@ -64,6 +66,7 @@ RowanQueryServicesTest >> test_hierarchyImplementorsGetsAllSubclasses [
 	self assert: (subclassesImplementing includes: 'RwGsLoadedSymbolDictPackage'). 
 	self assert: (subclassesImplementing includes: 'RwGsLoadedSymbolDictClass'). 
 	self assert: (subclassesImplementing includes: 'RwGsLoadedSymbolDictClassExtension').
+
 ]
 
 { #category : 'tests' }
@@ -78,6 +81,7 @@ RowanQueryServicesTest >> test_hierarchySenders [
 	queryService queryResults do:[:methodService |
 		self assert: (methodService source includesString: 'isEmpty').
 		self assert: (hierarchyClassNames includes: methodService className asString)].
+
 ]
 
 { #category : 'tests' }
@@ -88,6 +92,7 @@ RowanQueryServicesTest >> test_implementors [
 	queryService implementorsOf: #size.
 	queryService queryResults do:[:methodService |
 		self assert: methodService selector equals: #size.].
+
 ]
 
 { #category : 'tests' }
@@ -99,6 +104,7 @@ RowanQueryServicesTest >> test_projectLog [
 	result := RowanCommandResult results first. 
 	self assert: (result isKindOf: RowanQueryService). 
 	self assert: (result queryResults isKindOf: String)
+
 ]
 
 { #category : 'tests' }
@@ -109,4 +115,5 @@ RowanQueryServicesTest >> test_senders [
 	queryService sendersOf: #isEmpty.
 	queryService queryResults do:[:methodService |
 		self assert: (methodService source includesString: 'isEmpty')].
+
 ]

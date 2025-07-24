@@ -15,6 +15,7 @@ Class {
 RwPackageSetDefinition >> addPackage: aDefinition [
 
 	self addDefinition: aDefinition
+
 ]
 
 { #category : 'deriving' }
@@ -32,10 +33,12 @@ RwPackageSetDefinition >> deriveLoadedThings [
 RwPackageSetDefinition >> packageNames [
 
 	^ self definitionNames
+
 ]
 
 { #category : 'accessing' }
 RwPackageSetDefinition >> packages [
 
 	^ self definitions
+
 ]

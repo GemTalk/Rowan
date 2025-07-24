@@ -69,6 +69,7 @@ RwCloneSymbolDictionaryTest >> testClassVarSystemDictionaryClone [
 
 	validationBlock value: clonedClass value: #ONE.
 	validationBlock value: theOriginalClass value: #one.
+
 ]
 
 { #category : 'tests' }
@@ -207,6 +208,7 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 	validationBlock value: clonedClass1 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass2 value: #ONE value: #TWO value: #THREE.
 	validationBlock value: clonedClass3 value: #ONE value: #TWO value: #THREE.
+
 ]
 
 { #category : 'tests' }
@@ -280,6 +282,7 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 	self assert: clonedClass classHistory ~~ theOriginalClass classHistory.
 
 	validationBlock value: clonedClass.
+
 ]
 
 { #category : 'tests' }
@@ -336,4 +339,5 @@ RwCloneSymbolDictionaryTest >> testSubclassSystemDictionaryClone [
 	self assert: clonedClass2 classHistory ~~ theOriginalSubclass classHistory.
 
 	self assert: (x := clonedClass2 superclass) == clonedClass1
+
 ]

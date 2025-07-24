@@ -18,6 +18,7 @@ Class {
 { #category : 'visitor' }
 RBPatternBlockNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptPatternBlockNode: self
+
 ]
 
 { #category : 'matching' }
@@ -31,6 +32,7 @@ RBPatternBlockNode >> addArgumentWithNameBasedOn: aString to: aRBBlockNode [
 			name := name , index printString].
 	aRBBlockNode 
 		arguments: (aRBBlockNode arguments copyWith: (RBVariableNode named: name))
+
 ]
 
 { #category : 'matching' }
@@ -44,11 +46,13 @@ RBPatternBlockNode >> constructLookupNodeFor: aString in: aRBBlockNode [
 		receiver: (RBVariableNode named: 'self')
 		selector: #lookupMatchFor:in:
 		arguments: (Array with: argumentNode with: aRBBlockNode arguments last)
+
 ]
 
 { #category : 'matching' }
 RBPatternBlockNode >> copyInContext: aDictionary [ 
 	^ self replacingBlock value: aDictionary
+
 ]
 
 { #category : 'matching' }
@@ -61,6 +65,7 @@ RBPatternBlockNode >> createBlockFor: aRBBlockNode [
     symbolList: GsSession currentSession symbolList
     oldLitVars: nil
     environmentId: 0) _executeInContext: self
+
 ]
 
 { #category : 'matching' }
@@ -76,6 +81,7 @@ RBPatternBlockNode >> createMatchingBlock [
 	newBlock arguments size = 1 
 		ifTrue: [self addArgumentWithNameBasedOn: 'aDictionary' to: newBlock].
 	^self createBlockFor: newBlock
+
 ]
 
 { #category : 'matching' }
@@ -89,6 +95,7 @@ RBPatternBlockNode >> createReplacingBlock [
 	self arguments isEmpty 
 		ifTrue: [self addArgumentWithNameBasedOn: 'aDictionary' to: newBlock].
 	^self createBlockFor: newBlock
+
 ]
 
 { #category : 'matching' }
@@ -98,11 +105,13 @@ RBPatternBlockNode >> lookupMatchFor: aString in: aDictionary [
 			[| variableNode |
 			variableNode := RBPatternVariableNode named: aString.
 			aDictionary at: variableNode ifAbsent: [nil]]
+
 ]
 
 { #category : 'matching' }
 RBPatternBlockNode >> match: aNode inContext: aDictionary [ 
 	^self matchingBlock value: aNode value: aDictionary
+
 ]
 
 { #category : 'matching' }
@@ -110,6 +119,7 @@ RBPatternBlockNode >> matchingBlock [
 	^valueBlock isNil 
 		ifTrue: [valueBlock := self createMatchingBlock]
 		ifFalse: [valueBlock]
+
 ]
 
 { #category : 'matching' }
@@ -120,6 +130,7 @@ RBPatternBlockNode >> replacePatternNodesIn: aRBBlockNode [
 				ifTrue: 
 					[each 
 						replaceWith: (self constructLookupNodeFor: each name in: aRBBlockNode)]]
+
 ]
 
 { #category : 'matching' }
@@ -127,9 +138,11 @@ RBPatternBlockNode >> replacingBlock [
 	^valueBlock isNil 
 		ifTrue: [valueBlock := self createReplacingBlock]
 		ifFalse: [valueBlock]
+
 ]
 
 { #category : 'accessing' }
 RBPatternBlockNode >> sentMessages [
 	^ OrderedCollection new
+
 ]

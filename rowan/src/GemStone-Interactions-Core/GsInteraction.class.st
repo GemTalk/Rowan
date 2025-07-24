@@ -15,6 +15,7 @@ GsInteraction >> defaultActionBlock [
       Transcript cr; show: self printString.
       nil ] ].
   ^ defaultActionBlock
+
 ]
 
 { #category : 'accessing' }
@@ -22,11 +23,13 @@ GsInteraction >> defaultActionBlock: anObject [
 
    "Modify the value of the instance variable 'defaultActionBlock'."
    defaultActionBlock := anObject
+
 ]
 
 { #category : 'interacting' }
 GsInteraction >> defaultActionFor: anInteractionRequest [
   ^ self defaultActionBlock value: anInteractionRequest
+
 ]
 
 { #category : 'interacting' }
@@ -42,19 +45,23 @@ GsInteraction >> interactWith: anObject [
   "
 
   self subclassResponsibility
+
 ]
 
 { #category : 'printing' }
 GsInteraction >> printLabel [
   ^ ''
+
 ]
 
 { #category : 'printing' }
 GsInteraction >> printOn: aStream [
   aStream nextPutAll: self class name asString , '(' , self printLabel , ')'
+
 ]
 
 { #category : 'interacting' }
 GsInteraction >> signal [
   ^ GsInteractionRequest signal: self
+
 ]

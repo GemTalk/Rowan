@@ -21,6 +21,7 @@ Class {
 { #category : 'constants' }
 RwGithubUrl class >> schemeName [
   ^ 'github'
+
 ]
 
 { #category : 'converting' }
@@ -28,11 +29,13 @@ RwGithubUrl >> asRwRepository [
   "return a platform appropriate repository for the repository identified in the receiver"
 
   ^ self halt: 'not yet implemented'
+
 ]
 
 { #category : 'accessing' }
 RwGithubUrl >> dirPath [
   ^ self pathFor: dir
+
 ]
 
 { #category : 'printing' }
@@ -42,6 +45,7 @@ RwGithubUrl >> printOn: aStream [
     nextPut: $:.
   aStream nextPutAll: '//'.
   aStream nextPutAll: self pathString
+
 ]
 
 { #category : 'private-initialization' }
@@ -63,9 +67,11 @@ RwGithubUrl >> privateInitializeFromText: aString [
         to: parsedPath size ].
   path := parsedPath.
   host := ''
+
 ]
 
 { #category : 'accessing' }
 RwGithubUrl >> projectPath [
   ^ self pathFor: project
+
 ]

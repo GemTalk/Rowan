@@ -7,4 +7,5 @@ Class {
 { #category : 'testing' }
 RBPathToken >> isPath [
   ^ true
+
 ]

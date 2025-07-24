@@ -14,6 +14,7 @@ RwRowanSample2Test >> _migrationClassMap [
 	#(#'RowanSample2B' #(#'ivar0' #'b' #'ivar1')).
 	#(#'RowanSample2E' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
 	#(#'RowanSample2F' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
+
 ]
 
 { #category : 'private' }
@@ -125,6 +126,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -177,6 +179,7 @@ RwRowanSample2Test >> testDeferredMigration [
 	classesToMigrate := (instanceMigrator classesToMigrate collect: [:each | each name ]) sort.
 	expectedClassesToMigrate := (self _migrationClassMap collect: [:each | each at: 1 ]) sort.
 	self assert: classesToMigrate = expectedClassesToMigrate
+
 ]
 
 { #category : 'tests' }
@@ -243,6 +246,7 @@ RwRowanSample2Test >> testNoMigration [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -309,6 +313,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -375,6 +380,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -445,6 +451,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -509,6 +516,7 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 0
+
 ]
 
 { #category : 'tests' }
@@ -552,4 +560,5 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	project := RwProject newNamed: projectName.
 	self assert: (x := project packageNames) = #('RowanSample2-Core')
+
 ]

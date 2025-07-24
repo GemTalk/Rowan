@@ -64,4 +64,5 @@ RowanClassHierarchyUpdate >> writeTestCaseInfoTo: writeStream [
 	writeStream nextPutAll: 'false';
 		tab;
 		lf
+
 ]

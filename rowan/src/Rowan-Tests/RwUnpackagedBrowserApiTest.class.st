@@ -8,18 +8,21 @@ Class {
 RwUnpackagedBrowserApiTest >> _testClass [
 
 	^ Rowan globalNamed: self _testClassName
+
 ]
 
 { #category : 'private' }
 RwUnpackagedBrowserApiTest >> _testClassName [
 
 	^  'Issue364_class'
+
 ]
 
 { #category : 'private' }
 RwUnpackagedBrowserApiTest >> _testPackagedClassName [
 
 	^  'Issue364_class_packaged'
+
 ]
 
 { #category : 'running' }
@@ -37,6 +40,7 @@ RwUnpackagedBrowserApiTest >> setUp [
 		poolDictionaries: #()
 		inDictionary: symDict
 		options: #()
+
 ]
 
 { #category : 'tests' }
@@ -67,6 +71,7 @@ RwUnpackagedBrowserApiTest >> testAddUnpackagedClassMethod [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -97,6 +102,7 @@ RwUnpackagedBrowserApiTest >> testAddUnpackagedMethod [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -151,6 +157,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -236,6 +243,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_A [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+
 ]
 
 { #category : 'tests' }
@@ -329,6 +337,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_B [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+
 ]
 
 { #category : 'tests' }
@@ -415,6 +424,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -503,6 +513,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+
 ]
 
 { #category : 'tests' }
@@ -591,6 +602,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
+
 ]
 
 { #category : 'tests' }
@@ -629,6 +641,7 @@ RwUnpackagedBrowserApiTest >> testMoveUnpackagedMethod [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
+
 ]
 
 { #category : 'tests' }
@@ -651,4 +664,5 @@ RwUnpackagedBrowserApiTest >> testUpdateUnpackagedClassComment [
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
+
 ]

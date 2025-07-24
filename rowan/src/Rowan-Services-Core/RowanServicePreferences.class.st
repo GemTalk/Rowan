@@ -12,6 +12,7 @@ RowanServicePreferences class >> current [
 	^(RwPlatform _userPlatformDictionary) 
 		at: #RowanServicePrefs 
 		ifAbsentPut: [ self new ]
+
 ]
 
 { #category : 'accessing' }

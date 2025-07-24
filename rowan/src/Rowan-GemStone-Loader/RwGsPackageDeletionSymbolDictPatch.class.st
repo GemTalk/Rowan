@@ -16,4 +16,5 @@ RwGsPackageDeletionSymbolDictPatch >> deletePackage [
 
 	(Rowan image loadedRegistryForPackageNamed: packageDefinition name)
 		deletePackage: packageDefinition name
+
 ]

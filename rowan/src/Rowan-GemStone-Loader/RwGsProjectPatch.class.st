@@ -15,6 +15,7 @@ Class {
 RwGsProjectPatch class >> for: aProjectDefinition [
 
 	^self new projectDefinition: aProjectDefinition
+
 ]
 
 { #category : 'applying' }

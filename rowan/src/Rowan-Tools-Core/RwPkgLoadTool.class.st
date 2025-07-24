@@ -10,6 +10,7 @@ RwPkgLoadTool >> loadPackageSetDefinition: packageSetDefinitionToLoad [
 	^ self
 		loadPackageSetDefinition: packageSetDefinitionToLoad
 		instanceMigrator: Rowan platform instanceMigrator
+
 ]
 
 { #category : 'smalltalk api' }
@@ -29,4 +30,5 @@ RwPkgLoadTool >> loadPackageSetDefinition: packageSetDefinitionToLoad instanceMi
 			^ msg ].
 	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
 	^ diff
+
 ]

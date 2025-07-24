@@ -10,6 +10,7 @@ RwGsClassConstraintsSymDictPatch >> addToNewClassesByName: aDictionary [
 	"noop"
 
 	
+
 ]
 
 { #category : 'installing' }

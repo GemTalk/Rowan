@@ -8,4 +8,5 @@ Class {
 RwExtensionMethodModificationForNewClassVersion >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitExtensionMethodModificationForNewClassVersion: self
+
 ]

@@ -14,4 +14,5 @@ GsNotifyInteraction >> defaultActionBlock [
       Transcript cr; show: self printString.
       self okResponse ] ].
   ^ defaultActionBlock
+
 ]

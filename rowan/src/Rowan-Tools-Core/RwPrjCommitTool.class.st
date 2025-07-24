@@ -20,6 +20,7 @@ RwPrjCommitTool >> commitPackagesForSpecification: aRwSpecification message: mes
 			^ msg ].
 	specification commitForTool: self message: messageString.
 	^ specification updateLoadedCommitIdForTool: self
+
 ]
 
 { #category : 'smalltalk api' }
@@ -30,6 +31,7 @@ RwPrjCommitTool >> commitPackagesForSpecUrl: aSpecUrlString message: messageStri
 	^ self
 		commitPackagesForSpecification: (RwSpecification fromUrl: aSpecUrlString)
 		message: messageString
+
 ]
 
 { #category : 'smalltalk api' }
@@ -47,6 +49,7 @@ RwPrjCommitTool >> commitProjectDefinition: projectDefinition message: messageSt
 	self specification: projectDefinition specification.
 	specification commitForTool: self message: messageString.
 	^ specification updateLoadedCommitIdForTool: self
+
 ]
 
 { #category : 'smalltalk api' }
@@ -67,4 +70,5 @@ RwPrjCommitTool >> commitProjectNamed: projectName message: messageString [
 	self specification: projectDefinition specification.
 	specification commitForTool: self message: messageString.
 	^ specification updateLoadedCommitIdForTool: self
+
 ]

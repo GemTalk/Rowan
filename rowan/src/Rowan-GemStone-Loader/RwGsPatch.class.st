@@ -27,12 +27,14 @@ RwGsPatch >> packageDefinition: newValue [
 RwGsPatch >> packageName [
 
 	^packageDefinition key
+
 ]
 
 { #category : 'accessing' }
 RwGsPatch >> projectDefinition [
 
 	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]
+
 ]
 
 { #category : 'accessing' }
@@ -45,6 +47,7 @@ RwGsPatch >> projectDefinition: newValue [
 RwGsPatch >> projectName [
 
 	^projectDefinition key
+
 ]
 
 { #category : 'utility' }
@@ -53,6 +56,7 @@ RwGsPatch >> resolveName: aName [
 	"Answer a SymbolAssociation for the given name."
 
 	^ Rowan image resolveName: aName
+
 ]
 
 { #category : 'accessing' }
@@ -66,6 +70,7 @@ RwGsPatch >> symbolDictionary [
 RwGsPatch >> symbolDictionaryFor: aPackageName [
 
 	^ self symbolDictionaryFor: aPackageName projectDefinition: self projectDefinition
+
 ]
 
 { #category : 'accessing' }
@@ -78,6 +83,7 @@ RwGsPatch >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefini
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
+
 ]
 
 { #category : 'accessing' }

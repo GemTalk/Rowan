@@ -16,17 +16,20 @@ RowanCommandResult class >> addResult: service [
 			commandArgs: nil. 
 	self updateClientBoundServices: service.
 	^service
+
 ]
 
 { #category : 'accessing' }
 RowanCommandResult class >> basicAddResult: service [
 	self results add: service
+
 ]
 
 { #category : 'initailize' }
 RowanCommandResult class >> initializeResults [
 
 	SessionTemps current at: #rowanCommandResults put: Array new.
+
 ]
 
 { #category : 'instance creation' }
@@ -43,6 +46,7 @@ RowanCommandResult class >> new [
 RowanCommandResult class >> removeResult: aResult [
 
 	self results remove: aResult
+
 ]
 
 { #category : 'accessing' }
@@ -50,6 +54,7 @@ RowanCommandResult class >> results [
 
 	"lazy initialize for a topaz session test" 
 	^SessionTemps current at: #rowanCommandResults ifAbsentPut: [Array new]
+
 ]
 
 { #category : 'private' }
@@ -65,6 +70,7 @@ RowanCommandResult class >> updateClientBoundServices: clientBoundService [
 	self results do:[:service |
 		service updateInternalService: clientBoundService.
 		clientBoundService updateInternalService: service].
+
 ]
 
 { #category : 'accessing' }
@@ -78,6 +84,7 @@ RowanCommandResult >> command: anObject [
 RowanCommandResult >> commandArgs: anObject [
 
 	"results don't have commandArgs"
+
 ]
 
 { #category : 'initialization' }
@@ -89,6 +96,7 @@ RowanCommandResult >> initialize [
 RowanCommandResult >> isMethodService [
 
 	^false
+
 ]
 
 { #category : 'private' }
@@ -98,4 +106,5 @@ RowanCommandResult >> rowanFixMe [
 
 { #category : 'accessing' }
 RowanCommandResult >> updateInternalService: service [
+
 ]

@@ -13,4 +13,5 @@ RowanTestService >> createNewTestProjectNamed: projectName [
 	Rowan projectTools create createProjectFor: proj.
 	Rowan projectTools load loadProjectDefinition: proj.
 	^proj
+
 ]

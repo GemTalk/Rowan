@@ -41,4 +41,5 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 			"at a minimum I know that I've got credentials to push to github"
 			"see https://github.com/GemTalk/Rowan/issues/150#issuecomment-1074567333"
 			service pushToGit ]
+
 ]

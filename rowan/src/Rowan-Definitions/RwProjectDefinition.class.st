@@ -40,6 +40,7 @@ RwProjectDefinition class >> newForSpecification: aRwSpecification [
 				add: 'spec' -> aRwSpecification;
 				yourself)
 		packageDefinitions: Dictionary new
+
 ]
 
 { #category : 'instance creation' }
@@ -49,6 +50,7 @@ RwProjectDefinition class >> withProperties: properties packageDefinitions: pack
 		properties: properties;
 		packages: packageDefinitions;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -57,6 +59,7 @@ RwProjectDefinition >> addOrUpdatePackage: aPackageDefinition [
 	| key |
 	key := aPackageDefinition key.
 	packages at: key put: aPackageDefinition
+
 ]
 
 { #category : 'accessing' }
@@ -66,12 +69,14 @@ RwProjectDefinition >> addPackage: aPackageDefinition [
 	key := aPackageDefinition key.
 	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
 	packages at: key put: aPackageDefinition
+
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> addPackageNamed: packageName [
 
 	self addPackage: (RwPackageDefinition newNamed: packageName)
+
 ]
 
 { #category : 'accessing' }
@@ -79,24 +84,28 @@ RwProjectDefinition >> addPackagesNamed: packageNames [
 
 	packageNames
 		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> canCommit [
 
 	^ self specification canCommit
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> comment [
 
 	^ self specification comment
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> comment: aString [
 
 	self specification comment: aString
+
 ]
 
 { #category : 'properties' }
@@ -151,6 +160,7 @@ RwProjectDefinition >> configurationTemplate [
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
 	^packages at: aKey ifAbsent: absentBlock
+
 ]
 
 { #category : 'initialization' }
@@ -158,6 +168,7 @@ RwProjectDefinition >> initialize [
 
 	super initialize.
 	packages := Dictionary new
+
 ]
 
 { #category : 'testing' }
@@ -165,6 +176,7 @@ RwProjectDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
 	^super isEmpty & packages isEmpty
+
 ]
 
 { #category : 'properties' }
@@ -172,18 +184,21 @@ RwProjectDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	^self propertyAt: 'name' ifAbsent: [nil]
+
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> keys [
 
 	^packages keys
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> loadedCommitId [
 
 	^ self specification loadedCommitId
+
 ]
 
 { #category : 'accessing' }
@@ -192,17 +207,20 @@ RwProjectDefinition >> packageNamed: aString [
 	^ self
 		packageNamed: aString
 		ifAbsent: [ self error: 'A package named ' , aString printString , ' was not found.' ]
+
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> packageNamed: aString ifAbsent: absentBlock [
 
 	^ self packages at: aString ifAbsent: absentBlock
+
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> packageNames [
   ^ self packages keys asArray
+
 ]
 
 { #category : 'accessing' }
@@ -217,12 +235,14 @@ RwProjectDefinition >> packageNames: packageNames [
 RwProjectDefinition >> packages [
 
 	^packages
+
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 
 	packages := aPackageDefinitionDictionary
+
 ]
 
 { #category : 'copying' }
@@ -254,6 +274,7 @@ RwProjectDefinition >> removePackageNamed: packageName [
 RwProjectDefinition >> repoPath [
 
 	^ self specification repoPath
+
 ]
 
 { #category : 'properties' }
@@ -267,36 +288,42 @@ RwProjectDefinition >> repoPath: aDirectoryPathString [
 RwProjectDefinition >> repositoryRootPath [
 
 	^ self specification repositoryRootPath
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> repositoryRootPath: rootRepoPath [
 
 	self specification repositoryRootPath: rootRepoPath
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> repositoryUrl [
 
 	^ self specification repositoryUrl
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> repositoryUrl: aString [
 
 	self specification repositoryUrl: aString
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> specification [
 
 	^ properties at: 'spec'
+
 ]
 
 { #category : 'properties' }
 RwProjectDefinition >> specsPath [
 
 	^ self specification specsPath
+
 ]
 
 { #category : 'properties' }
@@ -310,4 +337,5 @@ RwProjectDefinition >> specsPath: aDirectoryPathString [
 RwProjectDefinition >> useGit [
 
 	^ self specification useGit
+
 ]

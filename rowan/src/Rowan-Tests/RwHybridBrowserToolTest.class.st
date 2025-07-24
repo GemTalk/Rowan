@@ -150,6 +150,7 @@ RwHybridBrowserToolTest >> testHybridClassCreation [
 		category: packageName1
 		options: #().
 	self assert: normalClass rowanPackageName = packageName1
+
 ]
 
 { #category : 'tests' }
@@ -366,6 +367,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateA [
 	normalClass := template evaluate.
 	self assert: normalClass rowanPackageName = packageName1.
 	self assert: normalClass category = packageName1
+
 ]
 
 { #category : 'tests' }
@@ -408,6 +410,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 	variableClass := template evaluate.
 	self assert: variableClass rowanPackageName = packageName1.
 	self assert: variableClass category = category
+
 ]
 
 { #category : 'tests' }
@@ -504,6 +507,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests' }
@@ -555,6 +559,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = 'new category'.
 	self assert: barMethod rowanPackageName = packageName1
+
 ]
 
 { #category : 'tests' }
@@ -1098,6 +1103,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
+
 ]
 
 { #category : 'tests' }
@@ -1194,6 +1200,7 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			self assert: false description: 'no class methods expected in class'.
 			loadedClassOrClassExtension name ]
+
 ]
 
 { #category : 'tests' }
@@ -1254,6 +1261,7 @@ RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 		assert:
 			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
 	self assert: barMethod rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests' }
@@ -1290,6 +1298,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 		options: #().
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests' }
@@ -2297,6 +2306,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion
+
 ]
 
 { #category : 'tests' }
@@ -2358,6 +2368,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 	self assert: newSubclassVersion foo1 = 'foo'.
 	self assert: newSubclassVersion new foo = 'foo'.
 	self assert: newSubclassVersion new foo1 = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -2413,6 +2424,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 	self assert: newSubclassVersion foo1 = 'foo'.
 	self assert: newSubclassVersion new foo = 'foo'.
 	self assert: newSubclassVersion new foo1 = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -2472,6 +2484,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 	self assert: newSubclassVersion foo1 = 'foo'.
 	self assert: newSubclassVersion new foo = 'foo'.
 	self assert: newSubclassVersion new foo1 = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -2560,6 +2573,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 	newSubclassVersion4 := Rowan globalNamed: subclass4 name.
 	self assert: newSubclassVersion4 ~~ subclass4.
 	self assert: newSubclassVersion4 superClass == newSubclassVersion3
+
 ]
 
 { #category : 'tests - packages' }
@@ -2771,6 +2785,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
+
 ]
 
 { #category : 'tests' }

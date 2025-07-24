@@ -185,6 +185,7 @@ RwEditToolTest >> _standardClassDefinition: className [
 		yourself.
 
 	^ classDefinition
+
 ]
 
 { #category : 'private' }
@@ -220,6 +221,7 @@ RwEditToolTest >> setUp [
 	sessionBlackList :=	(Rowan platform 
 		sessionPreferenceFor: preferenceSymbol 
 		ifAbsent: []) copy.
+
 ]
 
 { #category : 'running' }
@@ -249,6 +251,7 @@ RwEditToolTest >> tearDown [
 			Rowan platform 
 				setSessionPreferenceFor: preferenceSymbol 
 				to: sessionBlackList ].
+
 ]
 
 { #category : 'tests - classes' }
@@ -355,6 +358,7 @@ RwEditToolTest >> testAddClass_blackList_A [
 	self assert: testClass cvar1 isNil.
 	testInstance := testClass new.
 	self assert: testInstance ivar1 isNil.
+
 ]
 
 { #category : 'tests - classes' }
@@ -406,6 +410,7 @@ RwEditToolTest >> testAddClass_blackList_B [
 	self assert: testClass cvar1 isNil.
 	testInstance := testClass new.
 	self assert: testInstance ivar1 isNil.
+
 ]
 
 { #category : 'tests - classes' }
@@ -557,6 +562,7 @@ RwEditToolTest >> testPreferences [
 
 	Rowan clearSessionAutomaticClassInitializationBlackList.
 	self deny: (Rowan sessionAutomaticClassInitializationBlackList includes: projectName).
+
 ]
 
 { #category : 'tests - classes' }

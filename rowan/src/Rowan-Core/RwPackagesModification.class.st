@@ -11,4 +11,5 @@ Class {
 RwPackagesModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitPackagesModification: self
+
 ]

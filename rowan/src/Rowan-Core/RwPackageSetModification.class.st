@@ -13,6 +13,7 @@ Class {
 RwPackageSetModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitPackageSetModification: self
+
 ]
 
 { #category : 'private - moves' }
@@ -50,6 +51,7 @@ RwPackageSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 										methodKey: newMethod key
 										isMeta: false
 										methodsModification: instanceMethodsModification)]]]
+
 ]
 
 { #category : 'private - moves' }
@@ -65,6 +67,7 @@ RwPackageSetModification >> addMethodsAddedByPackageModification: packageModific
 				classExtensionsModification
 		inPackage: packageModification after
 		toDictionary: dictionary
+
 ]
 
 { #category : 'private - moves' }
@@ -102,6 +105,7 @@ RwPackageSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 										methodKey: oldMethod key
 										isMeta: false
 										methodsModification: instanceMethodsModification)]]]
+
 ]
 
 { #category : 'private - moves' }
@@ -117,6 +121,7 @@ RwPackageSetModification >> addMethodsRemovedByPackageModification: packageModif
 				classExtensionsModification
 		inPackage: packageModification before
 		toDictionary: dictionary
+
 ]
 
 { #category : 'enumerating' }
@@ -162,6 +167,7 @@ RwPackageSetModification >> findAddedClasses [
 										classKey: newClass key
 										classesModification: classesModification)]]].
 	^addedClasses
+
 ]
 
 { #category : 'private - moves' }
@@ -175,6 +181,7 @@ RwPackageSetModification >> findAddedMethods [
 			self addMethodsAddedByPackageModification: packageModification
 				toDictionary: addedMethods].
 	^addedMethods
+
 ]
 
 { #category : 'private - moves' }
@@ -198,6 +205,7 @@ RwPackageSetModification >> findRemovedClasses [
 										classKey: oldClass key
 										classesModification: classesModification)]]].
 	^removedClasses
+
 ]
 
 { #category : 'private - moves' }
@@ -211,6 +219,7 @@ RwPackageSetModification >> findRemovedMethods [
 			self addMethodsRemovedByPackageModification: packageModification
 				toDictionary: removedMethods].
 	^removedMethods
+
 ]
 
 { #category : 'initialization' }
@@ -219,6 +228,7 @@ RwPackageSetModification >> initialize [
 	super initialize.
 	movedClasses := Set new.
 	movedMethods := Set new
+
 ]
 
 { #category : 'private - moves' }
@@ -247,6 +257,7 @@ RwPackageSetModification >> updateForClassMoveFrom: removal to: addition [
 	classModification isEmpty
 		ifFalse: 
 			[addition classesModification addElementModification: classModification]
+
 ]
 
 { #category : 'moves' }
@@ -262,6 +273,7 @@ RwPackageSetModification >> updateForClassMoves [
 			| removal |
 			removal := classRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [self updateForClassMoveFrom: removal to: addition]]
+
 ]
 
 { #category : 'private - moves' }
@@ -293,6 +305,7 @@ RwPackageSetModification >> updateForMethodMoveFrom: removal to: addition [
 	methodModification isEmpty
 		ifFalse: 
 			[addition methodsModification addElementModification: methodModification]
+
 ]
 
 { #category : 'moves' }
@@ -309,4 +322,5 @@ RwPackageSetModification >> updateForMethodMoves [
 			| removal |
 			removal := methodRemovals at: key ifAbsent: [nil].
 			removal ifNotNil: [self updateForMethodMoveFrom: removal to: addition]]
+
 ]

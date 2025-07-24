@@ -15,19 +15,23 @@ RBNumberLiteralToken class >> value: aNumber start: anInteger stop: stopInteger 
 		stop: stopInteger)
 		source: sourceString;
 		yourself
+
 ]
 
 { #category : 'printing' }
 RBNumberLiteralToken >> rbStoreOn: aStream [ 
 	aStream nextPutAll: source
+
 ]
 
 { #category : 'accessing' }
 RBNumberLiteralToken >> source [
 	^source
+
 ]
 
 { #category : 'initialize-release' }
 RBNumberLiteralToken >> source: aString [ 
 	source := aString
+
 ]

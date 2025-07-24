@@ -12,6 +12,7 @@ Class {
 RwPlatform >> _automaticClassInitializationBlackList_symbol [
 
 	^#automaticClassInitializationBlackList
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -28,6 +29,7 @@ RwPlatform >> automaticClassInitializationBlackList [
 			list := OrderedCollection new.
 			self setPreferenceFor: preferenceSymbol to: list.
 			list]
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -44,6 +46,7 @@ RwPlatform >> automaticClassInitializationBlackList_default [
 			list := OrderedCollection new.
 			self setDefaultPreferenceFor: preferenceSymbol to: list.
 			list]
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -60,6 +63,7 @@ RwPlatform >> automaticClassInitializationBlackList_global [
 			list := OrderedCollection new.
 			self setDefaultPreferenceFor: preferenceSymbol to: list.
 			list]
+
 ]
 
 { #category : 'queries' }
@@ -77,6 +81,7 @@ RwPlatform >> basePlatformAttribute [
 RwPlatform >> clearAllPreferencesFor: preferenceSymbol [ 
 
 	self subclassResponisbility: #clearAllPreferencesFor:
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -87,6 +92,7 @@ RwPlatform >> clearAutomaticClassInitializationBlackList [
 	| preferenceSymbol |
 	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
 	self clearPreferenceFor: preferenceSymbol
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -97,6 +103,7 @@ RwPlatform >> clearAutomaticClassInitializationBlackList_default [
 	| preferenceSymbol |
 	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
 	self clearDefaultPreferenceFor: preferenceSymbol
+
 ]
 
 { #category : 'automatic class initialization' }
@@ -107,30 +114,35 @@ RwPlatform >> clearAutomaticClassInitializationBlackList_global [
 	| preferenceSymbol |
 	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
 	self clearGlobalPreferenceFor: preferenceSymbol
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> clearDefaultPreferenceFor: preferenceSymbol [ 
 
 	self subclassResponisbility: #clearDefaultPreferenceFor:
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> clearPreferenceFor: preferenceSymbol [ 
 
 	self subclassResponisbility: #clearPreferenceFor:
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> defaultPreferenceFor: preferenceSymbol [
 
 	^ self defaultPreferenceFor: preferenceSymbol ifAbsent: [ self error: 'No preference found for ', preferenceSymbol asString printString ]
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self subclassResponisbility: #defaultPreferenceFor:ifAbsent:
+
 ]
 
 { #category : 'queries' }
@@ -147,6 +159,7 @@ RwPlatform >> globalNamed: aString [
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
 
 	self subclassResponsibility: #'globalNamed:'
+
 ]
 
 { #category : 'queries' }
@@ -171,24 +184,28 @@ RwPlatform >> platformConfigurationAttributes [
 RwPlatform >> preferenceFor: preferenceSymbol [
 
 	^ self preferenceFor: preferenceSymbol ifAbsent: [ self error: 'No preference found for ', preferenceSymbol asString printString ]
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self subclassResponisbility: #preferenceFor:ifAbsent:
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
 
 	self subclassResponisbility: #setDefaultPreferenceFor:to:
+
 ]
 
 { #category : 'preferences' }
 RwPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
 
 	self subclassResponisbility: #setPreferenceFor:to:
+
 ]
 
 { #category : 'queries' }

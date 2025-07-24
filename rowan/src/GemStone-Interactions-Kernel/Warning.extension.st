@@ -19,4 +19,5 @@ Warning >> defaultAction [
   response == false
     ifTrue: [ self halt: 'Debugging: ' , self description ].
   ^ Processor activeProcess terminate
+
 ]

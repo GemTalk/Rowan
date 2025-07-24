@@ -158,4 +158,5 @@ RwPrjDeleteTool >> forceDeleteProjectSetDefinition: projectSetDefinitionToDelete
 		(selectorDict at: 'class' ifAbsent: [ #() ]) do: [:selector |
 			GsFile gciLogServer: '		', selector asString printString.
 			behavior removeSelector: selector ] ].
+
 ]

@@ -11,6 +11,7 @@ Class {
 RwExistingAssociationWithSameKeyNotification >> defaultAction [
 
 	self error: self errorMessage
+
 ]
 
 { #category : 'accessing' }

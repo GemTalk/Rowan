@@ -65,4 +65,5 @@ Number class >> rwFromStream: aStream [
   ].
   sign == $- ifTrue:[ ^ 0 - integerPart ].
   ^ integerPart
+
 ]

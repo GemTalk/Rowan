@@ -8,6 +8,7 @@ Class {
 RwGsLoadedSymbolDictClass class >> newForClass: aClass [
 
 	^self new initializeForClass: aClass
+
 ]
 
 { #category : 'methods' }
@@ -16,6 +17,7 @@ RwGsLoadedSymbolDictClass >> addLoadedClassMethod: aLoadedMethod [
 	self markPackageDirty.
 	loadedClassMethods at: aLoadedMethod key put: aLoadedMethod.
 	aLoadedMethod loadedClass: self
+
 ]
 
 { #category : 'methods' }
@@ -24,6 +26,7 @@ RwGsLoadedSymbolDictClass >> addLoadedInstanceMethod: aLoadedMethod [
 	self markPackageDirty.
 	loadedInstanceMethods at: aLoadedMethod key put: aLoadedMethod.
 	aLoadedMethod loadedClass: self
+
 ]
 
 { #category : 'methods' }
@@ -32,6 +35,7 @@ RwGsLoadedSymbolDictClass >> addLoadedMethod: aLoadedMethod [
 	aLoadedMethod classIsMeta
 		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
+
 ]
 
 { #category : 'removing' }
@@ -64,6 +68,7 @@ RwGsLoadedSymbolDictClass >> handleClassDeletion [
 		do: [ :loadedClassExtension | loadedClassExtension handleClassDeletion ].
 	Rowan image removeLoadedClassExtensionsForClass: handle.
 	self loadedPackage removeLoadedClass: self
+
 ]
 
 { #category : 'private-updating' }
@@ -95,6 +100,7 @@ RwGsLoadedSymbolDictClass >> handleClassDeletionOrNewVersion [
 						, name ].
 	handle := thoseResolving first.
 	^ true
+
 ]
 
 { #category : 'initialization' }
@@ -103,6 +109,7 @@ RwGsLoadedSymbolDictClass >> initialize [
 	super initialize.
 	loadedInstanceMethods := KeyValueDictionary new.
 	loadedClassMethods := KeyValueDictionary new
+
 ]
 
 { #category : 'initialization' }
@@ -111,6 +118,7 @@ RwGsLoadedSymbolDictClass >> initializeForClass: aClass [
 	self initialize.
 	self initializeForName: aClass name asString.
 	handle := aClass
+
 ]
 
 { #category : 'initialization' }
@@ -118,6 +126,7 @@ RwGsLoadedSymbolDictClass >> initializeForName: aClassName [
 
 	super initializeForName: aClassName.
 	properties at: 'name' put: aClassName
+
 ]
 
 { #category : 'accessing' }
@@ -125,6 +134,7 @@ RwGsLoadedSymbolDictClass >> key [
 	"Answer some token that will uniquely identify me relative to any other LoadedClass in the same package."
 
 	^name
+
 ]
 
 { #category : 'removing' }
@@ -141,6 +151,7 @@ RwGsLoadedSymbolDictClass >> removeLoadedClassMethod: aLoadedMethod [
 	self markPackageDirty.
 	loadedClassMethods removeKey: aLoadedMethod key
 		ifAbsent: [self error: 'Method not present in loadedClass']
+
 ]
 
 { #category : 'methods' }
@@ -149,6 +160,7 @@ RwGsLoadedSymbolDictClass >> removeLoadedInstanceMethod: aLoadedMethod [
 	self markPackageDirty.
 	loadedInstanceMethods removeKey: aLoadedMethod key
 		ifAbsent: [self error: 'Method not present in loadedClass']
+
 ]
 
 { #category : 'methods' }
@@ -157,12 +169,14 @@ RwGsLoadedSymbolDictClass >> removeLoadedMethod: aLoadedMethod [
 	aLoadedMethod classIsMeta
 		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
+
 ]
 
 { #category : 'private' }
 RwGsLoadedSymbolDictClass >> symbolDictionaryName: aName [
 
 	self propertyAt: 'gs_SymbolDictionary' put: aName asString
+
 ]
 
 { #category : 'private-updating' }
@@ -182,6 +196,7 @@ RwGsLoadedSymbolDictClass >> updateCategoryFromClass [
 			newValue == absentToken
 				ifTrue: [ self removeProperty: propertyName ]
 				ifFalse: [ self propertyAt: propertyName put: newValue ] ]
+
 ]
 
 { #category : 'private-updating' }
@@ -193,6 +208,7 @@ RwGsLoadedSymbolDictClass >> updateClassInstvarNamesFromClass [
 	oldNames := self propertyAt: propertyName.
 	newNames := handle class instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+
 ]
 
 { #category : 'private-updating' }
@@ -205,6 +221,7 @@ RwGsLoadedSymbolDictClass >> updateClassNameFromClass [
 		ifFalse: 
 			[self name: newName.
 			self propertyAt: 'name' put: name]
+
 ]
 
 { #category : 'private-updating' }
@@ -251,6 +268,7 @@ RwGsLoadedSymbolDictClass >> updateClassVariableNamesFromClass [
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection asArray.
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+
 ]
 
 { #category : 'private-updating' }
@@ -315,6 +333,7 @@ RwGsLoadedSymbolDictClass >> updateInstvarNamesFromClass [
 	oldNames := self propertyAt: propertyName.
 	newNames := handle instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+
 ]
 
 { #category : 'private-updating' }
@@ -360,6 +379,7 @@ RwGsLoadedSymbolDictClass >> updatePoolDictionaryNamesFromClass [
 		asArray.
 	oldNames = newNames
 		ifFalse: [ self propertyAt: propertyName put: newNames ]
+
 ]
 
 { #category : 'private-updating' }
@@ -393,6 +413,7 @@ RwGsLoadedSymbolDictClass >> updateSuperclassNameFromClass [
     ifNotNil: [ :superclass | superclass name asString ].
   oldName = newName
     ifFalse: [ self propertyAt: 'superclass' put: newName ]
+
 ]
 
 { #category : 'private-updating' }

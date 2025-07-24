@@ -29,6 +29,7 @@ RwGsFileUtilities class >> _endsWithSpecial: filename [
   finalChars = '\..'
     ifTrue: [ ^ true ].
   ^ false
+
 ]
 
 { #category : 'utilities' }
@@ -67,6 +68,7 @@ RwGsFileUtilities class >> deleteAll: aDirectory rejecting: rejectBlock [
                     ifFalse: [ 
                       self deleteAll: filename rejecting: rejectBlock.
                       GsFile removeServerDirectory: filename ] ] ] ] ]
+
 ]
 
 { #category : 'utilities' }
@@ -83,6 +85,7 @@ RwGsFileUtilities class >> directoryEntriesFrom: aDirectory [
 	"Answer fully qualified paths to the contents of aDirectory."
 
 	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
+
 ]
 
 { #category : 'utilities' }
@@ -92,6 +95,7 @@ RwGsFileUtilities class >> directoryFromPath: directoryPath relativeTo: aDirecto
 		or: [directoryPath beginsWith: self pathNameDelimiter])
 			ifTrue: [aDirectory , directoryPath]
 			ifFalse: [aDirectory , self pathNameDelimiter , directoryPath]
+
 ]
 
 { #category : 'private' }
@@ -122,6 +126,7 @@ RwGsFileUtilities class >> ensureDirectoryExists: aDirectory [
 	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
 	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
 	self ensureDirectoryExists: aDirectory
+
 ]
 
 { #category : 'utilities' }
@@ -142,12 +147,14 @@ RwGsFileUtilities class >> localNameFrom: aDirectory [
 	endOfPath := aDirectory findLastSubString: self pathNameDelimiter
 				startingAt: aDirectory size.
 	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
+
 ]
 
 { #category : 'utilities' }
 RwGsFileUtilities class >> pathNameDelimiter [
 
 	^'/'
+
 ]
 
 { #category : 'utilities' }
@@ -164,6 +171,7 @@ RwGsFileUtilities class >> readStreamFor: filePath do: aOneArgBlock [
 	result := aOneArgBlock value: stream]
 			ensure: [file close].
 	^result
+
 ]
 
 { #category : 'utilities' }
@@ -172,6 +180,7 @@ RwGsFileUtilities class >> readStreamFor: filePath in: aDirectory do: aOneArgBlo
 	self
 		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
 		do: aOneArgBlock
+
 ]
 
 { #category : 'utilities' }

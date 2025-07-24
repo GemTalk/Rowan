@@ -49,6 +49,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 RwSpecification class >> new [
 
 	^self basicNew initialize
+
 ]
 
 { #category : 'private' }
@@ -64,6 +65,7 @@ RwSpecification >> currentVersion [
 { #category : 'initialization' }
 RwSpecification >> initialize [
   
+
 ]
 
 { #category : 'initialization' }
@@ -85,9 +87,11 @@ RwSpecification >> postCopy [
   "don't forget to copy any compound state objects"
 
   
+
 ]
 
 { #category : 'accessing' }
 RwSpecification >> projectUrl: ignored [
   
+
 ]

@@ -22,12 +22,14 @@ RBParseTreeRule class >> methodSearch: aString [
 	^(self new)
 		methodSearchString: aString;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
 RBParseTreeRule class >> new [
 
 	^self basicNew initialize
+
 ]
 
 { #category : 'instance creation' }
@@ -35,35 +37,42 @@ RBParseTreeRule class >> search: aString [
 	^(self new)
 		searchString: aString;
 		yourself
+
 ]
 
 { #category : 'matching' }
 RBParseTreeRule >> canMatch: aProgramNode [ 
 	^true
+
 ]
 
 { #category : 'private' }
 RBParseTreeRule >> context [
 	^owner context
+
 ]
 
 { #category : 'matching' }
 RBParseTreeRule >> foundMatchFor: aProgramNode [
 	^aProgramNode
+
 ]
 
 { #category : 'initialize-release' }
 RBParseTreeRule >> initialize [
+
 ]
 
 { #category : 'initialize-release' }
 RBParseTreeRule >> methodSearchString: aString [ 
 	searchTree := RBParser parseRewriteMethod: aString
+
 ]
 
 { #category : 'initialize-release' }
 RBParseTreeRule >> owner: aParseTreeSearcher [
 	owner := aParseTreeSearcher
+
 ]
 
 { #category : 'matching' }
@@ -75,14 +84,17 @@ RBParseTreeRule >> performOn: aProgramNode [
 				[owner recusivelySearchInContext.
 				self foundMatchFor: aProgramNode]
 			ifFalse: [nil]
+
 ]
 
 { #category : 'initialize-release' }
 RBParseTreeRule >> searchString: aString [ 
 	searchTree := RBParser parseRewriteExpression: aString
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeRule >> sentMessages [
 	^searchTree sentMessages
+
 ]

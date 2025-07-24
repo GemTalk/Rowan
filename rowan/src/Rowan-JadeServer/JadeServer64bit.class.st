@@ -127,6 +127,7 @@ JadeServer64bit >> metacelloConfigurations [
 		].
 	].
 	^list
+
 ]
 
 { #category : 'category' }
@@ -149,6 +150,7 @@ JadeServer64bit >> recompile: aMethod withSource: aString [
 								do: [:ex | ex resume ].
 			Rowan serviceClass rowanFixMe.	"need to handle compile errors"
 			^true
+
 ]
 
 { #category : 'category' }

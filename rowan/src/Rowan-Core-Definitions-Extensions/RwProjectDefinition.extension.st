@@ -9,6 +9,7 @@ RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue
 		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
 		^ true ].
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -26,6 +27,7 @@ RwProjectDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.
 	^ modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -43,10 +45,12 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 		elementClass: RwPackageDefinition.
 	modification packagesModification: packagesModification.
 	^ modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
 RwProjectDefinition >> projectDefinitionSourceProperty [
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+
 ]

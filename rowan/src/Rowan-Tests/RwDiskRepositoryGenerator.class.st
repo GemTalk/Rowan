@@ -13,6 +13,7 @@ RwDiskRepositoryGenerator class >> generate: aRwLoadSpecification [
   ^ self new
     generate: aRwLoadSpecification;
     yourself
+
 ]
 
 { #category : 'generating' }
@@ -20,6 +21,7 @@ RwDiskRepositoryGenerator class >> generateForUrl: specNameOrUrl [
   ^ self new
     generateForUrl: specNameOrUrl;
     yourself
+
 ]
 
 { #category : 'definitions' }
@@ -30,6 +32,7 @@ RwDiskRepositoryGenerator >> classExtensionMethodDefinitionsForClass: className 
 			{{#'testClassExtensionMethod1'.
 			('*' , packageName).
 			'testClassExtensionMethod1 ^ ClassinstVar2'}}
+
 ]
 
 { #category : 'definitions' }
@@ -43,6 +46,7 @@ RwDiskRepositoryGenerator >> classMethodsForClass: className [
 			{#'testClassMethod2'.
 			'accessing'.
 			'testClassMethod2 ^ true'}}
+
 ]
 
 { #category : 'generator' }
@@ -65,6 +69,7 @@ RwDiskRepositoryGenerator >> generate: myLoadSpecification [
 	Rowan projectTools write
 		writePackageSet: myPackageSet
 		specification: myLoadSpecification
+
 ]
 
 { #category : 'generator' }
@@ -78,6 +83,7 @@ RwDiskRepositoryGenerator >> generateForUrl: specNameOrUrl [
 				error:
 					'Must use a file: url for spec, since generator will write to the disk repository' ].
 	^ self generate: (RwSpecification fromUrl: url)
+
 ]
 
 { #category : 'generator' }
@@ -196,6 +202,7 @@ RwDiskRepositoryGenerator >> instanceExtensionMethodDefinitionsForClass: classNa
 			{{#'testInstanceExtensionMethod1'.
 			('*' , packageName).
 			'testInstanceExtensionMethod1 ^ instVar1'}}
+
 ]
 
 { #category : 'definitions' }
@@ -209,6 +216,7 @@ RwDiskRepositoryGenerator >> instanceMethodsForClass: className [
 			{#'testInstanceMethod2'.
 			'accessing'.
 			'testInstanceMethod2 ^ classInstVar1'}}
+
 ]
 
 { #category : 'definitions' }
@@ -229,4 +237,5 @@ RwDiskRepositoryGenerator >> methodDefsFromSpec: specArray [
               (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
             source: source) ].
   ^ dict
+
 ]

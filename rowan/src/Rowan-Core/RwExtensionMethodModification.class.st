@@ -11,6 +11,7 @@ Class {
 RwExtensionMethodModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitExtensionMethodModification: self
+
 ]
 
 { #category : 'patching' }
@@ -82,6 +83,7 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]
+
 ]
 
 { #category : 'converting' }

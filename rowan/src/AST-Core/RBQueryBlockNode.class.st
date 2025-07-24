@@ -7,4 +7,5 @@ Class {
 { #category : 'visitor' }
 RBQueryBlockNode >> acceptVisitor: aProgramNodeVisitor [
   ^ aProgramNodeVisitor acceptQueryBlockNode: self
+
 ]

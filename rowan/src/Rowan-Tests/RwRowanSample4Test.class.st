@@ -10,6 +10,7 @@ RwRowanSample4Test class >> _symbolDictionaryNames [
 	^ 	super _symbolDictionaryNames, 
 			#( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295'
 					#'RowanSample4DictionarySymbolDict_295_3')
+
 ]
 
 { #category : 'private' }
@@ -36,6 +37,7 @@ RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl_295 [
 	| rowanSpec |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample4_295.ston'
+
 ]
 
 { #category : 'private' }
@@ -80,6 +82,7 @@ RwRowanSample4Test >> test_projectUrl_issue_463 [
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+
 ]
 
 { #category : 'tests' }
@@ -117,6 +120,7 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 	self assert: (x := projectDefinition packageNames asArray sort) = #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests' 'RowanSample4-Tests') sort.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
+
 ]
 
 { #category : 'tests' }
@@ -204,6 +208,7 @@ RwRowanSample4Test >> testIssue14 [
 	theClass := Rowan globalNamed: 'RowanSample4IdentityBag'.
 	constraint := theClass _varyingConstraint.
 	self assert: constraint = String.
+
 ]
 
 { #category : 'tests' }
@@ -1651,6 +1656,7 @@ RwRowanSample4Test >> testIssue230 [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
+
 ]
 
 { #category : 'tests' }
@@ -1699,6 +1705,7 @@ RwRowanSample4Test >> testIssue284 [
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
 	self assert: loadedCommitId = '8a4a450'
+
 ]
 
 { #category : 'tests' }
@@ -1791,6 +1798,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -1901,6 +1909,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -2011,6 +2020,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -2110,6 +2120,7 @@ RwRowanSample4Test >> testIssue305 [
 		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+
 ]
 
 { #category : 'tests' }
@@ -2218,6 +2229,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -2330,6 +2342,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -2424,6 +2437,7 @@ RwRowanSample4Test >> testIssue490 [
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+
 ]
 
 { #category : 'tests' }
@@ -2464,6 +2478,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -2496,6 +2511,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -2717,6 +2733,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A [
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+
 ]
 
 { #category : 'tests' }
@@ -2762,6 +2779,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221B [
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+
 ]
 
 { #category : 'tests' }
@@ -2807,6 +2825,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221C [
 	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('tests').
+
 ]
 
 { #category : 'tests' }
@@ -2852,6 +2871,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Common').
 	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #().
+
 ]
 
 { #category : 'tests' }

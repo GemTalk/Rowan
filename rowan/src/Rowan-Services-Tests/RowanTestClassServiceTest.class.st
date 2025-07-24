@@ -8,12 +8,14 @@ Class {
 RowanTestClassServiceTest class >> shouldInheritSelectors [
 
 	^true
+
 ]
 
 { #category : 'support' }
 RowanTestClassServiceTest >> nonTestMethod [
 
 	"do not remove. Used in test"
+
 ]
 
 { #category : 'tests' }
@@ -30,12 +32,14 @@ RowanTestClassServiceTest >> test_isTestCase [
 
 	classService := RowanClassService forClassNamed: 'JadeServer'.
 	self deny: classService isTestCase.
+
 ]
 
 { #category : 'tests' }
 RowanTestClassServiceTest >> test_runClassService [
 
 	self jadeiteIssueTested: #issue341 withTitle: 'Run sunit tests from class pass when they should not'.
+
 ]
 
 { #category : 'tests' }
@@ -51,6 +55,7 @@ RowanTestClassServiceTest >> test_setTestClass [
 	self assert: classService isTestCase equals: nil.
 	classService setIsTestCase. 
 	self assert: classService isTestCase.
+
 ]
 
 { #category : 'tests' }
@@ -61,4 +66,5 @@ RowanTestClassServiceTest >> test_testSelectors [
 	classService := RowanClassService forClassNamed: 'RowanTestClassServiceTest'. 
 	self deny: (classService tests detect:[:methodService | methodService selector = #test_testSelectors] ifNone:[]) equals: nil.
 	self assert: (classService tests detect:[:methodService | methodService selector = #nonTestMethod] ifNone:[]) equals: nil.
+
 ]

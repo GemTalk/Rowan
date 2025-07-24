@@ -7,4 +7,5 @@ Class {
 { #category : 'other' }
 JadeServer64bit35 >> stepThrough: aGsProcess inFrame: anInteger [
   aGsProcess stepThroughFromLevel: anInteger
+
 ]

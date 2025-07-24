@@ -22,6 +22,7 @@ RowanAnsweringService >> addLowerCaseSymbolsIn: theClass To: array [
   array addAll: theClass instVarNames.
   array addAll: theClass class instVarNames.
   array addAll: theClass classVarNames.
+
 ]
 
 { #category : 'client commands' }
@@ -33,6 +34,7 @@ RowanAnsweringService >> allClassesStartingWith: string [
         ifTrue: [ answer add: cls name asString ] ].
   answer := answer asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -41,6 +43,7 @@ RowanAnsweringService >> allClassNames [
   answer addAll: (organizer classes collect: [ :cls | cls name asString ]).
   answer := answer asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -48,18 +51,21 @@ RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'other' }
 RowanAnsweringService >> answer [
 
 	^answer
+
 ]
 
 { #category : 'Updating' }
 RowanAnsweringService >> answer: anObject [
 
 	answer := anObject
+
 ]
 
 { #category : 'client commands' }
@@ -67,6 +73,7 @@ RowanAnsweringService >> autoCommit [
 
 	answer := RowanService autoCommit. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -87,6 +94,7 @@ RowanAnsweringService >> autocompleteSymbols [
     with: newLowerCaseSymbols asOrderedCollection.
   updateType := #'updateSymbols:'.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -95,6 +103,7 @@ RowanAnsweringService >> breakPointsAreEnabled [
   updateType := #'breakpointSettingChanged:'.
   RowanCommandResult addResult: self.
   ^ answer	"for testing"
+
 ]
 
 { #category : 'client commands' }
@@ -106,6 +115,7 @@ RowanAnsweringService >> clearAllBreaks [
   GsNMethod clearAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
+
 ]
 
 { #category : 'client commands' }
@@ -115,6 +125,7 @@ RowanAnsweringService >> clearMethodBreaks: methodServices [
       methodService
         organizer: organizer;
         clearMethodBreaks ]
+
 ]
 
 { #category : 'client commands' }
@@ -126,6 +137,7 @@ RowanAnsweringService >> disableAllBreaks [
   GsNMethod _disableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
+
 ]
 
 { #category : 'client commands' }
@@ -147,6 +159,7 @@ RowanAnsweringService >> doClientAndServerVersionsMatch: clientVersion [
           'Server (' , RowanService version printString , ') is more recent than client ('
             , clientVersion printString , ')' ] ].
   ^ answer
+
 ]
 
 { #category : 'client commands' }
@@ -158,6 +171,7 @@ RowanAnsweringService >> enableAllBreaks [
   GsNMethod _enableAllBreaks.
   methodServices
     do: [ :methodService | RowanCommandResult addResult: methodService update ]
+
 ]
 
 { #category : 'client commands' }
@@ -166,6 +180,7 @@ RowanAnsweringService >> exec: aString [
 	"for command line service someday"
 	answer := aString evaluate printString. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -180,6 +195,7 @@ RowanAnsweringService >> exec: aString context: oop [
 
 	"return answer for testing" 
 	^answer
+
 ]
 
 { #category : 'client commands' }
@@ -234,6 +250,7 @@ RowanAnsweringService >> exec: aString inFrame: level ofProcess: processOop cont
             RowanCommandResult addResult: variableService ] ].
       symbolList remove: symbolDictionary ].	"return answer for testing"
   ^ answer
+
 ]
 
 { #category : 'client commands' }
@@ -253,6 +270,7 @@ RowanAnsweringService >> expressionSelector: string [
         ifTrue: [ messageNode buildSelector ]
         ifFalse: [ string ] ].
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -261,17 +279,20 @@ RowanAnsweringService >> flipTranscript [
 		self jadeiteServer uninstallTranscript]
 	ifFalse:[
 		self jadeiteServer installTranscript]
+
 ]
 
 { #category : 'client commands' }
 RowanAnsweringService >> initializeAutoCommit [
 
 	RowanService setAutoCommit: false
+
 ]
 
 { #category : 'client commands' }
 RowanAnsweringService >> initializeBreakPointsAreEnabled [
   RowanService setBreakPointsAreEnabled: true
+
 ]
 
 { #category : 'client commands' }
@@ -280,12 +301,14 @@ RowanAnsweringService >> interactionHandlerActive [
     at: #'rowanServiceInteractionActive'
     ifAbsent: [ true ].
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
 
 	^self transcriptObject == self jadeiteServer
+
 ]
 
 { #category : 'client commands' }
@@ -297,6 +320,7 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 	command := nil. 
 	commandArgs := nil. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -304,6 +328,7 @@ RowanAnsweringService >> needsCommit [
 
 	answer := System needsCommit.
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -313,6 +338,7 @@ RowanAnsweringService >> newPackageNamed: packageName [
   packageService update.
   answer := packageService.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -322,6 +348,7 @@ RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
 	answer := answer size > integer ifTrue: [(answer copyFrom: 1 to: integer) , '...'] ifFalse:[answer].
 	RowanCommandResult addResult: self.
 	^answer
+
 ]
 
 { #category : 'client commands' }
@@ -343,6 +370,7 @@ answeringService answer. "
   ns := ProfMonitor computeInterval: time / 1000.
   answer := ProfMonitor monitorBlock: block intervalNs: ns.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -356,6 +384,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -366,6 +395,7 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
     select: [ :each | each charSize = 1 and: [ each _matchPatternNoCase: pattern ] ].
   answer := answer asSortedCollection asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
@@ -373,6 +403,7 @@ RowanAnsweringService >> setAutoCommit: object [
 
 	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'other' }
@@ -384,11 +415,13 @@ RowanAnsweringService >> setBreakPointsAreEnabled: boolean [
   answer := boolean.
   updateType := #'breakpointSettingChanged:'.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
 RowanAnsweringService >> setEnableInteractionHandler: boolean [
   SessionTemps current at: #'rowanServiceInteractionActive' put: boolean
+
 ]
 
 { #category : 'client commands' }
@@ -400,11 +433,13 @@ RowanAnsweringService >> sortedSymbols [
         ifTrue: [ answer add: symbol ] ].
   answer := answer asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'client commands' }
 RowanAnsweringService >> subclassCreationTemplate: className [
 	 (RowanClassService new name: className) subclassCreationTemplate.  "gives an answer for us"
+
 ]
 
 { #category : 'client commands' }
@@ -412,12 +447,14 @@ RowanAnsweringService >> transcriptInstalled [
 
 	answer := self isTranscriptInstalled.
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'private' }
 RowanAnsweringService >> transcriptObject [
 	
 	^(SessionTemps current  at: #'TranscriptStream_SessionStream')
+
 ]
 
 { #category : 'client commands' }
@@ -425,6 +462,7 @@ RowanAnsweringService >> turnOffTranscriptWrites [
 
 	self isTranscriptInstalled ifTrue:[
 		self flipTranscript]
+
 ]
 
 { #category : 'client commands' }
@@ -452,4 +490,5 @@ RowanAnsweringService >> updateAutocompleteSymbols [
   answer := Array with: newClassNames with: newLowerCaseSymbols.
   updateType := #'updateSymbols:'.
   RowanCommandResult addResult: self
+
 ]

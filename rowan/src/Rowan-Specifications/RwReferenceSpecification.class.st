@@ -23,4 +23,5 @@ RwReferenceSpecification >> referenceUrl: anObject [
 
 { #category : 'actions' }
 RwReferenceSpecification >> resolve [
+
 ]

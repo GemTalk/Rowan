@@ -11,6 +11,7 @@ Class {
 RwGsImage class >> _loadedProjectRegistry [
 
 	^ self _loadedProjectRegistryForUserId: self currentUserId
+
 ]
 
 { #category : 'private' }
@@ -29,12 +30,14 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'cypress (old)' }
 RwGsImage class >> _projectRegistry [
 
 	^ self _projectRegistryForUserId: self currentUserId
+
 ]
 
 { #category : 'querying' }
@@ -52,6 +55,7 @@ RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 				error:
 					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
 	projectRegistry removeKey: projectName
+
 ]
 
 { #category : 'querying' }
@@ -77,12 +81,14 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 RwGsImage class >> canWrite: anObject [
 
 	^ System canWrite: anObject
+
 ]
 
 { #category : 'querying' }
 RwGsImage class >> currentUserId [
 
 	^ GsCurrentSession currentSession userProfile userId
+
 ]
 
 { #category : 'operations' }
@@ -92,6 +98,7 @@ RwGsImage class >> ensureSessionMethodsEnabled [
 
 	GsPackagePolicy current enabled
 		ifFalse: [ GsPackagePolicy current enable ].
+
 ]
 
 { #category : 'querying' }
@@ -104,6 +111,7 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 	^ self symbolList
 		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
 		ifNone: [ nil ]
+
 ]
 
 { #category : 'querying' }
@@ -136,6 +144,7 @@ RwGsImage class >> loadedClassExtensionsForClass: class [
 					(registry classExtensionRegistry at: history ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	^ found
+
 ]
 
 { #category : 'querying' }
@@ -150,6 +159,7 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -166,6 +176,7 @@ RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
 					(registry classRegistry at: history ifAbsent: [  ])
 						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -174,6 +185,7 @@ RwGsImage class >> loadedClassNamed: className [
 	^ self
 		loadedClassNamed: className
 		ifAbsent: [ self error: 'loaded class named ' , className printString , ' not found.' ]
+
 ]
 
 { #category : 'querying' }
@@ -183,6 +195,7 @@ RwGsImage class >> loadedClassNamed: className ifAbsent: absentBlock [
 		loadedClassNamed: className
 		ifFound: [ :loadedClass | ^ loadedClass ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'querying' }
@@ -197,6 +210,7 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 		loadedClassForClass: class
 		ifAbsent: [ ^ absentBlock value ].
 	^ foundBlock value: loadedClass
+
 ]
 
 { #category : 'querying' }
@@ -214,6 +228,7 @@ RwGsImage class >> loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock [
 					(registry loadedHybridPackageNamed: aHybridName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -238,6 +253,7 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
 						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -266,6 +282,7 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod [
 			self
 				error:
 					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
+
 ]
 
 { #category : 'querying' }
@@ -280,6 +297,7 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
 						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -288,6 +306,7 @@ RwGsImage class >> loadedPackageNamed: aString [
 	^ self
 		loadedPackageNamed: aString
 		ifAbsent: [ self error: 'No loaded package named ' , aString printString , ' found' ]
+
 ]
 
 { #category : 'querying' }
@@ -302,6 +321,7 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 					(registry loadedPackageNamed: aName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -310,6 +330,7 @@ RwGsImage class >> loadedProjectNamed: aString [
 	^ self
 		loadedProjectNamed: aString
 		ifAbsent: [ self error: 'No loaded project named ' , aString printString , ' found' ]
+
 ]
 
 { #category : 'querying' }
@@ -389,6 +410,7 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 	symbolDict rowanSymbolDictionaryRegistry
 		ifNil: [ RwGsSymbolDictionaryRegistry installIn: symbolDict ].
 	^ symbolDict
+
 ]
 
 { #category : 'querying' }
@@ -464,6 +486,7 @@ RwGsImage class >> removeLoadedClassExtensionsForClass: class [
 		do: [ :symbolDict | 
 			symbolDict rowanSymbolDictionaryRegistry
 				ifNotNil: [ :registry | registry classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
+
 ]
 
 { #category : 'querying' }
@@ -476,6 +499,7 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 		do: [ :symbolDict | 
 			symbolDict rowanSymbolDictionaryRegistry
 				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
+
 ]
 
 { #category : 'querying' }
@@ -489,6 +513,7 @@ RwGsImage class >> resolveClassNamed: aName [
 	^ (resolved isBehavior and: [ resolved isMeta not ])
 		ifTrue: [ resolved ]
 		ifFalse: [ nil ]
+
 ]
 
 { #category : 'querying' }
@@ -499,6 +524,7 @@ RwGsImage class >> resolveName: aName [
  symbol list, returns nil. Uses the current session's transient copy of the symbol list."
 
 	^ GsCurrentSession currentSession resolveSymbol: aName asSymbol
+
 ]
 
 { #category : 'querying' }
@@ -507,4 +533,5 @@ RwGsImage class >> symbolList [
 	"Answer the current session (transient) symbol list"
 
 	^ GsCurrentSession currentSession symbolList
+
 ]

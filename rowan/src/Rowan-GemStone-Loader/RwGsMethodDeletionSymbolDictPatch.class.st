@@ -83,6 +83,7 @@ RwGsMethodDeletionSymbolDictPatch >> isAnInitializer [
 { #category : 'initializers' }
 RwGsMethodDeletionSymbolDictPatch >> runInitializer [
 	"noop"
+
 ]
 
 { #category : 'accessing' }

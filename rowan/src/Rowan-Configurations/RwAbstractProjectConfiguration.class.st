@@ -73,6 +73,7 @@ RwAbstractProjectConfiguration class >> newNamed: aName for: projectName [
 RwAbstractProjectConfiguration >> _configsPath [
 
 	^ self _specification configsPath
+
 ]
 
 { #category : 'exporting' }
@@ -98,24 +99,28 @@ RwAbstractProjectConfiguration >> _exportToUrl: fileUrl [
 RwAbstractProjectConfiguration >> _loadedProject [
 
 	^ Rowan image loadedProjectNamed: self projectName
+
 ]
 
 { #category : 'private' }
 RwAbstractProjectConfiguration >> _repositoryRootPath [
 
 	^ self _specification repositoryRootPath
+
 ]
 
 { #category : 'private' }
 RwAbstractProjectConfiguration >> _repositoryUrl [
 
 	^ self _specification repositoryUrl
+
 ]
 
 { #category : 'private' }
 RwAbstractProjectConfiguration >> _specification [
 
 	^ self _loadedProject specification
+
 ]
 
 { #category : 'visiting' }
@@ -188,6 +193,7 @@ RwAbstractProjectConfiguration >> export [
 	Rowan fileUtilities ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
 	^ self exportToUrl: exportUrl
+
 ]
 
 { #category : 'exporting' }
@@ -261,6 +267,7 @@ RwAbstractProjectConfiguration >> resolvePackageNames [
 	"return the list of package names that is the result of resolving all of the receiver's references"
 
 	self subclassResponsibility: #'resolvePackageNames'
+
 ]
 
 { #category : 'load support' }
@@ -270,6 +277,7 @@ RwAbstractProjectConfiguration >> resolvePackageNames: visitedConfigurationNames
 		Do not visit configurations already listed in visitedConfigurationNames "
 
 	self subclassResponsibility: #'resolvePackageNames:'
+
 ]
 
 { #category : 'accessing' }

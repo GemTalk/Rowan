@@ -36,6 +36,7 @@ RBParseTreeSearcher class >> buildSelectorString: aSelector [
 				nextPutAll: i printString;
 				nextPut: $ ].
 	^stream contents
+
 ]
 
 { #category : 'private' }
@@ -44,6 +45,7 @@ RBParseTreeSearcher class >> buildSelectorTree: aSelector [
 	^RBParser parseRewriteExpression: '``@receiver ' 
 				, (self buildSelectorString: aSelector)
 		onError: [:err :pos | ^nil]
+
 ]
 
 { #category : 'private' }
@@ -51,6 +53,7 @@ RBParseTreeSearcher class >> buildTree: aString method: aBoolean [
 	^aBoolean 
 		ifTrue: [RBParser parseRewriteMethod: aString]
 		ifFalse: [RBParser parseRewriteExpression: aString]
+
 ]
 
 { #category : 'instance creation' }
@@ -58,6 +61,7 @@ RBParseTreeSearcher class >> getterMethod: aVarName [
 	^(self new)
 		matchesMethod: '`method ^' , aVarName do: [:aNode :ans | aNode selector];
 		yourself
+
 ]
 
 { #category : 'instance creation' }
@@ -68,6 +72,7 @@ RBParseTreeSearcher class >> justSendsSuper [
 			'`@method: `@args super `@method: `@args')
 		do: [ :node :answer | true ];
 		yourself
+
 ]
 
 { #category : 'instance creation' }
@@ -76,6 +81,7 @@ RBParseTreeSearcher class >> returnSetterMethod: aVarName [
 		matchesMethod: '`method: `Arg ^' , aVarName , ' := `Arg'
 			do: [:aNode :ans | aNode selector];
 		yourself
+
 ]
 
 { #category : 'instance creation' }
@@ -85,6 +91,7 @@ RBParseTreeSearcher class >> setterMethod: aVarName [
 					with: '`method: `Arg ^' , aVarName , ' := `Arg')
 			do: [:aNode :ans | aNode selector];
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -93,6 +100,7 @@ RBParseTreeSearcher class >> treeMatching: aString in: aParseTree [
 		matches: aString do: [:aNode :answer | ^aNode];
 		executeTree: aParseTree.
 	^nil
+
 ]
 
 { #category : 'accessing' }
@@ -110,38 +118,45 @@ RBParseTreeSearcher class >> treeMatchingStatements: aString in: aParseTree [
 		do: [:aNode :answer | ^RBParser parseExpression: aString].
 	notifier executeTree: aParseTree.
 	^nil
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> addArgumentRule: aParseTreeRule [ 
 	argumentSearches add: aParseTreeRule.
 	aParseTreeRule owner: self
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> addArgumentRules: ruleCollection [ 
 	ruleCollection do: [:each | self addArgumentRule: each]
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> addRule: aParseTreeRule [ 
 	searches add: aParseTreeRule.
 	aParseTreeRule owner: self
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> addRules: ruleCollection [ 
 	ruleCollection do: [:each | self addRule: each]
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> answer [
 	^answer
+
 ]
 
 { #category : 'initialize-release' }
 RBParseTreeSearcher >> answer: anObject [
 	answer := anObject
+
 ]
 
 { #category : 'testing' }
@@ -152,11 +167,13 @@ RBParseTreeSearcher >> canMatchMethod: aCompiledMethod [
 	actualMessages := aCompiledMethod messages.
 	^ self messages 
 		anySatisfy: [ :each | actualMessages includes: each ]
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> context [
 	^context
+
 ]
 
 { #category : 'accessing' }
@@ -164,6 +181,7 @@ RBParseTreeSearcher >> executeMethod: aParseTree initialAnswer: anObject [
 	answer := anObject.
 	searches detect: [:each | (each performOn: aParseTree) notNil] ifNone: [].
 	^answer
+
 ]
 
 { #category : 'accessing' }
@@ -176,21 +194,25 @@ RBParseTreeSearcher >> executeTree: aParseTree [
 	self visitNode: aParseTree.
 	context := oldContext.
 	^answer
+
 ]
 
 { #category : 'accessing' }
 RBParseTreeSearcher >> executeTree: aParseTree initialAnswer: aValue [ 
 	answer := aValue.
 	^self executeTree: aParseTree
+
 ]
 
 { #category : 'private' }
 RBParseTreeSearcher >> foundMatch [
+
 ]
 
 { #category : 'testing' }
 RBParseTreeSearcher >> hasRules [
 	^searches notEmpty
+
 ]
 
 { #category : 'initialize-release' }
@@ -200,6 +222,7 @@ RBParseTreeSearcher >> initialize [
 	searches := OrderedCollection new.
 	argumentSearches := OrderedCollection new: 0.
 	answer := nil
+
 ]
 
 { #category : 'private' }
@@ -208,52 +231,62 @@ RBParseTreeSearcher >> lookForMoreMatchesInContext: oldContext [
 			[:key :value | 
 			(key isString not and: [key recurseInto]) 
 				ifTrue: [value do: [:each | self visitNode: each]]]
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matches: aString do: aBlock [ 
 	self addRule: (RBSearchRule searchFor: aString thenDo: aBlock)
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesAnyArgumentOf: stringCollection do: aBlock [ 
 	stringCollection do: [:each | self matchesArgument: each do: aBlock]
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesAnyMethodOf: aStringCollection do: aBlock [ 
 	aStringCollection do: [:each | self matchesMethod: each do: aBlock]
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesAnyOf: aStringCollection do: aBlock [ 
 	aStringCollection do: [:each | self matches: each do: aBlock]
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesAnyTreeOf: treeCollection do: aBlock [ 
 	treeCollection do: [:each | self matchesTree: each do: aBlock]
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesArgument: aString do: aBlock [ 
 	self addArgumentRule: (RBSearchRule searchFor: aString thenDo: aBlock)
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesArgumentTree: aBRProgramNode do: aBlock [ 
 	self 
 		addArgumentRule: (RBSearchRule searchForTree: aBRProgramNode thenDo: aBlock)
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesMethod: aString do: aBlock [ 
 	self addRule: (RBSearchRule searchForMethod: aString thenDo: aBlock)
+
 ]
 
 { #category : 'searching' }
 RBParseTreeSearcher >> matchesTree: aBRProgramNode do: aBlock [ 
 	self addRule: (RBSearchRule searchForTree: aBRProgramNode thenDo: aBlock)
+
 ]
 
 { #category : 'accessing' }
@@ -270,6 +303,7 @@ RBParseTreeSearcher >> messages [
 			searchMessages isEmpty ifTrue: [^messages := #()].
 			messages addAll: searchMessages].
 	^messages := messages asArray
+
 ]
 
 { #category : 'private' }
@@ -284,6 +318,7 @@ RBParseTreeSearcher >> performSearches: aSearchCollection on: aNode [
 					[self foundMatch.
 					^value]].
 	^nil
+
 ]
 
 { #category : 'private' }
@@ -295,6 +330,7 @@ RBParseTreeSearcher >> recusivelySearchInContext [
 	context := RBSmallDictionary new.
 	self lookForMoreMatchesInContext: oldContext.
 	context := oldContext
+
 ]
 
 { #category : 'visiting' }
@@ -306,6 +342,7 @@ RBParseTreeSearcher >> visitArgument: aNode [
 			[aNode acceptVisitor: self.
 			aNode]
 		ifFalse: [value]
+
 ]
 
 { #category : 'visiting' }
@@ -317,4 +354,5 @@ RBParseTreeSearcher >> visitNode: aNode [
 			[aNode acceptVisitor: self.
 			aNode]
 		ifFalse: [value]
+
 ]

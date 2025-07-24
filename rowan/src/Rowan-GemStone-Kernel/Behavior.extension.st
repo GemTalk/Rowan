@@ -134,6 +134,7 @@ Behavior >> _rwNewConstraint: aClass atOffset: offset [
 	[ self _newConstraint: aClass atOffset: offset ] on: Deprecated do: [:ex | ex resume ].
 
 	constraints immediateInvariant
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -151,6 +152,7 @@ self _validatePrivilege ifTrue:[
   ] .
 ]
  
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -218,6 +220,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 		inProtocol: aCategoryString asString
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -229,6 +232,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 		inPackageNamed: packageName
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -259,4 +263,5 @@ Behavior >> rwRemoveSelector: methodSelector [
 		removeMethod: methodSelector
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
+
 ]

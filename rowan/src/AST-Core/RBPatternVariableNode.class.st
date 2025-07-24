@@ -34,17 +34,20 @@ RBPatternVariableNode class >> identifierToken: anIdentifierToken [
 	^anIdentifierToken isPatternVariable 
 		ifTrue: [super identifierToken: anIdentifierToken]
 		ifFalse: [RBVariableNode identifierToken: anIdentifierToken]
+
 ]
 
 { #category : 'matching' }
 RBPatternVariableNode >> copyInContext: aDictionary [ 
 	^ (aDictionary at: self) copy
+
 ]
 
 { #category : 'initialize-release' }
 RBPatternVariableNode >> identifierToken: anIdentifierToken [ 
 	super identifierToken: anIdentifierToken.
 	self initializePatternVariables
+
 ]
 
 { #category : 'initialize-release' }
@@ -69,31 +72,37 @@ RBPatternVariableNode >> initializePatternVariables [
 									[character == self recurseIntoCharacter 
 										ifTrue: [recurseInto := true]
 										ifFalse: [^self]]]]]
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> isAnything [
 	^isAnything
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> isList [
 	^isList
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> isLiteralNode [
 	^isLiteral
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> isPatternNode [
 	^true
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> isStatement [
 	^isStatement
+
 ]
 
 { #category : 'matching' }
@@ -105,23 +114,27 @@ RBPatternVariableNode >> match: aNode inContext: aDictionary [
 		ifTrue: [^self matchStatement: aNode inContext: aDictionary].
 	aNode class == self matchingClass ifFalse: [^false].
 	^(aDictionary at: self ifAbsentPut: [aNode]) = aNode
+
 ]
 
 { #category : 'private' }
 RBPatternVariableNode >> matchingClass [
 	^RBVariableNode
+
 ]
 
 { #category : 'matching' }
 RBPatternVariableNode >> matchLiteral: aNode inContext: aDictionary [ 
 	^aNode isLiteralNode
 		and: [(aDictionary at: self ifAbsentPut: [aNode]) = aNode]
+
 ]
 
 { #category : 'matching' }
 RBPatternVariableNode >> matchStatement: aNode inContext: aDictionary [ 
 	(aNode parent notNil and: [aNode parent isSequence]) ifFalse: [^false].
 	^(aDictionary at: self ifAbsentPut: [aNode]) = aNode
+
 ]
 
 { #category : 'accessing' }
@@ -133,9 +146,11 @@ RBPatternVariableNode >> parent: aBRProgramNode [
 		ifTrue: 
 			[(self isStatement or: [parent temporaries includes: self]) 
 				ifFalse: [isList := false]]
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternVariableNode >> recurseInto [
 	^recurseInto
+
 ]

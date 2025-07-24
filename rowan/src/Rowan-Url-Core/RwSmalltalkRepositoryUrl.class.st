@@ -26,6 +26,7 @@ Class {
 { #category : 'constants' }
 RwSmalltalkRepositoryUrl class >> schemeName [
   ^ 'smalltalk'
+
 ]
 
 { #category : 'converting' }
@@ -33,6 +34,7 @@ RwSmalltalkRepositoryUrl >> asRwRepository [
   "return a platform appropriate repository for the repository identified in the receiver"
 
   ^ self halt: 'not yet implemented'
+
 ]
 
 { #category : 'accessing' }
@@ -52,6 +54,7 @@ RwSmalltalkRepositoryUrl >> dir [
 { #category : 'accessing' }
 RwSmalltalkRepositoryUrl >> dirPath [
   ^ self pathFor: dir
+
 ]
 
 { #category : 'parsing' }
@@ -71,6 +74,7 @@ RwSmalltalkRepositoryUrl >> privateParsePath: remainder relativeTo: basePath [
         copyFrom: (parsedPath indexOf: pivot) + 1
         to: parsedPath size ].
   ^ parsedPath
+
 ]
 
 { #category : 'accessing' }
@@ -83,4 +87,5 @@ RwSmalltalkRepositoryUrl >> project [
 { #category : 'accessing' }
 RwSmalltalkRepositoryUrl >> projectPath [
   ^ self pathFor: project
+
 ]

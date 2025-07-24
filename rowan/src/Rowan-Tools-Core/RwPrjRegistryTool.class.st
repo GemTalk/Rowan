@@ -8,6 +8,7 @@ Class {
 RwPrjRegistryTool >> registeredSpecNames [
 
 	^ Rowan projectNames
+
 ]
 
 { #category : 'smalltalk api' }

@@ -34,4 +34,5 @@ RwGsProjectAdditionPatch >> updateProjectProperties [
 	"noop - properties updated during createLoadedProject"
 
 	
+
 ]

@@ -32,6 +32,7 @@ RwGsTestImage class >> _loadedProjectNamedForNonTestProjects: aString ifAbsent: 
 RwGsTestImage class >> _loadedProjectRegistryForUserId: aUserId [
 
 	^ self _loadedTestProjectRegistryForUserId: aUserId
+
 ]
 
 { #category : 'private' }
@@ -67,4 +68,5 @@ RwGsTestImage class >> resetTestProjectRegistry [
 	((AllUsers userWithId: self currentUserId) objectNamed: #'UserGlobals')
 		removeKey: #'RwGsTestLoadedProjectRegistry'
 		ifAbsent: [  ]
+
 ]

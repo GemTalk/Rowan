@@ -36,6 +36,7 @@ RBMethodNode class >> selector: aSymbol arguments: variableNodes body: aSequence
 		selector: aSymbol;
 		body: aSequenceNode;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
@@ -44,6 +45,7 @@ RBMethodNode class >> selector: aSymbol body: aSequenceNode [
 		selector: aSymbol
 		arguments: #()
 		body: aSequenceNode
+
 ]
 
 { #category : 'instance creation' }
@@ -51,6 +53,7 @@ RBMethodNode class >> selectorParts: tokenCollection arguments: variableNodes [
 	^(self new)
 		selectorParts: tokenCollection arguments: variableNodes;
 		yourself
+
 ]
 
 { #category : 'comparing' }
@@ -68,32 +71,38 @@ RBMethodNode >> = anObject [
 		first = second 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'visitor' }
 RBMethodNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptMethodNode: self
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> addNode: aNode [
 	^ body addNode: aNode
+
 ]
 
 { #category : 'replacing' }
 RBMethodNode >> addReplacement: aStringReplacement [ 
 	replacements isNil ifTrue: [^self].
 	replacements add: aStringReplacement
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> addReturn [
 	^ body addReturn
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> addSelfReturn [
 	^ body addSelfReturn
+
 ]
 
 { #category : 'accessing' }
@@ -101,6 +110,7 @@ RBMethodNode >> allArgumentVariables [
 	^(self argumentNames asOrderedCollection)
 		addAll: super allArgumentVariables;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -108,33 +118,39 @@ RBMethodNode >> allDefinedVariables [
 	^(self argumentNames asOrderedCollection)
 		addAll: super allDefinedVariables;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> argumentNames [
 	^self arguments collect: [:each | each name]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> arguments [
 	^arguments
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> arguments: variableNodes [ 
 	arguments := variableNodes.
 	arguments do: [:each | each parent: self]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> body [
 	^body
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> body: stmtsNode [ 
 	body := stmtsNode.
 	body parent: self
+
 ]
 
 { #category : 'private' }
@@ -143,6 +159,7 @@ RBMethodNode >> buildSelector [
 	selectorStream := WriteStreamPortable on: String new.
 	selectorParts do: [:each | selectorStream nextPutAll: each value].
 	^selectorStream contents asSymbol
+
 ]
 
 { #category : 'private-replacing' }
@@ -175,6 +192,7 @@ RBMethodNode >> changeSourceSelectors: oldSelectorParts arguments: oldArguments 
 							ifTrue: [ stream space; nextPutAll: (arguments at: index) name ] ] ])) ] ]
 		on: Error
 		do: [ :ex | ex return ]
+
 ]
 
 { #category : 'accessing' }
@@ -184,11 +202,13 @@ RBMethodNode >> children [
 		addAll: self pragmas;
 		add: self body;
 		yourself
+
 ]
 
 { #category : 'replacing' }
 RBMethodNode >> clearReplacements [
 	replacements := nil
+
 ]
 
 { #category : 'matching' }
@@ -202,11 +222,13 @@ RBMethodNode >> copyInContext: aDictionary [
 		body: (self body copyInContext: aDictionary);
 		source: (aDictionary at: '-source-' ifAbsentPut: [ self source ]);
 		yourself
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> defines: aName [ 
 	^arguments anySatisfy: [:each | each name = aName]
+
 ]
 
 { #category : 'comparing' }
@@ -224,11 +246,13 @@ RBMethodNode >> equalTo: anObject withMapping: aDictionary [
 		(first equalTo: second	withMapping: aDictionary) 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'comparing' }
 RBMethodNode >> hash [
 	^ ((self selector hash bitXor: (self hashForCollection: self arguments)) bitXor: (self hashForCollection: self pragmas)) bitXor: self body hash
+
 ]
 
 { #category : 'initialize-release' }
@@ -238,36 +262,43 @@ RBMethodNode >> initialize [
 					a startPosition < b startPosition 
 						or: [a startPosition = b startPosition and: [a stopPosition < b stopPosition]]].
 	nodeReplacements := IdentityDictionary new
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> isLast: aNode [ 
 	^body isLast: aNode
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> isMethod [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> isPrimitive [
 	^ self pragmas anySatisfy: [ :each | each isPrimitive ]
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> lastIsReturn [
 	^body lastIsReturn
+
 ]
 
 { #category : 'replacing' }
 RBMethodNode >> map: oldNode to: newNode [ 
 	nodeReplacements at: oldNode put: newNode
+
 ]
 
 { #category : 'replacing' }
 RBMethodNode >> mappingFor: oldNode [ 
 	^nodeReplacements at: oldNode ifAbsent: [oldNode]
+
 ]
 
 { #category : 'matching' }
@@ -278,6 +309,7 @@ RBMethodNode >> match: aNode inContext: aDictionary [
 	^ (self matchList: arguments against: aNode arguments inContext: aDictionary)
 		and: [ (self matchPragmas: self pragmas against: aNode pragmas inContext: aDictionary)
 		and: [ body match: aNode body inContext: aDictionary ] ]
+
 ]
 
 { #category : 'matching' }
@@ -288,6 +320,7 @@ RBMethodNode >> matchPragmas: matchNodes against: pragmaNodes inContext: aDictio
 	^ matchNodes allSatisfy: [ :matchNode |
 		pragmaNodes anySatisfy: [ :pragmaNode |
 			matchNode match: pragmaNode inContext: aDictionary ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -296,22 +329,26 @@ RBMethodNode >> methodComments [
 	methodComments := OrderedCollection withAll: self comments.
 	arguments do: [:each | methodComments addAll: each comments].
 	^methodComments asSortedCollection: [:a :b | a first < b first]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> methodNode [
 	^self
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> newSource [
 	replacements isNil ifTrue: [^self formattedCode].
 	^[self reformatSource] on: Error do: [:ex | ex return: self formattedCode]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> numArgs [
 	^self selector numArgs
+
 ]
 
 { #category : 'copying' }
@@ -320,32 +357,38 @@ RBMethodNode >> postCopy [
 	self arguments: (self arguments collect: [ :each | each copy ]).
 	self pragmas: (self pragmas collect: [ :each | each copy ]).
 	self body: self body copy
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> pragmas [
 	^ pragmas ifNil: [ #() ]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> pragmas: aCollection [
 	pragmas := aCollection.
 	pragmas do: [ :each | each parent: self ]
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> primitiveSources [
 	^ self pragmas collect: [ :each | self source copyFrom: each first to: each last ]
+
 ]
 
 { #category : 'printing' }
 RBMethodNode >> printOn: aStream [ 
 	aStream nextPutAll: self formattedCode
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> references: aVariableName [ 
 	^body references: aVariableName
+
 ]
 
 { #category : 'private' }
@@ -369,6 +412,7 @@ RBMethodNode >> reformatSource [
 	self = newTree
 		ifFalse: [ ^ self formattedCode ].
 	^ newSource
+
 ]
 
 { #category : 'accessing' }
@@ -380,6 +424,7 @@ RBMethodNode >> renameSelector: newSelector andArguments: varNodeCollection [
 		arguments: varNodeCollection;
 		selector: newSelector.
 	self changeSourceSelectors: oldSelectorParts arguments: oldArguments
+
 ]
 
 { #category : 'replacing' }
@@ -387,6 +432,7 @@ RBMethodNode >> replaceNode: aNode withNode: anotherNode [
 	aNode == body ifTrue: [self body: anotherNode].
 	self arguments: (arguments 
 				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+
 ]
 
 { #category : 'accessing' }
@@ -394,6 +440,7 @@ RBMethodNode >> selector [
 	^selector isNil
 		ifTrue: [selector := self buildSelector]
 		ifFalse: [selector]
+
 ]
 
 { #category : 'accessing' }
@@ -412,45 +459,54 @@ RBMethodNode >> selector: aSelector [
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
+
 ]
 
 { #category : 'private' }
 RBMethodNode >> selectorParts [
 	^selectorParts
+
 ]
 
 { #category : 'private' }
 RBMethodNode >> selectorParts: tokenCollection [ 
 	selectorParts := tokenCollection
+
 ]
 
 { #category : 'initialize-release' }
 RBMethodNode >> selectorParts: tokenCollection arguments: variableNodes [ 
 	selectorParts := tokenCollection.
 	self arguments: variableNodes
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> source [
 	^source
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> source: anObject [
 	source := anObject
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> start [
 	^1
+
 ]
 
 { #category : 'accessing' }
 RBMethodNode >> stop [
 	^source size
+
 ]
 
 { #category : 'testing' }
 RBMethodNode >> uses: aNode [ 
 	^body == aNode and: [aNode lastIsReturn]
+
 ]

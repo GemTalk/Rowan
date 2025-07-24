@@ -73,6 +73,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
+
 ]
 
 { #category : 'tests' }
@@ -635,6 +636,7 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
+
 ]
 
 { #category : 'tests' }
@@ -694,6 +696,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
+
 ]
 
 { #category : 'tests' }
@@ -780,4 +783,5 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple3 class and methods'
+
 ]

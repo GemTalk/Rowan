@@ -28,6 +28,7 @@ RBPatternMessageNode class >> receiver: aValueNode selectorParts: keywordTokens 
 				receiver: aValueNode
 				selectorParts: keywordTokens
 				arguments: valueNodes]
+
 ]
 
 { #category : 'matching' }
@@ -45,21 +46,25 @@ RBPatternMessageNode >> copyInContext: aDictionary [
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternMessageNode >> isList [
 	^isCascadeList and: [parent notNil and: [parent isCascade]]
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternMessageNode >> isPatternNode [
 	^true
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternMessageNode >> isSelectorList [
 	^isList
+
 ]
 
 { #category : 'matching' }
@@ -73,6 +78,7 @@ RBPatternMessageNode >> match: aNode inContext: aDictionary [
 						[(aDictionary at: arguments first ifAbsentPut: [aNode arguments]) 
 							= aNode arguments]].
 	^self matchArgumentsAgainst: aNode inContext: aDictionary
+
 ]
 
 { #category : 'matching' }
@@ -85,11 +91,13 @@ RBPatternMessageNode >> matchArgumentsAgainst: aNode inContext: aDictionary [
 		(first match: second inContext: aDictionary) 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'private' }
 RBPatternMessageNode >> matchingClass [
 	^RBMessageNode
+
 ]
 
 { #category : 'matching' }
@@ -105,6 +113,7 @@ RBPatternMessageNode >> matchSelectorAgainst: aNode inContext: aDictionary [
 		keyword = second value 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'initialize-release' }
@@ -127,6 +136,7 @@ RBPatternMessageNode >> receiver: aValueNode selectorParts: keywordTokens argume
 					[character == self cascadeListCharacter 
 						ifTrue: [isCascadeList := true]
 						ifFalse: [^self]]]
+
 ]
 
 { #category : 'accessing' }
@@ -134,4 +144,5 @@ RBPatternMessageNode >> sentMessages [
 	^ super sentMessages
 		remove: self selector ifAbsent: [ ];
 		yourself
+
 ]

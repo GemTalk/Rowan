@@ -7,9 +7,11 @@ Class {
 { #category : 'testing' }
 RBLiteralArrayToken >> isForByteArray [
 	^value last = $[
+
 ]
 
 { #category : 'testing' }
 RBLiteralArrayToken >> isLiteralArrayToken [
 	^true
+
 ]

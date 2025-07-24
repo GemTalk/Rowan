@@ -21,6 +21,7 @@ RwGsClassPatch class >> for: aClassDefinition inPackage: aPackageDefinition [
 		classDefinition: aClassDefinition;
 		packageDefinition: aPackageDefinition;
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -37,6 +38,7 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 					[ classType = 'bytes'
 						ifTrue: [ (fmt bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4 ]
 						ifFalse: [self error: 'Unknown class type']]]
+
 ]
 
 { #category : 'private' }
@@ -70,6 +72,7 @@ RwGsClassPatch >> addToNewClassesByName: aDictionary [
 	(aDictionary includesKey: name)
 		ifTrue: [ self error: 'Duplicate name' ].
 	aDictionary at: name put: self
+
 ]
 
 { #category : 'private' }
@@ -162,6 +165,7 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 	createdClass := self privateCreateClassFor: aPatchSet.
 	aPatchSet createdClass: createdClass.
 	^ createdClass
+
 ]
 
 { #category : 'patching moved classes' }
@@ -171,6 +175,7 @@ RwGsClassPatch >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
 		rowanSymbolDictionaryRegistry.
 	self installPropertiesPatchFor: aPatchSet registry: theRegistry
+
 ]
 
 { #category : 'versioning' }
@@ -178,6 +183,7 @@ RwGsClassPatch >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."
 
 	^ (self resolveName: classDefinition key) value
+
 ]
 
 { #category : 'private' }
@@ -194,6 +200,7 @@ RwGsClassPatch >> privateCreateClassFor: aPatchSet [
 							'The class named ' , classDefinition superclassName printString
 								, ' does not exist.' ] ].
 	^ self privateCreateClassWithSuperclass: superclass
+
 ]
 
 { #category : 'private' }
@@ -208,10 +215,12 @@ RwGsClassPatch >> privateCreateClassWithSuperclass: superclass [
 		ifFalse: [ classProperties at: 'category' ifAbsent: [  ] ].
 	createdClass category: category.
 	^ createdClass
+
 ]
 
 { #category : 'accessing' }
 RwGsClassPatch >> superclassName [
 
 	^classDefinition superclassName
+
 ]

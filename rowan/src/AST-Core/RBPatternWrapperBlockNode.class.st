@@ -16,6 +16,7 @@ Class {
 { #category : 'visitor' }
 RBPatternWrapperBlockNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptPatternWrapperBlockNode: self
+
 ]
 
 { #category : 'matching' }
@@ -23,26 +24,31 @@ RBPatternWrapperBlockNode >> copyInContext: aDictionary [
 	"I don't know what this would mean, so ignore it."
 
 	^ wrappedNode copyInContext: aDictionary
+
 ]
 
 { #category : 'matching' }
 RBPatternWrapperBlockNode >> match: aNode inContext: aDictionary [ 
 	(wrappedNode match: aNode inContext: aDictionary) ifFalse: [^false].
 	^super match: aNode inContext: aDictionary
+
 ]
 
 { #category : 'accessing' }
 RBPatternWrapperBlockNode >> precedence [
 	^1
+
 ]
 
 { #category : 'accessing' }
 RBPatternWrapperBlockNode >> wrappedNode [
 	^wrappedNode
+
 ]
 
 { #category : 'accessing' }
 RBPatternWrapperBlockNode >> wrappedNode: aRBProgramNode [ 
 	wrappedNode := aRBProgramNode.
 	aRBProgramNode parent: self
+
 ]

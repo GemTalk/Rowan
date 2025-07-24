@@ -554,6 +554,7 @@ RwSemanticVersionNumber >> compareEqualTo: aRwSemanticVersionNumber [
     (self compareEqualTo: self preReleaseVersion other: aRwSemanticVersionNumber preReleaseVersion)
         ifFalse: [ ^ false ].
     ^ true
+
 ]
 
 { #category : 'private' }
@@ -590,6 +591,7 @@ RwSemanticVersionNumber >> compareLessThan: aRwSemanticVersionNumber [
                 ifTrue: [ defaultResult := false ] ]
         ifFalse: [ ^ self compareLessThan: myComponents other: otherComponents version: #'preRelease' ].
     ^ defaultResult
+
 ]
 
 { #category : 'private' }

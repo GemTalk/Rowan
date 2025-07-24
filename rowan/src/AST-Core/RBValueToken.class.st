@@ -18,11 +18,13 @@ Class {
 { #category : 'instance creation' }
 RBValueToken class >> value: aString start: anInteger [ 
 	^self new value: aString start: anInteger
+
 ]
 
 { #category : 'private' }
 RBValueToken >> length [
 	^value size
+
 ]
 
 { #category : 'printing' }
@@ -31,20 +33,24 @@ RBValueToken >> printOn: aStream [
 	aStream nextPut: $(.
 	value printOn: aStream.
 	aStream nextPutAll: ')'
+
 ]
 
 { #category : 'accessing' }
 RBValueToken >> value [
 	^value
+
 ]
 
 { #category : 'accessing' }
 RBValueToken >> value: anObject [
 	value := anObject
+
 ]
 
 { #category : 'initialize-release' }
 RBValueToken >> value: aString start: anInteger [ 
 	value := aString.
 	sourcePointer := anInteger
+
 ]

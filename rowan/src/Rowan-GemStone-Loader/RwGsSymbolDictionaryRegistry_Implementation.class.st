@@ -51,6 +51,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _clearLookupCachesFor: aBeh
 	aBehavior 
 		_clearLookupCaches: envId;
 		_codeChangedForEnv: envId
+
 ]
 
 { #category : 'private' }
@@ -144,6 +145,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassExtensionsFor: 
 					assoc value == loadedClassExtension handle
 						ifTrue: [ ^ noNewVersionBlock cull: loadedClassExtension ]
 						ifFalse: [ ^ newVersionBlock cull: loadedClassExtension ] ] ]
+
 ]
 
 { #category : 'private' }
@@ -187,6 +189,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNe
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
 				, classKey asString printString
+
 ]
 
 { #category : 'private' }
@@ -359,6 +362,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewClassVersionToAssocia
 			loadedClassExtension handleClassDeletionOrNewVersion
 				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
 		instance: registryInstance.
+
 ]
 
 { #category : 'private' }
@@ -603,6 +607,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> ensureExtensionClassNamed: 
 				at: extensionClass classHistory
 				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ].
 	^ registryInstance
+
 ]
 
 { #category : 'package - creation api' }

@@ -7,6 +7,7 @@ RwPlatform class >> _userPlatformDictionary [
 		if the user does not have write access to UserGlobals, we'll store in session-specific dictionary"
 
 	^self _userPlatformDictionaryForUser: RwGsImage currentUserId
+
 ]
 
 { #category : '*rowan-gemstone-core' }
@@ -20,6 +21,7 @@ RwPlatform class >> _userPlatformDictionaryForUser: aUserId [
 	^ (System canWrite: userGlobals)
 		ifTrue: [ userGlobals ]
 		ifFalse: [ SessionTemps current ]
+
 ]
 
 { #category : '*rowan-gemstone-core' }

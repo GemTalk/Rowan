@@ -12,6 +12,7 @@ GsInspectInteraction class >> theObject: anObject [
   ^ self new
     theObject: anObject;
     yourself
+
 ]
 
 { #category : 'accessing' }
@@ -22,6 +23,7 @@ GsInspectInteraction >> defaultActionBlock [
       Transcript cr; show: self printString.
       self theObject ] ].
   ^ defaultActionBlock
+
 ]
 
 { #category : 'interacting' }
@@ -37,11 +39,13 @@ GsInspectInteraction >> interactWith: anObject [
   "
 
   ^ anObject interactWithInspect: self
+
 ]
 
 { #category : 'printing' }
 GsInspectInteraction >> printLabel [
   ^ self theObject printString
+
 ]
 
 { #category : 'accessing' }
@@ -49,6 +53,7 @@ GsInspectInteraction >> theObject [
 
    "Return the value of the instance variable 'theObject'."
    ^theObject
+
 ]
 
 { #category : 'accessing' }
@@ -56,4 +61,5 @@ GsInspectInteraction >> theObject: anObject [
 
    "Modify the value of the instance variable 'theObject'."
    theObject := anObject
+
 ]

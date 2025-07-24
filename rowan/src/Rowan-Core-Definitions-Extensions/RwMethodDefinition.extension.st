@@ -17,6 +17,7 @@ RwMethodDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification: sourceModification.
 	^modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -43,6 +44,7 @@ RwMethodDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 		sourceModification:
 				(self compareSourceAgainstBaseForNewClassVersion: aDefinition).
 	^ modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -62,6 +64,7 @@ RwMethodDefinition >> compareExtensionMethodsAgainstBase_forUpgrade: aDefinition
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification: sourceModification.
 	^ modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -73,6 +76,7 @@ RwMethodDefinition >> compareExtensionMethodsAgainstBase: aDefinition [
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
 		sourceModification: (self compareSourceAgainstBase: aDefinition).
 	^ modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -90,6 +94,7 @@ RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
 								oldValue: before
 								newValue: after) ].
 	^modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -108,4 +113,5 @@ RwMethodDefinition >> compareSourceAgainstBaseForNewClassVersion: aDefinition [
 				oldValue: before
 				newValue: after).
 	^ modification
+
 ]

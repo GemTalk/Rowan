@@ -4,4 +4,5 @@ Extension { #name : 'RwClassMove' }
 RwClassMove >> addMovedClassToPatchSet: aPatchSet [
 
 	aPatchSet addClassMove: self
+
 ]

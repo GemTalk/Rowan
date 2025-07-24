@@ -119,6 +119,7 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 					ifAbsent: [self errorLog: res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
 
 	^res
+
 ]
 
 { #category : 'audit' }
@@ -204,6 +205,7 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 			]
 	].
 	^res
+
 ]
 
 { #category : 'audit' }
@@ -219,4 +221,5 @@ RwClsAuditTool >> errorLog: aResult add: aMessage [
 RwClsAuditTool >> errorLog: aResult addAll: aCol [	
 "add all messages to result"
 	aCol do: [:e | self errorLog: aResult add: e].
+
 ]

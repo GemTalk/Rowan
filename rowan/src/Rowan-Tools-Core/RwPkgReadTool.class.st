@@ -31,10 +31,12 @@ RwPkgReadTool >> readPackageSetForSpecification: aRwSpecification [
 			packageDefinition := reader packageStructure rwSnapshot.
 			readPackages add: packageDefinition ].
 	^ (RwEntitySet withAll: readPackages) asPackageDefinitionSet
+
 ]
 
 { #category : 'validation' }
 RwPkgReadTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForRead: aRwSpecification
+
 ]

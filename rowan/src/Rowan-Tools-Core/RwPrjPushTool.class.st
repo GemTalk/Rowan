@@ -16,11 +16,13 @@ RwPrjPushTool >> doGitPush: remote [
 			| currentBranchName |
 			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
 			gitTool gitpushIn: gitRootPath with: remote , ' ' , currentBranchName ]
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjPushTool >> pushSpecification: aRwSpecification [
   ^ self pushSpecification: aRwSpecification remote: nil
+
 ]
 
 { #category : 'smalltalk api' }
@@ -31,6 +33,7 @@ RwPrjPushTool >> pushSpecification: aRwSpecification remote: remoteOrNil [
     ifNil: [ remote := specification repoSpec remote ]
     ifNotNil: [ remote := remoteOrNil ].
   ^ specification pushForTool: self remote: remote
+
 ]
 
 { #category : 'smalltalk api' }
@@ -38,6 +41,7 @@ RwPrjPushTool >> pushSpecUrl: aSpecUrlString [
   ^ self
     pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: nil
+
 ]
 
 { #category : 'smalltalk api' }
@@ -45,4 +49,5 @@ RwPrjPushTool >> pushSpecUrl: aSpecUrlString remote: remote [
   ^ self
     pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: remote
+
 ]

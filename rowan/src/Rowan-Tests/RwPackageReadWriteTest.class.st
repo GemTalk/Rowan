@@ -26,6 +26,7 @@ RwPackageReadWriteTest >> basicPackageSet [
   "this is the package set used to generate the test data in the testRepositories dir"
 
   ^ RwDiskRepositoryGenerator new generatePackageSet
+
 ]
 
 { #category : 'private' }
@@ -113,6 +114,7 @@ RwPackageReadWriteTest >> setUpSpecificationForReadTest: myPackageSet rowanSpec:
     repositoryFormat: repositoryFormat
     relativeRootPath: '/test/testRepositories/'
     cleanRoot: false
+
 ]
 
 { #category : 'private' }
@@ -130,6 +132,7 @@ RwPackageReadWriteTest >> setUpSpecificationForTest: myPackageSet rowanSpec: row
     repositoryUrl: repositoryFormat , ':' , repositoryPath;
     repoPath: 'repositoryFormat';
     yourself
+
 ]
 
 { #category : 'private' }
@@ -142,6 +145,7 @@ RwPackageReadWriteTest >> setUpSpecificationForWriteTest: myPackageSet rowanSpec
     repositoryFormat: repositoryFormat
     relativeRootPath: '/test/testRepositories/empty/'
     cleanRoot: true
+
 ]
 
 { #category : 'tests' }
@@ -149,6 +153,7 @@ RwPackageReadWriteTest >> testCypressReadWriteRead [
   "read from committed test repository, write to disk, read from disk and compare package sets along the way"
 
   self doTestReadWriteReadForFormat: 'cypress'
+
 ]
 
 { #category : 'tests' }
@@ -156,6 +161,7 @@ RwPackageReadWriteTest >> testCypressWriteRead [
   "write to disk, read from disk and compare package sets"
 
   self doTestWriteReadForFormat: 'cypress'
+
 ]
 
 { #category : 'tests' }
@@ -163,6 +169,7 @@ RwPackageReadWriteTest >> testFiletreeReadWriteRead [
   "read from committed test repository, write to disk, read from disk and compare package sets along the way"
 
   self doTestReadWriteReadForFormat: 'filetree'
+
 ]
 
 { #category : 'tests' }
@@ -170,6 +177,7 @@ RwPackageReadWriteTest >> testFiletreeWriteRead [
   "write to disk, read from disk and compare package sets"
 
   self doTestWriteReadForFormat: 'filetree'
+
 ]
 
 { #category : 'tests' }
@@ -177,6 +185,7 @@ RwPackageReadWriteTest >> testTonelReadWriteRead [
   "read from committed test repository, write to disk, read from disk and compare package sets along the way"
 
   self doTestReadWriteReadForFormat: 'tonel'
+
 ]
 
 { #category : 'tests' }
@@ -184,4 +193,5 @@ RwPackageReadWriteTest >> testTonelWriteRead [
   "write to disk, read from disk and compare package sets"
 
   self doTestWriteReadForFormat: 'tonel'
+
 ]

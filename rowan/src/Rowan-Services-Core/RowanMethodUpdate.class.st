@@ -22,6 +22,7 @@ RowanMethodUpdate >> breakPoints [
 RowanMethodUpdate >> breakPoints: anObject [
 
 	gsMethod breakPoints: anObject asOrderedCollection
+
 ]
 
 { #category : 'accessing' }

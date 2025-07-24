@@ -20,6 +20,7 @@ Class {
 RwElementsModification class >> new [
 
 	^self basicNew initialize
+
 ]
 
 { #category : 'modifications' }
@@ -27,6 +28,7 @@ RwElementsModification >> addElementModification: aModification [
 
 	aModification isEmpty
 		ifFalse: [elementsModified at: aModification key put: aModification]
+
 ]
 
 { #category : 'Accessing' }
@@ -39,18 +41,21 @@ RwElementsModification >> elementsModified [
 RwElementsModification >> initialize [
 
 	elementsModified := Dictionary new
+
 ]
 
 { #category : 'testing' }
 RwElementsModification >> isEmpty [
 
 	^elementsModified isEmpty
+
 ]
 
 { #category : 'Accessing' }
 RwElementsModification >> modificationOf: aKey [
 
 	^elementsModified at: aKey
+
 ]
 
 { #category : 'printing' }
@@ -58,10 +63,12 @@ RwElementsModification >> printOn: aStream [
 
 	super printOn: aStream.
 	self isEmpty ifTrue: [aStream nextPutAll: ' (empty)']
+
 ]
 
 { #category : 'Accessing' }
 RwElementsModification >> removeModificationOf: aKey [
 
 	elementsModified removeKey: aKey
+
 ]

@@ -23,6 +23,7 @@ RwPrjCheckoutTool >> checkoutSpecification: aRwSpecification [
 			gitRepoPath := specification repoSpec repositoryRootPath.
 			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
 	^ specification
+
 ]
 
 { #category : 'smalltalk api' }

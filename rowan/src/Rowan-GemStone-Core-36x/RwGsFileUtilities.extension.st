@@ -6,4 +6,5 @@ RwGsFileUtilities class >> directoryExists: aDirectory [
 	"handle the case where GsFile class>>existsOnServer: returns nil"
 	aDirectory ifNil: [ ^false ].
 	^ (GsFile existsOnServer: aDirectory) == true
+
 ]

@@ -71,4 +71,5 @@ RowanClassInfoUpdate >> writeInfoOn: writeStream [
 	writeStream
 		nextPut: $%;
 		lf.
+
 ]

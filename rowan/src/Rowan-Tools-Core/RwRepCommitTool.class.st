@@ -17,6 +17,7 @@ RwRepCommitTool >> commitRepositoryForSpecification: aRwSpecification message: m
       ^ msg ].
   specification commitForTool: self message: messageString.
   ^ specification updateLoadedCommitIdForTool: self
+
 ]
 
 { #category : 'smalltalk api' }
@@ -26,4 +27,5 @@ RwRepCommitTool >> commitRepositoryForSpecUrl: aSpecUrlString message: messageSt
   ^ self
     commitRepositoryForSpecification: (RwSpecification fromUrl: aSpecUrlString)
     message: messageString
+
 ]

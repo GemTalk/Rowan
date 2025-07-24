@@ -17,6 +17,7 @@ RwPkgDiffTool >> patchForPackageName: packageName [
 	imageSnapshot := (RwCypressPackageStructure
 		fromPackage: loadedPackage asDefinition) snapshot.
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
+
 ]
 
 { #category : 'smalltalk api' }
@@ -31,6 +32,7 @@ RwPkgDiffTool >> patchSpecification: aRwSpecification packageName: packageName [
 	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
 	imageSnapshot := (CypressPackageDefinition named: packageName) snapshot.
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
+
 ]
 
 { #category : 'smalltalk api' }
@@ -39,4 +41,5 @@ RwPkgDiffTool >> patchSpecUrl: aString packageName: packageName [
 	^ self
 		patchSpecification: (RwSpecification fromUrl: aString)
 		packageName: packageName
+
 ]

@@ -4,4 +4,5 @@ Extension { #name : 'RwAbstractClassDefinition' }
 RwAbstractClassDefinition >> modificationForcingNewVersion [
 
 	^ self _modificationForcingNewClassVersion before: self after: self
+
 ]

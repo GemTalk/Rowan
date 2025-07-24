@@ -32,6 +32,7 @@ RwGsMethodExtensionSessionMethodSymbolDictPatch >> compileUsingNewClasses: creat
 		intoCategories: catDict
 		intoPragmas: pArray
 		environmentId: self methodEnvironmentId
+
 ]
 
 { #category : 'installing' }

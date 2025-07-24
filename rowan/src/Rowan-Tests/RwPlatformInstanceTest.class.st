@@ -8,6 +8,7 @@ Class {
 RwPlatformInstanceTest >> _testPreference [
 
 	^#'unknown_preference'
+
 ]
 
 { #category : 'running' }
@@ -15,6 +16,7 @@ RwPlatformInstanceTest >> tearDown [
 
 	super tearDown.
 	Rowan platform clearAllPreferencesFor: self _testPreference
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -42,6 +44,7 @@ RwPlatformInstanceTest >> testDefaultPrecedence [
 	platformInstance clearPreferenceFor: preference.
 	platformInstance clearDefaultPreferenceFor: preference.
 	self should: [ platformInstance preferenceFor: preference ] raise: Error
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -58,6 +61,7 @@ RwPlatformInstanceTest >> testGlobalPreferences [
 
 	platformInstance setGlobalPreferenceFor: preference to: true.
 	self assert: (platformInstance preferenceFor: preference).
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -87,6 +91,7 @@ RwPlatformInstanceTest >> testPreferencePrecedence [
 	platformInstance setSessionPreferenceFor: preference to: #session.
 	platformInstance clearPreferenceFor: preference.										"session and user prefs cleared"
 	self assert: (x := platformInstance preferenceFor: preference) == #global.
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -105,6 +110,7 @@ RwPlatformInstanceTest >> testPreferences [
 
 	platformInstance setPreferenceFor: preference to: true.
 	self assert: (platformInstance preferenceFor: preference).
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -121,6 +127,7 @@ RwPlatformInstanceTest >> testSessionPreferences [
 
 	platformInstance setSessionPreferenceFor: preference to: true.
 	self assert: (platformInstance preferenceFor: preference).
+
 ]
 
 { #category : 'test preferences (issue #448)' }
@@ -137,4 +144,5 @@ RwPlatformInstanceTest >> testUserPreferences [
 
 	platformInstance setUserPreferenceFor: preference to: true.
 	self assert: (platformInstance preferenceFor: preference).
+
 ]

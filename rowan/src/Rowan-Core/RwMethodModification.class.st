@@ -22,6 +22,7 @@ Class {
 RwMethodModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitMethodModification: self
+
 ]
 
 { #category : 'patching' }
@@ -117,6 +118,7 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]
+
 ]
 
 { #category : 'converting' }
@@ -159,6 +161,7 @@ RwMethodModification >> classDefinition: aClassDefinition [
 RwMethodModification >> isEmpty [
 
 	^super isEmpty & sourceModification isEmpty
+
 ]
 
 { #category : 'Accessing' }

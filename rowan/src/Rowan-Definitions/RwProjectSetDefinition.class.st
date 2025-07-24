@@ -15,6 +15,7 @@ Class {
 RwProjectSetDefinition >> addProject: aDefinition [
 
 	self addDefinition: aDefinition
+
 ]
 
 { #category : 'deriving' }
@@ -41,10 +42,12 @@ RwProjectSetDefinition >> projectNamed: projectName ifAbsent: absentBlock [
 RwProjectSetDefinition >> projectNames [
 
 	^ self definitionNames
+
 ]
 
 { #category : 'accessing' }
 RwProjectSetDefinition >> projects [
 
 	^ self definitions
+
 ]

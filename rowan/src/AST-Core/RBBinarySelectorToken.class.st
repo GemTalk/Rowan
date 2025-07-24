@@ -11,4 +11,5 @@ Class {
 { #category : 'testing' }
 RBBinarySelectorToken >> isBinary [
 	^true
+
 ]

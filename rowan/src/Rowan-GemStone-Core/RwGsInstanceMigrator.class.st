@@ -16,12 +16,14 @@ RwGsInstanceMigrator class >> aggressiveMigration [
 		maxThreads: SystemRepository _aggressiveMaxThreadCount;
 		maxCpuPercentage: 95;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
 RwGsInstanceMigrator class >> conservativeMigration [
 
 	^ self new
+
 ]
 
 { #category : 'instance creation' }
@@ -30,12 +32,14 @@ RwGsInstanceMigrator class >> noMigration [
 	^ self new
 		migrationEnabled: false;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RwGsInstanceMigrator >> maxCpuPercentage [
 
 	^ maxCpuPercentage ifNil: [ 90 ]
+
 ]
 
 { #category : 'accessing' }
@@ -49,6 +53,7 @@ RwGsInstanceMigrator >> maxCpuPercentage: anObject [
 RwGsInstanceMigrator >> maxThreads [
 
 	^ maxThreads ifNil: [ 2 ]
+
 ]
 
 { #category : 'accessing' }
@@ -90,6 +95,7 @@ RwGsInstanceMigrator >> migrateInstancesOf: aClassArray [
 RwGsInstanceMigrator >> migrationEnabled [
 
 	^ migrationEnabled ifNil: [ true ]
+
 ]
 
 { #category : 'accessing' }

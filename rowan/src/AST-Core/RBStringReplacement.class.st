@@ -26,34 +26,41 @@ RBStringReplacement class >> replaceFrom: startInteger to: stopInteger with: aSt
 		stopPosition: stopInteger;
 		string: aString;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RBStringReplacement >> startPosition [
 	^startPosition
+
 ]
 
 { #category : 'initialize-release' }
 RBStringReplacement >> startPosition: anInteger [ 
 	startPosition := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBStringReplacement >> stopPosition [
 	^stopPosition
+
 ]
 
 { #category : 'initialize-release' }
 RBStringReplacement >> stopPosition: anInteger [ 
 	stopPosition := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBStringReplacement >> string [
 	^string
+
 ]
 
 { #category : 'initialize-release' }
 RBStringReplacement >> string: aString [ 
 	string := aString
+
 ]

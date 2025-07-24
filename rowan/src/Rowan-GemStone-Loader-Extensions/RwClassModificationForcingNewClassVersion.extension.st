@@ -7,6 +7,7 @@ RwClassModificationForcingNewClassVersion >> addModificationForcingNewClassVersi
 		addForcingNewClassVersionModification: self 
 		toPatchSetInPackage: aPackage 
 		inProject: aProjectDefinition
+
 ]
 
 { #category : '*rowan-gemstone-loader-extensions' }

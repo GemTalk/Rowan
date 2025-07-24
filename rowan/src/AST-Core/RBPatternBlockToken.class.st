@@ -12,4 +12,5 @@ Class {
 { #category : 'testing' }
 RBPatternBlockToken >> isPatternBlock [
 	^true
+
 ]

@@ -26,6 +26,7 @@ RwMethodMove class >> methodBefore: beforeMethodDefinition methodAfter: afterMet
 		packageAfter: afterPackageDefinition;
 		isMeta: isMeta;
 		yourself
+
 ]
 
 { #category : 'unknown' }

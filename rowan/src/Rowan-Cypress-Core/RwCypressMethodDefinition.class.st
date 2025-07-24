@@ -11,6 +11,7 @@ Class {
 RwCypressMethodDefinition >> isExtensionMethod [
 
 	^ isExtensionMethod ifNil: [ isExtensionMethod := false ]
+
 ]
 
 { #category : 'accessing' }

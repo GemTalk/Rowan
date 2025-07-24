@@ -18,6 +18,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassExtensionsIn: className [
 				description:
 					'expected class extension definitions for class ' , className printString
 						, ' not found.' ]
+
 ]
 
 { #category : 'private' }
@@ -31,6 +32,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassExtensionsIn: className ifAbsen
 		definitionsForClassExtensionNamed: className
 		ifFound: foundBlock
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
@@ -44,6 +46,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassName: className ifAbsent: absen
 		definitionsForClassNamed: className
 		ifFound: foundBlock
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
@@ -59,6 +62,7 @@ RwBrowserToolTest >> _assert: foundBlock forClassNamed: className [
 				assert: false
 				description:
 					'expected class definitions for class ' , className printString , ' not found.' ]
+
 ]
 
 { #category : 'private' }
@@ -77,6 +81,7 @@ RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory if
 	found isEmpty
 		ifFalse: [ ^ presentBlock cull: found ].
 	^ absentBlock value
+
 ]
 
 { #category : 'private' }
@@ -92,6 +97,7 @@ RwBrowserToolTest >> _assertNoClassExtensionsIn: className [
 					'No class extensions expected for class ' , className printString ]
 		forClassExtensionsIn: className
 		ifAbsent: [  ]
+
 ]
 
 { #category : 'private' }
@@ -116,6 +122,7 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass gs_
 				put:
 					(gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
 	^ def
+
 ]
 
 { #category : 'private' }
@@ -126,6 +133,7 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass typ
 		superclass: superclass
 		gs_options: nil
 		type: type
+
 ]
 
 { #category : 'private' }
@@ -495,6 +503,7 @@ RwBrowserToolTest >> _simpleClassDefinition: className [
 		comment: 'I am a SimpleEdit class'
 		pools: #()
 		type: 'normal'
+
 ]
 
 { #category : 'private' }
@@ -527,6 +536,7 @@ RwBrowserToolTest >> _standardClassDefinition: className [
 		yourself.
 
 	^ classDefinition
+
 ]
 
 { #category : 'private' }
@@ -538,6 +548,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		defaultSymbolDictName: defaultSymbolDictName
 		defaultUseSessionMethodsForExtensions: false
 		comment: comment
+
 ]
 
 { #category : 'private' }

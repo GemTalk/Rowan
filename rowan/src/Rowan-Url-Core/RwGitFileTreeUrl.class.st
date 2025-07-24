@@ -33,4 +33,5 @@ Class {
 { #category : 'constants' }
 RwGitFileTreeUrl class >> schemeName [
   ^ 'gitfiletree'
+
 ]

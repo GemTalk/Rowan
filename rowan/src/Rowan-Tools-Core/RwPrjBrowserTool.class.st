@@ -42,6 +42,7 @@ RwPrjBrowserTool >> _copyClassDefinitionNamed: className to: newName [
 			packageDef addClassExtension: classExtDef ].
 
 	^ projectSetDefinition
+
 ]
 
 { #category : 'private' }
@@ -53,6 +54,7 @@ RwPrjBrowserTool >> _loadedClassExtensionsNamed: className [
 			self
 				error:
 					'No extensions for the class ' , className printString , ' were found' ]
+
 ]
 
 { #category : 'private' }
@@ -62,6 +64,7 @@ RwPrjBrowserTool >> _loadedClassExtensionsNamed: className ifAbsent: absentBlock
 		loadedClassExtensionsNamed: className
 		ifFound: [ :loadedClassExtensionSet | ^ loadedClassExtensionSet ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
@@ -70,12 +73,14 @@ RwPrjBrowserTool >> _loadedClassNamed: className [
 	^ self
 		_loadedClassNamed: className
 		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedClassNamed: className ifAbsent: absentBlock [
 
 	^ Rowan image loadedClassNamed: className ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
@@ -90,6 +95,7 @@ RwPrjBrowserTool >> _loadedMethod: methodSelector inClassNamed: className isMeta
 				error:
 					'No loaded method for ' , methodSelector printString , ' was found for class '
 						, className printString ]
+
 ]
 
 { #category : 'private' }
@@ -101,6 +107,7 @@ RwPrjBrowserTool >> _loadedMethod: methodSelector inClassNamed: className isMeta
 		isMeta: isMeta
 		ifFound: [ :loadedMethod | ^ loadedMethod ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
@@ -109,18 +116,21 @@ RwPrjBrowserTool >> _loadedPackageNamed: packageName [
 	^ self
 		_loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ]
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ Rowan image loadedPackageNamed: packageName ifAbsent: absentBlock
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedProjectForClassNamed: className [
 
 	^ (self _loadedClassNamed: className) loadedProject
+
 ]
 
 { #category : 'private' }
@@ -128,12 +138,14 @@ RwPrjBrowserTool >> _loadedProjectForMethod: methodSelector inClassNamed: classN
 
 	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
 		loadedProject
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedProjectForPackageNamed: packageName [
 
 	^ (self _loadedPackageNamed: packageName) loadedProject
+
 ]
 
 { #category : 'private' }
@@ -142,12 +154,14 @@ RwPrjBrowserTool >> _loadedProjectNamed: projectName [
 	^ Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _projectForClassNamed: className [
 
 	^ (self _loadedProjectForClassNamed: className) asDefinition
+
 ]
 
 { #category : 'private' }
@@ -157,18 +171,21 @@ RwPrjBrowserTool >> _projectForMethod: methodSelector inClassNamed: className is
 		_loadedProjectForMethod: methodSelector
 		inClassNamed: className
 		isMeta: isMeta) asDefinition
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _projectForPackageNamed: packageName [
 
 	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
+
 ]
 
 { #category : 'private' }
 RwPrjBrowserTool >> _projectNamed: projectName [
 
 	^ (self _loadedProjectNamed: projectName) asDefinition
+
 ]
 
 { #category : 'private' }
@@ -322,6 +339,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 		forClassNamed: className
 		isMeta: isMeta
 		inPackageNamed: loadedPackage name
+
 ]
 
 { #category : 'method browsing' }
@@ -429,6 +447,7 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 	projectDefinition := self _projectNamed: projectName.
 	projectDefinition addPackage: (RwPackageDefinition newNamed: packageName).
 	Rowan projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'package browsing' }
@@ -439,6 +458,7 @@ RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
 	packageNames
 		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
 	Rowan projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'project browsing' }
@@ -473,12 +493,14 @@ RwPrjBrowserTool >> addRowanSymbolDictionariesToTransientSymbolList [
       aSymbolDictionary := systemUser objectNamed: symDictName.
       anIndex := transient size + 1.
       transient insertObject: aSymbolDictionary at: anIndex ]
+
 ]
 
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 
 	^ self classCreationTemplateForClass: aClass hybridBrowser: false
+
 ]
 
 { #category : 'class browsing' }
@@ -594,6 +616,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 		classCreationTemplateForSubclassOf: superclassName
 		category: category
 		packageName: nil
+
 ]
 
 { #category : 'class browsing' }
@@ -604,6 +627,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 		className: 'NameOfSubclass'
 		category: category
 		packageName: packageName
+
 ]
 
 { #category : 'class browsing' }
@@ -614,6 +638,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		className: className
 		category: category
 		packageName: nil
+
 ]
 
 { #category : 'class browsing' }
@@ -625,6 +650,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		type: 'normal'
 		category: category
 		packageName: packageName
+
 ]
 
 { #category : 'class browsing' }
@@ -726,6 +752,7 @@ comment: comment category: category [
 				addAll: comment;
 				addAll: lfsp ].
 	^ result
+
 ]
 
 { #category : 'definition updating' }
@@ -738,6 +765,7 @@ RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock [
 			self
 				error:
 					'expected class definition for class ' , className printString , ' not found.' ]
+
 ]
 
 { #category : 'definition updating' }
@@ -753,6 +781,7 @@ RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock ifAbsent
 
 	updateBlock value: classDefinition.
 	self class load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'class browsing' }
@@ -766,6 +795,7 @@ RwPrjBrowserTool >> copyClassNamed: className to: newName [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
+
 ]
 
 { #category : 'class browsing' }
@@ -785,12 +815,14 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 		inProject: projectDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'project browsing' }
 RwPrjBrowserTool >> createGitPackageProjectNamed: projectName [
 
 	self createGitPackageProjectNamed: projectName updateDefinition: [  ]
+
 ]
 
 { #category : 'definition updating' }
@@ -977,12 +1009,14 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 					srcClsDef removeInstanceMethod: methodSelector ] ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
 ]
 
 { #category : 'project browsing' }
 RwPrjBrowserTool >> projectNamed: projectName [
 
 	^ self _projectNamed: projectName
+
 ]
 
 { #category : 'definition updating' }
@@ -992,6 +1026,7 @@ RwPrjBrowserTool >> projectNamed: projectName updateDefinition: updateBlock [
 	projectDefinition := self _projectNamed: projectName.
 	updateBlock value: projectDefinition.
 	self class load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'definition updating' }
@@ -1006,6 +1041,7 @@ RwPrjBrowserTool >> projectsNamed: projectNames updateDefinition: updateBlock [
 			updateBlock value: projectDefinition.
 			projectSetDefinition addProject: projectDefinition ].
 	self class load loadProjectSetDefinition: projectSetDefinition
+
 ]
 
 { #category : 'class browsing' }
@@ -1062,6 +1098,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 					dict := ar at: 1.	
 					key := ar at: 2.
 					dict removeKey: key ] ]
+
 ]
 
 { #category : 'method browsing' }
@@ -1098,6 +1135,7 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
 	Rowan projectTools load loadProjectDefinition: projectDef
+
 ]
 
 { #category : 'package browsing' }
@@ -1181,6 +1219,7 @@ RwPrjBrowserTool >> removeProtocol: hybridPackageName fromClassNamed: className 
 	"Rowan does not automatically remove empty method categories ... just removes methods,
 		we need to clean up after Rowan is done."
 	theBehavior removeCategory: hybridPackageName asSymbol
+
 ]
 
 { #category : 'class browsing' }
@@ -1241,6 +1280,7 @@ RwPrjBrowserTool >> renameClassNamed: className to: newName [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
+
 ]
 
 { #category : 'class browsing' }
@@ -1262,4 +1302,5 @@ RwPrjBrowserTool >> updateClassComment: aString forClassNamed: className [
 	classDefinition comment: aString.
 
 	self class load loadProjectDefinition: projectDefinition.
+
 ]

@@ -34,6 +34,7 @@ RBFormatter >> acceptArrayNode: anArrayNode [
 				self indent ]
 			ifFalse: [ self formatStatementsFor: anArrayNode ] ].
 	codeStream nextPut: $}
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -43,6 +44,7 @@ RBFormatter >> acceptAssignmentNode: anAssignmentNode [
 			[self visitNode: anAssignmentNode variable.
 			codeStream space; nextPutAll: anAssignmentNode assignmentOperator; space.
 			self visitNode: anAssignmentNode value]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -51,6 +53,7 @@ RBFormatter >> acceptBlockNode: aBlockNode [
 		acceptBlockNode: aBlockNode
 		startBlockString: '['
 		endBlockString: ']'
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -77,6 +80,7 @@ RBFormatter >> acceptBlockNode: aBlockNode startBlockString: startBlockString en
 	codeStream
 		nextPutAll: formattedBody;
 		nextPutAll: endBlockString
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -93,6 +97,7 @@ RBFormatter >> acceptCascadeNode: aCascadeNode [
 						indent;
 						indentWhile: [self formatMessage: each cascade: true]]
 				separatedBy: [codeStream nextPut: $;]]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -106,11 +111,13 @@ RBFormatter >> acceptLiteralArrayNode: aRBArrayLiteralNode [
 		separatedBy: [codeStream nextPut: $ ].
 	codeStream 
 		nextPut: (aRBArrayLiteralNode isForByteArray ifTrue: [$]] ifFalse: [$)])
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBFormatter >> acceptLiteralNode: aLiteralNode [ 
 	aLiteralNode token rbStoreOn: codeStream
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -124,6 +131,7 @@ RBFormatter >> acceptMessageNode: aMessageNode [
 		ifTrue: [lineStart := codeStream position - newFormatter lastLineLength].
 	self indent: (newFormatter isMultiLine ifTrue: [2] ifFalse: [1])
 		while: [self formatMessage: aMessageNode cascade: false]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -135,6 +143,7 @@ RBFormatter >> acceptMethodNode: aMethodNode [
 		self formatPragmasFor: aMethodNode.
 		aMethodNode body statements notEmpty 
 			ifTrue: [ self visitNode: aMethodNode body ] ]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -143,6 +152,7 @@ RBFormatter >> acceptPatternBlockNode: aRBPatternBlockNode [
 		acceptBlockNode: aRBPatternBlockNode
 		startBlockString: '`{'
 		endBlockString: '}'
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -152,6 +162,7 @@ RBFormatter >> acceptPatternWrapperBlockNode: aRBPatternWrapperBlockNode [
 		acceptBlockNode: aRBPatternWrapperBlockNode
 		startBlockString: '`{'
 		endBlockString: '}'
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -163,6 +174,7 @@ RBFormatter >> acceptPragmaNode: aPragmaNode [
     ifTrue: [ codeStream nextPut: $  ].
   self formatMessage: aPragmaNode cascade: false.
   codeStream nextPut: $>
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -174,6 +186,7 @@ RBFormatter >> acceptQueryBlockNode: aBlockNode [
     startBlockString: '{'
     endBlockString: '}' ]
     ensure: [ inQueryBlock := false ]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -202,12 +215,14 @@ RBFormatter >> acceptQueryBlockNode: aBlockNode startBlockString: startBlockStri
   codeStream
     nextPutAll: formattedBody;
     nextPutAll: endBlockString
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBFormatter >> acceptReturnNode: aReturnNode [ 
 	codeStream nextPut: $^.
 	self visitNode: aReturnNode value
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -215,11 +230,13 @@ RBFormatter >> acceptSequenceNode: aSequenceNode [
 	self formatMethodCommentFor: aSequenceNode indentBefore: false.
 	self formatTemporariesFor: aSequenceNode.
 	self formatStatementsFor: aSequenceNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBFormatter >> acceptVariableNode: aVariableNode [ 
 	codeStream nextPutAll: aVariableNode name
+
 ]
 
 { #category : 'accessing' }
@@ -227,6 +244,7 @@ RBFormatter >> firstLineLength [
 	^firstLineLength isNil
 		ifTrue: [codeStream position]
 		ifFalse: [firstLineLength]
+
 ]
 
 { #category : 'private' }
@@ -240,12 +258,14 @@ RBFormatter >> for: aValue do: doBlock separatedBy: separatorBlock [
 			doBlock value: (aValue at: i).
 			separatorBlock value].
 	doBlock value: aValue last
+
 ]
 
 { #category : 'accessing' }
 RBFormatter >> format: aNode [ 
 	self visitNode: aNode.
 	^codeStream contents
+
 ]
 
 { #category : 'private-formatting' }
@@ -281,6 +301,7 @@ RBFormatter >> formatMessage: aMessageNode cascade: cascadeBoolean [
 		formatMessageSelector: selectorParts
 		withArguments: formattedArgs
 		multiline: multiLine
+
 ]
 
 { #category : 'private-formatting' }
@@ -298,6 +319,7 @@ RBFormatter >> formatMessageSelector: selectorParts withArguments: formattedArgs
 						nextPut: $ ;
 						nextPutAll: (formattedArgs at: i).
 					(multiLine and: [i < formattedArgs size]) ifTrue: [self indent]]]
+
 ]
 
 { #category : 'private-formatting' }
@@ -312,6 +334,7 @@ RBFormatter >> formatMethodCommentFor: aNode indentBefore: aBoolean [
 				nextPutAll: (aNode source copyFrom: each first to: each last);
 				lf.
 			aBoolean ifFalse: [self indent]]
+
 ]
 
 { #category : 'private-formatting' }
@@ -330,11 +353,13 @@ RBFormatter >> formatMethodPatternFor: aMethodNode [
 						nextPut: $ .
 					self visitArgument: arg.
 					codeStream nextPut: $ ]]
+
 ]
 
 { #category : 'private-formatting' }
 RBFormatter >> formatPragmasFor: aNode [
 	aNode pragmas do: [ :each | self visitNode: each; indent ]
+
 ]
 
 { #category : 'private-formatting' }
@@ -349,6 +374,7 @@ RBFormatter >> formatStatementCommentFor: aNode [
 			(crs - 1 max: 0) timesRepeat: [codeStream lf].
 			crs == 0 ifTrue: [codeStream tab] ifFalse: [self indent].
 			codeStream nextPutAll: (source copyFrom: each first to: each last)]
+
 ]
 
 { #category : 'private-formatting' }
@@ -365,6 +391,7 @@ RBFormatter >> formatStatementsFor: aSequenceNode [
 			self indent].
 	self visitNode: statements last.
 	self formatStatementCommentFor: statements last
+
 ]
 
 { #category : 'private-formatting' }
@@ -379,6 +406,7 @@ RBFormatter >> formatTemporariesFor: aSequenceNode [
 			codeStream nextPut: $ ].
 	codeStream nextPut: $|.
 	self indent
+
 ]
 
 { #category : 'private' }
@@ -387,6 +415,7 @@ RBFormatter >> indent [
 	codeStream lf.
 	tabs timesRepeat: [codeStream tab].
 	lineStart := codeStream position
+
 ]
 
 { #category : 'private' }
@@ -394,11 +423,13 @@ RBFormatter >> indent: anInteger while: aBlock [
 	tabs := tabs + anInteger.
 	aBlock value.
 	tabs := tabs - anInteger
+
 ]
 
 { #category : 'private' }
 RBFormatter >> indentWhile: aBlock [ 
 	self indent: 1 while: aBlock
+
 ]
 
 { #category : 'initialize-release' }
@@ -408,36 +439,43 @@ RBFormatter >> initialize [
   tabs := 0.
   lineStart := 0.
   inQueryBlock := false
+
 ]
 
 { #category : 'accessing' }
 RBFormatter >> isMultiLine [
 	^firstLineLength notNil
+
 ]
 
 { #category : 'accessing' }
 RBFormatter >> lastLineLength [
 	^codeStream position - (lineStart max: 0)
+
 ]
 
 { #category : 'private' }
 RBFormatter >> lineLength [
 	^codeStream position - lineStart
+
 ]
 
 { #category : 'private' }
 RBFormatter >> lineStart: aPosition [ 
 	lineStart := aPosition
+
 ]
 
 { #category : 'private' }
 RBFormatter >> maximumArgumentsPerLine [
 	^2
+
 ]
 
 { #category : 'private' }
 RBFormatter >> maxLineSize [
 	^75
+
 ]
 
 { #category : 'private' }
@@ -486,6 +524,7 @@ RBFormatter >> needsParenthesisFor: aNode [
   inQueryBlock
     ifTrue: [ ^ aNode receiver isMessage not and: [ aNode selector ~~ #'&' ] ].
   ^ self precedenceOf: parent selector greaterThan: aNode selector
+
 ]
 
 { #category : 'private-formatting' }
@@ -506,6 +545,7 @@ RBFormatter >> newLinesFor: aString startingAt: anIndex [
 			char == cr ifTrue: [count := count + 1].
 			index := index - 1].
 	^count
+
 ]
 
 { #category : 'copying' }
@@ -514,6 +554,7 @@ RBFormatter >> postCopy [
 	lineStart := self lineLength negated.
 	codeStream := WriteStreamPortable on: String new.
 	firstLineLength := nil
+
 ]
 
 { #category : 'private' }
@@ -533,16 +574,19 @@ RBFormatter >> precedenceOf: parentSelector greaterThan: childSelector [
 			((operators at: i) includes: childSelector first) 
 				ifTrue: [childIndex := i]].
 	^childIndex < parentIndex
+
 ]
 
 { #category : 'private' }
 RBFormatter >> selectorsToLeaveOnLine [
 	^#(#to:do: #to:by: #to:by:do:)
+
 ]
 
 { #category : 'private' }
 RBFormatter >> selectorsToStartOnNewLine [
 	^#(#ifTrue:ifFalse: #ifFalse:ifTrue: #ifTrue: #ifFalse:)
+
 ]
 
 { #category : 'testing' }
@@ -552,6 +596,7 @@ RBFormatter >> startMessageSendOnNewLine: aMessageNode [
 	(self selectorsToLeaveOnLine includes: aMessageNode selector) 
 		ifTrue: [^false].
 	^aMessageNode selector numArgs > self maximumArgumentsPerLine
+
 ]
 
 { #category : 'visiting' }
@@ -563,4 +608,5 @@ RBFormatter >> visitNode: aNode [
   aNode acceptVisitor: self.
   parenthesis
     ifTrue: [ codeStream nextPut: $) ]
+
 ]

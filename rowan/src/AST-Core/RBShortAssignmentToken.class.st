@@ -7,4 +7,5 @@ Class {
 { #category : 'private' }
 RBShortAssignmentToken >> length [
 	^ 1
+
 ]

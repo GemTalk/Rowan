@@ -15,12 +15,14 @@ Class {
 RwGsSymbolDictionaryRegistry class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
+
 ]
 
 { #category : 'installation' }
 RwGsSymbolDictionaryRegistry class >> globalSymbol [
 
 	^ #'RwSymbolDictionaryRegistry'
+
 ]
 
 { #category : 'installation' }
@@ -30,6 +32,7 @@ RwGsSymbolDictionaryRegistry class >> installIn: aSymbolDictionary [
 	registry := self newForSymbolDictionary: aSymbolDictionary.
 	aSymbolDictionary at: self globalSymbol put: registry.
 	^ registry
+
 ]
 
 { #category : 'instance creation' }
@@ -73,6 +76,7 @@ RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersio
 				error:
 					'internal error - the value associated with the key ' , class name printString
 						, ' is not identical to the given class' ]
+
 ]
 
 { #category : 'private' }
@@ -99,18 +103,21 @@ RwGsSymbolDictionaryRegistry >> _loadedClassFor: class noNewVersion: noNewVersio
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
 				, classKey asString printString
+
 ]
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry >> _symbolDictionary [
 
 	^ symbolDictionary
+
 ]
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry >> _symbolDictionary: aSymbolDictionary [
 
 	symbolDictionary := aSymbolDictionary
+
 ]
 
 { #category : 'private' }
@@ -122,6 +129,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: aKey ifPresent: 
 	anAssoc := self _symbolDictionary associationAt: aKey otherwise: nil.
 	anAssoc ifNotNil: [ ^ oneArgBlock cull: anAssoc ].
 	^ nil
+
 ]
 
 { #category : 'private' }
@@ -133,6 +141,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAssociationAt: key ifPresent: o
 		_symbolDictionaryAssociationAt: key
 		ifPresent: [ :v | ^ oneArgBlock cull: v ].
 	^ absentBlock value
+
 ]
 
 { #category : 'private' }
@@ -143,6 +152,7 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock 
 	| v |
 	v := self _symbolDictionary at: key ifAbsent: [ ^ nil ].
 	^ oneArgBlock cull: v
+
 ]
 
 { #category : 'private' }
@@ -366,6 +376,7 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 RwGsSymbolDictionaryRegistry >> classExtensionRegistry [
 
 	^ classExtensionRegistry
+
 ]
 
 { #category : 'accessing' }
@@ -583,6 +594,7 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass [
 	^ self
 		existingForClass: aClass
 		ifAbsent: [ self error: 'no loaded class found for ' , aClass name printString ]
+
 ]
 
 { #category : 'loaded queries' }
@@ -591,6 +603,7 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
 	"Answer the registered LoadedClass for the given class."
 
 	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+
 ]
 
 { #category : 'package - creation api' }
@@ -614,6 +627,7 @@ RwGsSymbolDictionaryRegistry >> homeSessionMethods [
 	package := self _symbolDictionary at: GsPackage globalName otherwise: nil.
 	package ifNil: [ package := GsPackage installIn: self _symbolDictionary ].
 	^ package
+
 ]
 
 { #category : 'initialization' }

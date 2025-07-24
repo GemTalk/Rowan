@@ -112,6 +112,7 @@ Class >> _rwSortedConstraints [
   ].
 
 ^constraintArray
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -128,6 +129,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -154,6 +156,7 @@ Class >> rwComment [
 	"Provide direct access to comment of class, bypassing default comeent string."
   
   ^ (self _extraDictAt: #comment) ifNil: [ '' ]
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -197,6 +200,7 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -267,6 +271,7 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }

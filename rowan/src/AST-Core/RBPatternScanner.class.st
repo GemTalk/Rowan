@@ -15,6 +15,7 @@ RBPatternScanner class >> initialize [
   "self initialize"
 
   super initialize
+
 ]
 
 { #category : 'accessing' }
@@ -23,4 +24,5 @@ RBPatternScanner >> scanToken [
 		ifTrue: [^self scanPatternVariable].
 	currentCharacter = $} ifTrue: [^self scanSpecialCharacter].
 	^super scanToken
+
 ]

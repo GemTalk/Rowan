@@ -20,6 +20,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> compiledMethod [
 					self
 						error:
 							'internal error - compiled session method not present in method dictionary' ] ]
+
 ]
 
 { #category : 'deleting' }
@@ -81,4 +82,5 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteNewVersionMetho
 RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> symbolDictionary [
 
 	^self symbolDictionaryFor: self packageName
+
 ]

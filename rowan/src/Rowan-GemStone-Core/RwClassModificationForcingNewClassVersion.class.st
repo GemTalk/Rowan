@@ -8,4 +8,5 @@ Class {
 RwClassModificationForcingNewClassVersion >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitClassModificationForcingNewVersion: self
+
 ]

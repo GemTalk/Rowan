@@ -21,6 +21,7 @@ Class {
 RwClassModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitClassModification: self
+
 ]
 
 { #category : 'Accessing' }
@@ -42,6 +43,7 @@ RwClassModification >> initialize [
 	super initialize.
 	instanceMethodsModification := #().
 	classMethodsModification := #()
+
 ]
 
 { #category : 'Accessing' }
@@ -61,6 +63,7 @@ RwClassModification >> isEmpty [
 
 	^super isEmpty & instanceMethodsModification isEmpty
 		& classMethodsModification isEmpty
+
 ]
 
 { #category : 'merging' }

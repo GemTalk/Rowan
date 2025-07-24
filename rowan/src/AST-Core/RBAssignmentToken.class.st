@@ -11,9 +11,11 @@ Class {
 { #category : 'testing' }
 RBAssignmentToken >> isAssignment [
 	^true
+
 ]
 
 { #category : 'private' }
 RBAssignmentToken >> length [
 	^2
+
 ]

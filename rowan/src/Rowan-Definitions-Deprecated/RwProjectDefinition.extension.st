@@ -5,6 +5,7 @@ RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
 
 	packageNamesInLoadOrder
 		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+
 ]
 
 { #category : '*rowan-definitions-deprecated' }

@@ -14,12 +14,14 @@ RowanQueryService >> basicBreakpointMethods [
   bpArray := (GsNMethod _breakReport: true) at: 2.
   bpArray do: [ :array | bpMethods add: (array at: 5) ].
   ^ (self methodServicesFrom: bpMethods) asSet asArray
+
 ]
 
 { #category : 'queries' }
 RowanQueryService >> breakPointMethods [
   queryResults := self basicBreakpointMethods.
   self returnQueryToClient
+
 ]
 
 { #category : 'queries' }
@@ -29,6 +31,7 @@ RowanQueryService >> browseClassReferences: className [
 	methods := organizer referencesTo: className asSymbol.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -38,12 +41,14 @@ RowanQueryService >> browseReferencesTo: symbol [
 	methods := organizer referencesTo: symbol.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'private' }
 RowanQueryService >> defaultProjectLogSize [
 
 	^100
+
 ]
 
 { #category : 'queries' }
@@ -57,6 +62,7 @@ RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 	methods := organizer implementorsOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -71,6 +77,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	queryResults := self methodServicesFrom: methods first.
 	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -80,6 +87,7 @@ RowanQueryService >> implementorsOf: selector [
 	methods := organizer implementorsOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -99,6 +107,7 @@ RowanQueryService >> instVarReaders: instVarName in: className [
             ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
+
 ]
 
 { #category : 'queries' }
@@ -118,6 +127,7 @@ RowanQueryService >> instVarWriters: instVarName in: className [
             ifTrue: [ methods add: method ] ] ].
   queryResults := self methodServicesFrom: methods.
   self returnQueryToClient
+
 ]
 
 { #category : 'queries' }
@@ -129,6 +139,7 @@ RowanQueryService >> literalReferences: string [
 	queryResults := self methodServicesFrom: methods first.
 	self setFirstReferenceUsing: queryResults and: methods.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -138,6 +149,7 @@ RowanQueryService >> methodsContaining: string [
 	methods := organizer substringSearch: string.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queries' }
@@ -158,6 +170,7 @@ RowanQueryService >> projectBranches: projectName [
 	project := (RwProject newNamed: projectName). 
 	queryResults := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'queries' }
@@ -168,6 +181,7 @@ RowanQueryService >> projectLog: projectName [
 		commitLogProjectNamed: projectName
 		limit: self defaultProjectLogSize).
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'queryResults' }
@@ -176,6 +190,7 @@ RowanQueryService >> queryResults [
 	"for tests. So far, not needed on server." 
 
 	^queryResults
+
 ]
 
 { #category : 'private' }
@@ -184,6 +199,7 @@ RowanQueryService >> returnQueryToClient [
 	queryResults do:[:service |
 		RowanCommandResult addResult: service].
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'queries' }
@@ -194,6 +210,7 @@ RowanQueryService >> sendersOf: selector [
 	queryResults := self methodServicesFrom: methods first.
 	self setFirstReferenceUsing: queryResults and: methods. 
 	self returnQueryToClient.
+
 ]
 
 { #category : 'queryResults' }
@@ -212,6 +229,7 @@ RowanQueryService >> setFirstReferenceUsing: results and: methods [
         ifNotNil: [ 
           index := methods first indexOf: gsMethod.
           methodService firstReference: (methods last at: index) ] ]
+
 ]
 
 { #category : 'ston' }
@@ -226,6 +244,7 @@ RowanQueryService >> stonOn: stonWriter [
 					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
 						ifNotNil: [:value | dictionary at: each asSymbol put: value]
 						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
+
 ]
 
 { #category : 'update' }
@@ -241,4 +260,5 @@ RowanQueryService >> updateInternalService: updatedService [
 		service = updatedService ifTrue:[ 
 			queryResults at: index put: updatedService
 		]].
+
 ]

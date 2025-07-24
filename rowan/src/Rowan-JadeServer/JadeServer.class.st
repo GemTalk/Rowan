@@ -34,6 +34,7 @@ JadeServer class >> theJadeiteServer [
       jadeServerClass new
         initialize;
         yourself ]
+
 ]
 
 { #category : 'category' }
@@ -203,6 +204,7 @@ JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
 		nextPutAll: anMCMethodDefinition selector; tab;
 		nextPutAll: unicodeFreeSource size printString; tab;
 		nextPutAll: unicodeFreeSource; lf.
+
 ]
 
 { #category : 'category' }
@@ -300,6 +302,7 @@ JadeServer >> _describeMethod: aMethod [
 	string isNil ifTrue: [string := ''].
 	methodUpdate compilationWarnings: string.
 	methodUpdate writeMethodTo: writeStream.
+
 ]
 
 { #category : 'category' }
@@ -608,6 +611,7 @@ JadeServer >> abort [
 
 	classOrganizers := Array new: 4.
 	System abortTransaction.
+
 ]
 
 { #category : 'category' }
@@ -867,6 +871,7 @@ JadeServer >> autoCommitIfRequired [
 			(commitResult 
 				ifTrue:[true] 
 				ifFalse:[#failed])].
+
 ]
 
 { #category : 'category' }
@@ -1056,6 +1061,7 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 
 					
 	^result
+
 ]
 
 { #category : 'category' }
@@ -1225,6 +1231,7 @@ JadeServer >> debugString: aString fromContext: anObject environment: anInteger 
 	^(RowanDebuggerService new debugStringFrom: aString)
 		evaluateInContext: anObject 
 		symbolList: GsSession currentSession symbolList.
+
 ]
 
 { #category : 'category' }
@@ -1686,6 +1693,7 @@ JadeServer >> gsInteractionInformFailureHandler [
             args: (Array with: interaction theObject asOop).
           exception defaultAction.
           interaction theObject ]
+
 ]
 
 { #category : 'category' }
@@ -1765,6 +1773,7 @@ JadeServer >> initialize [
 	self 
 		registerOBNotifications;
 		yourself.
+
 ]
 
 { #category : 'category' }
@@ -1793,6 +1802,7 @@ JadeServer >> inspect: anObject [
 	^stream 
 		nextPutAll: string; 
 		contents.
+
 ]
 
 { #category : 'category' }
@@ -1800,6 +1810,7 @@ JadeServer >> inspect: anObject windowHandle: anInteger [
   | stream string |
   RowanBrowserService new saveRootObject: anObject asOop windowHandle: anInteger.
   ^ self inspect: anObject
+
 ]
 
 { #category : 'category' }
@@ -1836,6 +1847,7 @@ JadeServer >> inspectDictionary: aDictionary on: aStream [
 	^aStream 
 		lf; 
 		contents.
+
 ]
 
 { #category : 'category' }
@@ -1886,6 +1898,7 @@ JadeServer >> installTranscript [
 { #category : 'jadeite' }
 JadeServer >> interactionHandlerActive [
   ^ SessionTemps current at: #'rowanServiceInteractionActive' ifAbsent: [ true ]
+
 ]
 
 { #category : 'category' }
@@ -2970,6 +2983,7 @@ JadeServer >> printStringOf: anObject to: anInteger [
 	(string := self printStringOf: anObject) size > anInteger ifTrue: [string := (string copyFrom: 1 to: anInteger) , '...'].
 	string := String withAll: (string collect: [:each | (32 <= each asciiValue and: [each asciiValue <= 255]) ifTrue: [each] ifFalse: [$?]]).
 	^string.
+
 ]
 
 { #category : 'category' }
@@ -3226,6 +3240,7 @@ JadeServer >> sbAddDictionary: anOrderedCollection [
 		at: index.
 	selections at: #'dictionary' put: newName.
 	self systemBrowserUpdate.
+
 ]
 
 { #category : 'category' }
@@ -3532,6 +3547,7 @@ JadeServer >> sbClassComment: anOrderedCollection [
 	doc documentClassWith: txt.
 	class rwComment: doc.
 	self systemBrowserUpdate.
+
 ]
 
 { #category : 'category' }
@@ -4003,6 +4019,7 @@ JadeServer >> sbRemoveClasses [
 			classNames
 				do: [:className | (Rowan packageServiceClass forPackageNamed: packageName) removeClassNamed: className]].
 	^self systemBrowserUpdate
+
 ]
 
 { #category : 'category' }
@@ -4012,6 +4029,7 @@ JadeServer >> sbRemoveDictionaries: anOrderedCollection [
 		self symbolList removeDictionaryNamed: each asSymbol.
 	].
 	self systemBrowserUpdate.
+
 ]
 
 { #category : 'category' }
@@ -4074,6 +4092,7 @@ JadeServer >> sbRemoveMethods: anOrderedCollection [
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
 	notRemoved isEmpty ifFalse:[self error: 'The following selectors were not removed. Possibly in a superclass? ', notRemoved printString].
+
 ]
 
 { #category : 'category' }
@@ -4370,6 +4389,7 @@ JadeServer >> sbUpdateClassInfo [
 					ifFalse: [' category: ' , selectedClass category printString]).
 	classInfoUpdate comment: selectedClass comment. 
 	classInfoUpdate writeInfoOn: writeStream.
+
 ]
 
 { #category : 'category' }
@@ -5144,6 +5164,7 @@ JadeServer >> superclassesOf: aClass isMeta: aBoolean [
 JadeServer >> symbolList [
 
 	^Rowan image symbolList
+
 ]
 
 { #category : 'category' }
@@ -5281,6 +5302,7 @@ JadeServer >> systemBrowserUpdate [
 			self
 				sbUpdateMethodFilter;
 				sbUpdateMethods]
+
 ]
 
 { #category : 'category' }
@@ -5353,6 +5375,7 @@ JadeServer >> updateFromSton: stonString [
   Rowan loggingServiceClass current logSentServices.
   resultString := STON toString: Rowan commandResultClass results.
   ^ resultString
+
 ]
 
 { #category : 'category' }

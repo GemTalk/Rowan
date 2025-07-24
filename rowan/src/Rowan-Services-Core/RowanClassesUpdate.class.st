@@ -57,6 +57,7 @@ RowanClassesUpdate >> initialize [
 RowanClassesUpdate >> objectInBaseNamed: aString [
 
 	^Rowan image symbolList objectNamed: aString asSymbol
+
 ]
 
 { #category : 'accessing' }

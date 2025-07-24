@@ -15,24 +15,28 @@ Class {
 RwGemStoneSpecification >> defaultMethodEnv [
 
 	^ defaultMethodEnv ifNil: [ defaultMethodEnv := 0 ]
+
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> defaultMethodEnv: anInteger [
 
 	defaultMethodEnv := anInteger
+
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> defaultSymbolDictName [
 
 	^ defaultSymbolDictName ifNil: [ 'UserGlobals' ]
+
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> defaultSymbolDictName: aString [
 
 	defaultSymbolDictName := aString
+
 ]
 
 { #category : 'accessing' }
@@ -40,6 +44,7 @@ RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions [
 
 	^ defaultUseSessionMethodsForExtensions
 		ifNil: [ defaultUseSessionMethodsForExtensions := false ]
+
 ]
 
 { #category : 'accessing' }
@@ -47,6 +52,7 @@ RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions: aBool [
 
 	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
 	defaultUseSessionMethodsForExtensions := aBool
+
 ]
 
 { #category : 'initialization' }
@@ -54,6 +60,7 @@ RwGemStoneSpecification >> initialize [
 
 	super initialize.
 	packageNameToPlatformPropertiesMap := Dictionary new
+
 ]
 
 { #category : 'initialization' }
@@ -73,6 +80,7 @@ RwGemStoneSpecification >> methodEnv: methodEnv forPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
 	packageProperties at: 'methodEnv' put: methodEnv
+
 ]
 
 { #category : 'accessing' }
@@ -83,12 +91,14 @@ RwGemStoneSpecification >> methodEnvForPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ ^ self defaultMethodEnv ].
 	^ packageProperties at: 'methodEnv' ifAbsent: [ ^ self defaultMethodEnv ]
+
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> packageNameToPlatformPropertiesMap [
 
 	^ packageNameToPlatformPropertiesMap
+
 ]
 
 { #category : 'accessing' }
@@ -107,12 +117,14 @@ RwGemStoneSpecification >> postCopy [
 	packageNameToPlatformPropertiesMap := packageNameToPlatformPropertiesMap copy.
 	packageNameToPlatformPropertiesMap
 		keysAndValuesDo: [ :key :value | packageNameToPlatformPropertiesMap at: key put: value copy ]
+
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> projectOwnerId [
 
 	^ projectOwnerId ifNil: [ Rowan image currentUserId ]
+
 ]
 
 { #category : 'accessing' }
@@ -152,6 +164,7 @@ RwGemStoneSpecification >> setUseSessionMethodsForExtensions: aBool forPackageNa
 			^self ].
 	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
 	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+
 ]
 
 { #category : 'accessing' }
@@ -164,6 +177,7 @@ RwGemStoneSpecification >> symbolDictNameForPackageNamed: packageName [
 	^ packageProperties
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
+
 ]
 
 { #category : 'accessing' }
@@ -174,6 +188,7 @@ RwGemStoneSpecification >> userId: userId forPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
 	packageProperties at: 'userId' put: userId
+
 ]
 
 { #category : 'accessing' }
@@ -186,4 +201,5 @@ RwGemStoneSpecification >> useSessionMethodsForExtensionsForPackageNamed: packag
 	^ packageProperties
 		at: 'useSessionMethodsForExtensions'
 		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
+
 ]

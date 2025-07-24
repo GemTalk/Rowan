@@ -41,4 +41,5 @@ Integer class >> _rwFinishFromStream: aStream signFound: aSignFound factor: aFac
       ch := aStream next.
       number := number * radix + (ch digitValueInRadix: radix) ].
   ^ number * factor
+
 ]

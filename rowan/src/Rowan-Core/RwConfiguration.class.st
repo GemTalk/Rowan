@@ -31,6 +31,7 @@ RwConfiguration >> needsPackageProtocolNames [
 	"Answer true if image protocol names need to be *<packageName>*"
 
 	^ packageInfoSource == #'Category'
+
 ]
 
 { #category : 'accessing' }
@@ -44,4 +45,5 @@ RwConfiguration >> packageInfoSource: newValue [
 	"Valid values for GemStone are #Cypress, #Category, #SymbolDictionary"
 
 	packageInfoSource := newValue
+
 ]

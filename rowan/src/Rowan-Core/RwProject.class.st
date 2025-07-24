@@ -8,24 +8,28 @@ Class {
 RwProject >> _loadedProject [
 
 	^ Rowan image loadedProjectNamed: self name
+
 ]
 
 { #category : 'private' }
 RwProject >> _specification [
 
 	^ self _loadedProject specification
+
 ]
 
 { #category : 'properties' }
 RwProject >> canCommit [
 
 	^ self _specification canCommit
+
 ]
 
 { #category : 'properties' }
 RwProject >> comment [
 
 	^ self _specification comment
+
 ]
 
 { #category : 'accessing' }
@@ -44,6 +48,7 @@ RwProject >> currentBranchName [
 RwProject >> definedClasses [
 
 	^ self _projectTools query classForProjectNamed: self name
+
 ]
 
 { #category : 'testing' }
@@ -51,12 +56,14 @@ RwProject >> existsOnDisk [
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
 	^ Rowan platform fileUtilities directoryExists: self repositoryRootPath.
+
 ]
 
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 
 	^ self _projectTools query classExtensionsForProjectNamed: self name
+
 ]
 
 { #category : 'testing' }
@@ -70,24 +77,28 @@ RwProject >> isDirty [
 RwProject >> loadedCommitId [
 
 	^ self _specification loadedCommitId
+
 ]
 
 { #category : 'accessing' }
 RwProject >> packageNames [
 
 	^ self _loadedProject packageNames
+
 ]
 
 { #category : 'accessing' }
 RwProject >> packages [
 
 	^ self packageNames collect: [ :packageName | RwPackage newNamed: packageName ]
+
 ]
 
 { #category : 'accessing' }
 RwProject >> project [
 
 	^ self
+
 ]
 
 { #category : 'accessing' }
@@ -96,6 +107,7 @@ RwProject >> projectUrl [
 	"Return the projectUrl used to clone the project"
 
 	^ self _loadedProject projectUrl
+
 ]
 
 { #category : 'project creation' }
@@ -110,6 +122,7 @@ RwProject >> register [
 RwProject >> remote [
 
 	^ self _specification remote
+
 ]
 
 { #category : 'accessing' }
@@ -128,6 +141,7 @@ RwProject >> repositoryCommitId [
 RwProject >> repositoryRootPath [
 
 	^ self _specification repositoryRootPath
+
 ]
 
 { #category : 'testing' }

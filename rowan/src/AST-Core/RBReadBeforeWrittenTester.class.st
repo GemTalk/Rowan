@@ -22,12 +22,14 @@ Class {
 { #category : 'accessing' }
 RBReadBeforeWrittenTester class >> isVariable: aString readBeforeWrittenIn: aBRProgramNode [ 
 	^(self isVariable: aString writtenBeforeReadIn: aBRProgramNode) not
+
 ]
 
 { #category : 'accessing' }
 RBReadBeforeWrittenTester class >> isVariable: aString writtenBeforeReadIn: aBRProgramNode [ 
 	^(self readBeforeWritten: (Array with: aString) in: aBRProgramNode) 
 		isEmpty
+
 ]
 
 { #category : 'accessing' }
@@ -37,6 +39,7 @@ RBReadBeforeWrittenTester class >> readBeforeWritten: varNames in: aParseTree [
 		initializeVars: varNames;
 		executeTree: aParseTree;
 		read
+
 ]
 
 { #category : 'accessing' }
@@ -44,17 +47,20 @@ RBReadBeforeWrittenTester class >> variablesReadBeforeWrittenIn: aParseTree [
 	^(self new)
 		executeTree: aParseTree;
 		read
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBReadBeforeWrittenTester >> acceptAssignmentNode: anAssignmentNode [ 
 	self visitNode: anAssignmentNode value.
 	self variableWritten: anAssignmentNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBReadBeforeWrittenTester >> acceptBlockNode: aBlockNode [ 
 	self processBlock: aBlockNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -69,21 +75,25 @@ RBReadBeforeWrittenTester >> acceptMessageNode: aMessageNode [
 		and: [aMessageNode arguments allSatisfy: [:each | each isBlock]]) 
 			ifTrue: [^self processIfTrueIfFalse: aMessageNode].
 	aMessageNode arguments do: [:each | self visitNode: each]
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBReadBeforeWrittenTester >> acceptSequenceNode: aSequenceNode [ 
 	self processStatementNode: aSequenceNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBReadBeforeWrittenTester >> acceptVariableNode: aVariableNode [ 
 	self variableRead: aVariableNode
+
 ]
 
 { #category : 'initialize-release' }
 RBReadBeforeWrittenTester >> checkNewTemps: aBoolean [ 
 	checkNewTemps := aBoolean
+
 ]
 
 { #category : 'private' }
@@ -94,21 +104,25 @@ RBReadBeforeWrittenTester >> copyDictionary: aDictionary [
 	newDictionary := Dictionary new: aDictionary size.
 	aDictionary keysAndValuesDo: [ :key :value | newDictionary at: key put: value ].
 	^ newDictionary
+
 ]
 
 { #category : 'private' }
 RBReadBeforeWrittenTester >> createScope [
 	scopeStack add: (self copyDictionary: scopeStack last)
+
 ]
 
 { #category : 'private' }
 RBReadBeforeWrittenTester >> currentScope [
 	^scopeStack last
+
 ]
 
 { #category : 'accessing' }
 RBReadBeforeWrittenTester >> executeTree: aParseTree [ 
 	^self visitNode: aParseTree
+
 ]
 
 { #category : 'initialize-release' }
@@ -117,11 +131,13 @@ RBReadBeforeWrittenTester >> initialize [
 	scopeStack := OrderedCollection with: Dictionary new.
 	read := Set new.
 	checkNewTemps := true
+
 ]
 
 { #category : 'initialize-release' }
 RBReadBeforeWrittenTester >> initializeVars: varNames [ 
 	varNames do: [:each | self currentScope at: each put: nil]
+
 ]
 
 { #category : 'private' }
@@ -134,6 +150,7 @@ RBReadBeforeWrittenTester >> processBlock: aNode [
 			[:key :value | 
 			(value == true and: [(self currentScope at: key) isNil]) 
 				ifTrue: [self currentScope at: key put: value]]
+
 ]
 
 { #category : 'private' }
@@ -154,6 +171,7 @@ RBReadBeforeWrittenTester >> processIfTrueIfFalse: aNode [
 						ifFalse: 
 							[((trueScope at: key) == true or: [(falseScope at: key) == true]) 
 								ifTrue: [self currentScope at: key put: true]]]]
+
 ]
 
 { #category : 'private' }
@@ -174,6 +192,7 @@ RBReadBeforeWrittenTester >> processStatementNode: aNode [
 				ifFalse: 
 					[(self currentScope at: key) isNil 
 						ifTrue: [self currentScope at: key put: value]]]
+
 ]
 
 { #category : 'accessing' }
@@ -181,11 +200,13 @@ RBReadBeforeWrittenTester >> read [
 	self currentScope
 		keysAndValuesDo: [:key :value | value == true ifTrue: [read add: key]].
 	^read
+
 ]
 
 { #category : 'private' }
 RBReadBeforeWrittenTester >> removeScope [
 	^scopeStack removeLast
+
 ]
 
 { #category : 'private' }
@@ -194,6 +215,7 @@ RBReadBeforeWrittenTester >> variableRead: aNode [
 		ifTrue: 
 			[(self currentScope at: aNode name) isNil 
 				ifTrue: [self currentScope at: aNode name put: true]]
+
 ]
 
 { #category : 'private' }
@@ -202,4 +224,5 @@ RBReadBeforeWrittenTester >> variableWritten: aNode [
 		ifTrue: 
 			[(self currentScope at: aNode variable name) isNil 
 				ifTrue: [self currentScope at: aNode variable name put: false]]
+
 ]

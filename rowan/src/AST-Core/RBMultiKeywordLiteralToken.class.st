@@ -7,4 +7,5 @@ Class {
 { #category : 'testing' }
 RBMultiKeywordLiteralToken >> isMultiKeyword [
 	^true
+
 ]

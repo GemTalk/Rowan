@@ -24,6 +24,7 @@ RwProjectSpecification class >> newNamed: aString [
 	^ self new
 		specName: aString;
 		yourself
+
 ]
 
 { #category : 'exporting' }
@@ -53,6 +54,7 @@ RwProjectSpecification >> _exportToUrl: fileUrl as: fileName [
 { #category : 'private' }
 RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile
+
 ]
 
 { #category : 'converting' }
@@ -67,6 +69,7 @@ RwProjectSpecification >> asDefinition [
 { #category : 'testing' }
 RwProjectSpecification >> canCommit [
   ^ self repositoryUrl notNil and: [ self repoSpec canCommit ]
+
 ]
 
 { #category : 'accessing' }
@@ -86,11 +89,13 @@ RwProjectSpecification >> comment: anObject [
 { #category : 'actions' }
 RwProjectSpecification >> commitForTool: aRwTool message: messageString [
   ^ self repoSpec commitForTool: aRwTool message: messageString
+
 ]
 
 { #category : 'actions' }
 RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
+
 ]
 
 { #category : 'accessing' }
@@ -219,6 +224,7 @@ RwProjectSpecification >> loadedGroupNames [
 RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
+
 ]
 
 { #category : 'accessing' }
@@ -240,6 +246,7 @@ RwProjectSpecification >> postCopy [
     keysAndValuesDo: [ :key :value | platformSpec at: key put: value copy ].
   repoSpec := repoSpec copy.
   imageSpec := imageSpec copy
+
 ]
 
 { #category : 'accessing' }
@@ -259,17 +266,20 @@ RwProjectSpecification >> projectUrl: anObject [
 { #category : 'actions' }
 RwProjectSpecification >> pullForTool: aRwTool remote: remoteString [
   ^ self repoSpec pullForTool: aRwTool remote: remoteString
+
 ]
 
 { #category : 'actions' }
 RwProjectSpecification >> pushForTool: aRwTool remote: remoteString [
   ^ self repoSpec pushForTool: aRwTool remote: remoteString
+
 ]
 
 { #category : 'accessing' }
 RwProjectSpecification >> remote [
 
 	^ self repoSpec remote
+
 ]
 
 { #category : 'accessing' }
@@ -289,11 +299,13 @@ RwProjectSpecification >> repoPath: anObject [
 { #category : 'accessing' }
 RwProjectSpecification >> repositoryRootPath [
   ^ self repoSpec repositoryRootPath
+
 ]
 
 { #category : 'accessing' }
 RwProjectSpecification >> repositoryRootPath: anObject [
   self repoSpec repositoryRootPath: anObject
+
 ]
 
 { #category : 'accessing' }
@@ -328,6 +340,7 @@ RwProjectSpecification >> repoSpec: anObject [
 RwProjectSpecification >> specName [
 
    ^specName
+
 ]
 
 { #category : 'accessing' }
@@ -354,12 +367,14 @@ RwProjectSpecification >> specsPath: anObject [
 { #category : 'actions' }
 RwProjectSpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
+
 ]
 
 { #category : 'accessing' }
 RwProjectSpecification >> useGit [
 
 	^ self repoSpec useGit
+
 ]
 
 { #category : 'accessing' }

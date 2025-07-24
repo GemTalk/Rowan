@@ -18,6 +18,7 @@ RwGsClassPropertiesSymDictPatch >> addToNewClassesByName: aDictionary [
 	"noop"
 
 	
+
 ]
 
 { #category : 'installing' }

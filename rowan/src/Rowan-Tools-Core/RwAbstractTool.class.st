@@ -28,6 +28,7 @@ Class {
 RwAbstractTool class >> git [
 
 	^ RwGitTool new
+
 ]
 
 { #category : 'private' }
@@ -38,6 +39,7 @@ RwAbstractTool >> _sh_realpath_source [
 	"all on one line because that's what our perform on server call wants - I think:)"
 
 	^'realpath() { canonicalize_path "$(resolve_symlinks "$1")"; }; resolve_symlinks() { local dir_context path ; path=$(readlink -- "$1"); if [ $? -eq 0 ]; then dir_context=$(dirname -- "$1"); resolve_symlinks "$(_prepend_path_if_relative "$dir_context" "$path")"; else printf ''%s\n'' "$1"; fi; }; _prepend_path_if_relative() { case "$2" in /* ) printf ''%s\n'' "$2" ;; * ) printf ''%s\n'' "$1/$2" ;; esac; }; canonicalize_path() { if [ -d "$1" ]; then _canonicalize_dir_path "$1"; else _canonicalize_file_path "$1"; fi; }; _canonicalize_dir_path() { (cd "$1" 2>/dev/null && pwd -P); }; _canonicalize_file_path() { local dir file; dir=$(dirname -- "$1"); file=$(basename -- "$1"); (cd "$dir" 2>/dev/null && printf ''%s/%s\n'' "$(pwd -P)" "$file"); }'
+
 ]
 
 { #category : 'private' }
@@ -46,6 +48,7 @@ RwAbstractTool >> _symbolDictionaryForSpecification [
 	^ Rowan image
 		newOrExistingSymbolDictionaryNamed:
 			(specification platformSpec at: 'gemstone') defaultSymbolDictName
+
 ]
 
 { #category : 'class lookup' }
@@ -67,6 +70,7 @@ RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlo
 					foundBlock value: classExtensionDef value: packageDef value: projectDef ].
 			^ self ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'class lookup' }
@@ -82,6 +86,7 @@ RwAbstractTool >> definitionsForClassNamed: className ifFound: foundBlock ifAbse
 			classDef := packageDef classDefinitions at: loadedClass name.
 			^ foundBlock value: classDef value: packageDef value: projectDef ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'class lookup' }
@@ -108,6 +113,7 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 				value: projectDef.
 			^ self ]
 		ifAbsent: absentBlock
+
 ]
 
 { #category : 'git' }
@@ -139,6 +145,7 @@ RwAbstractTool >> doGitUpdateLoadedCommitId [
 			"in memory repo without a rootPath is legal"
 			^ nil ].
 	^ self doGitUpdateLoadedCommitId: repoRootPath
+
 ]
 
 { #category : 'git' }
@@ -152,17 +159,20 @@ RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootPath [
 			"most likely no commits yet"
 			^ nil ].
 	^ specification imageSpec loadedCommitId: loadedCommitId
+
 ]
 
 { #category : 'private' }
 RwAbstractTool >> fileUtilities [
   ^ Rowan fileUtilities
+
 ]
 
 { #category : 'smalltalk api' }
 RwAbstractTool >> help [
 
 	^self manPage asText
+
 ]
 
 { #category : 'bash utilities' }
@@ -174,23 +184,27 @@ RwAbstractTool >> readlink: filepath [
 	| command |
 	command := self _sh_realpath_source, '; realpath ' , filepath.
 	^Rowan gitTools performOnServer: command logging: true
+
 ]
 
 { #category : 'smalltalk api' }
 RwAbstractTool >> specification: aRwSpecification [
   self validate: aRwSpecification.
   ^ specification := aRwSpecification
+
 ]
 
 { #category : 'smalltalk api' }
 RwAbstractTool >> specUrl: aString [
   ^ self specification: (RwSpecification fromUrl: aString)
+
 ]
 
 { #category : 'validation' }
 RwAbstractTool >> validate: aRwSpecification [
   aRwSpecification specName
     ifNil: [ self error: 'The specification must have a specName specified.' ]
+
 ]
 
 { #category : 'validation' }
@@ -201,6 +215,7 @@ RwAbstractTool >> validateForRead: aRwSpecification [
         error:
           'The repositoryRootPath must be defined in the specification: '
             , aRwSpecification specName printString ]
+
 ]
 
 { #category : 'validation' }
@@ -211,4 +226,5 @@ RwAbstractTool >> validateForWrite: aRwSpecification [
         error:
           'The repositoryRootPath must be defined in the specification: '
             , aRwSpecification specName printString ]
+
 ]

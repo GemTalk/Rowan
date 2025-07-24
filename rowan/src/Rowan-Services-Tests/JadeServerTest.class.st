@@ -8,6 +8,7 @@ Class {
 JadeServerTest >> jadeiteServer [
 
 	^JadeServer theJadeiteServer
+
 ]
 
 { #category : 'tests' }
@@ -23,6 +24,7 @@ JadeServerTest >> test_jadeServerCanonicalLocation [
   self
     assert:
       JadeServer theJadeiteServer == (SessionTemps current at: #'jadeiteServer')
+
 ]
 
 { #category : 'tests' }
@@ -45,6 +47,7 @@ JadeServerTest >> test_jadeServerExists [
 				JadeServer64bit24 .
 					JadeServer64bit3x .
 						JadeServer64bit32}.
+
 ]
 
 { #category : 'tests' }
@@ -85,6 +88,7 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit35. 
 	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -94,6 +98,7 @@ JadeServerTest >> test_rowanCanFindJadeServer [
 	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
 	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32.
 	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit35)equals: JadeServer64bit35
+
 ]
 
 { #category : 'tests' }
@@ -107,6 +112,7 @@ JadeServerTest >> test_serviceUsesCanonicalJadeServer [
   self
     assert:
       RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
+
 ]
 
 { #category : 'tests' }
@@ -131,4 +137,5 @@ JadeServerTest >> test_updateFromSton [
 	self assert: (services at: 2) queryResults first selector == #test_updateFromSton.
 	self assert: (services last isKindOf: RowanLoggingService)]
 		ensure: [RowanCommandResult initializeResults.]
+
 ]

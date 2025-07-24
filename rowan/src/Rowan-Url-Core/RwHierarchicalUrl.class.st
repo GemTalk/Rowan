@@ -45,6 +45,7 @@ RwHierarchicalUrl >> fullPath [
       ans nextPut: $#.
       ans nextPutAll: self fragment ].
   ^ ans contents
+
 ]
 
 { #category : 'access' }
@@ -123,6 +124,7 @@ RwHierarchicalUrl >> printOn: aStream [
     ifFalse: [ 
       aStream nextPut: $#.
       aStream nextPutAll: self fragment ]
+
 ]
 
 { #category : 'parsing' }
@@ -187,6 +189,7 @@ RwHierarchicalUrl >> privateInitializeFromText: aString [
 					authority := authority copyFrom: 1 to: lastColonIndex - 1 ]
 				ifFalse: [ self error: 'Invalid port number' ] ].	"get the path"
 	path := self privateParsePath: remainder relativeTo: #()
+
 ]
 
 { #category : 'parsing' }

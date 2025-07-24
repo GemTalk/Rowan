@@ -11,6 +11,7 @@ GsNMethod >> rowanPackageName [
 		loadedMethodForMethod: self
 		ifAbsent: [ ^ Rowan unpackagedName ].
 	^ loadedMethod loadedPackage name
+
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -24,4 +25,5 @@ GsNMethod >> rowanProjectName [
 		loadedMethodForMethod: self
 		ifAbsent: [ ^ Rowan unpackagedName ].
 	^ loadedMethod loadedProject name
+
 ]

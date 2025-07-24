@@ -25,6 +25,7 @@ RBLiteralToken class >> value: anObject [
 		value: literal
 		start: nil
 		stop: nil
+
 ]
 
 { #category : 'instance creation' }
@@ -34,21 +35,25 @@ RBLiteralToken class >> value: aString start: anInteger stop: stopInteger [
 			start: anInteger
 			stop: stopInteger;
 		yourself
+
 ]
 
 { #category : 'testing' }
 RBLiteralToken >> isLiteralToken [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBLiteralToken >> isMultiKeyword [
 	^false
+
 ]
 
 { #category : 'private' }
 RBLiteralToken >> length [
 	^stopPosition - self start + 1
+
 ]
 
 { #category : 'printing' }
@@ -65,16 +70,19 @@ RBLiteralToken >> rbStoreOn: aStream [
                 nextPut: value.
             ^ self ].
     value rbStoreOn: aStream
+
 ]
 
 { #category : 'accessing' }
 RBLiteralToken >> realValue [
 	^value
+
 ]
 
 { #category : 'accessing' }
 RBLiteralToken >> stop: anObject [ 
 	stopPosition := anObject
+
 ]
 
 { #category : 'initialize-release' }
@@ -82,4 +90,5 @@ RBLiteralToken >> value: aString start: anInteger stop: stopInteger [
 	value := aString.
 	sourcePointer := anInteger.
 	stopPosition := stopInteger
+
 ]

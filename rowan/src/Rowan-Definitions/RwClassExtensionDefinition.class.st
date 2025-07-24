@@ -20,6 +20,7 @@ RwClassExtensionDefinition class >> newForClassNamed: className [
 		withProperties: propertiesDictionary
 		classMethodDefinitions: Dictionary new
 		instanceMethodDefinitions: Dictionary new
+
 ]
 
 { #category : 'private' }
@@ -50,6 +51,7 @@ RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDiction
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [ anElementsModification addElementModification: modification ] ]
+
 ]
 
 { #category : 'comparing' }
@@ -69,6 +71,7 @@ RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDiction
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [ anElementsModification addElementModification: modification ] ]
+
 ]
 
 { #category : 'testing' }

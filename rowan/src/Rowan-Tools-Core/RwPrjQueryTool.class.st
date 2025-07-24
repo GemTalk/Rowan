@@ -15,6 +15,7 @@ RwPrjQueryTool >> classesForProjectNamed: projectName [
 			loadedPackage loadedClasses values
 				do: [ :rowanLoadedClass | classes add: rowanLoadedClass handle ] ].
 	^ classes
+
 ]
 
 { #category : 'smalltalk API' }
@@ -28,4 +29,5 @@ RwPrjQueryTool >> classExtensionsForProjectNamed: projectName [
 			loadedPackage loadedClassExtensions values
 				do: [ :rowanLoadedClass | classExtensions add: rowanLoadedClass handle ] ].
 	^ classExtensions
+
 ]

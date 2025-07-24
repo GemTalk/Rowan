@@ -286,6 +286,7 @@ RwProjectAuditToolTest >> test_Issue_535 [
 
 "audit"
   self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -328,6 +329,7 @@ RwProjectAuditToolTest >> test_issue478 [
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
 
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -381,6 +383,7 @@ self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) 
 		assert: (y := x at: packageName2 ) notNil;
 		assert: y size = 1;
 		assert: (y at: className) size = 2
+
 ]
 
 { #category : 'tests' }
@@ -602,6 +605,7 @@ RwProjectAuditToolTest >> testInvalidExtensionCategory [
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  projectName) size = 1.
 	self assert: ((x at: packageName) at: className) size = 3
+
 ]
 
 { #category : 'tests' }
@@ -632,6 +636,7 @@ RwProjectAuditToolTest >> testMissingBehavior [
 	(System myUserProfile resolveSymbol: self _symbolDictionaryName1) value removeKey: theClass name asSymbol.
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
 	self assert: ((x at: packageName) at: className) size = 1
+
 ]
 
 { #category : 'tests' }

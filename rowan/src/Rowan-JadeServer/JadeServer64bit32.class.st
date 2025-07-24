@@ -43,4 +43,5 @@ JadeServer64bit32 >> gsPackagePolicy [
 { #category : 'category' }
 JadeServer64bit32 >> stepThrough: aGsProcess inFrame: anInteger [
   aGsProcess _stepThrough
+
 ]

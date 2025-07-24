@@ -21,6 +21,7 @@ RBPatternMethodNode class >> selectorParts: tokenCollection arguments: variableN
 		ifTrue: [super selectorParts: tokenCollection arguments: variableNodes]
 		ifFalse: 
 			[RBMethodNode selectorParts: tokenCollection arguments: variableNodes]
+
 ]
 
 { #category : 'matching' }
@@ -40,16 +41,19 @@ RBPatternMethodNode >> copyInContext: aDictionary [
 		body: (self body copyInContext: aDictionary);
 		source: (aDictionary at: '-source-');
 		yourself
+
 ]
 
 { #category : 'testing-matching' }
 RBPatternMethodNode >> isPatternNode [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBPatternMethodNode >> isSelectorList [
 	^isList
+
 ]
 
 { #category : 'matching' }
@@ -65,6 +69,7 @@ RBPatternMethodNode >> match: aNode inContext: aDictionary [
 	^(self matchArgumentsAgainst: aNode inContext: aDictionary) 
 		and: [ (self matchPragmas: self pragmas against: aNode pragmas inContext: aDictionary)
 		and: [ body match: aNode body inContext: aDictionary ] ]
+
 ]
 
 { #category : 'matching' }
@@ -77,11 +82,13 @@ RBPatternMethodNode >> matchArgumentsAgainst: aNode inContext: aDictionary [
 		(first match: second inContext: aDictionary) 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'private' }
 RBPatternMethodNode >> matchingClass [
 	^RBMethodNode
+
 ]
 
 { #category : 'matching' }
@@ -97,10 +104,12 @@ RBPatternMethodNode >> matchSelectorAgainst: aNode inContext: aDictionary [
 		keyword = second value 
 			ifFalse: [ ^ false ] ].
 	^ true
+
 ]
 
 { #category : 'initialize-release' }
 RBPatternMethodNode >> selectorParts: tokenCollection arguments: variableNodes [ 
 	super selectorParts: tokenCollection arguments: variableNodes.
 	isList := (tokenCollection first value at: 2) == self listCharacter
+
 ]

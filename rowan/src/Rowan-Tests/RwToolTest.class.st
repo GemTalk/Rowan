@@ -11,6 +11,7 @@ RwToolTest >> gsInteractionInformFailureHandler [
 		defaultBlock: [ :ignored | self assert: false description: 'unexpected interaction' ];
 		informBlock: [ :interaction | self assert: false description: 'unexpected inform' ];
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -22,4 +23,5 @@ RwToolTest >> handleInformAsFailureDuring: aBlock [
 			ex
 				response:
 					(ex interaction interactWith: self gsInteractionInformFailureHandler) ]
+
 ]

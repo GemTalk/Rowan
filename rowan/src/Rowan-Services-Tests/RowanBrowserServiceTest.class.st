@@ -54,6 +54,7 @@ RowanBrowserServiceTest >> test_compileClassWithClassSelected [
     ensure: [ 
       Rowan projectTools browser removeClassNamed: 'Fubar'.
       self unloadServicesTestProject ]
+
 ]
 
 { #category : 'tests' }
@@ -70,6 +71,7 @@ RowanBrowserServiceTest >> test_flipAutoCommit [
 	self assert: (SessionTemps current at: #'Jadeite_AutoCommit') equals: autoCommit] ensure: [
 		RowanService setAutoCommit: autoCommit.
 		self assert: RowanService autoCommit equals: autoCommit.]
+
 ]
 
 { #category : 'tests' }
@@ -83,4 +85,5 @@ RowanBrowserServiceTest >> test_windowsRegistry [
 	self assert: (browserService openWindows at: 123456) equals: object.
 	browserService releaseWindowHandle: 123456. 
 	self assert: (browserService openWindows at: 123456 ifAbsent:['gone']) equals: 'gone'.
+
 ]

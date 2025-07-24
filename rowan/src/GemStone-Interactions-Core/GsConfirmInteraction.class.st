@@ -13,11 +13,13 @@ Class {
 { #category : 'instance creation' }
 GsConfirmInteraction class >> prompt: prompt [
   ^ self prompt: prompt confirm: 'Ok'
+
 ]
 
 { #category : 'instance creation' }
 GsConfirmInteraction class >> prompt: prompt confirm: confirm [
   ^ self prompt: prompt confirm: confirm cancel: 'Cancel'
+
 ]
 
 { #category : 'instance creation' }
@@ -26,6 +28,7 @@ GsConfirmInteraction class >> prompt: prompt confirm: confirm cancel: cancel [
     prompt: prompt;
     confirm: confirm;
     cancel: cancel
+
 ]
 
 { #category : 'instance creation' }
@@ -37,56 +40,67 @@ GsConfirmInteraction class >> prompt: prompt confirm: confirm cancel: cancel abo
     confirm: confirm;
     cancel: cancel;
     abort: abort
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> abort [
   ^ abort
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> abort: anObject [
   abort := anObject
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> abortFor: anInteractionRequest [
   anInteractionRequest response: self abortResponse
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> abortResponse [
   ^ nil
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> cancel [
   ^ cancel
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> cancel: anObject [
 	cancel := anObject
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> cancelFor: anInteractionRequest [
   anInteractionRequest response: self cancelResponse
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> cancelResponse [
   ^ false
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> confirm [
 	^ confirm
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> confirm: anObject [
 	confirm := anObject
+
 ]
 
 { #category : 'accessing' }
@@ -112,34 +126,41 @@ GsConfirmInteraction >> interactWith: anObject [
   "
 
   ^ anObject interactWithConfirm: self
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> ok [
   ^ true
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> okFor: anInteractionRequest [
   anInteractionRequest response: self okResponse
+
 ]
 
 { #category : 'confirm' }
 GsConfirmInteraction >> okResponse [
   ^ true
+
 ]
 
 { #category : 'printing' }
 GsConfirmInteraction >> printLabel [
   ^ self prompt
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> prompt [
 	^ prompt
+
 ]
 
 { #category : 'accessing' }
 GsConfirmInteraction >> prompt: aString [
   prompt := aString copyWrappedTo: 80
+
 ]

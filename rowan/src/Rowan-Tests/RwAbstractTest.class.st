@@ -8,18 +8,21 @@ Class {
 RwAbstractTest class >> _symbolDictionaryName [
 
 	^ #'CypressTestData'
+
 ]
 
 { #category : 'private' }
 RwAbstractTest class >> _symbolDictionaryName1 [
 
 	^ #'RowanTestData'
+
 ]
 
 { #category : 'private' }
 RwAbstractTest class >> _symbolDictionaryName2 [
 
 	^ #'RowanTestData2'
+
 ]
 
 { #category : 'private' }
@@ -36,6 +39,7 @@ RwAbstractTest class >> _symbolDictionaryNames [
 RwAbstractTest class >> _unmanagedDictionaryName [
 
 	^ #'UnmanagedPackages'
+
 ]
 
 { #category : 'cleanup' }
@@ -77,6 +81,7 @@ RwAbstractTest class >> cleanup [
 RwAbstractTest >> _classvars [
 
 	^ #('ClassVar1')
+
 ]
 
 { #category : 'private' }
@@ -122,30 +127,35 @@ RwAbstractTest >> _loadedProjectsNamed: someNames [
 RwAbstractTest >> _symbolDictionary [
 
 	^ Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName
+
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName [
 
 	^ self class _symbolDictionaryName
+
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName1 [
 
 	^ self class _symbolDictionaryName1
+
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName2 [
 
 	^ self class _symbolDictionaryName2
+
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _unmanagedDictionaryName [
 
 	^ self class _unmanagedDictionaryName
+
 ]
 
 { #category : 'support' }
@@ -158,6 +168,7 @@ RwAbstractTest >> assertAbsenceOfPackage: packageName [
 		loadedPackageNamed: packageName
 		ifAbsent: [  ].
 	self assert: loadedPackage equals: nil
+
 ]
 
 { #category : 'support' }
@@ -176,6 +187,7 @@ RwAbstractTest >> classDefinition: className super: superClassName category: cat
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -194,6 +206,7 @@ RwAbstractTest >> classDefinition: className super: superClassName classVars: cl
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -212,6 +225,7 @@ RwAbstractTest >> classDefinition: className super: superClassName comment: comm
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -229,6 +243,7 @@ RwAbstractTest >> classDefinition: className super: superClassName inPackage: pa
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -246,6 +261,7 @@ RwAbstractTest >> classDefinition: className super: superClassName instanceMetho
 						classMethodDefinitions: classMethods
 						instanceMethodDefinitions: instanceMethods);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -264,6 +280,7 @@ RwAbstractTest >> classDefinition: className super: superClassName instVars: ins
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
 		yourself
+
 ]
 
 { #category : 'support' }
@@ -277,6 +294,7 @@ RwAbstractTest >> classExtensionDefinition: className instanceMethods: instanceM
 						classMethodDefinitions: classMethods
 						instanceMethodDefinitions: instanceMethods);
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -286,6 +304,7 @@ RwAbstractTest >> gsInteractionConfirmationHandler [
 		defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
 		confirmBlock: [ :interaction | interaction ok ];
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -299,6 +318,7 @@ RwAbstractTest >> handleConfirmationDuring: aBlock [
 			ex
 				response:
 					(ex interaction interactWith: self gsInteractionConfirmationHandler) ]
+
 ]
 
 { #category : 'support' }
@@ -319,6 +339,7 @@ RwAbstractTest >> methodDefsFromSpec: specArray [
               (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
             source: source) ].
   ^ dict
+
 ]
 
 { #category : 'support' }
@@ -437,6 +458,7 @@ RwAbstractTest >> packageSetDefinition: packageName [
 
 	^ (RwPackageSetDefinition new addPackage: (self packageDefinition: packageName))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -446,6 +468,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 		addPackage:
 			(self packageDefinition: packageName classNamed: className super: superClassName))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -459,6 +482,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				super: superClassName
 				category: category))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -472,6 +496,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				super: superClassName
 				classVars: classVars))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -485,6 +510,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				super: superClassName
 				comment: comment))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -499,6 +525,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				instanceMethods: instanceMethods
 				classMethods: classMethods))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -512,6 +539,7 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				super: superClassName
 				instVars: instVars))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -525,6 +553,7 @@ RwAbstractTest >> packageSetDefinition: packageName extendClassNamed: className 
 				instanceMethods: instanceMethods
 				classMethods: classMethods))
 		asDefinition
+
 ]
 
 { #category : 'support' }
@@ -536,6 +565,7 @@ RwAbstractTest >> propertiesForClassExtensionNamed: className [
 		at: 'name' put: className;
 		yourself.
 	^ dict
+
 ]
 
 { #category : 'support' }
@@ -554,6 +584,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName categ
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -572,6 +603,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName class
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -590,6 +622,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName comme
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -608,6 +641,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName inPac
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -637,6 +671,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instv
 				put:
 					(gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
 	^ dict
+
 ]
 
 { #category : 'support' }
@@ -655,6 +690,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instv
 		type: type
 		gs_options: gs_options
 		inPackage: packageName
+
 ]
 
 { #category : 'support' }
@@ -673,6 +709,7 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instV
 		type: 'normal'
 		gs_options: {}
 		inPackage: packageName
+
 ]
 
 { #category : 'running' }
@@ -682,6 +719,7 @@ RwAbstractTest >> setUp [
 	self class cleanup.
 
 	Rowan platform _alternateImageClass: Rowan image testImageClass
+
 ]
 
 { #category : 'running' }

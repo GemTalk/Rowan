@@ -23,6 +23,7 @@ RwPackageDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		classesModification: classesModification;
 		classExtensionsModification: classExtensionsModification.
 	^modification
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -48,4 +49,5 @@ RwPackageDefinition >> compareAgainstBase: aDefinition [
 		classesModification: classesModification;
 		classExtensionsModification: classExtensionsModification.
 	^modification
+
 ]

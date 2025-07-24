@@ -11,6 +11,7 @@ Class {
 RwGsMethodDeletionExtensionSymbolDictPatch >> className [
 
 	^ self extendedClassName
+
 ]
 
 { #category : 'accessing' }
@@ -24,6 +25,7 @@ RwGsMethodDeletionExtensionSymbolDictPatch >> extendedClassName [
 RwGsMethodDeletionExtensionSymbolDictPatch >> extendedClassName: anObject [
 
 	extendedClassName := anObject
+
 ]
 
 { #category : 'private' }
@@ -42,4 +44,5 @@ RwGsMethodDeletionExtensionSymbolDictPatch >> primeBehaviorNewClasses: createdCl
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]
+
 ]

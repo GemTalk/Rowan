@@ -156,6 +156,7 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 	] on: Error do: [:ex | 
 		ex return: method -> warnings.
 	].
+
 ]
 
 { #category : 'category' }
@@ -287,6 +288,7 @@ JadeServer64bit3x >> inspect: anObject [
 	^stream 
 		nextPutAll: string; 
 		contents.
+
 ]
 
 { #category : 'category' }
@@ -320,6 +322,7 @@ JadeServer64bit3x >> installTranscript [
 
 	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
 	SessionTemps current at: #'TranscriptStream_SessionStream' put: self.
+
 ]
 
 { #category : 'category' }
@@ -627,4 +630,5 @@ JadeServer64bit3x >> uninstallTranscript [
 
 	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
 	SessionTemps current at: #'TranscriptStream_SessionStream' put: nil.
+
 ]

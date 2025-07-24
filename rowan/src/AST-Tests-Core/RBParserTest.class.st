@@ -8,11 +8,13 @@ Class {
 RBParserTest >> compare: anObject to: anotherObject [ 
 	self assert: anObject hash = anotherObject hash.
 	self assert: anObject = anotherObject
+
 ]
 
 { #category : 'accessing' }
 RBParserTest >> exampleClasses [
 	^ Array with: RBParser with: RBScanner with: RBProgramNode with: RBConfigurableFormatter
+
 ]
 
 { #category : 'private' }
@@ -21,6 +23,7 @@ RBParserTest >> parseError: each [
 		parseExpression: each first 
 		onError: [ :string :pos | ^ self assert: pos = each last ].
 	self assert: false description: 'Parser didn''t fail'
+
 ]
 
 { #category : 'tests' }
@@ -32,6 +35,7 @@ RBParserTest >> testAmbiguity [
 	self assert: tree statements size = 2.
 	self assert: tree periods size = 1.
 	tree statements do: [ :each | each value == 1 ]
+
 ]
 
 { #category : 'tests' }
@@ -43,6 +47,7 @@ RBParserTest >> testArray [
 		self assert: tree periods size = each last.
 		self assert: tree left = 1.
 		self assert: tree right = each first size ]
+
 ]
 
 { #category : 'tests' }
@@ -55,6 +60,7 @@ RBParserTest >> testBestNodeFor [
 				ifFalse: 
 					[self assert: ((tree bestNodeFor: each sourceInterval) = each 
 								or: [each parent isCascade and: [each parent messages last = each]])]]
+
 ]
 
 { #category : 'tests' }
@@ -83,6 +89,7 @@ RBParserTest >> testBlockRewrites [
 	<primitive: 1>
 	<primitive: 2>
 	^asdf +  foo + fdsa')
+
 ]
 
 { #category : 'tests' }
@@ -93,6 +100,7 @@ RBParserTest >> testCascadeReplacement [
 		replaceWith: (RBParser parseExpression: 'self bar: 2').
 	self compare: cascade
 		to: (RBParser parseExpression: 'self foo; bar: 2; baz')
+
 ]
 
 { #category : 'tests' }
@@ -105,6 +113,7 @@ RBParserTest >> testComparingTrees [
 			self
 				compare: (class parseTreeFor: selector) 
 				to: (class parseTreeFor: selector) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -119,6 +128,7 @@ RBParserTest >> testCopy [
 		class selectors do: [ :each |
 			tree := class parseTreeFor: each.
 			self compare: tree to: tree copy ] ]
+
 ]
 
 { #category : 'tests' }
@@ -133,6 +143,7 @@ RBParserTest >> testCopyInContext [
 		class selectors do: [ :each |
 			tree := class parseTreeFor: each.
 			self compare: tree to: (tree copyInContext: Dictionary new) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -149,6 +160,7 @@ RBParserTest >> testCreationProtocol [
 				body: (RBSequenceNode statements: (OrderedCollection 
 								with: (RBCascadeNode messages: (OrderedCollection with: messageNode with: messageNode)))))
 		to: (RBParser parseMethod: 'bar self foo; foo')
+
 ]
 
 { #category : 'tests' }
@@ -163,6 +175,7 @@ RBParserTest >> testEqualToWithMapping [
 		class selectors do: [ :each |
 			tree := class parseTreeFor: each.
 			self assert: (tree equalTo: tree withMapping: Dictionary new) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -171,6 +184,7 @@ RBParserTest >> testEquivalentExceptRenaming [
 				equalTo: (RBParser parseMethod: (each at: 2))
 				exceptForVariables: #('c' ))
 				== each last ]
+
 ]
 
 { #category : 'tests' }
@@ -180,6 +194,7 @@ RBParserTest >> testFormatter [
 		self 
 			compare: (class parseTreeFor: selector)
 			to: (RBParser parseMethod: (class parseTreeFor: selector) printString) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -191,6 +206,7 @@ RBParserTest >> testGsNumberParsing [
       node := RBParser parseExpression: spec first.
       self assert: node token source = spec first.
       self assert: node value = spec second ]
+
 ]
 
 { #category : 'tests' }
@@ -208,6 +224,7 @@ RBParserTest >> testIntervals [
 								ifTrue: [RBParser parseMethod: source]
 								ifFalse: [RBParser parseExpression: source].
 						self compare: each to: newNode]]]
+
 ]
 
 { #category : 'tests' }
@@ -227,6 +244,7 @@ RBParserTest >> testIsA [
 					((each respondsTo: sel) and: [each perform: sel]) 
 						ifTrue: [nodes remove: sel]]].
 	self assert: nodes isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -237,6 +255,7 @@ RBParserTest >> testLiteralArray [
 	collection add: #a; add: #b; add: #c; add: #'.'; add: #+; add: #-; add: 1; add: -2; add: 3.4; add: #true; add: true; add: #false; add: false; add: #nil; add: nil; add: 'string'; add: #[1 2 3]; add: #(1 2 3).	
 	tree value with: collection do: [ :token :value | 
 		self assert: token value = value ]
+
 ]
 
 { #category : 'tests' }
@@ -246,6 +265,7 @@ RBParserTest >> testLiteralIntevals [
 	self assert: tree contents first start = 3.
 	self assert: tree contents first stop = 4.
 	self assert: tree contents last contents first start = 11
+
 ]
 
 { #category : 'tests' }
@@ -260,12 +280,14 @@ RBParserTest >> testMatchInContext [
 		class selectors do: [ :each |
 			tree := class parseTreeFor: each.
 			self assert: (tree match: tree inContext: Dictionary new) ] ]
+
 ]
 
 { #category : 'tests' }
 RBParserTest >> testMethodPatterns [
 	#(#('+ a ^self + a' #+) #('foo ^self foo' #foo) #('foo: a bar: b ^a + b' #foo:bar:)) 
 		do: [:each | self assert: (RBParser parseMethodPattern: each first) == each last]
+
 ]
 
 { #category : 'tests' }
@@ -303,6 +325,7 @@ RBParserTest >> testModifying [
 	tree selector: #+.
 	self compare: tree to: (RBParser parseExpression: 'self + 0').
 	self should: [tree selector: #foo] raise: TestResult error.
+
 ]
 
 { #category : 'tests' }
@@ -318,6 +341,7 @@ RBParserTest >> testMultimatch [
 				executeTree: (RBParser parseExpression: 'self at: (bar at: 3)');
 				tree)
 		to: (RBParser parseExpression: 'self at: (bar foo: 3)')
+
 ]
 
 { #category : 'tests' }
@@ -326,6 +350,7 @@ RBParserTest >> testNodesDo [
 	size := 0.
 	self treeWithEverything nodesDo: [:e | size := size + 1].
 	self assert: size = 19
+
 ]
 
 { #category : 'tests' }
@@ -337,6 +362,7 @@ RBParserTest >> testNumberParsing [
       node := RBParser parseExpression: spec first.
       self assert: node token source = spec first.
       self assert: node value = spec second ]
+
 ]
 
 { #category : 'tests' }
@@ -348,6 +374,7 @@ RBParserTest >> testNumberRadixParsing [
 			| x |
 			self  assert: (x := ((RBParser parseExpression: (radixString, (i printStringRadix: radix)))
 				value)) = i ] ]
+
 ]
 
 { #category : 'tests' }
@@ -359,12 +386,14 @@ RBParserTest >> testParents [
 					(each parent isMessage and: [ each parent isCascaded ]) ifFalse: [ 
 						self assert: each parent == node.
 						self assert: each methodNode == root ] ] ] ] ]
+
 ]
 
 { #category : 'tests' }
 RBParserTest >> testParserErrors [
 	#(#('self foo. + 3' 11) #('#(' 3) #('self 0' 6) #('self asdf;;asfd' 11)) 
 		do: [:each | self parseError: each]
+
 ]
 
 { #category : 'tests' }
@@ -377,6 +406,7 @@ RBParserTest >> testParsingLiteralMessages [
 	self assert: (RBParser parseMethod: 'nil') isMethod.
 	self assert: (RBParser parseMethod: 'true') isMethod.
 	self assert: (RBParser parseMethod: 'false') isMethod
+
 ]
 
 { #category : 'tests' }
@@ -391,6 +421,7 @@ RBParserTest >> testPatternCascade [
 				tree)
 		to: (RBParser 
 				parseExpression: 'self bar; bar: 4; foo; printString. self foo:4')
+
 ]
 
 { #category : 'tests' }
@@ -409,6 +440,7 @@ RBParserTest >> testPositions [
 				arguments: (OrderedCollection with: (RBVariableNode named: 'a')
 						with: (RBVariableNode named: 'b'))
 				body: (RBSequenceNode statements: OrderedCollection new)).
+
 ]
 
 { #category : 'tests' }
@@ -423,6 +455,7 @@ RBParserTest >> testPragmas [
 			self assert: (node arguments at: i) value = (each last at: i) ].
 		self assert: (each first at: node start) = $<.
 		self assert: (each first at: node stop) = $> ]
+
 ]
 
 { #category : 'tests' }
@@ -430,6 +463,7 @@ RBParserTest >> testPrimitives [
   self assert: (Object parseTreeFor: #'_basicAt:') isPrimitive.
   #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <primitive: 123> ^true' true))
     do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
+
 ]
 
 { #category : 'tests' }
@@ -437,6 +471,7 @@ RBParserTest >> testProtectedPrimitives [
   self assert: (GemStoneParameters parseTreeFor: #'_getArg:key:') isPrimitive.
   #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <protected primitive: 123> ^true' true))
     do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
+
 ]
 
 { #category : 'tests' }
@@ -473,6 +508,7 @@ RBParserTest >> testQuerying [
 				= #('a' 'arg1').
 	self 
 		assert: tree allTemporaryVariables asSortedCollection asArray = #('b')
+
 ]
 
 { #category : 'tests' }
@@ -502,6 +538,7 @@ RBParserTest >> testReadBeforeWritten [
 		| read | 
 		read := RBReadBeforeWrittenTester variablesReadBeforeWrittenIn: (RBParser parseExpression: each).
 		self assert: (read size = 1 and: [read includes: 'read'])]
+
 ]
 
 { #category : 'tests' }
@@ -538,6 +575,7 @@ RBParserTest >> testReadBeforeWritten1 [
 								[(hashIndex := hashIndex + 1) > elementsSize ifTrue: [hashIndex := 1]]]].
 	^aCollection')) 
 				isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -557,6 +595,7 @@ RBParserTest >> testReplacingNodes [
 	self 
 		assert: tree removeDeadCode = (RBParser 
 						parseMethod: '+ q | q b | self ifTrue: [] ifFalse: [b := c]. q := b. {q. b}. ^q')
+
 ]
 
 { #category : 'tests' }
@@ -581,6 +620,7 @@ RBParserTest >> testRewriteMethods [
 								executeTree: (RBParser parseMethod: each first);
 								tree) formattedCode)
 				to: (RBParser parseMethod: (each at: 2))]
+
 ]
 
 { #category : 'tests' }
@@ -595,6 +635,7 @@ RBParserTest >> testRewrites [
 		self compare: (RBParser parseExpression: (rewrite executeTree: (RBParser parseExpression: each first);
 				 tree) formattedCode)
 			to: (RBParser parseExpression: (each at: 2))]
+
 ]
 
 { #category : 'tests' }
@@ -620,6 +661,7 @@ RBParserTest >> testSearching [
 	self assert: (searcher 
 				executeTree: (RBParser parseMethod: 'at: a put: b self foo put: 1')
 				initialAnswer: false)
+
 ]
 
 { #category : 'tests' }
@@ -629,6 +671,7 @@ RBParserTest >> testStatements [
 		tree := RBParser parseExpression: each first.
 		self assert: tree statements size = each second.
 		self assert: tree periods size = each last ]
+
 ]
 
 { #category : 'tests' }
@@ -644,6 +687,7 @@ RBParserTest >> testSymbolLiteral [
 		self assert: tree value = pair second.		
 		self assert: tree start > 1.
 		self assert: tree stop = pair first size ]
+
 ]
 
 { #category : 'tests' }
@@ -654,14 +698,17 @@ RBParserTest >> testSymbolNumber [
 		self assert: tree value = pair second.		
 		self assert: tree start > 1.
 		self assert: tree stop = pair first size ]
+
 ]
 
 { #category : 'private' }
 RBParserTest >> treeWithEverything [
 	^ RBParser parseMethod: 'method: arg1 | temps | temps := #(10). temps foo; foo. ^(temps collect: [:e | ])'
+
 ]
 
 { #category : 'private' }
 RBParserTest >> treeWithReallyEverything [
 	^ RBParser parseMethod: 'method: arg1 <foo> <foo: 1.2> | temps | temps := #[ 1 2 3 ]. temps := #(true false nil 1 1.2 $a foo #foo ''foo'' #() #(1 2) #[] #[1 2]). { 1 negated. 1 + 2. 1 raisedTo: 2 }. temps foo; foo: self. ^ (temps collect: [:e | | btemps | ((e isNil)) ])'
+
 ]

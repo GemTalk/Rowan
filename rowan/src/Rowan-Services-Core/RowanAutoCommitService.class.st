@@ -17,6 +17,7 @@ RowanAutoCommitService >> autoCommit: boolean [
 	autoCommit := self class autoCommit. 
 	updateType := #autoCommitUpdate:.
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'client commands' }
@@ -25,4 +26,5 @@ RowanAutoCommitService >> flipAutoCommit [
 	autoCommit := self class flipAutoCommit. 
 	updateType := #autoCommitUpdate:.
 	RowanCommandResult addResult: self.
+
 ]

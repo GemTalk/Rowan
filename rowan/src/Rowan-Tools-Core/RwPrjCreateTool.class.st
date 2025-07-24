@@ -26,6 +26,7 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 				ifFalse: [ 
 					"create a git repository"
 					gitTool gitinitIn: repoPath with: '' ] ]
+
 ]
 
 { #category : 'loaded project creation' }

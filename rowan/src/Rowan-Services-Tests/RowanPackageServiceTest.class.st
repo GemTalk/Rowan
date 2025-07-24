@@ -24,6 +24,7 @@ RowanPackageServiceTest >> test_classHierarchy [
 	self assert: objectClassService name = 'Object'.
 	self assert: ((packageService hierarchyServices at: objectClassService) detect:[:classService | classService name = 'TestAsserter'] ifNone: []) notNil.
 	self assert: ((packageService hierarchyServices keys) detect:[:classService | (classService ~~ #nil) and: [classService name = 'TestCase']] ifNone: []) notNil.
+
 ]
 
 { #category : 'tests' }
@@ -56,6 +57,7 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
     ensure: [ 
       Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
       self unloadServicesTestProject ]
+
 ]
 
 { #category : 'tests' }
@@ -89,6 +91,7 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
     ensure: [ 
       Rowan projectTools browser removeClassNamed: 'RowanTestCompile'.
       self unloadServicesTestProject ]
+
 ]
 
 { #category : 'tests' }
@@ -119,6 +122,7 @@ RowanPackageServiceTest >> test_compileClassSelectsPackageAndClass [
     ensure: [ 
       RowanBrowserService new
         unloadProjectsNamed: (Array with: self servicesTestProjectName) ]
+
 ]
 
 { #category : 'tests' }
@@ -149,6 +153,7 @@ RowanPackageServiceTest >> test_packageWasDeleted [
     ensure: [ 
       self unloadServicesTestProject.
       System commitTransaction ]
+
 ]
 
 { #category : 'tests' }
@@ -165,4 +170,5 @@ RowanPackageServiceTest >> test_testClassesIncludesExtensions [
 	packageService testClasses. 
 	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
 	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest').
+
 ]

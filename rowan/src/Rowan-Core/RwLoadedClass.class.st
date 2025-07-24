@@ -20,12 +20,14 @@ RwLoadedClass >> asDefinition [
 		withProperties: self propertiesForDefinition
 		classMethodDefinitions: self classMethodDefinitions
 		instanceMethodDefinitions: self instanceMethodDefinitions
+
 ]
 
 { #category : 'private' }
 RwLoadedClass >> classMethodDefinitions [
 
 	^self definitionsFor: loadedClassMethods
+
 ]
 
 { #category : 'testing' }
@@ -34,30 +36,35 @@ RwLoadedClass >> includesSelector: aSelector isMeta: isMeta [
 	^ isMeta
 		ifTrue: [ loadedClassMethods includesKey: aSelector ]
 		ifFalse: [ loadedInstanceMethods includesKey: aSelector ]
+
 ]
 
 { #category : 'private' }
 RwLoadedClass >> instanceMethodDefinitions [
 
 	^self definitionsFor: loadedInstanceMethods
+
 ]
 
 { #category : 'testing' }
 RwLoadedClass >> isEmpty [
 
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
+
 ]
 
 { #category : 'testing' }
 RwLoadedClass >> isLoadedClass [
 
 	^ true
+
 ]
 
 { #category : 'testing' }
 RwLoadedClass >> isLoadedClassExtension [
 
 	^ false
+
 ]
 
 { #category : 'accessing' }
@@ -94,6 +101,7 @@ RwLoadedClass >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassM
 				cull: self 
 				cull: loadedMethod
 	]
+
 ]
 
 { #category : 'testing' }
@@ -109,22 +117,26 @@ RwLoadedClass >> loadedMethodAt: aSelector isMeta: isMeta [
 RwLoadedClass >> loadedPackage [
 
 	^loadedPackage
+
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> loadedPackage: aLoadedPackage [
 
 	loadedPackage := aLoadedPackage
+
 ]
 
 { #category : 'private' }
 RwLoadedClass >> markPackageDirty [
 
 	loadedPackage markDirty
+
 ]
 
 { #category : 'accessing' }
 RwLoadedClass >> packageName [
 
 	^loadedPackage name
+
 ]

@@ -34,11 +34,13 @@ RowanPackageService class >> forPackageNamed: aName [
 RowanPackageService >> = packageService [
 	(packageService isKindOf: RowanPackageService) ifFalse:[^false].
 	^name = packageService name
+
 ]
 
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
   ^ self rowanDirty not and: [ self projectIsDirty not ]
+
 ]
 
 { #category : 'rowan' }
@@ -53,6 +55,7 @@ RowanPackageService >> changes [
 RowanPackageService >> classes: collection [
 
 	classes := collection
+
 ]
 
 { #category : 'client commands' }
@@ -62,12 +65,14 @@ RowanPackageService >> classHierarchy [
 	theClasses := classes collect:[:classService | classService theClass].
 	hierarchyServices := self classHierarchy: theClasses. 
 	RowanCommandResult addResult: self.
+
 ]
 
 { #category : 'commands support' }
 RowanPackageService >> classHierarchy: theClasses [
   hierarchyServices := super classHierarchy: theClasses.
   ^ hierarchyServices
+
 ]
 
 { #category : 'rowan' }
@@ -89,11 +94,13 @@ RowanPackageService >> createPackageNamed: aString inProject: projName [
 	projectDefinition := projectService createProjectNamed: projName.  
 	projectDefinition addPackageNamed: name.
 	self projectTools load loadProjectDefinition: projectDefinition.
+
 ]
 
 { #category : 'Updating' }
 RowanPackageService >> defaultTemplate: newValue [
 	defaultTemplate := newValue
+
 ]
 
 { #category : 'rowan' }
@@ -120,12 +127,14 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'comparing' }
 RowanPackageService >> hash [
 	^self name hash
+
 ]
 
 { #category : 'Accessing' }
 RowanPackageService >> hierarchyServices [
 
 	^hierarchyServices
+
 ]
 
 { #category : 'rowan' }
@@ -139,6 +148,7 @@ RowanPackageService >> isDirty [
 RowanPackageService >> isDirty: boolean [
 
 	isDirty := boolean
+
 ]
 
 { #category : 'Accessing' }
@@ -146,6 +156,7 @@ RowanPackageService >> jadeite_testClasses [
 
 	"for testing" 
 	^testClasses
+
 ]
 
 { #category : 'rowan' }
@@ -154,6 +165,7 @@ RowanPackageService >> loadedClasses [
 	| loadedPackage |
 	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClasses
+
 ]
 
 { #category : 'rowan' }
@@ -162,6 +174,7 @@ RowanPackageService >> loadedClassExtensions [
 	| loadedPackage |
 	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClassExtensions
+
 ]
 
 { #category : 'rowan' }
@@ -210,6 +223,7 @@ RowanPackageService >> printOn: aStream [
 	super printOn: aStream. 
 	aStream nextPut: $:. 
 	aStream nextPutAll: (name ifNil: [nil printString])
+
 ]
 
 { #category : 'Accessing' }
@@ -228,16 +242,19 @@ RowanPackageService >> projectDefinition: newValue [
 RowanPackageService >> projectIsDirty [
 
 	^(RowanProjectService new name: projectName) rowanDirty
+
 ]
 
 { #category : 'Accessing' }
 RowanPackageService >> projectName [
 	^projectName
+
 ]
 
 { #category : 'Updating' }
 RowanPackageService >> projectName: newValue [
 	projectName := newValue
+
 ]
 
 { #category : 'client commands' }
@@ -248,6 +265,7 @@ RowanPackageService >> removeClass: classService [
   classService wasRemoved: true.
   RowanCommandResult addResult: classService.
   RowanBrowserService new packagesWithTests	"sunit browser might need updated"
+
 ]
 
 { #category : 'commands support' }
@@ -268,18 +286,21 @@ RowanPackageService >> rowanDirty [
 RowanPackageService >> rowanProjectName [
 
 	^projectName
+
 ]
 
 { #category : 'other' }
 RowanPackageService >> selectedClass [
 	
 	^selectedClass
+
 ]
 
 { #category : 'Accessing' }
 RowanPackageService >> selectedClass: classService [
 	selectedClass := classService.
 	classService selectedPackageServices: (Array with: self)
+
 ]
 
 { #category : 'perform' }
@@ -292,6 +313,7 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
   self update.
   wasClean
     ifTrue: [ self updateProject ]
+
 ]
 
 { #category : 'commands support' }
@@ -301,12 +323,14 @@ RowanPackageService >> services: services from: levels expand: toExpand [
     from: levels
     expand: toExpand
     classes: (classes collect: [ :classService | classService theClass ])
+
 ]
 
 { #category : 'client commands' }
 RowanPackageService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
+
 ]
 
 { #category : 'client commands' }
@@ -338,6 +362,7 @@ RowanPackageService >> testClasses [
   updateType := #'testClasses:'.
   testClasses := testClasses asArray.
   RowanCommandResult addResult: self
+
 ]
 
 { #category : 'updates' }
@@ -355,6 +380,7 @@ RowanPackageService >> update [
 	self isDirty. 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
 	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'updates' }
@@ -371,6 +397,7 @@ RowanPackageService >> updateInternalService: updatedService [
 		classesService = updatedService ifTrue:[
 			classes at: index put: updatedService
 		]].
+
 ]
 
 { #category : 'updates' }
@@ -380,12 +407,14 @@ RowanPackageService >> updateProject [
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
 	RowanCommandResult addResult: projectService.
+
 ]
 
 { #category : 'updates' }
 RowanPackageService >> updateProjectName [
 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
+
 ]
 
 { #category : 'testing' }
@@ -393,4 +422,5 @@ RowanPackageService >> wasDeleted [
 
 	^(Rowan image loadedPackageNamed: name
 			ifAbsent: []) isNil
+
 ]

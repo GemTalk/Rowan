@@ -14,6 +14,7 @@ RwPrjEditTool >> addClass: classDefinition inPackageNamed: packageName inProject
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition addClassDefinition: classDefinition.
 	^ projectDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -39,6 +40,7 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition addClassExtension: classExtensionDefinition.
 	^ projectDefinition
+
 ]
 
 { #category : 'class extension editting' }
@@ -64,6 +66,7 @@ RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inPr
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition removeClassDefinition: classDefinition.
 	^ projectDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -89,6 +92,7 @@ RwPrjEditTool >> removeClassNamed: className fromPackageNamed: packageName inPro
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition removeClassNamed: className.
 	^ projectDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -114,6 +118,7 @@ RwPrjEditTool >> updateOrAddClass: classDefinition inPackageNamed: packageName i
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition updateClassDefinition: classDefinition.
 	^ projectDefinition
+
 ]
 
 { #category : 'class editing' }

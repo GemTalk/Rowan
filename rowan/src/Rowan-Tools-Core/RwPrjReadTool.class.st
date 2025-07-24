@@ -28,6 +28,7 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 			projectDefinition addOrUpdatePackage: packageDefinition ].
 	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -216,4 +217,5 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: grou
 RwPrjReadTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForRead: aRwSpecification
+
 ]

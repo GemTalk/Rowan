@@ -41,12 +41,14 @@ RwProjectConfiguration class >> newNamed: aName for: projectName [
 RwProjectConfiguration >> addConfig: configName [
 
 	self configNames add: configName
+
 ]
 
 { #category : 'accessing' }
 RwProjectConfiguration >> configNames [
 
 	^ configNames ifNil: [ configNames := Set new ]
+
 ]
 
 { #category : 'accessing' }
@@ -60,6 +62,7 @@ RwProjectConfiguration >> configNames: anObject [
 RwProjectConfiguration >> removeConfig: configName [
 
 	self configNames remove: configName ivAbsent: [  ]
+
 ]
 
 { #category : 'load support' }
@@ -70,6 +73,7 @@ RwProjectConfiguration >> resolvePackageNames [
 	"all of the names in configNames, should be package names"
 
 	^ self configNames
+
 ]
 
 { #category : 'load support' }
@@ -81,4 +85,5 @@ RwProjectConfiguration >> resolvePackageNames: visitedConfigurationNames [
 	visitedConfigurationNames add: self name.
 	thePackageNames := self resolvePackageNames.
 	^ thePackageNames
+
 ]

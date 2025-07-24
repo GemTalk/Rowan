@@ -11,12 +11,14 @@ Class {
 RwMethodsModification class >> extendedClassName: ignored [
 
 	^ self new
+
 ]
 
 { #category : 'visiting' }
 RwMethodsModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitMethodsModification: self
+
 ]
 
 { #category : 'merging' }

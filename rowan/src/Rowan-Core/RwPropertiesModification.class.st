@@ -11,4 +11,5 @@ Class {
 RwPropertiesModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitPropertiesModification: self
+
 ]

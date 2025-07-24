@@ -15,4 +15,5 @@ Class {
 RwClassExtensionsModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitClassExtensionsModification: self
+
 ]

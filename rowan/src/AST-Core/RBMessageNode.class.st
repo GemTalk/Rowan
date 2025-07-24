@@ -27,6 +27,7 @@ RBMessageNode class >> receiver: aValueNode selector: aSymbol [
 		receiver: aValueNode
 		selector: aSymbol
 		arguments: #()
+
 ]
 
 { #category : 'instance creation' }
@@ -36,6 +37,7 @@ RBMessageNode class >> receiver: aValueNode selector: aSymbol arguments: valueNo
 		arguments: valueNodes;
 		selector: aSymbol;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
@@ -45,6 +47,7 @@ RBMessageNode class >> receiver: aValueNode selectorParts: keywordTokens argumen
 			selectorParts: keywordTokens
 			arguments: valueNodes;
 		yourself
+
 ]
 
 { #category : 'comparing' }
@@ -56,22 +59,26 @@ RBMessageNode >> = anObject [
 	1 to: self arguments size
 		do: [:i | (self arguments at: i) = (anObject arguments at: i) ifFalse: [^false]].
 	^true
+
 ]
 
 { #category : 'visitor' }
 RBMessageNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptMessageNode: self
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> arguments [
 	^arguments isNil ifTrue: [#()] ifFalse: [arguments]
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> arguments: argCollection [ 
 	arguments := argCollection.
 	arguments do: [:each | each parent: self]
+
 ]
 
 { #category : 'querying' }
@@ -88,6 +95,7 @@ RBMessageNode >> bestNodeFor: anInterval [
 			| node |
 			node := each bestNodeFor: anInterval.
 			node notNil ifTrue: [^node]]
+
 ]
 
 { #category : 'private' }
@@ -96,6 +104,7 @@ RBMessageNode >> buildSelector [
 	selectorStream := WriteStreamPortable on: String new.
 	selectorParts do: [ :each | selectorStream nextPutAll: each value ].
 	^ selectorStream contents asSymbol
+
 ]
 
 { #category : 'accessing' }
@@ -103,6 +112,7 @@ RBMessageNode >> children [
 	^(OrderedCollection with: self receiver)
 		addAll: self arguments;
 		yourself
+
 ]
 
 { #category : 'matching' }
@@ -112,6 +122,7 @@ RBMessageNode >> copyInContext: aDictionary [
 		selectorParts: (self selectorParts collect: [ :each | each copy removePositions ]);
 		arguments: (self arguments collect: [ :each | each copyInContext: aDictionary ]);
 		yourself
+
 ]
 
 { #category : 'comparing' }
@@ -125,57 +136,68 @@ RBMessageNode >> equalTo: anObject withMapping: aDictionary [
 			((self arguments at: i) equalTo: (anObject arguments at: i)
 				withMapping: aDictionary) ifFalse: [^false]].
 	^true
+
 ]
 
 { #category : 'comparing' }
 RBMessageNode >> hash [
 	^ (self receiver hash bitXor: self selector hash) bitXor: (self hashForCollection: self arguments)
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isBinary [
 	^(self isUnary or: [self isKeyword]) not
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isCascaded [
 	^parent notNil and: [parent isCascade]
+
 ]
 
 { #category : 'private-replacing' }
 RBMessageNode >> isContainmentReplacement: aNode [ 
 	^(self mappingFor: self receiver) = aNode 
 		or: [self arguments anySatisfy: [:each | (self mappingFor: each) = aNode]]
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isFirstCascaded [
 	^self isCascaded and: [parent messages first == self]
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isKeyword [
 	^selectorParts first value last = $:
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isMessage [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isSelfSend [
 	^ self receiver isVariable and: [ self receiver name = 'self' ]
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isSuperSend [
 	^ self receiver isVariable and: [ self receiver name = 'super' ]
+
 ]
 
 { #category : 'testing' }
 RBMessageNode >> isUnary [
 	^arguments isEmpty
+
 ]
 
 { #category : 'testing' }
@@ -183,6 +205,7 @@ RBMessageNode >> lastIsReturn [
 	^ (#(#ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNil: #ifNotNil:ifNil:) includes: self selector)
 		and: [ arguments first isBlock and: [ arguments first body lastIsReturn 
 		and: [ arguments last isBlock and: [ arguments last body lastIsReturn ] ] ] ]
+
 ]
 
 { #category : 'matching' }
@@ -196,6 +219,7 @@ RBMessageNode >> match: aNode inContext: aDictionary [
 			((arguments at: i) match: (aNode arguments at: i) inContext: aDictionary)
 				ifFalse: [^false]].
 	^true
+
 ]
 
 { #category : 'testing' }
@@ -205,11 +229,13 @@ RBMessageNode >> needsParenthesis [
 		ifFalse: 
 			[self precedence > parent precedence 
 				or: [self precedence = parent precedence and: [self isUnary not]]]
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> numArgs [
 	^self selector numArgs
+
 ]
 
 { #category : 'copying' }
@@ -217,6 +243,7 @@ RBMessageNode >> postCopy [
 	super postCopy.
 	self receiver: self receiver copy.
 	self arguments: (self arguments collect: [ :each | each copy ])
+
 ]
 
 { #category : 'accessing' }
@@ -224,17 +251,20 @@ RBMessageNode >> precedence [
 	^self isUnary 
 		ifTrue: [1]
 		ifFalse: [self isKeyword ifTrue: [3] ifFalse: [2]]
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> receiver [
 	^receiver
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> receiver: aValueNode [ 
 	receiver := aValueNode.
 	receiver parent: self
+
 ]
 
 { #category : 'initialize-release' }
@@ -242,6 +272,7 @@ RBMessageNode >> receiver: aValueNode selectorParts: keywordTokens arguments: va
 	self receiver: aValueNode.
 	selectorParts := keywordTokens.
 	self arguments: valueNodes
+
 ]
 
 { #category : 'accessing' }
@@ -249,6 +280,7 @@ RBMessageNode >> renameSelector: newSelector andArguments: varNodeCollection [
 	self
 		arguments: varNodeCollection;
 		selector: newSelector
+
 ]
 
 { #category : 'private-replacing' }
@@ -267,6 +299,7 @@ RBMessageNode >> replaceContainmentSourceWith: aNode [
 					replaceFrom: originalNode stop + 1
 					to: self stop
 					with: (needsParenthesis ifTrue: [')'] ifFalse: ['']))
+
 ]
 
 { #category : 'replacing' }
@@ -280,6 +313,7 @@ RBMessageNode >> replaceNode: aNode withNode: anotherNode [
 				ifTrue: [parent messages do: [:each | each receiver: anotherNode]]].
 	self arguments: (arguments 
 				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+
 ]
 
 { #category : 'private-replacing' }
@@ -288,6 +322,7 @@ RBMessageNode >> replaceSourceWith: aNode [
 		ifTrue: [^self replaceContainmentSourceWith: aNode].
 	aNode isMessage ifFalse: [^super replaceSourceWith: aNode].
 	^self replaceSourceWithMessageNode: aNode
+
 ]
 
 { #category : 'private-replacing' }
@@ -331,6 +366,7 @@ RBMessageNode >> replaceSourceWithMessageNode: aNode [
 										and: [(self source at: old start - 1) isSqueakSeparator not]) 
 											ifTrue: [' ' , new value]
 											ifFalse: [new value]))]]
+
 ]
 
 { #category : 'accessing' }
@@ -338,6 +374,7 @@ RBMessageNode >> selector [
 	^selector isNil
 		ifTrue: [selector := self buildSelector]
 		ifFalse: [selector]
+
 ]
 
 { #category : 'accessing' }
@@ -356,16 +393,19 @@ RBMessageNode >> selector: aSelector [
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
+
 ]
 
 { #category : 'private' }
 RBMessageNode >> selectorParts [
 	^ selectorParts
+
 ]
 
 { #category : 'private' }
 RBMessageNode >> selectorParts: tokenCollection [ 
 	selectorParts := tokenCollection
+
 ]
 
 { #category : 'accessing' }
@@ -373,11 +413,13 @@ RBMessageNode >> sentMessages [
 	^ super sentMessages
 		add: self selector;
 		yourself
+
 ]
 
 { #category : 'accessing' }
 RBMessageNode >> startWithoutParentheses [
 	^receiver start
+
 ]
 
 { #category : 'accessing' }
@@ -385,4 +427,5 @@ RBMessageNode >> stopWithoutParentheses [
 	^arguments isEmpty 
 		ifTrue: [selectorParts first stop]
 		ifFalse: [arguments last stop]
+
 ]

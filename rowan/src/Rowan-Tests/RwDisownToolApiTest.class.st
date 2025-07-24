@@ -549,4 +549,5 @@ RwDisownToolApiTest >> testDisownProject [
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName1 ifAbsent: []) notNil.
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
 ]

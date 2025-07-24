@@ -77,6 +77,7 @@ RwCypressPackageStructure >> fromSnapshot: snapshot [
           (classMap at: methodDefinition className ifAbsentPut: [ Set new ])
             add: methodDefinition ] ].
   self name: self name from: classDefinitions classMap: classMap
+
 ]
 
 { #category : 'snapshotting' }
@@ -112,6 +113,7 @@ RwCypressPackageStructure >> rwSnapshot [
 							(RwMethodDefinition fromCypressMethod: methodStructure) ].
 			rwPackageDefinition addClassExtension: rwClassExtensionDef ].
 	^ rwPackageDefinition
+
 ]
 
 { #category : 'snapshotting' }
@@ -145,4 +147,5 @@ RwCypressPackageStructure >> snapshot [
 					mdef isExtensionMethod: true.
 					definitions add: mdef ] ].
 	^ CypressSnapshot definitions: definitions
+
 ]

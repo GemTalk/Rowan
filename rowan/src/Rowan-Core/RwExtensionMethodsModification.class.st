@@ -13,12 +13,14 @@ RwExtensionMethodsModification class >> extendedClassName: aString [
 	^ self new
 		extendedClassName: aString;
 		yourself
+
 ]
 
 { #category : 'visiting' }
 RwExtensionMethodsModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitExtensionMethodsModification: self
+
 ]
 
 { #category : 'modifications' }
@@ -44,4 +46,5 @@ RwExtensionMethodsModification >> extendedClassName [
 RwExtensionMethodsModification >> extendedClassName: anObject [
 
 	extendedClassName := anObject
+
 ]

@@ -23,6 +23,7 @@ RwDefinition class >> new [
 	^(super new)
 		initialize;
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -40,11 +41,13 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 	(aDictionary includesKey: key)
 		ifTrue: [self error: 'Duplicate definition.'].
 	aDictionary at: key put: aDefinition
+
 ]
 
 { #category : 'converting' }
 RwDefinition >> asDefinition [
   ^ self
+
 ]
 
 { #category : 'comparing' }
@@ -53,6 +56,7 @@ RwDefinition >> compareAgainstBase: aDefinition [
 	Answer a Modification, which might be empty if there are no changes."
 
 	self subclassResponsibility
+
 ]
 
 { #category : 'comparing' }
@@ -64,6 +68,7 @@ RwDefinition >> compareAgainstBaseForNewClassVersion: aBaseDefinition [
 	"Filter the definition to include changes that are only applicable to new class versions"
 
 	self subclassResponsibility
+
 ]
 
 { #category : 'comparing' }
@@ -80,6 +85,7 @@ RwDefinition >> compareDictionary: myDictionary againstBaseDictionary_forUpgrade
 			modification := after compareAgainstBase_forUpgrade: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+
 ]
 
 { #category : 'comparing' }
@@ -96,12 +102,14 @@ RwDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDicti
 			modification := after compareAgainstBase: before.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+
 ]
 
 { #category : 'initialization' }
 RwDefinition >> initialize [
 
 	properties := Dictionary new
+
 ]
 
 { #category : 'testing' }
@@ -110,6 +118,7 @@ RwDefinition >> isEmpty [
 	All definitions are expected to have at least a name property."
 
 	^properties isEmpty
+
 ]
 
 { #category : 'properties' }
@@ -117,6 +126,7 @@ RwDefinition >> key [
 	"Answer an object that can be used to uniquely identify myself in the context of my container."
 
 	self subclassResponsibility
+
 ]
 
 { #category : 'copying' }
@@ -134,36 +144,42 @@ RwDefinition >> printOn: aStream [
 	aStream
 		nextPutAll: ' for ';
 		nextPutAll: (self key ifNil: ['nil'])
+
 ]
 
 { #category : 'accessing' }
 RwDefinition >> properties [
 
 	^properties
+
 ]
 
 { #category : 'accessing' }
 RwDefinition >> properties: propertiesDictionary [
 
 	properties := propertiesDictionary
+
 ]
 
 { #category : 'accessing' }
 RwDefinition >> propertyAt: aKey [
 
 	^properties at: aKey
+
 ]
 
 { #category : 'accessing' }
 RwDefinition >> propertyAt: aKey ifAbsent: absentBlock [
 
 	^properties at: aKey ifAbsent: absentBlock
+
 ]
 
 { #category : 'properties' }
 RwDefinition >> propertyAt: aKey put: aValue [
 
 	^properties at: aKey put: aValue
+
 ]
 
 { #category : 'private' }
@@ -174,6 +190,7 @@ RwDefinition >> removeDefinition: aDefinition from: aDictionary [
 	aDictionary
 		removeKey: key
 		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+
 ]
 
 { #category : 'private' }
@@ -182,6 +199,7 @@ RwDefinition >> removeKey: key from: aDictionary [
 	aDictionary
 		removeKey: key
 		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+
 ]
 
 { #category : 'private' }
@@ -190,4 +208,5 @@ RwDefinition >> updateDefinition: aDefinition in: aDictionary [
 	| key |
 	key := aDefinition key.
 	aDictionary at: key put: aDefinition
+
 ]

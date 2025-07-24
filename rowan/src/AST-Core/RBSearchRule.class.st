@@ -18,38 +18,45 @@ Class {
 { #category : 'instance creation' }
 RBSearchRule class >> searchFor: aString thenDo: aBlock [ 
 	^self new searchFor: aString thenDo: aBlock
+
 ]
 
 { #category : 'instance creation' }
 RBSearchRule class >> searchForMethod: aString thenDo: aBlock [ 
 	^self new searchForMethod: aString thenDo: aBlock
+
 ]
 
 { #category : 'instance creation' }
 RBSearchRule class >> searchForTree: aBRProgramNode thenDo: aBlock [ 
 	^self new searchForTree: aBRProgramNode thenDo: aBlock
+
 ]
 
 { #category : 'testing' }
 RBSearchRule >> canMatch: aProgramNode [ 
 	owner answer: (answerBlock value: aProgramNode value: owner answer).
 	^true
+
 ]
 
 { #category : 'initialize-release' }
 RBSearchRule >> searchFor: aString thenDo: aBlock [ 
 	self searchString: aString.
 	answerBlock := aBlock
+
 ]
 
 { #category : 'initialize-release' }
 RBSearchRule >> searchForMethod: aString thenDo: aBlock [ 
 	self methodSearchString: aString.
 	answerBlock := aBlock
+
 ]
 
 { #category : 'initialize-release' }
 RBSearchRule >> searchForTree: aBRProgramNode thenDo: aBlock [ 
 	searchTree := aBRProgramNode.
 	answerBlock := aBlock
+
 ]

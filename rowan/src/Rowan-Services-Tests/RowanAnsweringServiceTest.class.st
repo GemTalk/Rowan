@@ -12,6 +12,7 @@ RowanAnsweringServiceTest >> setUp [
 
 	super setUp. 
 	service := RowanAnsweringService new organizer: ClassOrganizer new.
+
 ]
 
 { #category : 'tests' }
@@ -27,12 +28,14 @@ RowanAnsweringServiceTest >> test_disableBreakpointsInterface [
   self deny: service breakPointsAreEnabled.
   self assert: RowanService breakPointsAreEnabled equals: false.
   self deny: (SessionTemps current at: #'Jadeite_BreakPointsAreEnabled')
+
 ]
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execCompileError [
  
 	self deny: (service exec: '1 +' context: nil asOop) key.
+
 ]
 
 { #category : 'tests' }
@@ -43,6 +46,7 @@ RowanAnsweringServiceTest >> test_execNilContext [
 	self assert: (service exec: '3+4' context: nil asOop) value equals: 7 asOop.
 	self assert: (service exec: 'true' context: nil asOop) value equals: true asOop.
 	self assert: (service exec: 'false' context: nil asOop) value equals: false asOop.
+
 ]
 
 { #category : 'tests' }
@@ -51,6 +55,7 @@ RowanAnsweringServiceTest >> test_execWithContext [
 	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
 	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
 	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
+
 ]
 
 { #category : 'tests' }
@@ -65,6 +70,7 @@ RowanAnsweringServiceTest >> test_initializeAutoCommit [
 	self deny: (SessionTemps current at: #'Jadeite_AutoCommit')] ensure: [
 		RowanService setAutoCommit: autoCommit.
 		self assert: RowanService autoCommit equals: autoCommit.]
+
 ]
 
 { #category : 'tests' }
@@ -87,6 +93,7 @@ RowanAnsweringServiceTest >> test_initializeBreakPointsAreDisabled [
       self
         assert: RowanService breakPointsAreEnabled
         equals: breakPointsAreEnabled ]
+
 ]
 
 { #category : 'tests' }
@@ -98,6 +105,7 @@ RowanAnsweringServiceTest >> test_loadedPackageExists [
 	self deny: (service loadedPackageExists: 'AJsfdjsdf') answer.
 	self assert: (service loadedPackageExists: 'Rowan-Kernel') answer. 
 	self assert: (service loadedPackageExists: 'rowan-kernel') answer. "lower case is accepted"
+
 ]
 
 { #category : 'tests' }
@@ -124,6 +132,7 @@ RowanAnsweringServiceTest >> test_matchingPattern [
 	self assert: service answer size > 1. 
 	1 to: service answer size - 1 do:[:idx | 
 		self assert: (service answer at: idx) < (service answer at: idx + 1)].
+
 ]
 
 { #category : 'tests' }
@@ -136,6 +145,7 @@ RowanAnsweringServiceTest >> test_maxPrint [
 	self assert: (service printStringOf: 'ab
 cd' asOop toMaxSize: 25) equals: '''ab
 cd'''.  "includes lf (10) - no ? substitution"
+
 ]
 
 { #category : 'tests' }
@@ -144,6 +154,7 @@ RowanAnsweringServiceTest >> test_play [
 	"method to safely play with commits" 
 
 	self deny: false
+
 ]
 
 { #category : 'tests' }
@@ -159,4 +170,5 @@ RowanAnsweringServiceTest >> test_setAutoCommit [
 	self deny: (SessionTemps current at: #'Jadeite_AutoCommit')] ensure: [
 		RowanService setAutoCommit: autoCommit.
 		self assert: RowanService autoCommit equals: autoCommit.]
+
 ]

@@ -17,4 +17,5 @@ GsExploreInteraction >> interactWith: anObject [
   "
 
   ^ anObject interactWithExplore: self
+
 ]

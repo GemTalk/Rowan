@@ -16,6 +16,7 @@ RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue a
 RwClassDefinition >> _modificationForcingNewClassVersion [
 
 	^ RwClassModificationForcingNewClassVersion
+
 ]
 
 { #category : '*rowan-gemstone-definitions' }
@@ -75,6 +76,7 @@ RwClassDefinition >> gs_constraints: constraintsArray [
 					self properties
 						at: 'gs_constraints'
 						put: constraintsArray ] ]
+
 ]
 
 { #category : '*rowan-gemstone-definitions' }
@@ -95,6 +97,7 @@ RwClassDefinition >> gs_options: optionsArray [
 				at: 'gs_options'
 				put:
 					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+
 ]
 
 { #category : '*rowan-gemstone-definitions' }

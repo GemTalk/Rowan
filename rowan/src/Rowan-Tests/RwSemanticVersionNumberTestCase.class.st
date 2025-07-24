@@ -214,6 +214,7 @@ RwSemanticVersionNumberTestCase >> testVersion18 [
     self assert: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0-0').
     self assert: (x := self versionClass fromString: '1.0.0') = (y := self versionClass fromString: '1.0.0+0').
  
+
 ]
 
 { #category : 'tests' }

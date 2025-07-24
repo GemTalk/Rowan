@@ -28,6 +28,7 @@ RwMethodAdditionOrRemoval class >> packageDefinition: aPackageDefinition classDe
 		isMeta: isMeta;
 		methodsModification: aMethodsModification;
 		yourself
+
 ]
 
 { #category : 'instance creation' }

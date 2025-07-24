@@ -48,11 +48,13 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
     ifTrue: [ aGsProcess _stepPointAt: anInteger ]
     ifFalse: [ gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2) ].
   vars := self varsFor: frameData
+
 ]
 
 { #category : 'perform' }
 RowanFrameService >> servicePerform: symbol withArguments: collection [
 	^self perform: symbol withArguments: collection.
+
 ]
 
 { #category : 'other' }
@@ -98,4 +100,5 @@ RowanFrameService >> varsFor: anArray [
 		list add: (RowanVariableService oop: theOop key: key value: value className: valueClass name asString).
 	].
 	^list
+
 ]

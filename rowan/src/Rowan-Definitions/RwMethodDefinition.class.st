@@ -14,6 +14,7 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 		withProperties:
 			(Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
 		source: source
+
 ]
 
 { #category : 'instance creation' }
@@ -25,6 +26,7 @@ RwMethodDefinition class >> newForSource: methodSource protocol: protocol [
 		newForSelector: selector asSymbol
 		protocol: protocol
 		source: methodSource
+
 ]
 
 { #category : 'instance creation' }
@@ -70,6 +72,7 @@ RwMethodDefinition >> protocol: aString [
 RwMethodDefinition >> selector [
 
 	^properties at: 'selector'
+
 ]
 
 { #category : 'accessing' }

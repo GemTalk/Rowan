@@ -11,6 +11,7 @@ RwPackageSetDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		into: result
 		elementClass: RwPackageDefinition.
 	^ result
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }

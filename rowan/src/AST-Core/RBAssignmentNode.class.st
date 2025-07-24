@@ -25,6 +25,7 @@ RBAssignmentNode class >> variable: aVariableNode value: aValueNode [
 		variable: aVariableNode
 		value: aValueNode
 		position: nil
+
 ]
 
 { #category : 'instance creation' }
@@ -34,6 +35,7 @@ RBAssignmentNode class >> variable: aVariableNode value: aValueNode position: an
 			value: aValueNode
 			position: anInteger;
 		yourself
+
 ]
 
 { #category : 'comparing' }
@@ -41,21 +43,25 @@ RBAssignmentNode >> = anObject [
 	self == anObject ifTrue: [^true].
 	self class = anObject class ifFalse: [^false].
 	^self variable = anObject variable and: [self value = anObject value]
+
 ]
 
 { #category : 'visitor' }
 RBAssignmentNode >> acceptVisitor: aProgramNodeVisitor [ 
 	^aProgramNodeVisitor acceptAssignmentNode: self
+
 ]
 
 { #category : 'accessing-token' }
 RBAssignmentNode >> assignment [
 	^ assignment
+
 ]
 
 { #category : 'accessing-token' }
 RBAssignmentNode >> assignment: anInteger [
 	assignment := anInteger
+
 ]
 
 { #category : 'accessing' }
@@ -63,16 +69,19 @@ RBAssignmentNode >> assignmentOperator [
 	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) = $_ ] ])
 		ifTrue: [ '_' ]
 		ifFalse: [ ':=' ]
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> assignmentPosition [
 	^ assignment
+
 ]
 
 { #category : 'testing' }
 RBAssignmentNode >> assigns: aVariableName [ 
 	^variable name = aVariableName or: [value assigns: aVariableName]
+
 ]
 
 { #category : 'querying' }
@@ -88,11 +97,13 @@ RBAssignmentNode >> bestNodeFor: anInterval [
 			| node |
 			node := each bestNodeFor: anInterval.
 			node notNil ifTrue: [^node]]
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> children [
 	^Array with: value with: variable
+
 ]
 
 { #category : 'matching' }
@@ -101,11 +112,13 @@ RBAssignmentNode >> copyInContext: aDictionary [
 		variable: (self variable copyInContext: aDictionary);
 		value: (self value copyInContext: aDictionary);
 		yourself
+
 ]
 
 { #category : 'testing' }
 RBAssignmentNode >> directlyUses: aNode [ 
 	^aNode = value ifTrue: [true] ifFalse: [self isDirectlyUsed]
+
 ]
 
 { #category : 'comparing' }
@@ -113,16 +126,19 @@ RBAssignmentNode >> equalTo: anObject withMapping: aDictionary [
 	^self class = anObject class and: 
 			[(self variable equalTo: anObject variable withMapping: aDictionary) 
 				and: [self value equalTo: anObject value withMapping: aDictionary]]
+
 ]
 
 { #category : 'comparing' }
 RBAssignmentNode >> hash [
 	^self variable hash bitXor: self value hash
+
 ]
 
 { #category : 'testing' }
 RBAssignmentNode >> isAssignment [
 	^true
+
 ]
 
 { #category : 'matching' }
@@ -130,6 +146,7 @@ RBAssignmentNode >> match: aNode inContext: aDictionary [
 	aNode class = self class ifFalse: [^false].
 	^(variable match: aNode variable inContext: aDictionary)
 		and: [value match: aNode value inContext: aDictionary]
+
 ]
 
 { #category : 'testing' }
@@ -137,6 +154,7 @@ RBAssignmentNode >> needsParenthesis [
 	^parent isNil 
 		ifTrue: [false]
 		ifFalse: [self precedence > parent precedence]
+
 ]
 
 { #category : 'copying' }
@@ -144,17 +162,20 @@ RBAssignmentNode >> postCopy [
 	super postCopy.
 	self variable: self variable copy.
 	self value: self value copy
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> precedence [
 	^5
+
 ]
 
 { #category : 'replacing' }
 RBAssignmentNode >> replaceNode: aNode withNode: anotherNode [ 
 	value == aNode ifTrue: [self value: anotherNode].
 	variable == aNode ifTrue: [self variable: anotherNode]
+
 ]
 
 { #category : 'replacing' }
@@ -189,43 +210,51 @@ RBAssignmentNode >> replaceSourceWith: aNode [
 				replaceFrom: self variable start
 				to: self assignmentPosition + 1
 				with: aNode receiver name , ' ' , aNode selector)
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> startWithoutParentheses [
 	^variable start
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> stopWithoutParentheses [
 	^value stop
+
 ]
 
 { #category : 'testing' }
 RBAssignmentNode >> uses: aNode [ 
 	^aNode = value ifTrue: [true] ifFalse: [self isUsed]
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> value [
 	^value
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> value: aValueNode [ 
 	value := aValueNode.
 	value parent: self
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> variable [
 	^variable
+
 ]
 
 { #category : 'accessing' }
 RBAssignmentNode >> variable: varNode [ 
 	variable := varNode.
 	variable parent: self
+
 ]
 
 { #category : 'initialize-release' }
@@ -233,4 +262,5 @@ RBAssignmentNode >> variable: aVariableNode value: aValueNode position: anIntege
 	self variable: aVariableNode.
 	self value: aValueNode.
 	assignment := anInteger
+
 ]

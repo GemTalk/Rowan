@@ -8,6 +8,7 @@ Class {
 RwClassExtensionModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitClassExtensionModification: self
+
 ]
 
 { #category : 'patching' }
@@ -27,4 +28,5 @@ RwClassExtensionModification >> addModificationToPatchSet: aPatchSet inPackage: 
 		ifTrue: [ 
 			"nothing interesting to do for modification"
 			 ]
+
 ]

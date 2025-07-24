@@ -56,16 +56,19 @@ Class {
 { #category : 'accessing' }
 RBConfigurableFormatter class >> cascadedMessageInsideParentheses [
 	^ CascadedMessageInsideParentheses
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> cascadedMessageInsideParentheses: aBoolean [
 	CascadedMessageInsideParentheses := aBoolean
+
 ]
 
 { #category : 'public' }
 RBConfigurableFormatter class >> format: aParseTree [ 
 	^self format: aParseTree withIndents: 0
+
 ]
 
 { #category : 'public' }
@@ -73,36 +76,43 @@ RBConfigurableFormatter class >> format: aParseTree withIndents: anInteger [
 	^ self new
 		indent: anInteger;
 		format: aParseTree
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> formatCommentWithStatements [
 	^ FormatCommentWithStatements
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> formatCommentWithStatements: aBoolean [
 	FormatCommentWithStatements := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> indentsForKeywords [
 	^ IndentsForKeywords
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> indentsForKeywords: anInteger [
 	IndentsForKeywords := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> indentString [
 	^ IndentString
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> indentString: aString [
 	IndentString := aString
+
 ]
 
 { #category : 'initialization' }
@@ -134,212 +144,254 @@ RBConfigurableFormatter class >> initialize [
   StringInsideParentheses := ''.
   TraditionalBinaryPrecedence := #(#($| $& $?) #($= $~ $< $>) #($- $+) #($* $/ $% $\) #($@)).
   UseTraditionalBinaryPrecedenceForParentheses := true
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> keepBlockInMessage [
 	^ KeepBlockInMessage
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> keepBlockInMessage: aBoolean [
 	KeepBlockInMessage := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> lineUpBlockBrackets [
 	^ LineUpBlockBrackets
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> lineUpBlockBrackets: aBoolean [
 	LineUpBlockBrackets := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> maxLineLength [
 	^ MaxLineLength
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> maxLineLength: anInteger [
 	MaxLineLength := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> methodSignatureOnMultipleLines [
 	^ MethodSignatureOnMultipleLines
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> methodSignatureOnMultipleLines: aBoolean [
 	MethodSignatureOnMultipleLines := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> minimumNewLinesBetweenStatements [
 	^ MinimumNewLinesBetweenStatements
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> minimumNewLinesBetweenStatements: anInteger [
 	MinimumNewLinesBetweenStatements := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineAfterCascade [
 	^ NewLineAfterCascade
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineAfterCascade: aBoolean [
 	NewLineAfterCascade := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineBeforeFirstCascade [
 	^ NewLineBeforeFirstCascade
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineBeforeFirstCascade: aBoolean [
 	NewLineBeforeFirstCascade := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineBeforeFirstKeyword [
 	^ NewLineBeforeFirstKeyword
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLineBeforeFirstKeyword: aBoolean [
 	NewLineBeforeFirstKeyword := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterMethodComment [
 	^ NewLinesAfterMethodComment
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterMethodComment: anInteger [
 	NewLinesAfterMethodComment := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterMethodPattern [
 	^ NewLinesAfterMethodPattern
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterMethodPattern: anInteger [
 	NewLinesAfterMethodPattern := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterTemporaries [
 	^ NewLinesAfterTemporaries
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> newLinesAfterTemporaries: anInteger [
 	NewLinesAfterTemporaries := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> numberOfArgumentsForMultiLine [
 	^ NumberOfArgumentsForMultiLine
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> numberOfArgumentsForMultiLine: anInteger [
 	NumberOfArgumentsForMultiLine := anInteger
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAsTerminators [
 	^ PeriodsAtEndOfBlock and: [ PeriodsAtEndOfMethod ]
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAsTerminators: aBoolean [
 	PeriodsAtEndOfBlock := aBoolean.
 	PeriodsAtEndOfMethod := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAtEndOfBlock [
 	^ PeriodsAtEndOfBlock
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAtEndOfBlock: aBoolean [
 	PeriodsAtEndOfBlock := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAtEndOfMethod [
 	^ PeriodsAtEndOfMethod
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> periodsAtEndOfMethod: aBoolean [
 	PeriodsAtEndOfMethod := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> retainBlankLinesBetweenStatements [
 	^ RetainBlankLinesBetweenStatements
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> retainBlankLinesBetweenStatements: aBoolean [
 	RetainBlankLinesBetweenStatements := aBoolean
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringFollowingReturn [
 	^ StringFollowingReturn
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringFollowingReturn: aString [
 	StringFollowingReturn := aString
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringInsideBlocks [
 	^ StringInsideBlocks
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringInsideBlocks: aString [
 	StringInsideBlocks := aString
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringInsideParentheses [
 	^ StringInsideParentheses
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> stringInsideParentheses: aString [
 	StringInsideParentheses := aString
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> useTraditionalBinaryPrecedenceForParentheses [
 	^ UseTraditionalBinaryPrecedenceForParentheses
+
 ]
 
 { #category : 'accessing' }
 RBConfigurableFormatter class >> useTraditionalBinaryPrecedenceForParentheses: aBoolean [
 	UseTraditionalBinaryPrecedenceForParentheses := aBoolean
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptArrayNode: anArrayNode [
 	self bracketWith: '{}' around: [ self formatArray: anArrayNode ]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -347,11 +399,13 @@ RBConfigurableFormatter >> acceptAssignmentNode: anAssignmentNode [
 	self visitNode: anAssignmentNode variable.
 	codeStream space; nextPutAll: anAssignmentNode assignmentOperator; space.
 	self visitNode: anAssignmentNode value
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptBlockNode: aBlockNode [
 	self bracketWith: '[]' around: [self formatBlock: aBlockNode]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -371,6 +425,7 @@ RBConfigurableFormatter >> acceptCascadeNode: aCascadeNode [
 				separatedBy: 
 					[codeStream nextPut: $;.
 					NewLineAfterCascade ifTrue: [self newLine] ifFalse: [self space]]]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -384,23 +439,27 @@ RBConfigurableFormatter >> acceptLiteralArrayNode: aRBArrayLiteralNode [
 		around: 
 			[aRBArrayLiteralNode contents do: [:each | self visitNode: each]
 				separatedBy: [self space]]
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptLiteralNode: aLiteralNode [ 
 	self writeString: aLiteralNode token rbStoreString
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptMessageNode: aMessageNode [ 
 	self visitNode: aMessageNode receiver.
 	self formatSelectorAndArguments: aMessageNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptMethodNode: aMethodNode [ 
 	self formatMethodPatternFor: aMethodNode.
 	self formatMethodBodyFor: aMethodNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -409,6 +468,7 @@ RBConfigurableFormatter >> acceptPatternBlockNode: aRBPatternBlockNode [
 	self 
 		bracketWith: '{}' 
 		around: [self formatBlock: aRBPatternBlockNode]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -418,6 +478,7 @@ RBConfigurableFormatter >> acceptPatternWrapperBlockNode: aRBPatternWrapperBlock
 	self 
 		bracketWith: '{}' 
 		around: [self formatBlock: aRBPatternWrapperBlockNode]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -432,6 +493,7 @@ RBConfigurableFormatter >> acceptPragmaNode: aPragmaNode [
         ifTrue: [ self space ] ]
     restSeparator: [ self space ].
   codeStream nextPut: $>
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -444,6 +506,7 @@ RBConfigurableFormatter >> acceptQueryBlockNode: aBlockNode [
       InQueryBlock := true.
       self formatBlock: aBlockNode ]
         ensure: [ InQueryBlock := false ] ]
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -452,6 +515,7 @@ RBConfigurableFormatter >> acceptReturnNode: aReturnNode [
 		nextPut: $^;
 		nextPutAll: StringFollowingReturn.
 	self visitNode: aReturnNode value
+
 ]
 
 { #category : 'visitor-double dispatching' }
@@ -459,11 +523,13 @@ RBConfigurableFormatter >> acceptSequenceNode: aSequenceNode [
 	self formatTemporariesFor: aSequenceNode.
 	self formatSequenceCommentsFor: aSequenceNode.
 	self formatSequenceNodeStatementsFor: aSequenceNode
+
 ]
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptVariableNode: aVariableNode [ 
 	codeStream nextPutAll: aVariableNode name
+
 ]
 
 { #category : 'private' }
@@ -474,6 +540,7 @@ RBConfigurableFormatter >> addNewLinesBeforeStatementStartingAt: anInteger [
 						ifTrue: [self newLinesBeforeStartingAt: anInteger]
 						ifFalse: [0]).
 	newLines = 0 ifTrue: [self space] ifFalse: [self newLines: newLines]
+
 ]
 
 { #category : 'private' }
@@ -481,11 +548,13 @@ RBConfigurableFormatter >> bracketWith: bracketString around: aBlock [
 	bracketString isEmpty ifTrue: [^aBlock value].
 	codeStream nextPut: bracketString first.
 	^aBlock ensure: [codeStream nextPut: bracketString last]
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> currentLineLength [
 	^codeStream position - lineStart
+
 ]
 
 { #category : 'public interface' }
@@ -493,12 +562,14 @@ RBConfigurableFormatter >> format: aParseTree [
 	originalSource := aParseTree source.
 	self visitNode: aParseTree.
 	^codeStream contents
+
 ]
 
 { #category : 'private-formatting' }
 RBConfigurableFormatter >> formatArray: anArrayNode [
 	self formatSequenceCommentsFor: anArrayNode.
 	self formatSequenceNodeStatementsFor: anArrayNode
+
 ]
 
 { #category : 'private-formatting' }
@@ -513,6 +584,7 @@ RBConfigurableFormatter >> formatBlock: aBlockNode [
 	(LineUpBlockBrackets and: [ self willBeMultiline: aBlockNode body ])
 		ifTrue: [ self newLine ]
 		ifFalse: [ codeStream nextPutAll: StringInsideBlocks ]
+
 ]
 
 { #category : 'private-formatting' }
@@ -527,6 +599,7 @@ RBConfigurableFormatter >> formatBlockArgumentsFor: aBlockNode [
 				ifTrue: [ self formatCommentsFor: each ].
 			self space ].
 	codeStream nextPutAll: '| '
+
 ]
 
 { #category : 'private-formatting' }
@@ -537,6 +610,7 @@ RBConfigurableFormatter >> formatCommentsFor: aNode [
 			codeStream
 				space;
 				nextPutAll: (originalSource copyFrom: each first to: each last)]
+
 ]
 
 { #category : 'private-formatting' }
@@ -547,6 +621,7 @@ RBConfigurableFormatter >> formatMethodBodyFor: aMethodNode [
 			self formatMethodCommentFor: aMethodNode.
 			self formatPragmasFor: aMethodNode.
 			self visitNode: aMethodNode body]
+
 ]
 
 { #category : 'private-formatting' }
@@ -563,6 +638,7 @@ RBConfigurableFormatter >> formatMethodCommentFor: aMethodNode [
 						copyFrom: each first
 						to: each last).
 			self newLines: NewLinesAfterMethodComment]
+
 ]
 
 { #category : 'private-formatting' }
@@ -582,11 +658,13 @@ RBConfigurableFormatter >> formatMethodPatternFor: aMethodNode [
 					[MethodSignatureOnMultipleLines
 						ifTrue: [self newLine]
 						ifFalse: [self space]]]
+
 ]
 
 { #category : 'private-formatting' }
 RBConfigurableFormatter >> formatPragmasFor: aMethodNode [
 	aMethodNode pragmas do: [ :each | self visitNode: each; newLine ]
+
 ]
 
 { #category : 'private-formatting' }
@@ -609,6 +687,7 @@ RBConfigurableFormatter >> formatSelectorAndArguments: aMessageNode [
 					(newLineBetweenArguments
 						ifTrue: [ [ self newLine ] ]
 						ifFalse: [ [ self space ] ]) ]
+
 ]
 
 { #category : 'private-formatting' }
@@ -642,6 +721,7 @@ RBConfigurableFormatter >> formatSelectorAndArguments: aMessageNode firstSeparat
 										ifTrue: [ self newLine ]
 										ifFalse: [ self space ].
 									self visitNode: argument ] ] ] ]
+
 ]
 
 { #category : 'private-formatting' }
@@ -656,6 +736,7 @@ RBConfigurableFormatter >> formatSequenceCommentsFor: aSequenceNode [
 						copyFrom: each first
 						to: each last).
 			self newLine]
+
 ]
 
 { #category : 'private-formatting' }
@@ -680,6 +761,7 @@ RBConfigurableFormatter >> formatSequenceNodeStatementsFor: aSequenceNode [
 			i < statements size 
 				ifTrue: 
 					[self addNewLinesBeforeStatementStartingAt: (statements at: i + 1) start]]
+
 ]
 
 { #category : 'private-formatting' }
@@ -695,12 +777,14 @@ RBConfigurableFormatter >> formatStatementCommentsFor: aStatementNode [
 						(originalSource
 								copyFrom: each first
 								to: each last)]
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> formattedSourceFor: aNode [ 
 	^lookaheadCode at: aNode
 		ifAbsentPut: [self class format: aNode withIndents: indent]
+
 ]
 
 { #category : 'private' }
@@ -717,22 +801,26 @@ RBConfigurableFormatter >> formatTemporariesFor: aSequenceNode [
 					FormatCommentWithStatements ifTrue: [self formatCommentsFor: each].
 					self space]].
 	self newLines: NewLinesAfterTemporaries
+
 ]
 
 { #category : 'initialize-release' }
 RBConfigurableFormatter >> indent: anInteger [
 	indent := anInteger
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> indent: anInteger around: aBlock [ 
 	indent := indent + anInteger.
 	^aBlock ensure: [indent := indent - anInteger]
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> indentAround: aBlock [ 
 	self indent: 1 around: aBlock
+
 ]
 
 { #category : 'initialize-release' }
@@ -742,11 +830,13 @@ RBConfigurableFormatter >> initialize [
 	indent := 0.
 	lookaheadCode := IdentityDictionary new.
 	codeStream := WriteStreamPortable on: String new
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> isLineTooLong: aString [ 
 	^ self currentLineLength + (aString indexOf: Character lf ifAbsent: [ aString size ]) >= MaxLineLength
+
 ]
 
 { #category : 'private-formatting' }
@@ -768,6 +858,7 @@ RBConfigurableFormatter >> isMultiLineMessage: aMessageNode [
 		do: [ :sel :arg | messageStream nextPutAll: sel value; space; nextPutAll: (self formattedSourceFor: arg) ]
 		separatedBy: [ messageStream space ].
 	^ self isLineTooLong: messageStream contents
+
 ]
 
 { #category : 'private' }
@@ -813,11 +904,13 @@ RBConfigurableFormatter >> needsParenthesisFor: aNode [
     ifTrue: [ ^ aNode receiver isMessage not and: [ aNode selector ~~ #'&' ] ].
   ^ UseTraditionalBinaryPrecedenceForParentheses
     and: [ self precedenceOf: parent selector greaterThan: aNode selector ]
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> newLine [
 	self newLines: 1
+
 ]
 
 { #category : 'private' }
@@ -826,6 +919,7 @@ RBConfigurableFormatter >> newLines: anInteger [
 	anInteger timesRepeat: [codeStream lf].
 	lineStart := codeStream position.
 	indent timesRepeat: [codeStream nextPutAll: IndentString]
+
 ]
 
 { #category : 'private' }
@@ -845,6 +939,7 @@ RBConfigurableFormatter >> newLinesBeforeStartingAt: anIndex [
 			char == cr ifTrue: [count := count + 1].
 			index := index - 1].
 	^count
+
 ]
 
 { #category : 'private' }
@@ -863,11 +958,13 @@ RBConfigurableFormatter >> precedenceOf: parentSelector greaterThan: childSelect
 			((TraditionalBinaryPrecedence at: i) includes: childSelector first) 
 				ifTrue: [childIndex := i]].
 	^childIndex < parentIndex
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> space [
 	codeStream space
+
 ]
 
 { #category : 'visiting' }
@@ -888,11 +985,13 @@ RBConfigurableFormatter >> visitNode: aNode [
 				ifFalse: [self formatCommentsFor: aNode].
 			needsParenthesis
 				ifTrue: [codeStream nextPutAll: StringInsideParentheses]]
+
 ]
 
 { #category : 'private' }
 RBConfigurableFormatter >> willBeMultiline: aNode [ 
 	^(self formattedSourceFor: aNode) includes: Character lf
+
 ]
 
 { #category : 'utility' }
@@ -909,6 +1008,7 @@ RBConfigurableFormatter >> with: firstCollection and: secondCollection do: aBloc
 			aBlock
 				value: (firstCollection at: i)
 				value: (secondCollection at: i)]
+
 ]
 
 { #category : 'private' }
@@ -918,4 +1018,5 @@ RBConfigurableFormatter >> writeString: aString [
 	codeStream nextPutAll: aString.
 	index > 0 
 		ifTrue: [lineStart := codeStream position - (aString size - index)]
+
 ]

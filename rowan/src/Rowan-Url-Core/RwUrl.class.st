@@ -81,11 +81,13 @@ RwUrl class >> fromString: aString [
     privateInitializeFromText: remainder.
   newUrl privateFragment: fragment.
   ^ newUrl
+
 ]
 
 { #category : 'parsing' }
 RwUrl class >> httpFromString: aString [
   ^CypressUrl absoluteFromText: aString
+
 ]
 
 { #category : 'constants' }
@@ -94,6 +96,7 @@ RwUrl class >> schemeName [
 	"When searching for a class to handle a particular scheme, make sure that Url classes never match by default. This is so that abstract Url classes e.g. HierarchicalUrl can be iterated over, but will not be selected"
 
 	^ #'none'
+
 ]
 
 { #category : 'parsing' }
@@ -130,11 +133,13 @@ RwUrl >> asRwRepository [
   "return a platform appropriate repository for the repository identified in the receiver"
 
   ^ self subclassResponsibility: #'asRwRepository'
+
 ]
 
 { #category : 'converting' }
 RwUrl >> asRwUrl [
   ^ self
+
 ]
 
 { #category : 'converting' }
@@ -167,6 +172,7 @@ RwUrl >> createRwCypressRepositoryForPath: repositoryDirectoryPath [
     url: self printString;
     yourself.
   ^ repo
+
 ]
 
 { #category : 'rowan support' }
@@ -180,6 +186,7 @@ RwUrl >> createRwFiletreeRepositoryForPath: repositoryDirectoryPath [
 		initializeReaderAndWriterClasses;
 		url: self printString;
 		yourself
+
 ]
 
 { #category : 'rowan support' }
@@ -190,6 +197,7 @@ RwUrl >> createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirect
     ifTrue: [ ^ self createRwFiletreeRepositoryForPath: repositoryDirectoryPath ].
   repositoryFormat = 'cypress'
     ifTrue: [ ^ self createRwCypressRepositoryForPath: repositoryDirectoryPath ]
+
 ]
 
 { #category : 'rowan support' }
@@ -238,11 +246,13 @@ RwUrl >> createRwTonelRepositoryForPath: repositoryDirectoryPath [
     initializeReaderAndWriterClasses;
     url: self printString;
     yourself
+
 ]
 
 { #category : 'rowan support' }
 RwUrl >> fileUtils [
   ^ Rowan fileUtilities
+
 ]
 
 { #category : 'fragment' }
@@ -263,6 +273,7 @@ RwUrl >> pathFor: coll [
     index < sz
       ifTrue: [ ans nextPut: $/ ] ].
   ^ ans contents
+
 ]
 
 { #category : 'printing' }

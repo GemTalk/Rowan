@@ -24,4 +24,5 @@ Class {
 { #category : 'constants' }
 RwCypressUrl class >> schemeName [
   ^ 'cypress'
+
 ]

@@ -10,6 +10,7 @@ CypressClassDefinition >> accept: aVisitor [
 CypressClassDefinition >> commentStamp [
 
 	^ ''
+
 ]
 
 { #category : '*rowan-cypress-kernel' }
@@ -33,6 +34,7 @@ CypressClassDefinition >> createOrReviseClass [
 CypressClassDefinition >> hasClassInstanceVariables [
 
 	^ self classInstVarNames isEmpty not
+
 ]
 
 { #category : '*rowan-cypress-kernel' }

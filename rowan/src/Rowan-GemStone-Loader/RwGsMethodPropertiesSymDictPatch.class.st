@@ -50,4 +50,5 @@ RwGsMethodPropertiesSymDictPatch >> isAnInitializer [
 { #category : 'initializers' }
 RwGsMethodPropertiesSymDictPatch >> runInitializer [
 	"noop"
+
 ]

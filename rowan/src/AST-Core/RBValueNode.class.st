@@ -26,32 +26,38 @@ Class {
 RBValueNode >> addParenthesis: anInterval [ 
 	parentheses isNil ifTrue: [parentheses := OrderedCollection new: 1].
 	parentheses add: anInterval
+
 ]
 
 { #category : 'testing' }
 RBValueNode >> containedBy: anInterval [ 
 	^anInterval first <= self startWithoutParentheses 
 		and: [anInterval last >= self stopWithoutParentheses]
+
 ]
 
 { #category : 'testing' }
 RBValueNode >> hasParentheses [
 	^self parentheses notEmpty
+
 ]
 
 { #category : 'testing' }
 RBValueNode >> isValue [
 	^true
+
 ]
 
 { #category : 'testing' }
 RBValueNode >> needsParenthesis [
 	^self subclassResponsibility
+
 ]
 
 { #category : 'accessing' }
 RBValueNode >> parentheses [
 	^parentheses isNil ifTrue: [#()] ifFalse: [parentheses]
+
 ]
 
 { #category : 'accessing' }
@@ -59,11 +65,13 @@ RBValueNode >> start [
 	^parentheses isNil 
 		ifTrue: [self startWithoutParentheses]
 		ifFalse: [parentheses last first]
+
 ]
 
 { #category : 'accessing' }
 RBValueNode >> startWithoutParentheses [
 	^self subclassResponsibility
+
 ]
 
 { #category : 'accessing' }
@@ -71,9 +79,11 @@ RBValueNode >> stop [
 	^parentheses isNil
 		ifTrue: [self stopWithoutParentheses]
 		ifFalse: [parentheses last last]
+
 ]
 
 { #category : 'accessing' }
 RBValueNode >> stopWithoutParentheses [
 	^self subclassResponsibility
+
 ]

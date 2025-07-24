@@ -25,12 +25,14 @@ RwPropertyModification class >> key: key oldValue: oldValue newValue: newValue [
 		oldValue: oldValue;
 		newValue: newValue;
 		yourself
+
 ]
 
 { #category : 'testing' }
 RwPropertyModification >> isEmpty [
 
 	^oldValue = newValue
+
 ]
 
 { #category : 'Accessing' }

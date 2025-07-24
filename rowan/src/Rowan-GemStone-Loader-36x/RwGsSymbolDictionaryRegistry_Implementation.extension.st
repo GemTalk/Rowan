@@ -36,6 +36,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
+
 ]
 
 { #category : '*rowan-gemstone-loader-36x' }
@@ -80,6 +81,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
+
 ]
 
 { #category : '*rowan-gemstone-loader-36x' }
@@ -182,6 +184,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledMethod: newCom
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
+
 ]
 
 { #category : '*rowan-gemstone-loader-36x' }

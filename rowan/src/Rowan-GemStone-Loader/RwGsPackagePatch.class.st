@@ -15,4 +15,5 @@ Class {
 RwGsPackagePatch class >> for: aPackageDefinition [
 
 	^self new packageDefinition: aPackageDefinition
+
 ]

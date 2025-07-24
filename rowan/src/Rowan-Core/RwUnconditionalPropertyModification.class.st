@@ -16,4 +16,5 @@ Class {
 RwUnconditionalPropertyModification >> isEmpty [
 
 	^ false
+
 ]

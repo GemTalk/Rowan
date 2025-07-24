@@ -12,6 +12,7 @@ RowanDebuggerServiceTest >> test_debugBlanksOnly [
 	string := '     '. 
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: 'nil halt.'
+
 ]
 
 { #category : 'tests' }
@@ -22,6 +23,7 @@ RowanDebuggerServiceTest >> test_debugEmptyString [
 	string := String new.
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: 'nil halt.'
+
 ]
 
 { #category : 'tests' }
@@ -34,6 +36,7 @@ var := ''|'''.
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: '| var | nil halt. 
 var := ''|'''.
+
 ]
 
 { #category : 'tests' }
@@ -46,6 +49,7 @@ var := ''|'''.
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: '| var | nil halt. 
 var := ''|'''.
+
 ]
 
 { #category : 'tests' }
@@ -56,6 +60,7 @@ RowanDebuggerServiceTest >> test_debugStringNoTemps [
 	string := 'abc'. 
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: 'nil halt. ', string
+
 ]
 
 { #category : 'tests' }
@@ -70,6 +75,7 @@ ps refresh'.
 	self assert: debugString equals: '| ps | nil halt. 
 ps := RowanProjectService newNamed: ''RowanSample1''.
 ps refresh'
+
 ]
 
 { #category : 'tests' }
@@ -80,4 +86,5 @@ RowanDebuggerServiceTest >> test_malformed [
 	string := 'abc | def | ^abc'.
 	debugString := RowanDebuggerService new debugStringFrom: string. 
 	self assert: debugString equals: 'nil halt. abc | def | ^abc'.
+
 ]

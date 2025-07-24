@@ -24,6 +24,7 @@ RwClassAdditionOrRemoval class >> packageDefinition: aPackageDefinition classKey
 		classKey: aClassKey;
 		classesModification: aClassesModification;
 		yourself
+
 ]
 
 { #category : 'instance creation' }

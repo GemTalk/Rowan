@@ -4,4 +4,5 @@ Extension { #name : 'RowanInterface' }
 RowanInterface >> _gemstonePlatformSpec [
 
 	^ self _specification platformSpec at: 'gemstone'
+
 ]

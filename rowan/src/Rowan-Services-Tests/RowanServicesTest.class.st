@@ -13,6 +13,7 @@ Class {
 { #category : 'testing' }
 RowanServicesTest class >> isAbstract [
   ^ self sunitName = #'RowanServicesTest'
+
 ]
 
 { #category : 'unicode method' }
@@ -22,6 +23,7 @@ RowanServicesTest >> addUnicodeSymbolKeyToUserGlobals [
   UserGlobals
     at: (String with: (Character withValue: 16r3DA)) asSymbol
     put: 'fnoodle'
+
 ]
 
 { #category : 'unicode method' }
@@ -29,6 +31,7 @@ RowanServicesTest >> addUnicodeValueToUserGlobals [
   "RowanServicesTest new addUnicodeValueToUserGlobals"
 
   UserGlobals at: #'bad' put: '£¥' asSymbol
+
 ]
 
 { #category : 'unicode method' }
@@ -44,6 +47,7 @@ RowanServicesTest >> compileUnicodeMethod [
 		^abc'
 
 	category: 'unicode method'
+
 ]
 
 { #category : 'support' }
@@ -61,6 +65,7 @@ RowanServicesTest >> createClassDefinitionNamed: className [
 			pools: #()
 			type: 'normal'.
 	^classDefinition
+
 ]
 
 { #category : 'support' }
@@ -76,6 +81,7 @@ RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: pac
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 	^projectDefinition
+
 ]
 
 { #category : 'support' }
@@ -88,6 +94,7 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 		defaultSymbolDictName: self defaultSymbolDictionaryName;
 		yourself.
 	^projectDefinition
+
 ]
 
 { #category : 'support' }
@@ -102,6 +109,7 @@ RowanServicesTest >> createServicesTestClass [
     createClassDefinitionNamed: self servicesDefaultClassName.
   packageDefinition addClassDefinition: classDefinition.
   ^ classDefinition
+
 ]
 
 { #category : 'support' }
@@ -112,6 +120,7 @@ RowanServicesTest >> createServicesTestPackage [
   projectDefinition := self defaultProjectDefinition.
   projectDefinition addPackageNamed: self servicesTestPackageName.
   ^ projectDefinition packageNamed: self servicesTestPackageName
+
 ]
 
 { #category : 'support' }
@@ -123,6 +132,7 @@ RowanServicesTest >> createServicesTestTestClass [
     createTestClassDefinitionNamed: self servicesDefaultTestClassName.
   packageDefinition addClassDefinition: classDefinition.
   ^ classDefinition
+
 ]
 
 { #category : 'support' }
@@ -140,6 +150,7 @@ RowanServicesTest >> createTestClassDefinitionNamed: className [
 			pools: #()
 			type: 'normal'.
 	^classDefinition
+
 ]
 
 { #category : 'support' }
@@ -148,12 +159,14 @@ RowanServicesTest >> defaultProjectDefinition [
     ifNil: [ 
       defaultProjectDefinition := self
         createProjectDefinitionNamed: self servicesTestProjectName ]
+
 ]
 
 { #category : 'support' }
 RowanServicesTest >> defaultSymbolDictionaryName [
 
 	^'ServicesTestDictionary'
+
 ]
 
 { #category : 'unicode method' }
@@ -163,6 +176,7 @@ RowanServicesTest >> iAmAUnicodeMethod [
 		abc := 'Ϛ'.
 		self halt. 
 		^abc
+
 ]
 
 { #category : 'support' }
@@ -173,6 +187,7 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 	Issues currently reside in: 
 		https://github.com/GemTalk/Jadeite/issues/"
+
 ]
 
 { #category : 'support' }
@@ -190,6 +205,7 @@ RowanServicesTest >> loadRowanSample1 [
     gitRootPath: gitRootPath
     useSsh: false.
   Rowan projectTools load loadProjectNamed: projectName
+
 ]
 
 { #category : 'support' }
@@ -198,6 +214,7 @@ RowanServicesTest >> loadServicesTestProject [
   projectSetDefinition := RwProjectSetDefinition new.
   projectSetDefinition addDefinition: self defaultProjectDefinition.
   Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+
 ]
 
 { #category : 'unicode method' }
@@ -208,30 +225,35 @@ RowanServicesTest >> removeUnicodeSymbolsFromUserGlobals [
     removeKey: (String with: (Character withValue: 16r3DA)) asSymbol
     ifAbsent: [  ].
   UserGlobals removeKey: #'bad' ifAbsent: [  ]
+
 ]
 
 { #category : 'constants' }
 RowanServicesTest >> servicesDefaultClassName [
 
 	^'RowanServicesTestClass'
+
 ]
 
 { #category : 'constants' }
 RowanServicesTest >> servicesDefaultTestClassName [
 
 	^'RowanServicesTestClassForTesting'
+
 ]
 
 { #category : 'constants' }
 RowanServicesTest >> servicesTestPackageName [
 
 	^'RowanServicesTestPackage'
+
 ]
 
 { #category : 'constants' }
 RowanServicesTest >> servicesTestProjectName [
 
 	^'RowanServicesTestProject'
+
 ]
 
 { #category : 'setup teardown' }
@@ -243,6 +265,7 @@ RowanServicesTest >> setUp [
   RowanAnsweringService new setEnableInteractionHandler: false.
   RowanCommandResult initializeResults.
   Rowan platform _alternateImageClass: Rowan image testImageClass
+
 ]
 
 { #category : 'setup teardown' }
@@ -251,6 +274,7 @@ RowanServicesTest >> tearDown [
   Rowan platform _alternateImageClass: nil.
   RowanCommandResult initializeResults.	"squash the gui updates"
   RowanAnsweringService new setEnableInteractionHandler: true
+
 ]
 
 { #category : 'support' }
@@ -259,4 +283,5 @@ RowanServicesTest >> unloadServicesTestProject [
 	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
 	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName.
 	defaultProjectDefinition := nil
+
 ]

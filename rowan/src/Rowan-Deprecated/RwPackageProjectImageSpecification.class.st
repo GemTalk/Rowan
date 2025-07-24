@@ -13,12 +13,14 @@ RwPackageProjectImageSpecification >> loadedPackageNames [
 	"method and iv should go away when Rowan is managed in Rowan"
 
 	^ loadedPackageNames ifNil: [ #() ]
+
 ]
 
 { #category : 'accessing' }
 RwPackageProjectImageSpecification >> loadedPackageNames: anObject [
 
 	loadedPackageNames := anObject
+
 ]
 
 { #category : 'copying' }
@@ -28,4 +30,5 @@ RwPackageProjectImageSpecification >> postCopy [
 
 	super postCopy.
 	loadedPackageNames := loadedPackageNames copy
+
 ]

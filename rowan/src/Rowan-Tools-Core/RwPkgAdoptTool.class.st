@@ -179,6 +179,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 				for: theBehavior 
 				protocol: protocolString
 				toPackageNamed: packageName ].
+
 ]
 
 { #category : 'smalltalk api' }

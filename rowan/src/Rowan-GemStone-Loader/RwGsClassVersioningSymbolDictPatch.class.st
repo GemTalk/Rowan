@@ -24,6 +24,7 @@ RwGsClassVersioningSymbolDictPatch class >> for: aClassModification inPackage: a
 		classModification: aClassModification;
 		packageDefinition: aPackageDefinition;
 		yourself
+
 ]
 
 { #category : 'private' }
@@ -161,6 +162,7 @@ RwGsClassVersioningSymbolDictPatch >> _updateNewClassVersionPatchesForClass: cla
 						isMeta: true
 						loadedMethod: loadedMethod
 						projectSetModification: aProjectSetModification ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -168,6 +170,7 @@ RwGsClassVersioningSymbolDictPatch >> classModification: aClassModification [
 
 	classModification := aClassModification.
 	classDefinition := classModification after
+
 ]
 
 { #category : 'actions' }
@@ -180,6 +183,7 @@ RwGsClassVersioningSymbolDictPatch >> createClassFor: aPatchSet [
 	newClassVersion := super createClassFor: aPatchSet.
 	symbolAssociation := self resolveName: newClassVersion name.
 	^ newClassVersion
+
 ]
 
 { #category : 'accessing' }
@@ -224,18 +228,21 @@ RwGsClassVersioningSymbolDictPatch >> moveNewClassVersionInSystem: aClassMove [
 
 	theRegistry addNewClassVersionToAssociation: newClassVersion 
 			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'versioning' }
 RwGsClassVersioningSymbolDictPatch >> newClassVersion [
 
 	^ newClassVersion
+
 ]
 
 { #category : 'accessing' }
 RwGsClassVersioningSymbolDictPatch >> oldClassDefinition [
 
 	^ classModification before
+
 ]
 
 { #category : 'versioning' }
@@ -245,6 +252,7 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 
 	oldClassVersion ifNotNil: [ ^ oldClassVersion ].
 	^ (self resolveName: self oldClassDefinition key) value
+
 ]
 
 { #category : 'new version support' }
@@ -257,6 +265,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 		_updateNewClassVersionPatchesForClass: class
 		in: aProjectSetModification
 		patchSet: aPatchSet
+
 ]
 
 { #category : 'new version support' }
@@ -327,6 +336,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
+
 ]
 
 { #category : 'new version support' }

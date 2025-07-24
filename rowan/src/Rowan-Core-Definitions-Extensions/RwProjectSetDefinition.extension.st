@@ -28,6 +28,7 @@ RwProjectSetDefinition >> compareAgainstBase_forUpgrade: aDefinition [
 		into: result
 		elementClass: RwProjectDefinition.
 	^ result
+
 ]
 
 { #category : '*rowan-core-definitions-extensions' }
@@ -41,4 +42,5 @@ RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 		into: result
 		elementClass: RwProjectDefinition.
 	^ result
+
 ]

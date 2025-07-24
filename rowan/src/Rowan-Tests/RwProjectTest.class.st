@@ -32,6 +32,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 "test existsOnDisk"
 
 	self deny: (RwProject newNamed: projectName) existsOnDisk.
+
 ]
 
 { #category : 'tests - issue 428' }
@@ -58,6 +59,7 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 "test existsOnDisk"
 
 	self assert: (RwProject newNamed: projectName) existsOnDisk.
+
 ]
 
 { #category : 'tests' }

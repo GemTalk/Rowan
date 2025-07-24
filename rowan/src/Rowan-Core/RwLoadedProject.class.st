@@ -16,6 +16,7 @@ RwLoadedProject class >> _projectDefinitionSourceKey [
 		then it isn't necessary to update the loaded commit id."
 
 	^ '_Project_Definition_Source'
+
 ]
 
 { #category : 'accessing' }
@@ -24,6 +25,7 @@ RwLoadedProject class >> _projectDiskDefinitionSourceValue [
 		then it isn't necessary to update the loaded commit id."
 
 	^ 'loaded from disk'
+
 ]
 
 { #category : 'accessing' }
@@ -32,6 +34,7 @@ RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
 		a loaded project, then it isn't necessary to update the loaded commit id."
 
 	^ 'loaded project'
+
 ]
 
 { #category : 'accessing' }
@@ -39,6 +42,7 @@ RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
 	"This value of the property key indicates that the source of the project definition is unknown."
 
 	^ 'unknown'
+
 ]
 
 { #category : 'instance creation' }
@@ -48,6 +52,7 @@ RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
 		initialize;
 		initializeForLoadSpecification: aLoadSpecification;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -56,6 +61,7 @@ RwLoadedProject >> addLoadedPackage: aLoadedPackage [
 	self markDirty.
 	loadedPackages at: aLoadedPackage key put: aLoadedPackage.
 	aLoadedPackage loadedProject: self
+
 ]
 
 { #category : 'definitions' }
@@ -66,6 +72,7 @@ RwLoadedProject >> asDefinition [
 	^ RwProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
+
 ]
 
 { #category : 'initialization' }
@@ -82,6 +89,7 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 
 	self initializeForName: aLoadSpecification specName.
 	handle := aLoadSpecification
+
 ]
 
 { #category : 'testing' }
@@ -102,12 +110,14 @@ RwLoadedProject >> isDirty [
 RwLoadedProject >> isEmpty [
 
 	^ loadedPackages isEmpty
+
 ]
 
 { #category : 'accessing' }
 RwLoadedProject >> key [
 
 	^ name
+
 ]
 
 { #category : 'accessing' }
@@ -116,12 +126,14 @@ RwLoadedProject >> loadedPackageDefinitions [
 	"Create definitions from all of the packages I define, and answer the collection of them"
 
 	^ self definitionsFor: loadedPackages
+
 ]
 
 { #category : 'accessing' }
 RwLoadedProject >> loadedPackages [
 
 	^ loadedPackages
+
 ]
 
 { #category : 'accessing' }
@@ -142,18 +154,21 @@ RwLoadedProject >> loadedPackagesDo: loadedPackageBlock loadedClassedDo: loadedC
 				loadedClassExtensionsDo: loadedClassExtensionBlock
 				loadedInstanceMethodsDo: loadedInstanceMethodBlock
 				loadedClassMethodsDo: loadedClassMethodBlock ]
+
 ]
 
 { #category : 'accessing' }
 RwLoadedProject >> loadedProject [
 
 	^ self
+
 ]
 
 { #category : 'accessing' }
 RwLoadedProject >> loadSpecification [
 
 	^ handle
+
 ]
 
 { #category : 'private' }
@@ -161,6 +176,7 @@ RwLoadedProject >> markDirty [
 	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
 
 	isDirty := true
+
 ]
 
 { #category : 'private' }
@@ -175,6 +191,7 @@ self halt.
 RwLoadedProject >> markProjectDirty [
 
 	self markDirty
+
 ]
 
 { #category : 'accessing' }
@@ -183,6 +200,7 @@ RwLoadedProject >> packageNames [
 	"Return list of package names in the receiver"
 
 	^ self loadedPackages keys asArray
+
 ]
 
 { #category : 'accessing' }
@@ -191,6 +209,7 @@ RwLoadedProject >> projectUrl [
 	"Return the projectUrl used to clone the project"
 
 	^ self specification projectUrl
+
 ]
 
 { #category : 'definitions' }
@@ -201,6 +220,7 @@ RwLoadedProject >> propertiesForDefinition [
 	props at: 'name' put: name.
 	props at: self class _projectDefinitionSourceKey put: self class _projectLoadedDefinitionSourceValue.
 	^ props
+
 ]
 
 { #category : 'accessing' }
@@ -208,10 +228,12 @@ RwLoadedProject >> removeLoadedPackage: aLoadedPackage [
 
 	self markDirty.
 	loadedPackages removeKey: aLoadedPackage key
+
 ]
 
 { #category : 'properties' }
 RwLoadedProject >> specification [
 
 	^ properties at: 'spec'
+
 ]

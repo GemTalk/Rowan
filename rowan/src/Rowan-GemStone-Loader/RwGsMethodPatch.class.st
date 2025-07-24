@@ -28,6 +28,7 @@ RwGsMethodPatch class >> forMethod: aMethodDefinition isMeta: isMeta inClass: aC
 		classDefinition: aClassDefinition;
 		packageDefinition: aPackageDefinition;
 		yourself
+
 ]
 
 { #category : 'accessing' }
@@ -41,6 +42,7 @@ RwGsMethodPatch >> behavior [
 RwGsMethodPatch >> classDefinition [
 
 	^ classDefinition
+
 ]
 
 { #category : 'accessing' }
@@ -53,6 +55,7 @@ RwGsMethodPatch >> classDefinition: newValue [
 RwGsMethodPatch >> className [
 
 	^ self classDefinition key
+
 ]
 
 { #category : 'accessing' }
@@ -66,6 +69,7 @@ RwGsMethodPatch >> compiledMethod [
 			compiledMethod := methodDictionary
 				at: selector
 				ifAbsent: [ self error: 'internal error - compiled method not present in method dictionary' ] ]
+
 ]
 
 { #category : 'compiling' }
@@ -87,6 +91,7 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 		intoCategories: nil
 		intoPragmas: nil
 		environmentId: self methodEnvironmentId
+
 ]
 
 { #category : 'initializers' }
@@ -102,6 +107,7 @@ RwGsMethodPatch >> isAnInitializer [
 RwGsMethodPatch >> isMeta [
 
 	^ isMeta
+
 ]
 
 { #category : 'accessing' }
@@ -149,6 +155,7 @@ RwGsMethodPatch >> methodEnvironmentId [
 	"use the project load spec package properties"
 
 	^ self projectDefinition methodEnvForPackageNamed: self packageName
+
 ]
 
 { #category : 'private-installing' }
@@ -157,6 +164,7 @@ RwGsMethodPatch >> packageProtocolName [
 	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
 
 	^ '*' , self packageName
+
 ]
 
 { #category : 'private' }
@@ -179,6 +187,7 @@ RwGsMethodPatch >> primeBehaviorNewClasses: createdClasses andExistingClasses: t
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]
+
 ]
 
 { #category : 'printing' }
@@ -193,12 +202,14 @@ RwGsMethodPatch >> printOn: aStream [
 	aStream
 		nextPutAll: '>>';
 		nextPutAll: methodDefinition key asString
+
 ]
 
 { #category : 'private-installing' }
 RwGsMethodPatch >> propertiesProtocolName [
 
 	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
+
 ]
 
 { #category : 'initializers' }
@@ -215,6 +226,7 @@ RwGsMethodPatch >> runInitializer [
 RwGsMethodPatch >> selector [
 
 	^ selector
+
 ]
 
 { #category : 'private-installing' }
@@ -225,4 +237,5 @@ RwGsMethodPatch >> setProtocolTo: protocolString [
 	(behavior includesCategory: protocolSymbol)
 		ifFalse: [behavior addCategory: protocolSymbol].
 	behavior moveMethod: selector toCategory: protocolSymbol
+
 ]
