@@ -48838,6 +48838,7 @@ auditLoadedClass: aLoadedClass
 
 			aBehavior == aLoadedClass handle
 				ifFalse: [ 
+System waitForDebug.
 					self
 						errorLog: res
 						add:
@@ -49060,6 +49061,7 @@ auditLoadedClassExtension: aLoadedClassExtension
 					
 				aBehavior == aLoadedClassExtension handle
 					ifFalse: [ 
+System waitForDebug.
 						self
 							errorLog: res
 							add:
