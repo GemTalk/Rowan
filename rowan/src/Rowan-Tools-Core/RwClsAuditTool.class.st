@@ -176,7 +176,6 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 
 			aBehavior == aLoadedClass handle
 				ifFalse: [ 
-System waitForDebug.
 					self
 						errorLog: res
 						add:

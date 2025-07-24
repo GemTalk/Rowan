@@ -34,7 +34,6 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 					
 				aBehavior == aLoadedClassExtension handle
 					ifFalse: [ 
-System waitForDebug.
 						self
 							errorLog: res
 							add:
