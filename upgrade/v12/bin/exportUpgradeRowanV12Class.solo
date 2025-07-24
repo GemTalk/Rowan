@@ -45,7 +45,6 @@ doit
 	projectSetDefinition := loadSpecs read.
 	projectSetModification := projectSetDefinition
 		compareAgainstBase: RwProjectSetDefinition new.
-self halt.
 	topazFileNameMap := Dictionary new.
 	topazFileNameMap at:'UpgradeRowanV12'  put: { 'RowanV12Upgrade-Core' }.
 	topazFileHeader := '! Copyright (C) GemTalk Systems 1986-', Date today year printString, '.  All Rights Reserved.
