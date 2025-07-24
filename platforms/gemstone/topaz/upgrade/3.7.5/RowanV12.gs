@@ -48841,12 +48841,9 @@ auditLoadedClass: aLoadedClass
 					self
 						errorLog: res
 						add:
-							aLoadedClass name
-								->
-									('loaded class (' , aLoadedClass handle asOop printString
-									, ') not latest version of class ('
-									, aBehavior asOop printString , ') ') ].
-
+							(aLoadedClass name,  '(' , aLoadedClass handle asOop printString
+									, ') ~=  (' , aBehavior asOop printString, ')') 
+								-> 'Loaded class not latest version of class' ].
 			"audit class properties"
 			self errorLog: res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
 			"audit categories"
