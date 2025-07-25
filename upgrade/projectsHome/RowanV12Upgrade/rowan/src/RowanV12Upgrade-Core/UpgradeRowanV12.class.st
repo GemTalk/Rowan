@@ -395,6 +395,11 @@ UpgradeRowanV12 >> repairAuditFailures: repairMap [
 	self repairSummary
 ]
 
+{ #category : 'repair' }
+UpgradeRowanV12 >> repairClassesNotIdentical: ignored inClassNamed: className  inPackageNamed: packageName [
+	System waitForDebug
+]
+
 { #category : 'accessing' }
 UpgradeRowanV12 >> repairedByReload [
 	^ repairedByReload ifNil: [ repairedByReload := 0 ].
@@ -549,6 +554,8 @@ UpgradeRowanV12 >> rowanRepairMap [
 			put: #'repairNonIdenticalClassMethodFor:inClassNamed:inPackageNamed:';
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
+		at: 'Loaded class not latest version of class'
+			put: #'repairClassesNotIdentical:inClassNamed:inPackageNamed:';
 		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
