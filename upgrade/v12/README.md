@@ -1,6 +1,4 @@
-## After making changes to RowanV1 tone files
-
-### Generate the RowanV1/platforms/gemstone/topaz/upgrade/3.7.5/RowanV12.gs file
+### Generate the RowanV1/platforms/gemstone/topaz/upgrade/3.7.5/RowanV12.gs file -- required after making changes to the RowanV1 definitions
 The RowanV12.gs file is an export of the RowanV1 classes and methods. 
 The RowanV12.gs is used to bootstrap RowanV1 into a 3.7.5 stone and as part of the upgrade process 
 for upgrading to a RowanV1 extent to 3.7.5
@@ -11,7 +9,7 @@ $RowanV1ProjectsHome/RowanV1/platforms/gemstone/topaz/upgrade/read_and_write_row
      --projectsHome=$RowanV1ProjectsHome --projectAlias=Rowan --gemstoneVersion=3.7.5
 ```
 
-### Generate the RowanV3/upgrade/v12/UpgradeRowanV12
+### Generate the RowanV3/upgrade/v12/UpgradeRowanV12 -- required after making changes to RowanV3/upgrade/projectsHome/RowanV12Upgrade project
 After making changes to the RowanV3/upgrade/projectsHome/RowanV12Upgrade project using RowanV3 to make 
 the changes, you need to create .gs file that installs the RowanV1 upgrade support classes.
 ```
