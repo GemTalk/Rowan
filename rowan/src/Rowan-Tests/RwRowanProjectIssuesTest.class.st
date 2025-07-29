@@ -368,6 +368,331 @@ RwRowanProjectIssuesTest >> _writeProjectNamed: projectName validate: validate [
 
 ]
 
+{ #category : 'tests-issue 467' }
+RwRowanProjectIssuesTest >> testBasic_new_version_class_with_subclass_A [
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- pure Rowan (passing) baseline"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2  packageDefinition className1 className2  
+		projectSetDefinition class1 class2  oldClass1 oldClass2  audit |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"modify class -- new version"
+	classDefinition1 instVarNames: #(ivar1).
+	classDefinition2 instVarNames: #().
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	oldClass1 := class1.
+	oldClass2 := class2.
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+
+	self assert: class1 ~~ oldClass1.
+	self assert: class1 instVarNames = #(ivar1).
+
+	self assert: class2 ~~ oldClass2.
+	self assert: class2 instVarNames = #().
+	self assert: class2 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests-issue 467' }
+RwRowanProjectIssuesTest >> testBasic_new_version_class_with_subclass_B [
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- change class via GemStone API, not Rowan API -- emulate upgrade -- reproduce issue"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition2  
+		packageDefinition className1 className2 projectSetDefinition class1 class2  
+		oldClass1 oldClass2  audit expectedFailure |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	class1 := Object
+		subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"create a new class history of class1 using GemStone API ... simulate a new version of Gemstone 
+	where class1 has a new oop and classHistory"
+
+	oldClass1 := class1.
+	(Rowan globalNamed: self _symbolDictionaryName1) removeKey: className1 asSymbol.
+	class1 := Object
+		subclass: className1
+		instVarNames: #(ivar2)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"use GemStone API to simulate the filein during upgrade ... "
+	oldClass2 := class2.
+	class2 := class1
+		subclass: className2
+		instVarNames: #(ivar1)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: packageName1
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"audit expect 'Loaded class not latest version of class' audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	self assert: audit size = 1.
+	expectedFailure := ((audit at: packageName1) at: className2).
+	self assert: expectedFailure size = 1.
+	self assert: (expectedFailure first key beginsWith: className2).
+	self assert: (expectedFailure first value = 'Loaded class not latest version of class').
+]
+
+{ #category : 'tests-issue 467' }
+RwRowanProjectIssuesTest >> testBasic_new_version_class_with_subclass_C [
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- work out bugfix"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition2  
+		packageDefinition className1 className2 projectSetDefinition class1 class2  
+		oldClass1 oldClass2  audit expectedFailure |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	class1 := Object
+		subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"create a new class history of class1 using GemStone API ... simulate a new version of Gemstone 
+	where class1 has a new oop and classHistory"
+
+	oldClass1 := class1.
+	(Rowan globalNamed: self _symbolDictionaryName1) removeKey: className1 asSymbol.
+	class1 := Object
+		subclass: className1
+		instVarNames: #(ivar2)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+false ifTrue: [ 
+	| registry |
+"
+	| disownTool |
+	disownTool := Rowan packageTools disown. 
+	disownTool disownClassNamed: className2
+"
+	registry := (Rowan globalNamed: self _symbolDictionaryName1) rowanSymbolDictionaryRegistry.
+	registry disownClass: class2.
+self halt.
+].
+
+"use GemStone API to simulate the filein during upgrade ... "
+	oldClass2 := class2.
+	class2 := class1
+		subclass: className2
+		instVarNames: #(ivar1)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: packageName1
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+false ifTrue: [ 
+	| registry |
+"
+	| disownTool |
+	disownTool := Rowan packageTools disown. 
+	disownTool disownClassNamed: className2
+"
+	registry := (Rowan globalNamed: self _symbolDictionaryName1) rowanSymbolDictionaryRegistry.
+	registry disownClass: class2.
+].
+
+"audit expect 'Loaded class not latest version of class' audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	self assert: audit size = 1.
+	expectedFailure := ((audit at: packageName1) at: className2).
+	self assert: expectedFailure size = 1.
+	self assert: (expectedFailure first key beginsWith: className2).
+	self assert: (expectedFailure first value = 'Loaded class not latest version of class').
+]
+
 { #category : 'tests-issue 114' }
 RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1 [
 

@@ -9,7 +9,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	"disown a class with a method"
 
-	| packageTools projectName packageNames className packageName theClass fooMethod |
+	| packageTools projectName packageNames className packageName theClass fooMethod audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -34,14 +34,21 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'xxx'.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
 	packageTools disown
 		disownClassNamed: className.
+
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+"expect a method audit error"
+	auditData := (audit at: packageName) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -52,12 +59,12 @@ RwDisownToolApiTest >> testDisownClass1 [
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
@@ -65,7 +72,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	"disown a class with a method and an extenstion method"
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -92,11 +99,12 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -105,6 +113,11 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	packageTools disown
 		disownClassNamed: className.
+"expect a method audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -117,6 +130,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName1.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -124,7 +138,6 @@ RwDisownToolApiTest >> testDisownClass2 [
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests' }
@@ -202,7 +215,7 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownMethod [
-	| packageTools projectName packageNames className packageName theClass fooMethod package |
+	| packageTools projectName packageNames className packageName theClass fooMethod package audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -228,14 +241,20 @@ RwDisownToolApiTest >> testDisownMethod [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'xxx'.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
 	packageTools disown
 		disownMethod: #foo inClassNamed: className isMeta: false.
+
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -247,17 +266,17 @@ RwDisownToolApiTest >> testDisownMethod [
 	packageTools adopt
 		adoptMethod: #foo inClassNamed: className isMeta: false  intoPackageNamed: packageName.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
 	self assert: fooMethod rowanPackageName = packageName.
-
 ]
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownPackage1 [
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x audit |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -284,11 +303,12 @@ RwDisownToolApiTest >> testDisownPackage1 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -313,6 +333,7 @@ RwDisownToolApiTest >> testDisownPackage1 [
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName1.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -321,13 +342,13 @@ RwDisownToolApiTest >> testDisownPackage1 [
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName1 ifAbsent: []) notNil.
-
 ]
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownPackage2 [
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod 
+		fooMethod theClass x audit auditData|
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -354,11 +375,12 @@ RwDisownToolApiTest >> testDisownPackage2 [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -369,6 +391,11 @@ RwDisownToolApiTest >> testDisownPackage2 [
 
 	packageTools disown
 		disownPackageNamed: packageName2.
+"expect an audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -385,6 +412,7 @@ RwDisownToolApiTest >> testDisownPackage2 [
 	packageTools adopt
 		adoptClassExtensionNamed: className  instanceSelectors: #( #bar) classSelectors: #() intoPackageNamed: packageName2.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -393,13 +421,13 @@ RwDisownToolApiTest >> testDisownPackage2 [
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName2 ifAbsent: []) notNil.
-
 ]
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownPackage3 [
 
-	| packageTools projectName packageNames className packageName1 packageName2 packageName3 barMethod fooMethod theClass x y |
+	| packageTools projectName packageNames className packageName1 packageName2 packageName3 
+		barMethod fooMethod theClass x y audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -431,6 +459,7 @@ RwDisownToolApiTest >> testDisownPackage3 [
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -442,6 +471,11 @@ RwDisownToolApiTest >> testDisownPackage3 [
 
 	packageTools disown
 		disownPackageNamed: packageName2.
+"expect an audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -459,6 +493,7 @@ RwDisownToolApiTest >> testDisownPackage3 [
 	packageTools adopt
 		adoptClassExtensionNamed: className  instanceSelectors: #( #bar) classSelectors: #() intoPackageNamed: packageName2.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -469,14 +504,13 @@ RwDisownToolApiTest >> testDisownPackage3 [
 	self assert: (Rowan image loadedPackageNamed: packageName2 ifAbsent: []) notNil.
 	self assert: (Rowan image loadedPackageNamed: packageName3 ifAbsent: []) notNil.
 	self assert: (x := (Rowan image loadedClassExtensionsForClass: theClass) size) = 2.
-
 ]
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownProject [
 
 	| projectTools projectName packageNames className packageName1 packageName2 barMethod fooMethod 
-		theClass x projectDefinitionToLoad projectDefinitionToAdopt |
+		theClass x projectDefinitionToLoad projectDefinitionToAdopt  audit|
 
 	projectTools := Rowan projectTools.
 	projectName := 'Disown Browser'.
@@ -504,11 +538,12 @@ RwDisownToolApiTest >> testDisownProject [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -540,6 +575,7 @@ RwDisownToolApiTest >> testDisownProject [
 	projectTools adopt
 		adoptProjectDefinition: projectDefinitionToAdopt.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -549,5 +585,4 @@ RwDisownToolApiTest >> testDisownProject [
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName1 ifAbsent: []) notNil.
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
-
 ]
