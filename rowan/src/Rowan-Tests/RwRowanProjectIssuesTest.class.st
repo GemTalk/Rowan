@@ -649,18 +649,6 @@ RwRowanProjectIssuesTest >> testBasic_new_version_class_with_subclass_C [
 		category: 'AnyWhere'
 		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
 
-false ifTrue: [ 
-	| registry |
-"
-	| disownTool |
-	disownTool := Rowan packageTools disown. 
-	disownTool disownClassNamed: className2
-"
-	registry := (Rowan globalNamed: self _symbolDictionaryName1) rowanSymbolDictionaryRegistry.
-	registry disownClass: class2.
-self halt.
-].
-
 "use GemStone API to simulate the filein during upgrade ... "
 	oldClass2 := class2.
 	class2 := class1
@@ -672,25 +660,23 @@ self halt.
 		category: packageName1
 		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
 
-false ifTrue: [ 
-	| registry |
-"
-	| disownTool |
-	disownTool := Rowan packageTools disown. 
-	disownTool disownClassNamed: className2
-"
-	registry := (Rowan globalNamed: self _symbolDictionaryName1) rowanSymbolDictionaryRegistry.
-	registry disownClass: class2.
-].
-
 "audit expect 'Loaded class not latest version of class' audit error"
 	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
-
 	self assert: audit size = 1.
 	expectedFailure := ((audit at: packageName1) at: className2).
 	self assert: expectedFailure size = 1.
 	self assert: (expectedFailure first key beginsWith: className2).
 	self assert: (expectedFailure first value = 'Loaded class not latest version of class').
+
+"looks like disown/adopt is the proper procedure to follow to repair 'Loaded class not latest version of class' audit error"
+	self assert: class2 rowanPackageName equals: packageName1.
+	Rowan packageTools disown disownClassNamed: className2.
+	Rowan packageTools adopt adoptClassNamed: className2  intoPackageNamed: packageName1.
+	self assert: class2 rowanPackageName equals: packageName1.
+"it seems that the disown had some effect since it is no longer in the package"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	self assert: class2 rowanPackageName equals: packageName1.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 114' }
