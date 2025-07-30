@@ -29,7 +29,8 @@ Class {
 		'auditErrors',
 		'projectsHome',
 		'skip',
-		'shouldCommit'
+		'shouldCommit',
+		'upgradeFrom'
 	],
 	#category : 'RowanV12Upgrade-Core'
 }
@@ -625,29 +626,24 @@ UpgradeRowanV12 >> step_1_installRowan [
 UpgradeRowanV12 >> step_2_repairRowanAuditFailures [
 	"Use the Rowan project audit to repair the damaged Rowan metadata"
 
-	(Rowan globalNamed: 'TonelSTONWriter')
-		ifNotNil: [ :theClass | 
-			| history |
-			history := theClass classHistory.
-			history size > 1
-				ifTrue: [ 
-					| x y |
-					"new TonelSTONWriter version in upgrade to 3.7.5. The oop of the superclass STONWriter changed during upgrade, but NO shape changes to be found ... 
-					STONWriter does not have a reserved oop, during package loading . 
-					Do the disown now"
-					x := { theClass classHistory first rowanPackageName . theClass classHistory last rowanPackageName . theClass rowanPackageName }.
-					self logMessage: 'Disown TonelSTONWriter from project Rowan'.
-					System waitForDebug.
-					Rowan packageTools disown disownClassNamed: theClass name.
-					y := { theClass classHistory first rowanPackageName . theClass classHistory last rowanPackageName . theClass rowanPackageName }.
- ] ].
-
+	(self gemstoneVersion >= '3.7.5' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber = '3.6.2' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"new TonelSTONWriter version in upgrade to 3.7.5 (Rowan v1.2.17)from 3.6.2 (Rowan v1.2.14). The oop of the superclass STONWriter changed during upgrade, but NO shape changes to be found"
+			Rowan packageTools disown disownClassNamed: 'TonelSTONWriter'.
+			Rowan packageTools adopt
+				adoptClassNamed: 'TonelSTONWriter'
+				intoPackageNamed: 'Tonel-Core' ].
 	self logMessage: ' repair ROWAN audit failures'.
 	self auditForProjectsNamed: self rowanProjectNames.
+	self logMessage: ' repairing ROWAN audit failures'.
 	audit isEmpty
 		ifFalse: [ 
 			self repairAuditFailures: self rowanRepairMap.
-			self commit ]
+			self commit ].
+	self
+		logMessage:
+			' ROWAN audit repair COMPLETE (' , repairedCount printString , ' repairs)'
 ]
 
 { #category : 'steps' }
@@ -704,4 +700,15 @@ UpgradeRowanV12 >> step_6_finalAudit [
 			self
 				error:
 					'Final Audit did not run clean ... repair audit errors before proceeding' ]
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV12 >> upgradeFrom [
+	upgradeFrom ifNil: [ self error: 'upgradeFrom must be defined' ].
+	^ upgradeFrom
+]
+
+{ #category : 'accessing' }
+UpgradeRowanV12 >> upgradeFrom: object [
+	upgradeFrom := object
 ]
