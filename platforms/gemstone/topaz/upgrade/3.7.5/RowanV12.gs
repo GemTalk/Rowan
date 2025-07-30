@@ -87816,7 +87816,7 @@ testDisownClass1
 
 	"disown a class with a method"
 
-	| packageTools projectName packageNames className packageName theClass fooMethod |
+	| packageTools projectName packageNames className packageName theClass fooMethod audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -87841,14 +87841,21 @@ testDisownClass1
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'xxx'.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
 	packageTools disown
 		disownClassNamed: className.
+
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+"expect a method audit error"
+	auditData := (audit at: packageName) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -87859,6 +87866,7 @@ testDisownClass1
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -87872,7 +87880,7 @@ testDisownClass2
 
 	"disown a class with a method and an extenstion method"
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -87899,11 +87907,12 @@ testDisownClass2
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -87912,6 +87921,11 @@ testDisownClass2
 
 	packageTools disown
 		disownClassNamed: className.
+"expect a method audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -87924,6 +87938,7 @@ testDisownClass2
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName1.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -88009,7 +88024,7 @@ testDisownExtensionMethods
 category: 'tests'
 method: RwDisownToolApiTest
 testDisownMethod
-	| packageTools projectName packageNames className packageName theClass fooMethod package |
+	| packageTools projectName packageNames className packageName theClass fooMethod package audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -88035,14 +88050,20 @@ testDisownMethod
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName asLowercase.
+		category: 'xxx'.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
 	packageTools disown
 		disownMethod: #foo inClassNamed: className isMeta: false.
+
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -88054,6 +88075,7 @@ testDisownMethod
 	packageTools adopt
 		adoptMethod: #foo inClassNamed: className isMeta: false  intoPackageNamed: packageName.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -88064,7 +88086,7 @@ category: 'tests'
 method: RwDisownToolApiTest
 testDisownPackage1
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x audit |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -88091,11 +88113,12 @@ testDisownPackage1
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -88120,6 +88143,7 @@ testDisownPackage1
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName1.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -88134,7 +88158,8 @@ category: 'tests'
 method: RwDisownToolApiTest
 testDisownPackage2
 
-	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod 
+		fooMethod theClass x audit auditData|
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -88161,11 +88186,12 @@ testDisownPackage2
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -88176,6 +88202,11 @@ testDisownPackage2
 
 	packageTools disown
 		disownPackageNamed: packageName2.
+"expect an audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -88192,6 +88223,7 @@ testDisownPackage2
 	packageTools adopt
 		adoptClassExtensionNamed: className  instanceSelectors: #( #bar) classSelectors: #() intoPackageNamed: packageName2.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -88206,7 +88238,8 @@ category: 'tests'
 method: RwDisownToolApiTest
 testDisownPackage3
 
-	| packageTools projectName packageNames className packageName1 packageName2 packageName3 barMethod fooMethod theClass x y |
+	| packageTools projectName packageNames className packageName1 packageName2 packageName3 
+		barMethod fooMethod theClass x y audit auditData |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -88238,6 +88271,7 @@ testDisownPackage3
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -88249,6 +88283,11 @@ testDisownPackage3
 
 	packageTools disown
 		disownPackageNamed: packageName2.
+"expect an audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	auditData := (audit at: packageName1) at: className.
+	self assert: auditData size equals: 1.
+	self assert: (auditData at: 1) value equals: 'Missing loaded instance method. '.
 
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
@@ -88266,6 +88305,7 @@ testDisownPackage3
 	packageTools adopt
 		adoptClassExtensionNamed: className  instanceSelectors: #( #bar) classSelectors: #() intoPackageNamed: packageName2.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -88283,7 +88323,7 @@ method: RwDisownToolApiTest
 testDisownProject
 
 	| projectTools projectName packageNames className packageName1 packageName2 barMethod fooMethod 
-		theClass x projectDefinitionToLoad projectDefinitionToAdopt |
+		theClass x projectDefinitionToLoad projectDefinitionToAdopt  audit|
 
 	projectTools := Rowan projectTools.
 	projectName := 'Disown Browser'.
@@ -88311,11 +88351,12 @@ testDisownProject
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+		category: 'xxx'.
 	barMethod := theClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	self assert: theClass new foo = 'foo'.
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
@@ -88347,6 +88388,7 @@ testDisownProject
 	projectTools adopt
 		adoptProjectDefinition: projectDefinitionToAdopt.
 
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
@@ -92673,6 +92715,320 @@ testReconcileGlobalExtensionMethods_issue_290
 ! Class implementation for 'RwRowanProjectIssuesTest'
 
 !		Instance methods for 'RwRowanProjectIssuesTest'
+
+category: 'tests-issue 467'
+method: RwRowanProjectIssuesTest
+testBasic_new_version_class_with_subclass_A
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- pure Rowan (passing) baseline"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2  packageDefinition className1 className2  
+		projectSetDefinition class1 class2  oldClass1 oldClass2  audit |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"modify class -- new version"
+	classDefinition1 instVarNames: #(ivar1).
+	classDefinition2 instVarNames: #().
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	oldClass1 := class1.
+	oldClass2 := class2.
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+
+	self assert: class1 ~~ oldClass1.
+	self assert: class1 instVarNames = #(ivar1).
+
+	self assert: class2 ~~ oldClass2.
+	self assert: class2 instVarNames = #().
+	self assert: class2 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests-issue 467'
+method: RwRowanProjectIssuesTest
+testBasic_new_version_class_with_subclass_B
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- change class via GemStone API, not Rowan API -- emulate upgrade -- reproduce issue"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition2  
+		packageDefinition className1 className2 projectSetDefinition class1 class2  
+		oldClass1 oldClass2  audit expectedFailure |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	class1 := Object
+		subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"create a new class history of class1 using GemStone API ... simulate a new version of Gemstone 
+	where class1 has a new oop and classHistory"
+
+	oldClass1 := class1.
+	(Rowan globalNamed: self _symbolDictionaryName1) removeKey: className1 asSymbol.
+	class1 := Object
+		subclass: className1
+		instVarNames: #(ivar2)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"use GemStone API to simulate the filein during upgrade ... "
+	oldClass2 := class2.
+	class2 := class1
+		subclass: className2
+		instVarNames: #(ivar1)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: packageName1
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"audit expect 'Loaded class not latest version of class' audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+	self assert: audit size = 1.
+	expectedFailure := ((audit at: packageName1) at: className2).
+	self assert: expectedFailure size = 1.
+	self assert: (expectedFailure first key beginsWith: className2).
+	self assert: (expectedFailure first value = 'Loaded class not latest version of class').
+%
+
+category: 'tests-issue 467'
+method: RwRowanProjectIssuesTest
+testBasic_new_version_class_with_subclass_C
+
+	"Reproduce issue seen upgrading a 3.6.2 RowanV1.2.14 extent to 3.7.5 RowanV1.2.17
+		-- work out bugfix"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition2  
+		packageDefinition className1 className2 projectSetDefinition class1 class2  
+		oldClass1 oldClass2  audit expectedFailure |
+
+	projectName := 'Issue467'.
+	packageName1 := 'Issue467-Core1'.
+	packageName2 := 'Issue467-Core2'.
+	className1 := 'Issue461Class1'.
+	className2 := 'Issue467Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		yourself.
+
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	class1 := Object
+		subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+	classDefinition2 := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: packageName1
+			comment: 'comment'
+			pools: #()
+			type: 'normal').
+	packageDefinition 
+		addClassDefinition: classDefinition2.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar1).
+	self assert: class2 superclass == class1.
+
+"create a new class history of class1 using GemStone API ... simulate a new version of Gemstone 
+	where class1 has a new oop and classHistory"
+
+	oldClass1 := class1.
+	(Rowan globalNamed: self _symbolDictionaryName1) removeKey: className1 asSymbol.
+	class1 := Object
+		subclass: className1
+		instVarNames: #(ivar2)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: 'AnyWhere'
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"use GemStone API to simulate the filein during upgrade ... "
+	oldClass2 := class2.
+	class2 := class1
+		subclass: className2
+		instVarNames: #(ivar1)
+		classVars: #()
+		classInstVars:  #()
+		poolDictionaries:  #()
+		category: packageName1
+		inDictionary: (Rowan globalNamed: self _symbolDictionaryName1).
+
+"audit expect 'Loaded class not latest version of class' audit error"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+	self assert: audit size = 1.
+	expectedFailure := ((audit at: packageName1) at: className2).
+	self assert: expectedFailure size = 1.
+	self assert: (expectedFailure first key beginsWith: className2).
+	self assert: (expectedFailure first value = 'Loaded class not latest version of class').
+
+"looks like disown/adopt is the proper procedure to follow to repair 'Loaded class not latest version of class' audit error"
+	self assert: class2 rowanPackageName equals: packageName1.
+	Rowan packageTools disown disownClassNamed: className2.
+	Rowan packageTools adopt adoptClassNamed: className2  intoPackageNamed: packageName1.
+	self assert: class2 rowanPackageName equals: packageName1.
+"it seems that the disown had some effect since it is no longer in the package"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	self assert: class2 rowanPackageName equals: packageName1.
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
 
 category: 'tests-issue 114'
 method: RwRowanProjectIssuesTest
