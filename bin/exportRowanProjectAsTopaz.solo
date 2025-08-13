@@ -1,6 +1,8 @@
 #!/usr/bin/env superdoit_rowan3_solo
 options
 {
+SuperDoitOptionalOptionWithNoArg long: 'includeClassInitializers'.
+SuperDoitOptionalOptionWithNoArg long: 'includeRemoveAllMethods'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
 }
@@ -24,7 +26,13 @@ OPTIONS
   --projectAlias=<project-alias>
                        The name of the project directory on disk, if different
                        than the project name in the load spec.
-                       
+  --includeClassInitializers
+                       Include class initialization expressions at the end of 
+                       the file out for each class with a change to it's class
+                       initialization method.
+  --includeRemoveAllMethods
+                       Include removeallmethods and removeallclassmethods topaz commands
+                       for each added class.                       
   -h, --help           Display usage message
   -D, --debug          Bring up topaz debugger in the event of a script error.
 
@@ -38,7 +46,7 @@ EXAMPLES
   $basename file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
             $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
             --projectsHome=/home/daleh/projects/ \
-            --projectAlias=MyProjectV3
+            --projectAlias=MyProjectV3 --includeClassInitializers --includeRemoveAllMethods
 
 -----
 %
@@ -62,7 +70,7 @@ doit
 	(projectSet projectNamed: projectName)
 		exportTopazFormatTo: topazFilename 
 		logClassCreation: false 
-		excludeClassInitializers: false 
-		excludeRemoveAllMethods: true.
+		excludeClassInitializers: self includeClassInitializers not
+		excludeRemoveAllMethods: self includeRemoveAllMethods not.
 	^ self noResult.
 %
