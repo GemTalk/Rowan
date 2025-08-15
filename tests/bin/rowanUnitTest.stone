@@ -156,7 +156,7 @@ writeTestDone: detailedTestStatus explanation: explanation
 	explanation isEmpty
 		ifFalse: [ 
 			stream lf; nextPutAll: explanation; lf ].
-	stream close
+	stream close; flush
 %
 method
 writeTestStatus: message
@@ -175,7 +175,7 @@ _writeTestStatus: testStatus
 	self testStatusStream
 		nextPutAll: testStatus; lf;
 		nextPutAll: 'SECTION 2: UNREPORTED BUGS'; lf; "without this entry, batterytest.pl thinks it's a crash (instead of a failure)"
-		close.
+		close; flush.
 	testStatusStream := nil.
 %
 method
