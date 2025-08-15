@@ -213,13 +213,14 @@ UpgradeRowanV3 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.7.5' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.5' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"LogRotateNotification is a new class in 3.7.5 that needs to be adopted 
+			"LogRotateNotification and GsLog are new classes in 3.7.5 that needs to be adopted 
 				before reloading GemStone packages."
 			Rowan packageTools adopt
-				adoptClassNamed: 'LogRotateNotification'
-				instanceSelectors: #( defaultAction )
-				classSelectors: #( disableSignalling enableSignalling signallingEnabled )
-				intoPackageNamed: 'Filein3A' ].
+				adoptClass:  (Rowan globalNamed: 'LogRotateNotification')
+				intoPackageNamed: 'Filein3A'.
+			Rowan packageTools adopt
+				adoptClass:  (Rowan globalNamed: 'GsLog')
+				intoPackageNamed: 'Filein3B'. ].
 ]
 
 { #category : 'upgrade rowan' }
