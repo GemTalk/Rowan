@@ -133,6 +133,233 @@ RwRowanSample9V4Test >> testIssue705 [
 ]
 
 { #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_1 [
+	"RwCompileErrorCompilingMethodsForNewClassVersionNotification should be signaled when inst var, class inst var and class var with references are removed ... standard Rowan definition based process"
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| definedProject packageName projectName package class1_def loadedProjects theClass1 ans1 methodErrors notificationHit |
+	projectName := 'Issue_962'.
+	packageName := projectName , '-Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	definedProject := (Rowan newV4ProjectNamed: projectName)
+		projectsHome: '$ROWAN_PROJECTS_SANDBOX';
+		gemstoneSetDefaultSymbolDictNameTo: 'UserGlobals';
+		addLoadComponentNamed: 'Core';
+		addPackagesNamed: {packageName} toComponentNamed: 'Core';
+		packageConvention: 'Rowan';
+		yourself.
+
+	package := definedProject packageNamed: packageName.
+
+	class1_def := package
+		addClassNamed: projectName , 'Class1'
+		super: 'Object'
+		instvars: #('a' 'b' 'c')
+		classinstvars: #('r' 's' 't')
+		classvars: #('CVr' 'CVs' 'CVt')
+		category: 'cat'
+		comment: 'test class 1'.
+
+	class1_def
+		addInstanceMethod: 'i1 CVt := ''CVt (inst)''.  ^ CVt' protocol: 'test';
+		addInstanceMethod: 'i2 c := ''c''.  ^ c' protocol: 'test';
+		addClassMethod: 'i3 CVt := ''CVt (class)''.  ^ CVt' protocol: 'test';
+		addClassMethod: 'i4 r := ''r (class)''.  ^ r' protocol: 'test';
+		yourself.
+
+	loadedProjects := definedProject resolveProject loadAsDefined.
+
+	theClass1 := Rowan globalNamed: projectName , 'Class1'.
+
+	ans1 := {
+		(theClass1 new i1).
+		(theClass1 new i2).
+		(theClass1 i3).
+		(theClass1 i4).
+	}.
+
+	definedProject := (loadedProjects projectNamed: projectName) defined.
+
+	package := definedProject packageNamed: packageName.
+	class1_def := package classDefinitionNamed: projectName , 'Class1'.	"
+remove iv `r` and cv CVt`"
+	class1_def
+		instVarNames: #('a' 'b' );
+		classInstVarNames: #( 's' 't');
+		classVarNames: #('CVr' 'CVs') yourself.
+
+	methodErrors := {}.
+	notificationHit := false.
+	[ definedProject load ]
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [ :ex | 
+			| compileError methodClass sourceString |
+			notificationHit := true.
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := compileError gsArguments at: 3.
+			methodErrors
+				add:
+					{methodClass.
+					sourceString}.
+			ex resume: true	"method compile error will be handled later" ].
+
+	self assert: methodErrors size equals: 4
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_2 [
+	"RwCompileErrorCompilingMethodsForNewClassVersionNotification should be signaled when inst var, class inst var and class var with references are removed. Use Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options: "
+
+	"https://github.com/dalehenrich/Rowan/issues/962"
+
+	| definedProject packageName projectName package class1_def loadedProjects theClass1 ans1 methodErrors |
+	projectName := 'Issue_962'.
+	packageName := projectName , '-Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	definedProject := (Rowan newV4ProjectNamed: projectName)
+		projectsHome: '$ROWAN_PROJECTS_SANDBOX';
+		gemstoneSetDefaultSymbolDictNameTo: 'UserGlobals';
+		addLoadComponentNamed: 'Core';
+		addPackagesNamed: {packageName} toComponentNamed: 'Core';
+		packageConvention: 'Rowan';
+		yourself.
+
+	package := definedProject packageNamed: packageName.
+
+	class1_def := package
+		addClassNamed: projectName , 'Class1'
+		super: 'Object'
+		instvars: #('a' 'b' 'c')
+		classinstvars: #('r' 's' 't')
+		classvars: #('CVr' 'CVs' 'CVt')
+		category: 'cat'
+		comment: 'test class 1'.
+
+	class1_def
+		addInstanceMethod: 'i1 CVt := ''CVt (inst)''.  ^ CVt' protocol: 'test';
+		addInstanceMethod: 'i2 c := ''c''.  ^ c' protocol: 'test';
+		addClassMethod: 'i3 CVt := ''CVt (class)''.  ^ CVt' protocol: 'test';
+		addClassMethod: 'i4 r := ''r (class)''.  ^ r' protocol: 'test';
+		yourself.
+
+	loadedProjects := definedProject resolveProject loadAsDefined.
+
+	theClass1 := Rowan globalNamed: projectName , 'Class1'.
+
+	ans1 := {
+		(theClass1 new i1).
+		(theClass1 new i2).
+		(theClass1  i3).
+		(theClass1  i4)
+	}.
+
+	methodErrors := {}.	"
+remove iv `c` and cv CVt`"
+	[  Object rwSubclass: projectName , 'Class1'
+		instVarNames: #(   a b )
+		classVars: #(CVr CVs)
+		classInstVars: #( s t )
+		poolDictionaries: #( )
+		category: 'Core'
+		packageName: packageName
+		options: #().  ]
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [ :ex | 
+			| compileError methodClass sourceString |
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := compileError gsArguments at: 3.
+			methodErrors
+				add:
+					{methodClass.
+					sourceString}.
+			ex resume: true	"method compile error will be handled later" ].
+	self assert: methodErrors size equals: 4
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testIssue962_3 [
+	"RwCompileErrorCompilingMethodsForNewClassVersionNotification should be signaled when inst var, class inst var and class var with references are removed. Use Class>>rwSubclass:instVarNames:classVars:classInstVars:poolDictionaries:category:options:. Reproduction test case for internal bug 51495 ... Remove only a class var"
+
+	"Internal bug 51495"
+
+	| definedProject packageName projectName package class1_def loadedProjects theClass1 ans1 methodErrors |
+	projectName := 'Issue_962'.
+	packageName := projectName , '-Core'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ].
+
+	definedProject := (Rowan newV4ProjectNamed: projectName)
+		projectsHome: '$ROWAN_PROJECTS_SANDBOX';
+		gemstoneSetDefaultSymbolDictNameTo: 'UserGlobals';
+		addLoadComponentNamed: 'Core';
+		addPackagesNamed: {packageName} toComponentNamed: 'Core';
+		packageConvention: 'Rowan';
+		yourself.
+
+	package := definedProject packageNamed: packageName.
+
+	class1_def := package
+		addClassNamed: projectName , 'Class1'
+		super: 'Object'
+		instvars: #('a' 'b' 'c')
+		classinstvars: #('r' 's' 't')
+		classvars: #('CVr' 'CVs' 'CVt')
+		category: 'cat'
+		comment: 'test class 1'.
+
+	class1_def
+		addInstanceMethod: 'i1 CVt := ''CVt (inst)''.  ^ CVt' protocol: 'test';
+		addInstanceMethod: 'i2 c := ''c''.  ^ c' protocol: 'test';
+		addClassMethod: 'i3 CVt := ''CVt (class)''.  ^ CVt' protocol: 'test';
+		addClassMethod: 'i4 r := ''r (class)''.  ^ r' protocol: 'test';
+		yourself.
+
+	loadedProjects := definedProject resolveProject loadAsDefined.
+
+	theClass1 := Rowan globalNamed: projectName , 'Class1'.
+
+	ans1 := {
+		(theClass1 new i1).
+		(theClass1 new i2).
+		(theClass1  i3).
+		(theClass1  i4)
+	}.
+
+	methodErrors := {}.	"
+remove cv CVt ONLY to reproduce 51495"
+	[  Object rwSubclass: projectName , 'Class1'
+		instVarNames: #(   a b c )
+		classVars: #(CVr CVs)
+		classInstVars: #(r s t )
+		poolDictionaries: #( )
+		category: 'Core'
+		packageName: packageName
+		options: #().  ]
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [ :ex | 
+			| compileError methodClass sourceString |
+			compileError := ex compileError.
+			sourceString := compileError sourceString.
+			methodClass := compileError gsArguments at: 3.
+			methodErrors
+				add:
+					{methodClass.
+					sourceString}.
+			ex resume: true	"method compile error will be handled later" ].
+	self assert: methodErrors size equals: 2
+]
+
+{ #category : 'tests' }
 RwRowanSample9V4Test >> testIssue962_A [
 	"notiication of method compilation errors, when new superclass instVar collides with temp var in subclass ... step A - clean load with no errors"
 
@@ -223,7 +450,7 @@ RwRowanSample9V4Test >> testIssue962_B [
 
 	"https://github.com/dalehenrich/Rowan/issues/962"
 
-	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition compileErrorHit notificationHit |
+	| loadSpec projectName projectNames resolvedProject loadedProjects project packageName1 packageName2 className1  className2 audit  definedProject classDefinition compileErrorHit notificationHit notificationCount |
 	loadSpec := self 
 		_migrationLoadSpecNamed:  'spec_0035' 
 		projectName: 'RowanSample9V4' 
@@ -268,15 +495,18 @@ RwRowanSample9V4Test >> testIssue962_B [
 	classDefinition := (definedProject  packageNamed: 'RowanSample9V4-Core') classDefinitionNamed: 'RowanSample9ClassB'.
 	classDefinition addInstanceMethod: 'boom | ivar2 | ivar2 := 1'  protocol: 'boom'.
 	compileErrorHit := notificationHit := false.
+	notificationCount := 0.
 	[
 		[ definedProject  load ] 
 			on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
 			do: [:ex |  
 				notificationHit := true.
+				notificationCount := notificationCount + 1.
 				ex resume:  false. "signal compile error" ]
 		] on: CompileError do: [:ex | compileErrorHit  := true] .
 	self assert: notificationHit description: 'expected notification not hit'.
-	self assert: compileErrorHit description: 'expected compile error not hit'
+	self assert: compileErrorHit description: 'expected compile error not hit'.
+	self assert: notificationCount equals: 1.
 ]
 
 { #category : 'tests' }

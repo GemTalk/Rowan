@@ -209,7 +209,18 @@ UpgradeRowanV3 >> adoptGemstoneBase [
 					"REMOVE ME ... JUST A TEST in 3.7.2"
 					Rowan packageTools adopt
 						adoptClass: (Rowan globalNamed: 'GenerateGsTestClass')
-						intoPackageNamed: 'Filein2Streams' ] ]
+						intoPackageNamed: 'Filein2Streams' ] ].
+	(self gemstoneVersion >= '3.7.5' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.5' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"LogRotateNotification and GsLog are new classes in 3.7.5 that needs to be adopted 
+				before reloading GemStone packages."
+			Rowan packageTools adopt
+				adoptClass:  (Rowan globalNamed: 'LogRotateNotification')
+				intoPackageNamed: 'Filein3A'.
+			Rowan packageTools adopt
+				adoptClass:  (Rowan globalNamed: 'GsLog')
+				intoPackageNamed: 'Filein3B'. ].
 ]
 
 { #category : 'upgrade rowan' }
