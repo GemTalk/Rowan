@@ -162,6 +162,7 @@ customerRepairMap
 		at: 'Comment has changed in compiled class v loaded class'
 			put: #'repairedWhenDefinitionsReloaded:inClassNamed:inPackageNamed:';
 		at: 'Missing loaded instance method. ' put: #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
+		at: 'Extension category name can not be same as class package' put:  #'repairMissingLoadedInstanceMethodFor:inClassNamed:inPackageNamed:';
 		yourself.
 	^ repairMap
 %
@@ -675,6 +676,8 @@ step_2_repairRowanAuditFailures
 			Rowan packageTools adopt
 				adoptClassNamed: 'TonelSTONWriter'
 				intoPackageNamed: 'Tonel-Core' ].
+	self logMessage: '-- Obsolete ObsoleteTimeZone project: ', (ObsoleteClasses at: #ObsoleteTimeZone) rowanProjectName.
+	self logMessage: '-- Obsolete AbstractCharacter  project: ', (ObsoleteClasses at: #AbstractCharacter) rowanProjectName.
 	self logMessage: ' repair ROWAN audit failures'.
 	self auditForProjectsNamed: self rowanProjectNames.
 	self logMessage: ' repairing ROWAN audit failures'.

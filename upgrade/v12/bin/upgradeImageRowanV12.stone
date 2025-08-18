@@ -116,8 +116,10 @@ doit
 	upgrader 
 		upgradeFrom: self upgradeFrom;
 		shouldCommit: self commit.
+	
 	self installRowan
 		ifTrue: [ upgrader step_1_installRowan ].
+	self stdout nextPutAll: 'CURRENT ROWAN VERSION=', currentRowanVersion; lf.
 	self rowanRepair
 		ifTrue: [ upgrader step_2_repairRowanAuditFailures ].
 	self customerRepair
