@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.4",
+	"gsVersion" : "3.7.5",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 10,
 		"failures" : 10,
-		"passed" : 886,
-		"summary" : "906 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 210.24s",
-		"tests" : 906,
-		"time" : 210.238
+		"passed" : 888,
+		"summary" : "908 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 243.87s",
+		"tests" : 908,
+		"time" : 243.872
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -3156,6 +3156,12 @@
 		{
 			"className" : "RwProjectTopazWriterTestV2",
 			"status" : "passed",
+			"selector" : "testGsTopazWriter_A_export_withHeader",
+			"time" : "0"
+		},
+		{
+			"className" : "RwProjectTopazWriterTestV2",
+			"status" : "passed",
 			"selector" : "testGsTopazWriter_B",
 			"time" : "0"
 		},
@@ -3169,6 +3175,12 @@
 			"className" : "RwProjectTopazWriterTestV2",
 			"status" : "passed",
 			"selector" : "testGsTopazWriter_C_export",
+			"time" : "0"
+		},
+		{
+			"className" : "RwProjectTopazWriterTestV2",
+			"status" : "passed",
+			"selector" : "testGsTopazWriter_C_export_withHeader",
 			"time" : "0"
 		},
 		{
@@ -5452,5 +5464,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-03-28T14:09:03.950518-07:00"
+	"timeStamp" : "2025-08-22T09:48:44.719500-07:00"
 }

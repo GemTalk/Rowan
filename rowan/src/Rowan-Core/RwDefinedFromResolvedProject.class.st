@@ -80,6 +80,16 @@ RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath logClassCreation: 
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
+{ #category : 'actions' }
+RwDefinedFromResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods topazFileHeader: header [
+	^ self _concreteProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+		topazFileHeader: header
+]
+
 { #category : 'transitions' }
 RwDefinedFromResolvedProject >> loadProjectSet [
 	"

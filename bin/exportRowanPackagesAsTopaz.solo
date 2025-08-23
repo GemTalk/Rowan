@@ -3,6 +3,7 @@ options
 {
 SuperDoitOptionalOptionWithNoArg long: 'includeClassInitializers'.
 SuperDoitOptionalOptionWithNoArg long: 'includeRemoveAllMethods'.
+SuperDoitOptionalOptionWithRequiredArg long: 'headerFile'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
 SuperDoitRequiredOptionWithRequiredArg long: 'loadSpec' short: 'l'.
@@ -13,6 +14,8 @@ usage
 -----
 USAGE
       $basename <spec-url> <topaz-file-name> [--projectAlias=<project-alias> ] \
+      [--includeClassInitializers] [--includeRemoveAllMethods] \
+      [--headerFile=<header-filename>]
       [--projectsHome=<projects-home-directory>] --loadSpec=<spec-url> \
       --fileName=<topaz-file-name> <package-names>
 
@@ -33,6 +36,9 @@ OPTIONS
   --projectAlias=<project-alias>
                        The name of the project directory on disk, if different
                        than the project name in the load spec.
+  --headerFile=<header-filename>
+                       Specify the name of the file that contains the desired header.
+                       This option is only supported in Rowan version 3.5.0 and greater.
   --includeClassInitializers
                        Include class initialization expressions at the end of 
                        the file out for each class with a change to it's class
@@ -55,7 +61,9 @@ EXAMPLES
   $basename --loadSpec=file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
             --fileName=$ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
             --projectsHome=/home/daleh/projects/ \
-            --projectAlias=MyProjectV3 MyProject-Tests --includeClassInitializers --includeRemoveAllMethods
+            --projectAlias=MyProjectV3 MyProject-Tests --includeClassInitializers \
+            --includeRemoveAllMethods \
+            --headerFile=header.txt
 
 -----
 %
@@ -75,11 +83,23 @@ doit
 		ifTrue: [ self error: 'Expected at least one package name.' ].
 	packageNamesMap := Dictionary new.
 	packageNamesMap at: topazFilename asFileReference base put: self positionalArgs asSet.
-	(projectSet projectNamed: projectName)
-		exportTopazFormatTo: topazFilename 
-		logClassCreation: false 
-		excludeClassInitializers: self includeClassInitializers not
-		excludeRemoveAllMethods: self includeRemoveAllMethods not
-		usingPackageNamesMap: packageNamesMap.
+	self headerFile
+		ifNil: [ 
+			(projectSet projectNamed: projectName)
+				exportTopazFormatTo: topazFilename 
+				logClassCreation: false 
+				excludeClassInitializers: self includeClassInitializers not
+				excludeRemoveAllMethods: self includeRemoveAllMethods not
+				usingPackageNamesMap: packageNamesMap ]
+		ifNotNil: [:theFileName |
+			(Rowan version < '3.5.0' asRwSemanticVersionNumber)
+				ifTrue: [ self error: '--headerFile option not supported in Rowan version ', Rowan version printString].
+			(projectSet projectNamed: projectName)
+				exportTopazFormatTo: topazFilename 
+				logClassCreation: false 
+				excludeClassInitializers: self includeClassInitializers not
+				excludeRemoveAllMethods: self includeRemoveAllMethods not
+				topazFileHeader: theFileName asFileReference contents
+				usingPackageNamesMap: packageNamesMap ].
 	^ self noResult.
 %

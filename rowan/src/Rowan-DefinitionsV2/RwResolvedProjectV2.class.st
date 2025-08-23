@@ -931,6 +931,46 @@ RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassC
 ]
 
 { #category : 'exporting' }
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods topazFileHeader: header [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	(visitor := RwGsModificationTopazWriterVisitorV2 new)
+		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference base;
+		topazFileHeader: header;
+		filenameExtension: fileReference extension .
+
+	visitor visit: projectSetModification
+]
+
+{ #category : 'exporting' }
+RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods topazFileHeader: header usingPackageNamesMap: packageNamesMap [
+	| projectSetDefinition projectSetModification visitor fileReference |
+	fileReference := filePath asFileReference.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition
+		compareAgainstBase: RwProjectSetDefinition new.
+	(visitor := RwGsModificationTopazWriterVisitorV2 new)
+		logCreation: logClassCreation;
+		excludeClassInitializers: excludeClassInitializers;
+		excludeRemoveAllMethods: excludeRemoveAllMethods;
+		repositoryRootPath: fileReference parent;
+		topazFilename: fileReference base;
+		topazFileHeader: header;
+		topazFilenamePackageNamesMap: packageNamesMap .
+
+	visitor visit: projectSetModification
+]
+
+{ #category : 'exporting' }
 RwResolvedProjectV2 >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap [
 	| projectSetDefinition projectSetModification visitor fileReference |
 	fileReference := filePath asFileReference.

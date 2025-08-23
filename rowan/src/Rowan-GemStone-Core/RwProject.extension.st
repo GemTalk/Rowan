@@ -19,6 +19,27 @@ RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation ex
 ]
 
 { #category : '*rowan-gemstone-core' }
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods topazFileHeader: header [
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+		topazFileHeader: header
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods  topazFileHeader: header usingPackageNamesMap: packageNamesMap [
+	^ self _loadedProject asDefinition
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+		topazFileHeader: header
+		usingPackageNamesMap: packageNamesMap
+]
+
+{ #category : '*rowan-gemstone-core' }
 RwProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods usingPackageNamesMap: packageNamesMap [
 	^ self _loadedProject asDefinition
 		exportTopazFormatTo: filePath

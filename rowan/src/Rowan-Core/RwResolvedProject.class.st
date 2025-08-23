@@ -247,6 +247,16 @@ RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCre
 		excludeRemoveAllMethods: excludeRemoveAllMethods
 ]
 
+{ #category : 'actions' }
+RwResolvedProject >> exportTopazFormatTo: filePath logClassCreation: logClassCreation excludeClassInitializers: excludeClassInitializers excludeRemoveAllMethods: excludeRemoveAllMethods topazFileHeader: header [
+	^ self _concreteProject
+		exportTopazFormatTo: filePath
+		logClassCreation: logClassCreation
+		excludeClassInitializers: excludeClassInitializers
+		excludeRemoveAllMethods: excludeRemoveAllMethods
+		topazFileHeader: header
+]
+
 { #category : 'accessing' }
 RwResolvedProject >> packagesRoot [
 	^ self _concreteProject packagesRoot

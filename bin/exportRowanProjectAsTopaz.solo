@@ -3,6 +3,7 @@ options
 {
 SuperDoitOptionalOptionWithNoArg long: 'includeClassInitializers'.
 SuperDoitOptionalOptionWithNoArg long: 'includeRemoveAllMethods'.
+SuperDoitOptionalOptionWithRequiredArg long: 'headerFile'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
 SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
 }
@@ -10,7 +11,9 @@ SuperDoitOptionalOptionWithRequiredArg long: 'projectAlias'.
 usage
 -----
 USAGE
-      $basename <spec-url> <topaz-file-name> [--projectAlias=<project-alias> ] [--projectsHome=<projects-home-directory>]
+      $basename <spec-url> <topaz-file-name> [--projectAlias=<project-alias> ] \
+      [--includeClassInitializers] [--includeRemoveAllMethods] \
+      [--headerFile=<header-filename>] [--projectsHome=<projects-home-directory>]
 
 DESCRIPTION
   Read the project denoted by <spec-url> from disk and export it to a .gs file name
@@ -26,6 +29,9 @@ OPTIONS
   --projectAlias=<project-alias>
                        The name of the project directory on disk, if different
                        than the project name in the load spec.
+  --headerFile=<header-filename>
+                       Specify the name of the file that contains the desired header.
+                       This option is only supported in Rowan version 3.5.0 and greater.
   --includeClassInitializers
                        Include class initialization expressions at the end of 
                        the file out for each class with a change to it's class
@@ -46,12 +52,13 @@ EXAMPLES
   $basename file:/home/daleh/projects/MyProject/rowan/specs/MyProject.ston  \
             $ROWAN_PROJECTS_HOME/MyProject/gemstone/MyProject.gs \
             --projectsHome=/home/daleh/projects/ \
-            --projectAlias=MyProjectV3 --includeClassInitializers --includeRemoveAllMethods
+            --projectAlias=MyProjectV3 --includeClassInitializers --includeRemoveAllMethods \
+            --headerFile=header.txt
 
 -----
 %
 doit
-	| loadSpecUrl args loadSpec resolvedProject topazFilename projectSet projectAlias projectName |
+	| loadSpecUrl args loadSpec resolvedProject topazFilename projectAlias projectName theHeader projectSet |
 	args := self positionalArgs.
 	args size ~= 2
 		ifTrue: [
@@ -67,10 +74,21 @@ doit
 		projectsHome: self projectsHome;
 		yourself.
 	projectSet := (loadSpec resolve: loadSpec customConditionalAttributes, Rowan platformConditionalAttributes) read.
-	(projectSet projectNamed: projectName)
-		exportTopazFormatTo: topazFilename 
-		logClassCreation: false 
-		excludeClassInitializers: self includeClassInitializers not
-		excludeRemoveAllMethods: self includeRemoveAllMethods not.
+	theHeader := self headerFile
+		ifNil: [
+			(projectSet projectNamed: projectName)
+				exportTopazFormatTo: topazFilename 
+				logClassCreation: false 
+				excludeClassInitializers: self includeClassInitializers not
+				excludeRemoveAllMethods: self includeRemoveAllMethods not ]
+		ifNotNil: [:theFileName |
+			(Rowan version < '3.5.0' asRwSemanticVersionNumber)
+				ifTrue: [ self error: '--headerFile option not supported in Rowan version ', Rowan version printString].
+					(projectSet projectNamed: projectName)
+						exportTopazFormatTo: topazFilename 
+						logClassCreation: false 
+						excludeClassInitializers: self includeClassInitializers not
+						excludeRemoveAllMethods: self includeRemoveAllMethods not
+						topazFileHeader: theFileName asFileReference contents ].
 	^ self noResult.
 %
