@@ -1,0 +1,60 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+  SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+}
+%
+usage
+-----
+USAGE
+  $basename [--help | -h] [--debug | -D] [--debugGem]
+
+DESCRIPTION
+
+OPTIONS
+  -h, --help      display usage message
+  -D, --debug     bring up topaz debugger in the event of a script error
+  --debugGem      If terminal is connected to stdout, bring up debugger. If not,
+                  dump stack to stdout and wait for topaz to attach using topaz
+                  DEBUGGEM command.
+
+EXAMPLES
+  $basename --help
+  $basename -D 
+  $basename --debugGem
+  $basename --projectsHome
+-----
+%
+method
+loadDBO
+	self stdout 
+		nextPutAll: '**************************'; lf; tab; 
+		nextPutAll: 'start DBO load'; lf; tab; 
+		nextPutAll: 'projectsHome = ', self projectsHome printString; lf; tab;
+		nextPutAll: 'Rowan V', Rowan versionString; lf;
+		nextPutAll: '**************************'; lf;
+		yourself. 
+{
+	'file:', self projectsHome, '/dbo_anon/Project_DBO_Missing/rowan/specs/Project_DBO_Missing.ston'.
+	'file:', self projectsHome, '/dbo_anon/Project_DBOMain/rowan/specs/Project_DBOMain.ston'.
+	'file:', self projectsHome, '/dbo_anon/Project_DBOGemStoneExtensions/rowan/specs/Project_DBOGemStoneExtensions.ston'.
+	'file:', self projectsHome, '/dbo_anon/Project_DBOTestsGemStoneExtensions/rowan/specs/Project_DBOTestsGemStoneExtensions.ston'.
+	'file:', self projectsHome, '/dbo_anon/Project_DBOTestsMain/rowan/specs/Project_DBOTestsMain.ston'.
+} do: [:specUrl |
+	(self globalNamed: 'Rowan') projectTools load loadProjectFromSpecUrl: specUrl.
+	System commit ].
+%
+doit
+	| rowanClass |
+	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
+		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
+	((self globalNamed: 'RwSemanticVersionNumber') fromString: rowanClass versionString)
+		>= ((self globalNamed: 'RwSemanticVersionNumber') fromString: '1.2.14')
+		ifFalse: [
+			self
+				error:
+					'dbo_anon load with Rowan v' , rowanClass versionString
+						, ' is not supported. No load performed.' ].
+	self loadDBO.
+	^ self noResult
+%

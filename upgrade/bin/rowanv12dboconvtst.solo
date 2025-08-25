@@ -1,0 +1,217 @@
+#!/usr/bin/env superdoit_solo
+options
+{
+	SuperDoitRequiredOptionWithRequiredArg long: 'resultDir' short: 'y'.
+
+	SuperDoitOptionalOptionWithNoArg long: 'debugSuite'.
+	SuperDoitOptionalOptionWithNoArg long: 'ignoreScriptExitCode'.
+	SuperDoitOptionalOptionWithNoArg long: 'noNativeCode'.
+	SuperDoitOptionalOptionWithNoArg long: 'validate'.
+
+	SuperDoitRequiredOptionWithRequiredArg long: 'upgradeFrom'.
+
+	SuperDoitOptionalOptionWithRequiredArg long: 'dbfSrc'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'dboRemote' default: 'git@git.gemtalksystems.com:dbo_anon.git'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'dboRevision' default: 'v1.2.10'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanRemote' default: 'git@git.gemtalksystems.com:Rowan'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanRevision' default: 'masterV1.2'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'testStatsRemote' default: 'git@git.gemtalksystems.com:GsTestStats'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'testStatsRevision' default: 'v1'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] [--debugGem] [--ignoreScriptExitCode]
+
+DESCRIPTION
+
+OPTIONS
+  -h, --help        display usage message
+  -D, --debug       bring up topaz debugger in the event of a script error
+  --ignoreScriptExitCode
+                    If present, debugGem will NOT be invoked for scripts exitting
+                    with non-zero exit codes.
+  --debugGem        If terminal is connected to stdout, bring up debugger. If not,
+                    dump stack to stdout and wait for topaz to attach using topaz
+                    DEBUGGEM command.
+
+EXAMPLES
+  $basename --help
+  $basename -h
+  $basename -D
+  $basename --debugGem
+  $basename  
+-----
+%
+instvars
+batteryTestSolo
+%
+SPECS
+[
+RwLoadSpecificationV2 {
+	#projectName : 'BatteryTest',
+	#projectSpecFile : 'rowan/project.ston',
+	#diskUrl : '$l2tests/solo/BatteryTest',
+	#componentNames : [
+		'Solo'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : ''
+},
+RwLoadSpecificationV2 {
+	#projectName : 'GsCommands',
+	#projectSpecFile : 'rowan/project.ston',
+	#diskUrl : '$GEMSTONE/examples/GsCommands/projectsHome/GsCommands',
+	#componentNames : [
+		'Commands'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}
+]
+%
+method
+customSysConf: sysConfStream
+	sysConfStream
+		nextPutAll: 'DBF_EXTENT_NAMES = ', (self batteryTestSolo resultDir / 'extent0.dbf') pathString, ';'; lf;
+		nextPutAll: 'STN_TRAN_LOG_DIRECTORIES = ', self batteryTestSolo resultDir pathString,';'; lf;
+		yourself.
+%
+method
+customGemConf: gemConfStream
+	gemConfStream nextPutAll: 'GEM_TEMPOBJ_CACHE_SIZE = 100000;'; lf.
+%
+method
+batteryTestSolo
+	^ batteryTestSolo 
+		ifNil: [ batteryTestSolo := (self globalNamed: 'BatteryTestUpgradeRowanV1FromSolo') fromSuperDoitScript: self ].
+%
+method
+chdir: pathString
+	GsFile _directoryPrim: 0 with: pathString with: nil
+%
+method
+topaziniPathStringForStone
+	^ self batteryTestSolo topaziniPathString
+%
+method
+validateHiddenSymbolDicts
+	"--validate and --validateClassMap used to ensure integrity of the upgrade"
+	| superDoit_topazini |
+	superDoit_topazini := self topaziniPathStringForStone.
+	self batteryTestSolo bannerLog: ' run $l2tests/rowantst/validateHiddenSymbolDicts.stone '.
+	self batteryTestSolo
+		executeCommand: 
+			'$l2tests/rowantst/validateHiddenSymbolDicts.stone' asFileReference pathString, 
+			(self validate ifTrue: [' --validate --validateClassMap' ] ifFalse: [ '' ]),
+			(self debugGem ifTrue: [ ' --debugGem' ] ifFalse: [ '' ]),
+			' -- -L ',
+			' -I ', superDoit_topazini, 
+			' -e ', self batteryTestSolo gemConfFile pathString
+		withOutputFile: (self batteryTestSolo resultDir / 'testmain.log') pathString
+		commandName: 'validateHiddenSymbolDicts.stone'.
+%
+method
+loadRowanCommandLine
+	| commandString |
+	commandString := String new.
+	commandString 
+		add: '$GEMSTONE/projects/RowanV3/upgrade/v12/tests/bin/rowanV12UnitTest.stone' asFileReference pathString;
+		add: ' --resultDir=', self batteryTestSolo resultDir pathString;
+		add: ' --dev_loadProjectsOnly';
+		add: ' -- -L -I ', self topaziniPathStringForStone, ' -e ', self batteryTestSolo gemConfFile pathString;
+		yourself.
+	^ commandString
+%
+method
+doUpgrade
+	| superDoit_topazini |
+	superDoit_topazini := self topaziniPathStringForStone.
+self stdout nextPutAll: self basename, 'resultDir=', self resultDir, '::', self resultDir asFileReference printString, '::', self resultDir asFileReference pathString; lf.
+	self batteryTestSolo standardUpgrade.
+
+	self batteryTestSolo bannerLog: ' run $GEMSTONE/projects/RowanV3/upgrade/v12/bin/upgradeImageRowanV12.stone '.
+	self batteryTestSolo
+		executeCommand: 
+			'$GEMSTONE/projects/RowanV3/upgrade/v12/bin/upgradeImageRowanV12.stone' asFileReference pathString, 
+			' --upgradeFrom=', self upgradeFrom, ' --customerRepair --commit --installRowan --rowanRepair --rowanReload --rowanVersion=', self rowanRevision, 
+			(self debugGem ifTrue: [ ' --debugGem' ] ifFalse: [ '' ]),
+			' -- -L ',
+			' -I ', superDoit_topazini, 
+			' -e ', self batteryTestSolo gemConfFile pathString 
+		withOutputFile: (self batteryTestSolo resultDir / 'testmain.log') pathString
+		commandName: 'upgradeImageRowanV12.stone'.
+	self stdout nextPutAll: '***SUCCEESSFUL upgradeImageRowanV12.stone***'; lf.
+
+	self batteryTestSolo bannerLog: ' run $l2tests/rowantst/dboRowanV12Install.stone '.
+	self batteryTestSolo
+		executeCommand: 
+			'$l2tests/rowantst/dboRowanV12Install.stone' asFileReference pathString, 
+			(self debugGem ifTrue: [ ' --debugGem' ] ifFalse: [ '' ]),
+			' -- -L',
+			' -T 1000000',
+			' -I ', superDoit_topazini, 
+			' -e ', self batteryTestSolo gemConfFile pathString 
+		withOutputFile: (self batteryTestSolo resultDir / 'testmain.log') pathString
+		commandName: 'dboRowanV12Install.stone'.
+
+	self validate ifTrue: [self validateHiddenSymbolDicts ].
+
+	self batteryTestSolo bannerLog: ' run $GEMSTONE/projects/RowanV3/upgrade/v12/tests/bin/rowanV12UnitTest.stone '.
+	self batteryTestSolo
+		executeCommand: 
+			'$GEMSTONE/projects/RowanV3/upgrade/v12/tests/bin/rowanV12UnitTest.stone' asFileReference pathString, 
+			' --skipLoad',
+			' --resultDir=', self batteryTestSolo resultDir pathString, 
+			' --expectedResults=$GEMSTONE/projects/RowanV3/upgrade/v12/tests/expectedV12TestResultsV1.2.17.json',
+			(self debugSuite | self debugGem ifTrue: [ ' --debugGem' ] ifFalse: [ '' ]),
+			(self debugSuite ifTrue: [ ' --debugSuite' ] ifFalse: [ '' ]),
+			' -- -L',
+			' -I ', superDoit_topazini, 
+			' -e ', self batteryTestSolo gemConfFile pathString 
+		withOutputFile: (self batteryTestSolo resultDir / 'testmain.log') pathString
+		commandName: 'rowanV12UnitTest.stone'.
+	self batteryTestSolo bannerLog: ' finished with conversion tests '.
+%
+method
+prepareToUpgrade
+	| projectsHome |
+	self batteryTestSolo prepareToUpgrade.
+	projectsHome := '$ROWAN_PROJECTS_HOME' asFileReference. 
+	Rowan gitTools
+		gitcloneIn: projectsHome pathString with: self dboRemote;
+		gitcheckoutIn: projectsHome / 'dbo_anon' with: self dboRevision.
+%
+doit
+	(System gemEnvironmentVariable: 'l2tests') ifNil: [ self error: 'Required env var l2tests is not defined' ].
+	(System gemEnvironmentVariable: 'GEMSTONE') ifNil: [ self error: 'Required env var GEMSTONE is not defined' ].
+	self preDoitSpecLoad: [:spec | 
+		spec projectName = 'BatteryTest'
+			ifTrue: [ spec projectsHome: '$l2tests/solo' ].
+		spec projectName = 'GsCommands'
+			ifTrue: [ spec projectsHome: '$GEMSTONE/examples/GsCommands/projectsHome' ] ].
+	self batteryTestSolo logStartScript.
+	self batteryTestSolo pretest.
+	[ 
+		self prepareToUpgrade.
+		self doUpgrade ]
+			on: ChildError, Error
+			do: [:ex |
+				"stop stone before we exit process with errors"
+				self batteryTestSolo stopStone.
+				ex pass ].
+	self batteryTestSolo stopStone.
+	^ self exit: 'SOLO TESTS FINISHED' withStatus: 0
+%
