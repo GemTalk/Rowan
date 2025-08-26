@@ -122,16 +122,6 @@ STONWriter >> close [
 
 ]
 
-{ #category : 'private' }
-STONWriter >> encodeKey: key value: value [
-	self nextPut: key.
-	self prettyPrintSpace.
-	writeStream nextPut: $:.
-	self prettyPrintSpace.
-	self nextPut: value
-
-]
-
 { #category : 'writing' }
 STONWriter >> encodeCharacter: char [
   | code encoding |
@@ -152,6 +142,16 @@ STONWriter >> encodeCharacter: char [
             yourself) , digits ]
         ifFalse: [ digits ].
       writeStream nextPutAll: encoding ]
+
+]
+
+{ #category : 'private' }
+STONWriter >> encodeKey: key value: value [
+	self nextPut: key.
+	self prettyPrintSpace.
+	writeStream nextPut: $:.
+	self prettyPrintSpace.
+	self nextPut: value
 
 ]
 
@@ -281,16 +281,16 @@ STONWriter >> nextPut: anObject [
 
 ]
 
+{ #category : 'initialize-release' }
+STONWriter >> on: aWriteStream [
+	writeStream := aWriteStream
+
+]
+
 { #category : 'private' }
 STONWriter >> optimizeForLargeStructures [
   "nothing special for GemStone"
 
-
-]
-
-{ #category : 'initialize-release' }
-STONWriter >> on: aWriteStream [
-	writeStream := aWriteStream
 
 ]
 
@@ -345,15 +345,34 @@ STONWriter >> with: object do: block [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeAssociation: association [
+	jsonMode
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self
+		encodeKey: association key
+		value: association value
+]
+
+{ #category : 'writing' }
 STONWriter >> writeBoolean: boolean [
 	writeStream print: boolean
-
 ]
 
 { #category : 'writing' }
 STONWriter >> writeFloat: float [
   writeStream nextPutAll: float asString
 
+]
+
+{ #category : 'writing' }
+STONWriter >> writeFraction: fraction [
+
+	jsonMode
+		ifTrue: [ self writeFloat: fraction asFloat ]
+		ifFalse: [ writeStream
+				print: fraction numerator;
+				nextPut: $/;
+				print: fraction denominator ]
 ]
 
 { #category : 'writing' }
@@ -465,6 +484,19 @@ STONWriter >> writeReference: index [
 		nextPut: $@;
 		print: index
 
+]
+
+{ #category : 'writing' }
+STONWriter >> writeScaledDecimal: scaledDecimal [
+
+	jsonMode
+		ifTrue: [ self writeFloat: scaledDecimal asFloat ]
+		ifFalse: [ writeStream
+				print: scaledDecimal numerator;
+				nextPut: $/;
+				print: scaledDecimal denominator;
+				nextPut: $s;
+				print: scaledDecimal scale ]
 ]
 
 { #category : 'writing' }

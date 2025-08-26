@@ -73,7 +73,6 @@ STONWriteReadTests >> serializeAndMaterialize: object [
 	serialization := self serialize: object.
 	materialization := self materialize: serialization.
 	self assert: object equals: materialization
-	
 ]
 
 { #category : 'private' }
@@ -200,6 +199,13 @@ STONWriteReadTests >> testFloats [
 ]
 
 { #category : 'tests' }
+STONWriteReadTests >> testFractions [
+	| fractions |
+	fractions := STON listClass withAll: (-2/3 to: 2/3 by: 1/3).
+	self serializeAndMaterialize: fractions
+]
+
+{ #category : 'tests' }
 STONWriteReadTests >> testJsonMode [
 	| object |
 	object := STON listClass withAll: {
@@ -222,6 +228,13 @@ STONWriteReadTests >> testPrimitives [
 	| primitives |
 	primitives := STON listClass withAll: { true. false. nil }.
 	self serializeAndMaterialize: primitives
+]
+
+{ #category : 'tests' }
+STONWriteReadTests >> testScaledDecimals [
+	| fractions |
+	fractions := STON listClass withAll: (-2/3s2 to: 2/3s2 by: 1/3s2).
+	self serializeAndMaterialize: fractions
 ]
 
 { #category : 'tests' }
