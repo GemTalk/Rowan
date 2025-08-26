@@ -9,7 +9,7 @@ doit
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: RowanV12UpgradeSymbolDict
 	options: #()
 )
 		category: 'RowanV12Upgrade-Core';

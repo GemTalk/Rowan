@@ -61,9 +61,6 @@ EXAMPLES
   $basename -D --audit                          # audit all projects ... run clean
 -----
 %
-input
-$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs
-%
 method
 checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 	"in-line the test for
@@ -90,6 +87,10 @@ doit
 	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
 		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
 
+	"install $ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs ... the upgrade driver for Rowan1"
+	GsCurrentSession currentSession transientSymbolList.
+	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanV1UpgradeSymDict'.	"the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
+	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs'.
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
 		ifTrue: [ rowanClass versionString ]
 		ifFalse: [ '1.2.10' ].
