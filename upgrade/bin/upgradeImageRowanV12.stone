@@ -82,14 +82,35 @@ checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 			'Upgrade for Rowan v' , currentRowanVersion
 				, ' is not supported. No Rowan upgrade performed.'
 %
+method
+newOrExistingSymbolDictionaryNamed: dictName
+  "If the current session's transient symbol list includes a dictionary with the given name, answer it.
+    Otherwise, create one, add it to the beginning of both transient and persistent symbol lists, and 
+    answer it." 
+  | symbolName session symbolList symbolDict |
+  symbolName := dictName asSymbol.
+  session := GsCurrentSession currentSession.
+  symbolList := session symbolList.
+  symbolDict := symbolList
+    detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
+    ifNone: [ 
+      | newDict size |
+      newDict := SymbolDictionary new
+        name: symbolName;
+        objectSecurityPolicy: symbolList objectSecurityPolicy;
+        yourself.
+     size := System myUserProfile symbolList size.
+     System myUserProfile insertDictionary: newDict at: size + 1.
+       newDict ].
+  ^ symbolDict
+%
 doit
 	| rowanClass upgrader currentRowanVersion |
 	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
 		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
-
 	"install $ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs ... the upgrade driver for Rowan1"
 	GsCurrentSession currentSession transientSymbolList.
-	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanV1UpgradeSymDict'.	"the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
+	self newOrExistingSymbolDictionaryNamed: 'RowanV1UpgradeSymDict'.    "the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
 	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs'.
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
 		ifTrue: [ rowanClass versionString ]
@@ -99,6 +120,7 @@ doit
 			"this section provided for GemStone internal testing only ... the documented install instructions should be followed"
 			| rowanVersion |
 			"assume 3.2.15 to 3.5.7 to 3.6.4 upgrade sequence for Rowan v1.2.10"
+			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
 			rowanVersion := self rowanVersion
 				ifNil: [ '1.2.14' ]
 				ifNotNil: [:version  | version ].
