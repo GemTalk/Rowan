@@ -32,6 +32,20 @@ STONReaderTests >> sumOf: aCollection [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testAssociation [
+
+	self assert: (self materialize: '''foo'':1') equals: 'foo' -> 1.
+	self assert: (self materialize: '#bar:2') equals: #bar -> 2.
+	self assert: (self materialize: '''foo bar'':#ok') equals: 'foo bar' -> #ok.
+	self assert: (self materialize: '123:456') equals: 123 -> 456.
+	self assert: (self materialize: '''foo'' : 1') equals: 'foo' -> 1.
+	self assert: (self materialize: '#bar : 2') equals: #bar -> 2.
+	self assert: (self materialize: '''foo bar'' : #ok') equals: 'foo bar' -> #ok.
+	self assert: (self materialize: '123 : -456') equals: 123 -> -456.
+	self assert: (self materialize: '#foo : 1 : 2') equals: #foo -> (1 -> 2)
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testBoolean [
 	self assert: (self materialize: 'true') = true.
 	self assert: (self materialize: 'false') = false
@@ -46,6 +60,17 @@ STONReaderTests >> testByteArray [
 { #category : 'tests' }
 STONReaderTests >> testCharacter [
 	self assert: (self materialize: 'Character[''A'']') == $A.
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testClass [
+
+	self
+		assert: (self materialize: 'Class[#Object]')
+		equals: Object.
+	self
+		should: [self materialize: 'Class[#ThisClassDoesNotExist]']
+		raise: LookupError
 ]
 
 { #category : 'tests' }
@@ -106,6 +131,14 @@ false ifTrue: [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testFraction [
+
+	self assert: (self materialize: '1/3') equals: 1/3.
+	self assert: (self materialize: '-1/3') equals: -1/3.
+	self assert: (self materialize: '100/11') equals: 100/11
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testIdentityDictionary [
 	| collection |
 	collection := IdentityDictionary new at: 1 put: 1; at: 2 put: 2; yourself.
@@ -157,6 +190,17 @@ STONReaderTests >> testList [
 STONReaderTests >> testMap [
 	self assert: (self materialize: '{#foo:1}') = (STON mapClass new at: #foo put: 1; yourself).
 	self assert: (self materialize: '{}') = STON mapClass new
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testMetaclass [
+
+	self
+		assert: (self materialize: 'Metaclass[#Object]')
+		equals: Object class.
+	self
+		should: [self materialize: 'Metaclass[#ThisClassDoesNotExist]']
+		raise: LookupError
 ]
 
 { #category : 'tests' }
@@ -233,6 +277,15 @@ STONReaderTests >> testReferenceSharing [
 	self assert: array = (STON listClass with: one with: one with: one).
 	self assert: array first == array second.
 	self assert: array first == array third
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testScaledDecimal [
+
+	self assert: (self materialize: '1/3s2') equals: 1/3s2.
+	self assert: (self materialize: '-1/3s2') equals: -1/3s2.
+	self assert: (self materialize: '1/3s10') equals: 1/3s10.
+	self assert: (self materialize: '-1/3s10') equals: -1/3s10
 ]
 
 { #category : 'tests' }

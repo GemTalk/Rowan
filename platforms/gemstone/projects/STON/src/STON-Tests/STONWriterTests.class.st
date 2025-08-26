@@ -90,6 +90,14 @@ STONWriterTests >> serializePretty: anObject [
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testAssociation [
+	self assert: (self serialize: 'foo' -> 1) equals: '''foo'':1'.
+	self assert: (self serialize: #bar -> 2) equals: '#bar:2'.
+	self assert: (self serialize: 'foo bar' -> #ok) equals: '''foo bar'':#ok'.
+	self assert: (self serialize: 123 -> 456) equals: '123:456'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testBoolean [
 	self assert: (self serialize: true) = 'true'.
 	self assert: (self serialize: false) = 'false'
@@ -99,6 +107,11 @@ STONWriterTests >> testBoolean [
 STONWriterTests >> testByteArray [
 	self assert: (self serialize: #(1 2 3) asByteArray) = 'ByteArray[''010203'']' 
 
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testClass [
+	self assert: (self serialize: Object) equals: 'Class[#Object]'
 ]
 
 { #category : 'tests' }
@@ -200,6 +213,17 @@ false ifTrue: [ 	self assert: (((self serialize: 1/3) asFloat closeTo:  '0.333' 
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testFraction [
+
+	self assert: (self serialize: 1/3) equals: '1/3'.
+	self assert: (self serialize: -1/3) equals: '-1/3'.
+	self assert: (self serialize: 10/100) equals: '1/10'.
+	self assert: (self serialize: 100/10) equals: '10'.
+	self assert: (self serialize: 123/123) equals: '1'.
+	self assert: (self serialize: 100/11) equals: '100/11'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testIdentityDictionary [
 	| collection |
 	collection := IdentityDictionary new at: 1 put: 1; at: 2 put: 2; yourself.
@@ -254,6 +278,11 @@ STONWriterTests >> testMap [
   map at: 123 put: 456.
   self assert: (self serialize: map) = '{123:456}'
 
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testMetaclass [
+	self assert: (self serialize: Object class) equals: 'Metaclass[#Object]'
 ]
 
 { #category : 'tests' }
