@@ -110,7 +110,7 @@ doit
 		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
 	"install $ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs ... the upgrade driver for Rowan1"
 	GsCurrentSession currentSession transientSymbolList.
-	self newOrExistingSymbolDictionaryNamed: 'RowanV1UpgradeSymDict'.    "the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
+	self newOrExistingSymbolDictionaryNamed: 'RowanV12UpgradeSymbolDict'.    "the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
 	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs'.
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
 		ifTrue: [ rowanClass versionString ]

@@ -1,5 +1,5 @@
-#! /bin/sh
-set -xv
+#! /bin/bash
+set -exv
 #=========================================================================
 # Copyright (C) GemTalk Systems 1986-2025.  All Rights Reserved.
 #
@@ -30,6 +30,26 @@ if [ "a$ROWAN_PROJECTS_HOME" = "a" ]; then
   exit 1
 fi
 
+# make sure that Rowan V1 is present in $ROWAN_PROJECTS_HOME and that the correct branch is checkout out.
+#		clone if not present
+
+if [ -d "$ROWAN_PROJECTS_HOME/Rowan" ]; then
+	echo "Rowan project is already present in $ROWAN_PROJECTS_HOME"
+	pushd $ROWAN_PROJECTS_HOME/Rowan
+		currentBranch=`git branch --show-current`
+		if [ "$currentBranch" != "candidateV1.2.17" ]; then
+			echo "incorrect Rowan v1 branch is currently checked out: $currentBranch. Expected candidateV1.2.17"
+			exit 1
+		else
+			echo "Rowan v1 branch is $currentBranch"
+		fi
+	popd
+else
+	echo "cloning Rowan V1 project into $ROWAN_PROJECTS_HOME"
+	pushd $ROWAN_PROJECTS_HOME
+		git clone -b candidateV1.2.17 -- git@github.com:GemTalk/Rowan.git Rowan
+	popd
+fi
 # make sure $GEMSTONE/bin in path for .solo and .stone scripts
 PATH=$GEMSTONE/bin:$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin:$PATH; export PATH
 
@@ -63,3 +83,4 @@ popd
 # Run RowanV12 upgrade
 $ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --commit --installRowan --rowanRepair --rowanReload --rowanVersion=candidateV1.2.17  --debugGem -- -L  -I .topazini -e ./gem.conf
 
+echo "### Rowan V1 upgrade complete"
