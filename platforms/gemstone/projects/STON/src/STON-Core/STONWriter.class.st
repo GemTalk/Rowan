@@ -440,6 +440,27 @@ STONWriter >> writeObject: object listSingleton: element [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeObject: anObject named: stonName do: block [
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		writeStream nextPutAll: stonName.
+		self prettyPrintSpace.
+		block value ]
+]
+
+{ #category : 'writing' }
+STONWriter >> writeObject: object named: stonName listSingleton: element [
+	self writeObject: object named: stonName do: [
+		writeStream nextPut: $[.
+		self
+			prettyPrintSpace;
+			nextPut: element;
+			prettyPrintSpace.
+		writeStream nextPut: $] ]
+]
+
+{ #category : 'writing' }
 STONWriter >> writeObject: object streamList: block [
 	self writeObject: object do: [ | listWriter |
 		listWriter := STONListWriter on: self.

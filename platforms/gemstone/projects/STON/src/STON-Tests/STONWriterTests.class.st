@@ -168,6 +168,15 @@ STONWriterTests >> testDictionaryWithComplexKeys [
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testDiskFile [
+	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''foo.txt'']'.
+	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
+	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
+	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
+	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testDoubleQuotedString [
   | string |
   self assert: (self serializeJson: 'foo') = '"foo"'.
@@ -308,6 +317,29 @@ STONWriterTests >> testOrderedCollection [
 	collection := OrderedCollection with: 1 with: 2 with: 3.
 	self assert: (self serialize: collection) = 'OrderedCollection[1,2,3]'.
 	self assert: (self serialize: OrderedCollection new) = 'OrderedCollection[]'.
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testPath [
+
+	self
+		assert: (self serialize: (Path from: '/'))
+		equals: 'AbsolutePath[]'.
+	self
+		assert: (self serialize: (Path from: '/tmp'))
+		equals: 'AbsolutePath[''tmp'']'.
+	self
+		assert: (self serialize: (Path from: '.'))
+		equals: 'RelativePath[]'.
+	self
+		assert: (self serialize: (Path from: '../bin/env'))
+		equals: 'RelativePath[''..'',''bin'',''env'']'.
+	self
+		assert: (self serialize: (Path from: './.config'))
+		equals: 'RelativePath[''.config'']'.
+	self
+		assert: (self serialize: (Path from: '.git'))
+		equals: 'RelativePath[''.git'']'.
 ]
 
 { #category : 'tests' }

@@ -162,6 +162,17 @@ STONWriteReadTests >> testComplexSet [
 ]
 
 { #category : 'tests' }
+STONWriteReadTests >> testDiskFiles [
+	| diskFiles |
+	diskFiles := STON listClass withAll: {
+		FileLocator workingDirectory asAbsolute.
+		'foo/bar/readme.txt' asFileReference.
+		'./readme.txt' asFileReference.
+		(FileLocator home / 'foo.txt') asFileReference }.
+	self serializeAndMaterialize: diskFiles
+]
+
+{ #category : 'tests' }
 STONWriteReadTests >> testDomainObject [
 	| object objects |
 	object := STONTestDomainObject dummy.
@@ -221,6 +232,39 @@ STONWriteReadTests >> testJsonMode [
 	}.
 	self serializeAndMaterializeJsonMode: object
 
+]
+
+{ #category : 'tests' }
+STONWriteReadTests >> testMemoryFileReferences [
+	| root dir1 file1 references ston result |
+	root := FileSystem memory root.
+	dir1 := (root / 'dir1') ensureCreateDirectory.
+	file1 := (dir1 / 'file1') ensureCreateFile.
+	file1 writeStreamDo: [ :out | out nextPutAll: 'ABC' ].
+	references := STON listClass withAll: { dir1 . file1 }.
+	ston := self serialize: references.
+	result := self materialize: ston.
+	self assert: result first exists.
+	self assert: result second exists.
+	self assert: result first fileSystem equals: result second fileSystem.
+	self assert: result first fileSystem identical: result second fileSystem.
+	self assert: result first fileSystem isMemoryFileSystem.
+	self assert: result second contents equals: 'ABC'
+]
+
+{ #category : 'tests' }
+STONWriteReadTests >> testPath [
+
+	| paths |
+	paths := STON listClass withAll: {
+		Path from: '/'.
+		Path from: '/tmp'.
+		Path from: '.'.
+		Path from: '../bin/env'.
+		Path from: './.config'.
+		Path from: '.git'.
+	}.
+	self serializeAndMaterialize: paths
 ]
 
 { #category : 'tests' }
