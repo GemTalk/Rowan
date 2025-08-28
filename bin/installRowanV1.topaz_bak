@@ -12,7 +12,6 @@ set inputpauseonerror on
 # define class variables
 run
 	| session symbolList symbolDictNames |
-System waitForDebug. "Need to know if this script is used for anything"
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
 	symbolDictNames := symbolList names.
@@ -31,7 +30,7 @@ System waitForDebug. "Need to know if this script is used for anything"
 %
 
 # load Rowan from .gs file
-input $ROWAN_PROJECTS_HOME/RowanV1/platforms/gemstone/topaz/upgrade/3.7.5/RowanV12.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade/3.7.5/RowanV12.gs
 
 commit
 
