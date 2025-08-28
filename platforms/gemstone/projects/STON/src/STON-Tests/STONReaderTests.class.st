@@ -108,6 +108,14 @@ STONReaderTests >> testDictionaryWithComplexKeys [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testDiskFile [
+	self assert: (self materialize: 'FILE[''foo.txt'']') equals: 'foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp/foo.txt'']') equals: '/tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''tmp/foo.txt'']') equals: 'tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp'']') equals: '/tmp' asFileReference
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testError [
 	#( 'foo' '{foo:}' '{foo,}' '[1,]' '+1' ']' '#' '' '  ' '	' 'nul' 'tru' 'fals' ) do: [ :each |
 		self 
@@ -257,6 +265,29 @@ STONReaderTests >> testOrderedCollection [
 	collection := OrderedCollection with: 1 with: 2 with: 3.
 	self assert: (self materialize: 'OrderedCollection[1,2,3]') = collection.
 	self assert: (self materialize: 'OrderedCollection[]') = OrderedCollection new.
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testPath [
+
+	self
+		assert: (self materialize: 'AbsolutePath[]')
+		equals: (Path from: '/').
+	self
+		assert: (self materialize:'AbsolutePath[''tmp'']')
+		equals: (Path from: '/tmp').
+	self
+		assert: (self materialize: 'RelativePath[]')
+		equals: (Path from: '.').
+	self
+		assert: (self materialize: 'RelativePath[''..'',''bin'',''env'']')
+		equals: (Path from: '../bin/env').
+	self
+		assert: (self materialize: 'RelativePath[''.config'']')
+		equals: (Path from: './.config').
+	self
+		assert: (self materialize: 'RelativePath[''.git'']')
+		equals: (Path from: '.git').
 ]
 
 { #category : 'tests' }
