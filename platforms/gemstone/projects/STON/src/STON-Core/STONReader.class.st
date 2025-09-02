@@ -333,7 +333,7 @@ STONReader >> parseMapDo: block [
   (self matchChar: $})
     ifTrue: [ ^ self ].
   [ readStream atEnd ] whileFalse: [ | name value |
-      name := self parseValue.
+      name := self parseSimpleValue.
       (allowComplexMapKeys
         or: [ name isString or: [ name isNumber ] ])
         ifFalse: [ self error: 'unexpected property name type' ].
@@ -344,7 +344,6 @@ STONReader >> parseMapDo: block [
         ifTrue: [ ^ self ].
       self expectChar: $, ].
   self error: 'end of map expected'
-
 ]
 
 { #category : 'parsing-internal' }
@@ -352,15 +351,20 @@ STONReader >> parseNumber [
 	| negated number |
 	negated := readStream peekFor: $-.
 	number := self parseNumberInteger.
-	(readStream peekFor: $.)
-		ifTrue: [ number := number + self parseNumberFraction ].
-	((readStream peekFor: $e) or: [ readStream peekFor: $E ])
-		ifTrue: [ number := number * self parseNumberExponent ].
+	(readStream peekFor: $/)
+		ifTrue: 
+			[number := Fraction numerator: number denominator: self parseNumberInteger.
+			(readStream peekFor: $s)
+				ifTrue: [ number := ScaledDecimal for: number scale: self parseNumberInteger ] ]
+		ifFalse:
+			[(readStream peekFor: $.)
+				ifTrue: [ number := (number + self parseNumberFraction) asFloat ].
+			((readStream peekFor: $e) or: [ readStream peekFor: $E ])
+				ifTrue: [ number := number * self parseNumberExponent ]].
 	negated
 		ifTrue: [ number := number negated ].
 	self consumeWhitespace.
 	^ number
-
 ]
 
 { #category : 'parsing-internal' }
@@ -421,6 +425,28 @@ STONReader >> parseReference [
 
 ]
 
+{ #category : 'parsing' }
+STONReader >> parseSimpleValue [
+	| char |
+	readStream atEnd ifFalse: [ 
+		(self isClassStartChar: (char := readStream peek)) 
+			ifTrue: [ ^ self parseObject ].
+		char = ${
+			ifTrue: [ ^ self parseMap ].
+		char = $[
+			ifTrue: [ ^ self parseList ].
+		(char = $' or: [ char = $" ])
+			ifTrue: [ ^ self parseString ].
+		char = $#
+			ifTrue: [ ^ self parseSymbol ].
+		char = $@
+			ifTrue: [ ^ self parseReference ].
+		(char = $- or: [ char isDigit ])
+			ifTrue: [ ^ self parseNumber ].
+		self parseConstantDo: [ :value | ^ value ] ].
+	self error: 'invalid input'
+]
+
 { #category : 'parsing-internal' }
 STONReader >> parseString [
 	^ self parseStringInternal
@@ -458,25 +484,11 @@ STONReader >> parseSymbol [
 
 { #category : 'parsing' }
 STONReader >> parseValue [
-	| char |
-	readStream atEnd ifFalse: [ 
-		(self isClassStartChar: (char := readStream peek)) 
-			ifTrue: [ ^ self parseObject ].
-		char = ${
-			ifTrue: [ ^ self parseMap ].
-		char = $[
-			ifTrue: [ ^ self parseList ].
-		(char = $' or: [ char = $" ])
-			ifTrue: [ ^ self parseString ].
-		char = $#
-			ifTrue: [ ^ self parseSymbol ].
-		char = $@
-			ifTrue: [ ^ self parseReference ].
-		(char = $- or: [ char isDigit ])
-			ifTrue: [ ^ self parseNumber ].
-		self parseConstantDo: [ :value | ^ value ] ].
-	self error: 'invalid input'
-
+	| value |
+	value := self parseSimpleValue.
+	^ (self matchChar: $:)
+		ifTrue: [ Association new key: value value: self parseValue ]
+		ifFalse: [ value ]
 ]
 
 { #category : 'private' }
