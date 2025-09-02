@@ -7,7 +7,7 @@ RwLoadSpecificationV2 {
 	#platformProperties : {
 		'gemstone' : {
 			'allusers' : {
-				#defaultSymbolDictName : 'Globals'
+				#defaultSymbolDictName : 'RowanV12UpgradeSymbolDict'
 			}
 		}
 	},

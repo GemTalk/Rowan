@@ -2,6 +2,7 @@
 options
 {
   SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
+  SuperDoitRequiredOptionWithRequiredArg long: 'gsV1Home'.
 }
 %
 usage
@@ -18,13 +19,21 @@ OPTIONS
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
   --projectsHome=<Rowan-project-parent-directory>
-                             The parent directory of the RowanV12Upgrade project.
+                             The parent directory of the RowanV12Upgrade project in
+                             RowanV3 project.
+  --gsV1Home                 The parent directory of the generated .gs file in the
+                             RowanV1 project
 
 EXAMPLES
   $basename --help
   $basename -D
-	$basename --projectsHome=$GS_HOME/Rowan/upgrade/projectsHome
+	$basename --projectsHome=$ROWAN_PROJECTS_HOME/RowanV3/upgrade/projectsHome \
+            --gsV1Home==$ROWAN_PROJECTS_HOME/RowanV1/upgrade/gs
 -----
+%
+method
+copyright
+	^ 'Copyright (C) GemTalk Systems 1986-', Date today year asString, '.  All Rights Reserved.'
 %
 doit
 	| projectName projectsHomeReference projectRoot loadSpecRef resolvedProject 
@@ -37,7 +46,7 @@ doit
 	resolvedProject := Rowan 
 		projectFromUrl: 'file:' , loadSpecRef pathString 
 		diskUrl: 'file:' , projectRoot pathString.
-	gsFileParent := projectRoot parent parent / 'v12'.
+	gsFileParent := self gsV1Home asFileReference.
 	gsFileParent ensureCreateDirectory.
 
 	theProjectSetDefinition := RwProjectSetDefinition new.
@@ -49,13 +58,13 @@ doit
 	topazFileNameMap := Dictionary new
 		at: gsFileName put: resolvedProject packageNames;
 		yourself.
-	GsFile gciLogServer: 'Creating UpgradeRowanV12.gs:'.
+	GsFile gciLogServer: 'Creating ', gsFileParent pathString, '/UpgradeRowanV12.gs'.
 
 	projectSetModification := theProjectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		repositoryRootPath: gsFileParent;
 		topazFilenamePackageNamesMap: topazFileNameMap;
-		topazFileHeader: '! ', self _copyright, String new lf; 
+		topazFileHeader: '! ', self copyright, String new lf; 
 		yourself.
 	visitor visit: projectSetModification.
 	^ self noResult
