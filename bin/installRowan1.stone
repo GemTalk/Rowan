@@ -202,7 +202,6 @@ reloadRowan
 %
 doit
 	| runner testSuiteSample passingStatus  stdoutReporter exportStream  externalsStBase |
-System waitForDebug.	"need to know if this script is used ... and when"
 	(self rowanProjectsHome) 
 		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
 	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', self rowanProjectsHome; lf.
