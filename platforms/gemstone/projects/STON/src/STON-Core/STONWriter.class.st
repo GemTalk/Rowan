@@ -122,16 +122,6 @@ STONWriter >> close [
 
 ]
 
-{ #category : 'private' }
-STONWriter >> encodeKey: key value: value [
-	self nextPut: key.
-	self prettyPrintSpace.
-	writeStream nextPut: $:.
-	self prettyPrintSpace.
-	self nextPut: value
-
-]
-
 { #category : 'writing' }
 STONWriter >> encodeCharacter: char [
   | code encoding |
@@ -152,6 +142,16 @@ STONWriter >> encodeCharacter: char [
             yourself) , digits ]
         ifFalse: [ digits ].
       writeStream nextPutAll: encoding ]
+
+]
+
+{ #category : 'private' }
+STONWriter >> encodeKey: key value: value [
+	self nextPut: key.
+	self prettyPrintSpace.
+	writeStream nextPut: $:.
+	self prettyPrintSpace.
+	self nextPut: value
 
 ]
 
@@ -281,16 +281,16 @@ STONWriter >> nextPut: anObject [
 
 ]
 
+{ #category : 'initialize-release' }
+STONWriter >> on: aWriteStream [
+	writeStream := aWriteStream
+
+]
+
 { #category : 'private' }
 STONWriter >> optimizeForLargeStructures [
   "nothing special for GemStone"
 
-
-]
-
-{ #category : 'initialize-release' }
-STONWriter >> on: aWriteStream [
-	writeStream := aWriteStream
 
 ]
 
@@ -345,15 +345,34 @@ STONWriter >> with: object do: block [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeAssociation: association [
+	jsonMode
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self
+		encodeKey: association key
+		value: association value
+]
+
+{ #category : 'writing' }
 STONWriter >> writeBoolean: boolean [
 	writeStream print: boolean
-
 ]
 
 { #category : 'writing' }
 STONWriter >> writeFloat: float [
   writeStream nextPutAll: float asString
 
+]
+
+{ #category : 'writing' }
+STONWriter >> writeFraction: fraction [
+
+	jsonMode
+		ifTrue: [ self writeFloat: fraction asFloat ]
+		ifFalse: [ writeStream
+				print: fraction numerator;
+				nextPut: $/;
+				print: fraction denominator ]
 ]
 
 { #category : 'writing' }
@@ -421,6 +440,27 @@ STONWriter >> writeObject: object listSingleton: element [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeObject: anObject named: stonName do: block [
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		writeStream nextPutAll: stonName.
+		self prettyPrintSpace.
+		block value ]
+]
+
+{ #category : 'writing' }
+STONWriter >> writeObject: object named: stonName listSingleton: element [
+	self writeObject: object named: stonName do: [
+		writeStream nextPut: $[.
+		self
+			prettyPrintSpace;
+			nextPut: element;
+			prettyPrintSpace.
+		writeStream nextPut: $] ]
+]
+
+{ #category : 'writing' }
 STONWriter >> writeObject: object streamList: block [
 	self writeObject: object do: [ | listWriter |
 		listWriter := STONListWriter on: self.
@@ -465,6 +505,19 @@ STONWriter >> writeReference: index [
 		nextPut: $@;
 		print: index
 
+]
+
+{ #category : 'writing' }
+STONWriter >> writeScaledDecimal: scaledDecimal [
+
+	jsonMode
+		ifTrue: [ self writeFloat: scaledDecimal asFloat ]
+		ifFalse: [ writeStream
+				print: scaledDecimal numerator;
+				nextPut: $/;
+				print: scaledDecimal denominator;
+				nextPut: $s;
+				print: scaledDecimal scale ]
 ]
 
 { #category : 'writing' }

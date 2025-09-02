@@ -90,6 +90,14 @@ STONWriterTests >> serializePretty: anObject [
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testAssociation [
+	self assert: (self serialize: 'foo' -> 1) equals: '''foo'':1'.
+	self assert: (self serialize: #bar -> 2) equals: '#bar:2'.
+	self assert: (self serialize: 'foo bar' -> #ok) equals: '''foo bar'':#ok'.
+	self assert: (self serialize: 123 -> 456) equals: '123:456'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testBoolean [
 	self assert: (self serialize: true) = 'true'.
 	self assert: (self serialize: false) = 'false'
@@ -99,6 +107,11 @@ STONWriterTests >> testBoolean [
 STONWriterTests >> testByteArray [
 	self assert: (self serialize: #(1 2 3) asByteArray) = 'ByteArray[''010203'']' 
 
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testClass [
+	self assert: (self serialize: Object) equals: 'Class[#Object]'
 ]
 
 { #category : 'tests' }
@@ -155,6 +168,15 @@ STONWriterTests >> testDictionaryWithComplexKeys [
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testDiskFile [
+	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''foo.txt'']'.
+	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
+	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
+	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
+	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testDoubleQuotedString [
   | string |
   self assert: (self serializeJson: 'foo') = '"foo"'.
@@ -197,6 +219,17 @@ false ifTrue: [ 	self assert: (((self serialize: 1/3) asFloat closeTo:  '0.333' 
 	self assert: ((self serialize: (10 raisedTo: -50) asFloat) asFloat closeTo: '1.0e-50' asFloat).
 	self assert: ((self serialize: (10 raisedTo: -50) asFloat negated) asFloat closeTo: '-1.0e-50' asFloat).
 
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testFraction [
+
+	self assert: (self serialize: 1/3) equals: '1/3'.
+	self assert: (self serialize: -1/3) equals: '-1/3'.
+	self assert: (self serialize: 10/100) equals: '1/10'.
+	self assert: (self serialize: 100/10) equals: '10'.
+	self assert: (self serialize: 123/123) equals: '1'.
+	self assert: (self serialize: 100/11) equals: '100/11'
 ]
 
 { #category : 'tests' }
@@ -257,6 +290,11 @@ STONWriterTests >> testMap [
 ]
 
 { #category : 'tests' }
+STONWriterTests >> testMetaclass [
+	self assert: (self serialize: Object class) equals: 'Metaclass[#Object]'
+]
+
+{ #category : 'tests' }
 STONWriterTests >> testNil [
 	self assert: (self serialize: nil) = 'nil'
 ]
@@ -279,6 +317,29 @@ STONWriterTests >> testOrderedCollection [
 	collection := OrderedCollection with: 1 with: 2 with: 3.
 	self assert: (self serialize: collection) = 'OrderedCollection[1,2,3]'.
 	self assert: (self serialize: OrderedCollection new) = 'OrderedCollection[]'.
+]
+
+{ #category : 'tests' }
+STONWriterTests >> testPath [
+
+	self
+		assert: (self serialize: (Path from: '/'))
+		equals: 'AbsolutePath[]'.
+	self
+		assert: (self serialize: (Path from: '/tmp'))
+		equals: 'AbsolutePath[''tmp'']'.
+	self
+		assert: (self serialize: (Path from: '.'))
+		equals: 'RelativePath[]'.
+	self
+		assert: (self serialize: (Path from: '../bin/env'))
+		equals: 'RelativePath[''..'',''bin'',''env'']'.
+	self
+		assert: (self serialize: (Path from: './.config'))
+		equals: 'RelativePath[''.config'']'.
+	self
+		assert: (self serialize: (Path from: '.git'))
+		equals: 'RelativePath[''.git'']'.
 ]
 
 { #category : 'tests' }
