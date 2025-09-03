@@ -49,6 +49,17 @@ STONReaderTests >> testCharacter [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testClass [
+
+	self
+		assert: (self materialize: 'Class[#Object]')
+		equals: Object.
+	self
+		should: [self materialize: 'Class[#ThisClassDoesNotExist]']
+		raise: LookupError
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testDate [
 	| date |
 	date := Date newDay: 1 month:  'January' year: 2012.
@@ -83,6 +94,14 @@ STONReaderTests >> testDictionaryWithComplexKeys [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testDiskFile [
+	self assert: (self materialize: 'FILE[''foo.txt'']') equals: 'foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp/foo.txt'']') equals: '/tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''tmp/foo.txt'']') equals: 'tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp'']') equals: '/tmp' asFileReference
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testError [
 	#( 'foo' '{foo:}' '{foo,}' '[1,]' '+1' ']' '#' '' '  ' '	' 'nul' 'tru' 'fals' ) do: [ :each |
 		self 
@@ -103,6 +122,14 @@ false ifTrue: [
 	self assert: (self materialize: '1.0e-100') = (10 raisedTo: -100) asFloat.
 	self assert: (self materialize: '-1.0e-100') = (10 raisedTo: -100) asFloat negated.
 
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testFraction [
+
+	self assert: (self materialize: '1/3') equals: 1/3.
+	self assert: (self materialize: '-1/3') equals: -1/3.
+	self assert: (self materialize: '100/11') equals: 100/11
 ]
 
 { #category : 'tests' }
@@ -157,6 +184,17 @@ STONReaderTests >> testList [
 STONReaderTests >> testMap [
 	self assert: (self materialize: '{#foo:1}') = (STON mapClass new at: #foo put: 1; yourself).
 	self assert: (self materialize: '{}') = STON mapClass new
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testMetaclass [
+
+	self
+		assert: (self materialize: 'Metaclass[#Object]')
+		equals: Object class.
+	self
+		should: [self materialize: 'Metaclass[#ThisClassDoesNotExist]']
+		raise: LookupError
 ]
 
 { #category : 'tests' }
@@ -216,6 +254,29 @@ STONReaderTests >> testOrderedCollection [
 ]
 
 { #category : 'tests' }
+STONReaderTests >> testPath [
+
+	self
+		assert: (self materialize: 'AbsolutePath[]')
+		equals: (Path from: '/').
+	self
+		assert: (self materialize:'AbsolutePath[''tmp'']')
+		equals: (Path from: '/tmp').
+	self
+		assert: (self materialize: 'RelativePath[]')
+		equals: (Path from: '.').
+	self
+		assert: (self materialize: 'RelativePath[''..'',''bin'',''env'']')
+		equals: (Path from: '../bin/env').
+	self
+		assert: (self materialize: 'RelativePath[''.config'']')
+		equals: (Path from: './.config').
+	self
+		assert: (self materialize: 'RelativePath[''.git'']')
+		equals: (Path from: '.git').
+]
+
+{ #category : 'tests' }
 STONReaderTests >> testReferenceCycle [
 	| array |
 	array := (self materialize: '[1,@1]').
@@ -233,6 +294,15 @@ STONReaderTests >> testReferenceSharing [
 	self assert: array = (STON listClass with: one with: one with: one).
 	self assert: array first == array second.
 	self assert: array first == array third
+]
+
+{ #category : 'tests' }
+STONReaderTests >> testScaledDecimal [
+
+	self assert: (self materialize: '1/3s2') equals: 1/3s2.
+	self assert: (self materialize: '-1/3s2') equals: -1/3s2.
+	self assert: (self materialize: '1/3s10') equals: 1/3s10.
+	self assert: (self materialize: '-1/3s10') equals: -1/3s10
 ]
 
 { #category : 'tests' }
