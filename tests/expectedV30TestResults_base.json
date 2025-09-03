@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 10,
 		"failures" : 10,
-		"passed" : 888,
-		"summary" : "908 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 243.87s",
-		"tests" : 908,
-		"time" : 243.872
+		"passed" : 919,
+		"summary" : "939 Tests with 10 Failures, 10 Errors and 0 DeprecationWarnings in 350.99s",
+		"tests" : 939,
+		"time" : 350.993
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -4794,6 +4794,12 @@
 		{
 			"className" : "STONLargeWriteReadTests",
 			"status" : "passed",
+			"selector" : "testClasses",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
 			"selector" : "testCollections",
 			"time" : "0"
 		},
@@ -4801,6 +4807,12 @@
 			"className" : "STONLargeWriteReadTests",
 			"status" : "passed",
 			"selector" : "testComplexSet",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
+			"selector" : "testDiskFiles",
 			"time" : "0"
 		},
 		{
@@ -4824,6 +4836,12 @@
 		{
 			"className" : "STONLargeWriteReadTests",
 			"status" : "passed",
+			"selector" : "testFractions",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
 			"selector" : "testGemStoneCollections",
 			"time" : "0"
 		},
@@ -4836,7 +4854,25 @@
 		{
 			"className" : "STONLargeWriteReadTests",
 			"status" : "passed",
+			"selector" : "testMemoryFileReferences",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
+			"selector" : "testPath",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
 			"selector" : "testPrimitives",
+			"time" : "0"
+		},
+		{
+			"className" : "STONLargeWriteReadTests",
+			"status" : "passed",
+			"selector" : "testScaledDecimals",
 			"time" : "0"
 		},
 		{
@@ -4878,6 +4914,12 @@
 		{
 			"className" : "STONReaderTests",
 			"status" : "passed",
+			"selector" : "testAssociation",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
 			"selector" : "testBoolean",
 			"time" : "0"
 		},
@@ -4891,6 +4933,12 @@
 			"className" : "STONReaderTests",
 			"status" : "passed",
 			"selector" : "testCharacter",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
+			"selector" : "testClass",
 			"time" : "0"
 		},
 		{
@@ -4920,6 +4968,12 @@
 		{
 			"className" : "STONReaderTests",
 			"status" : "passed",
+			"selector" : "testDiskFile",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
 			"selector" : "testError",
 			"time" : "0"
 		},
@@ -4927,6 +4981,12 @@
 			"className" : "STONReaderTests",
 			"status" : "passed",
 			"selector" : "testFloat",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
+			"selector" : "testFraction",
 			"time" : "0"
 		},
 		{
@@ -4957,6 +5017,12 @@
 			"className" : "STONReaderTests",
 			"status" : "passed",
 			"selector" : "testMap",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
+			"selector" : "testMetaclass",
 			"time" : "0"
 		},
 		{
@@ -4998,6 +5064,12 @@
 		{
 			"className" : "STONReaderTests",
 			"status" : "passed",
+			"selector" : "testPath",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
 			"selector" : "testReferenceCycle",
 			"time" : "0"
 		},
@@ -5005,6 +5077,12 @@
 			"className" : "STONReaderTests",
 			"status" : "passed",
 			"selector" : "testReferenceSharing",
+			"time" : "0"
+		},
+		{
+			"className" : "STONReaderTests",
+			"status" : "passed",
+			"selector" : "testScaledDecimal",
 			"time" : "0"
 		},
 		{
@@ -5088,6 +5166,12 @@
 		{
 			"className" : "STONWritePrettyPrinterReadTests",
 			"status" : "passed",
+			"selector" : "testClasses",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
 			"selector" : "testCollections",
 			"time" : "0"
 		},
@@ -5095,6 +5179,12 @@
 			"className" : "STONWritePrettyPrinterReadTests",
 			"status" : "passed",
 			"selector" : "testComplexSet",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
+			"selector" : "testDiskFiles",
 			"time" : "0"
 		},
 		{
@@ -5118,6 +5208,12 @@
 		{
 			"className" : "STONWritePrettyPrinterReadTests",
 			"status" : "passed",
+			"selector" : "testFractions",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
 			"selector" : "testGemStoneCollections",
 			"time" : "0"
 		},
@@ -5130,7 +5226,25 @@
 		{
 			"className" : "STONWritePrettyPrinterReadTests",
 			"status" : "passed",
+			"selector" : "testMemoryFileReferences",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
+			"selector" : "testPath",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
 			"selector" : "testPrimitives",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWritePrettyPrinterReadTests",
+			"status" : "passed",
+			"selector" : "testScaledDecimals",
 			"time" : "0"
 		},
 		{
@@ -5184,6 +5298,12 @@
 		{
 			"className" : "STONWriteReadTests",
 			"status" : "passed",
+			"selector" : "testClasses",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
 			"selector" : "testCollections",
 			"time" : "0"
 		},
@@ -5191,6 +5311,12 @@
 			"className" : "STONWriteReadTests",
 			"status" : "passed",
 			"selector" : "testComplexSet",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
+			"selector" : "testDiskFiles",
 			"time" : "0"
 		},
 		{
@@ -5214,6 +5340,12 @@
 		{
 			"className" : "STONWriteReadTests",
 			"status" : "passed",
+			"selector" : "testFractions",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
 			"selector" : "testGemStoneCollections",
 			"time" : "0"
 		},
@@ -5226,7 +5358,25 @@
 		{
 			"className" : "STONWriteReadTests",
 			"status" : "passed",
+			"selector" : "testMemoryFileReferences",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
+			"selector" : "testPath",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
 			"selector" : "testPrimitives",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriteReadTests",
+			"status" : "passed",
+			"selector" : "testScaledDecimals",
 			"time" : "0"
 		},
 		{
@@ -5268,6 +5418,12 @@
 		{
 			"className" : "STONWriterTests",
 			"status" : "passed",
+			"selector" : "testAssociation",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
 			"selector" : "testBoolean",
 			"time" : "0"
 		},
@@ -5275,6 +5431,12 @@
 			"className" : "STONWriterTests",
 			"status" : "passed",
 			"selector" : "testByteArray",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
+			"selector" : "testClass",
 			"time" : "0"
 		},
 		{
@@ -5310,6 +5472,12 @@
 		{
 			"className" : "STONWriterTests",
 			"status" : "passed",
+			"selector" : "testDiskFile",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
 			"selector" : "testDoubleQuotedString",
 			"time" : "0"
 		},
@@ -5329,6 +5497,12 @@
 			"className" : "STONWriterTests",
 			"status" : "passed",
 			"selector" : "testFloat",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
+			"selector" : "testFraction",
 			"time" : "0"
 		},
 		{
@@ -5364,6 +5538,12 @@
 		{
 			"className" : "STONWriterTests",
 			"status" : "passed",
+			"selector" : "testMetaclass",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
 			"selector" : "testNil",
 			"time" : "0"
 		},
@@ -5383,6 +5563,12 @@
 			"className" : "STONWriterTests",
 			"status" : "passed",
 			"selector" : "testOrderedCollection",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
+			"selector" : "testPath",
 			"time" : "0"
 		},
 		{
@@ -5464,5 +5650,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-08-22T09:48:44.719500-07:00"
+	"timeStamp" : "2025-09-02T16:49:38.255070-07:00"
 }
