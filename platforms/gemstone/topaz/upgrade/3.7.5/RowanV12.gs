@@ -45826,10 +45826,10 @@ breakPointsFor: aGsNMethod
   theMethod _allBreakpoints
     ifNil: [ ^ OrderedCollection new ]
     ifNotNil: [ :anArray | 
-      1 to: anArray size by: 3 do: [ :i | 
+      1 to: anArray size by: 4 do: [ :i |   "<<<<<< Change from 3 to 4<<<<<<" 
         list
           add:
-            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2) abs) ] ].
+            (theMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)) ] ].
   ^ list asOrderedCollection
 %
 
@@ -70913,6 +70913,14 @@ writer
 
 category: 'instance creation'
 classmethod: STONReader
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONReader
 on: readStream
 	^ self new
 		on: readStream;
@@ -70931,6 +70939,13 @@ category: 'testing'
 method: STONReader
 atEnd
 	^ readStream atEnd
+%
+
+category: 'initialize-release'
+method: STONReader
+classes
+
+	^ classes
 %
 
 category: 'initialize-release'
@@ -71000,6 +71015,27 @@ isSimpleSymbolChar: char
 
 category: 'private'
 method: STONReader
+lookupClass: name
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+%
+
+category: 'private'
+method: STONReader
 match: string do: block
 	"Try to read and consume string and execute block if successful.
 	Else do nothing (but do not back up)"
@@ -71048,6 +71084,13 @@ category: 'initialize-release'
 method: STONReader
 on: aReadStream
 	readStream := aReadStream
+%
+
+category: 'private'
+method: STONReader
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'parsing-internal'
@@ -71188,7 +71231,7 @@ parseMapDo: block
   (self matchChar: $})
     ifTrue: [ ^ self ].
   [ readStream atEnd ] whileFalse: [ | name value |
-      name := self parseValue.
+      name := self parseSimpleValue.
       (allowComplexMapKeys
         or: [ name isString or: [ name isNumber ] ])
         ifFalse: [ self error: 'unexpected property name type' ].
@@ -71207,10 +71250,16 @@ parseNumber
 	| negated number |
 	negated := readStream peekFor: $-.
 	number := self parseNumberInteger.
-	(readStream peekFor: $.)
-		ifTrue: [ number := number + self parseNumberFraction ].
-	((readStream peekFor: $e) or: [ readStream peekFor: $E ])
-		ifTrue: [ number := number * self parseNumberExponent ].
+	(readStream peekFor: $/)
+		ifTrue: 
+			[number := Fraction numerator: number denominator: self parseNumberInteger.
+			(readStream peekFor: $s)
+				ifTrue: [ number := ScaledDecimal for: number scale: self parseNumberInteger ] ]
+		ifFalse:
+			[(readStream peekFor: $.)
+				ifTrue: [ number := (number + self parseNumberFraction) asFloat ].
+			((readStream peekFor: $e) or: [ readStream peekFor: $E ])
+				ifTrue: [ number := number * self parseNumberExponent ]].
 	negated
 		ifTrue: [ number := number negated ].
 	self consumeWhitespace.
@@ -71275,6 +71324,29 @@ parseReference
 	^ STONReference index: index
 %
 
+category: 'parsing'
+method: STONReader
+parseSimpleValue
+	| char |
+	readStream atEnd ifFalse: [ 
+		(self isClassStartChar: (char := readStream peek)) 
+			ifTrue: [ ^ self parseObject ].
+		char = ${
+			ifTrue: [ ^ self parseMap ].
+		char = $[
+			ifTrue: [ ^ self parseList ].
+		(char = $' or: [ char = $" ])
+			ifTrue: [ ^ self parseString ].
+		char = $#
+			ifTrue: [ ^ self parseSymbol ].
+		char = $@
+			ifTrue: [ ^ self parseReference ].
+		(char = $- or: [ char isDigit ])
+			ifTrue: [ ^ self parseNumber ].
+		self parseConstantDo: [ :value | ^ value ] ].
+	self error: 'invalid input'
+%
+
 category: 'parsing-internal'
 method: STONReader
 parseString
@@ -71316,24 +71388,11 @@ parseSymbol
 category: 'parsing'
 method: STONReader
 parseValue
-	| char |
-	readStream atEnd ifFalse: [ 
-		(self isClassStartChar: (char := readStream peek)) 
-			ifTrue: [ ^ self parseObject ].
-		char = ${
-			ifTrue: [ ^ self parseMap ].
-		char = $[
-			ifTrue: [ ^ self parseList ].
-		(char = $' or: [ char = $" ])
-			ifTrue: [ ^ self parseString ].
-		char = $#
-			ifTrue: [ ^ self parseSymbol ].
-		char = $@
-			ifTrue: [ ^ self parseReference ].
-		(char = $- or: [ char isDigit ])
-			ifTrue: [ ^ self parseNumber ].
-		self parseConstantDo: [ :value | ^ value ] ].
-	self error: 'invalid input'
+	| value |
+	value := self parseSimpleValue.
+	^ (self matchChar: $:)
+		ifTrue: [ Association new key: value value: self parseValue ]
+		ifFalse: [ value ]
 %
 
 category: 'private'
@@ -71847,6 +71906,25 @@ stonShouldWriteNilInstVars
 
 !		Class methods for 'STONWriter'
 
+category: 'private'
+classmethod: STONWriter
+findFirstInString: aString inSet: inclusionMap startingAt: start
+  "Trivial, non-primitive version"
+
+  | i stringSize ascii |
+  inclusionMap size ~= 256
+    ifTrue: [ ^ 0 ].
+  i := start.
+  stringSize := aString size.
+  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
+      ascii < 256
+        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
+        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
+  i > stringSize
+    ifTrue: [ ^ 0 ].
+  ^ i
+%
+
 category: 'class initialization'
 classmethod: STONWriter
 initialize
@@ -71891,6 +71969,14 @@ isSimpleSymbolChar: char
 
 category: 'instance creation'
 classmethod: STONWriter
+new
+  ^ self basicNew
+    initialize;
+    yourself
+%
+
+category: 'instance creation'
+classmethod: STONWriter
 on: writeStream
 	^ self new
 		on: writeStream;
@@ -71905,6 +71991,29 @@ close
 	writeStream ifNotNil: [
 		writeStream close.
 		writeStream := nil ]
+%
+
+category: 'writing'
+method: STONWriter
+encodeCharacter: char
+  | code encoding |
+  ((code := char codePoint) < 127
+    and: [ (encoding := STONCharacters at: code + 1) notNil ])
+    ifTrue: [ (encoding = #'pass' or: [ jsonMode and: [ char = $' ] ])
+        ifTrue: [ writeStream nextPut: char ]
+        ifFalse: [ writeStream nextPutAll: encoding ] ]
+    ifFalse: [ | paddedStream padding digits |
+      paddedStream := WriteStream on: String new.
+      code printOn: paddedStream base: 16 showRadix: false.
+      digits := paddedStream contents.
+      padding := 4 - digits size.
+      writeStream nextPutAll: '\u'.
+      encoding := padding > 0
+        ifTrue: [ ((String new: padding)
+            atAllPut: $0;
+            yourself) , digits ]
+        ifFalse: [ digits ].
+      writeStream nextPutAll: encoding ]
 %
 
 category: 'private'
@@ -71992,6 +72101,17 @@ initialize
   objects := IdentityDictionary new
 %
 
+category: 'private'
+method: STONWriter
+isSimpleSymbol: symbol
+  symbol isEmpty
+    ifTrue: [ ^ false ].
+  ^ (self class
+    findFirstInString: symbol
+    inSet: STONSimpleSymbolCharacters
+    startingAt: 1) = 0
+%
+
 category: 'initialize-release'
 method: STONWriter
 jsonMode: boolean
@@ -72036,6 +72156,13 @@ category: 'initialize-release'
 method: STONWriter
 on: aWriteStream
 	writeStream := aWriteStream
+%
+
+category: 'private'
+method: STONWriter
+optimizeForLargeStructures
+  "nothing special for GemStone"
+
 %
 
 category: 'initialize-release'
@@ -72090,8 +72217,36 @@ with: object do: block
 
 category: 'writing'
 method: STONWriter
+writeAssociation: association
+	jsonMode
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self
+		encodeKey: association key
+		value: association value
+%
+
+category: 'writing'
+method: STONWriter
 writeBoolean: boolean
 	writeStream print: boolean
+%
+
+category: 'writing'
+method: STONWriter
+writeFloat: float
+  writeStream nextPutAll: float asString
+%
+
+category: 'writing'
+method: STONWriter
+writeFraction: fraction
+
+	jsonMode
+		ifTrue: [ self writeFloat: fraction asFloat ]
+		ifFalse: [ writeStream
+				print: fraction numerator;
+				nextPut: $/;
+				print: fraction denominator ]
 %
 
 category: 'writing'
@@ -72160,6 +72315,29 @@ writeObject: object listSingleton: element
 
 category: 'writing'
 method: STONWriter
+writeObject: anObject named: stonName do: block
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		writeStream nextPutAll: stonName.
+		self prettyPrintSpace.
+		block value ]
+%
+
+category: 'writing'
+method: STONWriter
+writeObject: object named: stonName listSingleton: element
+	self writeObject: object named: stonName do: [
+		writeStream nextPut: $[.
+		self
+			prettyPrintSpace;
+			nextPut: element;
+			prettyPrintSpace.
+		writeStream nextPut: $] ]
+%
+
+category: 'writing'
+method: STONWriter
 writeObject: object streamList: block
 	self writeObject: object do: [ | listWriter |
 		listWriter := STONListWriter on: self.
@@ -72203,6 +72381,20 @@ writeReference: index
 	writeStream
 		nextPut: $@;
 		print: index
+%
+
+category: 'writing'
+method: STONWriter
+writeScaledDecimal: scaledDecimal
+
+	jsonMode
+		ifTrue: [ self writeFloat: scaledDecimal asFloat ]
+		ifFalse: [ writeStream
+				print: scaledDecimal numerator;
+				nextPut: $/;
+				print: scaledDecimal denominator;
+				nextPut: $s;
+				print: scaledDecimal scale ]
 %
 
 category: 'writing'
@@ -115450,6 +115642,21 @@ sumOf: aCollection
 
 category: 'tests'
 method: STONReaderTests
+testAssociation
+
+	self assert: (self materialize: '''foo'':1') equals: 'foo' -> 1.
+	self assert: (self materialize: '#bar:2') equals: #bar -> 2.
+	self assert: (self materialize: '''foo bar'':#ok') equals: 'foo bar' -> #ok.
+	self assert: (self materialize: '123:456') equals: 123 -> 456.
+	self assert: (self materialize: '''foo'' : 1') equals: 'foo' -> 1.
+	self assert: (self materialize: '#bar : 2') equals: #bar -> 2.
+	self assert: (self materialize: '''foo bar'' : #ok') equals: 'foo bar' -> #ok.
+	self assert: (self materialize: '123 : -456') equals: 123 -> -456.
+	self assert: (self materialize: '#foo : 1 : 2') equals: #foo -> (1 -> 2)
+%
+
+category: 'tests'
+method: STONReaderTests
 testBoolean
 	self assert: (self materialize: 'true') = true.
 	self assert: (self materialize: 'false') = false
@@ -115465,6 +115672,18 @@ category: 'tests'
 method: STONReaderTests
 testCharacter
 	self assert: (self materialize: 'Character[''A'']') == $A.
+%
+
+category: 'tests'
+method: STONReaderTests
+testClass
+
+	self
+		assert: (self materialize: 'Class[#Object]')
+		equals: Object.
+	self
+		should: [self materialize: 'Class[#ThisClassDoesNotExist]']
+		raise: LookupError
 %
 
 category: 'tests'
@@ -115504,6 +115723,15 @@ testDictionaryWithComplexKeys
 
 category: 'tests'
 method: STONReaderTests
+testDiskFile
+	self assert: (self materialize: 'FILE[''foo.txt'']') equals: 'foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp/foo.txt'']') equals: '/tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''tmp/foo.txt'']') equals: 'tmp/foo.txt' asFileReference.
+	self assert: (self materialize: 'FILE[''/tmp'']') equals: '/tmp' asFileReference
+%
+
+category: 'tests'
+method: STONReaderTests
 testError
 	#( 'foo' '{foo:}' '{foo,}' '[1,]' '+1' ']' '#' '' '  ' '	' 'nul' 'tru' 'fals' ) do: [ :each |
 		self 
@@ -115523,6 +115751,15 @@ false ifTrue: [
 	self assert: (self materialize: '1.0e100') = (10 raisedTo: 100) asFloat.
 	self assert: (self materialize: '1.0e-100') = (10 raisedTo: -100) asFloat.
 	self assert: (self materialize: '-1.0e-100') = (10 raisedTo: -100) asFloat negated.
+%
+
+category: 'tests'
+method: STONReaderTests
+testFraction
+
+	self assert: (self materialize: '1/3') equals: 1/3.
+	self assert: (self materialize: '-1/3') equals: -1/3.
+	self assert: (self materialize: '100/11') equals: 100/11
 %
 
 category: 'tests'
@@ -115581,6 +115818,18 @@ method: STONReaderTests
 testMap
 	self assert: (self materialize: '{#foo:1}') = (STON mapClass new at: #foo put: 1; yourself).
 	self assert: (self materialize: '{}') = STON mapClass new
+%
+
+category: 'tests'
+method: STONReaderTests
+testMetaclass
+
+	self
+		assert: (self materialize: 'Metaclass[#Object]')
+		equals: Object class.
+	self
+		should: [self materialize: 'Metaclass[#ThisClassDoesNotExist]']
+		raise: LookupError
 %
 
 category: 'tests'
@@ -115644,6 +115893,30 @@ testOrderedCollection
 
 category: 'tests'
 method: STONReaderTests
+testPath
+
+	self
+		assert: (self materialize: 'AbsolutePath[]')
+		equals: (Path from: '/').
+	self
+		assert: (self materialize:'AbsolutePath[''tmp'']')
+		equals: (Path from: '/tmp').
+	self
+		assert: (self materialize: 'RelativePath[]')
+		equals: (Path from: '.').
+	self
+		assert: (self materialize: 'RelativePath[''..'',''bin'',''env'']')
+		equals: (Path from: '../bin/env').
+	self
+		assert: (self materialize: 'RelativePath[''.config'']')
+		equals: (Path from: './.config').
+	self
+		assert: (self materialize: 'RelativePath[''.git'']')
+		equals: (Path from: '.git').
+%
+
+category: 'tests'
+method: STONReaderTests
 testReferenceCycle
 	| array |
 	array := (self materialize: '[1,@1]').
@@ -115662,6 +115935,16 @@ testReferenceSharing
 	self assert: array = (STON listClass with: one with: one with: one).
 	self assert: array first == array second.
 	self assert: array first == array third
+%
+
+category: 'tests'
+method: STONReaderTests
+testScaledDecimal
+
+	self assert: (self materialize: '1/3s2') equals: 1/3s2.
+	self assert: (self materialize: '-1/3s2') equals: -1/3s2.
+	self assert: (self materialize: '1/3s10') equals: 1/3s10.
+	self assert: (self materialize: '-1/3s10') equals: -1/3s10
 %
 
 category: 'tests'
@@ -115943,7 +116226,6 @@ serializeAndMaterialize: object
 	serialization := self serialize: object.
 	materialization := self materialize: serialization.
 	self assert: object equals: materialization
-	
 %
 
 category: 'private'
@@ -116038,6 +116320,18 @@ testComplexSet
 
 category: 'tests'
 method: STONWriteReadTests
+testDiskFiles
+	| diskFiles |
+	diskFiles := STON listClass withAll: {
+		FileLocator workingDirectory asAbsolute.
+		'foo/bar/readme.txt' asFileReference.
+		'./readme.txt' asFileReference.
+		(FileLocator home / 'foo.txt') asFileReference }.
+	self serializeAndMaterialize: diskFiles
+%
+
+category: 'tests'
+method: STONWriteReadTests
 testDomainObject
 	| object objects |
 	object := STONTestDomainObject dummy.
@@ -116078,6 +116372,14 @@ testFloats
 
 category: 'tests'
 method: STONWriteReadTests
+testFractions
+	| fractions |
+	fractions := STON listClass withAll: (-2/3 to: 2/3 by: 1/3).
+	self serializeAndMaterialize: fractions
+%
+
+category: 'tests'
+method: STONWriteReadTests
 testJsonMode
 	| object |
 	object := STON listClass withAll: {
@@ -116096,10 +116398,53 @@ testJsonMode
 
 category: 'tests'
 method: STONWriteReadTests
+testMemoryFileReferences
+	| root dir1 file1 references ston result |
+	root := FileSystem memory root.
+	dir1 := (root / 'dir1') ensureCreateDirectory.
+	file1 := (dir1 / 'file1') ensureCreateFile.
+	file1 writeStreamDo: [ :out | out nextPutAll: 'ABC' ].
+	references := STON listClass withAll: { dir1 . file1 }.
+	ston := self serialize: references.
+	result := self materialize: ston.
+	self assert: result first exists.
+	self assert: result second exists.
+	self assert: result first fileSystem equals: result second fileSystem.
+	self assert: result first fileSystem identical: result second fileSystem.
+	self assert: result first fileSystem isMemoryFileSystem.
+	self assert: result second contents equals: 'ABC'
+%
+
+category: 'tests'
+method: STONWriteReadTests
+testPath
+
+	| paths |
+	paths := STON listClass withAll: {
+		Path from: '/'.
+		Path from: '/tmp'.
+		Path from: '.'.
+		Path from: '../bin/env'.
+		Path from: './.config'.
+		Path from: '.git'.
+	}.
+	self serializeAndMaterialize: paths
+%
+
+category: 'tests'
+method: STONWriteReadTests
 testPrimitives
 	| primitives |
 	primitives := STON listClass withAll: { true. false. nil }.
 	self serializeAndMaterialize: primitives
+%
+
+category: 'tests'
+method: STONWriteReadTests
+testScaledDecimals
+	| fractions |
+	fractions := STON listClass withAll: (-2/3s2 to: 2/3s2 by: 1/3s2).
+	self serializeAndMaterialize: fractions
 %
 
 category: 'tests'
@@ -116358,6 +116703,15 @@ serializePretty: anObject
 
 category: 'tests'
 method: STONWriterTests
+testAssociation
+	self assert: (self serialize: 'foo' -> 1) equals: '''foo'':1'.
+	self assert: (self serialize: #bar -> 2) equals: '#bar:2'.
+	self assert: (self serialize: 'foo bar' -> #ok) equals: '''foo bar'':#ok'.
+	self assert: (self serialize: 123 -> 456) equals: '123:456'
+%
+
+category: 'tests'
+method: STONWriterTests
 testBoolean
 	self assert: (self serialize: true) = 'true'.
 	self assert: (self serialize: false) = 'false'
@@ -116367,6 +116721,12 @@ category: 'tests'
 method: STONWriterTests
 testByteArray
 	self assert: (self serialize: #(1 2 3) asByteArray) = 'ByteArray[''010203'']' 
+%
+
+category: 'tests'
+method: STONWriterTests
+testClass
+	self assert: (self serialize: Object) equals: 'Class[#Object]'
 %
 
 category: 'tests'
@@ -116403,14 +116763,6 @@ testDate
 
 category: 'tests'
 method: STONWriterTests
-testDateAndTime
-	| dateAndTime |
-	dateAndTime := DateAndTime year: 2012 month: 1 day: 1 hour: 6 minute: 30 second: 15 offset: (Duration seconds: 60*60).
-	self assert: (self serialize: dateAndTime) equals: 'DateAndTime[''2012-01-01T06:30:15.000000+01:00'']'
-%
-
-category: 'tests'
-method: STONWriterTests
 testDictionary
 	| collection |
 	collection := STON mapClass new at: 1 put: 1; at: 2 put: 2; yourself.
@@ -116434,6 +116786,16 @@ testDictionaryWithComplexKeys
 
 category: 'tests'
 method: STONWriterTests
+testDiskFile
+	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''foo.txt'']'.
+	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
+	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
+	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
+	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'
+%
+
+category: 'tests'
+method: STONWriterTests
 testDoubleQuotedString
   | string |
   self assert: (self serializeJson: 'foo') = '"foo"'.
@@ -116451,7 +116813,7 @@ testDoubleQuotedString
       (Character lf).
       (Character newPage).
       (Character backspace)}.
-  self assert: (self serializeJson: string) = '"\"\''\\\t\r\n\f\b"'
+  self assert: (self serializeJson: string) = '"\"''\\\t\r\n\f\b"'.
 %
 
 category: 'tests'
@@ -116478,6 +116840,18 @@ false ifTrue: [ 	self assert: (((self serialize: 1/3) asFloat closeTo:  '0.333' 
 	self assert: ((self serialize: (10 raisedTo: 100) asFloat) asFloat closeTo: '1.0e100' asFloat).
 	self assert: ((self serialize: (10 raisedTo: -50) asFloat) asFloat closeTo: '1.0e-50' asFloat).
 	self assert: ((self serialize: (10 raisedTo: -50) asFloat negated) asFloat closeTo: '-1.0e-50' asFloat).
+%
+
+category: 'tests'
+method: STONWriterTests
+testFraction
+
+	self assert: (self serialize: 1/3) equals: '1/3'.
+	self assert: (self serialize: -1/3) equals: '-1/3'.
+	self assert: (self serialize: 10/100) equals: '1/10'.
+	self assert: (self serialize: 100/10) equals: '10'.
+	self assert: (self serialize: 123/123) equals: '1'.
+	self assert: (self serialize: 100/11) equals: '100/11'
 %
 
 category: 'tests'
@@ -116543,6 +116917,12 @@ testMap
 
 category: 'tests'
 method: STONWriterTests
+testMetaclass
+	self assert: (self serialize: Object class) equals: 'Metaclass[#Object]'
+%
+
+category: 'tests'
+method: STONWriterTests
 testNil
 	self assert: (self serialize: nil) = 'nil'
 %
@@ -116567,6 +116947,30 @@ testOrderedCollection
 	collection := OrderedCollection with: 1 with: 2 with: 3.
 	self assert: (self serialize: collection) = 'OrderedCollection[1,2,3]'.
 	self assert: (self serialize: OrderedCollection new) = 'OrderedCollection[]'.
+%
+
+category: 'tests'
+method: STONWriterTests
+testPath
+
+	self
+		assert: (self serialize: (Path from: '/'))
+		equals: 'AbsolutePath[]'.
+	self
+		assert: (self serialize: (Path from: '/tmp'))
+		equals: 'AbsolutePath[''tmp'']'.
+	self
+		assert: (self serialize: (Path from: '.'))
+		equals: 'RelativePath[]'.
+	self
+		assert: (self serialize: (Path from: '../bin/env'))
+		equals: 'RelativePath[''..'',''bin'',''env'']'.
+	self
+		assert: (self serialize: (Path from: './.config'))
+		equals: 'RelativePath[''.config'']'.
+	self
+		assert: (self serialize: (Path from: '.git'))
+		equals: 'RelativePath[''.git'']'.
 %
 
 category: 'tests'
@@ -118629,6 +119033,17 @@ stonProcessSubObjects: block
 							super stonProcessSubObjects: block"
 %
 
+! Class extensions for 'AbstractFraction'
+
+!		Instance methods for 'AbstractFraction'
+
+category: '*ston-gemstone-kernel'
+method: AbstractFraction
+stonOn: stonWriter
+
+	stonWriter writeFraction: self
+%
+
 ! Class extensions for 'Array'
 
 !		Instance methods for 'Array'
@@ -118657,6 +119072,17 @@ _writeCypressJsonOn: aStream indent: startIndent
 						lf]].
 	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' ]'
+%
+
+! Class extensions for 'Association'
+
+!		Instance methods for 'Association'
+
+category: '*ston-gemstone-kernel'
+method: Association
+stonOn: stonWriter
+
+	stonWriter writeAssociation: self
 %
 
 ! Class extensions for 'Behavior'
@@ -119731,6 +120157,19 @@ withoutGemstoneLineEndings
 
 ! Class extensions for 'Class'
 
+!		Class methods for 'Class'
+
+category: '*ston-gemstone-kernel'
+classmethod: Class
+fromSton: stonReader
+	| theClassName symbolList |
+	theClassName := stonReader parseListSingleton.
+	symbolList := System myUserProfile symbolList.
+	^(symbolList resolveSymbol:  theClassName)
+		ifNil: [LookupError signal: theClassName asString, ' was not found']
+		ifNotNil: [:assoc | assoc value]
+%
+
 !		Instance methods for 'Class'
 
 category: '*rowan-gemstone-kernel-extensions-36x'
@@ -120006,12 +120445,20 @@ rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars
 		options: optionsArray
 %
 
-category: '*ston-core'
+category: '*ston-gemstone-kernel'
 method: Class
 stonName
 	"Override to encode my instances using a different class name."
 	
 	^ self name
+%
+
+category: '*ston-gemstone-kernel'
+method: Class
+stonOn: stonWriter
+	stonWriter
+		writeObject: self
+		listSingleton: self name asSymbol
 %
 
 category: '*rowan-gemstone-kernel-extensions-36x'
@@ -121944,6 +122391,46 @@ stonOn: stonWriter
         at: #'start' put: from;
         at: #'stop' put: to;
         at: #'step' put: by ]
+%
+
+! Class extensions for 'Metaclass3'
+
+!		Class methods for 'Metaclass3'
+
+category: '*ston-gemstone-kernel'
+classmethod: Metaclass3
+fromSton: stonReader
+
+	| theClassName symbolList |
+	theClassName := stonReader parseListSingleton.
+	symbolList := System myUserProfile symbolList.
+	^(symbolList resolveSymbol:  theClassName)
+		ifNil: [LookupError signal: theClassName asString, ' was not found']
+		ifNotNil: [:assoc | assoc value class]
+%
+
+category: '*ston-gemstone-kernel'
+classmethod: Metaclass3
+stonName
+
+	^#Metaclass
+%
+
+!		Instance methods for 'Metaclass3'
+
+category: '*ston-gemstone-kernel'
+method: Metaclass3
+stonName
+
+	^#Class
+%
+
+category: '*ston-gemstone-kernel'
+method: Metaclass3
+stonOn: stonWriter
+	stonWriter
+		writeObject: self
+		listSingleton: self thisClass name asSymbol
 %
 
 ! Class extensions for 'Number'
@@ -124217,6 +124704,17 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 	^ true
 %
 
+! Class extensions for 'ScaledDecimal'
+
+!		Instance methods for 'ScaledDecimal'
+
+category: '*ston-gemstone-kernel'
+method: ScaledDecimal
+stonOn: stonWriter
+
+	stonWriter writeScaledDecimal: self
+%
+
 ! Class extensions for 'SequenceableCollection'
 
 !		Class methods for 'SequenceableCollection'
@@ -124597,6 +125095,18 @@ writeFloat: float
 ! Class extensions for 'STONWriteReadTests'
 
 !		Instance methods for 'STONWriteReadTests'
+
+category: '*ston-gemstone-tests'
+method: STONWriteReadTests
+testClasses
+	| classes |
+	classes := STON listClass withAll: { Integer. Object }.
+	self serializeAndMaterialize: classes.
+	classes := STON listClass withAll: { Integer class. Object class }.
+	self serializeAndMaterialize: classes.
+	classes := STON listClass withAll: { Class. Class class. Class class class. Class class class class }.
+	self serializeAndMaterialize: classes
+%
 
 category: '*ston-gemstone-tests'
 method: STONWriteReadTests

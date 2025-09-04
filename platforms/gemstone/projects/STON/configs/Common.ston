@@ -4,6 +4,7 @@
 	#packageNames : Set [
 		'STON-Core',
 		'STON-GemStoneBase',
+		'STON-GemStoneBase',
 		'STON-GemStoneCommon'
 	],
 	#comment : 'Common set of packages '

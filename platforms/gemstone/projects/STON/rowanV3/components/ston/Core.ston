@@ -5,6 +5,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#componentNames : [ ],
 	#packageNames : [
 		'STON-Core',
+		'STON-GemStone-Kernel',
 		'STON-GemStoneBase',
 		'STON-GemStoneCommon'
  ],

@@ -204,6 +204,7 @@ doit
 	| runner testSuiteSample passingStatus  stdoutReporter exportStream  externalsStBase |
 	(self rowanProjectsHome) 
 		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self rowanProjectsHome.
 	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', self rowanProjectsHome; lf.
 	(GsFile existsOnServer: self rowanProjectsHome)
 		ifFalse: [ self error: 'Directory referred to by ROWAN_PROJECTS_HOME (', self rowanProjectsHome, ') does not exist' ].

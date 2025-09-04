@@ -37,6 +37,25 @@ Class {
 	#category : 'STON-Core'
 }
 
+{ #category : 'private' }
+STONWriter class >> findFirstInString: aString inSet: inclusionMap startingAt: start [
+  "Trivial, non-primitive version"
+
+  | i stringSize ascii |
+  inclusionMap size ~= 256
+    ifTrue: [ ^ 0 ].
+  i := start.
+  stringSize := aString size.
+  [ i <= stringSize and: [ ascii := (aString at: i) asciiValue.
+      ascii < 256
+        ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
+        ifFalse: [ true ] ] ] whileTrue: [ i := i + 1 ].
+  i > stringSize
+    ifTrue: [ ^ 0 ].
+  ^ i
+
+]
+
 { #category : 'class initialization' }
 STONWriter class >> initialize [
 	self initializeSTONCharacters.
@@ -80,6 +99,14 @@ STONWriter class >> isSimpleSymbolChar: char [
 ]
 
 { #category : 'instance creation' }
+STONWriter class >> new [
+  ^ self basicNew
+    initialize;
+    yourself
+
+]
+
+{ #category : 'instance creation' }
 STONWriter class >> on: writeStream [
 	^ self new
 		on: writeStream;
@@ -92,6 +119,29 @@ STONWriter >> close [
 	writeStream ifNotNil: [
 		writeStream close.
 		writeStream := nil ]
+
+]
+
+{ #category : 'writing' }
+STONWriter >> encodeCharacter: char [
+  | code encoding |
+  ((code := char codePoint) < 127
+    and: [ (encoding := STONCharacters at: code + 1) notNil ])
+    ifTrue: [ (encoding = #'pass' or: [ jsonMode and: [ char = $' ] ])
+        ifTrue: [ writeStream nextPut: char ]
+        ifFalse: [ writeStream nextPutAll: encoding ] ]
+    ifFalse: [ | paddedStream padding digits |
+      paddedStream := WriteStream on: String new.
+      code printOn: paddedStream base: 16 showRadix: false.
+      digits := paddedStream contents.
+      padding := 4 - digits size.
+      writeStream nextPutAll: '\u'.
+      encoding := padding > 0
+        ifTrue: [ ((String new: padding)
+            atAllPut: $0;
+            yourself) , digits ]
+        ifFalse: [ digits ].
+      writeStream nextPutAll: encoding ]
 
 ]
 
@@ -180,6 +230,17 @@ STONWriter >> initialize [
 
 ]
 
+{ #category : 'private' }
+STONWriter >> isSimpleSymbol: symbol [
+  symbol isEmpty
+    ifTrue: [ ^ false ].
+  ^ (self class
+    findFirstInString: symbol
+    inSet: STONSimpleSymbolCharacters
+    startingAt: 1) = 0
+
+]
+
 { #category : 'initialize-release' }
 STONWriter >> jsonMode: boolean [
 	jsonMode := boolean
@@ -223,6 +284,13 @@ STONWriter >> nextPut: anObject [
 { #category : 'initialize-release' }
 STONWriter >> on: aWriteStream [
 	writeStream := aWriteStream
+
+]
+
+{ #category : 'private' }
+STONWriter >> optimizeForLargeStructures [
+  "nothing special for GemStone"
+
 
 ]
 
@@ -277,9 +345,34 @@ STONWriter >> with: object do: block [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeAssociation: association [
+	jsonMode
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self
+		encodeKey: association key
+		value: association value
+]
+
+{ #category : 'writing' }
 STONWriter >> writeBoolean: boolean [
 	writeStream print: boolean
+]
 
+{ #category : 'writing' }
+STONWriter >> writeFloat: float [
+  writeStream nextPutAll: float asString
+
+]
+
+{ #category : 'writing' }
+STONWriter >> writeFraction: fraction [
+
+	jsonMode
+		ifTrue: [ self writeFloat: fraction asFloat ]
+		ifFalse: [ writeStream
+				print: fraction numerator;
+				nextPut: $/;
+				print: fraction denominator ]
 ]
 
 { #category : 'writing' }
@@ -347,6 +440,27 @@ STONWriter >> writeObject: object listSingleton: element [
 ]
 
 { #category : 'writing' }
+STONWriter >> writeObject: anObject named: stonName do: block [
+	(jsonMode and: [ anObject class ~= STON listClass and: [ anObject class ~= STON mapClass ] ])
+		ifTrue: [ self error: 'wrong object class for JSON mode' ].
+	self with: anObject do: [
+		writeStream nextPutAll: stonName.
+		self prettyPrintSpace.
+		block value ]
+]
+
+{ #category : 'writing' }
+STONWriter >> writeObject: object named: stonName listSingleton: element [
+	self writeObject: object named: stonName do: [
+		writeStream nextPut: $[.
+		self
+			prettyPrintSpace;
+			nextPut: element;
+			prettyPrintSpace.
+		writeStream nextPut: $] ]
+]
+
+{ #category : 'writing' }
 STONWriter >> writeObject: object streamList: block [
 	self writeObject: object do: [ | listWriter |
 		listWriter := STONListWriter on: self.
@@ -391,6 +505,19 @@ STONWriter >> writeReference: index [
 		nextPut: $@;
 		print: index
 
+]
+
+{ #category : 'writing' }
+STONWriter >> writeScaledDecimal: scaledDecimal [
+
+	jsonMode
+		ifTrue: [ self writeFloat: scaledDecimal asFloat ]
+		ifFalse: [ writeStream
+				print: scaledDecimal numerator;
+				nextPut: $/;
+				print: scaledDecimal denominator;
+				nextPut: $s;
+				print: scaledDecimal scale ]
 ]
 
 { #category : 'writing' }

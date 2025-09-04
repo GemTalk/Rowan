@@ -19,6 +19,14 @@ Class {
 }
 
 { #category : 'instance creation' }
+STONReader class >> new [
+  ^ self basicNew
+    initialize;
+    yourself
+
+]
+
+{ #category : 'instance creation' }
 STONReader class >> on: readStream [
 	^ self new
 		on: readStream;
@@ -35,6 +43,13 @@ STONReader >> allowComplexMapKeys: boolean [
 { #category : 'testing' }
 STONReader >> atEnd [
 	^ readStream atEnd
+
+]
+
+{ #category : 'initialize-release' }
+STONReader >> classes [
+
+	^ classes
 
 ]
 
@@ -104,6 +119,26 @@ STONReader >> isSimpleSymbolChar: char [
 ]
 
 { #category : 'private' }
+STONReader >> lookupClass: name [
+	^ (System myUserProfile objectNamed: name asSymbol)
+		ifNil: [ 
+			(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
+				ifNotNil: [ :rowanSymbolDictionary | 
+					(rowanSymbolDictionary at: name asSymbol ifAbsent: [  ])
+						ifNotNil: [ :cls | ^ cls ] ])
+				ifNil: [ 
+					classes
+						at: name
+						ifAbsentPut: [ 
+							(ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [ 
+									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
+										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])
+										ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+]
+
+{ #category : 'private' }
 STONReader >> match: string do: block [
 	"Try to read and consume string and execute block if successful.
 	Else do nothing (but do not back up)"
@@ -152,6 +187,13 @@ STONReader >> next [
 { #category : 'initialize-release' }
 STONReader >> on: aReadStream [
 	readStream := aReadStream
+
+]
+
+{ #category : 'private' }
+STONReader >> optimizeForLargeStructures [
+  "nothing special for GemStone"
+
 
 ]
 
@@ -292,7 +334,7 @@ STONReader >> parseMapDo: block [
   (self matchChar: $})
     ifTrue: [ ^ self ].
   [ readStream atEnd ] whileFalse: [ | name value |
-      name := self parseValue.
+      name := self parseSimpleValue.
       (allowComplexMapKeys
         or: [ name isString or: [ name isNumber ] ])
         ifFalse: [ self error: 'unexpected property name type' ].
@@ -303,7 +345,6 @@ STONReader >> parseMapDo: block [
         ifTrue: [ ^ self ].
       self expectChar: $, ].
   self error: 'end of map expected'
-
 ]
 
 { #category : 'parsing-internal' }
@@ -311,15 +352,20 @@ STONReader >> parseNumber [
 	| negated number |
 	negated := readStream peekFor: $-.
 	number := self parseNumberInteger.
-	(readStream peekFor: $.)
-		ifTrue: [ number := number + self parseNumberFraction ].
-	((readStream peekFor: $e) or: [ readStream peekFor: $E ])
-		ifTrue: [ number := number * self parseNumberExponent ].
+	(readStream peekFor: $/)
+		ifTrue: 
+			[number := Fraction numerator: number denominator: self parseNumberInteger.
+			(readStream peekFor: $s)
+				ifTrue: [ number := ScaledDecimal for: number scale: self parseNumberInteger ] ]
+		ifFalse:
+			[(readStream peekFor: $.)
+				ifTrue: [ number := (number + self parseNumberFraction) asFloat ].
+			((readStream peekFor: $e) or: [ readStream peekFor: $E ])
+				ifTrue: [ number := number * self parseNumberExponent ]].
 	negated
 		ifTrue: [ number := number negated ].
 	self consumeWhitespace.
 	^ number
-
 ]
 
 { #category : 'parsing-internal' }
@@ -380,6 +426,28 @@ STONReader >> parseReference [
 
 ]
 
+{ #category : 'parsing' }
+STONReader >> parseSimpleValue [
+	| char |
+	readStream atEnd ifFalse: [ 
+		(self isClassStartChar: (char := readStream peek)) 
+			ifTrue: [ ^ self parseObject ].
+		char = ${
+			ifTrue: [ ^ self parseMap ].
+		char = $[
+			ifTrue: [ ^ self parseList ].
+		(char = $' or: [ char = $" ])
+			ifTrue: [ ^ self parseString ].
+		char = $#
+			ifTrue: [ ^ self parseSymbol ].
+		char = $@
+			ifTrue: [ ^ self parseReference ].
+		(char = $- or: [ char isDigit ])
+			ifTrue: [ ^ self parseNumber ].
+		self parseConstantDo: [ :value | ^ value ] ].
+	self error: 'invalid input'
+]
+
 { #category : 'parsing-internal' }
 STONReader >> parseString [
 	^ self parseStringInternal
@@ -420,25 +488,11 @@ STONReader >> parseSymbol [
 
 { #category : 'parsing' }
 STONReader >> parseValue [
-	| char |
-	readStream atEnd ifFalse: [ 
-		(self isClassStartChar: (char := readStream peek)) 
-			ifTrue: [ ^ self parseObject ].
-		char = ${
-			ifTrue: [ ^ self parseMap ].
-		char = $[
-			ifTrue: [ ^ self parseList ].
-		(char = $' or: [ char = $" ])
-			ifTrue: [ ^ self parseString ].
-		char = $#
-			ifTrue: [ ^ self parseSymbol ].
-		char = $@
-			ifTrue: [ ^ self parseReference ].
-		(char = $- or: [ char isDigit ])
-			ifTrue: [ ^ self parseNumber ].
-		self parseConstantDo: [ :value | ^ value ] ].
-	self error: 'invalid input'
-
+	| value |
+	value := self parseSimpleValue.
+	^ (self matchChar: $:)
+		ifTrue: [ Association new key: value value: self parseValue ]
+		ifFalse: [ value ]
 ]
 
 { #category : 'private' }
