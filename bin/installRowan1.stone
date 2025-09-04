@@ -11,9 +11,12 @@ USAGE
   $basename [--help | -h] [--debug | -D] [OPTIONS]
 
 DESCRIPTION
-
+  Install RowanV1 into a 3.7.5 stone
 
 OPTIONS
+ --rowanProjectsHome=<project-parent-directory>
+                Speciy the parent directory of the Rowan clone. Default is
+                $ROWAN_PROJECTS_HOME
  --projectAlias=<project-name>
                 Specify the name of the Rowan V1 git checkout directory. Default
                 is 'Rowan'.
@@ -35,7 +38,7 @@ method
 adoptRowan
  	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
-	gitRepoPath := self rowanProjectsHome, '/', self projectAlias.
+	gitRepoPath := self projectsHomePath, '/', self projectAlias.
 	{
 		{'file:', gitRepoPath, '/rowan/specs/Rowan.ston'}.
 		{'file:', gitRepoPath, '/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
@@ -172,7 +175,7 @@ fileinRowanV12
 	warnings := {}.
 	[
 		GsFileIn
-			fromServerPath: self rowanProjectsHome, '/', self projectAlias, '/platforms/gemstone/topaz/upgrade/', self gsVersion, '/RowanV12.gs'
+			fromServerPath: self projectsHomePath, '/', self projectAlias, '/platforms/gemstone/topaz/upgrade/', self gsVersion, '/RowanV12.gs'
 	]
 		on: CompileWarning
 		do: [:ex |
@@ -200,14 +203,19 @@ reloadRowan
 					on: CompileWarning do: [:ex | ex resume ] ].
 	System commit.
 %
+method
+projectsHomePath
+	"resolve any env vars that may bin rowanProjectsHome"
+	^self rowanProjectsHome asFileReference pathString
+%
 doit
 	| runner testSuiteSample passingStatus  stdoutReporter exportStream  externalsStBase |
 	(self rowanProjectsHome) 
 		ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
-	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self rowanProjectsHome.
-	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', self rowanProjectsHome; lf.
-	(GsFile existsOnServer: self rowanProjectsHome)
-		ifFalse: [ self error: 'Directory referred to by ROWAN_PROJECTS_HOME (', self rowanProjectsHome, ') does not exist' ].
+	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: self projectsHomePath.
+	self stdout nextPutAll: '-- ROWAN_PROJECTS_HOME = ', self projectsHomePath; lf.
+	(GsFile existsOnServer: self projectsHomePath)
+		ifFalse: [ self error: 'Directory referred to by ROWAN_PROJECTS_HOME (', self projectsHomePath, ') does not exist' ].
 	self bootstrapRowanV12.
 	^ self noResult
 %

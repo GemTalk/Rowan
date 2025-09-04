@@ -2,17 +2,21 @@
 options
 {
 	SuperDoitOptionalOptionWithRequiredArg long: 'projectsHome' default: '$ROWAN_PROJECTS_HOME'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'projectName' default: 'Rowan'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowan3ProjectName' default: 'Rowan'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowan1ProjectName' default: 'Rowan'.
 }
 %
 usage
 -----
 USAGE 
   $basename [--help | -h] [--debug | -D] [--projectsHome=<directory>] \
-            [--projectName=<Rowan3-clone-directoryName>]
+            [--rowan3ProjectName=<Rowan3-clone-directoryName>] \
+            [--rowan1ProjectName=<Rowan1-clone-directoryName>] \
 
 DESCRIPTION
-  Read and write the RowanV12Upgrade to upgrade/v12/UpgradeRowanV12.gs.
+  Read and write the RowanV12Upgrade project to upgrade/v12/UpgradeRowanV12.gs.
+  The RowanV12Upgrade project files are located in a masterV3.5 Rowan V3 clone 
+  in the upgrade/projectsHome/RowanV12Upgrade directory
 
 OPTIONS
   -h, --help                 display usage message
@@ -20,25 +24,30 @@ OPTIONS
                              script error
   --projectsHome=<director>  path to parent directory of the target RowanV3 clone. 
                              $ROWAN_PROJECTS_HOME is used by default.
-  --projectName=<name-of-the-RowanV3-directory>
+  --rowan1ProjectName=<name-of-the-RowanV1-directory>
+                             name of the RowanV1 clone directory. 
+                             'Rowan' by default
+  --rowan3ProjectName=<name-of-the-RowanV3-directory>
                              name of the RowanV3 clone directory. 
                              'Rowan' by default
 
 EXAMPLES
   $basename --help 
   $basename 
-  $basename --projectsHome=/bosch1/users/dhenrich/_stones/37x/stones/gs_375/v12 \
-            --projectName=RowanV1
+  $basename --projectsHome=/bosch1/users/dhenrich/_stones/37x/l_37x_externals_st \
+            --rowan1ProjectName=RowanV1 --rowan3ProjectName=RowanV3
 -----
 %
 doit
-	| projectRoot loadSpecPath spec loadSpecs projectSetDefinition projectSetModification topazFileHeader visitor
+	| v3ProjectRoot v1ProjectRoot loadSpecPath spec loadSpecs projectSetDefinition projectSetModification topazFileHeader visitor
 	  topazFileNameMap fileoutRoot |
 
-	projectRoot := self projectsHome, '/', self projectName.
-	loadSpecPath :=  projectRoot, '/upgrade/projectsHome/RowanV12Upgrade/rowan/specs/RowanV12Upgrade.ston'.
+	v3ProjectRoot := self projectsHome asFileReference pathString, '/', self rowan3ProjectName.
+  v1ProjectRoot := self projectsHome asFileReference pathString, '/', self rowan1ProjectName.
+	loadSpecPath :=  v3ProjectRoot, '/upgrade/projectsHome/RowanV12Upgrade/rowan/specs/RowanV12Upgrade.ston'.
+	"Read from Rowan V3"
 	spec := (RwSpecification fromUrl: 'file:', loadSpecPath)
-		projectsHome: projectRoot, '/upgrade/projectsHome';
+		projectsHome: v3ProjectRoot, '/upgrade/projectsHome';
 		yourself.
 	loadSpecs := spec resolve.
 	projectSetDefinition := loadSpecs read.
@@ -48,7 +57,8 @@ doit
 	topazFileNameMap at:'UpgradeRowanV12'  put: { 'RowanV12Upgrade-Core' }.
 	topazFileHeader := '! Copyright (C) GemTalk Systems 1986-', Date today year printString, '.  All Rights Reserved.
 '.
-	fileoutRoot := (projectRoot, '/upgrade/v12') asFileReference.
+	"Write to Rowan V1"
+	fileoutRoot := (v1ProjectRoot, '/upgrade/gs') asFileReference.
 	visitor := RwGsModificationTopazWriterVisitorV2 new
 		logCreation: false;
 		excludeClassInitializers: true;

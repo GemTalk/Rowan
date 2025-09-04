@@ -19,14 +19,13 @@ usage
   $basename [--help | -h] [--debug | -D] -- ([-r] | -l | -L) -I <path-to-.topazini> [<topaz-command-line-args>]
 
 DESCRIPTION
-  Write a set of .gs files for Rowan v1.2.13 that contains only the code that 
-  needs to be loaded into the stone after upgradeImage has completed. The 
-  bootstrap code will replace the GemStone kernel class extension methods that 
-  are removed during upgradeImage.  
+  Write a set of .gs files for Rowan v1.2.14 that contains only the code that 
+  needs to be loaded into the stone after upgradeImage has completed or to install 
+  Rowan V1 in extent0.dbf. The bootstrap code will replace the GemStone kernel 
+  class extension methods that are removed during upgradeImage.  
 
-	The set of .gs files will be used to upgrade from 3.6.2 to 3.6.2.
-
-  This script is expected to be run in a solo extent that has Rowan V3.0 installed.
+  This script is expected to be run in a solo extent that has Rowan V3.0 installed
+  (#!/usr/bin/env superdoit_rowan3_solo).
 
 OPTIONS
   -h, --help     display usage message

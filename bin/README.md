@@ -5,7 +5,7 @@ $ROWAN_PROJECTS_HOME/RowanV1/bin/read_and_write_rowan_v.1.2.17_upgrade.solo \
 		--projectsHome=/bosch1/users/dhenrich/_stones/37x/l_37x_externals_st \
 		--projectAlias=RowanV1 --gemstoneVersion=3.7.5
 ```
-To run the .solo script you need to have $GEMSTONE defined and $GEMSTONE/bin in your $PATH.
+To run the .solo script you need to have $GEMSTONE defined pointing to 3.7.5 and $GEMSTONE/bin in your $PATH.
 
 ### installRowan1.stone
 Run the following script to install Rowan V1 into the stone named in the .topazini file. You should start the stone with a fresh extent0.dbf.
@@ -14,4 +14,12 @@ Run the following script to install Rowan V1 into the stone named in the .topazi
 		--rowanProjectsHome=/bosch1/users/dhenrich/_stones/37x/l_37x_externals_st \
 		--projectAlias=RowanV1 -- -L -I .topazini
 ```
-To run the .solo script you need to have $GEMSTONE defined and $GEMSTONE/bin in your $PATH.
+To run the .solo script you need to have $GEMSTONE defined pointing to 3.7.5 and $GEMSTONE/bin in your $PATH.
+
+### exportUpgradeRowanV12Class.solo
+Run the following script after making modifications to the RowanV12Upgrade project which contains
+the upgrade logic for Rowan V1. The RowanV12Upgrade project is found in a Rowan V3 project in the
+directory upgrade/projectsHome/RowanV12Upgrade. The Rowan V3 has the Rowan upgrade logic for Rowan V3, V2, and V1.
+
+To run the .solo script you need to have $GEMSTONE defined pointing to 3.7.5 and $GEMSTONE/bin in your $PATH.
+
