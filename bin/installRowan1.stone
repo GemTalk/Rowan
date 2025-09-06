@@ -38,7 +38,7 @@ method
 adoptRowan
  	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := (self globalNamed: 'RwProjectSetDefinition') new.
-	gitRepoPath := self projectsHomePath, '/', self projectAlias.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/', self projectAlias.
 	{
 		{'file:', gitRepoPath, '/rowan/specs/Rowan.ston'}.
 		{'file:', gitRepoPath, '/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
@@ -175,7 +175,7 @@ fileinRowanV12
 	warnings := {}.
 	[
 		GsFileIn
-			fromServerPath: self projectsHomePath, '/', self projectAlias, '/platforms/gemstone/topaz/upgrade/', self gsVersion, '/RowanV12.gs'
+			fromServerPath: '$ROWAN_PROJECTS_HOME/', self projectAlias, '/platforms/gemstone/topaz/upgrade/', self gsVersion, '/RowanV12.gs'
 	]
 		on: CompileWarning
 		do: [:ex |
