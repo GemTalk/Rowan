@@ -4013,7 +4013,7 @@
 		},
 		{
 			"className" : "RwUrlTest",
-			"status" : "errors",
+			"status" : "passing",
 			"selector" : "testAsRwRepository",
 			"time" : "0"
 		},
