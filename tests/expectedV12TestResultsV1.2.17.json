@@ -7,11 +7,11 @@
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 9,
-		"failures" : 6,
-		"passed" : 814,
-		"summary" : "829 Tests with 6 Failures, 9 Errors and 0 DeprecationWarnings in 113.96s",
-		"tests" : 829,
-		"time" : 113.964
+		"failures" : 4,
+		"passed" : 817,
+		"summary" : "830 Tests with 4 Failures, 9 Errors and 0 DeprecationWarnings in 73.24s",
+		"tests" : 830,
+		"time" : 73.24
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -4698,6 +4698,12 @@
 		{
 			"className" : "STONWriterTests",
 			"status" : "passed",
+			"selector" : "testDateAndTime",
+			"time" : "0"
+		},
+		{
+			"className" : "STONWriterTests",
+			"status" : "passed",
 			"selector" : "testDictionary",
 			"time" : "0"
 		},
@@ -4990,5 +4996,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-09-04T15:29:11.306266-07:00"
+	"timeStamp" : "2025-09-08T10:58:13.242527-07:00"
 }
