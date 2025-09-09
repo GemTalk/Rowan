@@ -19,6 +19,49 @@ set -exv
 #
 #=========================================================================
 
+#=========================================================================
+#	argument handling
+#=========================================================================
+usage() {
+  cat <<EOF
+Usage:
+rowanV1Upgrade.sh [-v <original-gemstone-version>][-s <stoneName>]
+Environment Requirements:
+    GEMSTONE          set to a 3.x GemStone/S 64 Bit product tree
+    upgradeLogDir     set to a writable directory used in previous steps
+Parameters:
+    -b <branch-name>
+        Name of the Rowan V1 git branch to be loaded during the upgrade. 
+        Default: master
+    -d
+        debug the upgradeImageRowanV12.stone script ... bring up topaz
+        debugger in case of an execution error.
+    -s <stoneName>
+        where <stoneName> is the name of a running 3.x stone.
+        Default: gs64stone
+    -v <original-gemstone-version>]
+        original GemSTone version that was used to produce extent0.dbf 
+        being upgraded.
+        Default: 3.6.2
+EOF
+}
+
+stoneName=gs64stone
+upgradeFrom="3.6.2"
+expectedBranchName="master"
+debugGem=""
+
+# process command line
+while getopts "b:ds:v:" opt; do
+  case $opt in 
+  	b ) expectedBranchName=$OPTARG ;;
+    d ) debugGem="-D" ;;
+    s ) stoneName=$OPTARG ;;
+    v ) upgradeFrom="$OPTARG" ;;
+   \? ) usage; exit 1 ;;   
+  esac
+done
+
 if [ "a$GEMSTONE" = "a" ]; then
   echo "ERROR: GemStone scripts require a GEMSTONE environment variable."
   echo "       Please set it to the directory where GemStone resides."
@@ -37,7 +80,7 @@ if [ -d "$ROWAN_PROJECTS_HOME/Rowan" ]; then
 	echo "Rowan project is already present in $ROWAN_PROJECTS_HOME"
 	pushd $ROWAN_PROJECTS_HOME/Rowan
 		currentBranch=`git branch --show-current`
-		if [ "$currentBranch" != "candidateV1.2.17" ]; then
+		if [ "$currentBranch" != "$expectedBranchName" ]; then
 			echo "incorrect Rowan v1 branch is currently checked out: $currentBranch. Expected candidateV1.2.17"
 			exit 1
 		else
@@ -52,44 +95,6 @@ else
 fi
 # make sure $GEMSTONE/bin in path for .solo and .stone scripts
 PATH=$GEMSTONE/bin:$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin:$PATH; export PATH
-
-#=========================================================================
-#	wire up variables for testing
-#=========================================================================
-usage() {
-  cat <<EOF
-Usage:
-rowanV1Upgrade.sh [-v <original-gemstone-version>][-s <stoneName>]
-Environment Requirements:
-    GEMSTONE          set to a 3.x GemStone/S 64 Bit product tree
-    upgradeLogDir     set to a writable directory used in previous steps
-Parameters:
-    -d
-        debug the upgradeImageRowanV12.stone script ... bring up topaz
-        debugger in case of an execution error
-    -s <stoneName>
-        where <stoneName> is the name of a running 3.x stone.
-        Default: gs64stone
-    -v <original-gemstone-version>]
-        original GemSTone version that was used to produce extent0.dbf 
-        being upgraded.
-        Default: 3.6.2
-EOF
-}
-
-stoneName=gs64stone
-upgradeFrom="3.6.2"
-debugGem=""
-
-# process command line
-while getopts "ds:v:" opt; do
-  case $opt in 
-    d ) debugGem="-D" ;;
-    s ) stoneName=$OPTARG ;;
-    v ) upgradeFrom="$OPTARG" ;;
-   \? ) usage; exit 1 ;;   
-  esac
-done
 
 #======
 # set up upgrade directories

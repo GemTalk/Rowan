@@ -4,6 +4,7 @@
 options
 {
 	SuperDoitRequiredOptionWithRequiredArg long: 'upgradeFrom'.
+	SuperDoitOptionalOptionWithRequiredArg long: 'rowanVersion'. "no longer used ... and ignored ... left to keep battery tests happy"
 	SuperDoitOptionalOptionWithNoArg long: 'installRowan'.
 	SuperDoitOptionalOptionWithNoArg long: 'commit'.
 	SuperDoitOptionalOptionWithNoArg long: 'audit'.
@@ -12,7 +13,6 @@ options
 	SuperDoitOptionalOptionWithNoArg long: 'skip'.
 	SuperDoitOptionalOptionWithNoArg long: 'customerReload'.
 	SuperDoitOptionalOptionWithNoArg long: 'rowanReload'.
-	SuperDoitOptionalOptionWithNoArg long: 'persistIt'.
 }
 %
 usage
@@ -39,6 +39,33 @@ OPTIONS
                              stone directory (i.e., $GS_HOME/server/stones/<stone-name>
   <topaz-command-line-args>  topaz options that should be passed to topaz when running
                              running the script
+  --upgradeFrom=<gemstone-version>
+                             Original GemStone version of the upgraded extent. Used 
+                             to determine which bootstrap .gs file to use for Rowan.
+                             Required.
+  --rowanVersion=<rowan-version>
+                             Ignored and no longer used. Allow older scripts that 
+                             use this argument to continue to work.
+  --installRowan             If set, Rowan will be installed by this script.
+                             Recommended.
+  --commit                   If set, a commit will be performed at the end of the 
+                             Rowan upgrade process. If not set, nothing will be 
+                             committed -- useful for testing without committing.
+                             Recommended.
+  --audit                    Run a final audit of all projects in the image.
+                             Recommended.
+  --customerRepair           Repair the customer project based on audit errors.
+                             Recommended.
+  --rowanRepair              Repair the Rowan project based on audit errors.
+                             Recommended.
+  --skip                     Ignore repair errors. Useful in some debugging situations.
+                             Not recommended.
+  --customerReload           Reload the customer projects after the customer audit
+                             errors have been repaired.
+                             Recommended.
+  --rowanReload              Reload Rowan itself after the rowan audit errors have 
+                             been repaired.
+                             Recommended.
   -h, --help                 display usage message
   -D, --debug                bring up topaz debugger in the event of a script error
 
