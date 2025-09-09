@@ -4,7 +4,6 @@
 options
 {
 	SuperDoitRequiredOptionWithRequiredArg long: 'upgradeFrom'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'rowanVersion'. "no longer used ... and ignored ... left to keep battery tests happy"
 	SuperDoitOptionalOptionWithNoArg long: 'installRowan'.
 	SuperDoitOptionalOptionWithNoArg long: 'commit'.
 	SuperDoitOptionalOptionWithNoArg long: 'audit'.
@@ -43,9 +42,6 @@ OPTIONS
                              Original GemStone version of the upgraded extent. Used 
                              to determine which bootstrap .gs file to use for Rowan.
                              Required.
-  --rowanVersion=<rowan-version>
-                             Ignored and no longer used. Allow older scripts that 
-                             use this argument to continue to work.
   --installRowan             If set, Rowan will be installed by this script.
                              Recommended.
   --commit                   If set, a commit will be performed at the end of the 
