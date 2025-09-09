@@ -84,7 +84,7 @@ EXAMPLES
 -----
 %
 method
-checkVersion: currentRowanVersion equalTo: minimumRowanVersion
+checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 	"in-line the test for
 			(RwSemanticVersionNumber fromString: currentRowanVersion) >= (RwSemanticVersionNumber fromString: minimumRowanVersion)
 	'>=' implementation involves messages in Integer and CharacterCollection which are removed by upgradeImage.
@@ -94,9 +94,9 @@ checkVersion: currentRowanVersion equalTo: minimumRowanVersion
 	| rowanVersion minimumVersion |
 	rowanVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: currentRowanVersion) normalVersion.
 	minimumVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: minimumRowanVersion) normalVersion.
-	(((rowanVersion at: 1) = (minimumVersion at: 1)) and: [
-		((rowanVersion at: 2) = (minimumVersion at: 2)) and: [
-			((rowanVersion at: 3) = (minimumVersion at: 3)) ] ])
+	(((rowanVersion at: 1) >= (minimumVersion at: 1)) and: [
+		((rowanVersion at: 2) >= (minimumVersion at: 2)) and: [
+			((rowanVersion at: 3) >= (minimumVersion at: 3)) ] ])
 		ifTrue: [ ^ self ].
 
 	self
@@ -137,7 +137,7 @@ doit
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
 		ifTrue: [ rowanClass versionString ]
 		ifFalse: [ self error: 'Rowan original Rowan V1 version must be 1.2.14' ].
-	self checkVersion: currentRowanVersion equalTo: '1.2.14'.
+	self checkVersion: currentRowanVersion greaterThanOrEqualTo: '1.2.14'.
 	upgrader := (self globalNamed: 'UpgradeRowanV12') new.
 	upgrader 
 		upgradeFrom: self upgradeFrom;
