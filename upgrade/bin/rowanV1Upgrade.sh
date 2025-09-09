@@ -56,10 +56,40 @@ PATH=$GEMSTONE/bin:$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin:$PATH; export PATH
 #=========================================================================
 #	wire up variables for testing
 #=========================================================================
-stoneName=battery_l
-upgradeFrom=3.6.2
+usage() {
+  cat <<EOF
+Usage:
+rowanV1Upgrade.sh [-v <original-gemstone-version>][-s <stoneName>]
+Environment Requirements:
+    GEMSTONE          set to a 3.x GemStone/S 64 Bit product tree
+    upgradeLogDir     set to a writable directory used in previous steps
+Parameters:
+    -d
+        debug the upgradeImageRowanV12.stone script ... bring up topaz
+        debugger in case of an execution error
+    -s <stoneName>
+        where <stoneName> is the name of a running 3.x stone.
+        Default: gs64stone
+    -v <original-gemstone-version>]
+        original GemSTone version that was used to produce extent0.dbf 
+        being upgraded.
+        Default: 3.6.2
+EOF
+}
 
-cd /bosch1/users/dhenrich/_stones/37x/stones/$stoneName
+stoneName=gs64stone
+upgradeFrom="3.6.2"
+debugGem=""
+
+# process command line
+while getopts "ds:v:" opt; do
+  case $opt in 
+    d ) debugGem="-D" ;;
+    s ) stoneName=$OPTARG ;;
+    v ) upgradeFrom="$OPTARG" ;;
+   \? ) usage; exit 1 ;;   
+  esac
+done
 
 #======
 # set up upgrade directories
@@ -71,16 +101,14 @@ export upgradeImageLogPath=$upgradeLogDir/upgradeImage.log
 export upgradeFir=$GEMSTONE/upgrade
 
 # Start Stone
-newExtent.solo --registry=37x $stoneName --extent=/export/smalltalk/rowanupgradetest/rowanV12/$upgradeFrom/extent0_RowanV1.2.14.dbf
+newExtent.solo --registry=37x $stoneName --extent=/export/smalltalk/rowanupgradetest/rowanV12/$upgradeFrom/extent0_RowanV1.2.14.dbf $debugGem
 
 # Run upgradeImage
-pushd $upgradeLogDir
-	$GEMSTONE/bin/upgradeImage -s $stoneName > $upgradeImageLogPath << EOF
+$GEMSTONE/bin/upgradeImage -s $stoneName > $upgradeImageLogPath << EOF
 
 EOF
-popd
 
 # Run RowanV12 upgrade
-$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --commit --installRowan --rowanRepair --rowanReload --rowanVersion=candidateV1.2.17  --debugGem -- -L  -I .topazini -e ./gem.conf
+$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload --commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I .topazini -e ./gem.conf
 
 echo "### Rowan V1 upgrade complete"

@@ -4,7 +4,6 @@
 options
 {
 	SuperDoitRequiredOptionWithRequiredArg long: 'upgradeFrom'.
-	SuperDoitOptionalOptionWithRequiredArg long: 'rowanVersion'.
 	SuperDoitOptionalOptionWithNoArg long: 'installRowan'.
 	SuperDoitOptionalOptionWithNoArg long: 'commit'.
 	SuperDoitOptionalOptionWithNoArg long: 'audit'.
@@ -62,7 +61,7 @@ EXAMPLES
 -----
 %
 method
-checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
+checkVersion: currentRowanVersion equalTo: minimumRowanVersion
 	"in-line the test for
 			(RwSemanticVersionNumber fromString: currentRowanVersion) >= (RwSemanticVersionNumber fromString: minimumRowanVersion)
 	'>=' implementation involves messages in Integer and CharacterCollection which are removed by upgradeImage.
@@ -72,9 +71,9 @@ checkVersion: currentRowanVersion greaterThanOrEqualTo: minimumRowanVersion
 	| rowanVersion minimumVersion |
 	rowanVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: currentRowanVersion) normalVersion.
 	minimumVersion := ((Rowan globalNamed: 'RwSemanticVersionNumber') fromString: minimumRowanVersion) normalVersion.
-	(((rowanVersion at: 1) >= (minimumVersion at: 1)) and: [
-		((rowanVersion at: 2) >= (minimumVersion at: 2)) and: [
-			((rowanVersion at: 3) >= (minimumVersion at: 3)) ] ])
+	(((rowanVersion at: 1) = (minimumVersion at: 1)) and: [
+		((rowanVersion at: 2) = (minimumVersion at: 2)) and: [
+			((rowanVersion at: 3) = (minimumVersion at: 3)) ] ])
 		ifTrue: [ ^ self ].
 
 	self
@@ -114,26 +113,8 @@ doit
 	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs'.
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
 		ifTrue: [ rowanClass versionString ]
-		ifFalse: [ '1.2.10' ].
-	currentRowanVersion = '1.2.10'
-		ifTrue: [
-			"this section provided for GemStone internal testing only ... the documented install instructions should be followed"
-			| rowanVersion |
-			"assume 3.2.15 to 3.5.7 to 3.6.4 upgrade sequence for Rowan v1.2.10"
-			(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') ifNil: [ self error: 'Required env var ROWAN_PROJECTS_HOME is not defined' ].
-			rowanVersion := self rowanVersion
-				ifNil: [ '1.2.14' ]
-				ifNotNil: [:version  | version ].
-			self stdout 
-				nextPutAll: '======	 UPGRADING ROWAN FROM v1.2.10'; lf;
-				nextPutAll: '======	 INSTALL ROWAN v', rowanVersion; lf.
-			GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/installRowan.gs'.
-			GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/RowanV2.gs'.
-			self stdout 	nextPutAll: '======	 Adopt Rowan v', rowanVersion; lf.
-			GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/upgrade_32x_to_36x/adoptRowan.gs'.
-			"Customer installation performed in caller"
- 			^ 'success' ].
-	self checkVersion: currentRowanVersion greaterThanOrEqualTo: '1.2.13'.
+		ifFalse: [ self error: 'Rowan original Rowan V1 version must be 1.2.14' ].
+	self checkVersion: currentRowanVersion equalTo: '1.2.14'.
 	upgrader := (self globalNamed: 'UpgradeRowanV12') new.
 	upgrader 
 		upgradeFrom: self upgradeFrom;
