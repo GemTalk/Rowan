@@ -1,0 +1,16 @@
+RwSimpleProjectSpecification {
+	#specName : 'RowanV12Upgrade',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'UserGlobals',
+			#defaultUseSessionMethodsForExtensions : false }
+	},
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#configsPath : 'rowan/configs',
+	#repoPath : 'src',
+	#specsPath : 'rowan/specs',
+	#comment : 'RowanV12 upgrade driver'
+}

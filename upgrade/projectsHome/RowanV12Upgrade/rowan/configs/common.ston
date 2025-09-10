@@ -1,0 +1,8 @@
+RwProjectCompoundConfiguration{
+	#name : 'Common',
+	#version : '1.0.0',
+	#packageNames : Set [
+		'RowanV12Upgrade-Core'
+	],
+	#comment : 'RowanV12 packages'
+}
