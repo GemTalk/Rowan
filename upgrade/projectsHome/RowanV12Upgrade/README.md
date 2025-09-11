@@ -23,3 +23,11 @@ false ifTrue: [ self halt ].
 spec register.
 Rowan projectTools load loadProjectNamed: 'RowanV12Upgrade' withConfiguration: 'common'.
 ```
+
+### exportUpgradeRowanV12Class.solo
+Run the following script after making modifications to the RowanV12Upgrade project which contains
+the upgrade logic for Rowan V1. The RowanV12Upgrade project is found in a Rowan V3 project in the
+directory upgrade/projectsHome/RowanV12Upgrade. The Rowan V3 has the Rowan upgrade logic for Rowan V3, V2, and V1.
+
+To run the .solo script you need to have $GEMSTONE defined pointing to 3.7.5 and $GEMSTONE/bin in your $PATH.
+
