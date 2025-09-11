@@ -127,11 +127,22 @@ newOrExistingSymbolDictionaryNamed: dictName
   ^ symbolDict
 %
 doit
-	| rowanClass upgrader currentRowanVersion |
+	| rowanClass upgrader currentRowanVersion currentSession transientSymbolList |
 	rowanClass := (self globalNamed: 'Rowan' ifAbsent: [])
 		ifNil: [ self error: 'Rowan not present in image. No Rowan upgrade performed.' ].
+	currentSession := GsCurrentSession currentSession.
+	transientSymbolList := currentSession transientSymbolList. "install transient symbol list"
+	(currentSession userProfile userId ~= 'SystemUser')
+		ifTrue: [
+			| rowanTools rowanKernel |
+			"install RowanTools and RowanKernel symbol dictionaries into transient symbol list ... to satisfy class references used by UpgradeDriver"
+			rowanTools := (AllUsers userWithId: 'SystemUser' ifAbsent: []) symbolList resolveSymbol: #RowanTools.
+			rowanKernel := (AllUsers userWithId: 'SystemUser' ifAbsent: []) symbolList resolveSymbol: #RowanKernel.
+			transientSymbolList 
+				addLast: rowanTools value;
+				addLast: rowanKernel value.
+			].
 	"install $ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs ... the upgrade driver for Rowan1"
-	GsCurrentSession currentSession transientSymbolList.
 	self newOrExistingSymbolDictionaryNamed: 'RowanV12UpgradeSymbolDict'.    "the code in UpgradeRowanV12.gs adds classes to the RowanV1UpgradeSymDict"
 	GsFileIn fromServerPath: '$ROWAN_PROJECTS_HOME/Rowan/upgrade/gs/UpgradeRowanV12.gs'.
 	currentRowanVersion := (rowanClass respondsTo: #versionString)
