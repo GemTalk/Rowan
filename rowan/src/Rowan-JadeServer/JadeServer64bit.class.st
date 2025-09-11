@@ -184,15 +184,9 @@ JadeServer64bit >> sourceForProcess: gsProcess frame: level [
 
 { #category : 'category' }
 JadeServer64bit >> streamType [
-
-	| isLegacy type |
-	type := Globals at: #'PositionableStream_position' ifAbsent: [#'Legacy'].
-	(Globals includesKey: #'PositionableStreamLegacy') ifFalse: [^type].
-	isLegacy := PositionableStream isLegacyStreamImplementation.
-	(type = #'Legacy') == isLegacy ifTrue: [^type].
-	self error: 'Inconsistent PositionableStream configuration'.
-
-
+  ^ PositionableStream isLegacyStreamImplementation
+    ifTrue: [ #'Legacy' ]
+    ifFalse: [ #'ANSI' ]
 ]
 
 { #category : 'category' }

@@ -25,7 +25,20 @@ set -exv
 usage() {
   cat <<EOF
 Usage:
-rowanV1Upgrade.sh [-v <original-gemstone-version>][-s <stoneName>]
+rowanV1Upgrade.sh [-b <<branch-name>] [-C  <customer-topazini-path>] [-d ] \
+    [-S <SystemUser-topazini-path>] [-s <stoneName>] [-u] \
+    [-v <original-gemstone-version>][-s <stoneName>]
+
+NOTE:
+  If the customer projects are installed as SystemUser, then the -S
+  option will be sufficient to upgrade the customer projects.
+
+  If the customer projects are installed as another GemStone user, then
+  use the -C option to specify the user name to be used to upgrade
+  the customer projects for that user. The -C option can be used more
+  than once in separate script runs, if customer projects are installed
+  in multiple users.
+
 Environment Requirements:
     GEMSTONE          set to a 3.x GemStone/S 64 Bit product tree
     upgradeLogDir     set to a writable directory used in previous steps
@@ -33,12 +46,20 @@ Parameters:
     -b <branch-name>
         Name of the Rowan V1 git branch to be loaded during the upgrade. 
         Default: master
+    -C <customer-topazini-path>
+        Path to the customer project .topazini file. Necessary if the
+        customer project is not installed as SystemUser.
     -d
         debug the upgradeImageRowanV12.stone script ... bring up topaz
         debugger in case of an execution error.
+		-S <SystemUser-topazini-path>
+        Path to the SystemUser topazini file path.
     -s <stoneName>
         where <stoneName> is the name of a running 3.x stone.
         Default: gs64stone
+    -u
+       run the standard upgradeImage on the stone BEFORE upgrading Rowan 
+       and customer projects
     -v <original-gemstone-version>]
         original GemSTone version that was used to produce extent0.dbf 
         being upgraded.
@@ -51,16 +72,53 @@ upgradeFrom="3.6.2"
 expectedBranchName="master"
 debugGem=""
 
+runUpgradeImage="false"
+
+COMBINED_RUN="false"
+SystemUser_RUN="false"
+Customer_RUN="false"
+
+defaultTopazini="./.topazini"
+
+customerTopazini=""
+systemTopazini=""
+
 # process command line
-while getopts "b:ds:v:" opt; do
+while getopts "b:C:dS:s:uv:" opt; do
   case $opt in 
   	b ) expectedBranchName=$OPTARG ;;
+		C ) customerTopazini="$OPTARG" ;;
     d ) debugGem="-D" ;;
+		S ) systemTopazini="$OPTARG" ;;
     s ) stoneName=$OPTARG ;;
+		u ) runUpgradeImage="true" ;;
     v ) upgradeFrom="$OPTARG" ;;
    \? ) usage; exit 1 ;;   
   esac
 done
+
+if [ "a$customerTopazini" = "a" ]; then
+	if [ "a$systemTopazini" = "a" ]; then
+		customerTopazini=$defaultTopazini
+		systemTopazini=$defaultTopazini
+		# customer projects are installed as SystemUser
+		COMBINED_RUN="true"
+	else
+		#customer projects are installed as SystemUser
+		customerTopazini=$systemTopazini
+		COMBINED_RUN="true"
+	fi
+else
+	if [ "a$systemTopazini" = "a" ]; then
+		# customer only run
+		SystemUser_RUN="false"
+		Customer_RUN="true"
+	else
+		# customer and system run ... each using a different .topazini
+		SystemUser_RUN="true"
+		Customer_RUN="true"
+	fi
+fi
 
 if [ "a$GEMSTONE" = "a" ]; then
   echo "ERROR: GemStone scripts require a GEMSTONE environment variable."
@@ -103,17 +161,33 @@ export upgradeLogDir=`pwd`/upgradeLogDir
 rm -rf upgradeLogDir
 mkdir upgradeLogDir
 export upgradeImageLogPath=$upgradeLogDir/upgradeImage.log
-export upgradeFir=$GEMSTONE/upgrade
 
-# Start Stone
-newExtent.solo --registry=37x $stoneName --extent=/export/smalltalk/rowanupgradetest/rowanV12/$upgradeFrom/extent0_RowanV1.2.14.dbf $debugGem
+if [ "$runUpgradeImage" = "true" ]; then
+	# Start Stone
+	newExtent.solo --registry=37x $stoneName --extent=/bosch1/users/dhenrich/_stones/37x/stones/plantis_3.7.5_l/snapshots/extent0_plantis_362.dbf $debugGem
 
-# Run upgradeImage
-$GEMSTONE/bin/upgradeImage -s $stoneName > $upgradeImageLogPath << EOF
+	echo "Run upgradeImage"
+	$GEMSTONE/bin/upgradeImage -s $stoneName > $upgradeImageLogPath << EOF
 
 EOF
+fi
 
-# Run RowanV12 upgrade
-$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload --commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I .topazini -e ./gem.conf
-
+if [ "$COMBINED_RUN" = "true" ]; then
+	# Run RowanV12 upgrade where customer project installed as SystemUser
+	echo "combined run using _ $systemTopazini _"
+	$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload \
+		--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini -e ./gem.conf
+else
+	# Run RowanV12 upgrade where customer project installed as an alternate user
+	if [ "$SystemUser_RUN" = "true" ]; then
+		echo "SystemUser run using _ $systemTopazini _ "
+		$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom \
+			--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini -e ./gem.conf
+	fi
+	if [ "$Customer_RUN" = "true" ]; then
+		echo "Customer run using _ $customerTopazini _ "
+		$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload \
+			--commit $debugGem -- -L  -I $customerTopazini -e ./gem.conf
+	fi
+fi
 echo "### Rowan V1 upgrade complete"
