@@ -1,6 +1,6 @@
 RwLoadSpecificationV2 {
 	#projectName : 'RowanV12Upgrade',
-	#projectSpecFile : 'rowan/project.ston',
+	#projectSpecFile : 'rowan3/project.ston',
 	#componentNames : [
 		'Core'
 	],
