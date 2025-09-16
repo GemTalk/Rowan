@@ -185,6 +185,7 @@ doit
 	self positionalArgs size ~= 1
 		ifTrue: [ self error: 'Expected a single positional argument specifying the path to the root directory of a GemStone product tree' ].
 	self rowanVersion.
+	self stdout nextPutAll: 'Incoming Rowan version v', rowanVersion printString; lf.
 	rowanVersion < ('2.6.0' asRwSemanticVersionNumber)
 		ifTrue: [
 			| componentName |

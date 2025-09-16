@@ -329,7 +329,7 @@ UpgradeRowanV2 >> adoptGemstoneBase [
 				intoPackageNamed: 'Filein3A'.
 			Rowan packageTools adopt
 				adoptClass:  (Rowan globalNamed: 'GsLog')
-				intoPackageNamed: 'Filein3B'. ].
+				intoPackageNamed: 'Filein3B' ].
 ]
 
 { #category : 'upgrade rowan' }
@@ -387,7 +387,104 @@ UpgradeRowanV2 >> adoptRowan [
 				and it will be moved to final resting place during reload"
 			Rowan packageTools adopt
 				adoptClass: (Rowan globalNamed: 'GsFileinPackager')
-				intoPackageNamed: 'Rowan-GemStone-Core' ]
+				intoPackageNamed: 'Rowan-GemStone-Core' ].
+	(self gemstoneVersion >= '3.7.5' asRwGemStoneVersionNumber
+		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.5' asRwGemStoneVersionNumber ])
+		ifTrue: [ 
+			"STONFileReference is a new class in 3.7.0 ... put into package Rowan-GemStone-Core (symbol dictionary RowanKernel)"
+			Rowan packageTools adopt
+				adoptClass: (Rowan globalNamed: 'STONFileReference')
+				intoPackageNamed: 'STON-GemStone-Kernel'.
+			"the methods #stonName, #stonOn: and #fromSton: are new 3.7.5 and need to be disowned/adopted
+				before reloading GemStone packages (earlier step put method in wrong package)"
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'Metaclass3'
+				isMeta: false.
+			Rowan packageTools disown
+				disownMethod: #'fromSton:'
+				inClassNamed: 'Metaclass3'
+				isMeta: true.
+			Rowan packageTools disown
+				disownMethod: #'stonName'
+				inClassNamed: 'Metaclass3'
+				isMeta: false.
+			Rowan packageTools disown
+				disownMethod: #'stonName'
+				inClassNamed: 'Metaclass3'
+				isMeta: true.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'Metaclass3') 
+				instanceSelectors: #(stonName stonOn:) 
+				classSelectors: #(stonName fromSton:) 
+				intoPackageNamed: 'STON-GemStone-Kernel'.
+
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'Class'
+				isMeta: false.
+			Rowan packageTools disown
+				disownMethod: #'fromSton:'
+				inClassNamed: 'Class'
+				isMeta: true.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'Class') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #(fromSton:) 
+				intoPackageNamed: 'STON-GemStone-Kernel'.
+
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'AbstractFraction'
+				isMeta: false.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'AbstractFraction') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #() 
+				intoPackageNamed: 'STON-GemStone-Kernel'. 
+
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'ScaledDecimal'
+				isMeta: false.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'ScaledDecimal') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #() 
+				intoPackageNamed: 'STON-GemStone-Kernel'. 
+
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'Association'
+				isMeta: false.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'Association') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #() 
+				intoPackageNamed: 'STON-GemStone-Kernel'.
+			"FileReference >> stonOn:; Path>>stonOn:; Path class>>fromSton: ... new methods in 3.7.5"
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'FileReference'
+				isMeta: false.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'FileReference') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #() 
+				intoPackageNamed: 'STON-GemStone-Kernel'. 
+			Rowan packageTools disown
+				disownMethod: #'stonOn:'
+				inClassNamed: 'Path'
+				isMeta: false.
+			Rowan packageTools disown
+				disownMethod: #'fromSton:'
+				inClassNamed: 'Path'
+				isMeta: true.
+			Rowan packageTools adopt
+				adoptClassExtension: (Rowan globalNamed: 'Path') 
+				instanceSelectors: #(stonOn:) 
+				classSelectors: #( fromSton:) 
+				intoPackageNamed: 'STON-GemStone-Kernel' ].
 ]
 
 { #category : 'upgrade' }
