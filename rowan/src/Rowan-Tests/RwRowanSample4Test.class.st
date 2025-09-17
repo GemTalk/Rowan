@@ -2569,7 +2569,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
+	gitRootPath_symLink  := (FileReference newTempFilePrefix: 'rowan_issue_300' suffix: '') pathString, '/'.
 	gitRootPath :=  rowanSpec repositoryRootPath , '/test/testRepositories/repos/issue_300_dir/'.
 
 	commandLine := 'set -e;  rm -rf ', gitRootPath.
@@ -2612,7 +2612,6 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'.
-
 ]
 
 { #category : 'tests' }

@@ -691,7 +691,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_05/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_05' suffix: '') pathString,'/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -725,7 +725,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass2 new ivar1 isNil.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -741,7 +740,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 	packageName2 := 'Issue114-Core2'.
 	comment := 'a class comment'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_06/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_06' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -772,7 +771,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2
 
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass2 comment = comment.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -787,7 +785,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_07/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_07' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -829,7 +827,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 new ivar1 isNil.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -844,7 +841,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_08/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_08' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -892,7 +889,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -907,7 +903,7 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_09/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_09' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -957,7 +953,6 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_5
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -972,7 +967,7 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_10/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_10' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1007,7 +1002,6 @@ RwRowanProjectIssuesTest >> testIssue114_classComment [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1023,7 +1017,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_11/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_11' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1060,7 +1054,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_1 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'theClass2 comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1076,7 +1069,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_12/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_12' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1113,7 +1106,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_2 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'theClass1 comment'.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1129,7 +1121,7 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_13/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_13' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1167,7 +1159,6 @@ RwRowanProjectIssuesTest >> testIssue114_classCommentChange_3 [
 	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
 	self assert: theClass1 comment = 'a new comment'.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1183,7 +1174,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_14/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_14' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1232,7 +1223,6 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_0 [
 	self assert: theClass1 new foo = 1.
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1248,7 +1238,8 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_15/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_15' suffix: '') pathString, '/'
+  validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1299,7 +1290,6 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_1 [
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1315,7 +1305,7 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_16/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_16' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1371,7 +1361,6 @@ RwRowanProjectIssuesTest >> testIssue114_methodSourceIsNotTheSame_2 [
 	self assert: theClass2 new foo = 2.
 	self assert: theClass2 new ivar1 isNil.
 	self assert: theClass2 comment = 'a new comment'.
-
 ]
 
 { #category : 'tests-issue 114' }
@@ -1386,7 +1375,7 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	packageName1 := 'Issue114-Core1'.
 	packageName2 := 'Issue114-Core2'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_17/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_17' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1437,7 +1426,6 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	self assert: theClass1 new foo = 2.
 	self assert: theClass1 new ivar1 isNil.
 	self assert: theClass2 new foo = 2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1573,7 +1561,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_18/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_18' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1626,7 +1614,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsAn
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1647,8 +1634,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_19/'.
-
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_19' suffix: '') pathString, '/'.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 
@@ -1683,7 +1669,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1706,7 +1691,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_20/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_20' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1742,7 +1727,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithExtensionMethodsTo
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase).
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1762,7 +1746,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 	className1 := 'Issue123Class'.
 	className2 := 'Issue123SubClass'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_101/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_101' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1817,7 +1801,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1836,7 +1819,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_21/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_21' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1872,7 +1855,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1891,7 +1873,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	packageName2 := 'Issue123-Extensions'.
 	className := 'Issue123Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_22' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1930,7 +1912,6 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	self assert: theClass rowanPackageName = packageName2.
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -1950,7 +1931,7 @@ RwRowanProjectIssuesTest >> testIssue125_1 [
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_22_101/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_22_101' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -1972,7 +1953,6 @@ RwRowanProjectIssuesTest >> testIssue125_1 [
 
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName2 asLowercase)
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -1992,7 +1972,7 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 	packageName2 := 'Issue125-Extensions'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_23/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_23' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -2014,7 +1994,6 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 
 	self assert: theClass new foo = 1.
 	self assert: (x := (theClass categoryOfSelector: #foo) asString) = 'accessing'
-
 ]
 
 { #category : 'tests-issue 125' }
@@ -2035,7 +2014,7 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 	packageName3 := 'Issue125-Extensions2'.
 	className := 'Issue125Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_24/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_24' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -2058,7 +2037,6 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName3 asLowercase).
-
 ]
 
 { #category : 'tests-issue 165' }
@@ -2074,7 +2052,7 @@ RwRowanProjectIssuesTest >> testIssue165 [
 
 	self 
 		_createLoadedProjectNamed: projectName 
-		root: '/tmp/rowanIssuesProject_25/' 
+		root: (FileReference newTempFilePrefix: 'rowanIssuesProject_25' suffix: '') pathString, '/'
 		symbolDictionaryName: symDictName 
 		validate: false.
 
@@ -2105,7 +2083,6 @@ RwRowanProjectIssuesTest >> testIssue165 [
 	self assert: (Rowan projectNames includes: projectName).		"project is visible"
 	self deny: (Rowan packageNames includes: packageName1).	"package is NOT visible"
 	self deny: (Rowan globalNamed: className) notNil.				"class is NOT visible"
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -4430,10 +4407,9 @@ RwRowanProjectIssuesTest >> testIssue24_addProject [
 	| projectName |
 	projectName := 'Issue24_addProject'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_26/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_26' suffix: '') pathString, '/'.
 
 	self _writeProjectNamed: projectName
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4443,7 +4419,7 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_27/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_27' suffix: '') pathString, '/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -4454,7 +4430,6 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 	self _removePackageNamed: packageName from: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4465,7 +4440,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_28/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_28' suffix: '') pathString, '/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -4484,7 +4459,6 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	self _removeClassNamed: className fromProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4495,7 +4469,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_29/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_29' suffix: '') pathString, '/'.
 
 	self _writeProjectNamed: projectName.
 
@@ -4530,7 +4504,6 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4541,7 +4514,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject_30/'  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: (FileReference newTempFilePrefix: 'rowanIssuesProject_30' suffix: '') pathString, '/' validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
@@ -4582,7 +4555,6 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	theClass := Rowan image objectNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4596,7 +4568,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_31/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_31' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -4616,7 +4588,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4629,8 +4600,8 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_32/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_32/'.
+	self _createLoadedProjectNamed: projectName1 root: (FileReference newTempFilePrefix: 'rowanIssuesProject1_32' suffix: '') pathString, '/'.
+	self _createLoadedProjectNamed: projectName2 root: (FileReference newTempFilePrefix: 'rowanIssuesProject2_32' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -4652,7 +4623,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass rowanPackageName = packageName2
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4667,7 +4637,7 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_32/'.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_32' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
@@ -4683,7 +4653,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName2 inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
-
 ]
 
 { #category : 'tests-issue 24' }
@@ -4698,8 +4667,8 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 	packageName2 := 'Issue24-Core2'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1_33/'.
-	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2_33/'.
+	self _createLoadedProjectNamed: projectName1 root: (FileReference newTempFilePrefix: 'rowanIssuesProject1_33' suffix: '') pathString, '/'.
+	self _createLoadedProjectNamed: projectName2 root: (FileReference newTempFilePrefix: 'rowanIssuesProject2_33' suffix: '') pathString, '/'.
 
 	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
@@ -4717,7 +4686,6 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 
 	self _writeProjectNamed: projectName1.
 	self _writeProjectNamed: projectName2.
-
 ]
 
 { #category : 'tests-issue 255' }
@@ -8539,7 +8507,7 @@ RwRowanProjectIssuesTest >> testIssue40 [
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_33/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_33' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
 
 	theClass1 := self 
@@ -8579,7 +8547,6 @@ RwRowanProjectIssuesTest >> testIssue40 [
 
 	self assert: theClass2 cvar1 = 1.
 	self assert: theClass2 cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 41' }
@@ -8595,7 +8562,7 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_34/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_34' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -8624,7 +8591,6 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 41' }
@@ -8640,7 +8606,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 	packageName2 := 'Issue41-Extensions'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_35/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_35' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
@@ -8657,7 +8623,6 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 41' }
@@ -8674,7 +8639,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_36/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_36' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -8765,7 +8730,6 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 41' }
@@ -8782,7 +8746,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_37/' validate: false.
+	self _createLoadedProjectNamed: projectName root:  (FileReference newTempFilePrefix: 'rowanIssuesProject_37' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -8862,7 +8826,6 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 41' }
@@ -8879,7 +8842,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	packageName3 := 'Issue41-Extensions2'.
 	className := 'Issue41Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject_38/' validate: false.
+	self _createLoadedProjectNamed: projectName root: (FileReference newTempFilePrefix: 'rowanIssuesProject_38' suffix: '') pathString, '/' validate: false.
 	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
 	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
@@ -8923,7 +8886,6 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
-
 ]
 
 { #category : 'tests-issue 467' }

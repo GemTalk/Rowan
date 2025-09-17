@@ -9,7 +9,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 
 	| projectDefinitionSet projectName  packageName1 packageName2 packageName3 projectDefinition 
 		classDefinition classExtensionDefinition packageDefinition1 packageDefinition2 packageDefinition3
-		className |
+		className rootPath |
 
 	projectName := 'GlobalsExtensionMethods'.
 	packageName1 := 'GlobalsExtensionMethods-Core1'.
@@ -23,10 +23,11 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
+	rootPath := (FileReference newTempFilePrefix: 'rowanTest_01' suffix: '') pathString.
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest_01/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'cypress:/tmp/rowanTest_01/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: rootPath, '/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:/', rootPath, '/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -119,7 +120,6 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		globalsUserId: 'SystemUser'.
 
 "validate"
-
 ]
 
 { #category : 'tests' }
@@ -129,7 +129,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 
 	| projectDefinitionSet projectName  packageName1 packageName2 packageName3 projectDefinition 
 		classDefinition classExtensionDefinition packageDefinition1 packageDefinition2 packageDefinition3
-		className classFileString |
+		className classFileString rootPath |
 
 	projectName := 'GlobalsExtensionMethods'.
 	packageName1 := 'GlobalsExtensionMethods-Core1'.
@@ -143,10 +143,11 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 "create project"
+	rootPath := (FileReference newTempFilePrefix: 'rowanTest_02' suffix: '') pathString.
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		repositoryRootPath: '/tmp/rowanTest_02/';					"reconcile expects the repo to be on disk"
-		repositoryUrl: 'tonel:/tmp/rowanTest_02/rowan/src/';	"reconcile expects the repo to be on disk"
+		repositoryRootPath: rootPath, '/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'tonel:', rootPath, '/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
@@ -247,8 +248,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 "validate"
 
 	Rowan fileUtilities 
-		readStreamFor: '/tmp/rowanTest_02/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
+		readStreamFor: rootPath, '/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
-
 ]

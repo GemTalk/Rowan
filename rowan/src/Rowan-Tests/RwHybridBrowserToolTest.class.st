@@ -844,7 +844,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject_01/'.
+		root: (FileReference newTempFilePrefix: 'rowanHybridPatchProject_01' suffix: '') pathString,'/' .
 	className1 := 'SimpleHybridNormalReload1'.
 	className2 := 'SimpleHybridNormalReload2'.
 	classNames := {className1.
@@ -1103,7 +1103,6 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-
 ]
 
 { #category : 'tests' }
@@ -2593,7 +2592,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project package patch test'
 		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject_02/'.
+		root: (FileReference newTempFilePrefix: 'rowanHybridPatchProject_02' suffix: '') pathString,'/'.
 	className := 'SimpleHybridNormalReload'.
 
 	normalClass := Object
@@ -2785,7 +2784,6 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-
 ]
 
 { #category : 'tests' }

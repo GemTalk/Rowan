@@ -54,12 +54,11 @@ RwProjectTest >> test_issue428_loaded_on_disk [
 				createGitBasedProject: projectName
 				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject_01/' ].
+				root: (FileReference newTempFilePrefix: 'rowanSimpleProject_01' suffix: '') pathString,'/' ].
 
 "test existsOnDisk"
 
 	self assert: (RwProject newNamed: projectName) existsOnDisk.
-
 ]
 
 { #category : 'tests' }
