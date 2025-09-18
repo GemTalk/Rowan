@@ -169,8 +169,6 @@ updateRowanV230
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
 	self stdout nextPutAll: '	load Rowan v2.3'; lf.
 	rowanClientServicesProject readOnlyRepositoryRoot: rowanClientServicesRepositoryRoot pathString commitId: commitId.
-self stdout nextPutAll: '[DEBUG] platform conditional attributes: ', Rowan platformConditionalAttributes printString; lf.
-self stdout nextPutAll: '[DEBUG] project platform conditional attributes: ', (Rowan projectNamed: 'Rowan') projectDefinitionPlatformConditionalAttributes printString; lf.
 	(Rowan projectNamed: 'Rowan')
 		loadProjectSet: Rowan platformConditionalAttributes, #('v2' 'v2Only' 'stubs' 'tonel').
 	"address the required project bug in V2.x ... fixed in v3.0.0"
@@ -195,7 +193,37 @@ doit
 			self stdout nextPutAll: 'disowning Rowan-Tonel-GemStone-Kernel package'; lf.
 			componentName := ((Rowan projectNamed: 'Rowan') componentForPackageNamed: 'Rowan-Tonel-GemStone-Kernel') name.
 			Rowan packageTools disown disownPackageNamed: 'Rowan-Tonel-GemStone-Kernel'.
-			(Rowan projectNamed: 'Rowan') addNewPackageNamed: 'Rowan-Tonel-GemStone-Kernel' toComponentNamed: componentName ].
+			(Rowan projectNamed: 'Rowan') addNewPackageNamed: 'Rowan-Tonel-GemStone-Kernel' toComponentNamed: componentName.
+			self gemstoneVersion < ('3.7.0' asRwGemStoneVersionNumber)
+				ifTrue: [ 
+					"In GemStone 3.7.5, new extension methods were added to Path and need to be dealt with in upgrades from GemStone versions prior to 3.7.0.
+						where the packaging is different. "
+self stdout nextPutAll: 'Disowning Path class >> fromSton:; Path >> stonOn:'; lf.
+					(Path compiledMethodAt: #'stonOn:')
+						ifNil: [ self halt ]
+						ifNotNil: [:m | self stdout nextPutAll: m printString, ' -> ', m rowanProjectName, ':', m rowanPackageName; lf ].
+					(Path class compiledMethodAt: #'fromSton:')
+						ifNil: [ self halt ]
+						ifNotNil: [:m | self stdout nextPutAll: m printString, ' -> ', m rowanProjectName, ':', m rowanPackageName; lf ].
+					Rowan packageTools disown
+						disownMethod: 'stonOn:'
+						inClassNamed: 'Path'
+						isMeta: false.
+Rowan packageTools adopt
+	adoptMethod: 'stonOn:' 
+	inClassNamed: 'Path'  
+	isMeta: false 
+	intoPackageNamed: 'STON-GemStone-Kernel'.
+					Rowan packageTools disown
+						disownMethod: 'fromSton:'
+						inClassNamed: 'Path'
+						isMeta: true.
+Rowan packageTools adopt
+	adoptMethod: 'fromSton:' 
+	inClassNamed: 'Path'  
+	isMeta: true 
+	intoPackageNamed: 'STON-GemStone-Kernel'.
+ ] ].
 	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
 	rowanVersion >= ('2.6.0' asRwSemanticVersionNumber)
