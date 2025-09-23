@@ -209,20 +209,20 @@ self stdout nextPutAll: 'Disowning Path class >> fromSton:; Path >> stonOn:'; lf
 						disownMethod: 'stonOn:'
 						inClassNamed: 'Path'
 						isMeta: false.
-Rowan packageTools adopt
-	adoptMethod: 'stonOn:' 
-	inClassNamed: 'Path'  
-	isMeta: false 
-	intoPackageNamed: 'STON-GemStone-Kernel'.
+					Rowan packageTools adopt
+						adoptMethod: 'stonOn:' 
+						inClassNamed: 'Path'  
+						isMeta: false 
+						intoPackageNamed: 'STON-GemStone-Kernel'.
 					Rowan packageTools disown
 						disownMethod: 'fromSton:'
 						inClassNamed: 'Path'
 						isMeta: true.
-Rowan packageTools adopt
-	adoptMethod: 'fromSton:' 
-	inClassNamed: 'Path'  
-	isMeta: true 
-	intoPackageNamed: 'STON-GemStone-Kernel'.
+					Rowan packageTools adopt
+						adoptMethod: 'fromSton:' 
+						inClassNamed: 'Path'  
+						isMeta: true 
+						intoPackageNamed: 'STON-GemStone-Kernel'.
  ] ].
 	rowanVersion < ('2.0.0' asRwSemanticVersionNumber)
 		ifTrue: [ self error: 'Rowan updates not currently supported for Rowan versions earlier than v2.0.0, current Rowan version is ', rowanVersion printString ].
