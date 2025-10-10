@@ -137,7 +137,7 @@ fi
 if [ -d "$ROWAN_PROJECTS_HOME/Rowan" ]; then
 	echo "Rowan project is already present in $ROWAN_PROJECTS_HOME"
 	pushd $ROWAN_PROJECTS_HOME/Rowan
-		currentBranch=`git branch --show-current`
+		currentBranch=`git rev-parse --abbrev-ref HEAD`
 		if [ "$currentBranch" != "$expectedBranchName" ]; then
 			echo "incorrect Rowan v1 branch is currently checked out: $currentBranch. Expected candidateV1.2.17"
 			exit 1
