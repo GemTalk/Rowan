@@ -185,13 +185,24 @@ status
 login
 
 obj DbfHistory
+
+expectValue true
+run
+| gsVers |
+gsVers := System gemVersionReport at: 'gsVersion'.
+gsVers = '3.7.5'
+GsFile stdout
+	nextPutAll: 'Current GemStone version is ', gsVers;
+	lf.
+gsVers = '3.7.5'
+%
 EOF
 
 	topaz_stat=$?
 	if [ $topaz_stat -eq 0 ]; then
 		echo "Confirmed that the extent has been upgraded to 3.7.5"
 	else
-		echo "It appears that GemStone has not been upgraded to 3.7.5. Please run upgradeImage on your stone before running this script "
+		echo "It appears that GemStone has not been upgraded to 3.7.5. Please run upgradeImage on your stone before running this script. Check $upgradeLogDir/rowanUpgradeCheck.out for details "
 		exit $topaz_stat
 	fi
 fi
