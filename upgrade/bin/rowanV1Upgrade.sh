@@ -169,7 +169,8 @@ export upgradeImageLogPath=$upgradeLogDir/upgradeImage.log
 
 if [ "$runUpgradeImage" = "true" ]; then
 	# Start Stone
-	newExtent.solo --registry=37x $stoneName --extent=/bosch1/users/dhenrich/_stones/37x/stones/plantis_3.7.5_l/snapshots/extent0_plantis_362.dbf $debugGem
+#	newExtent.solo --registry=37x $stoneName --extent=/bosch1/users/dhenrich/_stones/37x/stones/plantis_3.7.5_l/snapshots/extent0_RowanV1.2.14.dbf $debugGem
+#	newExtent.solo --registry=37x $stoneName --extent=/bosch1/users/dhenrich/_stones/37x/stones/plantis_3.7.5_l/snapshots/extent0_plantis_362.dbf $debugGem
 
 	echo "Run upgradeImage"
 	$GEMSTONE/bin/upgradeImage -s $stoneName > $upgradeImageLogPath << EOF
