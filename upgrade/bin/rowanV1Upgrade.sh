@@ -177,7 +177,8 @@ if [ "$runUpgradeImage" = "true" ]; then
 
 EOF
 else
-	# verify that the extent has been upgraded to 3.7.5 ... `obj DBFHistory` dumps an informative mesage to stdout
+	# verify that the extent has been upgraded to 3.7.5 ... `obj DBFHistory` dumps an informative mesage to stdout 
+	set +e #we'll check for exit status below and try to provide a useful error message
 	$GEMSTONE/bin/topaz -i -l $gem_conf_file_option  -I $systemTopazini << EOF > $upgradeLogDir/rowanUpgradeCheck.out
 
 set gemstone $stoneName
@@ -191,12 +192,13 @@ expectValue true
 run
 | gsVers |
 gsVers := System gemVersionReport at: 'gsVersion'.
-gsVers = '3.7.5'
+gsVers = '3.7.5'.
 GsFile stdout
 	nextPutAll: 'Current GemStone version is ', gsVers;
 	lf.
 gsVers = '3.7.5'
 %
+exit 0
 EOF
 
 	topaz_stat=$?
@@ -208,22 +210,33 @@ EOF
 	fi
 fi
 
+upgradeStat=0
 if [ "$COMBINED_RUN" = "true" ]; then
 	# Run RowanV12 upgrade where customer project installed as SystemUser
-	echo "combined run using _ $systemTopazini _"
+	echo "combined run using _ $systemTopazini _ check $upgradeLogDir/rowanCombinedUpgradeLog.out for details"
+	rowanUpgradeLog="$upgradeLogDir/rowanCombinedUpgradeLog.out"
 	$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload \
-		--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini $gem_conf_file_option 
+		--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini $gem_conf_file_option  > $rowanUpgradeLog
+	upgradeStat=$?
 else
 	# Run RowanV12 upgrade where customer project installed as an alternate user
 	if [ "$SystemUser_RUN" = "true" ]; then
-		echo "SystemUser run using _ $systemTopazini _ "
+		echo "SystemUser run using _ $systemTopazini _ check $upgradeLogDir/rowanSystemUserUpgradeLog.out for details"
+		rowanUpgradeLog="$upgradeLogDir/rowanSystemUserUpgradeLog.out"
 		$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom \
-			--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini $gem_conf_file_option
+			--commit --installRowan --rowanRepair --rowanReload $debugGem -- -L  -I $systemTopazini $gem_conf_file_option  > $rowanUpgradeLog
+		upgradeStat=$?
 	fi
 	if [ "$Customer_RUN" = "true" ]; then
-		echo "Customer run using _ $customerTopazini _ "
+		echo "Customer run using _ $customerTopazini _ check $upgradeLogDir/rowanCustomerUpgradeLog.out for details"
+		rowanUpgradeLog="$upgradeLogDir/rowanCustomerUpgradeLog.out"
 		$ROWAN_PROJECTS_HOME/Rowan/upgrade/bin/upgradeImageRowanV12.stone --upgradeFrom=$upgradeFrom --customerRepair --customerReload \
-			--commit $debugGem -- -L  -I $customerTopazini $gem_conf_file_option
+			--commit $debugGem -- -L  -I $customerTopazini $gem_conf_file_option   > $rowanUpgradeLog
+		upgradeStat=$?
 	fi
 fi
-echo "### Rowan V1 upgrade complete"
+if [ $upgradeStat -ne 0 ]; then
+	echo "Rowan V1 upgrade failed - See $rowanUpgradeLog for error details"
+	exit 1
+fi
+echo "### Rowan V1 upgrade completed. See $rowanUpgradeLog for details"
