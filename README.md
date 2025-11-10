@@ -23,6 +23,8 @@ By default Rowan will clone GitHub projects into this directory. The directory m
 cd <GitHub clones directory>
 export ROWAN_PROJECTS_HOME=`pwd`
 git clone git@github.com:GemTalk/Rowan.git
+cd Rowan
+git checkout master
 ```
 
 If you have already performed the clone, and are re-installing Rowan in a new GemStone extent, do a "git pull origin master" before running the install.
@@ -34,9 +36,6 @@ The following script logs in as SystemUser and DataCurator.  Ensure that the pas
 ```
 input $ROWAN_PROJECTS_HOME/Rowan/bin/installRowanV1.topaz
 ```
-
-
-
 ## Acknowledgements
 
 Some portions of this reference implementation came from Pharo. Notably, the URL hierarchy of classes.
