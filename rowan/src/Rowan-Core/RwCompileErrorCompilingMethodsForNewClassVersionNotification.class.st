@@ -2,7 +2,11 @@ Class {
 	#name : 'RwCompileErrorCompilingMethodsForNewClassVersionNotification',
 	#superclass : 'RwNotification',
 	#instVars : [
-		'compileError'
+		'compileError',
+		'projectName',
+		'packageName',
+		'methodSelector',
+		'methodCategory'
 	],
 	#category : 'Rowan-Core'
 }
@@ -23,4 +27,44 @@ RwCompileErrorCompilingMethodsForNewClassVersionNotification >> defaultAction [
 	"do not handle or resume exception with false, to pass the compile error on up the stack"
 	
 	^self compileError pass
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> methodCategory [
+	^methodCategory
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> methodCategory: object [
+	methodCategory := object
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> methodSelector [
+	^methodSelector
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> methodSelector: object [
+	methodSelector := object
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> packageName [
+	^packageName
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> packageName: object [
+	packageName := object
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> projectName [
+	^projectName
+]
+
+{ #category : 'accessing' }
+RwCompileErrorCompilingMethodsForNewClassVersionNotification >> projectName: object [
+	projectName := object
 ]

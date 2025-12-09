@@ -1313,6 +1313,10 @@ RwGsPatchSet_V2 >> compileMethodPatch: aMethodAdditionPatch [
 		do: [ :ex | 
 			(RwCompileErrorCompilingMethodsForNewClassVersionNotification new
 				compileError: ex;
+				projectName: aMethodAdditionPatch projectName;
+				packageName: aMethodAdditionPatch packageName;
+				methodSelector: aMethodAdditionPatch methodDefinition selector;
+				methodCategory: aMethodAdditionPatch methodDefinition protocol;
 				signal)
 				ifTrue: [ 
 					"method compile will be handled later"

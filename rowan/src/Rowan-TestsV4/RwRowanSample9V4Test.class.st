@@ -205,7 +205,11 @@ remove iv `r` and cv CVt`"
 			methodErrors
 				add:
 					{methodClass.
-					sourceString}.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true	"method compile error will be handled later" ].
 
 	self assert: methodErrors size equals: 4
@@ -280,7 +284,11 @@ remove iv `c` and cv CVt`"
 			methodErrors
 				add:
 					{methodClass.
-					sourceString}.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true	"method compile error will be handled later" ].
 	self assert: methodErrors size equals: 4
 ]
@@ -354,7 +362,11 @@ remove cv CVt ONLY to reproduce 51495"
 			methodErrors
 				add:
 					{methodClass.
-					sourceString}.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true	"method compile error will be handled later" ].
 	self assert: methodErrors size equals: 2
 ]
@@ -576,7 +588,13 @@ RwRowanSample9V4Test >> testIssue962_C [
 			compileError := ex compileError.
 			sourceString := compileError sourceString.
 			methodClass := (compileError gsArguments at: 3) .
-			methodErrors add: {methodClass . sourceString}.
+			methodErrors add: 
+					{methodClass.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true. "method compile error will be handled later"  ].
 	methods_step_2 := classDefinition instanceMethodDefinitions keys asArray.
 	self assert: notificationHit description: 'expected notification not hit'.
@@ -589,7 +607,7 @@ RwRowanSample9V4Test >> testIssue962_C [
 		source add: (ar at: 1).
 		source add: (ar at: 1) name.
 		source add: (ar at: 2).
-		selector := Rowan platform parseSelectorFrom: (ar at: 2) passCompileError: false.
+		selector :=  (ar at: 6).
 		theSource := selector, replacementSource.
 		source add: theSource.
 		(ar at: 1) compileMethod: theSource category: 'boom' environmentId: 0].
@@ -671,7 +689,13 @@ RwRowanSample9V4Test >> testIssue962_D [
 			compileError := ex compileError.
 			sourceString := compileError sourceString.
 			methodClass := (compileError gsArguments at: 3) .
-			methodErrors add: {methodClass . sourceString . compileError}.
+			methodErrors add: 
+					{methodClass.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true. "method compile error will be handled later"  ].
 	self assert: notificationHit description: 'expected notification not hit'.
 	self assert: (audit := project audit) isEmpty.
@@ -683,7 +707,7 @@ RwRowanSample9V4Test >> testIssue962_D [
 		source add: (ar at: 1).
 		source add: (ar at: 1) name.
 		source add: (ar at: 2).
-		selector := Rowan platform parseSelectorFrom: (ar at: 2) passCompileError: false.
+		selector := (ar at: 6).
 		theSource := ((selector asSymbol  keywords at: 1) endsWith: ':')
 			ifTrue: [ selector, ' temp ', replacementSource ]
 			ifFalse: [ selector, replacementSource ].
@@ -769,7 +793,13 @@ RwRowanSample9V4Test >> testIssue962_E [
 			compileError := ex compileError.
 			sourceString := compileError sourceString.
 			methodClass := (compileError gsArguments at: 3) .
-			methodErrors add: {methodClass . sourceString . compileError}.
+			methodErrors add: 
+					{methodClass.
+					sourceString.
+					ex projectName.
+					ex packageName.
+					ex methodCategory.
+					ex methodSelector }.
 			ex resume: true. "method compile error will be handled later"  ]. 
 	self assert: notificationHit description: 'expected notification not hit'.
 	self assert: (audit := project audit) isEmpty.
@@ -781,7 +811,7 @@ RwRowanSample9V4Test >> testIssue962_E [
 		source add: (ar at: 1).
 		source add: (ar at: 1) name.
 		source add: (ar at: 2).
-		selector := Rowan platform parseSelectorFrom: (ar at: 2) passCompileError: false.
+		selector := (ar at: 6).
 		theSource := ((selector asSymbol  keywords at: 1) endsWith: ':')
 			ifTrue: [ selector, ' temp ', replacementSource ]
 			ifFalse: [ selector, replacementSource ].
