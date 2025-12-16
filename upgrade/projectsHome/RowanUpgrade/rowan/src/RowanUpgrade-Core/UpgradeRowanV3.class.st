@@ -213,11 +213,19 @@ UpgradeRowanV3 >> adoptGemstoneBase [
 	(self gemstoneVersion >= '3.7.5' asRwGemStoneVersionNumber
 		and: [ self upgradeFrom asRwGemStoneVersionNumber < '3.7.5' asRwGemStoneVersionNumber ])
 		ifTrue: [ 
-			"LogRotateNotification and GsLog are new classes in 3.7.5 that needs to be adopted 
-				before reloading GemStone packages."
-			Rowan packageTools adopt
-				adoptClass:  (Rowan globalNamed: 'LogRotateNotification')
-				intoPackageNamed: 'Filein3A'.
+			"ParallelDoExternalSession, ParallelDoHost, ParallelDoManager, ParallelDoReportStream, ParallelDoWorker, LogRotateNotification 
+			and GsLog are new classes in 3.7.5 that need to be adopted  before reloading GemStone packages."
+			{
+				'ParallelDoExternalSession' .
+				'ParallelDoHost' .
+				'ParallelDoManager' . 
+				'ParallelDoReportStream' .
+				'ParallelDoWorker' . 
+				'LogRotateNotification'
+			 } do: [:newFilein3ClassName |
+				Rowan packageTools adopt
+					adoptClass:  (Rowan globalNamed: newFilein3ClassName)
+					intoPackageNamed: 'Filein3A' ].
 			Rowan packageTools adopt
 				adoptClass:  (Rowan globalNamed: 'GsLog')
 				intoPackageNamed: 'Filein3B'. ].
