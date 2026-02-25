@@ -240,7 +240,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 					clsDef addInstanceMethodDefinition: mDef ].
 			self checkMethodDefinitions: clsDef.
 			packageDef := currentProjectDefinition packageNamed: packageName.
-			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsDef ] ]
+			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsDef ].
+			 currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: clsDef ] ]
 				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
 					(ex messageText includesString: 'near line')
@@ -273,10 +274,10 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 							Error
 								signal:
 									'both a trait definition and class definition in file ' , fileReference fullName ].
-					currentClassExtension
+					currentTraitDefinition
 						ifNotNil: [ Error signal: 'both a trait definition and class extension in file ' , fileReference fullName ].
 					def ]
-				ifNil: [ currentClassExtension ].
+				ifNil: [ currentTraitDefinition ].
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
 					mDef propertyAt: '_gsFileName' put: fileReference fullName.

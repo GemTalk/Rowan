@@ -267,5 +267,5 @@ Rowan class >> version [
 
 { #category : 'public' }
 Rowan class >> versionString [
-	^ '3.5.0'
+	^ '3.6.0'
 ]

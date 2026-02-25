@@ -347,6 +347,10 @@ RwModificationTonelWriterVisitorV2 >> deletedClassExtension: aClassExtensionModi
 RwModificationTonelWriterVisitorV2 >> methodSortBlock [
 	^ methodSortBlock
 		ifNil: [ 
+			currentProjectDefinition
+				ifNil: [ 
+					"use unicode methodSortOrder"
+					^ [ :a :b |  a selector _unicodeLessThan: b selector ] ].
 			methodSortBlock := currentProjectDefinition methodSortOrder = 'codePoint'
 				ifTrue: [ [ :a :b | (a selector codePointCompareTo: b selector) < 1 ] ]
 				ifFalse: [ [ :a :b | a selector _unicodeLessThan: b selector ] ] ]

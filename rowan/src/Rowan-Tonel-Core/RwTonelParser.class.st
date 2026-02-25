@@ -121,7 +121,7 @@ RwTonelParser class >> writeStreamClass [
 ]
 
 { #category : 'private' }
-RwTonelParser >> _checkMethodOrderFor: selector isMeta: isMeta [
+RwTonelParser >> _checkMethodOrderFor: className selector: selector isMeta: isMeta [
 	| col sawClassMethods sawInstanceMethods |
 	self checkTonelClassMethodOrder
 		ifFalse: [ ^ self ].
@@ -147,11 +147,11 @@ RwTonelParser >> _checkMethodOrderFor: selector isMeta: isMeta [
 		ifFalse: [ 
 			self
 				error:
-					'The '
+					'The method ' , className
 						,
 							(isMeta
-								ifTrue: [ 'class ' ]
-								ifFalse: [ 'instance ' ]) , 'method ' , selector
+								ifTrue: [ ' class >>' ]
+								ifFalse: [ ' >>' ]) , selector
 						,
 							' is out of order - run the $ARCHBASE/build/canonicalizeTonelFiles.sh to canonicalize the file.' ]
 ]
@@ -485,7 +485,7 @@ RwTonelParser >> newMethodDefinitionFrom: anArray [
 	(selsSet includes: selector)
 		ifTrue: [ self error: 'Duplicate selector ' , selector ].
 	selsSet add: selector.
-	self _checkMethodOrderFor: selector isMeta: meta.
+	self _checkMethodOrderFor: className selector: selector isMeta: meta.
 	source := String new.
 	source addAll: fourthTwo.
 	(anArray at: 5) ifNotEmpty: [ :src | source addAll: src ].
