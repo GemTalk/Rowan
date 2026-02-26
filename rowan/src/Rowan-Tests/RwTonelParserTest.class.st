@@ -67,7 +67,6 @@ RwTonelParserTest >> newTraitDefinitionFrom: anArray [
 		classinstvars: #()
 		classvars: #()
 		category: category
-		packageName: packageName
 ]
 
 { #category : 'private' }

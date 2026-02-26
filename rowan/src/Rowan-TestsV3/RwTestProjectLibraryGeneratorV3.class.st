@@ -1689,6 +1689,89 @@ Interesting things could happen when different conditions are mixed together, bu
 ]
 
 { #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0086: resolvedProject [
+	"Start with spec_0001; add and use Traits -- ensure compatibility with Pharo (category and package name written to disk) - package and category do not match"
+
+	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Traits'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	traitName := projectName , 'Trait1'.
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		classInstVarNames: #('civ1');
+		classVarNames: #('Cv1');
+		traits: traitName;
+		classTraits: traitName , ' classTrait';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addTraitNamed: traitName
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1')
+		category: packageName2)
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
+RwTestProjectLibraryGeneratorV3 >> _addDefinitionsFor_0087: resolvedProject [
+	"Start with spec_0001; add and use Traits -- GemStone-specific disk format no package and no category"
+
+	| packageName1 packageName2 packageName3 traitName className1 className2 |
+	packageName1 := projectName , '-' , 'Core'.
+	packageName2 := projectName , '-' , 'Traits'.
+	packageName3 := projectName , '-' , 'Tests'.
+	className1 := projectName , 'Class1'.
+	className2 := projectName , 'TestCase'.
+	resolvedProject
+		addPackagesNamed: {packageName2} toComponentNamed: 'Core';
+		yourself.
+	traitName := projectName , 'Trait1'.
+	((resolvedProject packageNamed: packageName1) classDefinitionNamed: className1)
+		instVarNames: #('iv1');
+		classInstVarNames: #('civ1');
+		classVarNames: #('Cv1');
+		traits: traitName;
+		classTraits: traitName , ' classTrait';
+		yourself.
+	((resolvedProject packageNamed: packageName2)
+		addTraitNamed: traitName
+		instvars: #('iv1')
+		classinstvars: #('civ1')
+		classvars: #('Cv1'))
+		addInstanceMethod: 'iv1 ^ iv1' protocol: 'accessing';
+		addInstanceMethod: 'cv1 ^ Cv1' protocol: 'accessing';
+		addClassMethod: 'civ1 ^ civ1' protocol: 'accessing';
+		yourself.
+	((resolvedProject packageNamed: packageName3) classDefinitionNamed: className2)
+		addInstanceMethod: 'testIv1  self assert: ' , className1 , ' new iv1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCiv1  self assert: ' , className1 , ' civ1 = nil'
+			protocol: 'tests';
+		addInstanceMethod: 'testCv1  self assert: ' , className1 , ' new cv1 = nil'
+			protocol: 'tests';
+		yourself.
+	^ resolvedProject
+]
+
+{ #category : 'private' }
 RwTestProjectLibraryGeneratorV3 >> _createNewProject: aString [
 	^ Rowan newProjectNamed: aString
 ]
@@ -2619,6 +2702,192 @@ Interesting things could happen when different conditions are mixed together, bu
 		derivedFrom:derivedFrom
 		comment: '')
 		rowanIssues: #(783);
+		yourself.
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		packageConvention: 'Rowan';
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'C01' .  'T01' . 'Tr01' };
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0085: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0086: commitMessage [
+	"Start with spec_0001 (RowanSample9V3) and add a Trait definition -- ensure compatibility with Pharo (category and package name written to disk)."
+
+	"https://github.com/GemTalk/Rowan/issues/938"
+
+	"similar to spec_0084, but remove requirement that Trait category matches the package name ... category may be anything and projectName is optional"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0086'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001 (RowanSample9V3) and add a Trait definition -- ensure compatibility with Pharo (category and package name written to disk).'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 86
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(938);
+		yourself.
+
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0086: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0087: commitMessage [
+	"Start with spec_0001; add and use Traits -- GemStone-specific disk format no trait package and category."
+
+	"https://github.com/GemTalk/Rowan/issues/938"
+
+	"similar to spec_0084, not trait package and no trait categoryl"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0087'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'spec_0001'.
+	title := 'Start with spec_0001; add and use Traits -- GemStone-specific disk format no trait package and category.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 87
+		derivedFrom: derivedFrom
+		comment: '')
+		rowanIssues: #(938);
+		yourself.
+
+	definedProject := (self _createDefinedProject: self projectName)
+		specName: specName;
+		revision: derivedFrom;
+		gitUrl: self projectUrl;
+		specComponentNames: {'Core'};
+		customConditionalAttributes: {'tests'};
+		comment: title;
+		yourself.
+
+	resolvedRepository := self
+		_genSpecFor: specName
+		definedProject: definedProject
+		addDefinitions: [ :resolvedProject | self _addDefinitionsFor_0087: resolvedProject ].
+
+	self
+		_finishCommitAndPush: specName
+		loadSpecification: resolvedRepository loadSpecification
+		indexCard: indexCard
+		derivedFrom: (derivedFrom copyReplaceAll: 'spec' with: 'index')
+		resolvedRepository: resolvedRepository
+		commitMessage: commitMessage
+]
+
+{ #category : 'generators' }
+RwTestProjectLibraryGeneratorV3 >> genSpec_0088: commitMessage [
+	"Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
+	E. C05, Tr05, T05 - C03, Tr03, T03 and add IV to class only and tests
+	F. C06, T06 - sames as C03 and T03 with Trait1 is removed; class and tests adjusted accordingly
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
+
+Based on spec_0085, with changes to improve rules related to category and packageName properties ... need to be compatible with Pharo (category AND packageName properties) and GemStone/Rowan (no category or packageName required.
+
+"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+
+	"The method is idempotent with respect to the branches involved, UNLESS something
+		has explicitly changed within the model or the disk format of artefacts."
+
+	| indexCard definedProject resolvedRepository specName postfix derivedFrom title |
+	postfix := '0088'.
+	specName := 'spec_' , postfix.
+	derivedFrom := 'master'.
+	title := 'Start from scratch and build a package/component structure for testing different Class/Trait combinations. Classes are in separate C* packages. Traits are in separate Tr* packages. Tests  are in separate T* packages. Each C* package is in a C* conditional (C*) component. Each Tr* package is in a Tr* conditional (Tr*) component. Each Test* package is in a Test* conditional (C*-T*) component. There is a Test package for Core/Trait combo. The idea is that we can test a significant number of Class/Trait combinations in a single project using conditions to control what is loaded.
+
+List of condition tuples intended to work together, since they were built together:
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
+	E. C05, Tr05, T05 - C03, Tr03, T03 and add IV to class only and tests
+	F. C06, T06 - sames as C03 and T03 with Trait1 is removed; class and tests adjusted accordingly
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.
+
+Based on spec_0085, with changes to improve rules related to category and packageName properties ... need to be compatible with Pharo (category AND packageName properties) and GemStone/Rowan (no category or packageName required.
+
+List of condition tuples intended to work together, since they were built together:
+```
+	A. C01, Tr01, T01 - baseline
+	B. C02, Tr02, T02 - C01, Tr01, T01 and add IV to class, trait and tests
+	C. C03, Tr03, T03 - C02, Tr02, T02 - C01, Tr01, T01 and remove IV from class, trait and tests
+	D. C03, Tr04, T03 - Tr04 moves trait to a different symbol dictionary than Tr03
+	E. C05, Tr05, T05 - C03, Tr03, T03 and add IV to class only and tests
+	F. C06, T06 - sames as C03 and T03 with Trait1 is removed; class and tests adjusted accordingly
+```
+
+Interesting things could happen when different conditions are mixed together, but transitions between built tuples should always work.'.
+
+	indexCard := (self
+		_createCard: postfix
+		specName: specName
+		title: title
+		index: 88
+		derivedFrom:derivedFrom
+		comment: '')
+		rowanIssues: #(783 938);
 		yourself.
 	definedProject := (self _createDefinedProject: self projectName)
 		specName: specName;

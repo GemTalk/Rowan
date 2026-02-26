@@ -6636,7 +6636,19 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
-			"selector" : "testSpec_0089",
+			"selector" : "testSpec_0086",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0087",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0088",
 			"time" : "0"
 		},
 		{

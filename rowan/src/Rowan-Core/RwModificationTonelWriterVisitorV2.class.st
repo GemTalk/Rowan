@@ -177,7 +177,7 @@ RwModificationTonelWriterVisitorV2 >> _typeOfClass: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
-	| definition handledProperties traitCategory |
+	| definition handledProperties |
 	(definition := self class orderedDictionaryClass new)
 		at: #'name'
 		put: aTraitDefinition name.
@@ -195,12 +195,10 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 		ifNotEmpty: [ :vars | definition at: #'classInstVars' put: vars asArray ].
 	aTraitDefinition classVarNames
 		ifNotEmpty: [ :vars | definition at: #'classVars' put: vars asArray ].
-	definition at: #'category' put: (traitCategory := aTraitDefinition category).
-	aTraitDefinition properties
-		at: #'packageName'
-		ifPresent: [ :value | 
-			traitCategory = value
-				ifFalse: [ definition at: #'package' put: value ] ].
+	aTraitDefinition category ifNotNil: [:traitCategory | 
+		"if a category is specified, then export the name of the package as well - trigger for Pharo compatability"
+		definition at: #'category' put: traitCategory.
+		definition at: #'package' put: self currentPackageDefinition name ].
 	aTraitDefinition properties
 		at: #'tag'
 		ifPresent: [ :value | definition at: #'tag' put: value ].
