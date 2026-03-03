@@ -327,13 +327,6 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 
 { #category : 'accessing' }
 RwPackageDefinition >> addTraitDefinition: aTraitDefinition [
-	aTraitDefinition packageName ifNil: [ aTraitDefinition packageName: self name ].
-	aTraitDefinition packageName ~= self name
-		ifTrue: [ 
-			self
-				error:
-					'The package name of trait (' , aTraitDefinition packageName
-						, '), must match the name of the receiver (' , self name , ').' ].
 	self _checkForDuplicateTraitDefinitionFor: aTraitDefinition.
 	^ self addDefinition: aTraitDefinition to: traitDefinitions
 ]

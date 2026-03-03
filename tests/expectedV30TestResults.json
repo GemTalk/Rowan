@@ -8,10 +8,10 @@
 	"resultsSummary" : {
 		"errors" : 11,
 		"failures" : 13,
-		"passed" : 1611,
-		"summary" : "1635 Tests with 13 Failures, 11 Errors and 0 DeprecationWarnings in 2781.38s",
-		"tests" : 1635,
-		"time" : 2781.379
+		"passed" : 1617,
+		"summary" : "1641 Tests with 13 Failures, 11 Errors and 0 DeprecationWarnings in 3107.05s",
+		"tests" : 1641,
+		"time" : 3107.05
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -6636,6 +6636,24 @@
 		{
 			"className" : "RwRowanSample9V3Test",
 			"status" : "passed",
+			"selector" : "testSpec_0086",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0087",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
+			"selector" : "testSpec_0088",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V3Test",
+			"status" : "passed",
 			"selector" : "testSpec_0089",
 			"time" : "0"
 		},
@@ -8185,6 +8203,24 @@
 			"className" : "RwRowanSample9V4Test",
 			"status" : "passed",
 			"selector" : "testSpec_0085_trait_upgrade_simulation",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V4Test",
+			"status" : "passed",
+			"selector" : "testSpec_0086",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V4Test",
+			"status" : "passed",
+			"selector" : "testSpec_0087",
+			"time" : "0"
+		},
+		{
+			"className" : "RwRowanSample9V4Test",
+			"status" : "passed",
+			"selector" : "testSpec_0088",
 			"time" : "0"
 		},
 		{
@@ -9826,5 +9862,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2025-09-02T17:34:12.258911-07:00"
+	"timeStamp" : "2026-03-02T15:38:39.955815-08:00"
 }
