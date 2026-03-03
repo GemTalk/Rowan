@@ -145,5 +145,8 @@ RwTestProjectLibraryGeneratorTestV4 >> testLibrarySample9V4UniqueGenerator [
 		genSpec_0083: commitComment;
 		genSpec_0084: commitComment;
 		genSpec_0085: commitComment;
+		genSpec_0086: commitComment;
+		genSpec_0087: commitComment;
+		genSpec_0088: commitComment;
 		yourself
 ]

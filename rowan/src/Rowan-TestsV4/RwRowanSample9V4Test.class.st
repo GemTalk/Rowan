@@ -33,6 +33,12 @@ RwRowanSample9V4Test >> _rowanSampleProjectBaseName [
 	^ 'RowanSample9V4'
 ]
 
+{ #category : 'private' }
+RwRowanSample9V4Test >> _spec_0088_traitName [
+
+	^ 'RowanSample9V4Trait1'
+]
+
 { #category : 'tests' }
 RwRowanSample9V4Test >> testIssue705 [
 	"load Bridge, Child, Parent, Bridge, Parent, Child, Bridge sequentially"
@@ -818,6 +824,110 @@ RwRowanSample9V4Test >> testIssue962_E [
 		source add: theSource.
 		(ar at: 1) compileMethod: theSource category: 'boom' environmentId: 0].
 	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
+RwRowanSample9V4Test >> testSpec_0084 [
+	"spec_0084 should load cleanly in Rowan V4, category name can be nil ... for pharo compatibility (#983)"
+
+	"https://github.com/GemTalk/Rowan/issues/783"
+	"https://github.com/GemTalk/Rowan/issues/938"
+
+	| loadSpec projectName projectNames loadSpecs loadedProjects trait1 class1 project audit  |
+	loadSpec := self _loadSpecNamed: 'spec_0084'.
+
+	projectName := loadSpec projectName.
+	projectNames := {projectName }.
+
+	projectNames do: [:pn | 
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+"resolve project"
+	loadSpecs := loadSpec resolve.
+
+"load project"
+	loadedProjects := loadSpecs load.
+	project := loadedProjects projectNamed: projectName.
+
+"validate"
+	self assert: (audit := project audit) isEmpty.
+	self
+		_standard_validateLoadedProjects: loadedProjects
+		expectedProjectNames: projectNames.
+
+	trait1 := Rowan globalNamed: self _rowanSampleProjectBaseName, 'Trait1'.
+	(ClassOrganizer new traits) includes: trait1.
+	self assert: trait1 category equals:  nil.
+	
+	class1 :=  Rowan globalNamed: self _rowanSampleProjectBaseName, 'Class1'.
+	self assert: class1 new iv1 equals: nil.
+	self assert: (class1 categoryOfSelector: #iv1) equals: #'accessing'.
+	self assert: (class1 categoryOfSelector: #cv1) equals: #'accessing'.
+	self assert: (class1 class categoryOfSelector: #civ1) equals: #'accessing'.
+
+"trait manipulation - change source"
+	trait1 compile: 'iv1 ^ iv1 ifNil: [ 1 ]'.
+	self assert: class1 new iv1 equals: 1.
+
+	trait1 classTrait compile: 'cv1 ^ Cv1 ifNil: [ 2 ]'.
+	self assert: class1 cv1 equals: 2.
+
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#( iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
+
+"trait manipulation - add selector"
+	trait1 compile: 'summary ^ {iv1. Cv1. self class cv1 . self class civ1}'.
+	self assert: class1 new summary equals: {nil . nil . 2 . nil}.
+
+	trait1 classTrait compile: 'summary ^ {nil . Cv1 . self cv1 . self civ1}'.
+	self assert: class1 summary equals: {nil. nil . 2 . nil}.
+
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#(summary iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
+
+"trait manipulation - remove selector"
+	trait1 removeSelector: 'summary'.
+	trait1 classTrait removeSelector: 'summary'.
+
+	self should: [ class1 summary ] raise: 2010. "MNU"
+	self should: [class1 new summary ] raise: 2010. "MNU"
+
+	[ self assert: (audit := project audit) isEmpty ]
+		on: RwAuditTraitMethodErrorNotification
+		do: [:ex |
+			(#(iv1 cv1) includes: ex selector)
+				ifTrue: [
+					"expected audit error, since we did change the trait directly ... don't signal audit error"
+					ex resume: false ]
+				ifFalse: [ ex pass ] ].
+
+"remove trait from system"
+	trait1 removeFromSystem.
+
+"validate removal"
+	self assert: (Rowan globalNamed: 'RowanSample9V3Trait1') equals: nil.
+	self should: [class1 new iv1 ] raise: 2010. "MNU"
+	self should: [class1  new cv1 ] raise: 2010. "MNU"
+	self should: [class1 civ1 ] raise: 2010. "MNU"
+
+	self assert: (audit := project audit) isEmpty not.
+	self assert: audit size equals: 1.
+	self assert: ((audit at: (self _rowanSampleProjectBaseName, '-Traits')) at: trait1 name) size equals: 1.
+	self assert: (((audit at: (self _rowanSampleProjectBaseName, '-Traits')) at: trait1 name) at: 1) reason 
+			equals: #missingGemStoneTraitForLoadedTrait
 ]
 
 { #category : 'tests' }

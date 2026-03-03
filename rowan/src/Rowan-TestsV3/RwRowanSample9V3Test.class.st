@@ -35,6 +35,12 @@ RwRowanSample9V3Test >> _spec_0079Name [
 	^ 'spec_0083'
 ]
 
+{ #category : 'private' }
+RwRowanSample9V3Test >> _spec_0088_traitName [
+
+	^ 'RowanSample9V3Trait1'
+]
+
 { #category : 'tests' }
 RwRowanSample9V3Test >> testIssue_571_1 [
 	"load project with a different projectName and projectAlias"
@@ -3947,7 +3953,7 @@ RwRowanSample9V3Test >> testSpec_0088 [
 		_standard_validateLoadedProjects: loadedProjects
 		expectedProjectNames: projectNames.
 
-	trait1 := Rowan globalNamed: 'RowanSample9V3Trait1'.
+	trait1 := Rowan globalNamed: self _spec_0088_traitName.
 	self assert: ((ClassOrganizer new traits) includes: trait1) description: 'trait1 is unexpectedly not present'.
 
 	self assert: ((System myUserProfile symbolList dictionaryAndSymbolOf: trait1) at: 1) name equals: #'RowanSample9_1'
