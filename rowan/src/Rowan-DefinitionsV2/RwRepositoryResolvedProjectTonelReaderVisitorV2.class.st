@@ -274,8 +274,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 							Error
 								signal:
 									'both a trait definition and class definition in file ' , fileReference fullName ].
-					currentTraitDefinition
-						ifNotNil: [ Error signal: 'both a trait definition and class extension in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentTraitDefinition ].
 			((definitions at: 2) at: 1)
