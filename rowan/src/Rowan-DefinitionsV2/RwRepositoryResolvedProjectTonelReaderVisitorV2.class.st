@@ -4,25 +4,25 @@ Class {
 	#category : 'Rowan-DefinitionsV2'
 }
 
-{ #category : 'class file reading' }
+{ #category : 'obsolete' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFile: file [
 
 	^ self readClassFiles: { file }
 ]
 
-{ #category : 'class file reading' }
+{ #category : 'obsolete' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFile: file projectName: projectName packageName: packageName [
 
 	^ self readClassFiles: { file } projectName: projectName packageName: packageName
 ]
 
-{ #category : 'class file reading' }
+{ #category : 'obsolete' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArray [
 
 	^ self readClassFiles: fileArray projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
 ]
 
-{ #category : 'class file reading' }
+{ #category : 'obsolete' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArray projectName: projectName packageName: packageName [
 	| visitor resolvedProject packageDefinition |
 	resolvedProject := RwResolvedProjectV2 new
@@ -45,6 +45,44 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassFiles: fileArr
 			_packageConvention: 'Rowan';
 			yourself.
 		visitor readClassFile: file inPackage: packageDefinition name ].
+	^ resolvedProject
+]
+
+{ #category : 'class file reading' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassOrTraitFile: file [
+
+	^ self readClassOrTraitFiles: { file }
+]
+
+{ #category : 'class file reading' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassOrTraitFiles: fileArray [
+
+	^ self readClassOrTraitFiles: fileArray projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
+]
+
+{ #category : 'class file reading' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 class >> readClassOrTraitFiles: fileArray projectName: projectName packageName: packageName [
+	| visitor resolvedProject packageDefinition |
+	resolvedProject := RwResolvedProjectV2 new
+		projectName: projectName;
+		packageConvention: 'Rowan';
+		gemstoneSetDefaultSymbolDictNameTo: 'Globals';
+		yourself.
+	resolvedProject
+		addLoadComponentNamed: 'Core'
+		comment: 'Temporary project to hold class definitions read from disk'.
+	1 to: fileArray size do: [ :index | 
+		| file |
+		file := fileArray at: index.
+		packageDefinition := resolvedProject
+			addPackageNamed: packageName , '_' , index asString
+			toComponentNamed: 'Core'.
+		visitor := self new
+			currentProjectDefinition: resolvedProject;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassOrTraitFile: file inPackage: packageDefinition name ].
 	^ resolvedProject
 ]
 
@@ -242,6 +280,53 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 			packageDef := currentProjectDefinition packageNamed: packageName.
 			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsDef ].
 			 currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: clsDef ] ]
+				on: STONReaderError , RwTonelParseError , Error
+				do: [ :ex | 
+					(ex messageText includesString: 'near line')
+						ifFalse: [ 
+							"only add line number info, in absence of existing line number info"
+							ex
+								addText:
+									(self class
+										lineNumberStringForOffset: fileStream position
+										fileName: fileReference fullName) ].
+					ex pass ] ]
+]
+
+{ #category : 'class reading' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file inPackage: packageName [
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference
+		readStreamDo: [ :fileStream | 
+			[ 
+			| definitions clsOrTraitDef packageDef tonelParser |
+			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
+			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
+				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			definitions := tonelParser start.
+			clsOrTraitDef := currentClassDefinition
+				ifNotNil: [ :def | 
+					currentClassExtension
+						ifNotNil: [ Error signal: 'both a class definition and extension in file ' , fileReference fullName ].
+					currentTraitDefinition
+						ifNotNil: [ Error signal: 'both a trait definition and class definition in file ' , fileReference fullName ].
+					def ]
+				ifNil: [ currentClassExtension ].
+			self validateClassCategory: clsOrTraitDef forPackageNamed: packageName.
+			((definitions at: 2) at: 1)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsOrTraitDef addClassMethodDefinition: mDef ].
+			((definitions at: 2) at: 2)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					clsOrTraitDef addInstanceMethodDefinition: mDef ].
+			self checkMethodDefinitions: clsOrTraitDef.
+			packageDef := currentProjectDefinition packageNamed: packageName.
+			currentTraitDefinition ifNotNil: [ packageDef addTraitDefinition: clsOrTraitDef ].
+			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsOrTraitDef ].
+			 currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: clsOrTraitDef ] ]
 				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
 					(ex messageText includesString: 'near line')

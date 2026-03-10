@@ -430,7 +430,7 @@ RwAbstractReaderWriterVisitor >> projectName [
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> validateClassCategory: aClassDefinition forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> validateClassCategory: aClassOrTraitDefinition forPackageNamed: packageName [
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
 		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
@@ -439,17 +439,17 @@ RwAbstractReaderWriterVisitor >> validateClassCategory: aClassDefinition forPack
 
 	"signal an error if the protocol does not conform to the convention for the current project"
 
-	aClassDefinition isClassExtension 
+	aClassOrTraitDefinition isClassExtension 
 		ifTrue: [ 
 			"no need to validate category for a class extension definition"
 			^ self ].
 	(Rowan image
-		validClassCategory: aClassDefinition category
+		validClassCategory: aClassOrTraitDefinition category
 		forPackageConvention: self packageConvention
 		andPackageNamed: packageName)
 		ifTrue: [ ^ self ].
 	RwInvalidClassCategoryConventionErrorNotification
-		signalWithClassDefinition: aClassDefinition
+		signalWithClassDefinition: aClassOrTraitDefinition
 		packageName: packageName
 		packageConvention: packageConvention
 ]
