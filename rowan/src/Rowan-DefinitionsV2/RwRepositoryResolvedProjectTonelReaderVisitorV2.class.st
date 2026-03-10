@@ -301,18 +301,38 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions clsOrTraitDef packageDef tonelParser |
-			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
-			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
-				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			tonelParser := RwTonelParser
+				on: fileStream
+				filePath: fileReference fullName
+				forReader: self.
+			(self checkTonelClassMethodOrder
+				and: [ tonelParser respondsTo: #'checkTonelClassMethodOrder:' ])
+				ifTrue: [ tonelParser checkTonelClassMethodOrder: true ].
 			definitions := tonelParser start.
 			clsOrTraitDef := currentClassDefinition
 				ifNotNil: [ :def | 
 					currentClassExtension
-						ifNotNil: [ Error signal: 'both a class definition and extension in file ' , fileReference fullName ].
+						ifNotNil: [ 
+							Error
+								signal:
+									'both a class definition and extension in file ' , fileReference fullName ].
 					currentTraitDefinition
-						ifNotNil: [ Error signal: 'both a trait definition and class definition in file ' , fileReference fullName ].
+						ifNotNil: [ 
+							Error
+								signal:
+									'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
-				ifNil: [ currentClassExtension ].
+				ifNil: [ 
+					currentClassExtension
+						ifNotNil: [ :def | 
+							currentTraitDefinition
+								ifNotNil: [ 
+									Error
+										signal:
+											'both a trait definition and class extension definition in file '
+												, fileReference fullName ].
+							def ]
+						ifNil: [ currentTraitDefinition ] ].
 			self validateClassCategory: clsOrTraitDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -324,9 +344,12 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 					clsOrTraitDef addInstanceMethodDefinition: mDef ].
 			self checkMethodDefinitions: clsOrTraitDef.
 			packageDef := currentProjectDefinition packageNamed: packageName.
-			currentTraitDefinition ifNotNil: [ packageDef addTraitDefinition: clsOrTraitDef ].
-			currentClassDefinition ifNotNil: [ packageDef addClassDefinition: clsOrTraitDef ].
-			 currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: clsOrTraitDef ] ]
+			currentTraitDefinition
+				ifNotNil: [ packageDef addTraitDefinition: clsOrTraitDef ].
+			currentClassDefinition
+				ifNotNil: [ packageDef addClassDefinition: clsOrTraitDef ].
+			currentClassExtension
+				ifNotNil: [ packageDef addClassExtensionDefinition: clsOrTraitDef ] ]
 				on: STONReaderError , RwTonelParseError , Error
 				do: [ :ex | 
 					(ex messageText includesString: 'near line')
