@@ -149,6 +149,11 @@ RwTraitDefinition >> instVarNames: arrayOfInstanceVariableNames [
 	^ properties at: #'instvars' put: arrayOfInstanceVariableNames
 ]
 
+{ #category : 'testing' }
+RwTraitDefinition >> isTraitDefinition [
+	^ true
+]
+
 { #category : 'accessing' }
 RwTraitDefinition >> packageName: ignored [
 	"packageName is a Pharo property ... for Rowan this property is not explicityly stored in the trait definition ... on disk the property is written to maintain compatibiity with Pharo"

@@ -195,15 +195,18 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 		ifNotEmpty: [ :vars | definition at: #'classInstVars' put: vars asArray ].
 	aTraitDefinition classVarNames
 		ifNotEmpty: [ :vars | definition at: #'classVars' put: vars asArray ].
-	aTraitDefinition category ifNotNil: [:traitCategory | 
-		"if a category is specified, then export the name of the package as well - trigger for Pharo compatability"
-		definition at: #'category' put: traitCategory.
-		definition at: #'package' put: self currentPackageDefinition name ].
+	aTraitDefinition category
+		ifNotNil: [ :traitCategory | 
+			definition at: #'category' put: traitCategory.
+			self currentPackageDefinition
+				ifNotNil: [ 
+					"if a category is specified, then export the name of the package as well - trigger for Pharo compatability"
+					definition at: #'package' put: self currentPackageDefinition name ] ].
 	aTraitDefinition properties
 		at: #'tag'
 		ifPresent: [ :value | definition at: #'tag' put: value ].
 
-	handledProperties := #(#'name' #'category' #'instvars' #'classinstvars' #'classvars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits' #'classtraits').
+	handledProperties := #(#'name' #'category' #'instvars' #'classinstvars' #'classvars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits'  #'classtraits' #'_gsFileName' #'_gsfilename' #'_gsfileoffset' #'_gsFileOffset').
 	aTraitDefinition properties
 		keysAndValuesDo: [ :propName :propValue | 
 			"write out any other unknown properties"

@@ -251,6 +251,11 @@ RwAbstractClassDefinition >> instanceMethodDefinitionsForCompare [
 ]
 
 { #category : 'testing' }
+RwAbstractClassDefinition >> isClassDefinition [
+	^ false
+]
+
+{ #category : 'testing' }
 RwAbstractClassDefinition >> isClassExtension [
 	^ false
 
@@ -261,6 +266,11 @@ RwAbstractClassDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
   ^ instanceMethodDefinitions isEmpty and:[ classMethodDefinitions isEmpty and:[ super isEmpty]]
+]
+
+{ #category : 'testing' }
+RwAbstractClassDefinition >> isTraitDefinition [
+	^ false
 ]
 
 { #category : 'private' }

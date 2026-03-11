@@ -161,6 +161,11 @@ RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 	^ properties at: #'instvars' put: arrayOfInstanceVariableNames
 ]
 
+{ #category : 'testing' }
+RwClassDefinition >> isClassDefinition [
+	^ true
+]
+
 { #category : 'accessing' }
 RwClassDefinition >> moveToPackageNamed: newPackageName packageConvention: thePackageConvention [
 	thePackageConvention = 'Rowan'
