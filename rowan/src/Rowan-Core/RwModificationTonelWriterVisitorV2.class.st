@@ -198,15 +198,18 @@ RwModificationTonelWriterVisitorV2 >> _typeTraitDefinitionOf: aTraitDefinition [
 	aTraitDefinition category
 		ifNotNil: [ :traitCategory | 
 			definition at: #'category' put: traitCategory.
-			self currentPackageDefinition
-				ifNotNil: [ 
-					"if a category is specified, then export the name of the package as well - trigger for Pharo compatability"
-					definition at: #'package' put: self currentPackageDefinition name ] ].
+			self packageConvention = 'Monticello'
+				ifTrue: [ 
+					"conform to Pharo convention that ithe package and category may be specified independently, with the package declared always and category is used if the category is different than the package"
+					self currentPackageDefinition
+						ifNotNil: [ 
+							"if a category is specified, then export the name of the package as well - trigger for Pharo compatability"
+							definition at: #'package' put: self currentPackageDefinition name ] ] ].
 	aTraitDefinition properties
 		at: #'tag'
 		ifPresent: [ :value | definition at: #'tag' put: value ].
 
-	handledProperties := #(#'name' #'category' #'instvars' #'classinstvars' #'classvars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits'  #'classtraits' #'_gsFileName' #'_gsfilename' #'_gsfileoffset' #'_gsFileOffset').
+	handledProperties := #(#'name' #'category' #'instvars' #'classinstvars' #'classvars' #'gs_SymbolDictionary' #'tag' #'packageName' #'traits' #'classtraits' #'_gsFileName' #'_gsfilename' #'_gsfileoffset' #'_gsFileOffset').
 	aTraitDefinition properties
 		keysAndValuesDo: [ :propName :propValue | 
 			"write out any other unknown properties"
