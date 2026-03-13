@@ -4,7 +4,7 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gemstone'
 	],
 	#packageNames : [
-		'Rowan-Obsolete-GemStone'
+		'Rowan-Obsolete-Gemstone'
 	],
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
