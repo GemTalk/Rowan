@@ -1,1 +1,1 @@
-Package { #name : 'Rowan-Obsolete-GemStone' }
+Package { #name : 'Rowan-Obsolete-Gemstone' }
