@@ -7,11 +7,11 @@
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 11,
-		"failures" : 13,
+		"failures" : 11,
 		"passed" : 1617,
-		"summary" : "1641 Tests with 13 Failures, 11 Errors and 0 DeprecationWarnings in 3107.05s",
-		"tests" : 1641,
-		"time" : 3107.05
+		"summary" : "1639 Tests with 11 Failures, 11 Errors and 0 DeprecationWarnings in 3088.66s",
+		"tests" : 1639,
+		"time" : 3088.656
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -803,12 +803,6 @@
 		},
 		{
 			"className" : "RowanClassServiceTest",
-			"status" : "failures",
-			"selector" : "test_setSuperSubIndicators",
-			"time" : "0"
-		},
-		{
-			"className" : "RowanClassServiceTest",
 			"status" : "passed",
 			"selector" : "test_simpleCompile",
 			"time" : "0"
@@ -1243,12 +1237,6 @@
 			"className" : "RowanTestClassServiceTest",
 			"status" : "passed",
 			"selector" : "test_setClassCommentDuringMetaclassRefresh",
-			"time" : "0"
-		},
-		{
-			"className" : "RowanTestClassServiceTest",
-			"status" : "failures",
-			"selector" : "test_setSuperSubIndicators",
 			"time" : "0"
 		},
 		{
@@ -9862,5 +9850,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2026-03-02T15:38:39.955815-08:00"
+	"timeStamp" : "2026-03-17T15:59:01.826782-07:00"
 }
