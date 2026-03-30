@@ -163,17 +163,19 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> definitionForType: aString [
 
 { #category : 'tonel parser' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source [
-
 	| methodDef |
-	methodDef := (currentTraitDefinition ifNil: [ RwMethodDefinition ] ifNotNil: [ RwTraitMethodDefinition ])
-		newForSelector: selector 
-			protocol: protocol 
-			source: source.
-	self 
-		validateMethodDefinitionProtocol: methodDef 
-			className: className
-			isMeta: meta
-			forPackageNamed: self currentPackageDefinition name.
+	self validateDefinitionNameMatchesExpectedDefName: className selector: selector.
+	methodDef := (currentTraitDefinition
+		ifNil: [ RwMethodDefinition ]
+		ifNotNil: [ RwTraitMethodDefinition ])
+		newForSelector: selector
+		protocol: protocol
+		source: source.
+	self
+		validateMethodDefinitionProtocol: methodDef
+		className: className
+		isMeta: meta
+		forPackageNamed: self currentPackageDefinition name.
 	^ methodDef
 ]
 
@@ -227,7 +229,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 	| fileReference |
 	fileReference := file asFileReference.
 	fileReference readStreamDo: [:fileStream |
-		[ | definitions  packageDef tonelParser |
+		[ | definitions  packageDef tonelParser clsNameFromFile |
 		tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 		(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 			ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
@@ -235,6 +237,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		  ((definitions at: 2) at: 1) do: [:mDef |
 			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addClassMethodDefinition: mDef ].
+clsNameFromFile := fileReference base asFileReference base.
+currentClassExtension name = clsNameFromFile
+ifFalse: [Error signal: 'The base name of a class extension file (', fileReference printString, ') does not match the name of the class  extension (', currentClassExtension name printString, ')' ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
@@ -254,7 +259,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 	fileReference
 		readStreamDo: [ :fileStream | 
 			[ 
-			| definitions clsDef packageDef tonelParser |
+			| definitions clsDef packageDef tonelParser clsNameFromFile |
 			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
 				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
@@ -267,6 +272,9 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 						ifNotNil: [ Error signal: 'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentClassExtension ].
+clsNameFromFile := fileReference base asFileReference base.
+clsDef name = clsNameFromFile
+ifFalse: [Error signal: 'The base name of a class file (', fileReference printString, ') does not match the name of the class definition (', clsDef name printString, ')' ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -333,6 +341,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 												, fileReference fullName ].
 							def ]
 						ifNil: [ currentTraitDefinition ] ].
+clsOrTraitDef name = fileReference base
+ifFalse: [Error signal: 'The base name of a class/trait file (', fileReference printString, ') does not match the name of the class/trait definition (', clsOrTraitDef name printString, ')' ].
 			self validateClassCategory: clsOrTraitDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -384,6 +394,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 									'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentTraitDefinition ].
+traitDef name = fileReference base
+ifFalse: [Error signal: 'The base name of a trait file (', fileReference base printString, ') does not match the name of the trait definition (', traitDef name printString, ')' ].
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
 					mDef propertyAt: '_gsFileName' put: fileReference fullName.
@@ -412,4 +424,23 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> traitFileExtensions [
 
 	^ #( 'trait' 'st' )
+]
+
+{ #category : 'tonel parser' }
+RwRepositoryResolvedProjectTonelReaderVisitorV2 >> validateDefinitionNameMatchesExpectedDefName: aDefName selector: selector [
+	| currentDefName |
+	currentDefName := currentClassDefinition
+		ifNotNil: [ :def | def name ]
+		ifNil: [ 
+			currentClassExtension
+				ifNotNil: [ :def | def name ]
+				ifNil: [ currentTraitDefinition name ] ].
+	currentDefName = aDefName
+		ifFalse: [ 
+			self
+				error:
+					'The name of the class/trait (' , aDefName printString
+						, ') specified for the method ' , selector printString
+						, ' does not match the name of the class/trait ('
+						, currentDefName printString , ') that contains the method.' ]
 ]

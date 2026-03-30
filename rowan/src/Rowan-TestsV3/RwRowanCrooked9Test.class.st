@@ -483,3 +483,106 @@ RwRowanCrooked9Test >> testIssue920_2 [
 	] ensure: [
 		Rowan gitTools performGitCommand: 'restore' in: (self _testRowanProjectsSandbox / crookedProjectName ) fullName with: ' .'  ]
 ]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue974_a [
+	"https://github.com/GemTalk/Rowan/issues/974"
+
+	| loadSpec crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0014_a'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0014.ston') fullName.
+	
+	errorHit := false.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			errorHit := true.
+			self
+				assert:
+					(ex messageText
+						beginsWith:
+							'The name of the class/trait (''Object'') specified for the method #''foo'' does not match the name of the class/trait (''RowanSample9V3Class1'') that contains the method., last method parsed: ''foo''') ].
+	self assert: errorHit description: 'expected error not encountered'
+]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue974_b [
+	"https://github.com/GemTalk/Rowan/issues/974"
+
+	| loadSpec crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0014_b'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0014.ston') fullName.
+	
+	errorHit := false.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			| errorMessage |
+			errorHit := true.
+			errorMessage := ex messageText.
+			self
+				assert:
+					(errorMessage
+						beginsWith:
+							'The name of the class/trait (''Object'') specified for the method #''instanceMethod'' does not match the name of the class/trait (''RowanSample9V3Trait'') that contains the method., last method parsed: ''instanceMethod''') ].
+	self assert: errorHit description: 'expected error not encountered'
+]
+
+{ #category : 'tests' }
+RwRowanCrooked9Test >> testIssue974_c [
+	"https://github.com/GemTalk/Rowan/issues/974"
+
+	| loadSpec crookedProject crookedProjectName errorHit |
+	self _checkoutBranchNamed: 'spec_0014_c'.
+	crookedProjectName := 'RowanCrooked9'.
+
+	{crookedProjectName}
+		do: [ :pName | 
+			(Rowan image loadedProjectNamed: pName ifAbsent: [  ])
+				ifNotNil: [ :proj | Rowan image _removeLoadedProject: proj ] ].
+
+	loadSpec := RwSpecification
+		fromUrl:
+			'file:'
+				,
+					(self _testRowanProjectsSandbox / crookedProjectName / 'rowan' / 'specs'
+						/ 'spec_0014.ston') fullName.
+	
+	errorHit := false.
+	[ crookedProject := loadSpec resolve load ]
+		on: Error
+		do: [ :ex | 
+			| errorMessage |
+			errorHit := true.
+			errorMessage := ex messageText.
+			self
+				assert:
+					(errorMessage
+						beginsWith:
+							'The name of the class/trait (''Object'') specified for the method #''baz'' does not match the name of the class/trait (''RowanSample9V3Class1'') that contains the method., last method parsed: ''baz''') ].
+	self assert: errorHit description: 'expected error not encountered'
+]

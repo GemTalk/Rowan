@@ -343,12 +343,21 @@ RwTonelParser >> metadata [
 { #category : 'parsing' }
 RwTonelParser >> method [
 	| type selector selectorChunk |
-	"if there is a single $> then we read until we find the NEXT ONE"
-	type := self readClassNameForMethod.	"if there is no leading $[ we read until we find the NEXT ONE"
+	"if there is a single $> then we read until we find the NEXT ONE ..."
+	type := self readClassNameForMethod.
+	"if there is no leading $[ we read until we find the NEXT ONE"
 	selectorChunk := (stream upTo: $[) trimBoth.
+	(selectorChunk includes: $]) 
+		ifTrue: [ 
+			"If a ] precedes the initial $], then thats as good as a missing $["
+			RwTonelParseError signal: 'Misplaced or missing ''['' in tonel file' ].
 	stream position: stream position - 1.	"in-lined untilExcludingChar: ... need to preserve the $[ in the selectorChunk"
 	selector := self cleanSelector: selectorChunk.
-	[Behavior extractSelector: selector] on: CompileError do: [:ex | RwTonelParseError signal: 'Misplaced or missing ''['' in tonel file' ].
+	[Behavior extractSelector: selector] 
+		on: CompileError 
+		do: [:ex | 
+			"if there is a compile error extracting the selector, then thats as good as a missing $["
+			RwTonelParseError signal: 'Misplaced or missing ''['' in tonel file' ].
 	type := type trimBoth substringsSpace.	"substrings: ' ' "
 		type size = 1
 		ifTrue: [ type := type copyWith: nil ].
