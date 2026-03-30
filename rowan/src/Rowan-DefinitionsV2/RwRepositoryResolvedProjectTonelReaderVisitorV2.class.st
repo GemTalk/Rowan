@@ -239,7 +239,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 			  currentClassExtension addClassMethodDefinition: mDef ].
 clsNameFromFile := fileReference base asFileReference base.
 currentClassExtension name = clsNameFromFile
-ifFalse: [Error signal: 'The base name of a class extension file (', fileReference printString, ') does not match the name of the class  extension (', currentClassExtension name printString, ')' ].
+ifFalse: [Error signal: 'The base name of a class extension file (', fileReference base asFileReference base printString, ') does not match the name of the class  extension (', currentClassExtension name printString, ')' ].
 		  ((definitions at: 2) at: 2) do: [:mDef |
 			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
 			  currentClassExtension addInstanceMethodDefinition: mDef ] .
@@ -274,7 +274,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 				ifNil: [ currentClassExtension ].
 clsNameFromFile := fileReference base asFileReference base.
 clsDef name = clsNameFromFile
-ifFalse: [Error signal: 'The base name of a class file (', fileReference printString, ') does not match the name of the class definition (', clsDef name printString, ')' ].
+ifFalse: [Error signal: 'The base name of a class file (', fileReference base asFileReference base printString, ') does not match the name of the class definition (', clsDef name printString, ')' ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -341,8 +341,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 												, fileReference fullName ].
 							def ]
 						ifNil: [ currentTraitDefinition ] ].
-clsOrTraitDef name = fileReference base
-ifFalse: [Error signal: 'The base name of a class/trait file (', fileReference printString, ') does not match the name of the class/trait definition (', clsOrTraitDef name printString, ')' ].
+clsOrTraitDef name = fileReference base asFileReference base
+ifFalse: [Error signal: 'The base name of a class/trait file (', fileReference base asFileReference base printString, ') does not match the name of the class/trait definition (', clsOrTraitDef name printString, ')' ].
 			self validateClassCategory: clsOrTraitDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -394,8 +394,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 									'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentTraitDefinition ].
-traitDef name = fileReference base
-ifFalse: [Error signal: 'The base name of a trait file (', fileReference base printString, ') does not match the name of the trait definition (', traitDef name printString, ')' ].
+traitDef name = fileReference base asFileReference base
+ifFalse: [Error signal: 'The base name of a trait file (', fileReference base asFileReference base printString, ') does not match the name of the trait definition (', traitDef name printString, ')' ].
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
 					mDef propertyAt: '_gsFileName' put: fileReference fullName.
