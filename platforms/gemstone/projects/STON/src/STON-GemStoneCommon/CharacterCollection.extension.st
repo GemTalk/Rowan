@@ -1,21 +1,6 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*ston-gemstonecommon' }
-CharacterCollection >> stonContainSubObjects [
-  ^ false
-
-]
-
-{ #category : '*ston-gemstonecommon' }
-CharacterCollection >> stonOn: stonWriter [
-
-        self isSymbol
-                ifTrue: [stonWriter writeSymbol: self]
-                ifFalse: [stonWriter writeString: self]
-
-]
-
-{ #category : '*ston-gemstonecommon' }
 CharacterCollection class >> findFirstInString: aString inSet: inclusionMap startingAt: start [
 
 	"Trivial, non-primitive version"
@@ -40,3 +25,19 @@ CharacterCollection class >> findFirstInString: aString inSet: inclusionMap star
 	^ i
 
 ]
+
+{ #category : '*ston-gemstonecommon' }
+CharacterCollection >> stonContainSubObjects [
+  ^ false
+
+]
+
+{ #category : '*ston-gemstonecommon' }
+CharacterCollection >> stonOn: stonWriter [
+
+        self isSymbol
+                ifTrue: [stonWriter writeSymbol: self]
+                ifFalse: [stonWriter writeString: self]
+
+]
+

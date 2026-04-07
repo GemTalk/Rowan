@@ -60,7 +60,7 @@ RwTopazTonelReader class >> topazCompileTonelMethod: aString envId: envId [
 	| strm parser warnStr |
 	strm := ReadStreamPortable on: aString.
 
-	parser := RwTonelParser on: strm forReader: (self forEnvironmentId: envId).
+	parser := RwStrictTonelParser on: strm forReader: (self forEnvironmentId: envId).
 
 	[ parser methodDef ]
 		on: CompileWarning
@@ -138,7 +138,7 @@ RwTopazTonelReader class >> topazReadTonelStream: tonelStream envId: envId [
    It file is  a class.st file, 
    creation of the class is attempted by createClassFrom:"
 
-	RwTonelParser
+	RwStrictTonelParser
 		parseStream: tonelStream
 		forReader: (self forEnvironmentId: envId)
 ]
@@ -301,6 +301,13 @@ RwTopazTonelReader >> environmentId [
 { #category : 'accessing' }
 RwTopazTonelReader >> environmentId: object [
 	environmentId := object
+]
+
+{ #category : 'accessing' }
+RwTopazTonelReader >> methodSortOrder [
+	"methods in topaz tonel projects will be sorted in unicode sort order"
+
+	^ 'unicode'
 ]
 
 { #category : 'tonel parser interface' }

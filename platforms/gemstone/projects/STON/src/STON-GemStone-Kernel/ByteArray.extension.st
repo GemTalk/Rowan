@@ -1,12 +1,6 @@
 Extension { #name : 'ByteArray' }
 
 { #category : '*ston-gemstone-kernel' }
-ByteArray >> stonContainSubObjects [ 
-	^ false
-
-]
-
-{ #category : '*ston-gemstone-kernel' }
 ByteArray class >> fromSton: stonReader [
   | singletonString |
   singletonString := stonReader parseListSingleton.
@@ -14,3 +8,10 @@ ByteArray class >> fromSton: stonReader [
     readHexFrom: singletonString readStream
 
 ]
+
+{ #category : '*ston-gemstone-kernel' }
+ByteArray >> stonContainSubObjects [ 
+	^ false
+
+]
+

@@ -73,20 +73,6 @@ RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: package
 ]
 
 { #category : 'class reading' }
-RwRepositoryComponentProjectReaderVisitor >> checkTonelClassMethodOrder [
-	"true means that it is an error if method selectors in a tonel class file are not in canonical order"
-
-	^ (self dynamicInstVarAt: #'checkTonelClassMethodOrder') ifNil: [ false ]
-]
-
-{ #category : 'class reading' }
-RwRepositoryComponentProjectReaderVisitor >> checkTonelClassMethodOrder: aBoolean [
-	"true means that it is an error if method selectors in a tonel class file are not in canonical order"
-
-	self dynamicInstVarAt: #'checkTonelClassMethodOrder' put: aBoolean
-]
-
-{ #category : 'class reading' }
 RwRepositoryComponentProjectReaderVisitor >> compileWhileReading [
   ^ (self dynamicInstVarAt: #compileWhileReading) ifNil:[ false ]
 ]

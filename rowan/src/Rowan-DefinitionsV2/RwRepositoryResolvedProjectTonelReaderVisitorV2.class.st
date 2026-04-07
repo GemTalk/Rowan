@@ -225,31 +225,40 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassesFor: packageName p
 
 { #category : 'class reading' }
 RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file inPackage: packageName [
-
 	| fileReference |
 	fileReference := file asFileReference.
-	fileReference readStreamDo: [:fileStream |
-		[ | definitions  packageDef tonelParser clsNameFromFile |
-		tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
-		(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
-			ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
-		  definitions := tonelParser start.
-		  ((definitions at: 2) at: 1) do: [:mDef |
-			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
-			  currentClassExtension addClassMethodDefinition: mDef ].
-clsNameFromFile := fileReference base asFileReference base.
-currentClassExtension name = clsNameFromFile
-ifFalse: [Error signal: 'The base name of a class extension file (', fileReference base asFileReference base printString, ') does not match the name of the class  extension (', currentClassExtension name printString, ')' ].
-		  ((definitions at: 2) at: 2) do: [:mDef |
-			mDef propertyAt: '_gsFileName' put:  fileReference fullName.
-			  currentClassExtension addInstanceMethodDefinition: mDef ] .
-		self checkMethodDefinitions: currentClassExtension .
-		packageDef := currentProjectDefinition packageNamed: packageName.
-		currentClassExtension ifNotNil: [ packageDef addClassExtensionDefinition: currentClassExtension ]    ] on: ( STONReaderError , RwTonelParseError, Error) do:[:ex |
-      ex addText: (self class lineNumberStringForOffset: fileStream position fileName: fileReference fullName).
-      ex pass .
-    ].
-  ].
+	fileReference
+		readStreamDo: [ :fileStream | 
+			[ 
+			| definitions packageDef tonelParser |
+			tonelParser := RwStrictTonelParser
+				on: fileStream
+				filePath: fileReference fullName
+				forReader: self.
+			definitions := tonelParser start.
+			((definitions at: 2) at: 1)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					currentClassExtension addClassMethodDefinition: mDef ].
+			((definitions at: 2) at: 2)
+				do: [ :mDef | 
+					mDef propertyAt: '_gsFileName' put: fileReference fullName.
+					currentClassExtension addInstanceMethodDefinition: mDef ].
+			self checkMethodDefinitions: currentClassExtension.
+			packageDef := currentProjectDefinition packageNamed: packageName.
+			currentClassExtension
+				ifNotNil: [ packageDef addClassExtensionDefinition: currentClassExtension ] ]
+				on: STONReaderError , RwTonelParseError , Error
+				do: [ :ex | 
+					(ex messageText includesString: 'near line')
+						ifFalse: [ 
+							"only add line number info, in absence of existing line number info"
+							ex
+								addText:
+									(self class
+										lineNumberStringForOffset: fileStream position
+										fileName: fileReference fullName) ].
+					ex pass ] ]
 ]
 
 { #category : 'class reading' }
@@ -259,10 +268,8 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 	fileReference
 		readStreamDo: [ :fileStream | 
 			[ 
-			| definitions clsDef packageDef tonelParser clsNameFromFile |
-			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
-			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
-				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			| definitions clsDef packageDef tonelParser |
+			tonelParser := RwStrictTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			definitions := tonelParser start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
@@ -272,9 +279,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 						ifNotNil: [ Error signal: 'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentClassExtension ].
-clsNameFromFile := fileReference base asFileReference base.
-clsDef name = clsNameFromFile
-ifFalse: [Error signal: 'The base name of a class file (', fileReference base asFileReference base printString, ') does not match the name of the class definition (', clsDef name printString, ')' ].
 			self validateClassCategory: clsDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -309,13 +313,10 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions clsOrTraitDef packageDef tonelParser |
-			tonelParser := RwTonelParser
+			tonelParser := RwStrictTonelParser
 				on: fileStream
 				filePath: fileReference fullName
 				forReader: self.
-			(self checkTonelClassMethodOrder
-				and: [ tonelParser respondsTo: #'checkTonelClassMethodOrder:' ])
-				ifTrue: [ tonelParser checkTonelClassMethodOrder: true ].
 			definitions := tonelParser start.
 			clsOrTraitDef := currentClassDefinition
 				ifNotNil: [ :def | 
@@ -341,8 +342,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 												, fileReference fullName ].
 							def ]
 						ifNil: [ currentTraitDefinition ] ].
-clsOrTraitDef name = fileReference base asFileReference base
-ifFalse: [Error signal: 'The base name of a class/trait file (', fileReference base asFileReference base printString, ') does not match the name of the class/trait definition (', clsOrTraitDef name printString, ')' ].
 			self validateClassCategory: clsOrTraitDef forPackageNamed: packageName.
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
@@ -381,9 +380,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions traitDef projectDef tonelParser |
-			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
-			(self checkTonelClassMethodOrder and: [ tonelParser respondsTo: #checkTonelClassMethodOrder:])
-				ifTrue: [tonelParser checkTonelClassMethodOrder: true] .
+			tonelParser := RwStrictTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			definitions := tonelParser start.
 			traitDef := currentTraitDefinition
 				ifNotNil: [ :def | 
@@ -394,8 +391,6 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 									'both a trait definition and class definition in file ' , fileReference fullName ].
 					def ]
 				ifNil: [ currentTraitDefinition ].
-traitDef name = fileReference base asFileReference base
-ifFalse: [Error signal: 'The base name of a trait file (', fileReference base asFileReference base printString, ') does not match the name of the trait definition (', traitDef name printString, ')' ].
 			((definitions at: 2) at: 1)
 				do: [ :mDef | 
 					mDef propertyAt: '_gsFileName' put: fileReference fullName.

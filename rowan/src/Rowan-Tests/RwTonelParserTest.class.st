@@ -85,17 +85,53 @@ RwTonelParserTest >> newTypeDefinitionFrom: anArray [
 { #category : 'private' }
 RwTonelParserTest >> parse: aString rule: rule [
   | parser |
-  parser := RwTonelParser onString: aString forReader: self.
+  parser := self tonelParserClass onString: aString forReader: self.
   ^ parser perform: rule
-
 ]
 
 { #category : 'asserting' }
 RwTonelParserTest >> shouldParse: aString rule: rule raise: error [
   | parser |
-  parser := RwTonelParser onString: aString  forReader: self.
+  parser := self tonelParserClass onString: aString  forReader: self.
   self should: [ parser perform: rule ] raise: error
+]
 
+{ #category : 'tests' }
+RwTonelParserTest >> testCantParseType [
+	"specific error from RwTonelParser"
+
+	| gotError |
+	gotError := false.
+	[ 
+	self
+		assertParse:
+			'
+"
+this is a test
+"
+XXX { 
+	#name: ''X'',
+	#superclass: ''Y'',
+	#category: ''Z'' 
+}'
+		rule: #'typeDef'
+		equals:
+			(self
+				newClassDefinitionForClassNamed: 'X'
+				superclassName: 'Y'
+				category: 'Z'
+				instVarNames: #()
+				classVarNames: #()
+				poolDictionaryNames: #()
+				classInstVarNames: #()
+				type: #'normal'
+				comment: 'this is a test') ]
+		on: Error
+		do: [ :ex | 
+			self assert: ex printString equals: 'a RwTonelParseError occurred (error 2710), Can''t parse type.'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ]
 ]
 
 { #category : 'tests' }
@@ -123,7 +159,7 @@ RwTonelParserTest >> testComment [
 RwTonelParserTest >> testExtractSelector [
 	| parser |
 	
-	parser := RwTonelParser new.
+	parser := self tonelParserClass new.
 	
 	self assert: (parser extractSelector: 'unary') equals: #unary.
 	self assert: (parser extractSelector: '+ something') equals: #+.
@@ -139,7 +175,6 @@ RwTonelParserTest >> testExtractSelector [
 keyword: arg2 
 selector: arg3') 
 		equals: #some:keyword:selector:.
-
 ]
 
 { #category : 'tests' }
@@ -163,7 +198,9 @@ RwTonelParserTest >> testMetadata [
 ]
 
 { #category : 'tests' }
-RwTonelParserTest >> testMethod [
+RwTonelParserTest >> testMethod_01 [
+	"common behavior between RwTonelParser and RwStrictTonelParser"
+
 	| gotError |
 	self
 		assertParse: 'Object>>name'
@@ -179,41 +216,10 @@ RwTonelParserTest >> testMethod [
 		assertParse: 'Object >> name: aString [ I do not care ]'
 		rule: #'method'
 		equals: #(#('Object' nil) 'name: aString').
-
 	self
 		assertParse: 'Object class >> name: aString'
 		rule: #'method'
 		equals: #(#('Object' 'class') 'name: aString').
-	gotError := false.
-	[ 
-	self
-		assertParse: 'Object class >name: aString'
-		rule: #'method'
-		equals: 'single > ... expect error' ]
-		on: Error
-		do: [ :ex | 
-			self
-				assert: ex printString
-				equals:
-					'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
-			gotError := true ].
-	gotError
-		ifFalse: [ self error: 'missing expected error' ].
-	gotError := false.
-	[ 
-	self
-		assertParse: 'Object class  name: aString ['
-		rule: #'method'
-		equals: 'single > ... expect error' ]
-		on: Error
-		do: [ :ex | 
-			self
-				assert: ex printString
-				equals:
-					'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
-			gotError := true ].
-	gotError
-		ifFalse: [ self error: 'missing expected error' ].
 	gotError := false.
 	[ 
 	self
@@ -225,10 +231,32 @@ RwTonelParserTest >> testMethod [
 			self
 				assert: ex printString
 				equals:
-					'a RwTonelParseError occurred (error 2710), empty selector string'.
+					'a RwTonelParseError occurred (error 2710), incorrect selector pattern. Expecting ''className >> selector'' or ''className class >> selector''  '.
 			gotError := true ].
 	gotError
 		ifFalse: [ self error: 'missing expected error' ]
+]
+
+{ #category : 'tests' }
+RwTonelParserTest >> testMethod_02 [
+	"different behavior between RwTonelParser and RwStrictTonelParser"
+
+	| gotError |
+	gotError := false.
+	[ 
+	"error message is not specific ... RwStrictTonelParser should provied a detailed error"
+	self
+		assertParse: 'Object class >name: aString'
+		rule: #'method'
+		equals: 'single > ... expect error' ]
+		on: Error
+		do: [ :ex | 
+			self
+				assert: ex printString
+				equals: 'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ].
 ]
 
 { #category : 'tests' }
@@ -407,10 +435,48 @@ Object>>printOn: aStream [
 ]
 
 { #category : 'tests' }
+RwTonelParserTest >> testNoLeadingLeftBracket [
+	"non-specific error from RwTonelParser"
+
+	| gotError |
+	gotError := false.
+	[ 
+	self
+		assertParse:
+			'
+"
+this is a test
+"
+XXX { 
+	#name: ''X'',
+	#superclass: ''Y'',
+	#category: ''Z'' 
+}'
+		rule: #'typeDef'
+		equals:
+			(self
+				newClassDefinitionForClassNamed: 'X'
+				superclassName: 'Y'
+				category: 'Z'
+				instVarNames: #()
+				classVarNames: #()
+				poolDictionaryNames: #()
+				classInstVarNames: #()
+				type: #'normal'
+				comment: 'this is a test') ]
+		on: Error
+		do: [ :ex | 
+			self assert: ex printString equals: 'a RwTonelParseError occurred (error 2710), Can''t parse type.'.
+			gotError := true ].
+	gotError
+		ifFalse: [ self error: 'missing expected error' ]
+]
+
+{ #category : 'tests' }
 RwTonelParserTest >> testRemoveFromEnclosingStartEnd [
   | parser nl |
-  nl := RwTonelParser lineEnding.
-  parser := RwTonelParser new.
+  nl := RwStrictTonelParser lineEnding.
+  parser := self tonelParserClass new.
   self
     assert: (parser removeFrom: '[ ^ self ]' enclosingStart: $[ end: $])
     equals: '^ self'.
@@ -448,7 +514,6 @@ RwTonelParserTest >> testRemoveFromEnclosingStartEnd [
       ('
 	^ self
 ' withLineEndings: nl)
-
 ]
 
 { #category : 'tests' }
@@ -539,4 +604,10 @@ Class {
         type: #'normal'
         comment: 'this is a test')
 
+]
+
+{ #category : 'private' }
+RwTonelParserTest >> tonelParserClass [
+
+	^RwStrictTonelParser
 ]

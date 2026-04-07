@@ -1,6 +1,13 @@
 Extension { #name : 'Date' }
 
 { #category : '*ston-gemstonecommon' }
+Date class >> fromSton: stonReader [
+
+	^ self fromStream: stonReader parseListSingleton readStream usingFormat: #(3 2 1 $- 1 1)
+
+]
+
+{ #category : '*ston-gemstonecommon' }
 Date >> stonOn: stonWriter [
   "Use an ISO style YYYYMMDD representation"
 
@@ -10,9 +17,3 @@ Date >> stonOn: stonWriter [
 
 ]
 
-{ #category : '*ston-gemstonecommon' }
-Date class >> fromSton: stonReader [
-
-	^ self fromStream: stonReader parseListSingleton readStream usingFormat: #(3 2 1 $- 1 1)
-
-]
