@@ -231,7 +231,7 @@ RwTonelParserTest >> testMethod_01 [
 			self
 				assert: ex printString
 				equals:
-					'a RwTonelParseError occurred (error 2710), incorrect selector pattern. Expecting ''className >> selector'' or ''className class >> selector''  '.
+					'a RwTonelParseError occurred (error 2710), Unexpected singleton $> reading selector'.
 			gotError := true ].
 	gotError
 		ifFalse: [ self error: 'missing expected error' ]
@@ -253,7 +253,7 @@ RwTonelParserTest >> testMethod_02 [
 		do: [ :ex | 
 			self
 				assert: ex printString
-				equals: 'a RwTonelParseError occurred (error 2710), missing >> in tonel method source'.
+				equals: 'a RwTonelParseError occurred (error 2710), Unexpected singleton $> reading selector'.
 			gotError := true ].
 	gotError
 		ifFalse: [ self error: 'missing expected error' ].
@@ -609,5 +609,5 @@ Class {
 { #category : 'private' }
 RwTonelParserTest >> tonelParserClass [
 
-	^RwStrictTonelParser
+	^RwTonelParser
 ]

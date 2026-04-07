@@ -1327,7 +1327,7 @@ RwResolvedProjectV2 >> readPackageNames: packageNames [
 			formatFromDisk ].
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
+		ifTrue: [ RwRepositoryResolvedProjectStrictTonelReaderVisitorV2 ]
 		ifFalse: [ 
 			format = 'topaz'
 				ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]
@@ -1352,7 +1352,7 @@ RwResolvedProjectV2 >> readPackageNamesBlock: packageNamesBlock [
 			formatFromDisk ].
 	self _projectDefinition packages: Dictionary new.
 	visitorClass := format = 'tonel'
-		ifTrue: [ RwRepositoryResolvedProjectTonelReaderVisitorV2 ]
+		ifTrue: [ RwRepositoryResolvedProjectStrictTonelReaderVisitorV2 ]
 		ifFalse: [ 
 			format = 'topaz'
 				ifTrue: [ RwRepositoryResolvedProjectTopazPackageReaderVisitorV2 ]

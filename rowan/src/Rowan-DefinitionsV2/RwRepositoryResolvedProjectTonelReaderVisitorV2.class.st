@@ -1,3 +1,6 @@
+"
+In contrast to RwRepositoryResolvedProjectStrictTonelReaderVisitorV2, RwRepositoryResolvedProjectTonelReaderVisitorV2 ignores canonical format issues (method order, etc.), useful when you need to read a non-canonical tonel file in order to repair it.
+"
 Class {
 	#name : 'RwRepositoryResolvedProjectTonelReaderVisitorV2',
 	#superclass : 'RwRepositoryComponentProjectReaderVisitor',
@@ -231,7 +234,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassExtensionFile: file 
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions packageDef tonelParser |
-			tonelParser := RwStrictTonelParser
+			tonelParser := RwTonelParser
 				on: fileStream
 				filePath: fileReference fullName
 				forReader: self.
@@ -269,7 +272,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassFile: file inPackage
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions clsDef packageDef tonelParser |
-			tonelParser := RwStrictTonelParser on: fileStream filePath: fileReference fullName forReader: self.
+			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			definitions := tonelParser start.
 			clsDef := currentClassDefinition
 				ifNotNil: [ :def | 
@@ -313,7 +316,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readClassOrTraitFile: file in
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions clsOrTraitDef packageDef tonelParser |
-			tonelParser := RwStrictTonelParser
+			tonelParser := RwTonelParser
 				on: fileStream
 				filePath: fileReference fullName
 				forReader: self.
@@ -380,7 +383,7 @@ RwRepositoryResolvedProjectTonelReaderVisitorV2 >> readTraitFile: file inPackage
 		readStreamDo: [ :fileStream | 
 			[ 
 			| definitions traitDef projectDef tonelParser |
-			tonelParser := RwStrictTonelParser on: fileStream filePath: fileReference fullName forReader: self.
+			tonelParser := RwTonelParser on: fileStream filePath: fileReference fullName forReader: self.
 			definitions := tonelParser start.
 			traitDef := currentTraitDefinition
 				ifNotNil: [ :def | 
