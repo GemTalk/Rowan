@@ -1,6 +1,17 @@
 Extension { #name : 'Object' }
 
 { #category : '*ston-gemstone-kernel' }
+Object class >> fromSton: stonReader [
+	"Create a new instance and delegate decoding to instance side.
+	Override only when new instance should be created directly (see implementors). "
+	
+	^ self new
+		fromSton: stonReader;
+		yourself
+
+]
+
+{ #category : '*ston-gemstone-kernel' }
 Object >> fromSton: stonReader [
   "Decode non-variable classes from a map of their instance variables and values.
 	Override to customize and add a matching #toSton: (see implementors)."
@@ -48,16 +59,5 @@ Object >> stonShouldWriteNilInstVars [
 	false otherwise. Overwrite when necessary. By default, return false."
 	
 	^ false
-
-]
-
-{ #category : '*ston-gemstone-kernel' }
-Object class >> fromSton: stonReader [
-	"Create a new instance and delegate decoding to instance side.
-	Override only when new instance should be created directly (see implementors). "
-	
-	^ self new
-		fromSton: stonReader;
-		yourself
 
 ]
