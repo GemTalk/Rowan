@@ -2,16 +2,16 @@
 	"branch" : "",
 	"commitSha" : "",
 	"deprecationWarnings" : [ ],
-	"gsVersion" : "3.7.5",
+	"gsVersion" : "3.7.6",
 	"notes" : "",
 	"properties" : { },
 	"resultsSummary" : {
 		"errors" : 11,
 		"failures" : 11,
-		"passed" : 1620,
-		"summary" : "1642 Tests with 11 Failures, 11 Errors and 0 DeprecationWarnings in 2669.63s",
-		"tests" : 1642,
-		"time" : 2669.631
+		"passed" : 1642,
+		"summary" : "1664 Tests with 11 Failures, 11 Errors and 0 DeprecationWarnings in 2819.02s",
+		"tests" : 1664,
+		"time" : 2819.021
 	},
 	"suiteName" : "Rowan projects Test Suite",
 	"testCases" : [
@@ -8506,6 +8506,120 @@
 			"time" : "0"
 		},
 		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testCantParseType",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testComment",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testExtractSelector",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMetadata",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodBody",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDef",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDefList",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDef_627_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDef_627_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDef_627_03",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethodDef_627_04",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethod_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethod_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testNoLeadingLeftBracket",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testRemoveFromEnclosingStartEnd",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testTraitTypeDef",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testType",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testTypeDef",
+			"time" : "0"
+		},
+		{
+			"className" : "RwStrictTonelParserTest",
+			"status" : "passed",
+			"selector" : "testTypeDefWithClassVars",
+			"time" : "0"
+		},
+		{
 			"className" : "RwSymbolDictionaryTest",
 			"status" : "passed",
 			"selector" : "testClassAdditionPatch",
@@ -8646,6 +8760,12 @@
 		{
 			"className" : "RwTonelParserTest",
 			"status" : "passed",
+			"selector" : "testCantParseType",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTonelParserTest",
+			"status" : "passed",
 			"selector" : "testComment",
 			"time" : "0"
 		},
@@ -8659,12 +8779,6 @@
 			"className" : "RwTonelParserTest",
 			"status" : "passed",
 			"selector" : "testMetadata",
-			"time" : "0"
-		},
-		{
-			"className" : "RwTonelParserTest",
-			"status" : "passed",
-			"selector" : "testMethod",
 			"time" : "0"
 		},
 		{
@@ -8707,6 +8821,24 @@
 			"className" : "RwTonelParserTest",
 			"status" : "passed",
 			"selector" : "testMethodDef_627_04",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethod_01",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTonelParserTest",
+			"status" : "passed",
+			"selector" : "testMethod_02",
+			"time" : "0"
+		},
+		{
+			"className" : "RwTonelParserTest",
+			"status" : "passed",
+			"selector" : "testNoLeadingLeftBracket",
 			"time" : "0"
 		},
 		{
@@ -9868,5 +10000,5 @@
 			"time" : "0"
 		}
 	],
-	"timeStamp" : "2026-03-27T15:55:38.903533-07:00"
+	"timeStamp" : "2026-04-07T16:41:51.923680-07:00"
 }
