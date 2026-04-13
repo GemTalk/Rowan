@@ -27,7 +27,10 @@ RwStrictTonelParser >> _checkMethodOrderFor: className selector: selector isMeta
 										ifFalse: [ '' ]) , ' >> ' , selector
 								,
 									((packageReader respondsTo: #'currentPackageDefinition')
-										ifTrue: [ ' in package ' , packageReader currentPackageDefinition name ]
+										ifTrue: [ 
+											"Use #perform: to avoid triggering a sent but implemented error -- Note #respondsTo: is used to avoid MNU"
+											' in package '
+												, (packageReader perform: #'currentPackageDefinition' name) ]
 										ifFalse: [ '' ])
 								,
 									' is out of order - class methods must come before instance methods in a tonel class file.' ].
@@ -106,9 +109,11 @@ RwStrictTonelParser >> methodSortOrder [
 	^ methodSortOrder
 		ifNil: [ 
 			methodSortOrder := (packageReader respondsTo: #'currentProjectDefinition')
-				ifTrue: [ packageReader currentProjectDefinition methodSortOrder ]
-				ifFalse: [
-					(packageReader respondsTo: #methodSortOrder) 
+				ifTrue: [ 
+					"Use #perform: to avoid triggering a sent but implemented error -- Note #respondsTo: is used to avoid MNU"
+					(packageReader perform: #'currentProjectDefinition') methodSortOrder ]
+				ifFalse: [ 
+					(packageReader respondsTo: #'methodSortOrder')
 						ifTrue: [ packageReader methodSortOrder ]
 						ifFalse: [ 'unicode' ] ] ]
 ]
@@ -161,7 +166,7 @@ RwStrictTonelParser >> newMethodDefinitionFrom: anArray [
 
 { #category : 'accessing' }
 RwStrictTonelParser >> sawClassMethods [
-	^ sawClassMethods ifNIl: [ sawClassMethods := false ]
+	^ sawClassMethods ifNil: [ sawClassMethods := false ]
 ]
 
 { #category : 'accessing' }
