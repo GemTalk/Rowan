@@ -1,0 +1,147 @@
+#!/usr/bin/env superdoit_rowan3_solo
+options
+{
+        SuperDoitOptionalOptionWithNoArg long: 'classPathStrings'.
+        SuperDoitOptionalOptionWithNoArg long: 'fullClassPath'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] <list-of-tonel-class-or-extension-files>
+      -- -T 100000 [ <additional-topaz-command-line-args> ]
+
+DESCRIPTION
+	Read and write (in canonical order) the tonel class and extension files in 
+  for the list <list-of-tonel-class-or-extension-files>.
+
+
+OPTIONS
+  -h, --help          display usage message
+  -D, --debug         bring up topaz debugger in the event of a script error
+
+EXAMPLES
+  $basename --help            # display help message
+  $basename -D                # bring up debugger in case of error
+  $basename /bosch1/users/dhenrich/_stones/37x/g_37x/image/rowan/src/Filein1A/AbstractDictionary.extension.st \
+            -- -T 100000
+-----
+%
+instvars
+	packagesRoot
+	repositoryRoot
+	hitError
+%
+method
+readClassOrTraitOrClassExtensionDefFrom: tonelClassRef isExtension: isExtension
+	"reading a single class/classExtension/trait definition file" 
+	| project packageDict package classDefinitionsDict |
+	isExtension
+		ifTrue: [
+				Rowan version < '3.3.0' asRwSemanticVersionNumber
+					ifTrue: [ self error: 'Rowan v3.3.0 is required to check canonicalization of the class extension file: ', tonelClassRef pathString ] ].
+	[
+		"Use RwRepositoryResolvedProjectTonelReaderVisitorV2 because we don't want any canonical errors ... we need to read it so we can write it"
+		[RwRepositoryResolvedProjectStrictTonelReaderVisitorV2 readClassOrTraitFile: tonelClassRef ]
+			on: RwTonelParseError
+			do: [:ex |
+				| errorMessage|
+				errorMessage := ex messageText.
+				(((((errorMessage includesString: 'Misplaced or missing') 
+					or: [ errorMessage includesString: 'incorrect selector pattern' ]) 
+					or: [ errorMessage includesString: 'missing >>' ])
+					or: [ errorMessage includesString: 'missing selector' ])
+					or: [ errorMessage includesString: 'Can''t parse type' ])
+						ifTrue: [
+							"if we get a format error as opposed to canonical error ... we cannot canonicalize the file ... manual intervention required"
+							ex pass ] ].
+		project := RwRepositoryResolvedProjectTonelReaderVisitorV2 readClassOrTraitFile: tonelClassRef ]
+			on: Error do: [:ex | 
+				self stdout nextPutAll: ex printString; lf.
+				hitError := true.
+				^nil ].
+	packageDict := project packages.
+	package := packageDict at: packageDict keys any.
+	classDefinitionsDict := package classDefinitions.
+	classDefinitionsDict isEmpty
+		ifTrue: [
+			| classExtensionsDict |
+			classExtensionsDict := package classExtensions.
+			classExtensionsDict isEmpty
+				ifTrue: [
+					| traitDefinitionsDict |
+					traitDefinitionsDict := package traitDefinitions.
+					^ traitDefinitionsDict 
+							at: traitDefinitionsDict keys any 
+							ifAbsent: [ self error: 'No class definition, trait definition or class extension definition found in ', tonelClassRef pathString ] ]
+				ifFalse: [ 
+					^ classExtensionsDict 
+						at: classExtensionsDict keys any 
+						ifAbsent: [ self error: 'No class definition, trait definition or class extension definition found in ', tonelClassRef pathString ] ] ]
+		ifFalse: [ 
+			^ classDefinitionsDict 
+				at: classDefinitionsDict keys any
+				ifAbsent: [ self error: 'No class definition, trait definition or class extension definition found in ', tonelClassRef pathString ] ].
+%
+method
+exportClassIfChanged: tonelDefRef className: className inPackageName: packageName isExtension: isExtension
+	"Read the class file and and rewrite in canonical format, if needed. Return true if the class file is rewritten"
+	| visitor definitionStream canonicalDefinitionString fileString classOrExtensionOrTraitDefinition |
+	fileString := tonelDefRef readStream contents.
+	classOrExtensionOrTraitDefinition := self readClassOrTraitOrClassExtensionDefFrom: tonelDefRef isExtension: isExtension.	
+	classOrExtensionOrTraitDefinition ifNil: [ "error occured" ^ false ].
+	visitor := RwModificationTonelWriterVisitorV2 new.
+	visitor _packageConvention: 'Rowan'. "gemstone base using Rowan package convention"
+	definitionStream := WriteStream on: String new.
+	isExtension
+		ifTrue: [ 
+			visitor _writeClassExtension: classOrExtensionOrTraitDefinition on: definitionStream ]
+		ifFalse: [ 
+			classOrExtensionOrTraitDefinition isClassDefinition
+				ifTrue: [ visitor _writeClassDefinition: classOrExtensionOrTraitDefinition on: definitionStream ]
+				ifFalse: [
+					classOrExtensionOrTraitDefinition isTraitDefinition
+						ifTrue: [ visitor _writeTraitDefinition: classOrExtensionOrTraitDefinition on: definitionStream ]
+						ifFalse: [ self error: 'expected a Trait definition' ] ] ].
+	visitor
+		_writeClassSideMethodDefinitions: classOrExtensionOrTraitDefinition on: definitionStream;
+		_writeInstanceSideMethodDefinitions: classOrExtensionOrTraitDefinition on: definitionStream.
+	canonicalDefinitionString := definitionStream contents.
+	canonicalDefinitionString = fileString
+		ifTrue: [ 
+			"no change ... no need to write"
+			^ false ].
+	"Non-canonical class file - rewrite"
+	tonelDefRef
+		writeStreamDo: [ :writeStream | 
+			writeStream truncate.
+			writeStream nextPutAll: canonicalDefinitionString ].
+	^true
+%
+method
+rewriteFullToneClassFilesIfNotCanonical: fullTonelClassPaths
+	"file path is relative to ARCHBASE"
+	fullTonelClassPaths
+		do: [:tonelClassPath |
+			| extensions isExtension tonelClassRef className packageName |
+			tonelClassRef :=  tonelClassPath asFileReference.
+			extensions := tonelClassRef extensions.
+			isExtension := extensions includes: 'extension'.
+			(extensions includes: 'st')
+				ifFalse: [ 'The file ', tonelClassPath, ' does not appear to be a tonel format file' ].
+			className := tonelClassRef base asFileReference base. "hack for double extension"
+			packageName := tonelClassRef parent base.
+			(self
+				exportClassIfChanged: tonelClassRef
+				className: className
+				inPackageName: packageName
+				isExtension: isExtension)
+					ifTrue: [ self stdout nextPutAll: 'rewritten'; tab; nextPutAll: tonelClassPath; lf ] ].
+	hitError ifTrue: [ self error: '... errors encountered rewriting tonel files' ]. 
+	^ self noResult.
+%
+doit
+	hitError := false.
+	self positionalArgs size = 0
+		ifTrue: [ self error: 'Expected one or more full tonel class file paths on command line' ].
+	^ self rewriteFullToneClassFilesIfNotCanonical: self positionalArgs.
+%
